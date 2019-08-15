@@ -1,0 +1,79 @@
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 'col-sm-6':refHero.isSuperAdmin, 'col-sm-8':!refHero.isSuperAdmin}">
+      <h3>Company</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" name="search" nbInput fullWidth placeholder="Search" nbTooltip="Search"
+          (input)="onSearchPress($event.target.value)" (keyup.enter)="onSearchPress($event.target.value)">
+        <div class="input-group-addon">
+          <nb-icon icon="search-outline" class="link" (click)="onSearchPress()"></nb-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="refHero.isSuperAdmin" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create"
+        [routerLink]="'/setting/company-detail'">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6" *ngFor="let item of items;">
+    <nb-card accent="success">
+      <nb-card-header>
+        <div class="title">
+          <label [nbTooltip]="item.name">{{ item.name }}</label>
+        </div>
+        <div class="actions">
+          <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
+          </nb-icon>
+          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
+           *ngIf="utilitiesService.isDateGreaterThanToday(item.startDate)"></nb-icon>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="text-group">
+          <label class="label">Start Date</label>
+          <span>{{ utilitiesService.convertDate(item.startDate) || '-' }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Expiry Date</label>
+          <span>{{ utilitiesService.convertDate(item.expiryDate) || '-' }}</span>
+        </div>
+        <div *ngIf="item.adminEmail" class="text-group">
+          <label class="label">Admin Email</label>
+          <span [nbTooltip]="item.adminEmail">{{ item.adminEmail }}</span>
+        </div>
+        <div *ngIf="item.companySize" class="text-group">
+          <label class="label">Company Size</label>
+          <span>{{ item.companySize }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Transferable</label>
+          <nb-icon *ngIf="item.transferable" icon="checkmark-outline" class="text-green"></nb-icon>
+          <nb-icon *ngIf="!item.transferable" icon="close-outline" class="text-red"></nb-icon>
+        </div>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+            {{ item.active ? 'Active': 'Inactive' }}
+          </span>
+        </div>
+        <!-- <hr> -->
+        <div class="text-group">
+          <label class="label">Last update by</label>
+          <span>
+            {{ item.lastChangedInfo.refUser.firstname }}
+            {{ item.lastChangedInfo.refUser.lastname }}
+          </span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update date</label>
+          <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

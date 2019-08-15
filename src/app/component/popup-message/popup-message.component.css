@@ -1,0 +1,88 @@
+/* -------------------------------------------------------------------- */
+/* DIALOG */
+
+.mat-dialog-container {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+.mat-dialog-title {
+  margin-bottom: 15px;
+}
+.mat-dialog-actions {
+  margin-bottom: -12px;
+}
+.mat-dialog-actions button {
+  margin-left: 10px;
+}
+.content-message {
+  white-space: pre-wrap;
+}
+
+/* -------------------------------------------------------------------- */
+/* CONFIRMATION POPUP */
+
+#comfirmation-popup .icon {
+  font-size: 58px;
+  float: left;
+}
+#comfirmation-popup .title {
+  margin-left: 55px;
+  font-size: 24px;
+  font-weight: 800;
+}
+#comfirmation-popup .message {
+  margin-left: 58px;
+  font-size: 14px;
+}
+
+/* -------------------------------------------------------------------- */
+/* INFORMATION POPUP */
+
+#information-popup {
+  text-align: center;
+}
+#information-popup .icon {
+  height: 48px;
+  width: 48px;
+  margin: auto;
+  border-radius: 50%;
+}
+#information-popup .icon span {
+  font-size: 32px;
+  margin: 8px;
+}
+
+/* -------------------------------------------------------------------- */
+/* SUCCESS POPUP */
+
+#success-popup {
+  text-align: center;
+}
+#success-popup .icon {
+  height: 48px;
+  width: 48px;
+  margin: auto;
+  border-radius: 50%;
+}
+#success-popup .icon span {
+  font-size: 32px;
+  margin: 8px;
+}
+
+/* -------------------------------------------------------------------- */
+/* DELETE POPUP */
+
+#delete-popup .icon {
+  font-size: 58px;
+  float: left;
+}
+#delete-popup .title {
+  margin-left: 60px;
+  font-size: 24px;
+  font-weight: 800;
+}
+#delete-popup .message {
+  margin-left: 62px;
+  font-size: 14px;
+}

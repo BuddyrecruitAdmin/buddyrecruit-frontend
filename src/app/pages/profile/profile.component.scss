@@ -1,0 +1,39 @@
+.profile-user-img {
+  margin: 10px auto 5px;
+  width: 100px;
+  padding: 3px;
+  border: none;
+}
+.img-default {
+  padding: 3px;
+  border: none;
+  position: relative;
+  margin: 10px auto 10px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--color-orange);
+}
+.img-default span {
+  color: #fff;
+  font-size: 70px;
+  position: absolute;
+  bottom: 12px;
+  left: 20px;
+  border-radius: 40%;
+  overflow: hidden;
+}
+.box-profile {
+  text-align: center;
+}
+.box-profile h4 {
+  font-weight: bold;
+  margin-top: 15px;
+}
+.change-collapse {
+  color: var(--color-green);
+  margin-bottom: 15px;
+}
+.card {
+  margin-left: 15px;
+}

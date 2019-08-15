@@ -1,0 +1,65 @@
+<!-- Comfirmation -->
+<div id="comfirmation-popup" *ngIf="data.type === 'C'">
+  <div mat-dialog-title>
+    <span class="icon fa fa-question text-warning"></span>
+    <div class="title text-warning">{{ data.title }}</div>
+    <div class="message text-gray content-message">{{ data.content }}</div>
+  </div>
+  <div mat-dialog-content>
+
+  </div>
+  <div mat-dialog-actions align="end">
+    <button nbButton status="default" tabindex="-1" [mat-dialog-close]="false">CANCEL</button>
+    <button nbButton status="success" tabindex="-1" [mat-dialog-close]="true">{{ data.btnText.toUpperCase() }}</button>
+  </div>
+</div>
+
+<!-- Success -->
+<div id="success-popup" *ngIf="data.type === 'S'">
+  <div mat-dialog-title>
+    <div class="icon bg-green">
+      <span class="fa fa-check"></span>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <h4 class="text-gray"><b>{{ data.content }}</b></h4>
+  </div>
+  <br>
+  <div mat-dialog-actions align="center">
+    <button mat-raised-button color="success" class="full-width" tabindex="-1"
+      [mat-dialog-close]="true">{{ data.btnText.toUpperCase() }}</button>
+  </div>
+</div>
+
+<!-- Information -->
+<div id="information-popup" *ngIf="data.type === 'I'">
+  <div mat-dialog-title>
+    <div class="icon bg-orange">
+      <span class="fa fa-exclamation"></span>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    <h4 class="text-gray"><b>{{ data.content }}</b></h4>
+  </div>
+  <br>
+  <div mat-dialog-actions align="center">
+    <button mat-raised-button color="success" class="full-width" tabindex="-1"
+      [mat-dialog-close]="true">{{ data.btnText.toUpperCase() }}</button>
+  </div>
+</div>
+
+<!-- Delete -->
+<div id="delete-popup" *ngIf="data.type === 'D'">
+  <div mat-dialog-title>
+    <span class="icon fa fa-trash text-danger"></span>
+    <div class="title text-danger">{{ data.title }}</div>
+    <div class="message text-gray">{{ data.content }}</div>
+  </div>
+  <div mat-dialog-content>
+
+  </div>
+  <div mat-dialog-actions align="end">
+    <button nbButton status="default" [mat-dialog-close]="false">CANCEL</button>
+    <button nbButton status="danger" [mat-dialog-close]="true">DELETE</button>
+  </div>
+</div>

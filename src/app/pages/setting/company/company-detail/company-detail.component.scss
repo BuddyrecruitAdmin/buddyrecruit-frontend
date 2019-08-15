@@ -1,0 +1,20 @@
+.card {
+  border: 1px solid var(--color-light-gray);
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+.card-header {
+  padding: 20px;
+  text-align: center;
+  font-size: 40px;
+  background: var(--color-green);
+  color: var(--color-white);
+}
+.card-header.with-border {
+  border-bottom: 1px solid var(--color-light-gray);
+}
+.card-content {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}

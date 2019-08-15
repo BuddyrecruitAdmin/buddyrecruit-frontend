@@ -1,0 +1,231 @@
+<section class="content-header">
+  <h3>Dashboard</h3>
+</section>
+
+<!-- spinner loading -->
+<mat-spinner *ngIf="loading"></mat-spinner>
+
+<section *ngIf="!loading" class="content">
+
+  <!-- Filter -->
+  <!-- <div class="box">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Year</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterYear"
+              (change)="onChangeFilterYear($event.target.value)">
+              <option value="2019">2019</option>
+              <option value="2019">2018</option>
+              <option *ngFor="let year of filterYears; let i = index" value="{{ year._id }}">{{ year.value }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Department</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterDepartment"
+              (change)="onChangeFilterDepartment($event.target.value)">
+              <option value="ALL">All</option>
+              <option *ngFor="let department of filterDepartments; let i = index" value="{{ department }}">
+                {{ department }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Position</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterPosition"
+              (change)="onChangeFilterPosition($event.target.value)">
+              <option value="ALL">All</option>
+              <option *ngFor="let position of filterPositions; let i = index" value="{{ position }}">
+                {{ position }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- ---------------------------------------------------------------------------------- -->
+  <!-- Recruitment Status Report -->
+  <!-- ---------------------------------------------------------------------------------- -->
+
+  <div class="box">
+    <div class="box-header with-border">
+      <h4 class="text-green mg-r-40">Recruitment Status Report
+        <small> (Reporting Date: {{ reportDate }})</small>
+      </h4>
+      <div class="panel-collapse">
+        <button class="label-warning" data-toggle="collapse" data-target="#RecriteStatus" aria-expanded="true"
+          aria-controls="RecriteStatus">
+          <span class="fa fa-angle-down"></span>
+        </button>
+      </div>
+    </div>
+    <div id="RecriteStatus" class="box-body collapse show in" aria-expanded="true">
+      <!-- Filter Recruitement Status -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Department</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.department"
+              (change)="onChangeFilterRecruiteDepartment($event.target.value)">
+              <option value="ALL">All</option>
+              <option *ngFor="let department of filterStatus.departments; let i = index" value="{{ department }}">
+                {{ department }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Position</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.position"
+              (change)="onChangeFilterRecruitePosition($event.target.value)">
+              <option value="ALL">All</option>
+              <option *ngFor="let position of filterStatus.positions; let i = index" value="{{ position }}">
+                {{ position }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Stage</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.stage"
+              (change)="onChangeFilterRecruiteStage($event.target.value)">
+              <!-- <option value="ALL">All</option> -->
+              <option *ngFor="let stage of filterStatus.stages; let i = index" value="{{ stage.key }}">{{ stage.value }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- No data -->
+      <div class="no-data" *ngIf="bubbleChartData.length === 0">No data</div>
+      <!-- Recruitement Status Data -->
+      <div *ngIf="bubbleChartData.length > 0">
+        <h5 class="chart-text"> Number of Candidates / Expected employee (%)</h5>
+        <canvas baseChart [datasets]="bubbleChartData" [options]="bubbleChartOptions" [colors]="bubbleChartColors"
+          [legend]="bubbleChartLegend" [chartType]="bubbleChartType">
+        </canvas>
+        <h5 class="chart-text text-center">Timeline from start date - now / End date (%)</h5>
+        <small>* Position name: (scale X, Scale Y, Capacity)</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------------------- -->
+  <!-- Rejection Analysis Report -->
+  <!-- ---------------------------------------------------------------------------------- -->
+
+  <div class="box">
+    <div class="box-header with-border">
+      <h4 class="text-green mg-r-40">Rejection Analysis Report</h4>
+      <div class="panel-collapse">
+        <button class="label-warning" data-toggle="collapse" data-target="#Rejection" aria-expanded="true"
+          aria-controls="Rejection">
+          <span class="fa fa-angle-down"></span>
+        </button>
+      </div>
+    </div>
+    <div id="Rejection" class="box-body collapse show in" aria-expanded="true">
+      <!-- Filter Rejection -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Year</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterRejection.year"
+              (change)="onChangeFilterRejectionYear($event.target.value)">
+              <option *ngFor="let year of filterRejection.years; let i = index" value="{{ year }}">{{ year }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Department</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterRejection.department"
+              (change)="onChangeFilterRejectionDepartment($event.target.value)">
+              <option value="ALL">All</option>
+              <option *ngFor="let department of filterRejection.departments; let i = index" value="{{ department }}">
+                {{ department }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Position</label>
+            <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterRejection.position"
+              (change)="onChangeFilterRejectionPosition($event.target.value)">
+              <option value="ALL">All</option>
+              <option *ngFor="let position of filterRejection.positions; let i = index" value="{{ position }}">
+                {{ position }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Company Reject Reason -->
+        <div class="col-md-6">
+          <div class="box">
+            <div class="box-header with-border">
+              <h5 class="text-green">Reject by Company
+                <button mat-stroked-button color="success" class="pull-right"
+                  (click)="pieChart1Legend = !pieChart1Legend">
+                  Toggle Legend
+                </button>
+              </h5>
+            </div>
+            <div class="box-body">
+              <div class="no-data" *ngIf="pieChart1Data.length === 0">
+                No data
+              </div>
+              <div class="chart" *ngIf="pieChart1Data.length > 0">
+                <canvas baseChart [data]="pieChart1Data" [labels]="pieChart1Labels" [chartType]="pieChart1Type"
+                  [options]="pieChart1Options" [plugins]="pieChart1Plugins" [colors]="pieChart1Colors"
+                  [legend]="pieChart1Legend">
+                </canvas>
+                <small>*Unit: (%)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Candidate Reject Reason -->
+        <div class="col-md-6">
+          <div class="box">
+            <div class="box-header with-border">
+              <h5 class="text-green">Reject by Candidate
+                <button mat-stroked-button color="success" class="pull-right"
+                  (click)="pieChart2Legend = !pieChart2Legend">
+                  Toggle Legend
+                </button>
+              </h5>
+            </div>
+            <div class="box-body">
+              <div class="no-data" *ngIf="pieChart2Data.length === 0">
+                No data
+              </div>
+              <div class="chart" *ngIf="pieChart2Data.length > 0">
+                <canvas baseChart [data]="pieChart2Data" [labels]="pieChart2Labels" [chartType]="pieChart2Type"
+                  [options]="pieChart2Options" [plugins]="pieChart2Plugins" [colors]="pieChart2Colors"
+                  [legend]="pieChart2Legend">
+                </canvas>
+                <small>*Unit: (%)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
