@@ -24,6 +24,7 @@ export class CompanyListComponent implements OnInit {
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
+  minPageSize = Paging.pageSizeOptions[0];
 
   constructor(
     private service: CompanyService,
@@ -56,9 +57,13 @@ export class CompanyListComponent implements OnInit {
         'startDate',
         'expiryDate',
         'adminEmail',
+        'companySize',
+        'transferable',
+        'status',
         'lastChangedInfo.refUser.firstname',
         'lastChangedInfo.refUser.lastname',
         'lastChangedInfo.date',
+        
       ]
     };
     this.items = [];

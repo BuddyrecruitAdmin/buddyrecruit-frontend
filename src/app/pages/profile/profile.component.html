@@ -1,3 +1,197 @@
+<!-- content-header -->
+<!-- <ngb-alert *ngIf="alertMessage" [type]="alertType" (close)="alertMessage = null">
+  {{ alertMessage }}
+</ngb-alert> -->
 <div class="content-header with-shadow">
-  <h3>Profile</h3>
+  <div>
+    <h3>Profile</h3>
+  </div>
 </div>
+<!-- Main content -->
+<section class="content">
+
+  <div class="row">
+    <div class="col-md-4">
+      <nb-card>
+        <nb-card-body>
+          <div class="box-body box-profile">
+            <div class="img-default">
+              <span class="fa fa-user"></span>
+            </div>
+            <a (click)="fileInput.click()"><span class="fa fa-images"></span>
+              <input #fileInput type="file" (change)="onFileInput($event)" style="display:none;" accept="image/*" />
+              Select Profile Picture</a>
+            <h6 class="text-ellipsis text-center" [nbTooltip]="profileDetail.firstname + ' ' + profileDetail.lastname">
+              {{profileDetail.firstname}} {{profileDetail.lastname}}
+            </h6>
+
+            <div class="cardNew">
+              <div class="card-icon-left">
+                <i class="fa fa-building"></i>
+              </div>
+              <div class="card-content2">
+                <div class="card-title">Company</div>
+                <div class="card-desc" [nbTooltip]="profileDetail.refCompany?.name">
+                  {{profileDetail.refCompany?.name}}
+                </div>
+              </div>
+            </div>
+            <div class="cardNew">
+              <div class="card-icon-left">
+                <i class="fa fa-briefcase"></i>
+              </div>
+              <div class="card-content2">
+                <div class="card-title">Department</div>
+                <div class="card-desc" [nbTooltip]="profileDetail.thisDepartments?.name">
+                  {{profileDetail.thisDepartments?.name}}
+                </div>
+              </div>
+            </div>
+            <div class="cardNew">
+              <div class="card-icon-left">
+                <i class="fas fa-project-diagram"></i>
+              </div>
+              <div class="card-content2">
+                <div class="card-title">Position</div>
+                <div class="card-desc" [nbTooltip]="role.refHero.name">
+                  {{role.refHero.name}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+
+    <div class="col-md-8">
+      <nb-card>
+        <nb-card-body>
+          <div class="box">
+            <div class="box-header">
+              <h3>Edit Profile</h3>
+            </div>
+            <div>
+              <div class="form-group">
+                <label for="name">Username</label>
+                <input type="text" class="form-control" name="userame" disabled [(ngModel)]="profileDetail.username">
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="label">First name <small class="text-red">*</small></label><br>
+                    <input type="text" [(ngModel)]="profileDetail.firstname" [formControl]="firstName" nbInput fullWidth
+                      placeholder="first name">
+                    <small *ngIf="touched && firstName.errors" class="text-red">{{ sErrorFirstName }}</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="label">Last name <small class="text-red">*</small></label><br>
+                    <input type="text" [(ngModel)]="profileDetail.lastname" [formControl]="lastName" nbInput fullWidth
+                      placeholder="last name">
+                    <small *ngIf="touched && lastName.errors" class="text-red">{{ sErrorLastName }}</small>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="label">Notification email<small class="text-red">*</small></label><br>
+                    <input type="text" [(ngModel)]="profileDetail.notifyEmail" [formControl]="email" nbInput fullWidth
+                      placeholder="email">
+                    <small *ngIf="touched && email.errors" class="text-red">{{ sErrorEmail }}</small>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label class="label">Notification <i class="far fa-bell"></i></label><br>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+
+                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.talentPool.mail">
+                      talentPool
+                    </mat-checkbox><br>
+                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingExam.mail">
+                      pendingExam
+                    </mat-checkbox><br>
+                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingAppointment.mail">
+                      pendingAppointment
+                    </mat-checkbox><br>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingInterview.mail">
+                      pendingInterview
+                    </mat-checkbox><br>
+                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingSignContract.mail">
+                      pendingSignContract
+                    </mat-checkbox><br>
+                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.onboard.mail">
+                      onboard
+                    </mat-checkbox><br>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="change-collapse">
+                    <a (click)="togglePassword()"><span class="fa" [ngClass]="{
+                      'fa-angle-double-up': isChangePassword,
+                      'fa-angle-double-down': !isChangePassword }"></span> Change Password</a>
+                  </div>
+                </div>
+                <div *ngIf="isChangePassword" class="col-md-12">
+                  <div class="form-group">
+                    <label for="name">Current Password <small class="text-red">*</small></label>
+                    <div class="input-group">
+                      <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="profileDetail.passwordCur"
+                        [formControl]="passwordCur" nbInput fullWidth placeholder="Current Password">
+                      <div class="input-group-addon">
+                        <nb-icon icon="{{ showPassword ? 'eye-off-outline' : 'eye-outline' }}"
+                          (click)="showPassword=!showPassword">
+                        </nb-icon>
+                      </div>
+                      <small *ngIf="touched && passwordCur.errors" class="text-red">{{ sErrorPasswordCur }}</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">New Password<small class="text-red">*</small></label>
+                    <div class="input-group">
+                      <input type="{{ showPassword2 ? 'text' : 'password' }}" [(ngModel)]="profileDetail.passwordNew"
+                        [formControl]="passwordNew" nbInput fullWidth placeholder="New Password">
+                      <div class="input-group-addon">
+                        <nb-icon icon="{{ showPassword2 ? 'eye-off-outline' : 'eye-outline' }}"
+                          (click)="showPassword2=!showPassword2">
+                        </nb-icon>
+                      </div>
+                      <small *ngIf="touched && passwordNew.errors" class="text-red">{{ sErrorPasswordNew }}</small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Confirm Password<small class="text-red">*</small></label>
+                    <div class="input-group">
+                      <input type="{{ showPassword3 ? 'text' : 'password' }}" [(ngModel)]="profileDetail.passwordCon"
+                        [formControl]="passwordCon" nbInput fullWidth placeholder="Confirm Password">
+                      <div class="input-group-addon">
+                        <nb-icon icon="{{ showPassword3 ? 'eye-off-outline' : 'eye-outline' }}"
+                          (click)="showPassword3=!showPassword3">
+                        </nb-icon>
+                      </div>
+                      <small *ngIf="touched && passwordCon.errors || passwordCon != passwordNew"
+                        class="text-red">{{ sErrorPasswordCon }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer">
+            <button nbButton ghost routerLink="/dashboard">CANCEL</button>
+            <button nbButton shape="semi-round" status="success" nbTooltip="SAVE" (click)="save()">SAVE</button>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+
+</section>

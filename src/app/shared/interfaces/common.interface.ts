@@ -16,6 +16,12 @@ export interface DropDownValue {
   value: string;
 }
 
+export interface DropDownGroup {
+  group: string;
+  label: string;
+  value: string;
+}
+
 export interface Language {
   th: string;
   en: string;
@@ -43,3 +49,12 @@ export interface Paging {
   pageSize: number,
   pageSizeOptions: number[]
 }
+
+export interface Addresses {
+  address: string,
+  province: string,
+  postalCode: Number,
+  location?: string,
+}
+
+

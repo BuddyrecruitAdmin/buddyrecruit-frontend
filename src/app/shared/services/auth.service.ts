@@ -1,15 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Token, Role } from '../app.constants';
+import { Token, Url } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
-
-// @Injectable({
-//     providedIn: 'root'
-// })
-// export class AuthenticationService {
-
-//     constructor(private router: Router) { }
-
 
 export function setAuthentication(authentication?: IAuthentication): void {
   if (authentication) {
@@ -36,6 +26,15 @@ export function getRole(): any {
 
 export function checkPermission(): string {
   return '';
+}
+
+export function setUrl(url: string = '') {
+  localStorage.setItem(Url, JSON.stringify(url));
+}
+
+export function getUrl() {
+  const url = JSON.parse(localStorage.getItem(Url));
+  return (!url || url === null || url === '/') ? undefined : url;
 }
 
 // }

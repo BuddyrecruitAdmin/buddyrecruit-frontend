@@ -20,7 +20,8 @@ import {
   NbTooltipModule,
   NbTreeGridModule,
   NbDialogModule,
-  NbWindowModule
+  NbWindowModule,
+  NbAccordionModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -73,13 +74,18 @@ import { SettingComponent } from './setting.component';
 import { CompanyListComponent } from './company/company-list/company-list.component';
 import { CompanyTypeComponent } from './company-type/company-type.component';
 import { CompanyDetailComponent } from './company/company-detail/company-detail.component';
-import { DepartmentComponent } from './department/department.component';
 import { JobPositionComponent } from './job-position/job-position.component';
 import { LocationComponent } from './location/location.component';
-import { MailTemplateComponent } from './mail-template/mail-template.component';
+import { MailTemplateListComponent } from './mail-template/mail-template-list/mail-template-list.component';
+import { MailTemplateDetailComponent } from './mail-template/mail-template-detail/mail-template-detail.component';
 import { RejectionComponent } from './rejection/rejection.component';
 import { ReportComponent } from './report/report.component';
-import { UserComponent } from './user/user.component';
+import { DepartmentListComponent } from './department/department-list/department-list.component';
+import { DepartmentDetailComponent } from './department/department-detail/department-detail.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { UserDetailComponent } from './user/user-detail/user-detail.component';
+import { AuthorizeListComponent } from './authorize/authorize-list/authorize-list.component';
+import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
 
 @NgModule({
   declarations: [
@@ -87,13 +93,18 @@ import { UserComponent } from './user/user.component';
     CompanyListComponent,
     CompanyTypeComponent,
     CompanyDetailComponent,
-    DepartmentComponent,
     JobPositionComponent,
     LocationComponent,
-    MailTemplateComponent,
+    MailTemplateListComponent,
+    MailTemplateDetailComponent,
     RejectionComponent,
     ReportComponent,
-    UserComponent
+    DepartmentListComponent,
+    DepartmentDetailComponent,
+    UserListComponent,
+    UserDetailComponent,
+    AuthorizeListComponent,
+    AuthorizeDetailComponent
   ],
   imports: [
     CommonModule,
@@ -159,7 +170,8 @@ import { UserComponent } from './user/user.component';
     NbTreeGridModule,
     Ng2SmartTableModule,
     NbDialogModule.forRoot(),
-    NbWindowModule.forChild()
+    NbWindowModule.forChild(),
+    NbAccordionModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

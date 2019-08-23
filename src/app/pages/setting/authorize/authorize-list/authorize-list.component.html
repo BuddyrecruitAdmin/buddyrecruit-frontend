@@ -1,0 +1,64 @@
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 
+        'col-sm-6':role.refAuthorize.configuration.user.editable,
+        'col-sm-8':!role.refAuthorize.configuration.user.editable }">
+      <h3>Authorize</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="role.refAuthorize.configuration.user.editable" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create"
+        [routerLink]="'/setting/authorize-detail'">Create</button>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6" *ngFor="let item of items;">
+    <nb-card accent="success">
+      <nb-card-header>
+        <div class="title">
+          <label [nbTooltip]="item.name || item._id">{{ item.name || item._id }}</label>
+        </div>
+        <div class="actions">
+          <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+            [routerLink]="'/setting/authorize-detail/'+item._id">
+          </nb-icon>
+          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="!item.active">
+          </nb-icon>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+            {{ item.active ? 'Active': 'Inactive' }}
+          </span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update by</label>
+          <span>
+            {{ item.lastChangedInfo?.refUser?.firstname }}
+            {{ item.lastChangedInfo?.refUser?.lastname }}
+          </span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update date</label>
+          <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}</span>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+</mat-paginator>

@@ -1,3 +1,100 @@
-<p>
-  rejection works!
-</p>
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.rejection.editable, 'col-sm-8':!role.refAuthorize.configuration.rejection.editable}">
+      <h3>Reason for reject</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="role.refAuthorize.configuration.rejection.editable" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">ADD REASON</button>
+    </div>
+  </div>
+</div>
+<!-- list all item -->
+<div class="row">
+  <div class="col-lg-6" *ngFor="let item of items;">
+    <nb-card accent="success">
+      <nb-card-header>
+        <div class="title">
+          <label [nbTooltip]="item.name">{{ item.name }}</label>
+        </div>
+        <div class="actions">
+          <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
+          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+            {{ item.active ? 'Active': 'Inactive' }}
+          </span>
+        </div>
+        <div class="text-group">
+          <label class="label">Reson reject by</label>
+          <span>{{ item.candidateFlag? 'Candidate': 'Company' }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Point</label>
+          <span>{{ item.point }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update by</label>
+          <span>
+            {{ item.lastChangedInfo.refUser.firstname }}
+            {{ item.lastChangedInfo.refUser.lastname }}
+          </span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update date</label>
+          <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+<!-- popup item -->
+<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+  [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+</mat-paginator>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>Job Position</nb-card-header>
+    <nb-card-body>
+      <div class="form-control-group">
+        <label class="label">Reason for reject <span style="color:red">*</span></label>
+        <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth>
+      </div>
+      <div class="form-control-group">
+        <label>Point</label>
+        <input type="number" [(ngModel)]="itemDialog.point" nbInput fullWidth>
+      </div>
+      <label>Reason reject by</label><br>
+      <mat-radio-group [(ngModel)]="itemDialog.candidateFlag">
+        <mat-radio-button [value]="true" class="mg-r-10 ">Candidate
+        </mat-radio-button><br>
+        <mat-radio-button [value]="false">Company</mat-radio-button>
+      </mat-radio-group>
+      <div>
+        <label class="label">Status</label>
+        <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id" name="radio02">
+          <nb-radio *ngFor="let status of statusList" [value]="status.value" name="radio02">
+            {{ status.label }}
+          </nb-radio>
+        </nb-radio-group>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+      <button nbButton status="success" (click)="save()" [disabled]="!itemDialog.name">Save</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

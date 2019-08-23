@@ -9,6 +9,25 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { NbMenuModule } from '@nebular/theme';
+import {
+  NbActionsModule,
+  NbButtonModule,
+  NbCardModule,
+  NbCheckboxModule,
+  NbDatepickerModule,
+  NbIconModule,
+  NbInputModule,
+  NbRadioModule,
+  NbSelectModule,
+  NbUserModule,
+  NbToastrModule,
+  NbTooltipModule,
+  NbTreeGridModule,
+  NbDialogModule,
+  NbWindowModule,
+  NbAccordionModule
+} from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesRoutingModule } from './pages-routing.module';
 
@@ -60,6 +79,22 @@ import { ChartsModule } from 'ng2-charts';
 
 import { PagesComponent } from './pages.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
+import { JdListComponent } from './jd/jd-list/jd-list.component';
+import { JdDetailComponent } from './jd/jd-detail/jd-detail.component';
+import { JrListComponent } from './jr/jr-list/jr-list.component';
+import { JrDetailComponent } from './jr/jr-detail/jr-detail.component';
+import { TalentPoolListComponent } from './talent-pool/talent-pool-list/talent-pool-list.component';
+import { TalentPoolDetailComponent } from './talent-pool/talent-pool-detail/talent-pool-detail.component';
+import { ExamListComponent } from './exam/exam-list/exam-list.component';
+import { ExamDetailComponent } from './exam/exam-detail/exam-detail.component';
+import { AppointmentListComponent } from './appointment/appointment-list/appointment-list.component';
+import { AppointmentDetailComponent } from './appointment/appointment-detail/appointment-detail.component';
+import { InterviewListComponent } from './interview/interview-list/interview-list.component';
+import { InterviewDetailComponent } from './interview/interview-detail/interview-detail.component';
+import { SignContractListComponent } from './sign-contract/sign-contract-list/sign-contract-list.component';
+import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
+import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
+import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
 
 @NgModule({
   imports: [
@@ -71,6 +106,23 @@ import { ProfileComponent } from '../pages/profile/profile.component';
 
     ThemeModule,
     NbMenuModule,
+    NbActionsModule,
+    NbButtonModule,
+    NbCardModule,
+    NbCheckboxModule,
+    NbDatepickerModule,
+    NbIconModule,
+    NbInputModule,
+    NbRadioModule,
+    NbSelectModule,
+    NbUserModule,
+    NbToastrModule,
+    NbTooltipModule,
+    NbTreeGridModule,
+    Ng2SmartTableModule,
+    NbDialogModule.forRoot(),
+    NbWindowModule.forChild(),
+    NbAccordionModule,
 
     A11yModule,
     CdkStepperModule,
@@ -119,6 +171,22 @@ import { ProfileComponent } from '../pages/profile/profile.component';
   declarations: [
     PagesComponent,
     ProfileComponent,
+    JdListComponent,
+    JdDetailComponent,
+    JrListComponent,
+    JrDetailComponent,
+    TalentPoolListComponent,
+    TalentPoolDetailComponent,
+    ExamListComponent,
+    ExamDetailComponent,
+    AppointmentListComponent,
+    AppointmentDetailComponent,
+    InterviewListComponent,
+    InterviewDetailComponent,
+    SignContractListComponent,
+    SignContractDetailComponent,
+    OnboardListComponent,
+    OnboardDetailComponent,
   ],
   exports: [
     A11yModule,

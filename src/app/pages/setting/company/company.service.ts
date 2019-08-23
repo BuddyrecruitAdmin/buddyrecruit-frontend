@@ -31,4 +31,14 @@ export class CompanyService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.COMPANY_CREATE, request);
   }
 
+  getDetail(id: any): Observable<ApiResponse> {
+    const body = {
+      _id: id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.COMPANY_DETAIL,  body );
+  }
+
+  update(request: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.COMPANY_EDIT, request);
+  }
 }

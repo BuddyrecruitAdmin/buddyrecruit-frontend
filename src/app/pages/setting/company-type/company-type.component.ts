@@ -31,6 +31,7 @@ export class CompanyTypeComponent implements OnInit {
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
+  minPageSize = Paging.pageSizeOptions[0];
 
   constructor(
     private service: CompanyTypeService,

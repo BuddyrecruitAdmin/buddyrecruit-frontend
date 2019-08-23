@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { CompanyService } from '../company.service';
 import { CompanyTypeService } from '../../company-type/company-type.service';
 import { ResponseCode, Paging, State } from '../../../../shared/app.constants';
+import { MESSAGE } from '../../../../shared/constants/message';
 import { DropDownValue } from '../../../../shared/interfaces/common.interface';
 import { getRole } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
@@ -51,17 +52,20 @@ export class CompanyDetailComponent implements OnInit {
   refHero: any;
   state: string;
   companyDetail: CompanyDetail;
+  companyDetailTemp: CompanyDetail;
   typeOptions: DropDownValue[];
   companyOptions: DropDownValue[];
   roleSelected: string;
   errMsg: ErrMsg;
+  _id: string;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private service: CompanyService,
     private companyTypeService: CompanyTypeService,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    public matDialog: MatDialog,
   ) {
   }
 
@@ -74,6 +78,8 @@ export class CompanyDetailComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this.state = State.Edit;
+        this._id = params.id;
+        this.getDetail();
       } else {
         this.state = State.Create;
       }
@@ -151,16 +157,75 @@ export class CompanyDetailComponent implements OnInit {
     });
   }
 
+  getDetail() {
+    this.service.getDetail(this._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          this.companyDetail = response.data;
+          if (this.companyDetail.hero.payroll === false && this.companyDetail.hero.manager === false) {
+            this.roleSelected = '1';
+            console.log(this.roleSelected);
+          }
+          if (this.companyDetail.hero.payroll === false && this.companyDetail.hero.manager) {
+            this.roleSelected = '2';
+            console.log(this.roleSelected);
+          }
+          if (this.companyDetail.hero.payroll && this.companyDetail.hero.manager === false) {
+            this.roleSelected = '3';
+            console.log(this.roleSelected);
+          }
+          if (this.companyDetail.hero.payroll && this.companyDetail.hero.manager) {
+            this.roleSelected = '4';
+            console.log(this.roleSelected);
+          }
+          this.companyDetailTemp = _.cloneDeep(this.companyDetail);
+        }
+      }
+    });
+  }
+
+  back() {
+    let companyDetail: CompanyDetail;
+    if (this.state === State.Create) {
+      companyDetail = this.initialModel();
+    } else {
+      companyDetail = _.cloneDeep(this.companyDetailTemp);
+    }
+    if (JSON.stringify(companyDetail) === JSON.stringify(this.companyDetail)) {
+      this.router.navigate(['/setting/company']);
+    } else {
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: '40%',
+        data: { type: 'C', content: MESSAGE[31] }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          this.router.navigate(['/setting/company']);
+        }
+      });
+    }
+  }
+
   save() {
     if (this.validation()) {
       const request = this.setRequest();
-      this.service.create(request).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.showToast('success', 'Success Message', response.message);
-        } else {
-          this.showToast('danger', 'Error Message', response.message);
-        }
-      });
+      if (this.state === State.Create) {
+        this.service.create(request).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      } else if (this.state === State.Edit) {
+        this.service.update(request).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
     }
   }
 
@@ -225,8 +290,8 @@ export class CompanyDetailComponent implements OnInit {
       default:
         break;
     }
-    request.startDate.setTime( request.startDate.getTime() + Math.abs(request.startDate.getTimezoneOffset()*60*1000 ));
-    request.expiryDate.setTime( request.expiryDate.getTime() + Math.abs(request.expiryDate.getTimezoneOffset()*60*1000 ));
+    // request.startDate.setTime(request.startDate.getTime() + Math.abs(request.startDate.getTimezoneOffset() * 60 * 1000));
+    // request.expiryDate.setTime(request.expiryDate.getTime() + Math.abs(request.expiryDate.getTimezoneOffset() * 60 * 1000));
 
     return request;
   }

@@ -12,21 +12,19 @@ export const API_ENDPOINT = {
   },
   JOBDESCRIPTION: {
     LIST: "jd/list",
-    DEGREE: "degree",
-    DETAIL: "jd/{id}",
-    CREATE: "jd",
-    UPDATE: "jd",
-    DELETE: "jd/{id}"
-
+    DETAIL: "jd/detail",
+    CREATE: "jd/create",
+    EDIT: "jd/edit",
+    DELETE: "jd/delete"
   },
   JOBREQUEST: {
     LIST: "jr/list",
     DETAIL: "jr/detail",
-    CREATE: "jr",
-    UPDATE: "jr",
-    DELETE: "jr/{id}",
-    APPROVE: "jr/approve/{id}",
-    REJECT: "jr/reject/{id}",
+    CREATE: "jr/create",
+    EDIT: "jr/edit",
+    DELETE: "jr/delete",
+    APPROVE: "jr/approve",
+    REJECT: "jr/reject",
     SOURCE: "source/mode/{mode}",
     ACTION: "jr/action",
   },
@@ -88,18 +86,20 @@ export const API_ENDPOINT = {
     COMPANY_CREATE: "company/create",
     COMPANY_EDIT: "company/edit",
     COMPANY_DELETE: "company/delete",
-
-
-
-    POSITION_LIST: "position/list",
-    POSITION_CREATE: "create/position",
-    POSITION_LIST_ACTIVE: "position/list/active",
-    POSITION_ACTION: "position/action",
+    COMPANY_DETAIL: "company/detail",
 
     DEPARTMENT_LIST: "department/list",
-    DEPARTMENT_CREATE: "create/department",
-    DEPARTMENT_LIST_ACTIVE: "department/list/active",
-    DEPARTMENT_ACTION: "department/action",
+    DEPARTMENT_CREATE: "department/create",
+    DEPARTMENT_EDIT: "department/edit",
+    DEPARTMENT_DELETE: "department/delete",
+    DEPARTMENT_DETAIL: "department/detail",
+
+    POSITION_LIST: "position/list",
+    POSITION_CREATE: "position/create",
+    POSITION_LIST_ACTIVE: "position/list/active",
+    POSITION_ACTION: "position/action",
+    POSITION_EDIT: "position/edit",
+    POSITION_DELETE: "position/delete",
 
     LOCATION_LIST: "location/list",
     LOCATION_CREATE: "create/location",
@@ -107,17 +107,30 @@ export const API_ENDPOINT = {
     LOCATION_ACTION: "location/action",
 
     USER_LIST: "user/list",
-    USER_CREATE: "create/user",
+    USER_CREATE: "user/create",
+    USER_EDIT: "user/edit",
+    USER_DELETE: "user/delete",
+    USER_DETAIL: "user/detail",
     USER_LIST_ACTIVE: "user/list/active",
     USER_ACTION: "user/action",
     USER_STATUS_LIST: "user/status/list",
     ROLE_LIST: "role/list",
+    USER_PROFILE: "user/profile",
+    USER_PROFILE_EDIT: "user/profile/edit",
 
-    REASONS_REJECT_LIST: "rejectReason/list",
-    REASONS_REJECT_CREATE: "create/rejectReason",
-    REASONS_REJECT_LIST_ACTIVE: "rejectReason/list/active",
-    REASONS_REJECT_ACTION: "rejectReason/action",
-    REASONS_REJECT_STATUS_LIST: "rejectReason/status/list",
+    REASONS_REJECT_LIST: "rejection/list",
+    REASONS_REJECT_CREATE: "rejection/create",
+    REASONS_REJECT_LIST_ACTIVE: "rejection/list/active",
+    REASONS_REJECT_ACTION: "rejection/action",
+    REASONS_REJECT_STATUS_LIST: "rejection/status/list",
+    REASONS_REJECT_EDIT: "rejection/edit",
+    REASONS_REJECT_DELETE: "rejection/delete",
+
+    AUTH_LIST: "authorize/list",
+    AUTH_CREATE: "authorize/create",
+    AUTH_EDIT: "authorize/edit",
+    AUTH_DELETE: "authorize/delete",
+    AUTH_DETAIL: "authorize/detail",
 
     REJECT_STAGE_LIST: "stageReject/stage",
     REJECT_SUBSTAGE_LIST: "stageReject/substage",
@@ -134,6 +147,12 @@ export const API_ENDPOINT = {
 
     EMAIL_LIST: "mailTemplate/list",
     EMAIL_ACTION: "mailTemplate/action",
+
+    REPORT_LIST: "report/list",
+    REPORT_CREATE: "report/create",
+    REPORT_EDIT: "report/edit",
+    REPORT_DELETE: "report/delete",
+    REPORT_DETAIL: "report/detail",
   },
   CV: {
     DETAIL: "candidate/id",
@@ -183,5 +202,11 @@ export const API_ENDPOINT = {
   },
   REPORT: {
     ACTION: "report"
+  },
+  HERO: {
+    LIST: "hero/list"
+  },
+  AUTHORIZE: {
+    LIST: "authorize/list"
   }
 };

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { NbMenuItem } from '@nebular/theme';
 import * as MENU from './pages-menu';
 import { getRole } from '../shared/services/auth.service';
@@ -139,6 +138,9 @@ export class PagesComponent {
         }
         if (configuration.user && configuration.user.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[9]);
+        }
+        if (configuration.user && configuration.user.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[10]);
         }
         menuSetting.forEach(element => {
           this.menu.push(element);

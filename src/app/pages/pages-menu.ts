@@ -161,13 +161,18 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
-    title: 'report',
+    title: 'Report',
     link: '/setting/report',
     hidden: false,
   },
   {
     title: 'User',
     link: '/setting/user',
+    hidden: false,
+  },
+  {
+    title: 'Authorize',
+    link: '/setting/authorize',
     hidden: false,
   },
 ];

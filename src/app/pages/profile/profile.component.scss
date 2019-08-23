@@ -1,3 +1,8 @@
+
+.modal-body.confirmation {
+  height: auto;
+  overflow-y: hidden;
+}
 .profile-user-img {
   margin: 10px auto 5px;
   width: 100px;
@@ -36,4 +41,104 @@
 }
 .card {
   margin-left: 15px;
+}
+tbody td.actions {
+  text-align: center;
+  padding: 0.2rem;
+  vertical-align: middle;
+  button {
+    margin: 0 0.1rem;
+  }
+}
+.card-icon-left {
+  display: inline-block;
+  font-size: 35px;
+  width: 45px;
+  color: var(--color-green);
+  margin-right: 10px;
+}
+.card-content2 {
+  width: 75%;
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 14px;
+  color: var(--color-light-gray);
+  margin-bottom: 0rem;
+}
+.card-desc {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-gray);
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 70px);
+  margin-top: 5px;
+}
+.cardNew {
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+.buttonInside {
+  position: relative;
+  width: 100%;
+}
+.buttonInside input {
+  padding-right: 30px;
+  /* margin-bottom: 15px; */
+}
+.modal-content {
+  border-radius: 8px;
+}
+.modal-header .modal-tools {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+.modal-body {
+  height: 305px;
+  overflow-y: scroll;
+}
+.modal-footer .btn.btn-left {
+  float: left;
+  margin-left: 0px;
+  margin-right: 5px;
+}
+.box-footer {
+  text-align: right;
+  padding: 15px;
+  border-top: 1px solid #f4f4f4;
+}
+.change-collapse {
+  color: var(--color-green);
+  margin-bottom: 15px;
+}
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+h6{
+  font-family: sukhumvit;
+  font-size: 18px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+.btnCancel{
+  font-family: sukhumvit;
+  cursor: pointer;
+  color: #707070 !important;
+  border-radius: 8px !important;
+  border: none;
+  box-shadow: none;
+  font-weight: 800;
 }

@@ -4,7 +4,7 @@ import { MESSAGE } from "../../shared/constants/message";
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { LoginService } from './login.service';
 import { ResponseCode } from '../../shared/app.constants';
-import { getToken, setAuthentication } from '../../shared/services/auth.service';
+import { getToken, setAuthentication, getUrl, setUrl } from '../../shared/services/auth.service';
 import {
   NbComponentStatus,
   NbGlobalLogicalPosition,
@@ -68,25 +68,31 @@ export class LoginComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);
         this.showToast('success', '', response.data.message);
-        switch (true) {
-          case response.data.refHero.isSuperAdmin:
-            this.router.navigate(['/setting/company']);
-            break;
-          case response.data.refHero.isAdmin:
-            this.router.navigate(['/setting/company']);
-            break;
-          case response.data.refHero.isHR:
-            this.router.navigate(['/dashboard']);
-            break;
-          case response.data.refHero.isManager:
-            this.router.navigate(['/dashboard']);
-            break;
-          case response.data.refHero.isPayroll:
-            this.router.navigate(['/dashboard']);
-            break;
-          default:
-            this.router.navigate(['/dashboard']);
-            break;
+        const url = getUrl();
+        if (url) {
+          setUrl('');
+          this.router.navigate([url]);
+        } else {
+          switch (true) {
+            case response.data.refHero.isSuperAdmin:
+              this.router.navigate(['/setting/company']);
+              break;
+            case response.data.refHero.isAdmin:
+              this.router.navigate(['/setting/company']);
+              break;
+            case response.data.refHero.isHR:
+              this.router.navigate(['/dashboard']);
+              break;
+            case response.data.refHero.isManager:
+              this.router.navigate(['/dashboard']);
+              break;
+            case response.data.refHero.isPayroll:
+              this.router.navigate(['/dashboard']);
+              break;
+            default:
+              this.router.navigate(['/dashboard']);
+              break;
+          }
         }
       } else {
         this.showToast('danger', '', response.data.message);

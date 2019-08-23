@@ -54,6 +54,7 @@ export enum DiscountType {
 }
 
 export const Token = 'Authentication';
+export const Url = 'Url';
 
 export enum HolidayFrequency {
   Yearly = 'yearly',

@@ -1,0 +1,107 @@
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.jobPosition.editable, 
+        'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
+      <h3>Email</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/mail-template-detail'">ADD
+        MAIL</button>
+    </div>
+  </div>
+</div>
+<!-- Tab switch -->
+<nb-card>
+  <nb-card-body>
+    <nb-tabset>
+      <nb-tab tabTitle="Internal">
+        <!-- list all item  Internal-->
+        <div class="row">
+          <div class="col-lg-6" *ngFor="let item of items;">
+            <nb-card accent="success">
+              <nb-card-header>
+                <div class="title">
+                  <label nbTooltip="name">name email</label>
+                </div>
+                <div class="actions">
+                  <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
+                  <nb-icon icon="email-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+                </div>
+              </nb-card-header>
+              <nb-card-body>
+                <div class="text-group">
+                  <label class="label">Remark</label>
+                </div>
+                <div class="text-group">
+                  <label class="label">CC</label>
+
+                </div>
+                <div class="text-group">
+                  <label class="label">BCC</label>
+
+                </div>
+                <div class="text-group">
+                  <label class="label">Last update by</label>
+
+                </div>
+                <div class="text-group">
+                  <label class="label">Last update date</label>
+
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="External">
+        <!-- list all item External -->
+        <div class="row">
+          <div class="col-lg-6" *ngFor="let item of items;">
+            <nb-card accent="success">
+              <nb-card-header>
+                <div class="title">
+                  <label nbTooltip="name">name email</label>
+                </div>
+                <div class="actions">
+                  <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
+                  <nb-icon icon="email-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+                </div>
+              </nb-card-header>
+              <nb-card-body>
+                <div class="text-group">
+                  <label class="label">Remark</label>
+                </div>
+                <div class="text-group">
+                  <label class="label">CC</label>
+
+                </div>
+                <div class="text-group">
+                  <label class="label">BCC</label>
+
+                </div>
+                <div class="text-group">
+                  <label class="label">Last update by</label>
+
+                </div>
+                <div class="text-group">
+                  <label class="label">Last update date</label>
+
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+      </nb-tab>
+    </nb-tabset>
+  </nb-card-body>
+</nb-card>

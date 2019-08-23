@@ -1,0 +1,18 @@
+.division-bg {
+  background: #edf1f7;
+  padding: 1rem;
+}
+.division-bg nb-card {
+  margin-bottom: 1rem;
+}
+nb-accordion nb-accordion-item {
+  border-top: 1px solid #eaeef5;
+}
+.icon-close {
+  color: var(--color-red);
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.5rem;
+}

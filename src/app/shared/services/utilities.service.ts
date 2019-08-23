@@ -9,7 +9,7 @@ export class UtilitiesService {
 
   convertDate(date: Date): string {
     date = new Date(date);
-    if (date.getUTCFullYear() > 1900) {
+    if (date.getUTCFullYear() > 1970) {
       let arrayDate = [];
       arrayDate = date
         .toISOString()
@@ -23,7 +23,7 @@ export class UtilitiesService {
 
   convertDateTime(date: Date): string {
     date = new Date(date);
-    if (date.getUTCFullYear() > 1900) {
+    if (date.getUTCFullYear() > 1970) {
       let arrayDate = [];
       let arrayTime = [];
       arrayDate = date

@@ -1,0 +1,113 @@
+<div class="content-header with-shadow">
+  <h3>User <small class="text-cap">({{ state }})</small></h3>
+</div>
+
+<nb-card>
+  <nb-card-header>
+    User Detail
+    <div class="pull-right">
+      <mat-checkbox [(ngModel)]="userDetail.active">Active</mat-checkbox>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-control-group">
+          <label class="label">Title <span class="text-red">*</span></label>
+          <nb-select placeholder="Select Title" [(ngModel)]="userDetail.title" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.title }">
+            <nb-option *ngFor="let option of prefixOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.title" class="text-red">{{ errMsg.title }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Firstname <span class="text-red">*</span></label>
+          <input type="text" [(ngModel)]="userDetail.firstname" nbInput fullWidth placeholder="Firstname"
+            [ngClass]="{ 'status-danger': errMsg.firstname }">
+          <small *ngIf="errMsg.firstname" class="text-red">{{ errMsg.firstname }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Lastname <span class="text-red">*</span></label>
+          <input type="text" [(ngModel)]="userDetail.lastname" nbInput fullWidth placeholder="Lastname"
+            [ngClass]="{ 'status-danger': errMsg.lastname }">
+          <small *ngIf="errMsg.lastname" class="text-red">{{ errMsg.lastname }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Username <span class="text-red">*</span></label>
+          <input type="text" [(ngModel)]="userDetail.username" nbInput fullWidth placeholder="Username"
+            autocomplete="off" [ngClass]="{ 'status-danger': errMsg.username }">
+          <small *ngIf="errMsg.username" class="text-red">{{ errMsg.username }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Password <small>(Initial) </small> <span class="text-red">*</span></label>
+          <div class="input-group">
+            <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="userDetail.password" nbInput fullWidth
+              placeholder="Password" autocomplete="off" [ngClass]="{ 'status-danger': errMsg.password }">
+            <div class="input-group-addon">
+              <nb-icon icon="{{ showPassword ? 'eye-off-outline' : 'eye-outline' }}"
+                (click)="showPassword=!showPassword">
+              </nb-icon>
+            </div>
+          </div>
+          <small *ngIf="errMsg.password" class="text-red">{{ errMsg.password }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Notify Email <span *ngIf="!useSameUsername" class="text-red">*</span></label>
+          <mat-checkbox [(ngModel)]="useSameUsername">Use Same Username</mat-checkbox>
+          <input type="text" [(ngModel)]="userDetail.notifyEmail" nbInput fullWidth placeholder="Notify Email"
+            class="m-t-5" autocomplete="off" [ngClass]="{ 'status-danger': errMsg.notifyEmail }"
+            [disabled]="useSameUsername">
+          <small *ngIf="errMsg.notifyEmail" class="text-red">{{ errMsg.notifyEmail }}</small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-control-group">
+          <label class="label">Department <span class="text-red">*</span></label>
+          <nb-select placeholder="Select Department" [(ngModel)]="userDetail.refDepartment" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.refDepartment }" (selectedChange)="onChangeDepartment($event)">
+            <nb-option *ngFor="let option of departmentOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.refDepartment" class="text-red">{{ errMsg.refDepartment }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Division <span class="text-red">*</span></label>
+          <nb-select placeholder="Select Division" [(ngModel)]="userDetail.refDivision" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.refDivision }" [disabled]="divisionOptions.length <= 1">
+            <nb-option *ngFor="let option of divisionOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.refDivision" class="text-red">{{ errMsg.refDivision }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">User Role <span class="text-red">*</span></label>
+          <nb-select placeholder="Select User Role" [(ngModel)]="userDetail.refHero" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.refHero }">
+            <nb-option *ngFor="let option of roleOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.refHero" class="text-red">{{ errMsg.refHero }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Authorize Role <span class="text-red">*</span></label>
+          <nb-select placeholder="Select Authorize Role" [(ngModel)]="userDetail.refAuthorize" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.refAuthorize }">
+            <nb-option *ngFor="let option of authOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.refAuthorize" class="text-red">{{ errMsg.refAuthorize }}</small>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="default" (click)="back()">Back</button>
+    <button nbButton status="success" (click)="save()">Save</button>
+  </nb-card-footer>
+</nb-card>

@@ -21,25 +21,25 @@ export class PopupMessageComponent implements OnInit {
   ngOnInit() {
     switch (this.data.type) {
       case "C": { // Confirmation
-        this.data.title = this.data.title ? this.data.title : "Confirmation";
-        this.data.content = this.data.content ? this.data.content : "Are you sure?";
-        this.data.btnText = this.data.btnText ? this.data.btnText : "OK";
+        this.data.title = this.data.title || "Confirmation";
+        this.data.content = this.data.content || "Are you sure?";
+        this.data.btnText = this.data.btnText || "OKAY";
         break;
       }
       case "I": { // Information
-        this.data.content = this.data.content ? this.data.content : "Warning!";
-        this.data.btnText = this.data.btnText ? this.data.btnText : "CONTINUE";
+        this.data.content = this.data.content || "Warning!";
+        this.data.btnText = this.data.btnText || "CONTINUE";
         break;
       }
       case "S": { // Suceess
-        this.data.title = this.data.title ? this.data.title : "Successfully";
-        this.data.btnText = this.data.btnText ? this.data.btnText : "CONTINUE";
+        this.data.title = this.data.title || "Successfully";
+        this.data.btnText = this.data.btnText || "CONTINUE";
         break;
       }
       case "D": { // Confirm to Delete
-        this.data.title = this.data.title ? this.data.title : "Confirmation";
-        this.data.content = this.data.content ? this.data.content : "Do you want to delete?";
-        this.data.btnText = this.data.btnText ? this.data.btnText : "DELETE";
+        this.data.title = this.data.title || "Confirmation";
+        this.data.content = this.data.content || "Do you want to delete?";
+        this.data.btnText = this.data.btnText || "DELETE";
         break;
       }
     }

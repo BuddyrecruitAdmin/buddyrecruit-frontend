@@ -6,9 +6,10 @@
 export const environment = {
   production: false,
   // API_URI: 'http://192.168.25.59:4201', //DEV P KG LAN
-  API_URI: 'http://192.168.25.59:9001', //DEV P KG LAN
+  // API_URI: 'http://192.168.25.59:9001', //DEV P KG LAN
   // API_URI: 'http://192.168.35.146:4201', //DEV P KG  WIFI
   // API_URI: 'http://192.168.35.102:4201', //DEV P MO
   // API_URI: 'http://192.168.25.56:4201', //DEV my com
+  API_URI: 'http://192.168.35.179:9001', //DEV P KG LAN
   WriteLog: true
 };

@@ -13,7 +13,7 @@ export class CommonService extends NetworkService {
     constructor(
         protected httpClient: HttpClient,
         protected errorHandler: HttpErrorHandler) {
-        super('SettingService', httpClient, errorHandler);
+        super('CommonService', httpClient, errorHandler);
     }
 
 }

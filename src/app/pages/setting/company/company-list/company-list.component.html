@@ -5,10 +5,10 @@
     </div>
     <div class="col-sm-4">
       <div class="input-group">
-        <input type="text" name="search" nbInput fullWidth placeholder="Search" nbTooltip="Search"
-          (input)="onSearchPress($event.target.value)" (keyup.enter)="onSearchPress($event.target.value)">
-        <div class="input-group-addon">
-          <nb-icon icon="search-outline" class="link" (click)="onSearchPress()"></nb-icon>
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
           <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
           </nb-icon>
           <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
-           *ngIf="utilitiesService.isDateGreaterThanToday(item.startDate)"></nb-icon>
+            *ngIf="utilitiesService.isDateGreaterThanToday(item.startDate)"></nb-icon>
         </div>
       </nb-card-header>
       <nb-card-body>
@@ -77,3 +77,7 @@
     </nb-card>
   </div>
 </div>
+
+<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+  [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+</mat-paginator>

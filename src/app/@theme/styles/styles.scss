@@ -153,6 +153,12 @@
     }
   }
 
+  nb-dialog-container {
+    nb-card {
+      min-width: 20rem;
+    }
+  }
+
   // --------------------------------------------------------------------
   // CONTENT
 
@@ -540,13 +546,64 @@
 // --------------------------------------------------------------------
 // ANGULAR MATERIAL
 
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: var(--color-green);
+}
+mat-spinner {
+  margin: auto;
+  margin-top: 100px;
+}
+.mat-accordion .mat-expansion-panel,
+.mat-accordion .mat-expansion-panel:not([class*=mat-elevation-z]) {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, .16);
+  margin-bottom: 10px;
+}
+.mat-accordion .mat-expansion-panel.mat-expanded {
+  box-shadow: 0 0 12px rgba(0, 0, 0, .16);
+}
+.mat-accordion .mat-expansion-panel-header{
+  font-family: sukhumvit;
+  height: auto !important;
+  padding: 15px 24px;
+}
+.mat-accordion .mat-expansion-panel-header-description,
+.mat-accordion  .mat-expansion-panel-header-title {
+  display: block;
+}
+.mat-calendar-period-button {
+  color: var(--color-gray) !important;
+}
+.mat-checkbox-checked.mat-accent
+.mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent
+.mat-checkbox-background {
+  background-color: var(--color-green);
+}
+.mat-checkbox-layout {
+  margin-bottom: 0;
+}
+.mat-form-field {
+  display: block !important;
+}
+.btn .chevron {
+  color: var(--color-green) !important;
+}
+.angular-editor-textarea { 
+  min-height: 200px !important;
+}
+.mat-badge-content {
+  font-family: sukhumvit !important;
+}
+
 // TOGGLE BUTTON
 .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
   background-color:  var(--color-green);
- }
- .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-   background-color: rgba(0, 176, 156, 0.3); 
- }
+}
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgba(0, 176, 156, 0.3); 
+}
 // RADIO BUTTON
 .mat-radio-inner-circle {
   background-color: var(--color-green);

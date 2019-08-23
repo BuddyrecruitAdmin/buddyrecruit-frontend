@@ -1,0 +1,22 @@
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 
+        'col-sm-6':role.refAuthorize.jd.editable,
+        'col-sm-8':!role.refAuthorize.jd.editable }">
+      <h3>Job Description</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="role.refAuthorize.jd.editable" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create"
+        [routerLink]="'/jd/detail'">Create</button>
+    </div>
+  </div>
+</div>
