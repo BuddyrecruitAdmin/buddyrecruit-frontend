@@ -3,13 +3,6 @@
     "node_modules/codelyzer"
   ],
   "rules": {
-    "trailing-comma": [
-      false,
-      {
-        "multiline": "always",
-        "singleline": "never"
-      }
-    ],
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
@@ -49,7 +42,7 @@
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
-    "no-misused-new": true,
+    "no-misused-new": false,
     "no-non-null-assertion": true,
     "no-shadowed-variable": false,
     "no-string-literal": false,
@@ -110,7 +103,7 @@
       "camelCase"
     ],
     "component-selector": [
-      true,
+      false,
       "element",
       "ngx",
       "app",

@@ -32,10 +32,10 @@
   @include nb-overrides();
 };
 
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @font-face {
   font-family: sukhumvit;
-  src: url(../../../assets/font/SukhumvitSet/SukhumvitSet-Medium.ttf) format("truetype");
+  src: url(../../../assets/font/SukhumvitSet/SukhumvitSet-Medium.ttf) format('truetype');
 }
 :root {
   --color-blue: #1B74B6;
@@ -364,7 +364,9 @@
       opacity: 0.8;
     }    
   }
+
   .text-group {
+    
     line-height: 1.5rem;
     white-space: nowrap; 
     overflow: hidden;
@@ -373,7 +375,7 @@
       font-size: 0.8rem;
     }
     label::after {
-      content: " :";
+      content: ' :';
       margin-right: 0.25rem;
     }
   }
