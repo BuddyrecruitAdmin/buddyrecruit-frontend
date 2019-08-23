@@ -15,7 +15,7 @@ export const ResponseCode = {
   Catch: -99,
   Error: -1,
   Duplicate: -1100,
-  Expired: -101
+  Expired: -101,
 };
 
 export const ResponseMessage = {
@@ -23,7 +23,7 @@ export const ResponseMessage = {
   Duplicate: 'data duplicate',
   EmailDuplicate: 'Email is already registered.',
   NoContent: 'content not found.',
-  NotFound: 'data not found.'
+  NotFound: 'data not found.',
 };
 
 export enum Status {
@@ -85,7 +85,7 @@ export enum State {
 
 export const Paging = {
   pageSizeOptions: [10, 25, 50, 100]
-}
+};
 
 export const ToasteConfig = {
   destroyByClick: true,
@@ -94,4 +94,4 @@ export const ToasteConfig = {
   position: NbGlobalPhysicalPosition.TOP_RIGHT,
   preventDuplicates: false,
   status: 'success',
-}
+};
