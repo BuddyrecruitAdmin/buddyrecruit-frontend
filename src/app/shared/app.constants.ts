@@ -1,9 +1,5 @@
 import {
-  NbComponentStatus,
-  NbGlobalLogicalPosition,
   NbGlobalPhysicalPosition,
-  NbGlobalPosition,
-  NbToastrService,
 } from '@nebular/theme';
 
 export const ResponseCode = {
@@ -30,7 +26,7 @@ export enum Status {
   Active = 'active',
   Inactive = 'inactive',
   Blocked = 'blocked',
-  Deleted = 'deleted'
+  Deleted = 'deleted',
 }
 
 export enum Prefix {
@@ -38,7 +34,7 @@ export enum Prefix {
   Miss = 'miss',
   Mrs = 'mrs',
   Other = 'other',
-  Undefined = 'undefined'
+  Undefined = 'undefined',
 }
 
 export enum Role {
