@@ -3,7 +3,7 @@ export interface ApiResponse {
   code: number;
   status?: string;
   message?: string;
-  totalDataSize?: number
+  totalDataSize?: number;
 }
 
 export interface Authentication {
@@ -37,24 +37,24 @@ export interface Picture {
 }
 
 export interface Criteria {
-  keyword?: string,
-  skip?: number,
-  limit?: number,
-  filter?: string[]
+  keyword?: string;
+  skip?: number;
+  limit?: number;
+  filter?: string[];
 }
 
 export interface Paging {
-  length: number,
-  pageIndex: number,
-  pageSize: number,
-  pageSizeOptions: number[]
+  length: number;
+  pageIndex: number;
+  pageSize: number;
+  pageSizeOptions: number[];
 }
 
 export interface Addresses {
-  address: string,
-  province: string,
-  postalCode: Number,
-  location?: string,
+  address: string;
+  province: string;
+  postalCode: Number;
+  location?: string;
 }
 
 
