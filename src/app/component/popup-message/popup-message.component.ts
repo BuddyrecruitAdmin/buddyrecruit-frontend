@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'app-popup-message',
+  selector: 'ngx-popup-message',
   templateUrl: './popup-message.component.html',
   styleUrls: ['./popup-message.component.css']
 })

@@ -15,7 +15,7 @@ import { MESSAGE } from "../../shared/constants/message";
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'ngx-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
