@@ -210,7 +210,7 @@ export class AuthorizeDetailComponent implements OnInit {
   }
 
   validation(): boolean {
-    let isValid = true;
+    const isValid = true;
     this.errMsg = this.initialErrMsg();
 
     return isValid

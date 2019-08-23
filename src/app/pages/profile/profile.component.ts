@@ -13,7 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { MESSAGE } from "../../shared/constants/message";
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { request } from 'http';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -95,7 +95,7 @@ export class ProfileComponent implements OnInit {
   validation(): boolean {
     this.touched = true;
     let isValid = true;
-    if (this.email.value == null || this.email.value == "") {
+    if (this.email.value === null || this.email.value === "") {
       this.sErrorEmail = MESSAGE[8];
       isValid = false;
     }
@@ -115,8 +115,7 @@ export class ProfileComponent implements OnInit {
       if (!this.passwordCon.valid) {
         this.sErrorPasswordCon = MESSAGE[59];
         isValid = false;
-      }
-      else if (this.passwordCon.value == this.passwordNew.value) {
+      } else if (this.passwordCon.value == this.passwordNew.value) {
         isValid = true;
       } else {
         this.sErrorPasswordCon = MESSAGE[94];

@@ -30,7 +30,7 @@
     "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": [
-      true,
+      false,
       120
     ],
     "member-access": false,
@@ -51,23 +51,23 @@
     "no-eval": true,
     "no-misused-new": true,
     "no-non-null-assertion": true,
-    "no-shadowed-variable": true,
+    "no-shadowed-variable": false,
     "no-string-literal": false,
     "no-string-throw": true,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": false,
-    "no-unnecessary-initializer": true,
+    "no-unnecessary-initializer": false,
     "no-use-before-declare": false,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
-      true,
+      false,
       "check-open-brace",
       "check-catch",
       "check-else",
       "check-whitespace"
     ],
-    "prefer-const": true,
+    "prefer-const": false,
     "quotemark": [
       false,
       "single"
@@ -78,11 +78,11 @@
       "always"
     ],
     "triple-equals": [
-      true,
+      false,
       "allow-null-check"
     ],
     "typedef-whitespace": [
-      true,
+      false,
       {
         "call-signature": "nospace",
         "index-signature": "nospace",
@@ -95,7 +95,7 @@
     "unified-signatures": true,
     "variable-name": false,
     "whitespace": [
-      true,
+      false,
       "check-branch",
       "check-decl",
       "check-operator",
@@ -103,7 +103,7 @@
       "check-type"
     ],
     "directive-selector": [
-      true,
+      false,
       "attribute",
       "ngx",
       "camelCase"
