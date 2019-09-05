@@ -3,7 +3,7 @@
     <div [ngClass]="{ 
         'col-sm-6':role.refHero.isSuperAdmin, 
         'col-sm-8':!role.refHero.isSuperAdmin }">
-      <h3>Report</h3>
+      <h3>Dashboard</h3>
     </div>
     <div class="col-sm-4">
       <div *ngIf="role.refHero.isSuperAdmin" class="input-group">
@@ -39,7 +39,7 @@
               [checked]="item.active" (change)="toggleStatus(item)"></mat-slide-toggle>
           </div>
           <div *ngIf="role.refHero.isSuperAdmin">
-            <nb-icon *ngIf="role.refAuthorize.configuration.report.visible" icon="edit-outline" class="link"
+            <nb-icon *ngIf="role.refAuthorize.configuration.dashboard.visible" icon="edit-outline" class="link"
               nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
             <nb-icon *ngIf="!item.active" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
             </nb-icon>
@@ -87,10 +87,10 @@
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header>Report</nb-card-header>
+    <nb-card-header>Dashboard</nb-card-header>
     <nb-card-body>
       <div class="form-control-group">
-        <label class="label">Report Name <span class="text-red">*</span></label>
+        <label class="label">Dashboard Name <span class="text-red">*</span></label>
         <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth>
       </div>
       <div class="form-control-group">

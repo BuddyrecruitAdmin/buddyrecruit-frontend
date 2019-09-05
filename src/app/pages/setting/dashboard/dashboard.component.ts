@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { ReportService } from './report.service';
+import { DashboardService } from './dashboard.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
 import { getRole } from '../../../shared/services/auth.service';
@@ -22,11 +22,11 @@ export interface Item {
 }
 
 @Component({
-  selector: 'ngx-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['./report.component.scss']
+  selector: 'ngx-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class ReportComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   role: any;
   masterList: Item[];
   items: Item[];
@@ -46,7 +46,7 @@ export class ReportComponent implements OnInit {
   loading: boolean;
 
   constructor(
-    private service: ReportService,
+    private service: DashboardService,
     private dialogService: NbDialogService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
@@ -139,7 +139,7 @@ export class ReportComponent implements OnInit {
             let found: any;
             found = undefined;
             for (const key in response.data) {
-              if (response.data[key].refReport._id === element._id) {
+              if (response.data[key].refDashboard._id === element._id) {
                 found = response.data[key];
                 break;
               }

@@ -13,7 +13,7 @@
       </div>
     </div>
     <div *ngIf="role.refAuthorize.configuration.rejection.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">ADD REASON</button>
+      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">CREATE</button>
     </div>
   </div>
 </div>
@@ -32,18 +32,18 @@
       </nb-card-header>
       <nb-card-body>
         <div class="text-group">
-          <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
-            {{ item.active ? 'Active': 'Inactive' }}
-          </span>
-        </div>
-        <div class="text-group">
           <label class="label">Reson reject by</label>
           <span>{{ item.candidateFlag? 'Candidate': 'Company' }}</span>
         </div>
         <div class="text-group">
           <label class="label">Point</label>
           <span>{{ item.point }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+            {{ item.active ? 'Active': 'Inactive' }}
+          </span>
         </div>
         <div class="text-group">
           <label class="label">Last update by</label>

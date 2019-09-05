@@ -29,8 +29,10 @@
         <div class="actions">
           <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
           </nb-icon>
-          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
-            *ngIf="utilitiesService.isDateGreaterThanToday(item.startDate)"></nb-icon>
+          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
+            utilitiesService.isDateGreaterThanToday(item.startDate) || 
+            utilitiesService.isDateLowerThanToday(item.expiryDate)">
+          </nb-icon>
         </div>
       </nb-card-header>
       <nb-card-body>
@@ -78,6 +80,6 @@
   </div>
 </div>
 
-<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
-  [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
 </mat-paginator>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'ngx-popup-message',
@@ -14,6 +14,7 @@ export class PopupMessageComponent implements OnInit {
       type: string,
       title: string,
       content: string,
+      content2: string,
       btnText: string
     }
   ) { }
@@ -44,5 +45,4 @@ export class PopupMessageComponent implements OnInit {
       }
     }
   }
-
 }

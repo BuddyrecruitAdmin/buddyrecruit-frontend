@@ -128,12 +128,17 @@ export class CompanyDetailComponent implements OnInit {
     this.companyTypeService.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          response.data.forEach(element => {
-            this.typeOptions.push({
-              label: element.name,
-              value: element._id
-            });
+          const companyType = response.data.filter(element => {
+            return element.active;
           });
+          if (companyType) {
+            companyType.forEach(element => {
+              this.typeOptions.push({
+                label: element.name,
+                value: element._id
+              });
+            });
+          }
         }
       }
     });
@@ -146,12 +151,17 @@ export class CompanyDetailComponent implements OnInit {
     this.service.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          response.data.forEach(element => {
-            this.companyOptions.push({
-              label: element.name,
-              value: element._id
-            });
+          const company = response.data.filter(element => {
+            return element.active;
           });
+          if (company) {
+            company.forEach(element => {
+              this.companyOptions.push({
+                label: element.name,
+                value: element._id
+              });
+            });
+          }
         }
       }
     });
@@ -162,21 +172,14 @@ export class CompanyDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.companyDetail = response.data;
-          if (this.companyDetail.hero.payroll === false && this.companyDetail.hero.manager === false) {
-            this.roleSelected = '1';
-            console.log(this.roleSelected);
-          }
-          if (this.companyDetail.hero.payroll === false && this.companyDetail.hero.manager) {
-            this.roleSelected = '2';
-            console.log(this.roleSelected);
-          }
-          if (this.companyDetail.hero.payroll && this.companyDetail.hero.manager === false) {
-            this.roleSelected = '3';
-            console.log(this.roleSelected);
-          }
           if (this.companyDetail.hero.payroll && this.companyDetail.hero.manager) {
             this.roleSelected = '4';
-            console.log(this.roleSelected);
+          } else if (this.companyDetail.hero.payroll) {
+            this.roleSelected = '3';
+          } else if (this.companyDetail.hero.manager) {
+            this.roleSelected = '2';
+          } else {
+            this.roleSelected = '1';
           }
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }

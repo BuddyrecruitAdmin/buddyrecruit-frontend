@@ -17,6 +17,7 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { AuthorizeListComponent } from './authorize/authorize-list/authorize-list.component';
 import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -80,6 +81,10 @@ const routes: Routes = [
         component: ReportComponent,
       },
       {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
         path: 'user',
         component: UserListComponent,
       },
@@ -96,11 +101,11 @@ const routes: Routes = [
         component: AuthorizeListComponent,
       },
       {
-        path: 'authorize-detail',
+        path: 'authorize/:action',
         component: AuthorizeDetailComponent,
       },
       {
-        path: 'authorize-detail/:id',
+        path: 'authorize/:action/:id',
         component: AuthorizeDetailComponent,
       },
       {

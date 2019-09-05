@@ -13,7 +13,7 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-control-group">
-          <label class="label">Title <span class="text-red">*</span></label>
+          <label class="label">Title</label>
           <nb-select placeholder="Select Title" [(ngModel)]="userDetail.title" fullWidth
             [ngClass]="{ 'status-danger': errMsg.title }">
             <nb-option *ngFor="let option of prefixOptions" [value]="option.value">
@@ -74,7 +74,7 @@
           <small *ngIf="errMsg.refDepartment" class="text-red">{{ errMsg.refDepartment }}</small>
         </div>
         <div class="form-control-group">
-          <label class="label">Division <span class="text-red">*</span></label>
+          <label class="label">Division <span *ngIf="userDetail.refDepartment" class="text-red">*</span></label>
           <nb-select placeholder="Select Division" [(ngModel)]="userDetail.refDivision" fullWidth
             [ngClass]="{ 'status-danger': errMsg.refDivision }" [disabled]="divisionOptions.length <= 1">
             <nb-option *ngFor="let option of divisionOptions" [value]="option.value">

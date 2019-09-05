@@ -22,7 +22,7 @@ export class AuthorizeService extends NetworkService {
         refCompany: refCompany._id
       },
       criteria: criteria
-    }
+    };
     return this.post(API_ENDPOINT.CONFIGURATION.AUTH_LIST, body);
   }
 
@@ -40,12 +40,29 @@ export class AuthorizeService extends NetworkService {
   getDetail(_id: any) {
     const body = {
       _id: _id
-    }
+    };
     return this.post(API_ENDPOINT.CONFIGURATION.AUTH_DETAIL, body);
   }
 
   edit(request: any): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.AUTH_EDIT, request);
+  }
+
+  getDefaultList(refCompany: any): Observable<ApiResponse> {
+    const body = {
+      userData: {
+        refCompany: refCompany._id
+      }
+    };
+    return this.post(API_ENDPOINT.CONFIGURATION.AUTH_GET_DEFAULT, body);
+  }
+
+  setDefault(_id: any, refHero: any): Observable<ApiResponse> {
+    const request = {
+      _id: _id,
+      refHero: refHero
+    };
+    return this.post(API_ENDPOINT.CONFIGURATION.AUTH_SET_DEFAULT, request);
   }
 
   getHeroList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
@@ -54,7 +71,7 @@ export class AuthorizeService extends NetworkService {
         refCompany: refCompany._id
       },
       criteria: criteria
-    }
+    };
     return this.post(API_ENDPOINT.HERO.LIST, body);
   }
 

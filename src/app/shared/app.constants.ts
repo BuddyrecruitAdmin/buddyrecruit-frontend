@@ -30,39 +30,27 @@ export enum Status {
 }
 
 export enum Prefix {
-  Mister = 'mr',
-  Miss = 'miss',
-  Mrs = 'mrs',
-  Other = 'other',
-  Undefined = 'undefined',
+  Mr = 'Mr.',
+  Miss = 'Miss',
+  Mrs = 'Mrs.',
+  NotSpecify = 'Not Specify',
 }
 
 export enum Role {
-  Admin = 'admin',
-  Officer = 'officer',
-  Sale = 'sale',
-  SuperAdmin = 'superadmin'
-}
-
-export enum DiscountType {
-  Percentage = '%',
-  Amount = 'amt',
+  SuperAdmin = 'Super Admin',
+  Admin = 'Admin',
+  Hr = 'Hr',
+  Manager = 'Manager',
+  Py = 'Payroll',
 }
 
 export const Token = 'Authentication';
 export const Url = 'Url';
-
-export enum HolidayFrequency {
-  Yearly = 'yearly',
-  Monthly = 'monthly',
-  Weekly = 'weekly',
-  Daily = 'daily',
-}
-
-export enum HolidayType {
-  Static = 'static',
-  Dynamic = 'dynamic'
-}
+export const JdId = 'JdId';
+export const JdName = 'JdName';
+export const JrId = 'JrId';
+export const CandidateId = 'CandidateId';
+export const FlowId = 'FlowId';
 
 export enum DayOfWeek {
   Sunday = 0,
@@ -76,7 +64,8 @@ export enum DayOfWeek {
 
 export enum State {
   Create = 'create',
-  Edit = 'edit'
+  Edit = 'edit',
+  Duplicate = 'duplicate',
 }
 
 export const Paging = {
@@ -90,4 +79,11 @@ export const ToasteConfig = {
   position: NbGlobalPhysicalPosition.TOP_RIGHT,
   preventDuplicates: false,
   status: 'success',
+};
+
+export const InnerWidth = {
+  XS: 575, // Mobile
+  SM: 767, // Tablet
+  MD: 991, // Notebook
+  LG: 1199, // PC Monitor
 };

@@ -37,12 +37,6 @@
       </nb-card-header>
       <nb-card-body>
         <div class="text-group">
-          <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
-            {{ item.active ? 'Active': 'Inactive' }}
-          </span>
-        </div>
-        <div class="text-group">
           <label class="label">Username</label>
           <span>{{ item.username }}</span>
         </div>
@@ -61,6 +55,12 @@
         <div class="text-group">
           <label class="label">Notify Email</label>
           <span>{{ item.notifyEmail || '-' }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+            {{ item.active ? 'Active': 'Inactive' }}
+          </span>
         </div>
         <div class="text-group">
           <label class="label">Last update by</label>

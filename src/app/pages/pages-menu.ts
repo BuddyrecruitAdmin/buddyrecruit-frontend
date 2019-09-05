@@ -141,6 +141,16 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
+    title: 'Authorize',
+    link: '/setting/authorize',
+    hidden: false,
+  },
+  {
+    title: 'User',
+    link: '/setting/user',
+    hidden: false,
+  },
+  {
     title: 'Job Position',
     link: '/setting/job-position',
     hidden: false,
@@ -161,18 +171,13 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
+    title: 'Dashboard',
+    link: '/setting/dashboard',
+    hidden: false,
+  },
+  {
     title: 'Report',
     link: '/setting/report',
-    hidden: false,
-  },
-  {
-    title: 'User',
-    link: '/setting/user',
-    hidden: false,
-  },
-  {
-    title: 'Authorize',
-    link: '/setting/authorize',
     hidden: false,
   },
 ];

@@ -1,3 +1,86 @@
-<p>
-  talent-pool-list works!
-</p>
+<div class="content-header with-shadow">
+  <div class="row">
+    <div class="col-sm-8">
+      <h3>Talent Pool</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Not Mobile -->
+<nb-card *ngIf="!devices.isMobile" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col" class="text-left">Name</th>
+            <th scope="col" style="width: 100px;">Pending</th>
+            <th scope="col" style="width: 100px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items;" class="link" (click)="edit(item)">
+            <td class="text-left">
+              <b [nbTooltip]="item.refJD?.position">
+                {{ item.refJD?.position }}
+              </b>
+            </td>
+            <td>
+              <span class="label" [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">
+                {{ item.pending }}
+              </span>
+            </td>
+            <td class="actions">
+              <button nbButton status="success" size="tiny" (click)="edit(item)">
+                <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+      [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+    </mat-paginator>
+  </nb-card-body>
+</nb-card>
+
+<!-- Is Mobile -->
+<div *ngIf="devices.isMobile">
+  <nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+    nbSpinnerMessage="Loading...">
+    <nb-card-body></nb-card-body>
+  </nb-card>
+  <div *ngIf="!loading" class="row">
+    <div class="col-lg-6" *ngFor="let item of items;">
+      <nb-card style="margin-bottom: 1rem;">
+        <nb-card-header class="link" (click)="edit(item)">
+          <div class="title">
+            <label class="link" [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</label>
+          </div>
+          <div class="actions">
+            <span class="label"
+              [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">{{ item.pending }}</span>
+            <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
+          </div>
+        </nb-card-header>
+      </nb-card>
+    </div>
+    <div class="col-sm-12">
+      <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+        [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+        (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

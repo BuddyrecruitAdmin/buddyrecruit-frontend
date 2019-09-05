@@ -4,6 +4,7 @@
     <span class="icon fa fa-question text-warning"></span>
     <div class="title text-warning">{{ data.title }}</div>
     <div class="message text-gray content-message">{{ data.content }}</div>
+    <div *ngIf="data.content2" class="message text-gray content-message">{{ data.content2 }}</div>
   </div>
   <div mat-dialog-content>
 

@@ -9,18 +9,18 @@ import { API_ENDPOINT } from "../../../shared/constants";
 @Injectable({
   providedIn: "root"
 })
-export class ReportService extends NetworkService {
+export class DashboardService extends NetworkService {
   constructor(
     protected httpClient: HttpClient,
     protected errorHandler: HttpErrorHandler) {
-    super('ReportService', httpClient, errorHandler);
+    super('DashboardService', httpClient, errorHandler);
   }
 
   getMasterList(criteria: any = undefined): Observable<ApiResponse> {
     const body = {
       criteria: criteria
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_MASTER, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_MASTER, body);
   }
 
   getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
@@ -30,33 +30,29 @@ export class ReportService extends NetworkService {
       },
       criteria: criteria
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_LIST, body);
-  }
-
-  create(item: any): Observable<ApiResponse> {
-    const body = {
-      name: item.name,
-      isFree: item.isFree,
-      price: item.price,
-    }
-    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_CREATE, body);
-  }
-
-  edit(item: any): Observable<ApiResponse> {
-    const body = {
-      _id: item._id,
-      name: item.name,
-      active: item.active,
-      isFree: item.isFree,
-      price: item.price,
-    }
-    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_EDIT, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_LIST, body);
   }
 
   deleteItem(item: any): Observable<ApiResponse> {
     const body = {
       _id: item._id
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_DELETE, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_DELETE, body);
   }
+
+  create(request: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_CREATE, request);
+  }
+
+  getDetail(_id: any) {
+    const body = {
+      _id: _id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_DETAIL, body);
+  }
+
+  edit(request: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_EDIT, request);
+  }
+
 }

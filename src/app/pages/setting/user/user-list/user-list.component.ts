@@ -54,7 +54,16 @@ export class UserListComponent implements OnInit {
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
-        'name'
+        'firstname',
+        'lastname',
+        'username',
+        'thisDepartments.name',
+        'thisDivision.name',
+        'refHero.name',
+        'notifyEmail',
+        'lastChangedInfo.refUser.firstname',
+        'lastChangedInfo.refUser.lastname',
+        'lastChangedInfo.date',
       ]
     };
     this.items = [];

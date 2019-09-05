@@ -38,12 +38,6 @@
       </nb-card-header>
       <nb-card-body>
         <div class="text-group">
-          <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
-            {{ item.active ? 'Active': 'Inactive' }}
-          </span>
-        </div>
-        <div class="text-group">
           <label class="label">Address</label>
           <span *ngIf="!item.addresses.length">-</span>
           <span *ngFor="let address of item.addresses">
@@ -54,6 +48,12 @@
           <label class="label">Has Division</label>
           <nb-icon *ngIf="item.hasDivision" icon="checkmark-outline" class="text-green"></nb-icon>
           <nb-icon *ngIf="!item.hasDivision" icon="close-outline" class="text-red"></nb-icon>
+        </div>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+            {{ item.active ? 'Active': 'Inactive' }}
+          </span>
         </div>
         <div class="text-group">
           <label class="label">Last update by</label>

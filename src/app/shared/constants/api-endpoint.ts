@@ -29,14 +29,12 @@ export const API_ENDPOINT = {
     ACTION: "jr/action",
   },
   TALENT_POOL: {
-    LIST: "talentPool",
-    REASONREJECT: "rejectReason",
-    NOTBUYDETAIL: "webrecruit/jr",
-    MISSINGDETAIL: "candidate/flow",
-    REJECTDETAIL: "webrecruit/reject",
-    ACTION_CANDIDATE: "candidate/flow/action",
-    ACTION_WEBRECRUIT: "webrecruit/action",
-    SELECTEDLIST: "talentPool/selected"
+    LIST: "talentPool/list",
+    DETAIL: "talentPool/detail",
+    CANDIDATE: "talentPool/candidate",
+    APPROVE: "talentPool/approve",
+    REJECT: "talentPool/reject",
+    REVOKE: "talentPool/revoke",
   },
   PENDING_EXAM: {
     LIST: "pendingExam",
@@ -75,6 +73,18 @@ export const API_ENDPOINT = {
     REJECTDETAIL: "onboard/reject",
     ACTION: "onboard/action",
     REASONREJECT: "rejectReason",
+  },
+  CANDIDATE: {
+    FLOW: {
+      APPROVE: "candidate/flow/approve",
+      REJECT: "candidate/flow/reject",
+      REVOKE: "candidate/flow/revoke",
+      COMMENT: {
+        LIST: "candidate/flow/comment/list",
+        CREATE: "candidate/flow/comment/create",
+        DELETE: "candidate/flow/comment/delete",
+      }
+    }
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",
@@ -131,6 +141,8 @@ export const API_ENDPOINT = {
     AUTH_EDIT: "authorize/edit",
     AUTH_DELETE: "authorize/delete",
     AUTH_DETAIL: "authorize/detail",
+    AUTH_GET_DEFAULT: "authorize/getDefault",
+    AUTH_SET_DEFAULT: "authorize/setDefault",
 
     REJECT_STAGE_LIST: "stageReject/stage",
     REJECT_SUBSTAGE_LIST: "stageReject/substage",
@@ -148,11 +160,19 @@ export const API_ENDPOINT = {
     EMAIL_LIST: "mailTemplate/list",
     EMAIL_ACTION: "mailTemplate/action",
 
+    REPORT_MASTER: "report/master",
     REPORT_LIST: "report/list",
     REPORT_CREATE: "report/create",
     REPORT_EDIT: "report/edit",
     REPORT_DELETE: "report/delete",
     REPORT_DETAIL: "report/detail",
+
+    DASHBOARD_MASTER: "dashboard/master",
+    DASHBOARD_LIST: "dashboard/list",
+    DASHBOARD_CREATE: "dashboard/create",
+    DASHBOARD_EDIT: "dashboard/edit",
+    DASHBOARD_DELETE: "dashboard/delete",
+    DASHBOARD_DETAIL: "dashboard/detail",
   },
   CV: {
     DETAIL: "candidate/id",

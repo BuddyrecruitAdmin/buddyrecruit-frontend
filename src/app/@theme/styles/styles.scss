@@ -142,9 +142,9 @@
     }
   }
 
-  nb-layout .layout .layout-container .content .columns nb-layout-column {
-    padding: 1.25rem 1.75rem 0.75rem;
-  }
+  // nb-layout .layout .layout-container .content .columns nb-layout-column {
+  //   padding: 1.25rem 1.75rem 0.75rem;
+  // }
 
   .form-control-group {
     margin-bottom: 1rem;
@@ -181,24 +181,11 @@
     font-family: inherit;
     font-weight: bold;
     margin: 0;
-  }
-  @media (max-width: 767px) {
-    .content-header {
-      h1, h2, h3, h4, h5 {
-        margin-bottom: 1.5rem;
-      }
-      .input-group {
-        margin-bottom: 1rem;
-      }
-      .action {
-        margin-top: 55px;
-      }
-    }
-  }
+  }  
   .content-header .breadcrumb {
-    font-size: 14px;
-    color: var(--color-light-gray);
-    text-align: right;
+    font-size: 1.25rem;
+    color: var(--color-gray);
+    text-align: left;
     font-weight: 600;
     border: none;
     background: none;
@@ -207,22 +194,16 @@
     top: 0;
     right: 0;
     float: none;
+    display: block;
+    margin: 0;
+
+    .fa-angle-right {
+      margin: 0 5px;
+    }
   }
   .content-header .action button {
     vertical-align: top;
-  }
-
-  @media (max-width: 767px) {
-    
-    .fixed .content-wrapper,
-    .fixed .right-side {
-      padding-top: 54px;
-    }
-    .content-header .breadcrumb {
-      text-align: left;
-      margin-top: 10px;
-    }
-  }
+  }  
 
   // --------------------------------------------------------------------
   // TEXT COLOR
@@ -258,12 +239,26 @@
     color: var(--color-dark-green) !important;
   }
 
+
+  [nbInput]:hover,
+  [nbInput]:focus {
+    border-color: var(--color-green);
+  }
+
   // --------------------------------------------------------------------
   // BUTTON
+
   button:focus,
   [nbButton]:focus {
     box-shadow: none;
     outline: none;
+  }
+  [nbButton].appearance-filled {
+    position: relative;
+    nb-badge {
+      border-radius: 50%;
+      padding: 0.25rem 0.45rem;
+    }
   }
   [nbButton].appearance-filled.size-medium {
     nb-icon {
@@ -349,6 +344,17 @@
     opacity: 0.8;
   }
 
+  [nbButton].appearance-outline {
+    background: none;
+    border-style: solid;
+    border-width: 0.125rem;
+    text-transform: uppercase;
+  }
+  [nbButton].appearance-outline:not([disabled]):hover {
+    background: var(--color-light-gray);
+    opacity: 0.8;
+  }
+
   // --------------------------------------------------------------------
   // INPUT
 
@@ -366,7 +372,7 @@
   }
 
   .text-group {
-    
+
     line-height: 1.5rem;
     white-space: nowrap; 
     overflow: hidden;
@@ -383,6 +389,9 @@
   // --------------------------------------------------------------------
   // CARD
 
+  nb-card.accent {
+    border-top-color: var(--color-light-gray);
+  }
   nb-card.accent-primary {
     border-top-color: var(--color-blue);
   }
@@ -402,7 +411,7 @@
   nb-card-header {
     .title {
       float: left;
-      width: calc(100% - 70px);      
+      width: calc(100% - 92px);      
       label {
         max-width: 100%;
         margin: 0;
@@ -420,6 +429,26 @@
       nb-icon:not(:first-child) {
         margin-left: 1rem;
       }
+      .fa-star {
+        font-size: 150%;
+        vertical-align: top;
+      }
+    }
+    .status {
+      display: block;
+      margin-top: 0.25rem;
+    }
+    .mat-checkbox label.mat-checkbox-layout {
+      display: inline-flex;
+      margin-bottom: 0;
+    }
+  }
+
+  nb-card-body {
+    min-height: 4.5rem;
+
+    label {
+      margin-bottom: 0;
     }
   }
 
@@ -432,6 +461,43 @@
     text-align: right;
     button {
       margin-left: 0.5rem;
+    }
+    .footer-collapse {
+      float: left;
+      button {
+        margin: 0;
+        background: none;        
+        nb-icon {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+
+  nb-tabset {
+    .tab .tab-text {
+      line-height: 1.2rem;
+    }
+    nb-tab {
+      padding: 2rem 1rem;
+
+      nb-card:last-child {
+        margin-bottom: 0;
+      }
+
+      .mat-paginator-container {
+        margin: -1rem 0 -1.5rem;
+        padding: 0;
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------
+  // Window
+
+  nb-window {
+    nb-card nb-card-header .title {
+      width: auto;
     }
   }
 
@@ -454,6 +520,117 @@
   nb-option:focus,
   nb-option:active {
     background: var(--color-light-gray);
+  }
+
+  // --------------------------------------------------------------------
+  // Spinner
+
+  nb-spinner.status-primary .spin-circle {
+    border-top-color: var(--color-blue);
+    border-right-color: transparent;
+    border-bottom-color: var(--color-blue);
+    border-left-color: var(--color-blue);
+  }
+  nb-spinner.status-success .spin-circle {
+    border-top-color: var(--color-green);
+    border-right-color: transparent;
+    border-bottom-color: var(--color-green);
+    border-left-color: var(--color-green);
+  }
+  nb-spinner.status-danger .spin-circle {
+    border-top-color: var(--color-red);
+    border-right-color: transparent;
+    border-bottom-color: var(--color-red);
+    border-left-color: var(--color-red);
+  }
+  nb-spinner.status-warning .spin-circle {
+    border-top-color: var(--color-orange);
+    border-right-color: transparent;
+    border-bottom-color: var(--color-orange);
+    border-left-color: var(--color-orange);
+  }
+  nb-spinner.status-info .spin-circle {
+    border-top-color: var(--color-orange);
+    border-right-color: transparent;
+    border-bottom-color: var(--color-orange);
+    border-left-color: var(--color-orange);
+  }
+
+  // --------------------------------------------------------------------
+  // Progress Bar
+
+  nb-progress-bar.size-tiny {
+    .progress-container{
+      height: 0.75rem;
+    }
+  }
+
+  // --------------------------------------------------------------------
+  // Table
+
+  .table {
+    margin-bottom: 0;
+    th {
+      text-align: center;
+      vertical-align: middle;
+      color: var(--color-white);
+      background-color: var(--color-green);
+    }
+    tbody {
+      td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0.5rem 0.75rem;
+      }
+      td.actions {
+        text-align: center;
+        padding: 0.2rem;
+        vertical-align: middle;
+        button {
+          margin: 0 0.1rem;
+        }
+      }
+    }
+  }
+
+  // --------------------------------------------------------------------
+  // Labal
+
+  .label-primary {
+    color: var(--color-white);
+    background: var(--color-blue);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .label-success {
+    color: var(--color-white);
+    background: var(--color-green);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .label-danger {
+    color: var(--color-white);
+    background: var(--color-red);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .label-warning {
+    color: var(--color-white);
+    background: var(--color-orange);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .label-info {
+    color: var(--color-white);
+    background: var(--color-aqua);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .label-gray {
+    color: var(--color-black);
+    background: var(--color-light-gray);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
   }
 
   // --------------------------------------------------------------------
@@ -522,6 +699,9 @@
   .m-l-20 {
     margin-left: 20px;
   }
+  .p-l-15 {
+    padding-left: 15px;
+  }
   .pull-right {
     float: right;
   }
@@ -535,6 +715,18 @@
   .transitions {
     transition-property: background-color,border-color,box-shadow,color,-webkit-box-shadow,opacity !important;
   }
+  .text-top {
+    vertical-align: top;
+  }
+  .text-left {
+    text-align: left;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+  }
   .text-cap {
     text-transform: capitalize;
   }
@@ -542,77 +734,116 @@
   #toast-container > div {
     opacity:1;
   }
-} 
 
+  // --------------------------------------------------------------------
+  // ANGULAR MATERIAL
 
-// --------------------------------------------------------------------
-// ANGULAR MATERIAL
+  .mat-progress-spinner circle, .mat-spinner circle {
+    stroke: var(--color-green);
+  }
+  mat-spinner {
+    margin: auto;
+    margin-top: 100px;
+  }
+  .mat-accordion .mat-expansion-panel,
+  .mat-accordion .mat-expansion-panel:not([class*=mat-elevation-z]) {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .16);
+    margin-bottom: 10px;
+  }
+  .mat-accordion .mat-expansion-panel.mat-expanded {
+    box-shadow: 0 0 12px rgba(0, 0, 0, .16);
+  }
+  .mat-accordion .mat-expansion-panel-header{
+    font-family: sukhumvit;
+    height: auto !important;
+    padding: 15px 24px;
+  }
+  .mat-accordion .mat-expansion-panel-header-description,
+  .mat-accordion  .mat-expansion-panel-header-title {
+    display: block;
+  }
+  .mat-calendar-period-button {
+    color: var(--color-gray) !important;
+  }
+  .mat-checkbox-checked.mat-accent
+  .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent
+  .mat-checkbox-background {
+    background-color: var(--color-green);
+  }
+  .mat-checkbox label.mat-checkbox-layout {
+    display: inline-flex;
+  }
+  .group-checkbox {
+    margin-left: 1.5rem;
+  }
+  .group-checkbox .mat-checkbox .mat-checkbox-layout {
+    display: inline-flex;
+    margin-right: 1.5rem;
+  }
+  .mat-form-field {
+    display: block !important;
+  }
+  .btn .chevron {
+    color: var(--color-green) !important;
+  }
+  .angular-editor-textarea { 
+    min-height: 200px !important;
+  }
+  .mat-badge-content {
+    font-family: sukhumvit !important;
+  }
+  // TOGGLE BUTTON
+  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+    background-color:  var(--color-green);
+    cursor: pointer;
+  }
+  .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+    background-color: rgba(0, 176, 156, 0.3);
+    cursor: pointer;
+  }
+  // RADIO BUTTON
+  .mat-radio-inner-circle {
+    background-color: var(--color-green);
+  }
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: var(--color-green);
+  }
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color:var(--color-green);
+  }
 
-.mat-progress-spinner circle, .mat-spinner circle {
-  stroke: var(--color-green);
-}
-mat-spinner {
-  margin: auto;
-  margin-top: 100px;
-}
-.mat-accordion .mat-expansion-panel,
-.mat-accordion .mat-expansion-panel:not([class*=mat-elevation-z]) {
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, .16);
-  margin-bottom: 10px;
-}
-.mat-accordion .mat-expansion-panel.mat-expanded {
-  box-shadow: 0 0 12px rgba(0, 0, 0, .16);
-}
-.mat-accordion .mat-expansion-panel-header{
-  font-family: sukhumvit;
-  height: auto !important;
-  padding: 15px 24px;
-}
-.mat-accordion .mat-expansion-panel-header-description,
-.mat-accordion  .mat-expansion-panel-header-title {
-  display: block;
-}
-.mat-calendar-period-button {
-  color: var(--color-gray) !important;
-}
-.mat-checkbox-checked.mat-accent
-.mat-checkbox-background,
-.mat-checkbox-indeterminate.mat-accent
-.mat-checkbox-background {
-  background-color: var(--color-green);
-}
-.mat-checkbox-layout {
-  margin-bottom: 0;
-}
-.mat-form-field {
-  display: block !important;
-}
-.btn .chevron {
-  color: var(--color-green) !important;
-}
-.angular-editor-textarea { 
-  min-height: 200px !important;
-}
-.mat-badge-content {
-  font-family: sukhumvit !important;
-}
+  // --------------------------------------------------------------------
+  // MOBILE && TABLET
 
-// TOGGLE BUTTON
-.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-  background-color:  var(--color-green);
-}
-.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-  background-color: rgba(0, 176, 156, 0.3); 
-}
-// RADIO BUTTON
-.mat-radio-inner-circle {
-  background-color: var(--color-green);
-}
-.mat-radio-button.mat-accent .mat-radio-inner-circle {
-  background-color: var(--color-green);
-}
-.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-  border-color:var(--color-green);
+  @media (max-width: 767px) {    
+    
+    nb-card {
+      margin-bottom: 1rem;
+    }
+    
+    .content-header {
+      h1, h2, h3, h4, h5 {
+        margin-bottom: 1.5rem;
+      }
+      .input-group {
+        margin-bottom: 1rem;
+      }
+      .action {
+        margin-top: 55px;
+      }
+    }
+    
+    .fixed .content-wrapper,
+    .fixed .right-side {
+      padding-top: 54px;
+    }
+    .content-header .breadcrumb {
+      text-align: left;
+      margin-top: 10px;
+    }
+  }
+
 }

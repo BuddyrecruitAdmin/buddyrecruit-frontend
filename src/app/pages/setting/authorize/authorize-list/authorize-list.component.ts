@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthorizeService } from '../authorize.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
+import { Criteria, Paging as IPaging, Devices } from '../../../../shared/interfaces/common.interface';
 import { getRole } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -26,6 +26,8 @@ export class AuthorizeListComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   minPageSize = Paging.pageSizeOptions[0];
+  devices: Devices;
+  loading: boolean;
 
   constructor(
     private router: Router,
@@ -35,6 +37,7 @@ export class AuthorizeListComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
@@ -49,6 +52,7 @@ export class AuthorizeListComponent implements OnInit {
   }
 
   search() {
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
@@ -62,6 +66,7 @@ export class AuthorizeListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
+        this.loading = false;
       }
     });
   }

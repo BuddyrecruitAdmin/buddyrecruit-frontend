@@ -66,6 +66,10 @@ const routes: Routes = [
         component: TalentPoolListComponent,
       },
       {
+        path: 'talent-pool/detail',
+        component: TalentPoolDetailComponent,
+      },
+      {
         path: 'talent-pool/detail/:id',
         component: TalentPoolDetailComponent,
       },

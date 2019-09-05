@@ -121,26 +121,29 @@ export class PagesComponent {
         // if (configuration.division && configuration.division.visible) {
         //   menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[3]);
         // }
-        if (configuration.jobPosition && configuration.jobPosition.visible) {
+        if (configuration.user && configuration.user.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[4]);
         }
-        if (configuration.location && configuration.location.visible) {
+        if (configuration.authorize && configuration.authorize.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[5]);
         }
-        if (configuration.mailTemplate && configuration.mailTemplate.visible) {
+        if (configuration.jobPosition && configuration.jobPosition.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
-        if (configuration.rejection && configuration.rejection.visible) {
+        if (configuration.location && configuration.location.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[7]);
         }
-        if (configuration.report && configuration.report.visible) {
+        if (configuration.mailTemplate && configuration.mailTemplate.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[8]);
         }
-        if (configuration.user && configuration.user.visible) {
+        if (configuration.rejection && configuration.rejection.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[9]);
         }
-        if (configuration.user && configuration.user.visible) {
+        if (configuration.dashboard && configuration.dashboard.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[10]);
+        }
+        if (configuration.report && configuration.report.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[11]);
         }
         menuSetting.forEach(element => {
           this.menu.push(element);

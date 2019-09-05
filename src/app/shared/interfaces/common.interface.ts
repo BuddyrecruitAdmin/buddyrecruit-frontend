@@ -57,4 +57,10 @@ export interface Addresses {
   location?: string;
 }
 
-
+export interface Devices {
+  isMobile: boolean;
+  isTablet: boolean;
+  isNotebook: boolean;
+  isPC: boolean;
+  other: boolean;
+}

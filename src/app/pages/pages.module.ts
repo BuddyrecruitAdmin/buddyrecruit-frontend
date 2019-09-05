@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from "@angular/forms";
-import {
-  CommonModule,
-  LocationStrategy,
-  PathLocationStrategy
-} from "@angular/common";
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ThemeModule } from '../@theme/theme.module';
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentsModule } from '../component/component.module';
+import { PagesRoutingModule } from './pages-routing.module';
 
-import { NbMenuModule } from '@nebular/theme';
 import {
+  NbMenuModule,
   NbActionsModule,
   NbButtonModule,
   NbCardModule,
@@ -19,17 +18,20 @@ import {
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
+  NbSpinnerModule,
   NbUserModule,
+  NbTabsetModule,
   NbToastrModule,
   NbTooltipModule,
   NbTreeGridModule,
   NbDialogModule,
   NbWindowModule,
-  NbAccordionModule
+  NbAccordionModule,
+  NbProgressBarModule,
+  NbChatModule,
+  NbBadgeModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { ThemeModule } from '../@theme/theme.module';
-import { PagesRoutingModule } from './pages-routing.module';
 
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -74,6 +76,7 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 
@@ -95,16 +98,18 @@ import { SignContractListComponent } from './sign-contract/sign-contract-list/si
 import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
 import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
 import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
+import { CadidateDetailComponent } from './candidate/cadidate-detail/cadidate-detail.component';
 
 @NgModule({
   imports: [
-    PagesRoutingModule,
-    FormsModule,
     CommonModule,
-    ReactiveFormsModule,
-    NgbModule,
-
+    FormsModule,
     ThemeModule,
+    NgbModule,
+    ReactiveFormsModule,
+    ComponentsModule,
+    PagesRoutingModule,
+
     NbMenuModule,
     NbActionsModule,
     NbButtonModule,
@@ -115,20 +120,26 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     NbInputModule,
     NbRadioModule,
     NbSelectModule,
+    NbSpinnerModule,
     NbUserModule,
+    NbTabsetModule,
     NbToastrModule,
     NbTooltipModule,
     NbTreeGridModule,
     Ng2SmartTableModule,
-    NbDialogModule.forRoot(),
+    NbDialogModule.forChild(),
     NbWindowModule.forChild(),
     NbAccordionModule,
+    NbProgressBarModule,
+    NbChatModule,
+    NbBadgeModule,
 
     A11yModule,
     CdkStepperModule,
     CdkTableModule,
     CdkTreeModule,
     DragDropModule,
+    ScrollingModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -164,7 +175,6 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-    ScrollingModule,
     ChartModule,
     ChartsModule,
   ],
@@ -187,52 +197,20 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     SignContractDetailComponent,
     OnboardListComponent,
     OnboardDetailComponent,
+    CadidateDetailComponent,
   ],
-  exports: [
-    A11yModule,
-    CdkStepperModule,
-    CdkTableModule,
-    CdkTreeModule,
-    DragDropModule,
-    MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    ScrollingModule,
-    ChartModule,
-    ChartsModule,
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'en-GB'
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB'
+    },
   ]
 })
-export class PagesModule {
-}
+export class PagesModule { }

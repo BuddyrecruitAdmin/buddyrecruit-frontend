@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { LogoutService } from './logout.service';
 import { ResponseCode } from '../../shared/app.constants';
-import { getAuthentication, setAuthentication, setUrl } from '../../shared/services/auth.service';
+import { setAuthentication, setUrl } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'ngx-logout',

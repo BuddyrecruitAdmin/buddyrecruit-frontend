@@ -15,7 +15,9 @@ import {
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
+  NbSpinnerModule,
   NbUserModule,
+  NbTabsetModule,
   NbToastrModule,
   NbTooltipModule,
   NbTreeGridModule,
@@ -86,6 +88,7 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { AuthorizeListComponent } from './authorize/authorize-list/authorize-list.component';
 import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +107,8 @@ import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize
     UserListComponent,
     UserDetailComponent,
     AuthorizeListComponent,
-    AuthorizeDetailComponent
+    AuthorizeDetailComponent,
+    DashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -112,6 +116,26 @@ import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize
     ThemeModule,
     ComponentsModule,
     SettingRoutingModule,
+
+    NbActionsModule,
+    NbButtonModule,
+    NbCardModule,
+    NbCheckboxModule,
+    NbDatepickerModule,
+    NbIconModule,
+    NbInputModule,
+    NbRadioModule,
+    NbSelectModule,
+    NbSpinnerModule,
+    NbUserModule,
+    NbTabsetModule,
+    NbToastrModule,
+    NbTooltipModule,
+    NbTreeGridModule,
+    Ng2SmartTableModule,
+    NbDialogModule.forRoot(),
+    NbWindowModule.forChild(),
+    NbAccordionModule,
 
     A11yModule,
     CdkStepperModule,
@@ -154,24 +178,6 @@ import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-
-    NbActionsModule,
-    NbButtonModule,
-    NbCardModule,
-    NbCheckboxModule,
-    NbDatepickerModule,
-    NbIconModule,
-    NbInputModule,
-    NbRadioModule,
-    NbSelectModule,
-    NbUserModule,
-    NbToastrModule,
-    NbTooltipModule,
-    NbTreeGridModule,
-    Ng2SmartTableModule,
-    NbDialogModule.forRoot(),
-    NbWindowModule.forChild(),
-    NbAccordionModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -33,14 +33,14 @@
       </nb-card-header>
       <nb-card-body>
         <div class="text-group">
+          <label class="label">Remark</label>
+          <span>{{ item.remark || '-' }}</span>
+        </div>
+        <div class="text-group">
           <label class="label">Status</label>
           <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
-        </div>
-        <div class="text-group">
-          <label class="label">Remark</label>
-          <span>{{ item.remark || '-' }}</span>
         </div>
         <div class="text-group">
           <label class="label">Last update by</label>

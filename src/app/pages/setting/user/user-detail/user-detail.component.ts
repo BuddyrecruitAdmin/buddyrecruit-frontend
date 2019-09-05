@@ -141,7 +141,7 @@ export class UserDetailComponent implements OnInit {
       });
       for (const item in Prefix) {
         if (isNaN(Number(item))) {
-          this.prefixOptions.push({ label: item, value: Prefix[item] });
+          this.prefixOptions.push({ label: Prefix[item], value: item });
         }
       }
       resolve();
@@ -314,10 +314,10 @@ export class UserDetailComponent implements OnInit {
     let isValid = true;
     this.errMsg = this.initialErrMsg();
 
-    if (!this.userDetail.title) {
-      this.errMsg.title = 'Please Input Title';
-      isValid = false;
-    }
+    // if (!this.userDetail.title) {
+    //   this.errMsg.title = 'Please Input Title';
+    //   isValid = false;
+    // }
     if (!this.userDetail.firstname) {
       this.errMsg.firstname = 'Please Input Firstname';
       isValid = false;
@@ -339,19 +339,19 @@ export class UserDetailComponent implements OnInit {
       isValid = false;
     }
     if (!this.userDetail.refDepartment) {
-      this.errMsg.refDepartment = 'Please Input Department';
+      this.errMsg.refDepartment = 'Please Select Department';
       isValid = false;
     }
     if (this.divisionOptions.length > 1 && !this.userDetail.refDivision) {
-      this.errMsg.refDivision = 'Please Input Division';
+      this.errMsg.refDivision = 'Please Select Division';
       isValid = false;
     }
     if (!this.userDetail.refHero) {
-      this.errMsg.refHero = 'Please Input User Role';
+      this.errMsg.refHero = 'Please Select User Role';
       isValid = false;
     }
     if (!this.userDetail.refAuthorize) {
-      this.errMsg.refAuthorize = 'Please Input Authorize Role';
+      this.errMsg.refAuthorize = 'Please Select Authorize Role';
       isValid = false;
     }
 

@@ -1,0 +1,37 @@
+<nb-card [style.width.px]="innerWidth" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+      <small class="status text-gray m-0">
+        {{ jrName }}
+      </small>
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body *ngIf="!loading" class="dialog-body">
+    <h6 *ngIf="!items.length" class="text-gray text-center">No Comment</h6>
+    <div class="post">
+      <nb-card *ngFor="let item of items" [accent]="item.accent">
+        <nb-card-header>
+          <div class="title">
+            <nb-user size="medium" [name]="item.name" [title]="item.title" [picture]="item.picture"></nb-user>
+          </div>
+          <div class="actions">
+            <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="link text-red" nbTooltip="Delete"
+              (click)="delete(item)"></nb-icon>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          {{ item.message }}
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <input type="text" [(ngModel)]="message" nbInput placeholder="Message" [disabled]="loading">
+    <button nbButton status="success" (click)="comment()" [disabled]="!message">COMMENT</button>
+  </nb-card-footer>
+</nb-card>

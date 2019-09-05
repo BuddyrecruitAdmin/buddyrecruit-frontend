@@ -1,15 +1,13 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { JsonpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { ThemeModule } from '../@theme/theme.module';
+import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ComponentsRoutes } from './component.routing';
 import { HttpClientModule } from '@angular/common/http';
-// import { AngularEditorModule } from '@kolkov/angular-editor';
-// import { TagInputModule } from "ngx-chips";
 
 import {
+  NbMenuModule,
   NbActionsModule,
   NbButtonModule,
   NbCardModule,
@@ -19,11 +17,19 @@ import {
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
+  NbSpinnerModule,
   NbUserModule,
+  NbTabsetModule,
+  NbToastrModule,
   NbTooltipModule,
   NbTreeGridModule,
-  NbDialogModule
+  NbDialogModule,
+  NbWindowModule,
+  NbAccordionModule,
+  NbProgressBarModule,
+  NbChatModule,
 } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -68,39 +74,23 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ChartModule } from 'angular2-chartjs';
+import { ChartsModule } from 'ng2-charts';
 
-// import { CvDetailComponent } from './cv-detail/cv-detail.component';
-// import { PaginationComponent } from './pagination/pagination.component';
-// import { EmailComponent } from './email/email.component';
 import { PopupMessageComponent } from './popup-message/popup-message.component';
-// import { PopupRejectComponent } from './popup-reject/popup-reject.component';
-// import { PopupDatetimeComponent } from './popup-datetime/popup-datetime.component';
-// import { PopupScoreComponent } from './popup-score/popup-score.component';
-// import { PopupCommentComponent } from './popup-comment/popup-comment.component';
-// import { PopupPositionComponent } from './popup-position/popup-position.component';
-// import { PopupCompanyComponent } from './popup-company/popup-company.component';
-// import { PopupDepartmentComponent } from './popup-department/popup-department.component';
-// import { PopupLocationComponent } from './popup-location/popup-location.component';
-// import { PopupUserComponent } from './popup-user/popup-user.component';
-// import { PopupReasonRejectComponent } from './popup-reason-reject/popup-reason-reject.component';
-// import { PopupSelectJdComponent } from './popup-select-jd/popup-select-jd.component';
-// import { PopupCvComponent } from './popup-cv/popup-cv.component';
-// import { PopupConfigEmailComponent } from './popup-config-email/popup-config-email.component';
-// import { PopupAppointmentComponent } from './popup-appointment/popup-appointment.component';
-// import { PopupBugReportComponent } from './popup-bug-report/popup-bug-report.component';
+import { PopupCommentComponent } from './popup-comment/popup-comment.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(ComponentsRoutes),
     FormsModule,
-    ReactiveFormsModule,
-    // JsonpModule,
+    ThemeModule,
     NgbModule,
+    ReactiveFormsModule,
     HttpClientModule,
-    // AngularEditorModule,
-    // TagInputModule,
 
+    NbMenuModule,
     NbActionsModule,
     NbButtonModule,
     NbCardModule,
@@ -110,15 +100,25 @@ import { PopupMessageComponent } from './popup-message/popup-message.component';
     NbInputModule,
     NbRadioModule,
     NbSelectModule,
+    NbSpinnerModule,
     NbUserModule,
+    NbTabsetModule,
+    NbToastrModule,
     NbTooltipModule,
     NbTreeGridModule,
+    Ng2SmartTableModule,
+    NbDialogModule.forChild(),
+    NbWindowModule.forChild(),
+    NbAccordionModule,
+    NbProgressBarModule,
+    NbChatModule,
 
     A11yModule,
     CdkStepperModule,
     CdkTableModule,
     CdkTreeModule,
     DragDropModule,
+    ScrollingModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -154,68 +154,34 @@ import { PopupMessageComponent } from './popup-message/popup-message.component';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-    ScrollingModule
+    ChartModule,
+    ChartsModule,
   ],
   declarations: [
-    // CvDetailComponent,
-    // PaginationComponent,
-    // EmailComponent,
     PopupMessageComponent,
-    // PopupRejectComponent,
-    // PopupDatetimeComponent,
-    // PopupScoreComponent,
-    // PopupCommentComponent,
-    // PopupPositionComponent,
-    // PopupCompanyComponent,
-    // PopupDepartmentComponent,
-    // PopupLocationComponent,
-    // PopupUserComponent,
-    // PopupReasonRejectComponent,
-    // PopupSelectJdComponent,
-    // PopupCvComponent,
-    // PopupConfigEmailComponent,
-    // PopupAppointmentComponent,
-    // PopupBugReportComponent
+    PopupCommentComponent,
   ],
   exports: [
-    // CvDetailComponent,
-    // PaginationComponent,
-    // EmailComponent,
     PopupMessageComponent,
-    // PopupRejectComponent,
-    // PopupDatetimeComponent,
-    // PopupScoreComponent,
-    // PopupCommentComponent,
-    // PopupPositionComponent,
-    // PopupCompanyComponent,
-    // PopupDepartmentComponent,
-    // PopupLocationComponent,
-    // PopupUserComponent,
-    // PopupReasonRejectComponent,
-    // PopupCvComponent,
-    // PopupConfigEmailComponent,
-    // PopupAppointmentComponent,
-    // PopupBugReportComponent
+    PopupCommentComponent,
   ],
   entryComponents: [
-    // EmailComponent,
     PopupMessageComponent,
-    // PopupRejectComponent,
-    // PopupDatetimeComponent,
-    // PopupScoreComponent,
-    // PopupCommentComponent,
-    // PopupPositionComponent,
-    // PopupCompanyComponent,
-    // PopupDepartmentComponent,
-    // PopupLocationComponent,
-    // PopupUserComponent,
-    // PopupReasonRejectComponent,
-    // PopupCvComponent,
-    // PopupConfigEmailComponent,
-    // PopupAppointmentComponent,
-    // PopupBugReportComponent
+    PopupCommentComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'en-GB'
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB'
+    },
+  ]
 })
 
 export class ComponentsModule {
