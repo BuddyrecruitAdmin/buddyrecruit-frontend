@@ -7,33 +7,62 @@
   </nb-card-header>
   <nb-card-body>
     <div class="row">
-      <div class="col-md-12">
+
+      <div class="col-md-6">
         <div class="form-control-group">
-          <label class="label">Header <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Name">
+          <label class="label">Email Type <span style="color:red">*</span></label>
+          <nb-select *ngIf="getId" placeholder="Select Email Type" [(ngModel)]="itemDialog.action"
+            [disabled]="checkEdit" fullWidth>
+            <nb-option *ngFor="let typeOption of typeOptions" [value]="typeOption.value" (click)="getType()">
+              {{ typeOption.label }}
+            </nb-option>
+          </nb-select>
+          <input type="text" *ngIf="!getId" [(ngModel)]="itemDialog.action" nbInput fullWidth placeholder="name"
+            [disabled]="checkEdit">
+          <small *ngIf="touched" class="text-red">{{ sErrorEmailType }}</small>
         </div>
         <div class="form-control-group">
-          <label class="label">Subject <span class="text-red">*</span></label>
+          <label class="label">Header <span style="color:red">*</span></label>
+          <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="name">
+          <small *ngIf="touched" class="text-red">{{ sErrorHeader }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Subject <span style="color:red">*</span></label>
           <input type="text" [(ngModel)]="itemDialog.subject" nbInput fullWidth placeholder="subject">
+          <small *ngIf="touched" class="text-red">{{ sErrorSubject }}</small>
         </div>
         <div class="form-control-group">
-          <label class="label">Remark <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="itemDialog.remark" nbInput fullWidth >
+          <label class="label">Where</label>
+          <nb-radio-group [(ngModel)]="itemDialog.type">
+            <nb-radio value="true">Internal</nb-radio>
+            <nb-radio value="false">External</nb-radio>
+          </nb-radio-group>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-control-group">
+          <label class="label">Remark</label>
+          <input type="text" [(ngModel)]="itemDialog.remark" nbInput fullWidth placeholder="remark">
         </div>
         <div class="form-control-group">
-          <label class="label">CC <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="itemDialog.cc" nbInput fullWidth placeholder="email">
+          <label class="label">CC</label>
+          <tag-input [(ngModel)]="itemDialog.cc" secondaryPlaceholder="Enter a email" placeholder="+"
+            [ngModelOptions]="{ standalone: true }">
+          </tag-input>
         </div>
         <div class="form-control-group">
-          <label class="label">BCC <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="itemDialog.bcc" nbInput fullWidth placeholder="email">
+          <label class="label">BCC</label>
+          <tag-input [(ngModel)]="itemDialog.bcc" secondaryPlaceholder="Enter a email" placeholder="+"
+            [ngModelOptions]="{ standalone: true }">
+          </tag-input>
         </div>
       </div>
     </div>
+
   </nb-card-body>
   <div class="col-md-12">
     <div mat-dialog-content class="mat-typography">
-      <angular-editor placeholder="'Enter text here...'" [(ngModel)]="html"></angular-editor>
+      <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html"></angular-editor>
     </div>
   </div>
   <nb-card-footer>

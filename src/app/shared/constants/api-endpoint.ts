@@ -15,7 +15,8 @@ export const API_ENDPOINT = {
     DETAIL: "jd/detail",
     CREATE: "jd/create",
     EDIT: "jd/edit",
-    DELETE: "jd/delete"
+    DELETE: "jd/delete",
+    EDUCATION: "degree/list"
   },
   JOBREQUEST: {
     LIST: "jr/list",
@@ -173,6 +174,14 @@ export const API_ENDPOINT = {
     DASHBOARD_EDIT: "dashboard/edit",
     DASHBOARD_DELETE: "dashboard/delete",
     DASHBOARD_DETAIL: "dashboard/detail",
+
+    MAIL_TEMPLATE_CREATE: "mailTemplate/create",
+    MAIL_ACTION_LIST: "mailAction/list",
+    MAIL_TEMPLATE_LIST: "mailTemplate/list",
+    MAIL_TEMPLATE_EDIT: "mailTemplate/edit",
+    MAIL_TEMPLATE_DETAIL: "mailTemplate/detail",
+    MAIL_ACTION_DETAIL: "mailAction/detail",
+    MAIL_TEMPLATE_DELETE: "mailTemplate/delete",    
   },
   CV: {
     DETAIL: "candidate/id",

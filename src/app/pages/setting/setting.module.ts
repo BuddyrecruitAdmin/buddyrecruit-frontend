@@ -23,10 +23,10 @@ import {
   NbTreeGridModule,
   NbDialogModule,
   NbWindowModule,
-  NbAccordionModule
+  NbAccordionModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-
+import { AngularEditorModule } from '@kolkov/angular-editor';
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -71,6 +71,7 @@ import {
   MatTreeModule,
 } from '@angular/material';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { TagInputModule } from 'ngx-chips';
 
 import { SettingComponent } from './setting.component';
 import { CompanyListComponent } from './company/company-list/company-list.component';
@@ -178,6 +179,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+
+    AngularEditorModule,
+    TagInputModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

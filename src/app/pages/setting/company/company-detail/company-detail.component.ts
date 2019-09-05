@@ -58,6 +58,7 @@ export class CompanyDetailComponent implements OnInit {
   roleSelected: string;
   errMsg: ErrMsg;
   _id: string;
+  role: any;
 
   constructor(
     private router: Router,
@@ -67,6 +68,7 @@ export class CompanyDetailComponent implements OnInit {
     private toastrService: NbToastrService,
     public matDialog: MatDialog,
   ) {
+    this.role = getRole();
   }
 
   ngOnInit() {
@@ -79,6 +81,7 @@ export class CompanyDetailComponent implements OnInit {
       if (params.id) {
         this.state = State.Edit;
         this._id = params.id;
+        console.log(this.state)
         this.getDetail();
       } else {
         this.state = State.Create;
@@ -250,10 +253,6 @@ export class CompanyDetailComponent implements OnInit {
     }
     if (!this.companyDetail.expiryDate) {
       this.errMsg.expiryDate = 'Please Input Expiry Date';
-      isValid = false;
-    }
-    if (!this.companyDetail.companySize) {
-      this.errMsg.companySize = 'Please Input Company Size';
       isValid = false;
     }
     if (!this.companyDetail.adminEmail) {

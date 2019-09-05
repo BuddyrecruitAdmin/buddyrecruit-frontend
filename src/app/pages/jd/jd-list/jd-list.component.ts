@@ -19,12 +19,10 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 export class JdListComponent implements OnInit {
   role: any;
   items: [];
-
   keyword: string;
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
-
   constructor(
     private router: Router,
     private service: JdService,
@@ -33,7 +31,6 @@ export class JdListComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     this.role = getRole();
-    console.log(this.role);
   }
 
   ngOnInit() {
@@ -53,7 +50,7 @@ export class JdListComponent implements OnInit {
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
-        'name'
+        'position',
       ]
     };
     this.items = [];
@@ -61,8 +58,54 @@ export class JdListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
+        console.log(this.items)
+        if (!this.items.length && this.paging.pageIndex > 0) {
+          this.paging.pageIndex--;
+          this.search();
+        }
       }
     });
+  }
+
+  changePaging(event) {
+    this.paging = {
+      length: event.length,
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize,
+      pageSizeOptions: Paging.pageSizeOptions
+    }
+    this.search();
+  }
+
+  delete(item: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: '40%',
+      data: { type: 'D' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.deleteItem(item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
+    });
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
   }
 
 }

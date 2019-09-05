@@ -1,3 +1,103 @@
-<p>
-  jr-list works!
-</p>
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 
+          'col-sm-6':role.refAuthorize.jr.editable,
+          'col-sm-8':!role.refAuthorize.jr.editable }">
+      <h3>Job Request</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="role.refAuthorize.jr.editable" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/jr/detail/create'">Create</button>
+    </div>
+  </div>
+</div>
+<!-- list row -->
+<div class="row">
+  <div class="col-lg-6" *ngFor="let item of items;">
+    <nb-card accent="success">
+      <nb-card-header>
+        <div class="col-lg-12">
+          <label [nbTooltip]="item.refJD.position">{{ item.refJD.position }}</label>
+          <div class="actions">
+            <nb-icon *ngIf="item.refStatus.name != 'Reject' && role.refAuthorize.jr.editable" icon="edit-outline" class="link" nbTooltip="Edit"
+              [routerLink]="'/jr/detail/edit/'+item._id">
+            </nb-icon>
+            <nb-icon icon="copy-outline"
+              *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm'" class="link"
+              nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
+            <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
+              class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+            <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
+              [routerLink]="'/jr/detail/preview/'+item._id"></nb-icon>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="text-group">
+          <label class="label">Status</label>
+          <span class="label1" [ngClass]="item.refStatus.class">{{ item.refStatus.name}}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Department</label>
+          <span>{{ item.department.name || '-' }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">End Date</label>
+          {{ utilitiesService.convertDateTime(item.duration.endDate) || '-'}}
+        </div>
+        <div class="text-group">
+          <label class="label">Exam</label>
+          <nb-icon *ngIf="item.requiredExam" icon="checkmark-outline" class="text-green"></nb-icon>
+          <nb-icon *ngIf="!item.requiredExam" icon="close-outline" class="text-red"></nb-icon>
+        </div>
+        <div class="text-group">
+          <label class="label">Capacity</label>
+          <span>{{ item.capacity }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update by</label>
+          <span>
+            {{ item.lastChangedInfo.refUser.firstname || '-' }}
+            {{ item.lastChangedInfo.refUser.lastname || '-'}}
+          </span>
+        </div>
+        <div class="text-group">
+          <label class="label">Last update date</label>
+          <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
+        </div>
+      </nb-card-body>
+      <nb-card-footer *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'">
+        <button nbButton status="danger" (click)="Reject(item,dialog)">REJECT</button>
+        <button nbButton status="success" (click)="Approve(item)">APPROVE</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>
+
+<mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+  [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+</mat-paginator>
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>Reason of Rejection</nb-card-header>
+    <nb-card-body>
+      <div class="form-control-group">
+        <label class="label">Remark</label>
+        <textarea type="" [(ngModel)]="itemSelected.rejectRemark" nbInput fullWidth placeholder="Remark"></textarea>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+      <button nbButton status="success" (click)="RejectSave()">Save</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

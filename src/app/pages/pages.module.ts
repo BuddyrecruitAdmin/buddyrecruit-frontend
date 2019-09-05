@@ -79,6 +79,8 @@ import {
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
+import { FileUploadModule } from 'ng2-file-upload';
+import { TagInputModule } from 'ngx-chips';
 
 import { PagesComponent } from './pages.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
@@ -110,6 +112,7 @@ import { CadidateDetailComponent } from './candidate/cadidate-detail/cadidate-de
     ComponentsModule,
     PagesRoutingModule,
 
+    ThemeModule,
     NbMenuModule,
     NbActionsModule,
     NbButtonModule,
@@ -175,8 +178,11 @@ import { CadidateDetailComponent } from './candidate/cadidate-detail/cadidate-de
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+
     ChartModule,
     ChartsModule,
+    TagInputModule,
+    FileUploadModule,
   ],
   declarations: [
     PagesComponent,
