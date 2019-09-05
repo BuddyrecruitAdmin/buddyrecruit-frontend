@@ -7,7 +7,7 @@ import {
 } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { TagInputModule } from 'ngx-chips';
 import { NbMenuModule } from '@nebular/theme';
 import {
   NbActionsModule,
@@ -76,7 +76,7 @@ import {
 } from '@angular/material';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
-
+import { ComponentsModule } from './../component/component.module';
 import { PagesComponent } from './pages.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
 import { JdListComponent } from './jd/jd-list/jd-list.component';
@@ -95,7 +95,7 @@ import { SignContractListComponent } from './sign-contract/sign-contract-list/si
 import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
 import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
 import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
-
+import { FileUploadModule } from 'ng2-file-upload';
 @NgModule({
   imports: [
     PagesRoutingModule,
@@ -103,7 +103,9 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     CommonModule,
     ReactiveFormsModule,
     NgbModule,
-
+    TagInputModule,
+    FileUploadModule,
+    
     ThemeModule,
     NbMenuModule,
     NbActionsModule,
@@ -167,6 +169,7 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     ScrollingModule,
     ChartModule,
     ChartsModule,
+    ComponentsModule,
   ],
   declarations: [
     PagesComponent,
@@ -187,6 +190,7 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     SignContractDetailComponent,
     OnboardListComponent,
     OnboardDetailComponent,
+    // PopupMessageComponent
   ],
   exports: [
     A11yModule,
@@ -232,7 +236,8 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
     ScrollingModule,
     ChartModule,
     ChartsModule,
-  ]
+    // PopupMessageComponent
+  ],
 })
 export class PagesModule {
 }

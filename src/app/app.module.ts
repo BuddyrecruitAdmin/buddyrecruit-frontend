@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
+import { TagInputModule } from 'ngx-chips';
 import { AppRoutingModule } from './app-routing.module';
 import {
   NbChatModule,
@@ -32,7 +33,7 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
+    TagInputModule,
     ThemeModule.forRoot(),
 
     NbSidebarModule.forRoot(),

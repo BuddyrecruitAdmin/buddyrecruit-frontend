@@ -40,11 +40,11 @@ const routes: Routes = [
         component: JdListComponent,
       },
       {
-        path: 'jd/detail',
+        path: 'jd/detail/:action',//create
         component: JdDetailComponent,
       },
       {
-        path: 'jd/detail/:id',
+        path: 'jd/detail/:action/:id',//edit + duplicate
         component: JdDetailComponent,
       },
       // JR
@@ -53,11 +53,11 @@ const routes: Routes = [
         component: JrListComponent,
       },
       {
-        path: 'jr/detail',
+        path: 'jr/detail/:action',
         component: JrDetailComponent,
       },
       {
-        path: 'jr/detail/:id',
+        path: 'jr/detail/:action/:id',
         component: JrDetailComponent,
       },
       // Talent Pool

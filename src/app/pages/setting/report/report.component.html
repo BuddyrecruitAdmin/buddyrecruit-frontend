@@ -13,7 +13,7 @@
       </div>
     </div>
     <div *ngIf="role.refAuthorize.configuration.report.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">ADD REASON</button>
+      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">ADD REPORT</button>
     </div>
   </div>
 </div>
@@ -83,8 +83,8 @@
         <mat-checkbox [(ngModel)]="itemDialog.isFree" (click)="checkFree()">Is free
         </mat-checkbox>
       </div>
-      <div>
-        <label class="label">Status</label>
+      <div class="form-control-group" >
+        <label  class="label">Status</label>
         <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id" name="radio02">
           <nb-radio *ngFor="let status of statusList" [value]="status.value" name="radio02">
             {{ status.label }}

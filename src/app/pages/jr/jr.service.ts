@@ -47,5 +47,16 @@ export class JrService extends NetworkService {
   edit(request: any): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.JOBREQUEST.EDIT, request);
   }
+  action(action: any, item: any): Observable<ApiResponse> {
+    // const body = {
+    //   _id: item._id,
+    //   action: action,
+    //   refRejection: item.refRejection
+    // }
+    return this.post(API_ENDPOINT.JOBREQUEST.ACTION, { action, item });
+  }
+  getJopPositionList(action: any = "notUsed"): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.JOBDESCRIPTION.LIST, { action });
+  }
 
 }

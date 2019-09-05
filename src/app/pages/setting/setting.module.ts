@@ -21,10 +21,11 @@ import {
   NbTreeGridModule,
   NbDialogModule,
   NbWindowModule,
-  NbAccordionModule
+  NbAccordionModule,
+  NbTabsetModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-
+import { AngularEditorModule } from '@kolkov/angular-editor';
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -86,7 +87,7 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { AuthorizeListComponent } from './authorize/authorize-list/authorize-list.component';
 import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
-
+import { TagInputModule } from 'ngx-chips';
 @NgModule({
   declarations: [
     SettingComponent,
@@ -104,7 +105,7 @@ import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize
     UserListComponent,
     UserDetailComponent,
     AuthorizeListComponent,
-    AuthorizeDetailComponent
+    AuthorizeDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -112,7 +113,9 @@ import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize
     ThemeModule,
     ComponentsModule,
     SettingRoutingModule,
-
+    AngularEditorModule ,
+    TagInputModule,
+    
     A11yModule,
     CdkStepperModule,
     CdkTableModule,
@@ -171,7 +174,8 @@ import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize
     Ng2SmartTableModule,
     NbDialogModule.forRoot(),
     NbWindowModule.forChild(),
-    NbAccordionModule
+    NbAccordionModule,
+    NbTabsetModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

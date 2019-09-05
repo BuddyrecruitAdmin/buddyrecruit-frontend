@@ -53,8 +53,8 @@
   </div>
 </div>
 
-<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
-  [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
 </mat-paginator>
 
 <ng-template #dialog let-data let-ref="dialogRef">
@@ -65,7 +65,7 @@
         <label class="label">Name</label>
         <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Name">
       </div>
-      <div>
+      <div class="form-control-group" *ngIf="itemDialog._id">
         <label class="label">Status</label>
         <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id">
           <nb-radio *ngFor="let status of statusList" [value]="status.value">

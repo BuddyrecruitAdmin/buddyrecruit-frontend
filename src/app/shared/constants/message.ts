@@ -143,5 +143,11 @@ export const MESSAGE = {
   133: "Do you want to save template?",
   134: "Do you want to save application form?",
   135: "Please specify onboard date.",
-
+  136: "Please select email type.",
+  137: "Please enter job position",
+  138: "Please enter keyword",
+  139: "Please select email.",
+  140: "Please select Department.",
+  141: "Please select Job Position.",
+  142: "Please input onboard date.",
 };

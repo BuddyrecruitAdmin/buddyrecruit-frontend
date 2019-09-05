@@ -17,31 +17,58 @@ export class MailTemplateService extends NetworkService {
   }
 
   getList(criteria: any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.POSITION_LIST, { criteria });
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_ACTION_LIST, { criteria });
+  }
+  getListAll(criteria: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_LIST, { criteria });
+  }
+
+  getDetail(id: any): Observable<ApiResponse> {
+    const body = {
+      _id: id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_DETAIL, body);
+  }
+  getDetailEmail(id: any): Observable<ApiResponse> {
+    const body = {
+      _id: id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_ACTION_DETAIL, body);
   }
 
   create(item: any): Observable<ApiResponse> {
     const body = {
       name: item.name,
-      remark: item.remark
+      subject: item.subject,
+      remark: item.remark,
+      cc: item.cc,
+      bcc: item.bcc,
+      html: item.html,
+      type: item.type,
+      action: item.action,
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.POSITION_CREATE, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_CREATE, body);
   }
 
   edit(item: any): Observable<ApiResponse> {
     const body = {
       _id: item._id,
       name: item.name,
-      active: item.active,
-      remark: item.remark
+      subject: item.subject,
+      remark: item.remark,
+      cc: item.cc,
+      bcc: item.bcc,
+      type: item.type,
+      html: item.html,
+      action: item.action,
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.POSITION_EDIT, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_EDIT, body);
   }
 
   deleteItem(item: any): Observable<ApiResponse> {
     const body = {
       _id: item._id
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.POSITION_DELETE, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_DELETE, body);
   }
 }

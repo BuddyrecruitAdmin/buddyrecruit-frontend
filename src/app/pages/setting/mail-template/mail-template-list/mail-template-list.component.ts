@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
-// import { JobPositionService } from './job-position.service';
+import { MailTemplateService } from '../mail-template.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
 import { getRole } from '../../../../shared/services/auth.service';
@@ -14,15 +14,121 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 @Component({
   selector: 'ngx-mail-template-list',
   templateUrl: './mail-template-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./mail-template-list.component.scss']
 })
 export class MailTemplateListComponent implements OnInit {
   role: any;
-  constructor() {
+  internal: any;
+  external: any;
+  keyword: string;
+  paging: IPaging;
+  pageEvent: PageEvent;
+  criteria: Criteria;
+  dialogRef: NbDialogRef<any>;
+  itemDialog: any;
+  minPageSize = Paging.pageSizeOptions[0];
+  loading: boolean;
+
+  constructor(
+    private service: MailTemplateService,
+    private utilitiesService: UtilitiesService,
+    public matDialog: MatDialog,
+    private toastrService: NbToastrService,
+    private dialogService: NbDialogService,
+  ) {
     this.role = getRole();
   }
+
   ngOnInit() {
+    this.loading = true;
+    this.keyword = '';
+    this.paging = {
+      length: 0,
+      pageIndex: 0,
+      pageSize: Paging.pageSizeOptions[0],
+      pageSizeOptions: Paging.pageSizeOptions
+    }
+    this.search();
   }
 
+  search() {
+    this.loading = true;
+    this.criteria = {
+      keyword: this.keyword,
+      skip: (this.paging.pageIndex * this.paging.pageSize),
+      limit: this.paging.pageSize,
+      filter: [
+        'name',
+        'bcc',
+        'cc',
+        'remark',
+        'lastChangedInfo.refUser.firstname',
+        'lastChangedInfo.refUser.lastname',
+        'lastChangedInfo.date',
+        'html',
+        'type',
+        'action',
+      ]
+    };
+    this.internal = [];
+    this.external = [];
+    this.service.getListAll(this.criteria).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(element => {
+          if (element.type === "true") {
+            this.internal.push(element)
+          } else {
+            this.external.push(element)
+          }
+        });
+      }
+      console.log(response)// หาย
+      this.loading = false;
+    });
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+  }
+
+  delete(item: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: '40%',
+      data: { type: 'D' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.deleteItem(item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
+    });
+  }
+
+  changePaging(event) {
+    this.paging = {
+      length: event.length,
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize,
+      pageSizeOptions: Paging.pageSizeOptions
+    }
+    this.search();
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
+  }
 }
