@@ -13,7 +13,12 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { MESSAGE } from "../../shared/constants/message";
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-
+import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { API_ENDPOINT } from '../../shared/constants';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs/Subject';
+const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
 @Component({
   selector: 'ngx-profile',
   templateUrl: './profile.component.html',
@@ -21,6 +26,10 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 })
 export class ProfileComponent implements OnInit {
   role: any;
+  url: any;
+  file: any;
+  bHasFile: boolean;
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'profile' });
   loginForm: FormGroup;
   sErrorPassword: string;
   sErrorPasswordCur: string;
@@ -29,6 +38,7 @@ export class ProfileComponent implements OnInit {
   sErrorLastName: string;
   sErrorPasswordNew: string;
   sErrorEmail: string;
+  fileToUpload: File = null;
   isChangePassword = false;
   touched: boolean;
   firstName: AbstractControl;
@@ -40,19 +50,20 @@ export class ProfileComponent implements OnInit {
   email: AbstractControl;
   dialogRef: NbDialogRef<any>;
   profileDetail: any;
+  alertType: string;
+  alertMessage: string;
+  private _alertMessage = new Subject<string>();
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
-    private dialogService: NbDialogService,
-    private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private dialogService: NbDialogService,
   ) {
     this.role = getRole();
   }
 
   ngOnInit() {
-    console.log(this.role)
     this.profileDetail = {
       _id: undefined,
       firstname: undefined,
@@ -67,6 +78,10 @@ export class ProfileComponent implements OnInit {
       pendIn: undefined,
       pendSign: undefined,
       talentPool: undefined,
+      attachment: {
+        originalname: undefined,
+        uploadName: undefined,
+      },
     };
     this.service.getProfile(this.role.refHero._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -81,6 +96,7 @@ export class ProfileComponent implements OnInit {
       passwordnew: [null, [Validators.required, Validators.minLength(6)]],
       passwordcon: [null, [Validators.required, Validators.minLength(6)]],
       email: [null, [Validators.required, Validators.email]],
+      image: [null, Validators.required],
     });
     this.firstName = this.loginForm.controls["firstname"];
     this.lastName = this.loginForm.controls["lastname"];
@@ -91,6 +107,8 @@ export class ProfileComponent implements OnInit {
     this.sErrorPassword = MESSAGE[50];
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
+    this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+    this.bHasFile = false;
   }
   validation(): boolean {
     this.touched = true;
@@ -127,7 +145,12 @@ export class ProfileComponent implements OnInit {
 
   }
   save() {
-    console.log(this.profileDetail.setting.notification.talentPool.mail)
+    if (this.bHasFile) {
+      console.log(this.profileDetail)
+      this.uploader.uploadItem(
+        this.uploader.queue[this.uploader.queue.length - 1]
+      );
+    }
     if (this.validation()) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: '40%',
@@ -148,6 +171,56 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
+
+  onFileInput(files: FileList) {
+    if (files && files[0]) {
+      var reader = new FileReader();
+      if (files[0] != undefined || files[0] != null) {
+        reader.onload = (event) => { // called once readAsDataURL is completed
+          // this.url = event.target.result;
+        } 
+      }
+      reader.readAsDataURL(files[0]); // read file as data url
+    }
+    const FileSize = files.item(0).size / 1024 / 1024; // in MB
+    if (FileSize > 10) {
+      this.setAlertMessage("E", MESSAGE[121]);
+      this.bHasFile = false;
+      this.profileDetail.attachment.originalname = "";
+      this.profileDetail.attachment.uploadName = "";
+      this.fileToUpload = null;
+      return;
+    } else {
+      this.bHasFile = true;
+      this.profileDetail.attachment.originalname = files.item(0).name;
+      this.profileDetail.attachment.uploadName = "";
+      this.fileToUpload = files.item(0);
+      this.alertMessage = null;
+    }
+  }
+
+  setAlertMessage(type: string, message: string) {
+    this._alertMessage.next(message); // build message
+    switch (type) {
+      case "S": {
+        this.alertType = "success";
+        break;
+      }
+      case "E": {
+        this.alertType = "danger";
+        break;
+      }
+      case "W": {
+        this.alertType = "warning";
+        break;
+      }
+      case "I": {
+        this.alertType = "info";
+        break;
+      }
+    }
+  }
+
   setRequest(): any {
     const request = _.cloneDeep(this.profileDetail);
     return request;
@@ -166,6 +239,5 @@ export class ProfileComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
-
 
 }

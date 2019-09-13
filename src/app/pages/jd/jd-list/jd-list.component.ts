@@ -23,6 +23,7 @@ export class JdListComponent implements OnInit {
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
+  loading: boolean;
   constructor(
     private router: Router,
     private service: JdService,
@@ -34,6 +35,7 @@ export class JdListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -51,6 +53,9 @@ export class JdListComponent implements OnInit {
       limit: this.paging.pageSize,
       filter: [
         'position',
+        'department',
+        'keywordSearch',
+        'division',
       ]
     };
     this.items = [];
@@ -64,6 +69,7 @@ export class JdListComponent implements OnInit {
           this.search();
         }
       }
+      this.loading = false;
     });
   }
 
@@ -74,6 +80,7 @@ export class JdListComponent implements OnInit {
       pageSize: event.pageSize,
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.loading = true;
     this.search();
   }
 

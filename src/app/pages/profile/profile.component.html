@@ -11,15 +11,16 @@
 <section class="content">
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
       <nb-card>
         <nb-card-body>
           <div class="box-body box-profile">
-            <div class="img-default">
-              <span class="fa fa-user"></span>
-            </div>
+            <img class="img-default" (click)="fileInput.click()"
+              [src]="url ? url : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
+            <br>
             <a (click)="fileInput.click()"><span class="fa fa-images"></span>
-              <input #fileInput type="file" (change)="onFileInput($event)" style="display:none;" accept="image/*" />
+              <input #fileInput type="file" (change)="onFileInput($event.target.files)" style="display:none;" accept="image/*"
+                ng2FileSelect [uploader]="uploader" />
               Select Profile Picture</a>
             <h6 class="text-ellipsis text-center" [nbTooltip]="profileDetail.firstname + ' ' + profileDetail.lastname">
               {{profileDetail.firstname}} {{profileDetail.lastname}}
@@ -41,7 +42,7 @@
                 <i class="fa fa-briefcase"></i>
               </div>
               <div class="card-content2">
-                <div class="card-title">Department</div>
+                <div class="card-title" >Department</div>
                 <div class="card-desc" [nbTooltip]="profileDetail.thisDepartments?.name">
                   {{profileDetail.thisDepartments?.name}}
                 </div>
@@ -63,7 +64,7 @@
       </nb-card>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-7">
       <nb-card>
         <nb-card-body>
           <div class="box">
@@ -72,7 +73,7 @@
             </div>
             <div>
               <div class="form-group">
-                <label for="name">Username</label>
+                <label class="label" for="name">Username</label>
                 <input type="text" class="form-control" name="userame" disabled [(ngModel)]="profileDetail.username">
               </div>
               <div class="row">
@@ -103,43 +104,43 @@
                 <div class="col-md-12">
                   <label class="label">Notification <i class="far fa-bell"></i></label><br>
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6 col-md-6">
                   <div class="form-group">
 
-                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.talentPool.mail">
+                    <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.talentPool.mail">
                       talentPool
-                    </mat-checkbox><br>
-                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingExam.mail">
+                    </nb-checkbox><br>
+                    <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingExam.mail">
                       pendingExam
-                    </mat-checkbox><br>
-                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingAppointment.mail">
+                    </nb-checkbox><br>
+                    <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingAppointment.mail">
                       pendingAppointment
-                    </mat-checkbox><br>
+                    </nb-checkbox><br>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6 col-md-6">
                   <div class="form-group">
-                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingInterview.mail">
+                    <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingInterview.mail">
                       pendingInterview
-                    </mat-checkbox><br>
-                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingSignContract.mail">
+                    </nb-checkbox><br>
+                    <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingSignContract.mail">
                       pendingSignContract
-                    </mat-checkbox><br>
-                    <mat-checkbox [(ngModel)]="profileDetail.setting?.notification.onboard.mail">
+                    </nb-checkbox><br>
+                    <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.onboard.mail">
                       onboard
-                    </mat-checkbox><br>
+                    </nb-checkbox><br>
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="change-collapse">
-                    <a (click)="togglePassword()"><span class="fa" [ngClass]="{
+                    <button nbButton ghost status="success" (click)="togglePassword()"><span class="fa" [ngClass]="{
                       'fa-angle-double-up': isChangePassword,
-                      'fa-angle-double-down': !isChangePassword }"></span> Change Password</a>
+                      'fa-angle-double-down': !isChangePassword }"></span> Change Password</button>
                   </div>
                 </div>
                 <div *ngIf="isChangePassword" class="col-md-12">
                   <div class="form-group">
-                    <label for="name">Current Password <small class="text-red">*</small></label>
+                    <label class="label" for="name">Current Password <small class="text-red">*</small></label>
                     <div class="input-group">
                       <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="profileDetail.passwordCur"
                         [formControl]="passwordCur" nbInput fullWidth placeholder="Current Password">
@@ -153,7 +154,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="name">New Password<small class="text-red">*</small></label>
+                    <label class="label" for="name">New Password<small class="text-red">*</small></label>
                     <div class="input-group">
                       <input type="{{ showPassword2 ? 'text' : 'password' }}" [(ngModel)]="profileDetail.passwordNew"
                         [formControl]="passwordNew" nbInput fullWidth placeholder="New Password">
@@ -167,7 +168,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="name">Confirm Password<small class="text-red">*</small></label>
+                    <label class="label" for="name">Confirm Password<small class="text-red">*</small></label>
                     <div class="input-group">
                       <input type="{{ showPassword3 ? 'text' : 'password' }}" [(ngModel)]="profileDetail.passwordCon"
                         [formControl]="passwordCon" nbInput fullWidth placeholder="Confirm Password">

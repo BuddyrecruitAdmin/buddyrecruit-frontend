@@ -19,26 +19,32 @@
     </div>
   </div>
 </div>
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body></nb-card-body>
+</nb-card>
 <!-- list row -->
 <div class="row">
-  <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+  <div class="col-lg-6 col-md-6" *ngFor="let item of items;">
+    <nb-card accent="success" *ngIf="!loading">
       <nb-card-header>
-        <div class="col-lg-12">
-          <label [nbTooltip]="item.refJD.position">{{ item.refJD.position }}</label>
-          <div class="actions">
-            <nb-icon *ngIf="item.refStatus.name != 'Reject' && role.refAuthorize.jr.editable" icon="edit-outline" class="link" nbTooltip="Edit"
-              [routerLink]="'/jr/detail/edit/'+item._id">
-            </nb-icon>
-            <nb-icon icon="copy-outline"
-              *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm'" class="link"
-              nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
-            <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
-              class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
-            <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
-              [routerLink]="'/jr/detail/preview/'+item._id"></nb-icon>
-          </div>
+        <div class="title">
+          <a class="link" [routerLink]="'/jr/detail/preview/'+item._id" [nbTooltip]="item.refJD.position">
+            <label>{{ item.refJD.position }}</label></a>
         </div>
+        <div class="actions">
+          <nb-icon *ngIf="item.refStatus.name != 'Reject' && role.refAuthorize.jr.editable" icon="edit-outline"
+            class="link" nbTooltip="Edit" [routerLink]="'/jr/detail/edit/'+item._id">
+          </nb-icon>
+          <nb-icon icon="copy-outline"
+            *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm'" class="link"
+            nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
+          <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
+            class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+          <!-- <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
+            [routerLink]="'/jr/detail/preview/'+item._id"></nb-icon> -->
+        </div>
+
       </nb-card-header>
       <nb-card-body>
         <div class="text-group">
@@ -46,7 +52,7 @@
           <span class="label1" [ngClass]="item.refStatus.class">{{ item.refStatus.name}}</span>
         </div>
         <div class="text-group">
-          <label class="label">Department</label>
+          <label class="label" (click)="openPopupComment(item)">Department</label>
           <span>{{ item.department.name || '-' }}</span>
         </div>
         <div class="text-group">

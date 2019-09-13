@@ -17,7 +17,7 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: var(--color-orange);
+  background-color: var(--color-green);
 }
 .img-default span {
   color: #fff;
@@ -141,4 +141,13 @@ h6{
   border: none;
   box-shadow: none;
   font-weight: 800;
+}
+.img {
+  height: 100px;
+  width: 100px;
+  border: 5px solid #000;
+  border-radius: 50%;
+}
+.padBtn{
+  padding: 0 0 ;
 }

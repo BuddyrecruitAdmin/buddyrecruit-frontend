@@ -112,8 +112,68 @@ export class UtilitiesService {
   calculatePercentage(value1: any, value2: any): string {
     let percent = '0';
     if (value1 && value2) {
-      percent = ((value1 / value2) * 100).toFixed(0);      
+      percent = ((value1 / value2) * 100).toFixed(0);
     }
     return percent;
   }
+  convertWorkExpToText(work: any): string {
+    let text = '';
+    const startDate = this.getFullYear(work.start);
+    const endDate = this.getFullYear(work.end);
+    if (startDate && endDate) {
+      text += `${startDate} - ${endDate}, `;
+    }
+    if (work.position) {
+      text += `${work.position} `;
+    }
+    if (work.company) {
+      text += `at ${work.company} `;
+    }
+    text = text.trim();
+    return text;
+  }
+
+  convertEducationToText(education: any): string {
+    let text = '';
+    if (education.refDegree && education.refDegree.name) {
+      text += `${education.refDegree.name}, `;
+    }
+    if (education.major) {
+      text += `${education.major} `;
+    }
+    if (education.university) {
+      text += `at ${education.university} `;
+    }
+    if (education.gpa) {
+      text += `(${education.gpa})`;
+    }
+    text = text.trim();
+    return text;
+  }
+
+  getFullYear(date: Date): string {
+    if (this.dateIsValid(date)) {
+      date = new Date(date);
+      let arrayDate = [];
+      arrayDate = date
+        .toISOString()
+        .split("T")[0]
+        .split("-");
+      return arrayDate[0];
+    } else {
+      return null;
+    }
+  }
+
+  dateIsValid(date: Date): boolean {
+    let isValid = false;
+    if (date) {
+      date = new Date(date);
+      if (date.getUTCFullYear() > 1900) {
+        isValid = true;
+      }
+    }
+    return isValid;
+  }
+
 }

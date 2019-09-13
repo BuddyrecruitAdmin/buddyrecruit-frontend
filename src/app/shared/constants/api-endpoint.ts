@@ -85,7 +85,8 @@ export const API_ENDPOINT = {
         CREATE: "candidate/flow/comment/create",
         DELETE: "candidate/flow/comment/delete",
       }
-    }
+    },
+    DETAIL: "candidate/detail"
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",
@@ -113,9 +114,11 @@ export const API_ENDPOINT = {
     POSITION_DELETE: "position/delete",
 
     LOCATION_LIST: "location/list",
-    LOCATION_CREATE: "create/location",
+    LOCATION_EDIT: "location/edit",
+    LOCATION_CREATE: "location/create",
     LOCATION_LIST_ACTIVE: "location/list/active",
     LOCATION_ACTION: "location/action",
+    LOCATION_DELETE: "location/delete",
 
     USER_LIST: "user/list",
     USER_CREATE: "user/create",
@@ -128,6 +131,7 @@ export const API_ENDPOINT = {
     ROLE_LIST: "role/list",
     USER_PROFILE: "user/profile",
     USER_PROFILE_EDIT: "user/profile/edit",
+    USER_PROFILE_UPLOAD: "user/profile/upload",
 
     REASONS_REJECT_LIST: "rejection/list",
     REASONS_REJECT_CREATE: "rejection/create",
@@ -145,7 +149,8 @@ export const API_ENDPOINT = {
     AUTH_GET_DEFAULT: "authorize/getDefault",
     AUTH_SET_DEFAULT: "authorize/setDefault",
 
-    REJECT_STAGE_LIST: "stageReject/stage",
+    REJECT_STAGE_LIST: "stageReject/list",
+    REJECT_STAGE_EDIT: "stageReject/edit",
     REJECT_SUBSTAGE_LIST: "stageReject/substage",
     STAGE_REJECT_LIST: "stageReject/rejectReason",
     REJECT_STAGE_ACTION: "stageReject/action",
@@ -181,7 +186,7 @@ export const API_ENDPOINT = {
     MAIL_TEMPLATE_EDIT: "mailTemplate/edit",
     MAIL_TEMPLATE_DETAIL: "mailTemplate/detail",
     MAIL_ACTION_DETAIL: "mailAction/detail",
-    MAIL_TEMPLATE_DELETE: "mailTemplate/delete",    
+    MAIL_TEMPLATE_DELETE: "mailTemplate/delete",
   },
   CV: {
     DETAIL: "candidate/id",

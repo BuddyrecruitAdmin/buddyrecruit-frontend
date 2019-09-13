@@ -77,9 +77,10 @@ import {
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
-
+import { TagInputModule } from 'ngx-chips';
 import { PopupMessageComponent } from './popup-message/popup-message.component';
 import { PopupCommentComponent } from './popup-comment/popup-comment.component';
+import { PopupCvComponent } from './popup-cv/popup-cv.component';
 
 @NgModule({
   imports: [
@@ -156,18 +157,22 @@ import { PopupCommentComponent } from './popup-comment/popup-comment.component';
     MatTreeModule,
     ChartModule,
     ChartsModule,
+    TagInputModule,
   ],
   declarations: [
     PopupMessageComponent,
     PopupCommentComponent,
+    PopupCvComponent,
   ],
   exports: [
     PopupMessageComponent,
     PopupCommentComponent,
+    PopupCvComponent,
   ],
   entryComponents: [
     PopupMessageComponent,
     PopupCommentComponent,
+    PopupCvComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

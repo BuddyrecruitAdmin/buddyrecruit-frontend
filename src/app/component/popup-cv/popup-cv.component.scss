@@ -1,0 +1,32 @@
+.borderTop{
+    padding-top: 25px;
+}
+.padTop{
+    border-top: 1px solid #edf1f7;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.txt-left{
+    float: left;
+}
+.txt-right{
+    float: right;
+}
+.txt-title{
+    padding-bottom: 5px;
+}
+.img-circle{
+    padding: 3px;
+    border: none;
+    position: relative;
+    margin: 10px auto 10px;
+    width: 43px;
+    height: 43px;
+    border-radius: 50%;
+    background-color: var(--color-green);
+
+}
+.txt-padTop{
+    padding-top: 13px;
+    padding-left: 13px;
+}

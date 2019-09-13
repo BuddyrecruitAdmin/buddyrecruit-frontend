@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { JobPositionService } from './job-position.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
-import { getRole } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -11,7 +11,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-
 @Component({
   selector: 'ngx-job-position',
   templateUrl: './job-position.component.html',
@@ -31,6 +30,7 @@ export class JobPositionComponent implements OnInit {
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
+  loading: boolean;
 
   constructor(
     private service: JobPositionService,
@@ -39,10 +39,11 @@ export class JobPositionComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService
   ) {
-    this.role  = getRole();   
+    this.role = getRole();
   }
 
   ngOnInit() {
+    this.loading = true;
     this.refresh();
   }
 
@@ -93,6 +94,7 @@ export class JobPositionComponent implements OnInit {
           this.search();
         }
       }
+      this.loading = false;
     });
   }
 
@@ -164,6 +166,7 @@ export class JobPositionComponent implements OnInit {
       pageSize: event.pageSize,
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.loading = true;
     this.search();
   }
 

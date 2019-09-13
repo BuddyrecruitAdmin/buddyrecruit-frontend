@@ -1,0 +1,9 @@
+.txt-header{
+    color :var(--color-green);
+}
+.txt-body{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color : #8f9bb3;
+}

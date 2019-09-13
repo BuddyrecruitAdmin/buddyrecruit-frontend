@@ -171,6 +171,11 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
+    title: 'Reject Stage',
+    link: '/setting/reject-stage',
+    hidden: false,
+  },
+  {
     title: 'Dashboard',
     link: '/setting/dashboard',
     hidden: false,

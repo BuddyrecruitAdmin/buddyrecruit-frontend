@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
-import { getRole } from '../../../shared/services/auth.service';
+import { getRole,setFlowId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -13,6 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { CommonService } from '../../../shared/services';
+import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 @Component({
   selector: 'ngx-jr-list',
   templateUrl: './jr-list.component.html',
@@ -29,6 +30,7 @@ export class JrListComponent implements OnInit {
   criteria: Criteria;
   txtReject: string;
   dialogRef: NbDialogRef<any>;
+  loading: boolean;
   constructor(
     private router: Router,
     private service: JrService,
@@ -41,6 +43,7 @@ export class JrListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -57,7 +60,12 @@ export class JrListComponent implements OnInit {
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
-        'position',
+        'refStatus',
+        'department',
+        'requiredExam',
+        'remark',
+        'refJD',
+        'refSource',
       ]
     };
     this.items = [];
@@ -98,6 +106,7 @@ export class JrListComponent implements OnInit {
           this.search();
         }
       }
+      this.loading = false;
     });
   }
 
@@ -131,27 +140,47 @@ export class JrListComponent implements OnInit {
   }
 
   RejectSave() {
-    console.log(this.itemSelected)
-    this.service.action("reject", this.itemSelected).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        this.search();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: '40%',
+      data: { type: 'C' }
     });
-    this.dialogRef.close();
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(this.itemSelected)
+        this.service.action("reject", this.itemSelected).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+            this.dialogRef.close();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+
+      }
+    })
+
   }
 
   Approve(item: any) {
-    this.service.action("confirm", item).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        this.search();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: '40%',
+      data: { type: 'C' }
     });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.action("confirm", item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+            this.dialogRef.close();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
+    })
+
   }
 
   Reject(item: any, dialog: TemplateRef<any>) {
@@ -174,4 +203,15 @@ export class JrListComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
+
+  openPopupComment(item: any) {
+    setFlowId(item._id);
+    this.dialogService.open(PopupCvComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => setFlowId());
+  }
+
 }

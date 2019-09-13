@@ -19,12 +19,12 @@ import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-u
 import { Subject } from 'rxjs/Subject';
 import { API_ENDPOINT } from '../../../shared/constants';
 import { environment } from '../../../../environments/environment';
-
+import { saveAs } from "file-saver";
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
 @Component({
   selector: 'ngx-jd-detail',
   templateUrl: './jd-detail.component.html',
-  styleUrls: ['./jd-detail.component.scss']
+  styleUrls: ['./jd-detail.component.scss'],
 })
 export class JdDetailComponent implements OnInit {
   jd: any;
@@ -296,6 +296,7 @@ export class JdDetailComponent implements OnInit {
 
   onChangeDepartmentAfter(value) {
     this.divisionOptions = [];
+    console.log(this.jd.departmentId)
     // this.jd.divisionId = "";
     this.divisionOptions.push({
       label: '- Select Division -',
@@ -305,6 +306,7 @@ export class JdDetailComponent implements OnInit {
     const division = this.divisionAll.filter(element => {
       return element.group === value;
     });
+    console.log(this.jd.divisionId)
     if (division.length) {
       this.countDivision = division.length;
       console.log(this.countDivision)
@@ -315,14 +317,6 @@ export class JdDetailComponent implements OnInit {
       this.countDivision = 0;
     }
   }
-
-  // initialCheck() {
-  //   this.detailForm = this.formBuilder.group({
-  //     position: [null, [Validators.required]],
-  //   });
-  //   this.positionCheck = this.detailForm.controls["position"];
-  //   this.sErrorPosition = MESSAGE[137];
-  // }
 
   onHandleFileInput(files: FileList) {
     console.log(files)
@@ -372,9 +366,9 @@ export class JdDetailComponent implements OnInit {
   }
 
   onChangeScore(event, option) {
-    if (event.target.value === "") {
-      event.target.value = 0;
-    }
+    // if (event.target.value === "") {
+    //   event.target.value = 0;
+    // }
     switch (option) {
       case "WORKEXP": {
         this.jd.weightScore.workExperience.total = parseFloat(event.target.value);
@@ -735,10 +729,15 @@ export class JdDetailComponent implements OnInit {
     }
   }
 
-  saveAs() {
+  saveAll() {
     if (this.Validation()) {
       const request = this.setRequest();
       console.log(request);
+      if (this.bHasFile) {
+        this.uploader.uploadItem(
+          this.uploader.queue[this.uploader.queue.length - 1]
+        );
+      }
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: '40%',
         data: { type: 'C' }
@@ -746,14 +745,10 @@ export class JdDetailComponent implements OnInit {
       confirm.afterClosed().subscribe(result => {
         if (result) {
           if (this.state === State.Create) {
-            if (this.bHasFile) {
-              this.uploader.uploadItem(
-                this.uploader.queue[this.uploader.queue.length - 1]
-              );
-            }
             this.service.create(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
+                this.router.navigate(['/jd/list']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -763,6 +758,7 @@ export class JdDetailComponent implements OnInit {
             this.service.edit(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
+                this.router.navigate(['/jd/list']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -772,6 +768,7 @@ export class JdDetailComponent implements OnInit {
             this.service.create(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
+                this.router.navigate(['/jd/list']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -782,66 +779,82 @@ export class JdDetailComponent implements OnInit {
     }
   }
 
+  downloadFilePress() {
+    if (this.jd.attachment.uploadName && this.jd.attachment.originalname) {
+      this.service
+        .downloadFile(this.jd.attachment.uploadName)
+        .subscribe(data => this.downloadFile(data), function (error) {
+          this.alertType = "danger";
+          this.alertMessage = error;
+        });
+    }
+  }
+
+  downloadFile(data: any) {
+    saveAs(data, this.jd.attachment.originalname);
+  }
+
   Validation(): boolean {
-    console.log(this.jd);
+    console.log(this.bHasFile);
     console.log(this.jd.divisionId)
     console.log(this.countDivision)
     this.touched = true;
     let isValid = true;
     this.SErrorAll = "";
+    this.checkValue();
     if (this.jd.refPosition === null || this.jd.refPosition === undefined) {
       isValid = false;
       this.sErrorrefCheck = MESSAGE[139];
-      console.log(this.jd.refPosition)
-
     } else {
       this.sErrorrefCheck = "";
 
     }
     if (this.jd.departmentId === null || this.jd.departmentId === undefined) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.sErrorDe = MESSAGE[140];
     }
-    if (this.jd.divisionId === undefined) {
-      isValid = false;   console.log(this.jd.refPosition)
-    } else if (this.countDivision > 0) {
-      if (this.jd.divisionId === "") {
-        isValid = false;   console.log(this.jd.refPosition)
+    if (this.countDivision > 0) {
+      if (this.jd.divisionId === undefined || this.jd.divisionId === "" || this.jd.divisionId === null) {
+        isValid = false;
       }
     }
     if (this.jd.keywordSearch.length === 0) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.sErrorKey = MESSAGE[138];
     } else {
       this.sErrorKey = "";
     }
     if (this.sTotal != 100) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.SErrorAll = MESSAGE[53];
     }
     if (this.state === State.Edit || this.state === "duplicate") {
       if (this.jd.weightScore.certificate.total != 0) {
+        this.certificateTotal = 0;
         this.jd.weightScore.certificate.weight.map((element) => {
           this.certificateTotal += element.percent;
         })
       }
       if (this.jd.weightScore.hardSkill.total != 0) {
+        this.hardTotal = 0;
         this.jd.weightScore.hardSkill.weight.map((element) => {
           this.hardTotal += element.percent;
         })
       }
       if (this.jd.weightScore.softSkill.total != 0) {
+        this.softTotal = 0;
         this.jd.weightScore.softSkill.weight.map((element) => {
           this.softTotal += element.percent;
         })
       }
       if (this.jd.weightScore.education.total != 0) {
-        console.log(this.eduTotal);
+        this.eduTotal = 0;
         this.jd.weightScore.education.weight.map((element) => {
           this.eduTotal += element.percent;
         })
       }
       if (this.jd.weightScore.workExperience.total != 0) {
+        this.wCheck = 0;
         this.jd.weightScore.workExperience.weight.map((element) => {
           if (this.jd.weightScore.workExperience.total === element.percent) {
             this.wCheck = element.percent;
@@ -850,24 +863,24 @@ export class JdDetailComponent implements OnInit {
       }
     }
     if (this.hardTotal != this.jd.weightScore.hardSkill.total) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.SErrorAll = MESSAGE[69];
     }
     if (this.softTotal != this.jd.weightScore.softSkill.total) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.SErrorAll = MESSAGE[74];
     }
     if (this.certificateTotal != this.jd.weightScore.certificate.total) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.SErrorAll = MESSAGE[78];
     }
     if (this.eduTotal != this.jd.weightScore.education.total) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.SErrorAll = MESSAGE[66];
 
     }
     if (this.wCheck != this.jd.weightScore.workExperience.total) {
-      isValid = false;   console.log(this.jd.refPosition)
+      isValid = false;
       this.SErrorAll = MESSAGE[64];
     }
     return isValid
@@ -912,6 +925,7 @@ export class JdDetailComponent implements OnInit {
   }
 
   calculateTotal() {
+    this.checkValue();
     this.sTotal = this.jd.weightScore.workExperience.total +
       this.jd.weightScore.softSkill.total +
       this.jd.weightScore.hardSkill.total +
@@ -919,6 +933,23 @@ export class JdDetailComponent implements OnInit {
       this.jd.weightScore.certificate.total
   }
 
+  checkValue() {
+    if (isNaN(this.jd.weightScore.workExperience.total) || this.jd.weightScore.workExperience.total === null) {
+      this.jd.weightScore.workExperience.total = 0;
+    }
+    if (isNaN(this.jd.weightScore.softSkill.total) || this.jd.weightScore.softSkill.total === null) {
+      this.jd.weightScore.softSkill.total = 0;
+    }
+    if (isNaN(this.jd.weightScore.hardSkill.total) || this.jd.weightScore.hardSkill.total === null) {
+      this.jd.weightScore.hardSkill.total = 0;
+    }
+    if (isNaN(this.jd.weightScore.education.total) || this.jd.weightScore.education.total === null) {
+      this.jd.weightScore.education.total = 0;
+    }
+    if (isNaN(this.jd.weightScore.certificate.total) || this.jd.weightScore.certificate.total === null) {
+      this.jd.weightScore.certificate.total = 0;
+    }
+  }
 
   onChangePercentSoftSkill() {
     this.iTotalSoftSkill = 0;

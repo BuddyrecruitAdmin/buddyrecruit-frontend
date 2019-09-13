@@ -18,7 +18,7 @@ import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import { AuthorizeListComponent } from './authorize/authorize-list/authorize-list.component';
 import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
+import { RejectStageComponent } from './reject-stage/reject-stage.component';
 const routes: Routes = [
   {
     path: '',
@@ -75,6 +75,10 @@ const routes: Routes = [
       {
         path: 'rejection',
         component: RejectionComponent,
+      },
+      {
+        path: 'reject-stage',
+        component: RejectStageComponent,
       },
       {
         path: 'report',

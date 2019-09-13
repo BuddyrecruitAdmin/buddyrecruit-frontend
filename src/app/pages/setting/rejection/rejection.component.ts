@@ -32,6 +32,7 @@ export class RejectionComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   minPageSize = Paging.pageSizeOptions[0];
+  loading: boolean;
 
   constructor(
     private service: RejectionService,
@@ -44,6 +45,7 @@ export class RejectionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.refresh();
   }
 
@@ -95,6 +97,7 @@ export class RejectionComponent implements OnInit {
           this.search();
         }
       }
+      this.loading = false;
     });
   }
 
@@ -165,6 +168,7 @@ export class RejectionComponent implements OnInit {
       pageSize: event.pageSize,
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.loading = true;
     this.search();
   }
 
