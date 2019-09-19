@@ -9,11 +9,11 @@ import { API_ENDPOINT } from "../../shared/constants";
 @Injectable({
   providedIn: "root"
 })
-export class PopupCVService extends NetworkService {
+export class AppFormService extends NetworkService {
   constructor(
     protected httpClient: HttpClient,
     protected errorHandler: HttpErrorHandler) {
-    super('PopupCVService', httpClient, errorHandler);
+    super('AppFormService', httpClient, errorHandler);
   }
 
   getList(flowId): Observable<ApiResponse> {
@@ -23,11 +23,12 @@ export class PopupCVService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.LIST, body);
   }
 
-  getDetail(flowId: any) {
+  getDetail(_id,isUser): Observable<ApiResponse> {
     const body = {
-      _id: flowId
+      _id: _id,
+      isUser: isUser,
     }
-    return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
+    return this.post(API_ENDPOINT.APPFORM.DETAIL, body);
   }
 
   getEducationList(criteria: any = undefined): Observable<ApiResponse> {
@@ -40,10 +41,10 @@ export class PopupCVService extends NetworkService {
 
   create(flowId: string, message: any): Observable<ApiResponse> {
     const body = {
-      refCandidateFlowId: flowId,
+      refCandidate: flowId,
       message: message
     };
-    return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.CREATE, body);
+    return this.post(API_ENDPOINT.APPFORM.CREATE, body);
   }
 
   deleteItem(flowId: string, commentId: any): Observable<ApiResponse> {

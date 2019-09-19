@@ -28,6 +28,7 @@ export class ProfileComponent implements OnInit {
   role: any;
   url: any;
   file: any;
+  res: string;
   bHasFile: boolean;
   public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'profile' });
   loginForm: FormGroup;
@@ -86,6 +87,7 @@ export class ProfileComponent implements OnInit {
     this.service.getProfile(this.role.refHero._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.profileDetail = response.data;
+        this.url = response.data.imagePath;
         console.log(this.profileDetail)
       }
     });
@@ -150,6 +152,10 @@ export class ProfileComponent implements OnInit {
       this.uploader.uploadItem(
         this.uploader.queue[this.uploader.queue.length - 1]
       );
+      this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
+        console.log("ImageUpload:uploaded:", item, status);
+        
+    };
     }
     if (this.validation()) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
@@ -177,7 +183,7 @@ export class ProfileComponent implements OnInit {
       var reader = new FileReader();
       if (files[0] != undefined || files[0] != null) {
         reader.onload = (event) => { // called once readAsDataURL is completed
-          // this.url = event.target.result;
+          this.url = event.target.result;
         } 
       }
       reader.readAsDataURL(files[0]); // read file as data url

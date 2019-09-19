@@ -7,6 +7,9 @@ import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
+import { resolve } from 'dns';
+import { Router, ActivatedRoute } from "@angular/router";
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 @Component({
   selector: 'ngx-popup-cv',
   templateUrl: './popup-cv.component.html',
@@ -32,6 +35,8 @@ export class PopupCvComponent implements OnInit {
     private ref: NbDialogRef<PopupCvComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
+    private toastrService: NbToastrService,
+    private router: Router,
   ) {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
@@ -40,7 +45,6 @@ export class PopupCvComponent implements OnInit {
 
   ngOnInit() {
     this.flowId = getFlowId();
-    console.log(this.flowId)
     setFlowId();
     this.editable = false;
     this.buttonText = 'edit';
@@ -70,7 +74,7 @@ export class PopupCvComponent implements OnInit {
     this.loading = true;
     this.items = [];
     this.flowId = "5d6795dcbb9aa2080c13a703";
-    console.log(this.flowId);
+    this.degreeMaster = [];
     this.service.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
@@ -89,7 +93,12 @@ export class PopupCvComponent implements OnInit {
     this.service.getEducationList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          this.degreeMaster = response.data;
+          response.data.forEach(element => {
+            this.degreeMaster.push({
+              label: element.name,
+              value: element._id
+            })
+          });
         }
       }
       this.loading = false;
@@ -110,6 +119,18 @@ export class PopupCvComponent implements OnInit {
       major: "",
       gpa: ""
     });
+  }
+
+  edit() {
+    console.log(this.items)
+    this.service.edit(this.items).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.ref.close();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
   }
 
   comment() {
@@ -141,4 +162,21 @@ export class PopupCvComponent implements OnInit {
       }
     });
   }
+
+ checkCV(id){
+  this.router.navigate(['/auth/appform/view/'+id]);
+ }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
+  }
+
 }

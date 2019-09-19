@@ -1,77 +1,75 @@
 <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
-
-      <div>
-        <label [nbTooltip]="candidateName">{{items.title}}</label>
-        <div class="pull-right">
-          <button size="small" nbButton status="success" (click)="changeMode()"> <span class="fa"
-              [ngClass]="{ 'fa-eye': editable, 'fa-pencil-alt': !editable }"></span>
-            {{ buttonText.toUpperCase() }}</button>
-        </div>
+    <div>
+      <label class="label" [nbTooltip]="candidateName">{{items.title}}</label>
+      <div class="pull-right">
+        <button size="small" nbButton status="success" (click)="changeMode()"> <span class="fa"
+            [ngClass]="{ 'fa-eye': editable, 'fa-pencil-alt': !editable }"></span>
+          {{ buttonText.toUpperCase() }}</button>
       </div>
-
+    </div>
   </nb-card-header>
   <nb-card-body *ngIf="!loading" class="dialog-body">
     <div class="title">
-      <label class="txt-title" nbTooltip="Personal Details
-      ">Personal Details
-      </label>
+      <label class="label" nbTooltip="Personal Details">Personal Details</label>
     </div>
-    <div class="row">
-      <div class="col-md-6 col-lg-6">
-        <div class="form-control-group">
-          <label class="label">Name</label>
-          <input type="text" [(ngModel)]="items.firstname" nbInput fullWidth [disabled]="!editable">
+    <div class="border-all box-pad box-header with-border">
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <div class="form-control-group">
+            <label class="label">Name</label>
+            <input type="text" [(ngModel)]="items.firstname" nbInput fullWidth [disabled]="!editable">
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-control-group">
+            <label class="label">Surname</label>
+            <input type="text" [(ngModel)]="items.lastname" nbInput fullWidth [disabled]="!editable">
+          </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-6">
-        <div class="form-control-group">
-          <label class="label">Surname</label>
-          <input type="text" [(ngModel)]="items.lastname" nbInput fullWidth [disabled]="!editable">
+      <div class="row">
+        <div class="col-md-4 col-lg-4">
+          <div class="form-control-group">
+            <label class="label">Birthday</label>
+            <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
+            <input [nbDatepicker]="startDate" [(ngModel)]="items.birth" nbInput fullWidth placeholder="dd/mm/yyyy"
+              [disabled]="!editable">
+          </div>
+        </div>
+        <div class="col-md-2 col-lg-2">
+          <div class="form-control-group">
+            <label class="label">Age</label>
+            <input type="text" [(ngModel)]="items.age" nbInput fullWidth [disabled]="!editable">
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="form-control-group">
+            <label class="label">Phone</label>
+            <input type="text" [(ngModel)]="items.phone" nbInput fullWidth [disabled]="!editable">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <label class="label">Email</label>
+          <input type="text" [(ngModel)]="items.email" nbInput fullWidth [disabled]="!editable">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <label class="label">Address</label>
+          <input type="text" [(ngModel)]="items.address" nbInput fullWidth [disabled]="!editable">
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4 col-lg-4">
-        <div class="form-control-group">
-          <label class="label">Birthday</label>
-          <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-          <input [nbDatepicker]="startDate" [(ngModel)]="items.birth" nbInput fullWidth placeholder="dd/mm/yyyy"
-            [disabled]="!editable">
-        </div>
-      </div>
-      <div class="col-md-2 col-lg-2">
-        <div class="form-control-group">
-          <label class="label">Age</label>
-          <input type="text" [(ngModel)]="items.age" nbInput fullWidth [disabled]="!editable">
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-6">
-        <div class="form-control-group">
-          <label class="label">Phone</label>
-          <input type="text" [(ngModel)]="items.phone" nbInput fullWidth [disabled]="!editable">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <label class="label">Email</label>
-        <input type="text" [(ngModel)]="items.email" nbInput fullWidth [disabled]="!editable">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <label class="label">Address</label>
-        <input type="text" [(ngModel)]="items.address" nbInput fullWidth [disabled]="!editable">
-      </div>
-    </div>
-    <div class="borderTop"></div>
+    <!-- <div class="border-all"></div> -->
 
     <!-- CV Score -->
-    <div class="box-header with-border">
-      <div class="title padTop">
-        <label>CV Score
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">CV Score
           <span class="fa fa-bug" (click)="bugReport('CV Score', 'CV Score')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span></label>
         <small class="label pull-right bg-gray">
@@ -79,104 +77,105 @@
           {{ items.candidateFlow.weightScore?.total }}
         </small>
       </div>
-      <div class="box-body">
-        <div class="row box-pad">
-          <div class="col-md-6">
-            <div class="progress-group">
-              <span class="label">Experience</span>
-              <span class="pull-right">
-                <b>{{ items.candidateFlow.weightScore?.workExperience?.accumulativeScore }}</b>
-                /{{ items.candidateFlow.weightScore?.workExperience?.total }}
-              </span>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+      <div class="border-all box-pad box-header with-border">
+        <div class="progress-group">
+          <span class="label">Experience</span>
+          <span class="pull-right">
+            <b>{{ items.candidateFlow.weightScore?.workExperience?.accumulativeScore }}</b>
+            /{{ items.candidateFlow.weightScore?.workExperience?.total }}
+          </span>
+          <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                 items.candidateFlow.weightScore?.workExperience?.accumulativeScore,
                 items.candidateFlow.weightScore?.workExperience?.total)" status="primary" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="progress-group">
-              <span class="label">Education</span>
-              <span class="pull-right">
-                <b>{{ items.candidateFlow.weightScore?.education.accumulativeScore }}</b>
-                /{{ items.candidateFlow.weightScore?.education.total }}
-              </span>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+          </nb-progress-bar>
+        </div>
+        <div class="progress-group">
+          <span class="label">Education</span>
+          <span class="pull-right">
+            <b>{{ items.candidateFlow.weightScore?.education.accumulativeScore }}</b>
+            /{{ items.candidateFlow.weightScore?.education.total }}
+          </span>
+          <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                     items.candidateFlow.weightScore?.education?.accumulativeScore,
                     items.candidateFlow.weightScore?.education?.total)" status="info" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="progress-group">
-              <span class="label">Hard Skill</span>
-              <span class="pull-right">
-                <b>{{ items.candidateFlow.weightScore?.hardSkill.accumulativeScore }}</b>
-                /{{ items.candidateFlow.weightScore?.hardSkill.total }}
-              </span>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+          </nb-progress-bar>
+        </div>
+        <div class="progress-group">
+          <span class="label">Hard Skill</span>
+          <span class="pull-right">
+            <b>{{ items.candidateFlow.weightScore?.hardSkill.accumulativeScore }}</b>
+            /{{ items.candidateFlow.weightScore?.hardSkill.total }}
+          </span>
+          <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                 items.candidateFlow.weightScore?.hardSkill?.accumulativeScore,
                 items.candidateFlow.weightScore?.hardSkill?.total)" status="success" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="progress-group">
-              <span class="label">Soft Skill</span>
-              <span class="pull-right">
-                <b>{{ items.candidateFlow.weightScore?.softSkill.accumulativeScore }}</b>
-                /{{ items.candidateFlow.weightScore?.softSkill.total }}
-              </span>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+          </nb-progress-bar>
+        </div>
+        <div class="progress-group">
+          <span class="label">Soft Skill</span>
+          <span class="pull-right">
+            <b>{{ items.candidateFlow.weightScore?.softSkill.accumulativeScore }}</b>
+            /{{ items.candidateFlow.weightScore?.softSkill.total }}
+          </span>
+          <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                 items.candidateFlow.weightScore?.softSkill?.accumulativeScore,
                 items.candidateFlow.weightScore?.softSkill?.total)" status="warning" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="progress-group">
-              <span class="label">Certificate</span>
-              <span class="pull-right">
-                <b>{{ items.candidateFlow.weightScore?.certificate.accumulativeScore }}</b>
-                /{{ items.candidateFlow.weightScore?.certificate.total }}
-              </span>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+          </nb-progress-bar>
+        </div>
+        <div class="progress-group">
+          <span class="label">Certificate</span>
+          <span class="pull-right">
+            <b>{{ items.candidateFlow.weightScore?.certificate.accumulativeScore }}</b>
+            /{{ items.candidateFlow.weightScore?.certificate.total }}
+          </span>
+          <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                 items.candidateFlow.weightScore?.certificate?.accumulativeScore,
                 items.candidateFlow.weightScore?.certificate?.total)" status="danger" size="tiny">
-              </nb-progress-bar>
-            </div>
-          </div>
+          </nb-progress-bar>
         </div>
       </div>
     </div>
 
     <!-- EXAM -->
-    <div class="box-header with-border" *ngIf="items.candidateFlow.pendingExamScoreInfo.flag">
-      <label>Exam Score
-        <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.pendingExamScoreInfo.examScore }}
-        </small>
-      </label>
-      <div class="box-body">
+    <div class="border-padtop" *ngIf="items.candidateFlow.pendingExamScoreInfo.flag">
+      <div class="title">
+        <label class="label">Exam Score
+          <small class="label pull-right bg-gray">
+            {{ items.candidateFlow.pendingExamScoreInfo.examScore }}
+          </small>
+        </label>
+      </div>
+      <div class="border-all box-pad box-header with-border">
         <textarea class="form-control" rows="3"
           disabled>{{ items.candidateFlow.pendingExamScoreInfo.examRemark }}</textarea>
       </div>
     </div>
 
     <!-- ATIITUDE SCORE -->
-    <div class="box-header with-border" *ngIf="items.candidateFlow.pendingExamScoreInfo.flag">
-      <h4>Attitude Score
-        <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.pendingExamScoreInfo.attitudeScore }}
-        </small>
-      </h4>
-      <div class="box-body">
+    <div class="border-padtop" *ngIf="items.candidateFlow.pendingExamScoreInfo.flag">
+      <div class="title">
+        <label class="label">Attitude Score
+          <small class="label pull-right bg-gray">
+            {{ items.candidateFlow.pendingExamScoreInfo.attitudeScore }}
+          </small>
+        </label>
+      </div>
+      <div class="border-all box-pad box-header with-border">
         <textarea class="form-control" rows="3" disabled>{{ items.candidateFlow.pendingExamScoreInfo.attitudeRemark }}
         </textarea>
       </div>
     </div>
 
     <!-- InterView -->
-    <div class="borderTop"></div>
-    <div class="title padTop">
-      <div class="box-header with-border" *ngIf="items.candidateFlow.pendingInterviewInfo.flag">
-        <label>Comments</label>
-        <div class="box-body box-pad">
-          <div class="post" *ngFor="let comment of items.candidateFlow.pendingInterviewInfo.comments; let i = index">
+    <div class="border-padtop">
+      <div class="title" *ngIf="items.candidateFlow.pendingInterviewInfo.flag">
+        <label class="label">Comments</label>
+      </div>
+      <div class="border-all box-pad box-header with-border">
+        <nb-card *ngFor="let comment of items.candidateFlow.pendingInterviewInfo.comments; let i = index">
+          <nb-card-body>
             <div class="row">
-              <div>
+              <div class="label-pad">
                 <img class="img-circle"
                   src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg"
                   alt="user image">
@@ -188,15 +187,14 @@
               </div>
             </div>
             <p>{{ comment.message }}</p>
-          </div>
-        </div>
+          </nb-card-body>
+        </nb-card>
       </div>
     </div>
     <!-- Work Experience -->
-    <div class="borderTop"></div>
-    <div class="box-header with-border">
-      <div class="title padTop">
-        <label>Work Experience
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">Work Experience
           <span class="fa fa-bug" (click)="bugReport('Work Experience', 'Work Experience')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span>
         </label>
@@ -205,8 +203,8 @@
           {{ items.candidateFlow.weightScore?.workExperience?.total }}
         </small>
       </div>
-      <div class="box-body">
-        <div class="row justify-content-md-center">
+      <div class="border-all box-pad box-header with-border">
+        <div class="row">
           <div class="col-md-2 col-lg-2">
             <div class="form-control-group">
               <label class="label">Year</label>
@@ -220,20 +218,17 @@
             </div>
           </div>
         </div>
-        <div *ngFor="let exp of items.workExperience?.work" class="row justify-content-md-center">
-          <div class="col-md-6 col-lg-6">
-            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-            <span>{{ utilitiesService.convertWorkExpToText(exp) }} </span>
-          </div>
+        <div *ngFor="let exp of items.workExperience?.work" class="row">
+          <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+          <span>{{ utilitiesService.convertWorkExpToText(exp) }} </span>
         </div>
       </div>
     </div>
 
     <!-- Education -->
-    <div class="borderTop"></div>
-    <div class="box-header with-border">
-      <div class="title padTop">
-        <label>Education
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">Education
           <span class="fa fa-bug" (click)="bugReport('Education', 'Education')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span>
         </label>
@@ -242,59 +237,60 @@
           {{ items.candidateFlow.weightScore.education.total }}
         </small>
       </div>
-      <nb-card *ngFor="let education of items.education">
-        <nb-card-header>
-          <div class="actions">
-            <nb-icon *ngIf="editable" class="txt-right" icon="close-circle-outline" nbTooltip="Delete"
-              (click)="removeEducation(i)">
-            </nb-icon>
-          </div>
-        </nb-card-header>
-        <nb-card-body>
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label class="control-label">Degree
-              </label>
-              <nb-select [(ngModel)]="education.refDegree.name" [ngModelOptions]="{ standalone: true }"
-                [disabled]="!editable" Faria-hidden="true" fullWidth>
-                <nb-option *ngFor="let degree of degreeMaster" value="{{ degree.name }}">{{ degree.name }}</nb-option>
-              </nb-select>
+      <div class="border-all box-pad box-header with-border">
+        <nb-card *ngFor="let education of items.education;let i = index">
+          <nb-card-header>
+            <div class="actions">
+              <nb-icon *ngIf="editable" class="fa fa-times-circle ng-star-inserted link" status="danger"
+                nbTooltip="Delete" (click)="removeEducation(i)">
+              </nb-icon>
             </div>
-            <div class="col-md-2 form-group">
-              <label class="control-label">GPA
-              </label>
-              <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
-                [ngModelOptions]="{standalone: true}" nbInput />
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label class="control-label">Degree
+                </label>
+                <nb-select [(ngModel)]="education.refDegree._id" [ngModelOptions]="{ standalone: true }"
+                  [disabled]="!editable" Faria-hidden="true" fullWidth>
+                  <nb-option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</nb-option>
+                </nb-select>
+              </div>
+              <div class="col-md-2 form-group">
+                <label class="control-label">GPA
+                </label>
+                <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
+                  [ngModelOptions]="{standalone: true}" nbInput />
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label class="control-label">University
-              </label>
-              <input type="text" [(ngModel)]="education.university" [disabled]="!editable"
-                [ngModelOptions]="{standalone: true}" nbInput fullWidth />
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label class="control-label">University
+                </label>
+                <input type="text" [(ngModel)]="education.university" [disabled]="!editable"
+                  [ngModelOptions]="{standalone: true}" nbInput fullWidth />
+              </div>
+              <div class="col-md-6 form-group">
+                <label class="control-label">Major
+                </label>
+                <input type="text" [(ngModel)]="education.major" [disabled]="!editable"
+                  [ngModelOptions]="{standalone: true}" nbInput fullWidth />
+              </div>
             </div>
-            <div class="col-md-6 form-group">
-              <label class="control-label">Major
-              </label>
-              <input type="text" [(ngModel)]="education.major" [disabled]="!editable"
-                [ngModelOptions]="{standalone: true}" nbInput fullWidth />
-            </div>
-          </div>
-        </nb-card-body>
-      </nb-card>
-      <div *ngIf="editable" class="box-body text-center">
-        <button nbButton type="button" status="success" (click)="addEducation()"
-          [disabled]="items.education.length === 5">
-          Add more education
-        </button>
+          </nb-card-body>
+        </nb-card>
+        <div *ngIf="editable" class="box-body text-center">
+          <button nbButton type="button" status="success" size="small" (click)="addEducation()"
+            [disabled]="items.education.length === 5">
+            Add more education
+          </button>
+        </div>
       </div>
     </div>
     <!-- Hard Skill -->
-    <div class="borderTop"></div>
-    <div class="box-header with-border">
-      <div class="title padTop">
-        <label>Hard Skill
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">Hard Skill
           <span class="fa fa-bug" (click)="bugReport('Hard Skill', 'Hard Skill')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span>
         </label>
@@ -303,14 +299,14 @@
           {{ items.candidateFlow.weightScore.hardSkill.total }}
         </small>
       </div>
-      <div class="box-body">
+      <div class="border-all box-pad box-header with-border">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <tag-input [(ngModel)]="items.hardSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
               [maxItems]="15" secondaryPlaceholder="Hard SKill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="progress-group" *ngFor="
                 let item of items.candidateFlow.weightScore.hardSkill.weight;">
               <span class="label">{{ item.skill }}</span>
@@ -325,10 +321,9 @@
     </div>
 
     <!-- Soft Skill -->
-    <div class="borderTop"></div>
-    <div class="box-header with-border">
-      <div class="title padTop">
-        <label>Soft Skill
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">Soft Skill
           <span class="fa fa-bug" (click)="bugReport('Soft Skill', 'Soft Skill')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span>
         </label>
@@ -337,14 +332,14 @@
           {{ items.candidateFlow.weightScore.softSkill.total }}
         </small>
       </div>
-      <div class="box-body">
+      <div class="border-all box-pad box-header with-border">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <tag-input [(ngModel)]="items.softSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
               [maxItems]="15" secondaryPlaceholder="Soft SKill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="progress-group" *ngFor="
                 let item of items.candidateFlow.weightScore.softSkill.weight;
                 let i = index
@@ -361,10 +356,9 @@
     </div>
 
     <!-- Certificate -->
-    <div class="borderTop"></div>
-    <div class="box-header with-border">
-      <div class="title padTop">
-        <label>Certificate
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">Certificate
           <span class="fa fa-bug" (click)="bugReport('Certificate', 'Certificate')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span>
         </label>
@@ -373,15 +367,15 @@
           {{ items.candidateFlow.weightScore.certificate.total }}
         </small>
       </div>
-      <div class="box-body">
+      <div class="border-all box-pad box-header with-border">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <tag-input [(ngModel)]="items.certificate" [removable]="editable" [editable]="editable"
               [disable]="!editable" [maxItems]="15" secondaryPlaceholder="Hard SKill" placeholder="+"
               [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <div class="progress-group" *ngFor="
                 let item of items.candidateFlow.weightScore.certificate.weight;
                 let i = index
@@ -398,8 +392,9 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button class="txt-left" size="small" nbButton status="success" (click)="comment()">Original CV</button>
+    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)" [disabled]="!items.applicationForm">Original CV</button>
     <button class="txt-left" size="small" nbButton ghost (click)="comment()">Feedback</button>
+    <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
     <button nbButton ghost size="small" (click)="ref.close()">CLOSE</button>
   </nb-card-footer>
 </nb-card>

@@ -86,7 +86,8 @@ export const API_ENDPOINT = {
         DELETE: "candidate/flow/comment/delete",
       }
     },
-    DETAIL: "candidate/detail"
+    DETAIL: "candidate/detail",
+    EDIT: "candidate/edit",
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",
@@ -229,7 +230,9 @@ export const API_ENDPOINT = {
     UPDATE: "profile/changeProfile"
   },
   APPFORM: {
-    ACTION: "appForm/action"
+    ACTION: "appForm/action",
+    DETAIL: "appForm/detail",
+    CREATE: "appForm/create",
   },
   DASHBOARD: {
     DASHBOARD: "dashboard"
