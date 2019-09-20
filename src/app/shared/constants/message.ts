@@ -150,4 +150,9 @@ export const MESSAGE = {
   140: "Please select Department.",
   141: "Please select Job Position.",
   142: "Please input onboard date.",
+  143: "Please enter the nickname.",
+  144: "Please input salary.",
+  145: "Please complete all education fields",
+  146: "Please complete all workexeperience fields",
+  147: "Please complete all language fields",
 };

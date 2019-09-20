@@ -18,10 +18,14 @@
     </div>
   </div>
 </div>
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body></nb-card-body>
+</nb-card>
 <!-- list all item -->
 <div class="row">
-  <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+  <div class="col-md-6 col-lg-6" *ngFor="let item of items;">
+    <nb-card accent="success" *ngIf="!loading">
       <nb-card-header>
         <div class="title">
           <label [nbTooltip]="item.name">{{ item.name }}</label>
@@ -64,7 +68,8 @@
 <!-- dialogPopup -->
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header>Job Position</nb-card-header>
+    <nb-card-header>
+      <label class="label"> Job Position</label></nb-card-header>
     <nb-card-body>
       <div class="form-control-group">
         <label class="label">Job Position<span style="color:red">*</span></label>

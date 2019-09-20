@@ -1,0 +1,128 @@
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.rejection.editable, 
+      'col-sm-8':!role.refAuthorize.configuration.rejection.editable}">
+      <h3>Reject Stage</h3>
+    </div>
+  </div>
+</div>
+<!-- list item -->
+<nb-card accent="success">
+  <nb-card-body>
+    <div class="row">
+      <div class="col-sm-6 col-lg-6 col-md-6">
+        <nb-accordion multi>
+          <nb-accordion-item>
+            <nb-accordion-item-header class="txt-header">
+              Talent Pool
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row">
+                <div class="col-lg-6" *ngFor="let item of talentAll;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body">
+                    <div class="txt-body">
+                      {{item.label}}
+                    </div>
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header class="txt-header">
+              Pending Exam
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row">
+                <div class="col-lg-6" *ngFor="let exam of examAll;">
+                  <nb-checkbox [(ngModel)]="exam.value" class="txt-body">
+                    <div class="txt-body">
+                      {{exam.label}}
+                    </div>
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header class="txt-header">
+              Pending Appointment
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row">
+                <div class="col-lg-6" *ngFor="let app of appAll;">
+                  <nb-checkbox [(ngModel)]="app.value" class="txt-body">
+                    <div class="txt-body">
+                      {{app.label}}
+                    </div>
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+      </div>
+      <div class="col-sm-6 col-lg-6 col-md-6">
+        <nb-accordion multi>
+          <nb-accordion-item>
+            <nb-accordion-item-header class="txt-header">
+              Pending Interview
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row">
+                <div class="col-lg-6" *ngFor="let app of appAll;">
+                  <nb-checkbox [(ngModel)]="app.value" class="txt-body">
+                    <div class="txt-body">
+                      {{app.label}}
+                    </div>
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header class="txt-header">
+              Pending Sign Contract
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row">
+                <div class="col-lg-6" *ngFor="let sign of signAll;">
+                  <nb-checkbox [(ngModel)]="sign.value">
+                    <div class="txt-body">
+                      {{sign.label}}
+                    </div>
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+
+          <nb-accordion-item>
+            <nb-accordion-item-header class="txt-header">
+              Onboard
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div class="row">
+                <div class="col-lg-6" *ngFor="let on of onAll;">
+                  <nb-checkbox [(ngModel)]="on.value">
+                    <div class="txt-body">
+                      {{on.label}}
+                    </div>
+                  </nb-checkbox>
+                </div>
+              </div>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="input-group-addon" nbTooltip="Search">
+      <button nbButton status="success" (click)="saveAs()" style="float: right;">Save</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

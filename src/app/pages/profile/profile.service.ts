@@ -18,8 +18,8 @@ export class ProfileService extends NetworkService {
     super('ProfileService', httpClient, errorHandler);
   }
 
-  // getList(criteria: any = undefined): Observable<ApiResponse> {
-  //   return this.post(API_ENDPOINT.CONFIGURATION.USER_LIST, { criteria });
+  // saveFile(file: File): Observable<ApiResponse> {
+  //   return this.post(API_ENDPOINT.FILE.UPLOAD, { file });
   // }
 
   // create(item: any): Observable<ApiResponse> {
@@ -37,7 +37,7 @@ export class ProfileService extends NetworkService {
       notifyEmail: item.notifyEmail,
       passwordCur: item.passwordCur,
       passwordNew: item.passwordNew,
-      setting : item.setting
+      setting: item.setting
 
 
     }

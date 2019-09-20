@@ -33,8 +33,8 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-control-group">
-              <label class="label">Keyword to search in CV <span style="color:red">*</span></label>
-              <tag-input [disabled]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a Keyword"
+              <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
+              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a email"
                 placeholder="+" [ngModelOptions]="{ standalone: true }">
               </tag-input>
               <small *ngIf="touched" class="text-red">{{ sErrorKey }}</small>
@@ -47,39 +47,45 @@
               <label class="label">Job Description</label>
               <div class="input-group">
                 <div class="custom-file">
-                  <input type="text" [(ngModel)]="jd.attachment.originalname" class="form-control" disabled
-                    name="originalname" nbInput fullWidth />
+                  <input type="text" [(ngModel)]="jd.attachment.originalname" disabled name="originalname" nbInput
+                    fullWidth />
                 </div>
                 <div class="input-group-append">
                   <label for="file-upload" class="label custom-file-upload">
                     Browse File
                   </label>
                   <input id="file-upload" type="file" name="jd" (change)="onHandleFileInput($event.target.files)"
-                    ng2FileSelect [uploader]="uploader" [disabled]="!modeEditable"
-                    [(ngModel)]="jd.attachment.originalname" nbInput />
+                    ng2FileSelect [uploader]="uploader" [disabled]="!modeEditable || checkPreview"
+                    [(ngModel)]="jd.attachment.originalname" accept="image/*" nbInput />
                 </div>
                 <span *ngIf="!modeEditable" class="input-group-addon right">Browse File</span>
               </div>
-              <button nbButton [disabled]="!jd.attachment.originalname || !modeEditable || checkPreview" type="button"
-                (click)="clearAttachFile()">Clear File
+              <button class="nbBtn" nbButton [disabled]="!jd.attachment.originalname || !modeEditable || checkPreview"
+                type="button" (click)="clearAttachFile()">Clear File
               </button>
               <button nbButton [disabled]="!jd.attachment.originalname || !jd.attachment.uploadName" type="button"
                 (click)="downloadFilePress()">Download
               </button>
             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
             <div class="form-control-group">
-              <label class="label">Department <span style="color:red">*</span></label>
-              <nb-select [disabled]="checkPreview" (onClick)="getDepart()" [(ngModel)]="jd.departmentId"
-                [ngModelOptions]="{ standalone: true }" fullWidth (selectedChange)="onChangeDepartment($event)">
+              <label for="name">Department <span style="color:red">*</span></label>
+              <nb-select [disabled]="checkPreview" [(ngModel)]="jd.departmentId" [ngModelOptions]="{ standalone: true }"
+                fullWidth (selectedChange)="onChangeDepartment($event)">
                 <nb-option *ngFor="let department of departMentAdmin" [value]="department.value">
                   {{ department.label }}
                 </nb-option>
               </nb-select>
               <!-- <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorrefCheck }}</small> -->
             </div>
+          </div>
+          <div class="col-md-6">
             <div class="form-control-group">
-              <label class="label">Division <span style="color:red">*</span></label>
-              <nb-select [disabled]="divisionOptions.length <= 1" [(ngModel)]="jd.divisionId"
+              <label for="name">Division <span *ngIf="divisionOptions.length === 0" style="color:red">*</span></label>
+              <nb-select [disabled]="divisionOptions.length <= 1 || checkPreview" [(ngModel)]="jd.divisionId"
                 [ngModelOptions]="{ standalone: true }" fullWidth>
                 <nb-option *ngFor="let option of divisionOptions" [value]="option.value">
                   {{ option.label }}
@@ -96,116 +102,99 @@
       <nb-card-body>
         <div class="row">
           <!-- Work Experience -->
-          <div class="col-md-6">
+          <div class="col-sm-4 col-md-4">
             <div class="form-group">
-              <label class="col-md-5 control-label" for="inputEXP">
+              <label for="inputEXP">
                 Work Experience <span style="color:red">*</span>
               </label>
-              <div class="input-group-append">
-                <div class="col-md-11">
-                  <div class="input-group">
-                    <input class="form-control" type="number" min="0.00" max="100.00" step="1.00" name="exp"
-                      (input)="onChangeScore($event, 'WORKEXP')" [(ngModel)]="jd.weightScore.workExperience.total"
-                      pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput
-                      appNumberDirective [disabled]="checkPreview" />
-                    <span class="custom-file-upload2" (click)="open(ExperienceBox)">
-                      <span class="fa fa-cog"></span>
-                    </span>
-                  </div>
+              <div class="input-group">
+                <input type="number" min="0.00" max="100.00" step="1.00" name="exp"
+                  (input)="onChangeScore($event, 'WORKEXP')" [(ngModel)]="jd.weightScore.workExperience.total"
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview">
+                <div class="input-group-addon" nbTooltip="Search">
+                  <nb-icon icon="settings-2" class="link" (click)="open(ExperienceBox)"></nb-icon>
                 </div>
               </div>
             </div>
             <!-- HARD SKILL -->
             <div class="form-group">
-              <label class="col-md-5 control-label" for="inputEXP">
+              <label for="inputEXP">
                 Hard Skill<span style="color:red">*</span>
               </label>
-              <div class="input-group-append">
-                <div class="col-md-11">
-                  <div class="input-group">
-                    <input class="form-control" type="number" min="0.00" max="100.00" step="1.00" name="hard"
-                      (input)="onChangeScore($event, 'HARDSKILL')" [(ngModel)]="jd.weightScore.hardSkill.total"
-                      pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput
-                      appNumberDirective [disabled]="checkPreview" />
-                    <span class="custom-file-upload2" (click)="open(HardSkillBox)">
-                      <span class="fa fa-cog"></span>
-                    </span>
-                  </div>
+              <div class="input-group">
+                <input type="number" min="0.00" max="100.00" step="1.00" name="hard"
+                  (input)="onChangeScore($event, 'HARDSKILL')" [(ngModel)]="jd.weightScore.hardSkill.total"
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" />
+                <div class="input-group-addon" nbTooltip="Search">
+                  <nb-icon icon="settings-2" class="link" (click)="open(HardSkillBox)"></nb-icon>
                 </div>
               </div>
             </div>
-            <!--Certificate-->
-            <div class="form-group">
-              <label class="col-md-5 control-label" for="inputEXP">
-                Certificate <span style="color:red">*</span>
-              </label>
-              <div class="input-group-append">
-                <div class="col-md-11">
-                  <div class="input-group">
-                    <input class="form-control" type="number" min="0.00" max="100.00" step="1.00" name="cert"
-                      (input)="onChangeScore($event, 'CERTIFICATE')" [(ngModel)]="jd.weightScore.certificate.total"
-                      pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput
-                      appNumberDirective [disabled]="checkPreview" />
-                    <span class="custom-file-upload2" (click)="open(CertificateBox)">
-                      <span class="fa fa-cog"></span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
           <!-- Education  -->
-          <div class="col-md-6">
+          <div class="col-sm-4 col-md-4">
             <div class="form-group">
-              <label class="col-md-5 control-label" for="inputEXP">
+              <label for="inputEXP">
                 Education <span style="color:red">*</span>
               </label>
-              <div class="input-group-append">
-                <div class="col-md-11">
-                  <div class="input-group">
-                    <input class="form-control" type="number" min="0.00" max="100.00" step="1.00" name="edu"
-                      (input)="onChangeScore($event, 'EDUCATION')" [(ngModel)]="jd.weightScore.education.total"
-                      pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput
-                      appNumberDirective [disabled]="checkPreview" />
-                    <span class="custom-file-upload2" (click)="open(EducationBox)">
-                      <span class="fa fa-cog"></span>
-                    </span>
-                  </div>
+              <div class="input-group">
+                <input type="number" min="0.00" max="100.00" step="1.00" name="edu"
+                  (input)="onChangeScore($event, 'EDUCATION')" [(ngModel)]="jd.weightScore.education.total"
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" />
+                <div class="input-group-addon" nbTooltip="Search">
+                  <nb-icon icon="settings-2" class="link" (click)="open(EducationBox)"></nb-icon>
                 </div>
               </div>
             </div>
             <!-- SOFT SKILL -->
             <div class="form-group">
-              <label class="col-md-5 control-label" for="inputEXP">
+              <label for="inputEXP">
                 Soft Skill <span style="color:red">*</span>
               </label>
-              <div class="input-group-append">
-                <div class="col-md-11">
-                  <div class="input-group">
-                    <input class="form-control" type="number" min="0.00" max="100.00" step="1.00" name="soft"
-                      (input)="onChangeScore($event, 'SOFTSKILL')" [(ngModel)]="jd.weightScore.softSkill.total"
-                      pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput
-                      appNumberDirective [disabled]="checkPreview" />
-                    <span class="custom-file-upload2" (click)="open(SoftSkillBox)">
-                      <span class="fa fa-cog"></span>
-                    </span>
-                  </div>
+              <div class="input-group">
+                <input type="number" min="0.00" max="100.00" step="1.00" name="soft"
+                  (input)="onChangeScore($event, 'SOFTSKILL')" [(ngModel)]="jd.weightScore.softSkill.total"
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" />
+                <div class="input-group-addon" nbTooltip="Search">
+                  <nb-icon icon="settings-2" class="link" (click)="open(SoftSkillBox)"></nb-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4 col-md-4">
+            <!--Certificate-->
+            <div class="form-group">
+              <label for="inputEXP">
+                Certificate <span style="color:red">*</span>
+              </label>
+              <div class="input-group">
+                <input type="number" min="0.00" max="100.00" step="1.00" name="cert"
+                  (input)="onChangeScore($event, 'CERTIFICATE')" [(ngModel)]="jd.weightScore.certificate.total"
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" />
+                <div class="input-group-addon" nbTooltip="Search">
+                  <nb-icon icon="settings-2" class="link" (click)="open(CertificateBox)"></nb-icon>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-md-5 control-label" for="inputEXP">
+              <br />
+              <label for="inputEXP">
                 Total {{ sTotal }} %
               </label>
             </div>
           </div>
         </div>
+
       </nb-card-body>
       <small *ngIf="touched" class="text-red-right">{{ SErrorAll }}</small>
       <nb-card-footer>
         <button nbButton status="default" (click)="back()">Cancel</button>
-        <button nbButton status="success" (click)="saveAs()" [disabled]="checkPreview">Save</button>
+        <button nbButton status="success" (click)="saveAll()" [disabled]="checkPreview">Save</button>
       </nb-card-footer>
     </nb-card>
   </div>
@@ -222,7 +211,7 @@
     </nb-card-header>
     <nb-card-body>
       <div class="modal-body">
-        <table class="table">
+        <table class="table table table-bordered">
           <tbody>
             <tr>
               <th>No.</th>
@@ -236,11 +225,11 @@
               <td>
                 <div class="input-group">
                   <div class="input-group-addon left">
-                    <span class="fa fa-greater-than-equal"></span>
+                    <span class="fa fa-greater-than-equal"></span><i class="fas fa-greater-than-equal"></i>
                   </div>
                   <input type="number" min="0" max="100" name="low" value="workEXPline.low"
                     [(ngModel)]="workEXPline.low" [disabled]="checkPreview" class="form-control"
-                    pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" appNumberDirective />
+                    pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
                 </div>
               </td>
               <td>
@@ -250,7 +239,7 @@
                   </div>
                   <input type="number" min="0" max="100" name="high" value="workEXPline.high"
                     [(ngModel)]="workEXPline.high" [disabled]="checkPreview" class="form-control"
-                    pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" appNumberDirective />
+                    pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
                 </div>
               </td>
               <td>
@@ -258,7 +247,7 @@
                   [disabled]="checkPreview" class="form-control" [ngClass]="{
                         'has-error': workEXPline.flagError,
                         'has-success': !workEXPline.flagError
-                      }" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
+                      }" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;"
                   appNumberDirective />
               </td>
               <td>
@@ -311,7 +300,7 @@
               <td>
                 <input type="number" value="ss.percent" min="0" max="100" [(ngModel)]="ss.percent"
                   [disabled]="!modeEditable || checkPreview" class="form-control" (input)="onChangePercentSoftSkill()"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" appNumberDirective />
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
@@ -371,7 +360,7 @@
               <td>
                 <input type="number" min="0" max="100" value="hs.percent" [(ngModel)]="hs.percent"
                   [disabled]="!modeEditable || checkPreview" class="form-control" (input)="onChangePercentHardSkill()"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" appNumberDirective />
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
@@ -431,7 +420,7 @@
               <td>
                 <input type="number" value="cert.percent" min="0" max="100" [(ngModel)]="cert.percent"
                   [disabled]="!modeEditable || checkPreview" class="form-control" (input)="onChangePercentCertificate()"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" appNumberDirective />
+                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
@@ -479,7 +468,7 @@
               <td>
                 <input type="number" min="0" max="100" value="edu.percent" [(ngModel)]="edu.percent"
                   [disabled]="!modeEditable || checkPreview" class="form-control" pattern="/^-?\d+\.?\d*$/"
-                  onKeyPress="if(this.value.length==2) return false;" appNumberDirective />
+                  onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
             </tr>
           </tbody>

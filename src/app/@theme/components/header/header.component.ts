@@ -59,9 +59,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.user = {
       name: `${role.firstname || ''} ${role.lastname || ''}`,
       title: role.refHero.name,
-      picture: '../../../../assets/images/avatar.png'
+      picture: role.imagePath,
     };
-
+    
     // this.userService.getUsers()
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe((users: any) => this.user = users.nick);

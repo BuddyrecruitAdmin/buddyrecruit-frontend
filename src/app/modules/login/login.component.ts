@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit {
     });
     this.userName = this.loginForm.controls["username"];
     this.password = this.loginForm.controls["password"];
-
     this.sErrorUserName = MESSAGE[51];
     this.sErrorPassword = MESSAGE[50];
     this.sForgotPassword = MESSAGE[52];
@@ -64,6 +63,7 @@ export class LoginComponent implements OnInit {
 
   login(value) {
     this.touched = true;
+    console.log(this.loginForm)
     this.loginService.login(value.username, value.password).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);

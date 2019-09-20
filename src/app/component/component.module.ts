@@ -79,7 +79,7 @@ import {
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
-
+import { TagInputModule } from 'ngx-chips';
 import { PopupMessageComponent } from './popup-message/popup-message.component';
 import { PopupCommentComponent } from './popup-comment/popup-comment.component';
 import { PopupJrInfoComponent } from './popup-jr-info/popup-jr-info.component';
@@ -88,6 +88,7 @@ import { PopupExamDateComponent } from './popup-exam-date/popup-exam-date.compon
 import { PopupExamInfoComponent } from './popup-exam-info/popup-exam-info.component';
 import { PopupExamScoreComponent } from './popup-exam-score/popup-exam-score.component';
 import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.component';
+import { PopupCvComponent } from './popup-cv/popup-cv.component';
 
 @NgModule({
   imports: [
@@ -166,6 +167,7 @@ import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.co
     MatTreeModule,
     ChartModule,
     ChartsModule,
+    TagInputModule,
   ],
   declarations: [
     PopupMessageComponent,
@@ -176,6 +178,7 @@ import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.co
     PopupExamInfoComponent,
     PopupExamScoreComponent,
     PopupEvaluationComponent,
+    PopupCvComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -186,6 +189,7 @@ import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.co
     PopupExamInfoComponent,
     PopupExamScoreComponent,
     PopupEvaluationComponent,
+    PopupCvComponent,
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -196,6 +200,7 @@ import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.co
     PopupExamInfoComponent,
     PopupExamScoreComponent,
     PopupEvaluationComponent,
+    PopupCvComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

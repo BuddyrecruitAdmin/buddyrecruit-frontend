@@ -28,9 +28,9 @@
               <input *ngIf="modeSelect " type="number" name="capacity" [(ngModel)]="jr.capacity" min="0.00" max="100.00"
                 step="1.00" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;"
                 [disabled]="checkPreview" nbInput fullWidth appNumberDirective />
-              <small *ngIf="touchedCap" class="text-red">{{ sErrorCap }}</small>
               <input *ngIf="!modeSelect" type="number" name="capacity" [(ngModel)]="jr.capacity" nbInput fullWidth
                 appNumberDirective [disabled]="editCheck || checkPreview" />
+              <small *ngIf="touchedCap" class="text-red">{{ sErrorCap }}</small>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-sm-2 col-md-2">
             <label class="label">Sourcing</label>
             <div>
               <mat-checkbox class="label" [(ngModel)]="emailCheck" [disabled]="checkPreview">Email</mat-checkbox>
@@ -84,7 +84,7 @@
               <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="checkPreview">JobsDB</mat-checkbox>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-sm-2 col-md-2">
             <label class="label">Exam</label>
             <div>
               <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview">Yes</mat-checkbox>
