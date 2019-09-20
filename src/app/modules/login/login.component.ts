@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     if (getToken()) {
-      this.router.navigate(["/dashboard"]);
+      this.router.navigate(["/home"]);
     }
   }
 
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
     this.loginService.login(value.username, value.password).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);
-        this.showToast('success', '', response.data.message);
+        this.showToast('success', '', response.data.message || 'Login Success');
         const url = getUrl();
         if (url) {
           setUrl('');
@@ -81,21 +81,21 @@ export class LoginComponent implements OnInit {
               this.router.navigate(['/setting/company']);
               break;
             case response.data.refHero.isHR:
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/home']);
               break;
             case response.data.refHero.isManager:
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/home']);
               break;
             case response.data.refHero.isPayroll:
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/home']);
               break;
             default:
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/home']);
               break;
           }
         }
       } else {
-        this.showToast('danger', '', response.data.message);
+        this.showToast('danger', '', response.data.message || 'Login Fail');
       }
     });
   }

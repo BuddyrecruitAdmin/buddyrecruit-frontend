@@ -30,6 +30,8 @@ import {
   NbChatModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+// import { NbMomentDateModule } from '@nebular/moment';
+// import { NbDateFnsDateModule } from '@nebular/date-fns';
 
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -80,6 +82,12 @@ import { ChartsModule } from 'ng2-charts';
 import { TagInputModule } from 'ngx-chips';
 import { PopupMessageComponent } from './popup-message/popup-message.component';
 import { PopupCommentComponent } from './popup-comment/popup-comment.component';
+import { PopupJrInfoComponent } from './popup-jr-info/popup-jr-info.component';
+import { PopupRejectComponent } from './popup-reject/popup-reject.component';
+import { PopupExamDateComponent } from './popup-exam-date/popup-exam-date.component';
+import { PopupExamInfoComponent } from './popup-exam-info/popup-exam-info.component';
+import { PopupExamScoreComponent } from './popup-exam-score/popup-exam-score.component';
+import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.component';
 import { PopupCvComponent } from './popup-cv/popup-cv.component';
 
 @NgModule({
@@ -113,6 +121,8 @@ import { PopupCvComponent } from './popup-cv/popup-cv.component';
     NbAccordionModule,
     NbProgressBarModule,
     NbChatModule,
+    // NbMomentDateModule,
+    // NbDateFnsDateModule.forChild({ format: 'dd/MM/yyyy' }),
 
     A11yModule,
     CdkStepperModule,
@@ -162,16 +172,34 @@ import { PopupCvComponent } from './popup-cv/popup-cv.component';
   declarations: [
     PopupMessageComponent,
     PopupCommentComponent,
+    PopupJrInfoComponent,
+    PopupRejectComponent,
+    PopupExamDateComponent,
+    PopupExamInfoComponent,
+    PopupExamScoreComponent,
+    PopupEvaluationComponent,
     PopupCvComponent,
   ],
   exports: [
     PopupMessageComponent,
     PopupCommentComponent,
+    PopupJrInfoComponent,
+    PopupRejectComponent,
+    PopupExamDateComponent,
+    PopupExamInfoComponent,
+    PopupExamScoreComponent,
+    PopupEvaluationComponent,
     PopupCvComponent,
   ],
   entryComponents: [
     PopupMessageComponent,
     PopupCommentComponent,
+    PopupJrInfoComponent,
+    PopupRejectComponent,
+    PopupExamDateComponent,
+    PopupExamInfoComponent,
+    PopupExamScoreComponent,
+    PopupEvaluationComponent,
     PopupCvComponent,
   ],
   schemas: [

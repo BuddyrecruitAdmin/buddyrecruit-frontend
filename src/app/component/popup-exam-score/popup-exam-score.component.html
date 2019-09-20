@@ -1,0 +1,41 @@
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+      <small class="status text-gray m-0">
+        {{ jrName }}
+      </small>
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="dialog-body">
+    <div class="form-control-group">
+      <label class="label">Exam Score *</label>
+      <input type="number" [(ngModel)]="examScore" nbInput placeholder="0">
+    </div>
+    <div class="form-control-group">
+      <label class="label">Exam Remark</label>
+      <textarea [(ngModel)]="examRemark" nbInput fullWidth rows="2" placeholder="Remark"></textarea>
+    </div>
+    <div class="form-control-group">
+      <label class="label">Attitude Score *</label>
+      <input type="number" [(ngModel)]="attitudeScore" nbInput placeholder="0">
+    </div>
+    <div class="form-control-group m-0">
+      <label class="label">Attitude Remark</label>
+      <textarea [(ngModel)]="attitudeRemark" nbInput fullWidth rows="2" placeholder="Remark"></textarea>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="footer-collapse">
+      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+    </div>
+    <button nbButton status="primary" (click)="save()">SAVE</button>
+    <button nbButton status="success" (click)="passToAppointment()" [disabled]="!examScore || !attitudeScore">
+      PASS TO APPOINTMENT
+    </button>
+  </nb-card-footer>
+</nb-card>

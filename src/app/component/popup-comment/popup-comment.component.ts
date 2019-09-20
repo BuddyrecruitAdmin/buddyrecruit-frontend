@@ -22,6 +22,7 @@ export class PopupCommentComponent implements OnInit {
   jrName: string;
   message: string;
   loading: boolean;
+  result: boolean = false;
 
   constructor(
     private service: PopupCommentService,
@@ -31,7 +32,7 @@ export class PopupCommentComponent implements OnInit {
   ) {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.4;
-    this.innerHeight = window.innerHeight * 0.4;
+    this.innerHeight = window.innerHeight * 0.8;
   }
 
   ngOnInit() {
@@ -74,6 +75,7 @@ export class PopupCommentComponent implements OnInit {
   }
 
   comment() {
+    this.result = true;
     this.service.create(this.flowId, this.message).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
@@ -89,6 +91,7 @@ export class PopupCommentComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
+        this.result = true;
         this.service.deleteItem(this.flowId, item._id).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.getList();
@@ -97,5 +100,4 @@ export class PopupCommentComponent implements OnInit {
       }
     });
   }
-
 }

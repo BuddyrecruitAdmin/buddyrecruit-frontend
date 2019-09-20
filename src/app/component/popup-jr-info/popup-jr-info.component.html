@@ -1,0 +1,46 @@
+<nb-card [style.width.px]="innerWidth" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="jrDetail.refJD?.position">{{ jrDetail.refJD?.position }}</label>
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="dialog-body">
+    <div class="text-group">
+      <label class="label">Job Position</label>
+      <span>{{ jrDetail.refJD?.position || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Capacity</label>
+      <span>{{ jrDetail.capacity || '0' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Start Date</label>
+      <span>{{ utilitiesService.convertDate(jrDetail.duration.startDate) || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">End Date</label>
+      <span>{{ utilitiesService.convertDate(jrDetail.duration.endDate) || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Onboard Date</label>
+      <span>{{ utilitiesService.convertDate(jrDetail.onboardDate) || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Remark</label>
+      <span>{{ jrDetail.remark || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Sourcing</label>
+      <span *ngFor="let sourcing of jrDetail.refSource" class="m-r-5">{{ sourcing.name }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Exam</label>
+      <nb-icon *ngIf="jrDetail.requiredExam" icon="checkmark-outline" class="text-green"></nb-icon>
+      <nb-icon *ngIf="!jrDetail.requiredExam" icon="close-outline" class="text-red"></nb-icon>
+    </div>
+  </nb-card-body>
+</nb-card>
