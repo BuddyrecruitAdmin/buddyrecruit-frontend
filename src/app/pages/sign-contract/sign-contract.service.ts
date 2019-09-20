@@ -9,11 +9,11 @@ import { API_ENDPOINT } from "../../shared/constants";
 @Injectable({
   providedIn: "root"
 })
-export class TalentPoolService extends NetworkService {
+export class SignContractService extends NetworkService {
   constructor(
     protected httpClient: HttpClient,
     protected errorHandler: HttpErrorHandler) {
-    super('TalentPoolService', httpClient, errorHandler);
+    super('SignContractService', httpClient, errorHandler);
   }
 
   getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
@@ -23,7 +23,7 @@ export class TalentPoolService extends NetworkService {
       },
       criteria: criteria
     };
-    return this.post(API_ENDPOINT.TALENT_POOL.LIST, body);
+    return this.post(API_ENDPOINT.PENDING_SIGNCONTRACT.LIST, body);
   }
 
   getDetail(refStageId: string, jrId: string, tabName: string, criteria: any = undefined): Observable<ApiResponse> {
@@ -33,7 +33,6 @@ export class TalentPoolService extends NetworkService {
       tabName: tabName,
       criteria: criteria
     };
-    return this.post(API_ENDPOINT.TALENT_POOL.DETAIL, body);
+    return this.post(API_ENDPOINT.PENDING_SIGNCONTRACT.DETAIL, body);
   }
-
 }

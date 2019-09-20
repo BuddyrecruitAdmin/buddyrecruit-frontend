@@ -1,6 +1,21 @@
 import { NbMenuItem } from '@nebular/theme';
 
+export const MENU_HOME: NbMenuItem[] = [
+  {
+    title: 'Home',
+    icon: 'home-outline',
+    link: '/home',
+    home: true,
+    hidden: false,
+  }
+];
+
 export const MENU_DASHBOARD: NbMenuItem[] = [
+  {
+    title: 'Dashboard',
+    group: true,
+    hidden: false,
+  },
   {
     title: 'Dashboard',
     icon: 'pie-chart-outline',

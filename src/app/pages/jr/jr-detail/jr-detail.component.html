@@ -1,5 +1,5 @@
 <div class="content-header with-shadow">
-  <h3>Job Request Create</h3>
+  <h3>Job Request <small class="text-cap">({{ state }})</small></h3>
 </div>
 <div class="row">
   <div class="col-md-12">
@@ -81,13 +81,13 @@
               <mat-checkbox class="label" [(ngModel)]="emailCheck" [disabled]="checkPreview">Email</mat-checkbox>
             </div>
             <div>
-              <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="checkPreview">jobsDB</mat-checkbox>
+              <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="checkPreview">JobsDB</mat-checkbox>
             </div>
           </div>
           <div class="col-sm-2 col-md-2">
             <label class="label">Exam</label>
             <div>
-              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview">yes</mat-checkbox>
+              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview">Yes</mat-checkbox>
             </div>
           </div>
         </div>

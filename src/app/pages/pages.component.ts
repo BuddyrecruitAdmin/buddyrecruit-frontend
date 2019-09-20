@@ -21,6 +21,10 @@ export class PagesComponent {
     this.menu = [];
     const role = getRole();
     console.log(role);
+    // Home
+    MENU.MENU_HOME.forEach(element => {
+      this.menu.push(element);
+    });
     if (role && role.refCompany && role.refCompany.menu) {
       const menu = role.refCompany.menu;
       if (menu) {

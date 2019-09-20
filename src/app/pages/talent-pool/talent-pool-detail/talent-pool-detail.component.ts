@@ -2,19 +2,23 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
+import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import { PopupCommentComponent } from '../../../component/popup-comment/popup-comment.component';
+import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
+import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup-exam-date.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbWindowService } from '@nebular/theme';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
+import { CandidateService } from '../../candidate/candidate.service';
 
 @Component({
   selector: 'ngx-talent-pool-detail',
@@ -42,6 +46,7 @@ export class TalentPoolDetailComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0] || 10;
   devices: Devices;
   loading: boolean;
+  count: Count;
 
   constructor(
     private router: Router,
@@ -51,6 +56,7 @@ export class TalentPoolDetailComponent implements OnInit {
     private windowService: NbWindowService,
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
+    public candidateService: CandidateService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -58,6 +64,7 @@ export class TalentPoolDetailComponent implements OnInit {
     }
     this.role = getRole();
     this.jrName = getJdName();
+    this.collapseAll = getCollapse();
     this.devices = this.utilitiesService.getDevice();
     this.refStageId = this.role.refCompany.menu.talentPool.refStage._id;
     const tabs = this.role.refCompany.menu.talentPool.refStage.tabs.filter(tab => {
@@ -90,7 +97,9 @@ export class TalentPoolDetailComponent implements OnInit {
       this.tabs.push({
         name: element.name,
         icon: icon,
-      })
+        badgeText: 0,
+        badgeStatus: 'default',
+      });
     });
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
       return step.refStage.refMain._id === this.role.refCompany.menu.talentPool.refStage._id && step.editable;
@@ -100,7 +109,6 @@ export class TalentPoolDetailComponent implements OnInit {
   ngOnInit() {
     this.items = [];
     this.comments = [];
-    this.collapseAll = false;
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -111,7 +119,12 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   onSelectTab(event: any) {
-    this.tabSelected = event.tabTitle;
+    if (!this.tabSelected && getTabName()) {
+      this.tabSelected = getTabName();
+      setTabName();
+    } else {
+      this.tabSelected = event.tabTitle;
+    }
     this.search();
   }
 
@@ -133,13 +146,44 @@ export class TalentPoolDetailComponent implements OnInit {
         this.items.map(item => {
           item.collapse = this.collapseAll;
         });
-        this.paging.length = response.totalDataSize;
+        this.paging.length = (response.count && response.count.data) || response.totalDataSize;
+        this.setTabCount(response.count);
       }
       this.loading = false;
     });
   }
 
+  setTabCount(count: Count) {
+    if (count) {
+      this.count = count;
+      this.tabs.map(element => {
+        switch (element.name) {
+          case 'NOT BUY':
+            element.badgeText = count.notBuy;
+            element.badgeStatus = 'danger';
+            break;
+          case 'PENDING':
+            element.badgeText = count.pending;
+            element.badgeStatus = 'danger';
+            break;
+          case 'SELECTED':
+            element.badgeText = count.selected;
+            element.badgeStatus = 'danger';
+            break;
+          case 'REJECTED':
+            element.badgeText = count.rejected;
+            element.badgeStatus = 'danger';
+            break;
+          default:
+            element.badgeText = '0';
+            element.badgeStatus = 'default';
+        }
+      });
+    }
+  }
+
   onClickCollapseAll(value: any) {
+    setCollapse(value);
     if (this.items.length) {
       this.items.map(element => {
         element.collapse = value;
@@ -154,7 +198,7 @@ export class TalentPoolDetailComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.candidateFlowApprove(item._id, this.refStageId, button._id).subscribe(response => {
+        this.candidateService.candidateFlowApprove(item._id, this.refStageId, button._id).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.search();
@@ -166,21 +210,35 @@ export class TalentPoolDetailComponent implements OnInit {
     });
   }
 
-  reject(item: any) {
-    const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
-      data: { type: 'C', content: MESSAGE[43] }
-    });
-    confirm.afterClosed().subscribe(result => {
+  appointmentExam(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupExamDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
       if (result) {
-        this.service.candidateFlowReject(item._id, this.refStageId).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.search();
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
+        this.search();
+      }
+    });
+  }
+
+  reject(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupRejectComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
       }
     });
   }
@@ -192,7 +250,7 @@ export class TalentPoolDetailComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.candidateFlowRevoke(item._id, this.refStageId).subscribe(response => {
+        this.candidateService.candidateFlowRevoke(item._id, this.refStageId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.search();
@@ -204,17 +262,24 @@ export class TalentPoolDetailComponent implements OnInit {
     });
   }
 
-  openCandidateDetail(item: any) {
+  info(item: any) {
     this.windowService.open(
       this.contentTemplate,
       {
         title: item.refCandidate.name || item.refCandidate._id || '-No Name-',
         context: {
-          text: 'some text to pass into template',
+          text: 'cv detail',
         },
         closeOnBackdropClick: false
       },
     );
+  }
+
+  openCandidateDetail(item: any) {
+    setTabName(this.tabSelected);
+    setCollapse(this.collapseAll);
+    setCandidateId(item.refCandidate._id);
+    this.router.navigate(["/candidate/detail"]);
   }
 
   openPopupComment(item: any) {
@@ -224,7 +289,12 @@ export class TalentPoolDetailComponent implements OnInit {
         closeOnBackdropClick: true,
         hasScroll: true,
       }
-    ).onClose.subscribe(result => setFlowId());
+    ).onClose.subscribe(result => {
+      if (result) {
+        setFlowId();
+        this.search();
+      }
+    });
   }
 
   changePaging(event) {

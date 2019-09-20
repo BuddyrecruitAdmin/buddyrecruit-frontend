@@ -1,5 +1,5 @@
 <div class="content-header with-shadow">
-  <h3>Job Description Create</h3>
+  <h3>Job Description <small class="text-cap">({{ state }})</small></h3>
 </div>
 <div class="row">
   <div class="col-md-12">
@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group">
-              <label for="name">Job Position <span style="color:red">*</span></label>
+              <label class="label">Job Position <span style="color:red">*</span></label>
               <input type="text" name="position" [(ngModel)]="jd.position" [disabled]="checkPreview" nbInput
                 fullWidth />
               <small *ngIf="touched" class="text-red">{{ sErrorPosition }}</small>
@@ -19,7 +19,7 @@
           </div>
           <div class="col-md-6">
             <div class="form-control-group">
-              <label for="name">Job Position in email <span style="color:red">*</span></label>
+              <label class="label">Job Position in email <span style="color:red">*</span></label>
               <nb-select [(ngModel)]="jd.refPosition" [ngModelOptions]="{ standalone: true }" [disabled]="checkPreview"
                 fullWidth>
                 <nb-option *ngFor="let position of positionMaster" [value]="position.value">
@@ -34,8 +34,8 @@
           <div class="col-md-12">
             <div class="form-control-group">
               <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
-              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a email" placeholder="+"
-                [ngModelOptions]="{ standalone: true }">
+              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a email"
+                placeholder="+" [ngModelOptions]="{ standalone: true }">
               </tag-input>
               <small *ngIf="touched" class="text-red">{{ sErrorKey }}</small>
             </div>
@@ -44,14 +44,14 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="name">Job Description</label>
+              <label class="label">Job Description</label>
               <div class="input-group">
                 <div class="custom-file">
-                  <input type="text" [(ngModel)]="jd.attachment.originalname" disabled
-                    name="originalname" nbInput fullWidth />
+                  <input type="text" [(ngModel)]="jd.attachment.originalname" disabled name="originalname" nbInput
+                    fullWidth />
                 </div>
                 <div class="input-group-append">
-                  <label for="file-upload" class="custom-file-upload">
+                  <label for="file-upload" class="label custom-file-upload">
                     Browse File
                   </label>
                   <input id="file-upload" type="file" name="jd" (change)="onHandleFileInput($event.target.files)"

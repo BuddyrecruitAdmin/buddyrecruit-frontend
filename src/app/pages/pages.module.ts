@@ -30,6 +30,7 @@ import {
   NbProgressBarModule,
   NbChatModule,
   NbBadgeModule,
+  NbPopoverModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -100,7 +101,9 @@ import { SignContractListComponent } from './sign-contract/sign-contract-list/si
 import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
 import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
 import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
-import { CadidateDetailComponent } from './candidate/cadidate-detail/cadidate-detail.component';
+import { CandidateListComponent } from './candidate/candidate-list/candidate-list.component';
+import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   imports: [
@@ -136,6 +139,7 @@ import { CadidateDetailComponent } from './candidate/cadidate-detail/cadidate-de
     NbProgressBarModule,
     NbChatModule,
     NbBadgeModule,
+    NbPopoverModule,
 
     A11yModule,
     CdkStepperModule,
@@ -203,7 +207,9 @@ import { CadidateDetailComponent } from './candidate/cadidate-detail/cadidate-de
     SignContractDetailComponent,
     OnboardListComponent,
     OnboardDetailComponent,
-    CadidateDetailComponent,
+    HomeComponent,
+    CandidateListComponent,
+    CandidateDetailComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

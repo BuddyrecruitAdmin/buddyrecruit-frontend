@@ -1,3 +1,245 @@
-<p>
-  interview-detail works!
-</p>
+<div class="content-header with-shadow">
+  <div class="breadcrumb">
+    <span><a [routerLink]="'/interview/list'" class="text-green">Pending Interview</a></span>
+    <span class="fa fa-angle-right"></span>
+    <span>{{ jrName }}</span>
+  </div>
+</div>
+
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" style="margin-top: 3px;">
+        <nb-radio-group [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
+          <nb-radio [value]="true">Collapse All</nb-radio>
+          <nb-radio [value]="false">Expand All</nb-radio>
+        </nb-radio-group>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-body style="padding: 0.5rem;">
+    <nb-tabset fullWidth="true" (changeTab)="onSelectTab($event)">
+      <nb-tab *ngFor="let tab of tabs" [tabTitle]="tab.name" [active]="tabSelected && tabSelected === tab.name"
+        [badgeText]="tab.badgeText" [badgeStatus]="tab.badgeStatus" responsive="true" [tabIcon]="tab.icon"
+        [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+        <div *ngIf="!items.length && !loading" class="text-center text-gray">No data found !</div>
+        <div *ngIf="items.length">
+          <nb-card *ngFor="let item of items" accent="success">
+            <nb-card-header>
+              <div class="title">
+                <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
+                  (click)="openCandidateDetail(item)">
+                  {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
+                </label>
+                <small class="status">
+                  Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                </small>
+              </div>
+              <div class="actions">
+                <div class="link" (mouseenter)="itemSelected = item" [nbPopover]="score" nbPopoverTrigger="hint"
+                  nbPopoverPlacement="left">
+                  <span class="fa fa-star text-orange">&nbsp;</span>
+                  <span>{{ item.weightScore?.accumulativeScore || 0 }}</span>
+                  <small>/{{ item.weightScore?.total || 0 }}</small>
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body *ngIf="!item.collapse">
+              <div class="row">
+                <div class="col-md-6 m-b-15">
+                  <div class="text-group">
+                    <label class="label">Age</label>
+                    <span>{{ item.refCandidate?.age || '-' }}</span>
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Latest Position</label>
+                    <span>{{ item.refCandidate?.workExperience?.latestPostision || '-' }}</span>
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Latest Company</label>
+                    <span>{{ item.refCandidate?.workExperience?.latestCompany || '-' }}</span>
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Work Experience</label>
+                    <span>{{ item.refCandidate?.workExperience?.totalExpMonth || '-' }}</span>
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Phone</label>
+                    <span>{{ item.refCandidate?.phone || '-' }}</span>
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Email</label>
+                    <span>{{ item.refCandidate?.email || '-' }}</span>
+                  </div>
+                  <div class="text-group">
+                    <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
+                      <nb-icon icon="info-outline"></nb-icon> See more detail
+                    </span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="label text-light-gray m-r-5">Appointment Info</label>
+                  <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Appointment Info"
+                    (click)="openPopupAppointmentInfo(item)"></nb-icon>
+                  <div class="m-l-15">
+                    <div class="text-group">
+                      <label class="label">Date</label>
+                      <span>{{ utilitiesService.convertDateTime(item.pendingAppointmentInfo?.date) || '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Location</label>
+                      <span>{{ item.pendingAppointmentInfo?.location?.name || '-' }}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="item.refStage?.name === 'Interview Score'" class="m-t-5">
+                    <label class="label text-light-gray m-r-5">Interview Info</label>
+                    <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Interview Info"
+                      (click)="openPopupEvaluation(item)"></nb-icon>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Score</label>
+                        <span>{{ item.pendingInterviewInfo?.location?.name || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Result</label>
+                        <span>{{ item.pendingInterviewInfo?.passed || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Remark</label>
+                        <span>{{ item.pendingInterviewInfo?.remark || '-' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nb-card-body>
+            <nb-card-footer>
+              <div class="footer-collapse">
+                <button *ngIf="item.collapse" nbButton outline shape="round" size="small" status="default"
+                  (click)="item.collapse = !item.collapse" nbTooltip="Expand">
+                  <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+                </button>
+                <button *ngIf="!item.collapse" nbButton outline shape="round" size="small" status="default"
+                  (click)="item.collapse = !item.collapse" nbTooltip="Collapse">
+                  <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
+                </button>
+              </div>
+              <button *ngIf="tab.name !== 'SELECTED'" nbButton status="info" nbTooltip="Comment"
+                (click)="openPopupComment(item)">
+                <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+                <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
+                  position="top right"></nb-badge>
+              </button>
+              <span *ngIf="tab.name === 'PENDING'">
+                <span *ngFor="let button of steps">
+                  <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
+                    <button *ngIf="!displayButton(item, item.refStage.name)" nbButton status="success"
+                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                    </button>
+                    <button *ngIf="displayButton(item, 'Interview Taken')" nbButton status="success"
+                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                    </button>
+                    <button *ngIf="displayButton(item, 'Interview Score')" nbButton status="success"
+                      nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)">
+                      <nb-icon icon="edit-2-outline"></nb-icon>
+                    </button>
+                    <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
+                      <nb-icon icon="close-circle"></nb-icon>
+                    </button>
+                  </span>
+                </span>
+              </span>
+              <span *ngIf="tab.name === 'REJECTED'">
+                <span *ngFor="let button of steps">
+                  <button *ngIf="button.editable && button.refStage._id === item.refStage._id" nbButton status="primary"
+                    nbTooltip="Revoke" (click)="revoke(item)">
+                    <nb-icon icon="undo"></nb-icon>
+                  </button>
+                </span>
+              </span>
+            </nb-card-footer>
+          </nb-card>
+          <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+            [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+            (page)="pageEvent = changePaging($event)">
+          </mat-paginator>
+        </div>
+      </nb-tab>
+    </nb-tabset>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #score>
+  <div class="text-center m-b-10">
+    <label class="label text-top text-black">CV Score</label>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Work Experience
+      <span class="pull-right">
+        {{ itemSelected.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ itemSelected.weightScore?.workExperience?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              itemSelected.weightScore?.workExperience?.accumulativeScore,
+              itemSelected.weightScore?.workExperience?.total)" status="primary" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Education
+      <span class="pull-right">
+        {{ itemSelected.weightScore?.education?.accumulativeScore || 0 }}/{{ itemSelected.weightScore?.education?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              itemSelected.weightScore?.education?.accumulativeScore,
+              itemSelected.weightScore?.education?.total)" status="info" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Hard Skill
+      <span class="pull-right">
+        {{ itemSelected.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ itemSelected.weightScore?.hardSkill?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              itemSelected.weightScore?.hardSkill?.accumulativeScore,
+              itemSelected.weightScore?.hardSkill?.total)" status="success" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Soft Skill
+      <span class="pull-right">
+        {{ itemSelected.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ itemSelected.weightScore?.softSkill?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              itemSelected.weightScore?.softSkill?.accumulativeScore,
+              itemSelected.weightScore?.softSkill?.total)" status="warning" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div>
+    <div class="label">Certificate
+      <span class="pull-right">
+        {{ itemSelected.weightScore?.certificate?.accumulativeScore || 0 }}/{{ itemSelected.weightScore?.certificate?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              itemSelected.weightScore?.certificate?.accumulativeScore,
+              itemSelected.weightScore?.certificate?.total)" status="danger" size="tiny">
+    </nb-progress-bar>
+  </div>
+</ng-template>

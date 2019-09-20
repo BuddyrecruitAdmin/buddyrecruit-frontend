@@ -1,3 +1,176 @@
-<p>
-  onboard-list works!
-</p>
+<div class="content-header with-shadow">
+  <div class="breadcrumb">
+    <h4>Onboard</h4>
+  </div>
+</div>
+
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 ">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
+            (click)="filterToggle()">
+          </nb-action>
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="isGridLayout = true">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="isGridLayout = false"></nb-action>
+        </nb-actions>
+      </div>
+    </div>
+    <div *ngIf="filter.isFilter" class="filter-block">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <nb-select multiple fullWidth [(selected)]="filter.selected.departments"
+              (selectedChange)="changeFilter(true)" placeholder="Department">
+              <nb-option *ngFor="let option of filter.data.departments" [value]="option.value">
+                {{ option.label }}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <nb-select multiple fullWidth [(selected)]="filter.selected.divisions"
+              (selectedChange)="changeFilter(false)" placeholder="Division">
+              <nb-option *ngFor="let option of filter.data.divisions" [value]="option.value">
+                {{ option.label }}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading && items.length">
+
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-lg-6" *ngFor="let item of items;">
+        <nb-card style="margin-bottom: 1rem;">
+          <nb-card-header class="link" (click)="edit(item)">
+            <div class="title">
+              <label class="link" [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</label>
+            </div>
+            <div class="actions">
+              <span class="label"
+                [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">{{ item.pending }}</span>
+              <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="text-group">
+              <label class="label">Department</label>
+              <span>{{ item.departmentName || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Division</label>
+              <span>{{ item.divisionName || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Days before expiry</label>
+              <span [ngClass]="{ 'text-red' : 15 > item.daysBeforeExpiry }">
+                {{ item.daysBeforeExpiry || '0' }}
+              </span>
+            </div>
+            <div class="text-right ">
+              <span class="link" nbTooltip="See more detail" (click)="info(item)">
+                <nb-icon icon="info-outline"></nb-icon> See more detail
+              </span>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-12">
+        <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+          [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+          (page)="pageEvent = changePaging($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <!-- List Layout -->
+  <nb-card *ngIf="!isGridLayout">
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="text-left">Name</th>
+              <th scope="col" class="text-left" style="width: 200px;">Department</th>
+              <th scope="col" class="text-left" style="width: 150px;">Division</th>
+              <th scope="col" style="width: 150px;">Days before expiry</th>
+              <th scope="col" style="width: 70px;">Pending</th>
+              <th scope="col" style="width: 110px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items;">
+              <td class="text-left">
+                <span class="link" [nbTooltip]="item.refJD?.position" (click)="edit(item)">
+                  {{ item.refJD?.position || '-' }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span [nbTooltip]="item.departmentName">
+                  {{ item.departmentName || '-' }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span [nbTooltip]="item.divisionName">
+                  {{ item.divisionName || '-' }}
+                </span>
+              </td>
+              <td>
+                <span [ngClass]="{ 'text-red' : 15 > item.daysBeforeExpiry }">
+                  {{ item.daysBeforeExpiry || '0' }}
+                </span>
+              </td>
+              <td>
+                <span class="label" [ngClass]="{ 'label-danger' : item.pending }">
+                  {{ item.pending || '0' }}
+                </span>
+              </td>
+              <td class="actions">
+                <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
+                  <nb-icon icon="info-outline"></nb-icon>
+                </button>
+                <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
+                  <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+        [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
+
+</div>

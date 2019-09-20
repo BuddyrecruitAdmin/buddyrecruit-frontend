@@ -1,0 +1,290 @@
+<!-- <div class="content-header with-shadow">
+  <div class="breadcrumb">
+    <span (click)="gotoStage()" class="link">
+      {{ item.candidateFlow?.refStage?.refMain?.name || 'STAGE' }}
+    </span>
+    <span class="fa fa-angle-right"></span>
+    <span (click)="gotoJR()" class="link">
+      {{ item.candidateFlow?.refJR?.refJD?.position || 'JOB POSITION' }}
+    </span>
+    <span class="fa fa-angle-right"></span>
+    <span> {{ utilitiesService.setFullname(item) }}</span>
+  </div>
+</div> -->
+<div class="content-header with-shadow">
+  <div class="breadcrumb">
+    <h5>
+      <span class="link text-gray" (click)="back()">
+        <nb-icon icon="arrow-ios-back-outline" style="font-size: 100%;"></nb-icon>Back
+      </span>
+    </h5>
+  </div>
+</div>
+
+
+<nb-card accent="success" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="utilitiesService.setFullname(item)">
+        {{ utilitiesService.setFullname(item) }}
+      </label>
+      <small class="status">
+        Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
+      </small>
+    </div>
+    <div class="actions">
+      <span class="fa fa-star text-orange">&nbsp;</span>
+      <span>{{ item.candidateFlow?.weightScore?.accumulativeScore || 0 }}</span>
+      <small>/{{ item.candidateFlow?.weightScore?.total || 0 }}</small>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="label topic" style="margin-top: 0;">Process Flow</label>
+        <div class="m-l-15">
+          <div class="text-group">
+            <label class="label">Department</label>
+            <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Division</label>
+            <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Job Position</label>
+            <span (click)="gotoJR()" class="link underline"
+              nbTooltip="See More Candidate">{{ item.candidateFlow?.refJR?.refJD?.position || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Stage</label>
+            <span (click)="gotoStage()" class="link underline"
+              nbTooltip="See More Job Positon">{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+          </div>
+        </div>
+        <div *ngIf="item.candidateFlow?.examInfo?.flag">
+          <label class="label topic" style="margin-top: 0;">Exam Info</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Exam Date</label>
+              <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.examInfo?.date) || '-' }}</span>
+            </div>
+            <div *ngIf="item.candidateFlow?.pendingExamInfo?.flag">
+              <div class="text-group">
+                <label class="label">Available Date</label>
+                <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingExamInfo?.availableDate) || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">After Sign Contracct</label>
+                <span>{{ item.candidateFlow?.pendingExamInfo?.afterSignContract || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Remark</label>
+                <span>{{ item.candidateFlow?.pendingExamInfo?.remark || '-' }}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="item.candidateFlow?.pendingExamScoreInfo?.flag">
+            <label class="label topic" style="margin-top: 0;">Exam Score</label>
+            <div class="m-l-15">
+              <div class="text-group">
+                <label class="label">Exam Score</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examScore || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Exam Remark</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Attitude Score</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Attitude Remark</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="label topic" style="margin-top: 0;">CV Score</label>
+        <div class="m-l-15">
+          <div class="m-b-10">
+            <div class="label">Work Experience
+              <span class="pull-right">
+                {{ item.candidateFlow?.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.workExperience?.total || 0 }}
+              </span>
+            </div>
+            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              item.candidateFlow?.weightScore?.workExperience?.accumulativeScore,
+              item.candidateFlow?.weightScore?.workExperience?.total)" status="primary" size="tiny">
+            </nb-progress-bar>
+          </div>
+          <div class="m-b-10">
+            <div class="label">Education
+              <span class="pull-right">
+                {{ item.candidateFlow?.weightScore?.education?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.education?.total || 0 }}
+              </span>
+            </div>
+            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              item.candidateFlow?.weightScore?.education?.accumulativeScore,
+              item.candidateFlow?.weightScore?.education?.total)" status="info" size="tiny">
+            </nb-progress-bar>
+          </div>
+          <div class="m-b-10">
+            <div class="label">Hard Skill
+              <span class="pull-right">
+                {{ item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.hardSkill?.total || 0 }}
+              </span>
+            </div>
+            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore,
+              item.candidateFlow?.weightScore?.hardSkill?.total)" status="success" size="tiny">
+            </nb-progress-bar>
+          </div>
+          <div class="m-b-10">
+            <div class="label">Soft Skill
+              <span class="pull-right">
+                {{ item.candidateFlow?.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.softSkill?.total || 0 }}
+              </span>
+            </div>
+            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              item.candidateFlow?.weightScore?.softSkill?.accumulativeScore,
+              item.candidateFlow?.weightScore?.softSkill?.total)" status="warning" size="tiny">
+            </nb-progress-bar>
+          </div>
+          <div class="m-b-10">
+            <div class="label">Certificate
+              <span class="pull-right">
+                {{ item.candidateFlow?.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.certificate?.total || 0 }}
+              </span>
+            </div>
+            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              item.candidateFlow?.weightScore?.certificate?.accumulativeScore,
+              item.candidateFlow?.weightScore?.certificate?.total)" status="danger" size="tiny">
+            </nb-progress-bar>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <label class="label topic">Personal Details</label>
+      </div>
+      <div class="col-md-6">
+        <div class="m-l-15">
+          <div class="text-group">
+            <label class="label">Name</label>
+            <span>{{ utilitiesService.setFullname(item) || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Birthday</label>
+            <span>{{ utilitiesService.convertDate(item.birth) || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Age</label>
+            <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="m-l-15">
+          <div class="text-group">
+            <label class="label">Phone</label>
+            <span>{{ item.phone || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Email</label>
+            <span>{{ item.email || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Address</label>
+            <span>{{ item.address || '-' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <label class="label topic">Work Experience</label>
+        <div class="m-l-15">
+          <!-- <div class="text-group">
+            <label class="label">Latest Position</label>
+            <span>{{ item.workExperience?.latestPostision || item.workExperience?.lastPosition || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Latest Company</label>
+            <span>{{ item.workExperience?.latestCompany || item.workExperience?.lastCompany || '-' }}</span>
+          </div> -->
+          <div class="text-group">
+            <label class="label">Duration</label>
+            <span>{{ 
+              utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
+              utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
+            </span>
+          </div>
+          <label *ngIf="item.workExperience?.work.length" class="label">Detail :</label>
+          <div *ngFor="let exp of item.workExperience?.work">
+            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+            <span>{{ utilitiesService.convertWorkExpToText(exp) }} </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label class="label topic">Education</label>
+        <div class="m-l-15">
+          <div *ngFor="let education of item.education">
+            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+            <span>{{ utilitiesService.convertEducationToText(education) }} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="label topic">Hard Skills</label>
+      <div class="m-l-15">
+        <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+        <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) }}</span>
+      </div>
+    </div>
+    <div>
+      <label class="label topic">Soft Skills</label>
+      <div class="m-l-15">
+        <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+        <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) }}</span>
+      </div>
+    </div>
+    <div>
+      <label class="label topic">Certificate</label>
+      <div class="m-l-15">
+        <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+        <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) }}</span>
+      </div>
+    </div>
+
+  </nb-card-body>
+  <nb-card-footer>
+    <span *ngFor="let button of steps">
+      <span *ngIf="button.editable && button.refStage._id === item.candidateFlow.refStage._id">
+        <button nbButton status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
+          <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+          <nb-badge *ngIf="item.candidateFlow?.comments.length" [text]="item.candidateFlow?.comments.length"
+            status="danger" position="top right">
+          </nb-badge>
+        </button>
+        <button nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
+          <nb-icon icon="checkmark-circle-2"></nb-icon>
+        </button>
+        <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
+          <nb-icon icon="close-circle"></nb-icon>
+        </button>
+      </span>
+    </span>
+  </nb-card-footer>
+</nb-card>
