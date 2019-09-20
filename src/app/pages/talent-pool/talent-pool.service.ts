@@ -36,29 +36,4 @@ export class TalentPoolService extends NetworkService {
     return this.post(API_ENDPOINT.TALENT_POOL.DETAIL, body);
   }
 
-  candidateFlowApprove(flowId: string, stageId: string, buttonId: string): Observable<ApiResponse> {
-    const body = {
-      refCandidateFlowId: flowId,
-      refStageId: stageId,
-      buttonId: buttonId
-    };
-    return this.post(API_ENDPOINT.CANDIDATE.FLOW.APPROVE, body);
-  }
-
-  candidateFlowReject(flowId: string, stageId: string): Observable<ApiResponse> {
-    const body = {
-      refCandidateFlowId: flowId,
-      refStageId: stageId
-    };
-    return this.post(API_ENDPOINT.CANDIDATE.FLOW.REJECT, body);
-  }
-
-  candidateFlowRevoke(flowId: string, stageId: string): Observable<ApiResponse> {
-    const body = {
-      refCandidateFlowId: flowId,
-      refStageId: stageId
-    };
-    return this.post(API_ENDPOINT.CANDIDATE.FLOW.REVOKE, body);
-  }
-
 }

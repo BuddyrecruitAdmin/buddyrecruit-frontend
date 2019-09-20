@@ -24,20 +24,18 @@
   <div class="col-lg-6" *ngFor="let item of items;">
     <nb-card accent="success">
       <nb-card-header>
-        <div class="col-lg-12">
-          <label [nbTooltip]="item.refJD.position">{{ item.refJD.position }}</label>
-          <div class="actions">
-            <nb-icon *ngIf="item.refStatus.name != 'Reject' && role.refAuthorize.jr.editable" icon="edit-outline" class="link" nbTooltip="Edit"
-              [routerLink]="'/jr/detail/edit/'+item._id">
-            </nb-icon>
-            <nb-icon icon="copy-outline"
-              *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm'" class="link"
-              nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
-            <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
-              class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
-            <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
-              [routerLink]="'/jr/detail/preview/'+item._id"></nb-icon>
-          </div>
+        <label [nbTooltip]="item.refJD.position">{{ item.refJD.position }}</label>
+        <div class="actions">
+          <nb-icon *ngIf="item.refStatus.name != 'Reject' && role.refAuthorize.jr.editable" icon="edit-outline"
+            class="link" nbTooltip="Edit" [routerLink]="'/jr/detail/edit/'+item._id">
+          </nb-icon>
+          <nb-icon icon="copy-outline"
+            *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm'" class="link"
+            nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
+          <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
+            class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+          <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
+            [routerLink]="'/jr/detail/preview/'+item._id"></nb-icon>
         </div>
       </nb-card-header>
       <nb-card-body>

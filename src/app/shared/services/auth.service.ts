@@ -1,4 +1,15 @@
-import { Token, Url, CandidateId, FlowId, JdId, JdName, JrId } from '../app.constants';
+import {
+  Token,
+  Url,
+  CandidateId,
+  FlowId,
+  JdId,
+  JdName,
+  JrId,
+  Keyword,
+  TabName,
+  Collapse,
+} from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
 export function setAuthentication(authentication?: IAuthentication): void {
@@ -76,4 +87,31 @@ export function setFlowId(flowId: string = null) {
 export function getFlowId() {
   const flowId = JSON.parse(localStorage.getItem(FlowId));
   return (!flowId || flowId === null) ? undefined : flowId;
+}
+
+export function setKeyword(keyword: string = null) {
+  localStorage.setItem(Keyword, JSON.stringify(keyword));
+}
+
+export function getKeyword() {
+  const keyword = JSON.parse(localStorage.getItem(Keyword));
+  return (!keyword || keyword === null) ? undefined : keyword;
+}
+
+export function setTabName(tabName: string = null) {
+  localStorage.setItem(TabName, JSON.stringify(tabName));
+}
+
+export function getTabName() {
+  const tabName = JSON.parse(localStorage.getItem(TabName));
+  return (!tabName || tabName === null) ? undefined : tabName;
+}
+
+export function setCollapse(collapse: boolean = true) {
+  localStorage.setItem(Collapse, JSON.stringify(collapse));
+}
+
+export function getCollapse() {
+  const collapse = JSON.parse(localStorage.getItem(Collapse));
+  return (collapse === undefined || collapse === null) ? true : collapse;
 }

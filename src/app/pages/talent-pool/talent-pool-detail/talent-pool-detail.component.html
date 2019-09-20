@@ -31,7 +31,8 @@
 <nb-card>
   <nb-card-body style="padding: 0.5rem;">
     <nb-tabset fullWidth="true" (changeTab)="onSelectTab($event)">
-      <nb-tab *ngFor="let tab of tabs" [tabTitle]="tab.name" responsive="true" [tabIcon]="tab.icon"
+      <nb-tab *ngFor="let tab of tabs" [tabTitle]="tab.name" [active]="tabSelected && tabSelected === tab.name"
+        [badgeText]="tab.badgeText" [badgeStatus]="tab.badgeStatus" responsive="true" [tabIcon]="tab.icon"
         [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
         <div *ngIf="!items.length && !loading" class="text-center text-gray">No data found !</div>
         <div *ngIf="items.length">
@@ -78,6 +79,17 @@
                   <div class="text-group">
                     <label class="label">Email</label>
                     <span>{{ item.refCandidate?.email || '-' }}</span>
+                  </div>
+                  <div *ngIf="item.examInfo?.flag" class="text-group">
+                    <label class="label">Exam Date</label>
+                    <span>{{ utilitiesService.convertDateTime(item.examInfo?.date) || '-' }}</span>
+                    <nb-icon *ngIf="tab.name === 'PENDING'" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Exam Date" (click)="appointmentExam(item)"></nb-icon>
+                  </div>
+                  <div class="text-group">
+                    <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
+                      <nb-icon icon="info-outline"></nb-icon> See more detail
+                    </span>
                   </div>
                 </div>
                 <div class="col-md-5">
@@ -153,14 +165,21 @@
               <button *ngIf="tab.name !== 'SELECTED'" nbButton status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
+                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
                   position="top right"></nb-badge>
               </button>
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
-                  <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
+                  <span *ngIf="button.editable && button.refStage?._id === item.refStage?._id">
+                    <button
+                      *ngIf="item.refStage?.name !== 'Appointment for Exam' || utilitiesService.dateIsValid(item.examInfo?.date)"
+                      nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
+                    </button>
+                    <button
+                      *ngIf="item.refStage?.name === 'Appointment for Exam' && !utilitiesService.dateIsValid(item.examInfo?.date)"
+                      nbButton status="success" [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)">
+                      <nb-icon icon="calendar"></nb-icon>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
                       <nb-icon icon="close-circle"></nb-icon>
@@ -170,8 +189,8 @@
               </span>
               <span *ngIf="tab.name === 'REJECTED'">
                 <span *ngFor="let button of steps">
-                  <button *ngIf="button.editable && button.refStage._id === item.refStage._id" nbButton status="primary"
-                    nbTooltip="Revoke" (click)="revoke(item)">
+                  <button *ngIf="button.editable && button.refStage?._id === item.refStage?._id" nbButton
+                    status="primary" nbTooltip="Revoke" (click)="revoke(item)">
                     <nb-icon icon="undo"></nb-icon>
                   </button>
                 </span>
@@ -189,5 +208,5 @@
 </nb-card>
 
 <ng-template #contentTemplate let-data>
-  <p>Here is the text provided via config: "{{ data.text }}"</p>
+  <p>{{ data.text }}</p>
 </ng-template>

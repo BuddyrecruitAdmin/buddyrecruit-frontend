@@ -19,7 +19,7 @@ export interface Control {
   editable: boolean;
 }
 export interface Department {
-  refDepartment: any;
+  departmentId: any;
   name: string;
   control: Control;
   divisions: Division[];
@@ -109,7 +109,6 @@ export class AuthorizeDetailComponent implements OnInit {
     this.authDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
     this.initialDropdown().then((response) => {
-      debugger;
       this.activatedRoute.params.subscribe(params => {
         switch (params.action) {
           case State.Create:
@@ -502,7 +501,7 @@ export class AuthorizeDetailComponent implements OnInit {
   setDepartment() {
     if (this.authDetail.departments.length && this.departments.length) {
       this.authDetail.departments.forEach(department => {
-        const indexDepartment = this.departments.findIndex(x => x.refDepartment === department.refDepartment);
+        const indexDepartment = this.departments.findIndex(x => x.refDepartment === department.departmentId);
         if (indexDepartment >= 0) {
           this.departments[indexDepartment].control.visible = true;
           if (this.departments[indexDepartment].divisions.length) {

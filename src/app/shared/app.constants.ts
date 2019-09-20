@@ -51,6 +51,9 @@ export const JdName = 'JdName';
 export const JrId = 'JrId';
 export const CandidateId = 'CandidateId';
 export const FlowId = 'FlowId';
+export const Keyword = 'Keyword';
+export const TabName = "TabName";
+export const Collapse = "Collapse";
 
 export enum DayOfWeek {
   Sunday = 0,

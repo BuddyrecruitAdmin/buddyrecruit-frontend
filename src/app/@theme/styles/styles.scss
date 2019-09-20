@@ -59,10 +59,10 @@
 
 .nb-theme-default {
 
-  nb-layout .layout,
-  nb-card {
-    font-family: sukhumvit;
-  }
+  // nb-layout .layout,
+  // nb-card {
+  //   font-family: sukhumvit !important;
+  // }
   
   // --------------------------------------------------------------------
   // LAYOUT
@@ -146,7 +146,7 @@
   }
 
   // nb-layout .layout .layout-container .content .columns nb-layout-column {
-  //   padding: 1.25rem 1.75rem 0.75rem;
+  //   padding: 1.75rem 1.75rem 0.75rem;
   // }
 
   .form-control-group {
@@ -184,6 +184,7 @@
     font-family: inherit;
     font-weight: bold;
     margin: 0;
+    color: var(--color-gray);
   }  
   .content-header .breadcrumb {
     font-size: 1.25rem;
@@ -245,12 +246,6 @@
     color: var(--color-red) !important;
     text-align: right;
     margin-right: 25px;
-  }
-
-
-  [nbInput]:hover,
-  [nbInput]:focus {
-    border-color: var(--color-green);
   }
 
   // --------------------------------------------------------------------
@@ -351,6 +346,19 @@
     color: var(--color-white);
     opacity: 0.8;
   }
+  [nbButton].appearance-filled.status-black {
+    background-color: var(--color-black);
+    border-color: var(--color-black);
+    color: var(--color-white);
+  }
+  [nbButton].appearance-filled.status-black:not([disabled]):hover,
+  [nbButton].appearance-filled.status-black:not([disabled]):active,
+  [nbButton].appearance-filled.status-black:not([disabled]):focus {
+    background-color: var(--color-black);
+    border-color: var(--color-black);
+    color: var(--color-white);
+    opacity: 0.8;
+  }
 
   [nbButton].appearance-outline {
     background: none;
@@ -362,9 +370,19 @@
     background: var(--color-light-gray);
     opacity: 0.8;
   }
+  [nbButton].appearance-filled[disabled] {
+    background-color: #edf1f7;
+    border-color: #edf1f7;
+    color: #c5cee0;
+  }
 
   // --------------------------------------------------------------------
   // INPUT
+
+  [nbInput]:hover,
+  [nbInput]:focus {
+    border-color: var(--color-green);
+  }
 
   .input-group {
     .input-group-addon {
@@ -440,6 +458,9 @@
   }
 
   nb-card-header {
+    label {
+      margin-bottom: 0;
+    }
     .title {
       float: left;
       width: calc(100% - 92px);      
@@ -478,8 +499,14 @@
   nb-card-body {
     min-height: 4.5rem;
 
-    label {
-      margin-bottom: 0;
+    .filter-block {
+      margin-top: 1rem;
+      margin-bottom: -1rem;
+    }
+    .topic {
+      color: var(--color-light-gray);
+      margin-bottom: 0.5rem;
+      margin-top: 1.5rem;
     }
   }
 
@@ -547,6 +574,13 @@
   // --------------------------------------------------------------------
   // Dropdown
 
+  nb-select.appearance-outline.size-medium {    
+    .select-button:hover,
+    .select-button:focus,
+    .select-button:active {
+      border-color: var(--color-green);
+    }
+  }
   nb-option:hover,
   nb-option:focus,
   nb-option:active {
@@ -596,6 +630,46 @@
     }
   }
 
+  nb-action.active nb-icon {
+    color: var(--color-green);
+  }
+
+  // --------------------------------------------------------------------
+  // Table
+
+  nb-badge {
+    background: var(--color-light-gray);
+    color: var(--color-black);
+  }
+  nb-badge.status-primary {
+    background: var(--color-blue);
+    color: var(--color-white);
+  }
+  nb-badge.status-success {
+    background: var(--color-green);
+    color: var(--color-white);
+  }
+  nb-badge.status-danger {
+    background: var(--color-red);
+    color: var(--color-white);
+  }
+  nb-badge.status-warning {
+    background: var(--color-orange);
+    color: var(--color-white);
+  }
+  nb-badge.status-info {
+    background: var(--color-aqua);
+    color: var(--color-white);
+  }
+
+  // --------------------------------------------------------------------
+  // Popover
+
+  nb-popover {
+    min-width: 300px;
+    padding: 1rem;
+  }
+
   // --------------------------------------------------------------------
   // Table
 
@@ -627,6 +701,12 @@
   // --------------------------------------------------------------------
   // Labal
 
+  .label-gray {
+    color: var(--color-black);
+    background: var(--color-light-gray);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
   .label-primary {
     color: var(--color-white);
     background: var(--color-blue);
@@ -657,12 +737,6 @@
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
-  .label-gray {
-    color: var(--color-black);
-    background: var(--color-light-gray);
-    padding: 0.1rem 0.5rem;
-    border-radius: 0.25rem;
-  }
 
   // --------------------------------------------------------------------
   // Scrollbar
@@ -690,9 +764,17 @@
 
   // --------------------------------------------------------------------
   // ALL
-
+  .h-100 {
+    height: 100%;
+  }
+  .w-100 {
+    width: 100%;
+  }
   .m-0 {
     margin: 0;
+  }
+  .m-t-0 {
+    margin-top: 0;
   }
   .m-t-5 {
     margin-top: 5px;
@@ -700,7 +782,7 @@
   .m-t-10 {
     margin-top: 10px;
   }
-  .m-t-10 {
+  .m-t-15 {
     margin-top: 15px;
   }
   .m-t-20 {
@@ -730,6 +812,18 @@
   .m-l-20 {
     margin-left: 20px;
   }
+  .m-r-5 {
+    margin-right: 5px;
+  }
+  .m-r-10 {
+    margin-right: 10px;
+  }
+  .m-r-15 {
+    margin-right: 15px;
+  }
+  .m-r-20 {
+    margin-right: 20px;
+  }
   .p-l-15 {
     padding-left: 15px;
   }
@@ -740,9 +834,13 @@
     color: var(--color-green);
     cursor: pointer;
   }
+  .link.underline {
+    text-decoration: underline;
+  }
   .link:hover {
     opacity: 0.85;
   }
+  .link.active 
   .transitions {
     transition-property: background-color,border-color,box-shadow,color,-webkit-box-shadow,opacity !important;
   }
@@ -760,6 +858,12 @@
   }
   .text-cap {
     text-transform: capitalize;
+  }
+  .text-no-data {
+    text-align: center;
+    color: var(--color-light-gray);
+    font-weight: 600;
+    margin: 0;
   }
 
   #toast-container > div {
@@ -786,7 +890,7 @@
   .mat-accordion .mat-expansion-panel.mat-expanded {
     box-shadow: 0 0 12px rgba(0, 0, 0, .16);
   }
-  .mat-accordion .mat-expansion-panel-header{
+  .mat-accordion .mat-expansion-panel-header {
     font-family: sukhumvit;
     height: auto !important;
     padding: 15px 24px;
@@ -898,10 +1002,18 @@
   // --------------------------------------------------------------------
   // MOBILE && TABLET
 
-  @media (max-width: 767px) {    
+  @media (max-width: 767px) {
+
+    // nb-layout .layout .layout-container .content .columns nb-layout-column {
+    //   padding: 1rem 1rem 0.75rem;
+    // }
     
     nb-card {
       margin-bottom: 1rem;
+
+      nb-actions {
+        padding-top: 1rem;
+      }
     }
     
     .content-header {

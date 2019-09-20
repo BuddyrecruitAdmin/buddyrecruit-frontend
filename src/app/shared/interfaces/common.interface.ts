@@ -1,9 +1,19 @@
 export interface ApiResponse {
   data?;
+  filter?;
   code: number;
   status?: string;
   message?: string;
   totalDataSize?: number;
+  count?: Count;
+}
+
+export interface Count {
+  data?: number;
+  notBuy?: number;
+  pending?: number;
+  selected?: number;
+  rejected?: number;
 }
 
 export interface Authentication {
@@ -36,11 +46,17 @@ export interface Picture {
   name: string;
 }
 
+export interface Filter {
+  name: string;
+  value: string[];
+}
+
 export interface Criteria {
   keyword?: string;
   skip?: number;
   limit?: number;
   filter?: string[];
+  filters?: Filter[];
 }
 
 export interface Paging {

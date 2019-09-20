@@ -32,48 +32,26 @@ export const API_ENDPOINT = {
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",
-    CANDIDATE: "talentPool/candidate",
-    APPROVE: "talentPool/approve",
-    REJECT: "talentPool/reject",
-    REVOKE: "talentPool/revoke",
   },
   PENDING_EXAM: {
-    LIST: "pendingExam",
-    DETAIL: "pendingExam/pe",
-    ACTION: "pendingExam/action",
-    REASONREJECT: "rejectReason",
-    REJECTDETAIL: "pendingExam/reject",
-    REJECTHR: "pendingExam/notify"
+    LIST: "pendingExam/list",
+    DETAIL: "pendingExam/detail",
   },
   PENDING_APPOINTMENT: {
-    LIST: "pendingAppointment",
-    DETAIL: "pendingAppointment/pending",
-    REJECTDETAIL: "pendingAppointment/reject",
-    REASONREJECT: "rejectReason",
-    ACTION: "pendingAppointment/action",
-    REJECTHR: "pendingAppointment/notify",
+    LIST: "pendingAppointment/list",
+    DETAIL: "pendingAppointment/detail",
   },
   PENDING_INTERVIEW: {
-    LIST: "pendingInterview",
-    DETAIL: "pendingInterview/pending",
-    REJECTDETAIL: "pendingInterview/reject",
-    ACTION: "pendingInterview/action",
-    REASONREJECT: "rejectReason",
-    REJECTHR: "pendingInterview/notify"
+    LIST: "pendingInterview/list",
+    DETAIL: "pendingInterview/detail",
   },
   PENDING_SIGNCONTRACT: {
-    LIST: "pendingSignContract",
-    DETAIL: "pendingSignContract/pending",
-    REJECTDETAIL: "pendingSignContract/reject",
-    ACTION: "pendingSignContract/action",
-    REASONREJECT: "rejectReason",
+    LIST: "pendingSignContract/list",
+    DETAIL: "pendingSignContract/detail",
   },
   ONBOARD: {
-    LIST: "onboard",
-    DETAIL: "onboard/pending",
-    REJECTDETAIL: "onboard/reject",
-    ACTION: "onboard/action",
-    REASONREJECT: "rejectReason",
+    LIST: "onboard/list",
+    DETAIL: "onboard/detail",
   },
   CANDIDATE: {
     FLOW: {
@@ -84,8 +62,14 @@ export const API_ENDPOINT = {
         LIST: "candidate/flow/comment/list",
         CREATE: "candidate/flow/comment/create",
         DELETE: "candidate/flow/comment/delete",
-      }
-    }
+      },
+      DETAIL: "candidate/flow/detail",
+      EDIT: "candidate/flow/edit",
+    },
+    LIST: "candidate/list",
+    DETAIL: "candidate/detail",
+    BLOCK: "candidate/block",
+    UNBLOCK: "candidate/unblock",
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",
@@ -145,7 +129,7 @@ export const API_ENDPOINT = {
     AUTH_GET_DEFAULT: "authorize/getDefault",
     AUTH_SET_DEFAULT: "authorize/setDefault",
 
-    REJECT_STAGE_LIST: "stageReject/stage",
+    REJECT_STAGE_LIST: "stageReject/list",
     REJECT_SUBSTAGE_LIST: "stageReject/substage",
     STAGE_REJECT_LIST: "stageReject/rejectReason",
     REJECT_STAGE_ACTION: "stageReject/action",
@@ -181,7 +165,7 @@ export const API_ENDPOINT = {
     MAIL_TEMPLATE_EDIT: "mailTemplate/edit",
     MAIL_TEMPLATE_DETAIL: "mailTemplate/detail",
     MAIL_ACTION_DETAIL: "mailAction/detail",
-    MAIL_TEMPLATE_DELETE: "mailTemplate/delete",    
+    MAIL_TEMPLATE_DELETE: "mailTemplate/delete",
   },
   CV: {
     DETAIL: "candidate/id",

@@ -24,19 +24,19 @@
   <div class="col-lg-6" *ngFor="let item of items;">
     <nb-card accent="success">
       <nb-card-header>
-        <div class="col-lg-12">
-          <label [nbTooltip]="item.name">{{ item.position }}</label>  
-          <div class="actions">
-            <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="edit-outline" class="link" nbTooltip="Edit"
-              [routerLink]="'/jd/detail/edit/'+item._id">
-            </nb-icon>
-            <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="copy-outline" class="link" nbTooltip="Duplicate"
-              [routerLink]="'/jd/detail/duplicate/'+item._id"></nb-icon>
-            <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="trash-2-outline" class="link" nbTooltip="Delete"
-              (click)="delete(item)"></nb-icon>
-            <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
-              [routerLink]="'/jd/detail/preview/'+item._id"></nb-icon>
-          </div>
+        <!-- <div class="title"> -->
+          <label [nbTooltip]="item.position">{{ item.position }}</label>
+        <!-- </div> -->
+        <div class="actions">
+          <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="edit-outline" class="link" nbTooltip="Edit"
+            [routerLink]="'/jd/detail/edit/'+item._id">
+          </nb-icon>
+          <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="copy-outline" class="link" nbTooltip="Duplicate"
+            [routerLink]="'/jd/detail/duplicate/'+item._id"></nb-icon>
+          <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="trash-2-outline" class="link" nbTooltip="Delete"
+            (click)="delete(item)"></nb-icon>
+          <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="Preview"
+            [routerLink]="'/jd/detail/preview/'+item._id"></nb-icon>
         </div>
       </nb-card-header>
       <nb-card-body>

@@ -19,6 +19,9 @@ import { SignContractListComponent } from './sign-contract/sign-contract-list/si
 import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
 import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
 import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
+import { CandidateListComponent } from './candidate/candidate-list/candidate-list.component';
+import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
@@ -29,6 +32,20 @@ const routes: Routes = [
         path: 'profile',
         component: ProfileComponent,
       },
+      // Home
+      {
+        path: 'home',
+        component: HomeComponent,
+      },
+      {
+        path: 'candidate/list',
+        component: CandidateListComponent,
+      },
+      {
+        path: 'candidate/detail',
+        component: CandidateDetailComponent,
+      },
+      // Dashboard
       {
         path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module')
@@ -40,11 +57,11 @@ const routes: Routes = [
         component: JdListComponent,
       },
       {
-        path: 'jd/detail/:action',//create
+        path: 'jd/detail/:action', // create
         component: JdDetailComponent,
       },
       {
-        path: 'jd/detail/:action/:id',//edit + duplicate
+        path: 'jd/detail/:action/:id', // edit + duplicate
         component: JdDetailComponent,
       },
       // JR
@@ -79,6 +96,10 @@ const routes: Routes = [
         component: ExamListComponent,
       },
       {
+        path: 'exam/detail',
+        component: ExamDetailComponent,
+      },
+      {
         path: 'exam/detail/:id',
         component: ExamDetailComponent,
       },
@@ -86,6 +107,10 @@ const routes: Routes = [
       {
         path: 'appointment/list',
         component: AppointmentListComponent,
+      },
+      {
+        path: 'appointment/detail',
+        component: AppointmentDetailComponent,
       },
       {
         path: 'appointment/detail/:id',
@@ -97,6 +122,10 @@ const routes: Routes = [
         component: InterviewListComponent,
       },
       {
+        path: 'interview/detail',
+        component: InterviewDetailComponent,
+      },
+      {
         path: 'interview/detail/:id',
         component: InterviewDetailComponent,
       },
@@ -106,6 +135,10 @@ const routes: Routes = [
         component: SignContractListComponent,
       },
       {
+        path: 'sign-contract/detail',
+        component: SignContractDetailComponent,
+      },
+      {
         path: 'sign-contract/detail/:id',
         component: SignContractDetailComponent,
       },
@@ -113,6 +146,10 @@ const routes: Routes = [
       {
         path: 'onboard/list',
         component: OnboardListComponent,
+      },
+      {
+        path: 'onboard/detail',
+        component: OnboardDetailComponent,
       },
       {
         path: 'onboard/detail/:id',

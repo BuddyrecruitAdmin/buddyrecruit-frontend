@@ -1,5 +1,5 @@
-<nb-card [style.width.px]="innerWidth" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
-  nbSpinnerMessage="Loading...">
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
       <label [nbTooltip]="candidateName">{{ candidateName }}</label>
@@ -8,7 +8,7 @@
       </small>
     </div>
     <div class="actions">
-      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
     </div>
   </nb-card-header>
   <nb-card-body *ngIf="!loading" class="dialog-body">

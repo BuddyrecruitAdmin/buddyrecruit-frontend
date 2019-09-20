@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Devices } from '../interfaces/common.interface';
 import { InnerWidth } from '../../shared/app.constants';
+import { getRole } from '../../shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,65 +24,98 @@ export class UtilitiesService {
     return fullName;
   }
 
+  dateIsValid(date: Date): boolean {
+    let isValid = false;
+    if (date) {
+      date = new Date(date);
+      if (date.getUTCFullYear() > 1970) {
+        isValid = true;
+      }
+    }
+    return isValid;
+  }
+
   convertDate(date: Date): string {
-    date = new Date(date);
-    if (date.getUTCFullYear() > 1970) {
-      let arrayDate = [];
-      arrayDate = date
-        .toISOString()
-        .split("T")[0]
-        .split("-");
-      return arrayDate[2] + "/" + arrayDate[1] + "/" + arrayDate[0];
+    if (this.dateIsValid(date)) {
+      const dateTime = this.convertDateTime(date);
+      return dateTime.split(' ')[0];
+    } else {
+      return null;
+    }
+  }
+
+  convertTime(date: Date): string {
+    if (this.dateIsValid(date)) {
+      const dateTime = this.convertDateTime(date);
+      return dateTime.split(' ')[1];
     } else {
       return null;
     }
   }
 
   convertDateTime(date: Date): string {
-    date = new Date(date);
-    if (date.getUTCFullYear() > 1970) {
-      let arrayDate = [];
-      let arrayTime = [];
-      arrayDate = date
-        .toISOString()
-        .split("T")[0]
-        .split("-");
-      arrayTime = date
-        .toISOString()
-        .split("T")[1]
-        .split(":");
-      return (
-        arrayDate[2] +
-        "/" +
-        arrayDate[1] +
-        "/" +
-        arrayDate[0] +
-        " " +
-        arrayTime[0] +
-        ":" +
-        arrayTime[1] +
-        ":" +
-        arrayTime[2].slice(0, 2)
-      );
+    if (this.dateIsValid(date)) {
+      let text = '';
+      date = new Date(date);
+      text += this.fillZero(date.getDate(), 2);
+      text += '/';
+      text += this.fillZero(date.getMonth(), 2);
+      text += '/';
+      text += date.getFullYear().toString();
+      text += ' ';
+      text += this.fillZero(date.getHours(), 2);
+      text += ':';
+      text += this.fillZero(date.getMinutes(), 2);
+      return text;
     } else {
       return null;
     }
   }
 
-  isDateGreaterThanToday(date): boolean {
-    if (new Date(date) > new Date()) {
-      return true;
+  getFullYear(date: Date): string {
+    if (this.dateIsValid(date)) {
+      date = new Date(date);
+      let arrayDate = [];
+      arrayDate = date
+        .toISOString()
+        .split("T")[0]
+        .split("-");
+      return arrayDate[0];
     } else {
-      return false;
+      return null;
     }
   }
 
-  isDateLowerThanToday(date): boolean {
-    if (new Date(date) < new Date()) {
-      return true;
-    } else {
-      return false;
+  fillZero(value: any, digit: number): string {
+    let text = '';
+    const length = digit - value.toString().length;
+    if (length) {
+      for (let index = 0; index < length; index++) {
+        text += '0';
+      }
     }
+    text += value;
+    return text;
+  }
+
+  isDateGreaterThanToday(date: Date): boolean {
+    let isValid = false;
+    if (this.dateIsValid(date)) {
+      if (new Date(date) > new Date()) {
+        isValid = true;
+      }
+    }
+    return isValid;
+  }
+
+  isDateLowerThanToday(date: Date): boolean {
+    let isValid = false;
+    if (this.dateIsValid(date)) {
+      if (new Date(date) < new Date()) {
+        isValid = true;
+      }
+    }
+    return isValid;
   }
 
   getDevice(): Devices {
@@ -112,8 +146,135 @@ export class UtilitiesService {
   calculatePercentage(value1: any, value2: any): string {
     let percent = '0';
     if (value1 && value2) {
-      percent = ((value1 / value2) * 100).toFixed(0);      
+      percent = ((value1 / value2) * 100).toFixed(0);
     }
     return percent;
+  }
+
+  calculateDuration2Date(beginDate: Date, endDate: Date): number {
+    let diffDays = 0;
+    const date1 = new Date(beginDate);
+    const date2 = new Date(endDate);
+    const diffTime = Math.abs(date2.getTime() - date1.getTime());
+    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
+
+  findMainStage(stageId: string): string {
+    if (stageId) {
+      const role = getRole();
+      if (role.refAuthorize
+        && role.refAuthorize.processFlow
+        && role.refAuthorize.processFlow.exam
+        && role.refAuthorize.processFlow.exam.steps.length
+      ) {
+        const refStage = role.refAuthorize.processFlow.exam.steps.find(element => {
+          return element.refStage._id === stageId;
+        });
+        if (refStage) {
+          return refStage.refStage.refMain.name;
+        }
+      }
+    } else {
+      return '';
+    }
+  }
+
+  calculateAgeFromBirthdate(date: Date): number {
+    if (this.dateIsValid(date) && this.isDateLowerThanToday(date)) {
+      date = new Date(date);
+      let ageDifMs = Date.now() - date.getTime();
+      let ageDate = new Date(ageDifMs);
+      return Math.abs(ageDate.getUTCFullYear() - 1970);
+    } else {
+      return 0;
+    }
+  }
+
+  convertMonthToYearText(month = 0): string {
+    let text = '';
+    const nYear = Math.floor((month / 12));
+    const nMonth = (month % 12);
+    if (nYear) {
+      text += `${nYear} year `;
+    }
+    if (nMonth) {
+      text += `${nMonth} month`;
+    }
+    text = text.trim();
+    return text;
+  }
+
+  convertWorkExpToText(work: any): string {
+    let text = '';
+    const startDate = this.getFullYear(work.start);
+    const endDate = this.getFullYear(work.end);
+    if (startDate && endDate) {
+      text += `${startDate} - ${endDate}, `;
+    }
+    if (work.position) {
+      text += `${work.position} `;
+    }
+    if (work.company) {
+      text += `at ${work.company} `;
+    }
+    text = text.trim();
+    return text;
+  }
+
+  convertEducationToText(education: any): string {
+    let text = '';
+    if (education.refDegree && education.refDegree.name) {
+      text += `${education.refDegree.name}, `;
+    }
+    if (education.major) {
+      text += `${education.major} `;
+    }
+    if (education.university) {
+      text += `at ${education.university} `;
+    }
+    if (education.gpa) {
+      text += `(${education.gpa})`;
+    }
+    text = text.trim();
+    return text;
+  }
+
+  convertStringArrayToLongText(array: any): string {
+    let text = '';
+    if (array) {
+      array.forEach(element => {
+        text += `${element}, `;
+      });
+    }
+    text = text.trim();
+    text = text.slice(0, -1);
+    return text;
+  }
+
+  getWidthOfPopupCard(): number {
+    let width = window.innerWidth;
+    const devices = this.getDevice();
+    switch (true) {
+      case devices.isMobile:
+        width = width * 0.8;
+        break;
+      case devices.isTablet:
+        width = width * 0.7;
+        break;
+      case devices.isNotebook:
+        width = width * 0.6;
+        break;
+      case devices.isPC:
+        width = width * 0.5;
+        break;
+      case devices.other:
+        width = width * 0.4;
+        break;
+      default:
+        width = width * 0.5;
+        break;
+    }
+    return width;
   }
 }

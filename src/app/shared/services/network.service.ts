@@ -51,7 +51,9 @@ export class NetworkService {
           status: response.body.status,
           message: response.body.message,
           data: response.body.data || [],
-          totalDataSize: response.body.totalDataSize
+          filter: response.body.filter || [],
+          totalDataSize: response.body.totalDataSize,
+          count: response.body.count || undefined,
         };
       }),
       catchError(this._handleError('post', this.ErrorResponse()))

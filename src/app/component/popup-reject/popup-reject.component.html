@@ -1,0 +1,50 @@
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+      <small class="status text-gray m-0">
+        {{ jrName }}
+      </small>
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body *ngIf="!loading" class="dialog-body">
+    <div class="form-control-group">
+      <label class="label">Reason for Reject <span class="text-red">*</span></label>
+      <nb-select placeholder="Select Reason" [(ngModel)]="rejectId" fullWidth>
+        <nb-option *ngFor="let reject of rejection" [value]="reject._id">
+          {{ reject.name }}
+        </nb-option>
+      </nb-select>
+    </div>
+    <div class="form-control-group">
+      <label class="label">Remark</label>
+      <textarea nbInput fullWidth [(ngModel)]="remark" placeholder="Remark" rows="3"></textarea>
+    </div>
+    <span *ngIf="history.length" class="link underline" (click)="showHistory = !showHistory">
+      <nb-icon icon="info-outline"></nb-icon> History Reject
+    </span>
+    <div *ngIf="showHistory">
+      <div *ngFor="let item of history" class="text-gray m-t-10">
+        <div *ngIf="item.refReject?.name && item.remark">
+          <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+          <span>{{ item.refReject?.name }}</span>
+          <span *ngIf="item.remark">: {{ item.remark }}</span>
+        </div>
+        <div *ngIf="item.refUser && item.date" class="m-l-20">
+          <small>
+            ( {{ utilitiesService.setFullname(item.refUser) }},
+            {{ utilitiesService.convertDateTime(item.date) }} )
+          </small>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton class="status-black" status="black" (click)="block()" [disabled]="!rejectId">BLOCK</button>
+    <button nbButton status="danger" (click)="reject()" [disabled]="!rejectId">REJECT</button>
+  </nb-card-footer>
+</nb-card>
