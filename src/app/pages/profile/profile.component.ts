@@ -13,7 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { MESSAGE } from "../../shared/constants/message";
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 import { API_ENDPOINT } from '../../shared/constants';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -115,6 +115,12 @@ export class ProfileComponent implements OnInit {
   validation(): boolean {
     this.touched = true;
     let isValid = true;
+    if (this.firstName.status === "INVALID") {
+      isValid = false;
+    }
+    if (this.lastName.status === "INVALID") {
+      isValid = false;
+    }
     if (this.email.value === null || this.email.value === "") {
       this.sErrorEmail = MESSAGE[8];
       isValid = false;
@@ -151,11 +157,8 @@ export class ProfileComponent implements OnInit {
       console.log(this.profileDetail)
       this.uploader.uploadItem(
         this.uploader.queue[this.uploader.queue.length - 1]
-      );
-      this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
-        console.log("ImageUpload:uploaded:", item, status);
-        
-    };
+      )
+      this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
     }
     if (this.validation()) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
@@ -178,13 +181,19 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+    let data = JSON.parse(response); //success server response
+    console.log(data.uploadname)
+    this.profileDetail.attachment.uploadName = data.uploadname;
+  }
+
   onFileInput(files: FileList) {
     if (files && files[0]) {
       var reader = new FileReader();
       if (files[0] != undefined || files[0] != null) {
         reader.onload = (event) => { // called once readAsDataURL is completed
-          this.url = event.target.result;
-        } 
+          this.url = reader.result;
+        }
       }
       reader.readAsDataURL(files[0]); // read file as data url
     }

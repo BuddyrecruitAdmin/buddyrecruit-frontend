@@ -73,106 +73,103 @@
           <span class="fa fa-bug" (click)="bugReport('CV Score', 'CV Score')" [matTooltip]="bugTooltip"
             matTooltipPosition="above"></span></label>
         <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.weightScore?.accumulativeScore }} /
-          {{ items.candidateFlow.weightScore?.total }}
+          {{ items.candidateFlow?.weightScore?.accumulativeScore }} /
+          {{ items.candidateFlow?.weightScore?.total }}
         </small>
       </div>
       <div class="border-all box-pad box-header with-border">
         <div class="progress-group">
           <span class="label">Experience</span>
           <span class="pull-right">
-            <b>{{ items.candidateFlow.weightScore?.workExperience?.accumulativeScore }}</b>
-            /{{ items.candidateFlow.weightScore?.workExperience?.total }}
+            <b>{{ items.candidateFlow?.weightScore?.workExperience?.accumulativeScore }}</b>
+            /{{ items.candidateFlow?.weightScore?.workExperience?.total }}
           </span>
           <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-                items.candidateFlow.weightScore?.workExperience?.accumulativeScore,
-                items.candidateFlow.weightScore?.workExperience?.total)" status="primary" size="tiny">
+                items.candidateFlow?.weightScore?.workExperience?.accumulativeScore,
+                items.candidateFlow?.weightScore?.workExperience?.total)" status="primary" size="tiny">
           </nb-progress-bar>
         </div>
         <div class="progress-group">
           <span class="label">Education</span>
           <span class="pull-right">
-            <b>{{ items.candidateFlow.weightScore?.education.accumulativeScore }}</b>
-            /{{ items.candidateFlow.weightScore?.education.total }}
+            <b>{{ items.candidateFlow?.weightScore?.education.accumulativeScore }}</b>
+            /{{ items.candidateFlow?.weightScore?.education.total }}
           </span>
           <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-                    items.candidateFlow.weightScore?.education?.accumulativeScore,
-                    items.candidateFlow.weightScore?.education?.total)" status="info" size="tiny">
+                    items.candidateFlow?.weightScore?.education?.accumulativeScore,
+                    items.candidateFlow?.weightScore?.education?.total)" status="info" size="tiny">
           </nb-progress-bar>
         </div>
         <div class="progress-group">
           <span class="label">Hard Skill</span>
           <span class="pull-right">
-            <b>{{ items.candidateFlow.weightScore?.hardSkill.accumulativeScore }}</b>
-            /{{ items.candidateFlow.weightScore?.hardSkill.total }}
+            <b>{{ items.candidateFlow?.weightScore?.hardSkill.accumulativeScore }}</b>
+            /{{ items.candidateFlow?.weightScore?.hardSkill.total }}
           </span>
           <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-                items.candidateFlow.weightScore?.hardSkill?.accumulativeScore,
-                items.candidateFlow.weightScore?.hardSkill?.total)" status="success" size="tiny">
+                items.candidateFlow?.weightScore?.hardSkill?.accumulativeScore,
+                items.candidateFlow?.weightScore?.hardSkill?.total)" status="success" size="tiny">
           </nb-progress-bar>
         </div>
         <div class="progress-group">
           <span class="label">Soft Skill</span>
           <span class="pull-right">
-            <b>{{ items.candidateFlow.weightScore?.softSkill.accumulativeScore }}</b>
-            /{{ items.candidateFlow.weightScore?.softSkill.total }}
+            <b>{{ items.candidateFlow?.weightScore?.softSkill.accumulativeScore }}</b>
+            /{{ items.candidateFlow?.weightScore?.softSkill.total }}
           </span>
           <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-                items.candidateFlow.weightScore?.softSkill?.accumulativeScore,
-                items.candidateFlow.weightScore?.softSkill?.total)" status="warning" size="tiny">
+                items.candidateFlow?.weightScore?.softSkill?.accumulativeScore,
+                items.candidateFlow?.weightScore?.softSkill?.total)" status="warning" size="tiny">
           </nb-progress-bar>
         </div>
         <div class="progress-group">
           <span class="label">Certificate</span>
           <span class="pull-right">
-            <b>{{ items.candidateFlow.weightScore?.certificate.accumulativeScore }}</b>
-            /{{ items.candidateFlow.weightScore?.certificate.total }}
+            <b>{{ items.candidateFlow?.weightScore?.certificate.accumulativeScore }}</b>
+            /{{ items.candidateFlow?.weightScore?.certificate.total }}
           </span>
           <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-                items.candidateFlow.weightScore?.certificate?.accumulativeScore,
-                items.candidateFlow.weightScore?.certificate?.total)" status="danger" size="tiny">
+                items.candidateFlow?.weightScore?.certificate?.accumulativeScore,
+                items.candidateFlow?.weightScore?.certificate?.total)" status="danger" size="tiny">
           </nb-progress-bar>
         </div>
       </div>
     </div>
 
     <!-- EXAM -->
-    <div class="border-padtop" *ngIf="items.candidateFlow.pendingExamScoreInfo.flag">
+    <div class="border-padtop" *ngIf="items.candidateFlow?.pendingExamScoreInfo.flag">
       <div class="title">
-        <label class="label">Exam Score
-          <small class="label pull-right bg-gray">
-            {{ items.candidateFlow.pendingExamScoreInfo.examScore }}
-          </small>
-        </label>
+        <label class="label">Exam Score </label>
+        <small class="label pull-right bg-gray">
+          {{ items.candidateFlow?.pendingExamScoreInfo.examScore }}
+        </small>
       </div>
       <div class="border-all box-pad box-header with-border">
-        <textarea class="form-control" rows="3"
-          disabled>{{ items.candidateFlow.pendingExamScoreInfo.examRemark }}</textarea>
+        <textarea nbInput fullWidth disabled>{{ items.candidateFlow?.pendingExamScoreInfo.examRemark }}</textarea>
       </div>
     </div>
 
     <!-- ATIITUDE SCORE -->
-    <div class="border-padtop" *ngIf="items.candidateFlow.pendingExamScoreInfo.flag">
+    <div class="border-padtop" *ngIf="items.candidateFlow?.pendingExamScoreInfo.flag">
       <div class="title">
-        <label class="label">Attitude Score
-          <small class="label pull-right bg-gray">
-            {{ items.candidateFlow.pendingExamScoreInfo.attitudeScore }}
-          </small>
-        </label>
+        <label class="label">Attitude Score </label>
+        <small class="label pull-right bg-gray">
+          {{ items.candidateFlow?.pendingExamScoreInfo.attitudeScore }}
+        </small>
       </div>
       <div class="border-all box-pad box-header with-border">
-        <textarea class="form-control" rows="3" disabled>{{ items.candidateFlow.pendingExamScoreInfo.attitudeRemark }}
+        <textarea nbInput fullWidth disabled>{{ items.candidateFlow?.pendingExamScoreInfo.attitudeRemark }}
         </textarea>
       </div>
     </div>
 
     <!-- InterView -->
     <div class="border-padtop">
-      <div class="title" *ngIf="items.candidateFlow.pendingInterviewInfo.flag">
+      <div class="title" *ngIf="items.candidateFlow?.pendingInterviewInfo.flag">
         <label class="label">Comments</label>
       </div>
       <div class="border-all box-pad box-header with-border">
-        <nb-card *ngFor="let comment of items.candidateFlow.pendingInterviewInfo.comments; let i = index">
+        <nb-card *ngFor="let comment of items.candidateFlow?.pendingInterviewInfo.comments; let i = index">
           <nb-card-body>
             <div class="row">
               <div class="label-pad">
@@ -199,8 +196,8 @@
             matTooltipPosition="above"></span>
         </label>
         <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.weightScore?.workExperience?.accumulativeScore }} /
-          {{ items.candidateFlow.weightScore?.workExperience?.total }}
+          {{ items.candidateFlow?.weightScore?.workExperience?.accumulativeScore }} /
+          {{ items.candidateFlow?.weightScore?.workExperience?.total }}
         </small>
       </div>
       <div class="border-all box-pad box-header with-border">
@@ -233,8 +230,8 @@
             matTooltipPosition="above"></span>
         </label>
         <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.weightScore.education.accumulativeScore }} /
-          {{ items.candidateFlow.weightScore.education.total }}
+          {{ items.candidateFlow?.weightScore.education.accumulativeScore }} /
+          {{ items.candidateFlow?.weightScore.education.total }}
         </small>
       </div>
       <div class="border-all box-pad box-header with-border">
@@ -295,8 +292,8 @@
             matTooltipPosition="above"></span>
         </label>
         <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.weightScore.hardSkill.accumulativeScore }} /
-          {{ items.candidateFlow.weightScore.hardSkill.total }}
+          {{ items.candidateFlow?.weightScore.hardSkill.accumulativeScore }} /
+          {{ items.candidateFlow?.weightScore.hardSkill.total }}
         </small>
       </div>
       <div class="border-all box-pad box-header with-border">
@@ -308,7 +305,7 @@
           </div>
           <div class="col-lg-6">
             <div class="progress-group" *ngFor="
-                let item of items.candidateFlow.weightScore.hardSkill.weight;">
+                let item of items.candidateFlow?.weightScore.hardSkill.weight;">
               <span class="label">{{ item.skill }}</span>
               <span class="pull-right"><b>{{ item.score }}</b>/{{ item.percent }}</span>
               <nb-progress-bar [value]="utilitiesService.calculatePercentage(
@@ -328,8 +325,8 @@
             matTooltipPosition="above"></span>
         </label>
         <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.weightScore.softSkill.accumulativeScore }} /
-          {{ items.candidateFlow.weightScore.softSkill.total }}
+          {{ items.candidateFlow?.weightScore.softSkill.accumulativeScore }} /
+          {{ items.candidateFlow?.weightScore.softSkill.total }}
         </small>
       </div>
       <div class="border-all box-pad box-header with-border">
@@ -341,7 +338,7 @@
           </div>
           <div class="col-lg-6">
             <div class="progress-group" *ngFor="
-                let item of items.candidateFlow.weightScore.softSkill.weight;
+                let item of items.candidateFlow?.weightScore.softSkill.weight;
                 let i = index
               ">
               <span class="label">{{ item.skill }}</span>
@@ -363,8 +360,8 @@
             matTooltipPosition="above"></span>
         </label>
         <small class="label pull-right bg-gray">
-          {{ items.candidateFlow.weightScore.certificate.accumulativeScore }} /
-          {{ items.candidateFlow.weightScore.certificate.total }}
+          {{ items.candidateFlow?.weightScore.certificate.accumulativeScore }} /
+          {{ items.candidateFlow?.weightScore.certificate.total }}
         </small>
       </div>
       <div class="border-all box-pad box-header with-border">
@@ -377,7 +374,7 @@
           </div>
           <div class="col-lg-6">
             <div class="progress-group" *ngFor="
-                let item of items.candidateFlow.weightScore.certificate.weight;
+                let item of items.candidateFlow?.weightScore.certificate.weight;
                 let i = index
               ">
               <span class="label">{{ item.name }}</span>
@@ -392,8 +389,9 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)" [disabled]="!items.applicationForm">Original CV</button>
-    <button class="txt-left" size="small" nbButton ghost (click)="comment()">Feedback</button>
+    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)"
+      [disabled]="!items.applicationForm">Original CV</button>
+    <button class="txt-left" size="small" nbButton ghost >Feedback</button>
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
     <button nbButton ghost size="small" (click)="ref.close()">CLOSE</button>
   </nb-card-footer>

@@ -103,7 +103,7 @@
       <small *ngIf="touchedCheck" class="text-red-right">{{ sErrorCheck }}</small>
       <nb-card-footer>
         <button nbButton status="default" (click)="back()">Cancel</button>
-        <button nbButton status="success" (click)="save()">Save</button>
+        <button *ngIf="checkPreview" nbButton status="success" (click)="save()">Save</button>
       </nb-card-footer>
     </nb-card>
   </div>

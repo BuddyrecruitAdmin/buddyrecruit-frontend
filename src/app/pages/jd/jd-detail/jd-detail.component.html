@@ -22,7 +22,7 @@
               <label class="label">Job Position in email <span style="color:red">*</span></label>
               <nb-select [(ngModel)]="jd.refPosition" [ngModelOptions]="{ standalone: true }" [disabled]="checkPreview"
                 fullWidth>
-                <nb-option *ngFor="let position of positionMaster" [value]="position.value">
+                <nb-option [disabled]="checkPreview" *ngFor="let position of positionMaster" [value]="position.value">
                   {{ position.label }}
                 </nb-option>
               </nb-select>
@@ -75,7 +75,7 @@
               <label for="name">Department <span style="color:red">*</span></label>
               <nb-select [disabled]="checkPreview" [(ngModel)]="jd.departmentId" [ngModelOptions]="{ standalone: true }"
                 fullWidth (selectedChange)="onChangeDepartment($event)">
-                <nb-option *ngFor="let department of departMentAdmin" [value]="department.value">
+                <nb-option [disabled]="checkPreview" *ngFor="let department of departMentAdmin" [value]="department.value">
                   {{ department.label }}
                 </nb-option>
               </nb-select>
@@ -87,7 +87,7 @@
               <label for="name">Division <span *ngIf="divisionOptions.length === 0" style="color:red">*</span></label>
               <nb-select [disabled]="divisionOptions.length <= 1 || checkPreview" [(ngModel)]="jd.divisionId"
                 [ngModelOptions]="{ standalone: true }" fullWidth>
-                <nb-option *ngFor="let option of divisionOptions" [value]="option.value">
+                <nb-option [disabled]="checkPreview" *ngFor="let option of divisionOptions" [value]="option.value">
                   {{ option.label }}
                 </nb-option>
               </nb-select>

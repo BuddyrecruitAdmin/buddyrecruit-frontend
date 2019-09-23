@@ -23,21 +23,24 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'NAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="firstname" [(ngModel)]="appforms.firstname" nbInput fullWidth required>
+            <input type="text" class="form-control" [formControl]="firstname" [(ngModel)]="appforms.firstname" nbInput
+              fullWidth required>
             <small *ngIf="touched && firstname.errors" class="text-red">{{ sErrorFirstName }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'SURNAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="lastname" [(ngModel)]="appforms.lastname" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="lastname" [(ngModel)]="appforms.lastname" nbInput
+              fullWidth>
             <small *ngIf="touched && lastname.errors" class="text-red">{{ sErrorLastName }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'NICKNAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="nickname" [(ngModel)]="appforms.nickname" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="nickname" [(ngModel)]="appforms.nickname" nbInput
+              fullWidth>
             <small *ngIf="touched && nickname.errors" class="text-red">{{ sErrorNickName }}</small>
           </div>
         </div>
@@ -46,7 +49,7 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'POSITION_APPLIED_FOR' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="positionApply" [(ngModel)]="appforms.refPosition_1"
+            <input type="text" class="form-control" [formControl]="positionApply" [(ngModel)]="appforms.refPosition_1"
               placeholder="{{ 'POSITION' | translate }}" nbInput fullWidth>
             <small *ngIf="touched && positionApply.errors" class="text-red">{{ sErrorpositionApply }}</small>
           </div>
@@ -54,7 +57,8 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'SALARY' | translate }}<small class="text-red">*</small></label>
-            <input type="number" [formControl]="salary" [(ngModel)]="appforms.salary" nbInput fullWidth>
+            <input type="number" class="form-control" [formControl]="salary" [(ngModel)]="appforms.salary" nbInput
+              fullWidth>
             <small *ngIf="touched && salary.errors" class="text-red">{{ sErrorSalary }}</small>
           </div>
         </div>
@@ -62,8 +66,8 @@
       <div class="row">
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
-            <input type="text" [(ngModel)]="appforms.refPosition_2" placeholder="{{ 'POSITION2' | translate }}" nbInput
-              fullWidth>
+            <input type="text" class="form-control" [(ngModel)]="appforms.refPosition_2" [disabled]="!edtiable"
+              placeholder="{{ 'POSITION2' | translate }}" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -73,32 +77,32 @@
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{'PRESENT_ADDRESS' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="presentAddress" [(ngModel)]="appforms.personalInformation.presentAddr"
-              placeholder="" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="presentAddress"
+              [(ngModel)]="appforms.personalInformation.presentAddr" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && presentAddress.errors" class="text-red">{{ sErrorAddress }}</small>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{'MOO' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="moo" [(ngModel)]="appforms.personalInformation.moo" placeholder="" nbInput
-              fullWidth>
+            <input type="text" class="form-control" [formControl]="moo" [(ngModel)]="appforms.personalInformation.moo"
+              placeholder="" nbInput fullWidth>
             <small *ngIf="touched && moo.errors" class="text-red">{{ sErrorMoo }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'ROAD' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="road" [(ngModel)]="appforms.personalInformation.road" placeholder=""
-              nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="road" [(ngModel)]="appforms.personalInformation.road"
+              placeholder="" nbInput fullWidth>
             <small *ngIf="touched && road.errors" class="text-red">{{ sErrorRoad }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'DISTRICT' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="district" [(ngModel)]="appforms.personalInformation.district"
-              placeholder="" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="district"
+              [(ngModel)]="appforms.personalInformation.district" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && district.errors" class="text-red">{{ sErrorDistrict }}</small>
           </div>
         </div>
@@ -107,24 +111,24 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'AMPHUR' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="amphur" [(ngModel)]="appforms.personalInformation.amphur" placeholder=""
-              nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="amphur"
+              [(ngModel)]="appforms.personalInformation.amphur" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && amphur.errors" class="text-red">{{ sErrorAmphur }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'PROVINCE' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="province" [(ngModel)]="appforms.personalInformation.province"
-              placeholder="" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="province"
+              [(ngModel)]="appforms.personalInformation.province" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && province.errors" class="text-red">{{ sErrorProvince }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'POST_CODE' | translate }}<small class="text-red">*</small></label>
-            <input type="number" [formControl]="postcode" [(ngModel)]="appforms.personalInformation.postCode"
-              placeholder="" nbInput fullWidth>
+            <input type="number" class="form-control" [formControl]="postcode"
+              [(ngModel)]="appforms.personalInformation.postCode" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && postcode.errors" class="text-red">{{ sErrorPostcode }}</small>
           </div>
         </div>
@@ -133,15 +137,16 @@
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{'AGE' | translate }}<small class="text-red">*</small></label>
-            <input type="number" [formControl]="age" [(ngModel)]="appforms.personalInformation.age" placeholder="Age"
-              nbInput fullWidth>
+            <input type="number" class="form-control" [formControl]="age" [(ngModel)]="appforms.personalInformation.age"
+              placeholder="Age" nbInput fullWidth>
             <small *ngIf="touched && age.errors" class="text-red">{{ sErrorAge }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'HBD' | translate }}<small class="text-red">*</small></label>
-            <input type="date" [formControl]="dob" nbInput fullWidth [(ngModel)]="appforms.personalInformation.dob"
+            <input type="date" class="form-control" [formControl]="dob" nbInput fullWidth
+              [(ngModel)]="appforms.personalInformation.dob"
               [value]="appforms.personalInformation.dob | date:'yyyy-MM-dd'" />
             <small *ngIf="touched && dob.errors" class="text-red">{{ sErrordob }}</small>
           </div>
@@ -149,16 +154,16 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'MOBILE' | translate }}<small class="text-red">*</small></label>
-            <input type="number" [formControl]="mobile" [(ngModel)]="appforms.personalInformation.mobile"
-              placeholder="0123456789" nbInput fullWidth>
+            <input type="number" class="form-control" [formControl]="mobile"
+              [(ngModel)]="appforms.personalInformation.mobile" placeholder="0123456789" nbInput fullWidth>
             <small *ngIf="touched && mobile.errors" class="text-red">{{ sErrorMobile }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'EMAIL' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="email" [(ngModel)]="appforms.personalInformation.email" placeholder=""
-              nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="email"
+              [(ngModel)]="appforms.personalInformation.email" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && email.errors" class="text-red">{{ sErrorEmail }}</small>
           </div>
         </div>
@@ -167,24 +172,24 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'RACE' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="race" [(ngModel)]="appforms.personalInformation.race" placeholder=""
-              nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="race" [(ngModel)]="appforms.personalInformation.race"
+              placeholder="" nbInput fullWidth>
             <small *ngIf="touched && race.errors" class="text-red">{{ sErrorRace }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'NATIONALITY' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="nationality" [(ngModel)]="appforms.personalInformation.nationality"
-              placeholder="" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="nationality"
+              [(ngModel)]="appforms.personalInformation.nationality" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && nationality.errors" class="text-red">{{ sErrorNationality }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'RELIGION' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="religion" [(ngModel)]="appforms.personalInformation.religion"
-              placeholder="" nbInput fullWidth>
+            <input type="text" class="form-control" [formControl]="religion"
+              [(ngModel)]="appforms.personalInformation.religion" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && religion.errors" class="text-red">{{ sErrorReligion }}</small>
           </div>
         </div>
@@ -193,7 +198,8 @@
         <div class="col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'GENDER' | translate }}<small class="text-red">*</small></label>
-            <nb-radio-group [formControl]="sexGroup" [(ngModel)]="appforms.personalInformation.sex" name="gender">
+            <nb-radio-group [formControl]="sexGroup" [disabled]="!edtiable"
+              [(ngModel)]="appforms.personalInformation.sex" name="gender">
               <nb-radio value="male"> {{ 'MALE' | translate }}</nb-radio>
               <nb-radio value="female">{{ 'FEMALE' | translate }}</nb-radio>
               <nb-radio value="notspecified">{{ 'NOT_SPECIFIED' | translate }}</nb-radio>
@@ -204,8 +210,8 @@
         <div class="col-lg-2" *ngIf="appforms.personalInformation.sex === 'male'">
           <div class="form-control-group">
             <label class="label">{{ 'MILITARY_STATUS' | translate }}<small class="text-red">*</small></label>
-            <nb-radio-group (click)="changeText()" [(ngModel)]="appforms.personalInformation.militaryStatus"
-              name="military">
+            <nb-radio-group (click)="changeText()" [disabled]="!edtiable"
+              [(ngModel)]="appforms.personalInformation.militaryStatus" name="military">
               <nb-radio value="Exempted"> {{ 'EXEMPTED' | translate }}</nb-radio>
               <nb-radio value="Served"> {{ 'SERVED' | translate }}</nb-radio>
               <nb-radio value="NotServed"> {{ 'NOT_YET_SERVED' | translate }}</nb-radio>
@@ -216,7 +222,8 @@
         <div class="col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'MARITAL_STATUS' | translate }}</label>
-            <nb-radio-group [(ngModel)]="appforms.personalInformation.maritalStatus" name="martital">
+            <nb-radio-group [(ngModel)]="appforms.personalInformation.maritalStatus" [disabled]="!edtiable"
+              name="martital">
               <nb-radio value="single">{{ 'SINGLE' | translate }}</nb-radio>
               <nb-radio value="married">{{ 'MARRIED' | translate }}</nb-radio>
             </nb-radio-group>
@@ -229,23 +236,23 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'FATHER_NAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="fathername" [(ngModel)]="appforms.familyInformation.father.firstname"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="fathername"
+              [(ngModel)]="appforms.familyInformation.father.firstname" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && fathername.errors" class="text-red">{{ sErrorFatherName }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'FATHER_SURNAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="fathersurname" [(ngModel)]="appforms.familyInformation.father.lastname"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="fathersurname"
+              [(ngModel)]="appforms.familyInformation.father.lastname" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && fathersurname.errors" class="text-red">{{ sErrorFatherLast }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'OCCUPATION' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="fatheroccupation"
+            <input class="form-control" type="text" [formControl]="fatheroccupation"
               [(ngModel)]="appforms.familyInformation.father.occupation" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && fatheroccupation.errors" class="text-red">{{ sErrorFatherOccu }}</small>
           </div>
@@ -255,23 +262,23 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'MOTHER_NAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="mothername" [(ngModel)]="appforms.familyInformation.mother.firstname"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="mothername"
+              [(ngModel)]="appforms.familyInformation.mother.firstname" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && mothername.errors" class="text-red">{{ sErrorMotherName }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'MOTHER_SURNAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="mothersurname" [(ngModel)]="appforms.familyInformation.mother.lastname"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="mothersurname"
+              [(ngModel)]="appforms.familyInformation.mother.lastname" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && mothersurname.errors" class="text-red">{{ sErrorMotherLast }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'OCCUPATION' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="motheroccupation"
+            <input class="form-control" type="text" [formControl]="motheroccupation"
               [(ngModel)]="appforms.familyInformation.mother.occupation" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && motheroccupation.errors" class="text-red">{{ sErrorMotherOccu }}</small>
           </div>
@@ -283,29 +290,29 @@
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'NAME_WIFE_HUSBAND' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.personalInformation.couple.firstname" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="text" [(ngModel)]="appforms.personalInformation.couple.firstname"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'SURNAME_WIFE_HUSBAND' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.personalInformation.couple.lastname" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="text" [(ngModel)]="appforms.personalInformation.couple.lastname"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'WORKING_PLACE' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.personalInformation.couple.workingPlace" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="text" [(ngModel)]="appforms.personalInformation.couple.workingPlace"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'POSITION' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.personalInformation.couple.position" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="text" [(ngModel)]="appforms.personalInformation.couple.position"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -313,8 +320,8 @@
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'NUMBER_CHIDREN' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfChildren" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="number" [(ngModel)]="appforms.familyInformation.numberOfChildren"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -322,28 +329,29 @@
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'NUMBER_MEMBER_FAMILY' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfSibling" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="number" [(ngModel)]="appforms.familyInformation.numberOfSibling"
+              [disabled]="!edtiable" placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'MALE' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfMale" placeholder="" nbInput fullWidth>
+            <input class="form-control" type="number" [(ngModel)]="appforms.familyInformation.numberOfMale"
+              [disabled]="!edtiable" placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'FEMALE' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfFemale" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="number" [(ngModel)]="appforms.familyInformation.numberOfFemale"
+              [disabled]="!edtiable" placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'YOUR_CHILD_OF_FAMILY' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.rankOfSibling" placeholder="" nbInput
-              fullWidth>
+            <input class="form-control" type="number" [(ngModel)]="appforms.familyInformation.rankOfSibling"
+              [disabled]="!edtiable" placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -353,30 +361,30 @@
       <nb-card *ngFor="let education of appforms.education;let i = index">
         <nb-card-body>
           <div class="pull-right">
-            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete"
+            <nb-icon *ngIf="edtiable" icon="close-outline" class="link" status="danger" nbTooltip="Delete"
               (click)="remove('Education',i)">
             </nb-icon>
           </div>
           <div class="row">
             <div class="col-md-4">
-              <label>{{ 'EDUCATION_LEVEL' | translate }}<small class="text-red">*</small></label>
-              <select class="form-control" [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }"
-                Faria-hidden="true" fullWidth>
+              <label class="label">{{ 'EDUCATION_LEVEL' | translate }}<small class="text-red">*</small></label>
+              <select class="form-control" [disabled]="!edtiable" [(ngModel)]="education.refDegree"
+                [ngModelOptions]="{ standalone: true }" Faria-hidden="true" fullWidth>
                 <option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</option>
               </select>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'FROM' | translate }}<small class="text-red">*</small></label>
-                <input name="dateFrom" type="date" nbInput fullWidth [(ngModel)]="education.from"
-                  [value]="education.from | date:'yyyy-MM-dd'" />
+                <input class="form-control" name="dateFrom" [disabled]="!edtiable" type="date" nbInput fullWidth
+                  [(ngModel)]="education.from" [value]="education.from | date:'yyyy-MM-dd'" />
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'TO' | translate }}<small class="text-red">*</small></label>
-                <input name="dateTo" type="date" nbInput fullWidth [(ngModel)]="education.to"
-                  [value]="education.to | date:'yyyy-MM-dd'" />
+                <input class="form-control" name="dateTo" [disabled]="!edtiable" type="date" nbInput fullWidth
+                  [(ngModel)]="education.to" [value]="education.to | date:'yyyy-MM-dd'" />
               </div>
             </div>
           </div>
@@ -384,13 +392,15 @@
             <div class="col-md-6">
               <div class="form-control-group">
                 <label class="label">{{ 'INSTITUTION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="education.institution" placeholder="" nbInput fullWidth>
+                <input class="form-control" type="text" [disabled]="!edtiable" [(ngModel)]="education.institution"
+                  placeholder="" nbInput fullWidth>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-control-group">
                 <label class="label">{{ 'MAJOR' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="education.major" placeholder="" nbInput fullWidth>
+                <input class="form-control" type="text" [disabled]="!edtiable" [(ngModel)]="education.major"
+                  placeholder="" nbInput fullWidth>
               </div>
             </div>
           </div>
@@ -398,7 +408,7 @@
       </nb-card>
       <div class="box-body text-center btnBottom">
         <button nbButton type="button" status="success" size="small" (click)="add('Education')"
-          [disabled]="appforms.education.length === 5">
+          [disabled]="appforms.education.length === 5 || !edtiable">
           {{ 'ADD_MORE_EDUCATION' | translate }}
         </button>
       </div>
@@ -408,26 +418,28 @@
       <nb-card *ngFor="let workExp of appforms.workExperience;let i = index">
         <nb-card-body>
           <div class="pull-right">
-            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete" (click)="remove('workExp',i)">
+            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete" (click)="remove('workExp',i)"
+              *ngIf="edtiable">
             </nb-icon>
           </div>
           <div class="row">
             <div class="col-md-4">
               <label class="label">{{ 'COMPANY' | translate }}<small class="text-red">*</small></label>
-              <input type="text" [(ngModel)]="workExp.company" placeholder="" nbInput fullWidth>
+              <input type="text" class="form-control" [disabled]="!edtiable" [(ngModel)]="workExp.company"
+                placeholder="" nbInput fullWidth>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'FROM' | translate }}<small class="text-red">*</small></label>
-                <input type="date" nbInput fullWidth [(ngModel)]="workExp.from" name="comFrom"
-                  [value]="workExp.from | date:'yyyy-MM-dd'" />
+                <input type="date" class="form-control" [disabled]="!edtiable" nbInput fullWidth
+                  [(ngModel)]="workExp.from" name="comFrom" [value]="workExp.from | date:'yyyy-MM-dd'" />
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'TO' | translate }}<small class="text-red">*</small></label>
-                <input type="date" nbInput fullWidth [(ngModel)]="workExp.to" name="comTo"
-                  [value]="workExp.to | date:'yyyy-MM-dd'" />
+                <input type="date" class="form-control" [disabled]="!edtiable" nbInput fullWidth
+                  [(ngModel)]="workExp.to" name="comTo" [value]="workExp.to | date:'yyyy-MM-dd'" />
               </div>
             </div>
           </div>
@@ -435,13 +447,15 @@
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'POSITION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="workExp.position" placeholder="" nbInput fullWidth>
+                <input type="text" class="form-control" [disabled]="!edtiable" [(ngModel)]="workExp.position"
+                  placeholder="" nbInput fullWidth>
               </div>
             </div>
             <div class="col-md-8">
               <div class="form-control-group">
                 <label class="label">{{ 'JOB_DESCRIPTION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="workExp.jobDescription" placeholder="" nbInput fullWidth>
+                <input type="text" class="form-control" [disabled]="!edtiable" [(ngModel)]="workExp.jobDescription"
+                  placeholder="" nbInput fullWidth>
               </div>
             </div>
           </div>
@@ -449,13 +463,15 @@
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'SALARY' | translate }}<small class="text-red">*</small></label>
-                <input type="number" [(ngModel)]="workExp.salary" placeholder="" nbInput fullWidth>
+                <input type="number" class="form-control" [disabled]="!edtiable" [(ngModel)]="workExp.salary"
+                  placeholder="" nbInput fullWidth>
               </div>
             </div>
             <div class="col-md-8">
               <div class="form-control-group">
                 <label class="label">{{ 'REASONS_OF_RESIGNATION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="workExp.reasonResignation" placeholder="" nbInput fullWidth>
+                <input type="text" class="form-control" [disabled]="!edtiable" [(ngModel)]="workExp.reasonResignation"
+                  placeholder="" nbInput fullWidth>
               </div>
             </div>
           </div>
@@ -463,7 +479,7 @@
       </nb-card>
       <div class="box-body text-center btnBottom">
         <button nbButton type="button" status="success" size="small" (click)="add('workExp')"
-          [disabled]="appforms.workExperience.length === 5">
+          [disabled]="appforms.workExperience.length === 5 ||!edtiable">
           {{ 'ADD_MORE_WORKING_EXPERIENCE' | translate }}
         </button>
       </div>
@@ -474,18 +490,19 @@
       <nb-card *ngFor="let langu of appforms.languageAbility;let i = index">
         <nb-card-body>
           <div class="pull-right" *ngIf="langu.language != 'Thai' && langu.language != 'English'">
-            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete" (click)="remove('langu',i)">
+            <nb-icon *ngIf="edtiable" icon="close-outline" class="link" status="danger" nbTooltip="Delete"
+              (click)="remove('langu',i)">
             </nb-icon>
           </div>
           <div class="row">
             <div class="col-sm-3 col-md-3">
               <label>{{ 'LANGUAGE' | translate }}<small class="text-red">*</small></label>
-              <input type="text" [(ngModel)]="langu.language" placeholder="language" nbInput fullWidth
-                [disabled]="langu.language === 'Thai' || langu.language === 'English'">
+              <input class="form-control" type="text" [(ngModel)]="langu.language" placeholder="language" nbInput
+                fullWidth [disabled]="langu.language === 'Thai' || langu.language === 'English'">
             </div>
             <div class="col-sm-3 col-md-3">
               <label>{{ 'SPEAKING' | translate }}<small class="text-red">*</small></label>
-              <nb-radio-group [(ngModel)]="langu.speaking" [name]="'speaking'+i">
+              <nb-radio-group [disabled]="!edtiable" [(ngModel)]="langu.speaking" [name]="'speaking'+i">
                 <nb-radio value="good">{{ 'GOOD' | translate }}</nb-radio>
                 <nb-radio value="fair">{{ 'FAIR' | translate }}</nb-radio>
                 <nb-radio value="poor">{{ 'POOR' | translate }}</nb-radio>
@@ -493,7 +510,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
               <label>{{ 'WRITING' | translate }}<small class="text-red">*</small></label>
-              <nb-radio-group [(ngModel)]="langu.writing" [name]="'writing'+i">
+              <nb-radio-group [disabled]="!edtiable" [(ngModel)]="langu.writing" [name]="'writing'+i">
                 <nb-radio value="good">{{ 'GOOD' | translate }}</nb-radio>
                 <nb-radio value="fair">{{ 'FAIR' | translate }}</nb-radio>
                 <nb-radio value="poor">{{ 'POOR' | translate }}</nb-radio>
@@ -501,7 +518,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
               <label>{{ 'READING' | translate }}<small class="text-red">*</small></label>
-              <nb-radio-group [(ngModel)]="langu.reading" [name]="'reading'+i">
+              <nb-radio-group [disabled]="!edtiable" [(ngModel)]="langu.reading" [name]="'reading'+i">
                 <nb-radio value="good">{{ 'GOOD' | translate }}</nb-radio>
                 <nb-radio value="fair">{{ 'FAIR' | translate }}</nb-radio>
                 <nb-radio value="poor">{{ 'POOR' | translate }}</nb-radio>
@@ -512,7 +529,7 @@
       </nb-card>
       <div class="box-body text-center btnBottom">
         <button nbButton type="button" status="success" size="small" (click)="add('langu')"
-          [disabled]="appforms.languageAbility.length === 5">
+          [disabled]="appforms.languageAbility.length === 5 || !edtiable">
           {{ 'LANGUAGE_ADD' | translate }}
         </button>
       </div>
@@ -522,9 +539,10 @@
         <div class="col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'I_CAN_WORK_UP_COUNTRY' | translate }}<small class="text-red">*</small></label>
-            <nb-radio-group [formControl]="workCountry" [(ngModel)]="appforms.workUpcountry.answer" name="answer">
-              <nb-radio [value]="true">Yes</nb-radio>
-              <nb-radio [value]="false">No</nb-radio>
+            <nb-radio-group [disabled]="!edtiable" [formControl]="workCountry"
+              [(ngModel)]="appforms.workUpcountry.answer" name="answer">
+              <nb-radio value="true">Yes</nb-radio>
+              <nb-radio value="false">No</nb-radio>
             </nb-radio-group>
             <small *ngIf="touched && workCountry.errors" class="text-red">{{ sErrorWorkCountry }}</small>
           </div>
@@ -534,7 +552,8 @@
         <div class="col-lg-6">
           <div class="form-control-group">
             <label class="label"> {{ 'OTHERS_PLEASE_MENTION' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.workUpcountry.remark" placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [disabled]="!edtiable" [(ngModel)]="appforms.workUpcountry.remark"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -544,24 +563,24 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'NAME' | translate }}<small class="text-red">*</small> </label>
-            <input type="text" [formControl]="emergencyName" [(ngModel)]="appforms.contactEmergency.firstname"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="emergencyName"
+              [(ngModel)]="appforms.contactEmergency.firstname" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencyName.errors" class="text-red">{{ sErrorEmerName }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'SURNAME' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="emergencySurname" [(ngModel)]="appforms.contactEmergency.lastname"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="emergencySurname"
+              [(ngModel)]="appforms.contactEmergency.lastname" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencySurname.errors" class="text-red">{{ sErrorEmerSur }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'RELATE_TO_APPLICNT' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="emergencyRelation" [(ngModel)]="appforms.contactEmergency.relation"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="emergencyRelation"
+              [(ngModel)]="appforms.contactEmergency.relation" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencyRelation.errors" class="text-red">{{ sErrorEmerRelate }}</small>
           </div>
         </div>
@@ -570,16 +589,16 @@
         <div class="col-md-8 col-lg-8">
           <div class="form-control-group">
             <label class="label">{{ 'ADDRESS' | translate }}<small class="text-red">*</small></label>
-            <input type="text" [formControl]="emergencyAddress" [(ngModel)]="appforms.contactEmergency.address"
-              placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [formControl]="emergencyAddress"
+              [(ngModel)]="appforms.contactEmergency.address" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencyAddress.errors" class="text-red">{{ sErrorEmerAddress }}</small>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'TEL' | translate }}<small class="text-red">*</small></label>
-            <input type="number" [formControl]="emergencyTel" [(ngModel)]="appforms.contactEmergency.tel" placeholder=""
-              nbInput fullWidth>
+            <input class="form-control" type="number" [formControl]="emergencyTel"
+              [(ngModel)]="appforms.contactEmergency.tel" placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencyTel.errors" class="text-red">{{ sErrorEmerTel }}</small>
           </div>
         </div>
@@ -588,12 +607,13 @@
       <label>{{'SOURCES_JOB_INFORMATION' | translate}}</label>
       <div class="row">
         <div class="col-md-2 col-lg-2" *ngFor="let ref of appforms.knowCompanyFrom;">
-          <nb-checkbox status="success" [(ngModel)]="ref.isSelected">{{ref.source}}</nb-checkbox>
+          <mat-checkbox status="success" [disabled]="!edtiable" [(ngModel)]="ref.isSelected">{{ref.source}}
+          </mat-checkbox>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-lg-4  offset-md-8">
-          <input *ngIf="appforms.knowCompanyFrom[4].isSelected" type="text"
+          <input *ngIf="appforms.knowCompanyFrom[4].isSelected" [disabled]="!edtiable" type="text"
             [(ngModel)]="appforms.knowCompanyFrom[4].remark" placeholder="remark" nbInput fullWidth>
         </div>
       </div>
@@ -604,13 +624,15 @@
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
             <label class="label">{{ 'NAME' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.relativeEmployee.firstname" placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [disabled]="!edtiable"
+              [(ngModel)]="appforms.relativeEmployee.firstname" placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
             <label class="label">{{ 'SURNAME' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.relativeEmployee.lastname" placeholder="" nbInput fullWidth>
+            <input class="form-control" type="text" [disabled]="!edtiable"
+              [(ngModel)]="appforms.relativeEmployee.lastname" placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -619,17 +641,19 @@
       <div class="row">
         <div class="col-lg-1">
           <div class="form-control-group">
-            <nb-radio-group [formControl]="sick" [(ngModel)]="appforms.contagiousDisease.answer" name="">
+            <nb-radio-group [disabled]="!edtiable" [formControl]="sick" [(ngModel)]="appforms.contagiousDisease.answer"
+              name="">
               <nb-radio [value]="true">Yes</nb-radio>
               <nb-radio [value]="false">No</nb-radio>
             </nb-radio-group>
           </div>
-          <small *ngIf="touched && sick.errors" class="text-red">{{ sErrorSick }}</small>
         </div>
         <div class="col-lg-7" *ngIf="appforms.contagiousDisease.answer">
-          <input type="text" [(ngModel)]="appforms.contagiousDisease.remark" placeholder="remark" nbInput fullWidth>
+          <input class="form-control" type="text" [(ngModel)]="appforms.contagiousDisease.remark" placeholder="remark"
+            nbInput fullWidth>
         </div>
       </div>
+      <small *ngIf="touched && sick.errors" class="text-red">{{ sErrorSick }}</small><br>
       <!-- Intriduce -->
       <label>{{ 'REMARK' | translate }}<small class="text-red">*</small></label>
       <div class="row">
@@ -642,8 +666,8 @@
         <small class="text-red">{{ sErrorAll }}</small>
       </div>
     </nb-card-body>
-    <nb-card-footer>
-      <button nbButton size="small" status="success" (click)="save()" [disabled]="!edtiable">SAVE</button>
+    <nb-card-footer *ngIf="edtiable">
+      <button nbButton size="small" status="success" (click)="save()">SAVE</button>
     </nb-card-footer>
   </nb-card>
   <!-- Thank you for your information  External-->

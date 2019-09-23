@@ -13,7 +13,7 @@
           <label class="label">Email Type <span style="color:red">*</span></label>
           <nb-select *ngIf="getId" placeholder="Select Email Type" [(ngModel)]="itemDialog.action"
             [disabled]="checkEdit" fullWidth>
-            <nb-option *ngFor="let typeOption of typeOptions" [value]="typeOption.value" (click)="getType()">
+            <nb-option [disabled]="checkEdit" *ngFor="let typeOption of typeOptions" [value]="typeOption.value" (click)="getType()">
               {{ typeOption.label }}
             </nb-option>
           </nb-select>

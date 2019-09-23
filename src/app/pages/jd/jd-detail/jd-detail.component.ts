@@ -109,6 +109,7 @@ export class JdDetailComponent implements OnInit {
           this._id = params.id;
           this.getDetail();
         } else {
+          this.state = "View";
           this.checkPreview = true;
           this.getDetail();
         }

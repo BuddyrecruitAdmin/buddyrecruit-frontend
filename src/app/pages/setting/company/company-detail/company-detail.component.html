@@ -122,13 +122,13 @@
             <nb-radio name="activeJobsDB" [value]="false">No</nb-radio>
           </nb-radio-group>
         </div>
-        <div *ngIf="role.refHero.isSuperAdmin" class="form-control-group">
+        <!-- <div *ngIf="role.refHero.isSuperAdmin" class="form-control-group">
           <label class="label">Enable Pending Exam</label>
           <nb-radio-group [(ngModel)]="companyDetail.activeExam" name="activeExam" class="inline">
             <nb-radio [value]="true">Yes</nb-radio>
             <nb-radio [value]="false">No</nb-radio>
           </nb-radio-group>
-        </div>
+        </div> -->
         <div class="form-control-group">
           <label class="label">Transfer Agreement</label>
           <nb-radio-group [(ngModel)]="companyDetail.transferable" name="transferable" class="inline">
@@ -147,7 +147,7 @@
           <label class="label">Parent Company <span *ngIf="companyDetail.isSubCompany" class="text-red">*</span></label>
           <nb-select placeholder="Select Parent Company" [(ngModel)]="companyDetail.refParent" fullWidth
             [disabled]="!companyDetail.isSubCompany">
-            <nb-option *ngFor="let companyOption of companyOptions" [value]="companyOption.value">
+            <nb-option [disabled]="!companyDetail.isSubCompany" *ngFor="let companyOption of companyOptions" [value]="companyOption.value">
               {{ companyOption.label }}
             </nb-option>
           </nb-select>

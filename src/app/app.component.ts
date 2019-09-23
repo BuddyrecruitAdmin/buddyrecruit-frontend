@@ -13,13 +13,16 @@ import { getToken } from './shared/services/auth.service';
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-
+  url: any;
   constructor(
     private analytics: AnalyticsService,
     private router: Router,
   ) {
     if (!getToken()) {
-      this.router.navigate(["/auth/login"]);
+      this.url = window.location.pathname.slice(0,14)
+      if(this.url != "/auth/appform/"){
+        this.router.navigate(["/auth/login"]);
+      }
     }
   }
 

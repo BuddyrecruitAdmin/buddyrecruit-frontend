@@ -71,8 +71,6 @@ export class PopupCvComponent implements OnInit {
   }
 
   getList() {
-    this.loading = true;
-    this.items = [];
     this.flowId = "5d6795dcbb9aa2080c13a703";
     this.degreeMaster = [];
     this.service.getDetail(this.flowId).subscribe(response => {
@@ -88,6 +86,9 @@ export class PopupCvComponent implements OnInit {
             this.totalYear = 0;
           }
         }
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.ref.close();
       }
     })
     this.service.getEducationList().subscribe(response => {
@@ -99,9 +100,12 @@ export class PopupCvComponent implements OnInit {
               value: element._id
             })
           });
+          this.loading = false;
         }
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.ref.close();
       }
-      this.loading = false;
     })
   }
 
@@ -163,9 +167,9 @@ export class PopupCvComponent implements OnInit {
     });
   }
 
- checkCV(id){
-  this.router.navigate(['/auth/appform/view/'+id]);
- }
+  checkCV(id) {
+    this.router.navigate(['/auth/appform/view/' + id]);
+  }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {
