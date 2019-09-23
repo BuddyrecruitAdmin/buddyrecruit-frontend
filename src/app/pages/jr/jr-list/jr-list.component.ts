@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
-import { getRole,setFlowId } from '../../../shared/services/auth.service';
+import { getRole } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -12,8 +12,7 @@ import { PopupMessageComponent } from '../../../component/popup-message/popup-me
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { CommonService } from '../../../shared/services';
-import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
+
 @Component({
   selector: 'ngx-jr-list',
   templateUrl: './jr-list.component.html',
@@ -73,10 +72,7 @@ export class JrListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
-        console.log(response.data);
         this.items.map(item => {
-          //set label color
-          console.log(item)
           switch (item.refStatus.name) {
             case "Waiting for HR Confirm":
               item.refStatus.class = "label1-warning";
@@ -146,7 +142,6 @@ export class JrListComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        console.log(this.itemSelected)
         this.service.action("reject", this.itemSelected).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
@@ -203,15 +198,4 @@ export class JrListComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
-
-  openPopupComment(item: any) {
-    setFlowId(item._id);
-    this.dialogService.open(PopupCvComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => setFlowId());
-  }
-
 }

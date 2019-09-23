@@ -91,7 +91,7 @@
               <span>{{ item.divisionName || '-' }}</span>
             </div>
             <div class="text-group">
-              <label class="label">Days before expiry</label>
+              <label class="label">Days before expire</label>
               <span [ngClass]="{ 'text-red' : 15 > item.daysBeforeExpiry }">
                 {{ item.daysBeforeExpiry || '0' }}
               </span>
@@ -123,7 +123,7 @@
               <th scope="col" class="text-left">Name</th>
               <th scope="col" class="text-left" style="width: 200px;">Department</th>
               <th scope="col" class="text-left" style="width: 150px;">Division</th>
-              <th scope="col" style="width: 150px;">Days before expiry</th>
+              <th scope="col" style="width: 150px;">Days before expire</th>
               <th scope="col" style="width: 70px;">Pending</th>
               <th scope="col" style="width: 110px;">Actions</th>
             </tr>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
@@ -12,10 +12,10 @@ import { PopupMessageComponent } from '../../../component/popup-message/popup-me
 import { PopupCommentComponent } from '../../../component/popup-comment/popup-comment.component';
 import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
 import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup-exam-date.component';
+import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { NbWindowService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
@@ -26,7 +26,6 @@ import { CandidateService } from '../../candidate/candidate.service';
   styleUrls: ['./talent-pool-detail.component.scss']
 })
 export class TalentPoolDetailComponent implements OnInit {
-  @ViewChild('contentTemplate', { static: false }) contentTemplate: TemplateRef<any>;
   role: any;
   jrId: any;
   jrName: any;
@@ -53,7 +52,6 @@ export class TalentPoolDetailComponent implements OnInit {
     private service: TalentPoolService,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
-    private windowService: NbWindowService,
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
@@ -160,7 +158,7 @@ export class TalentPoolDetailComponent implements OnInit {
         switch (element.name) {
           case 'NOT BUY':
             element.badgeText = count.notBuy;
-            element.badgeStatus = 'danger';
+            element.badgeStatus = 'default';
             break;
           case 'PENDING':
             element.badgeText = count.pending;
@@ -168,11 +166,11 @@ export class TalentPoolDetailComponent implements OnInit {
             break;
           case 'SELECTED':
             element.badgeText = count.selected;
-            element.badgeStatus = 'danger';
+            element.badgeStatus = 'default';
             break;
           case 'REJECTED':
             element.badgeText = count.rejected;
-            element.badgeStatus = 'danger';
+            element.badgeStatus = 'default';
             break;
           default:
             element.badgeText = '0';
@@ -263,16 +261,19 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   info(item: any) {
-    this.windowService.open(
-      this.contentTemplate,
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupCvComponent,
       {
-        title: item.refCandidate.name || item.refCandidate._id || '-No Name-',
-        context: {
-          text: 'cv detail',
-        },
-        closeOnBackdropClick: false
-      },
-    );
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   openCandidateDetail(item: any) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
@@ -15,10 +15,10 @@ import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup
 import { PopupExamInfoComponent } from '../../../component/popup-exam-info/popup-exam-info.component';
 import { PopupExamScoreComponent } from '../../../component/popup-exam-score/popup-exam-score.component';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
+import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { NbWindowService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
@@ -56,7 +56,6 @@ export class InterviewDetailComponent implements OnInit {
     private service: InterviewService,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
-    private windowService: NbWindowService,
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
@@ -243,7 +242,19 @@ export class InterviewDetailComponent implements OnInit {
   }
 
   info(item: any) {
-
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupCvComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   openCandidateDetail(item: any) {

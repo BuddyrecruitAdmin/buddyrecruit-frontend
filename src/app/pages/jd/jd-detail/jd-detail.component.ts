@@ -197,6 +197,7 @@ export class JdDetailComponent implements OnInit {
         }
       }
     });
+    this.divisionOptions = [];
     if (this.role.refHero.isAdmin === true) {
       this.departMentAdmin = [];
       this.departMentAdmin.push({
