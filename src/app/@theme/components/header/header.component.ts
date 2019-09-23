@@ -56,10 +56,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentTheme = this.themeService.currentTheme;
 
     const role = getRole();
+    let imagePath = role.imagePath.split('images/');
+    if (imagePath.length && imagePath[1]) {
+      imagePath = role.imagePath;
+    } else {
+      imagePath = '../../../../assets/images/avatar.png';
+    }
     this.user = {
       name: `${role.firstname || ''} ${role.lastname || ''}`,
       title: role.refHero.name,
-      picture: role.imagePath,
+      picture: imagePath,
     };
     
     // this.userService.getUsers()

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
@@ -11,10 +11,10 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import { PopupCommentComponent } from '../../../component/popup-comment/popup-comment.component';
 import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
+import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { NbWindowService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
@@ -54,7 +54,6 @@ export class AppointmentDetailComponent implements OnInit {
     private service: AppointmentService,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
-    private windowService: NbWindowService,
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
@@ -241,7 +240,19 @@ export class AppointmentDetailComponent implements OnInit {
   }
 
   info(item: any) {
-
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupCvComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   openCandidateDetail(item: any) {

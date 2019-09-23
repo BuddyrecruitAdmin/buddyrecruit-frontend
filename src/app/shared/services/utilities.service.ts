@@ -197,9 +197,17 @@ export class UtilitiesService {
     const nMonth = (month % 12);
     if (nYear) {
       text += `${nYear} year `;
+      if (nYear > 1) {
+        text.trim();
+        text += `s `;
+      }
     }
     if (nMonth) {
       text += `${nMonth} month`;
+      if (nMonth > 1) {
+        text.trim();
+        text += `s`;
+      }
     }
     text = text.trim();
     return text;

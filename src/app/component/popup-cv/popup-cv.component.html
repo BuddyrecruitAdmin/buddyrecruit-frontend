@@ -2,11 +2,13 @@
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div>
-      <label class="label" [nbTooltip]="candidateName">{{items.title}}</label>
+      <label class="label" [nbTooltip]="items.firstname + ' ' + items.lastname">{{items.firstname}}
+        {{items.lastname}}</label>
       <div class="pull-right">
-        <button size="small" nbButton status="success" (click)="changeMode()"> <span class="fa"
-            [ngClass]="{ 'fa-eye': editable, 'fa-pencil-alt': !editable }"></span>
-          {{ buttonText.toUpperCase() }}</button>
+        <button size="small" nbButton status="success" (click)="changeMode()">
+          <span class="fa" [ngClass]="{ 'fa-eye': editable, 'fa-pencil-alt': !editable }"></span>
+          {{ buttonText.toUpperCase() }}
+        </button>
       </div>
     </div>
   </nb-card-header>
@@ -392,9 +394,9 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)" [disabled]="!items.applicationForm">Original CV</button>
-    <button class="txt-left" size="small" nbButton ghost (click)="comment()">Feedback</button>
+    <!-- <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)" [disabled]="!items.applicationForm">Original CV</button> -->
+    <!-- <button class="txt-left" size="small" nbButton ghost (click)="comment()">Feedback</button> -->
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
-    <button nbButton ghost size="small" (click)="ref.close()">CLOSE</button>
+    <button nbButton status="default" size="small" (click)="ref.close()">CLOSE</button>
   </nb-card-footer>
 </nb-card>

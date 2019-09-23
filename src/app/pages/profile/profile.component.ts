@@ -183,7 +183,7 @@ export class ProfileComponent implements OnInit {
       var reader = new FileReader();
       if (files[0] != undefined || files[0] != null) {
         reader.onload = (event) => { // called once readAsDataURL is completed
-          this.url = event.target.result;
+          this.url = reader.result;
         } 
       }
       reader.readAsDataURL(files[0]); // read file as data url
