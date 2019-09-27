@@ -46,7 +46,7 @@ build-prod:
 
 deploy-qas:
   stage: deploy
-  environment: qas  
+  environment: qas
   only:
     - qas_p3
   script:
