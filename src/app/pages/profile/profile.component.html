@@ -19,8 +19,8 @@
               [src]="url ? url : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
             <br>
             <a (click)="fileInput.click()"><span class="fa fa-images"></span>
-              <input #fileInput type="file" (change)="onFileInput($event.target.files)" style="display:none;" accept="image/*"
-                ng2FileSelect [uploader]="uploader" />
+              <input #fileInput type="file" (change)="onFileInput($event.target.files)" style="display:none;"
+                accept="image/*" ng2FileSelect [uploader]="uploader" />
               Select Profile Picture</a>
             <h6 class="text-ellipsis text-center" [nbTooltip]="profileDetail.firstname + ' ' + profileDetail.lastname">
               {{profileDetail.firstname}} {{profileDetail.lastname}}
@@ -42,7 +42,7 @@
                 <i class="fa fa-briefcase"></i>
               </div>
               <div class="card-content2">
-                <div class="card-title" >Department</div>
+                <div class="card-title">Department</div>
                 <div class="card-desc" [nbTooltip]="profileDetail.thisDepartments?.name">
                   {{profileDetail.thisDepartments?.name}}
                 </div>
@@ -74,7 +74,7 @@
             <div>
               <div class="form-group">
                 <label class="label" for="name">Username</label>
-                <input type="text" class="form-control" name="userame" disabled [(ngModel)]="profileDetail.username">
+                <input type="text" disabled [(ngModel)]="profileDetail.username" nbInput fullWidth>
               </div>
               <div class="row">
                 <div class="col-md-6">
@@ -133,9 +133,9 @@
                 </div>
                 <div class="col-md-12">
                   <div class="change-collapse">
-                    <button nbButton ghost status="success" (click)="togglePassword()"><span class="fa" [ngClass]="{
+                    <label class="link" (click)="togglePassword()"><span class="fa" [ngClass]="{
                       'fa-angle-double-up': isChangePassword,
-                      'fa-angle-double-down': !isChangePassword }"></span> Change Password</button>
+                      'fa-angle-double-down': !isChangePassword }"></span> Change Password</label>
                   </div>
                 </div>
                 <div *ngIf="isChangePassword" class="col-md-12">

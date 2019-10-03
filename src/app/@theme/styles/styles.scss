@@ -216,6 +216,7 @@
     cursor: not-allowed;
   }
 
+
   nb-dialog-container {
     nb-card {
       min-width: 20rem;
@@ -639,6 +640,11 @@
     .select-button:focus,
     .select-button:active {
       border-color: var(--color-green);
+    }
+    .select-button:disabled{
+      cursor: not-allowed;
+      background-color: rgba(210, 214, 217, 0.5);
+      color: #000000;
     }
   }
   nb-option:hover,

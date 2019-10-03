@@ -171,6 +171,11 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
+    title: 'Evaluation',
+    link: '/setting/evaluation',
+    hidden: false,
+  },
+  {
     title: 'Location',
     link: '/setting/location',
     hidden: false,
@@ -200,4 +205,5 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     link: '/setting/report',
     hidden: false,
   },
+
 ];

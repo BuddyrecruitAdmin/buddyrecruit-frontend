@@ -19,6 +19,8 @@ import { AuthorizeListComponent } from './authorize/authorize-list/authorize-lis
 import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RejectStageComponent } from './reject-stage/reject-stage.component';
+import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
+import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 const routes: Routes = [
   {
     path: '',
@@ -71,6 +73,18 @@ const routes: Routes = [
       {
         path: 'mail-template-detail/:id',
         component: MailTemplateDetailComponent,
+      },
+      {
+        path: 'evaluation',
+        component: EvaluationListComponent,
+      },
+      {
+        path: 'evaluation-detail/:action',
+        component: EvaluationDetailComponent,
+      },
+      {
+        path: 'evaluation-detail/:action/:id',
+        component: EvaluationDetailComponent,
       },
       {
         path: 'rejection',

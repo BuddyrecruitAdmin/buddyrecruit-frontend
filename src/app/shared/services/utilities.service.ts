@@ -19,6 +19,13 @@ export class UtilitiesService {
       if (refUser.lastname) {
         fullName = fullName + ' ' + refUser.lastname;
       }
+      if (!refUser.firstname && !refUser.lastname) {
+        if (refUser.email) {
+          fullName = fullName + ' ' + refUser.email;
+        } else if (refUser.phone) {
+          fullName = fullName + ' ' + refUser.phone;
+        }
+      }
     }
     fullName = fullName.trim();
     return fullName;
@@ -59,7 +66,7 @@ export class UtilitiesService {
       date = new Date(date);
       text += this.fillZero(date.getDate(), 2);
       text += '/';
-      text += this.fillZero(date.getMonth(), 2);
+      text += this.fillZero(date.getMonth() + 1, 2);
       text += '/';
       text += date.getFullYear().toString();
       text += ' ';

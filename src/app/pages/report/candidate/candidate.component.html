@@ -1,3 +1,151 @@
-<p>
-  candidate works!
-</p>
+<div class="content-header with-shadow">
+  <div class="breadcrumb">
+    <h4>Candidate Report</h4>
+  </div>
+</div>
+<!-- card search -->
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 ">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <span>
+          <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox>
+        </span>
+      </div>
+    </div>
+    <div class="filter-block">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Jop Position</label>
+            <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let option of filter.data.jobPosition" [value]="option.value">
+                {{option.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Jop Status</label>
+            <nb-select multiple [(selected)]="filter.selected.jobStatus" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let option of filter.data.jobStatus" [value]="option.value">
+                {{option.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Stage</label>
+            <nb-select multiple [(selected)]="filter.selected.stage" (selectedChange)="search(true)" placeholder="All"
+              fullWidth>
+              <nb-option *ngFor="let stage of filter.data.stage" [value]="stage.value">{{stage.label}}</nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Sub Stage</label>
+            <nb-select multiple [(selected)]="filter.selected.subStage" (selectedChange)="search(true)"
+              placeholder="All" fullWidth>
+              <nb-option *ngFor="let sub of filter.data.subStage" [value]="sub.value">{{sub.label}}</nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+<!--  -->
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+<!-- data and filter -->
+<div *ngIf="!loading && items.length">
+  <nb-card>
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th scope="col" style="font-size: 14px;">Job Position</th>
+              <th scope="col" style="width: 170px;font-size: 14px;">Job Status</th>
+              <th scope="col" style="width: 150px;font-size: 14px;">Candidate Name</th>
+              <th scope="col" style="width: 100px;font-size: 14px;">Stage</th>
+              <th scope="col" style="width: 100px;font-size: 14px;">Sub Stage</th>
+              <th scope="col" style="width: 110px;font-size: 14px;">Action Date</th>
+              <th *ngIf="checked" scope="col" style="font-size: 14px;">Reject Reason</th>
+              <th *ngIf="checked" scope="col" style="width: 110px;font-size: 14px;">Reject By</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- *ngFor="let item of items;" -->
+            <tr *ngFor="let item of items;">
+              <td class="text-left">
+                <span style="font-size: 14px;" [nbTooltip]="item?.refJR?.refJD?.position">
+                  {{ item?.refJR?.refJD?.position || '-' }}
+                </span>
+              </td>
+              <td>
+                <span style="font-size: 14px;" class="label1" [ngClass]="item.refJR.refStatus.class"
+                  [nbTooltip]="item?.refJR?.refStatus?.name">
+                  {{ item?.refJR?.refStatus?.name || '-' }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span style="font-size: 14px;" class="link" (click)="info(item)"
+                  [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+                  {{ utilitiesService.setFullname(item.refCandidate) }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span style="font-size: 14px;" [nbTooltip]="item?.refStage?.name">
+                  {{ item?.refStage?.name || '-' }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span style="font-size: 14px;" [nbTooltip]="item?.refStage?.name">
+                  {{ item?.refSubStage?.name || '-' }}
+                </span>
+              </td>
+              <td>
+                <span style="font-size: 14px;" [nbTooltip]="item?.actionDate">
+                  {{ utilitiesService.convertDateTime(item?.actionDate) || '-' }}
+                </span>
+              </td>
+              <td *ngIf="checked">
+                <span style="font-size: 14px;">
+                  {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
+                </span>
+              </td>
+              <td *ngIf="checked">
+                <span style="font-size: 14px;">
+                  {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+        [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
+</div>

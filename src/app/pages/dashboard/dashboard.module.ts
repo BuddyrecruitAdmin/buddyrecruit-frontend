@@ -9,11 +9,18 @@ import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 
 import {
-  MatButtonModule,
+	MatButtonModule,
 	MatButtonToggleModule,
 	MatProgressSpinnerModule
 } from '@angular/material';
-
+import {
+	NbSpinnerModule,
+	NbCardModule,
+	NbAccordionModule,
+	NbButtonModule,
+	NbIconModule,
+	NbInputModule
+} from '@nebular/theme';
 const routes: Routes = [{
 	path: '',
 	data: {
@@ -33,7 +40,13 @@ const routes: Routes = [{
 		NgbModule,
 		MatButtonModule,
 		MatButtonToggleModule,
-    MatProgressSpinnerModule
+		NbSpinnerModule,
+		MatProgressSpinnerModule,
+		NbCardModule,
+		NbAccordionModule,
+		NbButtonModule,
+		NbIconModule,
+		NbInputModule
 	],
 	declarations: [DashboardComponent]
 })

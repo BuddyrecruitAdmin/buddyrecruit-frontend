@@ -172,8 +172,13 @@
       </div>
       <div class="border-all box-pad box-header with-border">
         <nb-card *ngFor="let comment of items.candidateFlow?.pendingInterviewInfo.comments; let i = index">
+          <nb-card-header>
+            <div class="title">
+              <nb-user size="medium" [name]="utilitiesService.setFullname(comment.refUser)" [title]="utilitiesService.convertDate(comment.date)" src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg"></nb-user>
+            </div>
+          </nb-card-header>
           <nb-card-body>
-            <div class="row">
+            <!-- <div class="row">
               <div class="label-pad">
                 <img class="img-circle"
                   src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg"
@@ -185,7 +190,8 @@
                 </div>
               </div>
             </div>
-            <p>{{ comment.message }}</p>
+            <p>{{ comment.message }}</p> -->
+            {{ comment.message }}
           </nb-card-body>
         </nb-card>
       </div>

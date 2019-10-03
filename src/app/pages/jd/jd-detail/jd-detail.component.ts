@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { JdService } from '../jd.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
 import { getRole } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import { DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
@@ -10,7 +9,6 @@ import * as _ from 'lodash';
 import { MESSAGE } from '../../../shared/constants/message';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
-import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -81,6 +79,9 @@ export class JdDetailComponent implements OnInit {
   TempSoft: any;
   TempWork: any;
   checkPreview: boolean;
+  innerWidth: any;
+  innerHeight: any;
+  checkDivision: boolean;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -92,11 +93,14 @@ export class JdDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
+    this.innerWidth = window.innerWidth * 0.6;
+    this.innerHeight = window.innerHeight * 0.8;
   }
 
   ngOnInit() {
     this.initialDropdown();
     this.initialModel();
+    this.checkDivision = false;
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this._id = params.id;
@@ -115,11 +119,11 @@ export class JdDetailComponent implements OnInit {
         }
       } else {
         this.state = State.Create;
-        console.log(this.state)
         this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
         this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
         this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
         this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
+        this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
       }
     });
     this.bHasFile = false;
@@ -135,8 +139,6 @@ export class JdDetailComponent implements OnInit {
     this.isAddSoft = false;
     this.isAddCert = false;
     this.isAddWork = false;
-    // this.checkG = true;
-    // this.initialCheck();
   }
 
   initialModel(): any {
@@ -187,7 +189,6 @@ export class JdDetailComponent implements OnInit {
     this.service.getPositionList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          console.log(response.data)
           response.data.forEach(element => {
             this.positionMaster.push({
               label: element.name,
@@ -214,13 +215,13 @@ export class JdDetailComponent implements OnInit {
       this.service.getDepartmentList().subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
-            console.log(response.data)
             response.data.forEach(element => {
               this.departMentAdmin.push({
                 label: element.name,
                 value: element._id
               });
               if (element.hasDivision && element.divisions.length) {
+                console.log(element)
                 element.divisions.forEach(division => {
                   this.divisionAll.push({
                     group: element._id,
@@ -286,12 +287,14 @@ export class JdDetailComponent implements OnInit {
       return element.group === value;
     });
     if (division.length) {
+      this.checkDivision = true;
       this.countDivision = division.length;
       console.log(this.countDivision)
       division.forEach(element => {
         this.divisionOptions.push(element);
       });
     } else {
+      this.checkDivision = false;
       this.countDivision = 0;
     }
   }
@@ -310,18 +313,19 @@ export class JdDetailComponent implements OnInit {
     });
     console.log(this.jd.divisionId)
     if (division.length) {
+      this.checkDivision = true;
       this.countDivision = division.length;
       console.log(this.countDivision)
       division.forEach(element => {
         this.divisionOptions.push(element);
       });
     } else {
+      this.checkDivision = false;
       this.countDivision = 0;
     }
   }
 
   onHandleFileInput(files: FileList) {
-    console.log(files)
     const FileSize = files.item(0).size / 1024 / 1024; // in MB
     if (FileSize > 10) {
       this.setAlertMessage("E", MESSAGE[121]);
@@ -368,16 +372,13 @@ export class JdDetailComponent implements OnInit {
   }
 
   onChangeScore(event, option) {
-    // if (event.target.value === "") {
-    //   event.target.value = 0;
-    // }
     switch (option) {
       case "WORKEXP": {
         this.jd.weightScore.workExperience.total = parseFloat(event.target.value);
         if (this.jd.weightScore.workExperience.total > 0) {
           this.isAddWork = true;
         } else {
-          this.isAddWork = true;
+          this.isAddWork = false;
         }
         break;
       }
@@ -526,6 +527,7 @@ export class JdDetailComponent implements OnInit {
             this.dialogRef.close();
           }
         } else {
+          this.jd.weightScore.education.weightScore = _.cloneDeep(this.TempEdu)
           this.touched = false;
           this.dialogRef.close();
         }
@@ -734,7 +736,6 @@ export class JdDetailComponent implements OnInit {
   saveAll() {
     if (this.Validation()) {
       const request = this.setRequest();
-      console.log(request);
       if (this.bHasFile) {
         this.uploader.uploadItem(
           this.uploader.queue[this.uploader.queue.length - 1]
@@ -797,9 +798,6 @@ export class JdDetailComponent implements OnInit {
   }
 
   Validation(): boolean {
-    console.log(this.bHasFile);
-    console.log(this.jd.divisionId)
-    console.log(this.countDivision)
     this.touched = true;
     let isValid = true;
     this.SErrorAll = "";
@@ -959,9 +957,6 @@ export class JdDetailComponent implements OnInit {
     this.jd.weightScore.softSkill.weight.map(function (item) {
       that.iTotalSoftSkill += item.percent;
     });
-    // this.jd.weightScore.softSkill.weight.map(function (item, index) {
-    //   that.iTotalSoftSkill += item.percent;
-    // });
   }
 
   onChangePercentHardSkill() {

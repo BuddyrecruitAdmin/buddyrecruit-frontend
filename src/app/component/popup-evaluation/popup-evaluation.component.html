@@ -2,47 +2,48 @@
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="candidateName">{{ candidateName }}</label>
-      <small class="status text-gray m-0">
-        {{ jrName }}
-      </small>
+      <label [nbTooltip]="candidateName">{{ candidateName  || '-' }}</label>
+      <!-- <small class="status text-gray m-0">
+        {{ jrName || '-' }}
+      </small> -->
     </div>
     <div class="actions">
       <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
     </div>
   </nb-card-header>
-  <nb-card-body class="dialog-body">
+  <nb-card-body *ngIf="!loading" class="dialog-body">
     <h5 class="text-center text-green m-b-20">Applicant Evaluation Form</h5>
     <br>
-    <div *ngIf="evaluation.basicApplicants.length" class="m-b-20">
+    <div *ngIf="evaluation.basicApplications.length" class="m-b-20">
       <label class="text-black m-b-20"><b>ข้อมูลเบื้องต้นของผู้สมัคร / Basic Applicant Information</b></label>
-      <div *ngFor="let basic of evaluation.basicApplicants" class="form-control-group m-l-15">
+      <div *ngFor="let basic of evaluation.basicApplications" class="form-control-group m-l-15">
         <label class="m-0">
-          <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-          <span style="vertical-align: top;">{{ basic.topic }} <span class="text-red">*</span></span>
+          <nb-icon icon="corner-down-right-outline" class="text-light-gray"></nb-icon>
+          <span style="vertical-align: top;">{{ basic.subject }}</span>
         </label>
         <div class="m-l-20">
-          <nb-radio-group [(ngModel)]="basic.selected" [name]="basic.topic" class="inline">
-            <nb-radio *ngFor="let choice of basic.choices" [name]="basic.topic" [value]="choice.value">
+          <nb-radio-group [(ngModel)]="basic.selected" [name]="basic.subject" class="inline" status="info">
+            <nb-radio *ngFor="let choice of basic.options" [name]="basic.subject" [value]="choice.value">
               {{ choice.label }}
             </nb-radio>
           </nb-radio-group>
         </div>
       </div>
     </div>
-    <div *ngIf="evaluation.categories.length" class="m-b-20">
+    <div class="m-b-20">
       <label class="text-black m-0"><b>หัวข้อการประเมิน / Evaluation Categories</b></label>
       <div class="text-gray m-b-20">
         <small>( เกณฑ์การให้คะแนน 5 = ดีมาก, 4 = ดี, 3 = ปานกลาง, 2 = พอใช้, 1 = ไม่ดี )</small>
       </div>
-      <div *ngFor="let category of evaluation.categories" class="form-control-group m-l-15">
+      <div *ngFor="let category of evaluation.evaCategories;let i = index;" class="form-control-group m-l-15">
         <label class="m-0">
-          <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-          <span style="vertical-align: top;">{{ category.topic }} <span class="text-red">*</span></span>
+          <nb-icon icon="corner-down-right-outline" class="text-light-gray"></nb-icon>
+          <span style="vertical-align: top;">{{ category.subject }} <span class="text-red">*</span></span>
         </label>
         <div class="m-l-20">
-          <nb-radio-group [(ngModel)]="category.selected" [name]="category.topic" class="inline">
-            <nb-radio *ngFor=" let scoring of evaluation.scoring" [name]="category.topic" [value]="scoring.value">
+          <nb-radio-group [(ngModel)]="category.selected" [name]="category.subject" class="inline"
+            (valueChange)="sumScore($event,i)" status="primary">
+            <nb-radio *ngFor=" let scoring of scoring" [name]="category.subject" [value]="scoring.value">
               {{ scoring.label }}
             </nb-radio>
           </nb-radio-group>
@@ -50,29 +51,30 @@
       </div>
       <div class="text-gray text-right">
         <span class="m-r-10"><b>รวมคะแนน</b></span>
-        <span class="text-green m-r-10"><b>{{ sumScore() }}</b></span>
+        <span class="text-green m-r-10"><b>{{ evaluation.point }}</b></span>
         <span>คะแนน</span>
       </div>
     </div>
-    <div *ngIf="evaluation.rank.choices.length" class="m-b-20">
+    <div class="m-b-20">
       <label class="text-black"><b>ระดับคะแนน / Rank </b><span class="text-red">*</span></label>
       <div class="m-l-20">
-        <nb-radio-group [(ngModel)]="evaluation.rank.selected" name="rank">
-          <nb-radio *ngFor="let choice of evaluation.rank.choices" name="rank" [value]="choice.value">
-            {{ choice.label }} <span class="text-gray">( {{ choice.minScore }} - {{ choice.maxScore }} คะแนน )</span>
+        <nb-radio-group [(ngModel)]="evaluation.rank.selected" name="rank" status="success">
+          <nb-radio *ngFor="let choice of evaluation.rank.options" name="rank" [value]="choice.value">
+            {{ choice.subject }} <span class="text-gray">( {{ choice.min }} - {{ choice.max }} คะแนน )</span>
           </nb-radio>
         </nb-radio-group>
       </div>
     </div>
     <div class="form-control-group">
       <label class="text-black"><b>ความคิดเห็นเพิ่มเติม / Additional Comments</b></label>
-      <textarea nbInput fullWidth [(ngModel)]="evaluation.remark" rows="3"></textarea>
+      <textarea nbInput fullWidth [(ngModel)]="evaluation.additionalComment" rows="3"></textarea>
     </div>
   </nb-card-body>
-  <nb-card-footer>
+  <nb-card-footer *ngIf="!loading">
     <div class="footer-collapse">
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()" [disabled]="!validation()">SAVE</button>
+    <button nbButton status="primary" (click)="save()" [disabled]="!editable">SAVE</button>
   </nb-card-footer>
 </nb-card>
+<!-- [disabled]="!validation()" -->

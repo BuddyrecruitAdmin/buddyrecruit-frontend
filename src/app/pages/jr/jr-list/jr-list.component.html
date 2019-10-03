@@ -29,8 +29,8 @@
     <nb-card accent="success" *ngIf="!loading">
       <nb-card-header>
         <div class="title">
-          <label class="link" [routerLink]="'/jr/detail/preview/'+item._id" [nbTooltip]="item.refJD.position">
-            {{ item.refJD.position }}
+          <label class="link" [routerLink]="'/jr/detail/preview/'+item._id" [nbTooltip]="item.refJD?.position">
+            {{ item.refJD?.position }}
           </label>
         </div>
         <div class="actions">
@@ -42,8 +42,6 @@
             nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
           <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
             class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
-          <!-- <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
-            [routerLink]="'/jr/detail/preview/'+item._id"></nb-icon> -->
         </div>
       </nb-card-header>
       <nb-card-body>
@@ -53,7 +51,7 @@
         </div>
         <div class="text-group">
           <label class="label">Department</label>
-          <span>{{ item.department.name || '-' }}</span>
+          <span>{{ item.department?.name || '-' }}</span>
         </div>
         <div class="text-group">
           <label class="label">End Date</label>
