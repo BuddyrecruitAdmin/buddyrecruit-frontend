@@ -1,0 +1,181 @@
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body></nb-card-body>
+</nb-card>
+<!-- Main app form -->
+<!-- Basic Applicantts -->
+<div *ngIf="!loading">
+  <nb-card>
+    <nb-card-body>
+      <h5 class="text-center text-green">Applicant Evaluation Form</h5>
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="form-control-group">
+            <label class="text-black"><b>ชื่อแบบฟอร์ม/Name Evaluation Form</b></label>
+            <input type="text" [(ngModel)]="evaluation.name" name="name" [disabled]="preview" nbInput fullWidth>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <nb-checkbox [(ngModel)]="evaluation.checked" [disabled]="preview">
+            <span class="txtCred">ข้อมูลเบื้องต้นของผู้สมัคร / Basic
+              Applicant
+              Information</span>
+          </nb-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12" *ngFor="let basic of evaluation.basicApplications;let j = index">
+          <div class="form-control-group" style="padding-top:10px">
+            <nb-icon icon="corner-down-right-outline" class="text-light-gray"></nb-icon>
+            <input type="text" status="primary" [disabled]="!evaluation.checked || preview" [(ngModel)]="basic.subject"
+              nbInput>
+            <nb-icon *ngIf="evaluation.checked" status="danger" icon="minus-square-outline" class="text-light-gray"
+              class="link" (click)="deleteTopic(j,'basic')" nbTooltip="delete">
+            </nb-icon>
+          </div>
+          <div class="row">
+            <div class="col-md-3 col-lg-3" *ngFor="let choice of basic.options;let i = index;">
+              <div class="input-group">
+                <input type="text" [disabled]="!evaluation.checked || preview" [(ngModel)]="choice.label"
+                  name="chSelect" nbInput fullWidth>
+                <div class="input-group-addon" nbTooltip="delete">
+                  <nb-icon *ngIf="evaluation.checked" icon="minus-square-outline" class="text-light-gray" class="link"
+                    (click)="deleteOption(basic,i)">
+                  </nb-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 col-lg-2">
+              <div class="form-control-group">
+                <nb-icon *ngIf="basic.options.length < 5 && evaluation.checked" icon="plus-square-outline"
+                  class="text-light-gray" class="link" (click)="addOption(basic)" style="margin-top:10px">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <button *ngIf="evaluation.checked && !preview" nbButton size="small" status="success"
+            (click)="addTopic(dialog,'basic')" style="margin-top:10px;margin-left: 10px;">ADD TOPIC</button>
+        </div>
+      </div>
+      <!-- Evaluation Categories -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="title" style="margin-top:20px;">
+            <label class="text-black"><b>หัวข้อการประเมิน / Evaluation Categories</b></label>
+            <div class="text-gray">
+              <small>( เกณฑ์การให้คะแนน 5 = ดีมาก, 4 = ดี, 3 = ปานกลาง, 2 = พอใช้, 1 = ไม่ดี )</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngFor="let category of evaluation.evaCategories;let j = index">
+        <div class="col-lg-7">
+          <div class="input-group form-control-group">
+            <input type="text" [(ngModel)]="category.subject" [disabled]="preview" nbInput fullWidth>
+            <div class="input-group-addon" nbTooltip="delete">
+              <nb-icon *ngIf="evaluation.evaCategories.length > 1" status="danger" icon="minus-square-outline"
+                class="text-light-gray" class="link" (click)="deleteTopic(j,'category')">
+              </nb-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button nbButton size="small" status="success" (click)="addTopic(dialog,'category')"
+        style="margin-top:10px;margin-left: 10px;" [disabled]="preview">ADD TOPIC</button>
+      <div class="text-gray text-right">
+        <span><b>รวมคะแนนเต็ม</b></span>
+        <span class="text-green"><b>{{ sumScore() }}</b></span>
+        <span>คะแนน</span>
+      </div>
+      <!-- Summary -->
+      <div>
+        <div class="row col-lg-6">
+          <div class="form-control-group">
+            <label><b>ระดับคะแนน / Rank </b><span class="text-red">*</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-control-group">
+              <label>{{ evaluation.rank.options[0].subject }}
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[0].min" type="number" placeholder="Min" nbInput
+              fullWidth>
+          </div>
+          -
+          <div class="col-md-2 col-lg-2">
+            <input disabled [(ngModel)]="evaluation.rank.options[0].max" type="number" placeholder="Max" nbInput fullWidth>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-control-group">
+              <label>{{ evaluation.rank.options[1].subject }}
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[1].min" type="number" placeholder="Min" nbInput
+              fullWidth>
+          </div>
+          -
+          <div class="col-md-2 col-lg-2">
+            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[1].max" type="number" placeholder="Max" nbInput
+              fullWidth>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-control-group">
+              <label>{{ evaluation.rank.options[2].subject }}
+              </label>
+            </div>
+          </div>
+          <div class="col-md-2 col-lg-2">
+            <input disabled [(ngModel)]="evaluation.rank.options[2].min" type="number" placeholder="Min" nbInput fullWidth>
+          </div>
+          -
+          <div class="col-md-2 col-lg-2">
+            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[2].max" type="number" placeholder="Max" nbInput
+              fullWidth>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <small class="text-red-right">{{ sErrorCheck }}</small>
+    <nb-card-footer>
+      <button nbButton size="small" ghost [routerLink]="'/setting/evaluation'">BACK</button>
+      <button nbButton size="small" status="success" (click)="save()" [disabled]="preview">SAVE</button>
+    </nb-card-footer>
+  </nb-card>
+</div>
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <label class="label">Please input field name</label></nb-card-header>
+    <nb-card-body>
+      <div *ngIf="createTopic === 'basic'" class="form-control-group">
+        <label class="label">Basic name<span style="color:red">*</span></label>
+        <input type="text" [(ngModel)]="fieldName" nbInput fullWidth placeholder="field name">
+      </div>
+      <div *ngIf="createTopic === 'category'" class="form-control-group">
+        <label class="label">Category name<span style="color:red">*</span></label>
+        <input type="text" [(ngModel)]="fieldName" nbInput fullWidth placeholder="field name">
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+      <button nbButton status="success" (click)="createField()" [disabled]="!fieldName">OK</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

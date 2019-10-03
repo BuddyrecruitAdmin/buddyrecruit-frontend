@@ -91,6 +91,8 @@ import { AuthorizeListComponent } from './authorize/authorize-list/authorize-lis
 import { AuthorizeDetailComponent } from './authorize/authorize-detail/authorize-detail.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RejectStageComponent } from './reject-stage/reject-stage.component';
+import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
+import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 
 @NgModule({
   declarations: [
@@ -112,6 +114,8 @@ import { RejectStageComponent } from './reject-stage/reject-stage.component';
     AuthorizeDetailComponent,
     DashboardComponent,
     RejectStageComponent,
+    EvaluationDetailComponent,
+    EvaluationListComponent,
   ],
   imports: [
     CommonModule,

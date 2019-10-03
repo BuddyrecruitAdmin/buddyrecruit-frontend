@@ -155,4 +155,11 @@ export const MESSAGE = {
   145: "Please complete all education fields",
   146: "Please complete all workexeperience fields",
   147: "Please complete all language fields",
+  148: "Please enter name evaluation form",
+  149: "Please complete data in basic applicantion information",
+  150: "Please complete data in evaluation category",
+  151: "Min and Max cannot be equal",
+  152: "Max score must be greater than min",
+  153: "Gabs must be 1 point",
+  154: "Please enter new name of evaluation",
 };

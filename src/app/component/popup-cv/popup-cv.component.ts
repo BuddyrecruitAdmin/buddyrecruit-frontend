@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PopupCVService } from './popup-cv.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId,getCandidateId,setCandidateId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -44,8 +44,8 @@ export class PopupCvComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.flowId = getFlowId();
-    setFlowId();
+    this.flowId = getCandidateId();
+    setCandidateId();
     this.editable = false;
     this.buttonText = 'edit';
     this.loading = true;
@@ -71,7 +71,6 @@ export class PopupCvComponent implements OnInit {
   }
 
   getList() {
-    this.flowId = "5d6795dcbb9aa2080c13a703";
     this.degreeMaster = [];
     this.service.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {

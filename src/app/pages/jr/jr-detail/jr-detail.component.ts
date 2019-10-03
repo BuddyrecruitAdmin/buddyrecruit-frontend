@@ -36,10 +36,10 @@ export class JrDetailComponent implements OnInit {
   touchedCap: boolean;
   touchedOn: boolean;
   emailCheck: boolean;
-  modeSelect: boolean;
   role: any;
   action: any;
   JobPosition: DropDownValue[];
+  Evaluation: DropDownValue[];
   sErrorPosition: string;
   sErrorStart: string;
   sErrorEnd: string;
@@ -47,6 +47,7 @@ export class JrDetailComponent implements OnInit {
   sErrorCheck: string;
   sErrorCap: string;
   checkPreview: boolean;
+  jobStatus: any;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -62,43 +63,62 @@ export class JrDetailComponent implements OnInit {
 
   ngOnInit() {
     this.initialModel();
+    this.initialEvaluation();
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this._id = params.id;
-        this.modeSelect = false;
         this.duplicateCheck = false;
         this.editCheck = false;
+        this.emailCheck = false;
+        this.jobDB = false;
+        this.jobStatus = undefined;
         if (params.action === State.Edit) {
           this.state = State.Edit;
-          this.emailCheck = false;
-          this.jobDB = false;
+          this.initialDropDown();
           this.getDetailList();
         }
         if (params.action === "duplicate") {
           this.state = "duplicate";
-          this.emailCheck = false;
-          this.jobDB = false;
+          this.initialDropDown();
           this.getDetailList();
         }
         if (params.action === "preview") {
+          this.state = "preview";
           this.checkPreview = true;
-          this.emailCheck = false;
-          this.jobDB = false;
+          this.initialDropDown();
           this.getDetailList();//preview
         }
       } else {
         this.state = State.Create;
-        this.modeSelect = true;
         this.jr.requiredExam = false;
         this.emailCheck = false;
         this.jobDB = false;
         this.jr.capacity = 0;
+        this.jobStatus = "notUsed";
         this.initialDropDown();
-        // console.log(this.state);
-        // this.jr.remark = "";
       }
     });
 
+  }
+
+  initialEvaluation() {
+    this.Evaluation = [];
+    this.Evaluation.push({
+      label: "- Select Evaluation -",
+      value: undefined
+    });
+    this.service.getEvaluationList().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.forEach(element => {
+            this.Evaluation.push({
+              label: element.name,
+              value: element._id
+            })
+          });
+        }
+      }
+    })
   }
 
   initialModel(): any {
@@ -114,7 +134,8 @@ export class JrDetailComponent implements OnInit {
       requiredExam: undefined,
       refSource: undefined,
       remark: "",
-      refStatus: undefined
+      refStatus: undefined,
+      refEvaluation: undefined
     }
   }
 
@@ -124,7 +145,7 @@ export class JrDetailComponent implements OnInit {
       label: "- Select JobPosition -",
       value: undefined
     });
-    this.service.getJopPositionList().subscribe(response => {
+    this.service.getJopPositionList(this.jobStatus).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           console.log(response.data);
@@ -155,7 +176,6 @@ export class JrDetailComponent implements OnInit {
               this.duplicateCheck = true;
             }
           }
-
           this.selectedCheck();
         }
       }
@@ -163,7 +183,6 @@ export class JrDetailComponent implements OnInit {
   }
 
   selectedCheck() {
-    console.log(this.jr.refSource);
     this.jr.refSource.map(element => {
       if (element.name === "Email") {
         this.emailCheck = true;
@@ -177,7 +196,6 @@ export class JrDetailComponent implements OnInit {
   save() {
     if (this.validation()) {
       const request = this.setRequest();
-      console.log(this.state)
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: '40%',
         data: { type: 'C' }
@@ -204,7 +222,6 @@ export class JrDetailComponent implements OnInit {
               }
             });
           } else if (this.state === "duplicate") {
-            console.log(request)
             this.service.create(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
@@ -276,7 +293,6 @@ export class JrDetailComponent implements OnInit {
       this.touchedCap = true;
       isValid = false;
     }
-
     return isValid;
   }
 
@@ -285,8 +301,6 @@ export class JrDetailComponent implements OnInit {
       this.jr._id = undefined;
     }
     const request = _.cloneDeep(this.jr);
-    console.log(request);
-
     return request;
   }
 

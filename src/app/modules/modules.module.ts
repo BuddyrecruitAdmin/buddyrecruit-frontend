@@ -72,6 +72,8 @@ import {
   MatTreeModule,
 } from '@angular/material'
 import { ComponentsModule } from '../component/component.module';
+import { ForgotComponent } from './forgot/forgot.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 @NgModule({
   imports: [
     ModulesRoutingModule,
@@ -141,7 +143,9 @@ import { ComponentsModule } from '../component/component.module';
     LoginComponent,
     LogoutComponent,
     AppFormComponent,
-    TranslatePipe
+    TranslatePipe,
+    ForgotComponent,
+    ChangePasswordComponent
   ],
   providers: [
     TranslateService,

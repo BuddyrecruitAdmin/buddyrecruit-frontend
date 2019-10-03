@@ -7,6 +7,7 @@ import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
+import * as _ from 'lodash';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 
 @Component({
@@ -26,7 +27,8 @@ export class PopupEvaluationComponent implements OnInit {
   loading: boolean;
   result: boolean = false;
   evaluation: any;
-
+  scoring: any;
+  editable: boolean;
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupEvaluationComponent>,
@@ -39,180 +41,55 @@ export class PopupEvaluationComponent implements OnInit {
     this.candidateId = getCandidateId();
     setFlowId();
     setCandidateId();
-    this.innerWidth = window.innerWidth * 0.8;
+    this.innerWidth = window.innerWidth * 0.55;
     this.innerHeight = window.innerHeight * 0.9;
   }
 
   ngOnInit() {
-    this.evaluation = {
-      basicApplicants: [
-        {
-          topic: 'การศึกษา',
-          choices: [
-            {
-              label: 'ตรงตามสายงาน',
-              value: 1
-            },
-            {
-              label: 'ไม่ตรงตามสายงาน',
-              value: 2
-            }
-          ],
-          selected: null,
-          isDeleted: false
-        },
-        {
-          topic: 'ประสบการณ์',
-          choices: [
-            {
-              label: 'ตรงตามสายงาน',
-              value: 1
-            },
-            {
-              label: 'ไม่ตรงตามสายงาน',
-              value: 2
-            }
-          ],
-          selected: null,
-          isDeleted: false
-        },
-        {
-          topic: 'ประวัติการเปลี่ยนงาน',
-          choices: [
-            {
-              label: 'ไม่ค่อยเปลี่ยนงาน',
-              value: 1
-            },
-            {
-              label: 'เปลี่ยนงานบ่อย',
-              value: 2
-            }
-          ],
-          selected: null,
-          isDeleted: false
-        },
-        {
-          topic: 'ที่พัก',
-          choices: [
-            {
-              label: 'ใกล้บริษัท',
-              value: 1
-            },
-            {
-              label: 'ไกลบริษัท',
-              value: 2
-            }
-          ],
-          selected: null,
-          isDeleted: false
-        },
-        {
-          topic: 'ประสบการณ์ด้าน ISO',
-          choices: [
-            {
-              label: 'ดี',
-              value: 1
-            },
-            {
-              label: 'พอใช้',
-              value: 2
-            },
-            {
-              label: 'ไม่ดี',
-              value: 3
-            }
-          ],
-          selected: null,
-          isDeleted: false
-        }
-      ],
-      categories: [
-        {
-          topic: 'ท่าทาง บุคลิกภาพ',
-          selected: null
-        },
-        {
-          topic: 'การตรงต่อเวลา',
-          selected: null
-        },
-        {
-          topic: 'ความละเอียดรอบคอบ',
-          selected: null
-        },
-        {
-          topic: 'ทัศนคติต่อ ตนเอง ผู้อื่น และต่องาน',
-          selected: null
-        },
-        {
-          topic: 'การตอบคำถามอย่างมีเหตุผล',
-          selected: null
-        },
-      ],
-      rank: {
-        choices: [
-          {
-            label: 'ผ่าน และทาการนัดต้นสังกัดสัมภาษณ์',
-            value: 1,
-            minScore: 30,
-            maxScore: 50,
-          },
-          {
-            label: 'รอเปรียบเทียบผู้สมัครคนอื่นๆ',
-            value: 2,
-            minScore: 26,
-            maxScore: 29,
-          },
-          {
-            label: 'ไม่ผ่านการสัมภาษณ์',
-            value: 3,
-            minScore: 0,
-            maxScore: 25,
-          }
-        ],
-        selected: null
+    this.scoring = [
+      {
+        label: 'ดีมาก',
+        value: 5
       },
-      scoring: [
-        {
-          label: 'ดีมาก',
-          value: 5
-        },
-        {
-          label: 'ดี',
-          value: 4
-        },
-        {
-          label: 'ปานกลาง',
-          value: 3
-        },
-        {
-          label: 'พอใช้',
-          value: 2
-        },
-        {
-          label: 'ไม่ดี',
-          value: 1
-        },
-      ],
-      remark: '',
-      score: null
-    };
-
-    this.loading = true;
+      {
+        label: 'ดี',
+        value: 4
+      },
+      {
+        label: 'ปานกลาง',
+        value: 3
+      },
+      {
+        label: 'พอใช้',
+        value: 2
+      },
+      {
+        label: 'ไม่ดี',
+        value: 1
+      },
+    ],
+      this.loading = true;
     this.candidateName = '';
+    this.editable = false;
     this.jrName = '';
     if (this.flowId) {
+      this.getDetailPreview();
+    } else if (this.candidateId) {
+      this.editable = true;
       this.getDetail();
     } else {
       this.ref.close();
     }
   }
 
-  getDetail() {
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+  getDetailPreview() {
+    this.candidateService.getDetailPreview(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.candidateName = this.utilitiesService.setFullname(response.data);
-        this.jrName = response.data.candidateFlow.refJR.refJD.position;
-        this.stageId = response.data.candidateFlow.refStage._id;
+        // this.candidateName = this.utilitiesService.setFullname(response.data);
+        // this.jrName = response.data.candidateFlow.refJR.refJD.position;
+        // this.stageId = response.data.candidateFlow.refStage._id;
+        console.log(response.data)
+        this.evaluation = response.data;
       } else {
         this.showToast('danger', 'Error Message', response.message);
         this.ref.close();
@@ -221,21 +98,52 @@ export class PopupEvaluationComponent implements OnInit {
     });
   }
 
-  sumScore(): number {
+  getDetail() {
+    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.candidateName = this.utilitiesService.setFullname(response.data);
+        // this.jrName = response.data.candidateFlow.refJR.refJD.position;
+        // this.stageId = response.data.candidateFlow.refStage._id;
+        response.data.map(element => {
+          if (this.role._id === element.createdInfo.refUser) {
+            this.evaluation = element;
+          }
+        })
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.ref.close();
+      }
+      this.loading = false;
+    });
+  }
+
+
+  sumScore(event, index) {
     let score = 0;
-    this.evaluation.categories.forEach(element => {
+    this.evaluation.evaCategories[index].selected = event;
+    this.evaluation.evaCategories.forEach(element => {
       if (element.selected) {
         score += element.selected;
       }
     });
-    this.evaluation.score = score;
-    return score;
+    this.evaluation.point = score;
+    this.checkRank();
+  }
+
+  checkRank() {
+    if (this.evaluation.point <= this.evaluation.rank.options[2].max) {
+      this.evaluation.rank.selected = 3;
+    } else if (this.evaluation.point <= this.evaluation.rank.options[1].max) {
+      this.evaluation.rank.selected = 2;
+    } else {
+      this.evaluation.rank.selected = 1;
+    }
   }
 
   validation(): boolean {
     let isValid = true;
     let invalid: any;
-    invalid = this.evaluation.basicApplicants.find(element => {
+    invalid = this.evaluation.basicApplications.find(element => {
       if (!element.selected) {
         return element;
       }
@@ -243,7 +151,7 @@ export class PopupEvaluationComponent implements OnInit {
     if (invalid) {
       return false;
     }
-    invalid = this.evaluation.categories.find(element => {
+    invalid = this.evaluation.evaCategories.find(element => {
       if (!element.selected) {
         return element;
       }
@@ -259,22 +167,45 @@ export class PopupEvaluationComponent implements OnInit {
 
   save() {
     this.loading = true;
+    console.log(this.evaluation)
     const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
+    if (this.validation()) {
+      // if (this.flowId) {
+      //   this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+      //     if (response.code === ResponseCode.Success) {
+      //       this.showToast('success', 'Success Message', response.message);
+      //     } else {
+      //       this.showToast('danger', 'Error Message', response.message);
+      //     }
+      //     this.loading = false;
+      //     this.ref.close(true);
+      //   });
+      // } else {
+      //   this.candidateService.Edit(this.candidateId, request).subscribe(response => {
+      //     if (response.code === ResponseCode.Success) {
+      //       this.showToast('success', 'Success Message', response.message);
+      //     } else {
+      //       this.showToast('danger', 'Error Message', response.message);
+      //     }
+      //     this.ref.close(true);
+      //   });
+      // }
+      this.candidateService.Edit(this.candidateId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.ref.close(true);
+      });
+    } else {
       this.loading = false;
-      this.ref.close(true);
-    });
+      this.showToast('danger', 'Error Message', 'Please complete all required fields');
+    }
   }
 
   setRequest(): any {
-    const data = {
-
-    };
+    const data = _.cloneDeep(this.evaluation);
     return data;
   }
 

@@ -36,7 +36,7 @@
         [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
         <div *ngIf="!items.length && !loading" class="text-center text-gray">No data found !</div>
         <div *ngIf="items.length">
-          <nb-card *ngFor="let item of items" accent="success">
+          <nb-card *ngFor="let item of items;let i = index;" accent="success">
             <nb-card-header>
               <div class="title">
                 <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
@@ -110,15 +110,19 @@
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Score</label>
-                        <span>{{ item.pendingInterviewInfo?.location?.name || '-' }}</span>
+                        <span>{{ item.score || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Avg. Score</label>
+                        <span>{{ item.avg || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Result</label>
-                        <span>{{ item.pendingInterviewInfo?.passed || '-' }}</span>
+                        <span>{{ item.result || '-'}}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Remark</label>
-                        <span>{{ item.pendingInterviewInfo?.remark || '-' }}</span>
+                        <span>{{ item.comment || '-' }}</span>
                       </div>
                     </div>
                   </div>
