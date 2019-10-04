@@ -1,0 +1,32 @@
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+      <small class="status text-gray m-0">
+        {{ jrName }}
+      </small>
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="dialog-body">
+    <div class="text-group text-center">
+      <label class="label">Remain</label>
+      <span [ngClass]="{ 'text-green': remain > 0, 'text-red': remain === 0 }"><b>{{ remain }}</b></span>
+      <label class="label m-l-5">/ Capacity</label>
+      <span>{{ capacity }}</span>
+    </div>
+    <nb-radio-group [(ngModel)]="substitution">
+      <nb-radio [value]="false" [disabled]="!remain">Shortlist</nb-radio>
+      <nb-radio [value]="true">Substitute</nb-radio>
+    </nb-radio-group>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+    <button nbButton status="success" (click)="toSignContract()">
+      TO SIGN CONTRACT
+    </button>
+  </nb-card-footer>
+</nb-card>

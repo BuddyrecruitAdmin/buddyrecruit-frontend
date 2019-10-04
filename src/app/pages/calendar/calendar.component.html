@@ -1,0 +1,144 @@
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  Your working days is not configured to calendar!
+</nb-alert>
+<nb-tabset>
+  <nb-tab tabTitle="Calendar" tabIcon="calendar-outline">
+    <nb-card>
+      <nb-card-header>
+        <div class="pull-left">
+          <label class="label">Available Days :</label>
+          <nb-radio-group [(ngModel)]="byWorkingDays" class="inline m-l-10" (valueChange)="changeCalendarType($event)">
+            <nb-radio [value]="true">By Working Days</nb-radio>
+            <nb-radio [value]="false">Customize</nb-radio>
+          </nb-radio-group>
+        </div>
+        <div class="pull-right">
+          <button *ngIf="!byWorkingDays" nbButton status="success" (click)="callPopupAvailableDate()"
+            [disabled]="!dialogDate">
+            Add Available Date
+          </button>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row text-center">
+          <div class="col-md-4">
+            <div class="btn-group">
+              <button nbButton ghost status="success" size="small" nbTooltip="Previous" mwlCalendarPreviousView
+                [view]="view" [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()"
+                [excludeDays]="excludeDays">
+                <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+              </button>
+              <button nbButton status="success" size="small" mwlCalendarToday [(viewDate)]="viewDate">
+                Today
+              </button>
+              <button nbButton ghost status="success" size="small" nbTooltip="Next" mwlCalendarNextView [view]="view"
+                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()" [excludeDays]="excludeDays">
+                <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
+          </div>
+          <div class="col-md-4">
+            <div class="btn-group">
+              <button nbButton status="primary" size="small" (click)="setView(CalendarView.Month)"
+                [class.active]="view === CalendarView.Month">
+                Month
+              </button>
+              <button nbButton status="primary" size="small" (click)="setView(CalendarView.Week)"
+                [class.active]="view === CalendarView.Week">
+                Week
+              </button>
+              <button nbButton status="primary" size="small" (click)="setView(CalendarView.Day)"
+                [class.active]="view === CalendarView.Day">
+                Day
+              </button>
+            </div>
+          </div>
+        </div>
+        <br />
+        <div [ngSwitch]="view">
+          <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+            [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+            (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)"
+            [excludeDays]="excludeDays" [cellTemplate]="customCellTemplate"
+            (beforeViewRender)="beforeMonthViewRender($event)">
+          </mwl-calendar-month-view>
+          <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+            [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+            (eventTimesChanged)="eventTimesChanged($event)" [excludeDays]="excludeDays">
+          </mwl-calendar-week-view>
+          <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
+            [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+            (eventTimesChanged)="eventTimesChanged($event)">
+          </mwl-calendar-day-view>
+        </div>
+        <div class="text-gray m-t-10">
+          <span class="circle circle-success"></span>
+          <small>Available</small>
+          <span class="circle circle-danger m-l-10"></span>
+          <small>Unavailable</small>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-tab>
+
+  <nb-tab tabTitle="Working Days" tabIcon="clock-outline" [disabled]="!byWorkingDays">
+    <nb-card>
+      <nb-card-header>
+        <div class="title">
+          Working Days
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <div *ngFor="let workingDay of workingDays; let wIndex = index" class="m-b-20">
+          <mat-checkbox [(ngModel)]="workingDay.isActive">{{ workingDay.day }}</mat-checkbox>
+          <div style="padding-left: 1rem;">
+            <div *ngFor="let period of workingDay.periods; let pIndex = index" class="form-control-group">
+              <ngb-timepicker [(ngModel)]="period.startTime" [minuteStep]="minuteStep" [spinners]="false" class="inline"
+                [disabled]="!workingDay.isActive"></ngb-timepicker>
+              <span class="label m-l-10 m-r-10">To</span>
+              <ngb-timepicker [(ngModel)]="period.endTime" [minuteStep]="minuteStep" [spinners]="false" class="inline"
+                [disabled]="!workingDay.isActive"></ngb-timepicker>
+              <nb-icon *ngIf="workingDay.periods.length > 1 && workingDay.isActive" icon="minus-square-outline"
+                class="link text-red m-l-5" (click)="removePeriod(wIndex, pIndex)">
+              </nb-icon>
+              <nb-icon *ngIf="workingDay.periods.length - 1 === pIndex && workingDay.isActive"
+                icon="plus-square-outline" class="link m-l-5" (click)="addPeriod(wIndex)"></nb-icon>
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton status="success" nbTooltip="save" (click)="saveWorkingDays()">
+          <nb-icon icon="save-outline"></nb-icon> Save
+        </button>
+      </nb-card-footer>
+    </nb-card>
+  </nb-tab>
+</nb-tabset>
+
+<ng-template #customCellTemplate let-day="day" let-locale="locale">
+  <div class="cal-cell-top">
+    <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+  </div>
+  <div class="cell-totals">
+    <span *ngFor="let group of day.eventGroups" class="badge badge-{{ group[0] }}">
+      {{ group[1].length }}
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #dialog2 let-data let-ref="dialogRef">
+  <nb-card [style.max-height.px]="innerHeight">
+    <nb-card-header>Interview Info</nb-card-header>
+    <nb-card-body>
+      <div class="text-group">
+        <label class="label">Job Position</label>
+        <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-template>

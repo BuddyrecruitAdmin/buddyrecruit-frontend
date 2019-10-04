@@ -1,0 +1,37 @@
+<nb-card *ngIf="previewEmail" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="box-header">
+      <h5 class="box-title">{{ mailOptions.subject }}
+        <small class="pull-right">
+          <mat-checkbox [(ngModel)]="sendEmail">Send Email</mat-checkbox>
+        </small>
+      </h5>
+    </div>
+    <div class="user-block">
+      <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
+      <span class="username">
+        {{ mailOptions.from }}
+        <small class="pull-right">{{ utilitiesService.convertDateTime(today) }}</small>
+      </span>
+      <span class="description">
+        <strong>to:</strong> {{ mailOptions.to }}
+      </span>
+      <span *ngIf="mailOptions.cc.length" class="description">
+        <strong>cc:</strong> {{ mailOptions.cc }}
+      </span>
+      <span *ngIf="mailOptions.bcc.length" class="description">
+        <strong>bcc:</strong> {{ mailOptions.bcc }}
+      </span>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="dialog-body">
+    <angular-editor placeholder="'Enter text here...'" [(ngModel)]="mailOptions.html"></angular-editor>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="footer-collapse">
+      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+    </div>
+    <button nbButton status="success" (click)="nextStep()">{{ buttonName }}</button>
+  </nb-card-footer>
+</nb-card>

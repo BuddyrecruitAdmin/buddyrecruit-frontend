@@ -142,7 +142,7 @@ export class JrDetailComponent implements OnInit {
   initialDropDown() {
     this.JobPosition = [];
     this.JobPosition.push({
-      label: "- Select JobPosition -",
+      label: "- Select Job Position -",
       value: undefined
     });
     this.service.getJopPositionList(this.jobStatus).subscribe(response => {

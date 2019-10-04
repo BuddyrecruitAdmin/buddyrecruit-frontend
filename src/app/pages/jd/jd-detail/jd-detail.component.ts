@@ -183,7 +183,7 @@ export class JdDetailComponent implements OnInit {
   initialDropdown() {
     this.positionMaster = [];
     this.positionMaster.push({
-      label: "- Select email Type -",
+      label: "- Select Position -",
       value: undefined
     });
     this.service.getPositionList().subscribe(response => {
@@ -202,7 +202,7 @@ export class JdDetailComponent implements OnInit {
     if (this.role.refHero.isAdmin === true) {
       this.departMentAdmin = [];
       this.departMentAdmin.push({
-        label: "- Select department Type -",
+        label: "- Select Department -",
         value: undefined
       });
       this.divisionAll = [];

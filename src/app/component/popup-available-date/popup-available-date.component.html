@@ -1,0 +1,46 @@
+<nb-card [style.max-height.px]="innerHeight" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="candidateName">Available Date</label>
+      <!-- <small class="status text-gray m-0"></small> -->
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="form-control-group">
+      <label class="label">Date
+        <small class="text-gray">(click for change date)</small>
+      </label>
+      <nb-datepicker #datepicker format="dd/MM/yyyy" (dateChange)="changeDate($event)"></nb-datepicker>
+      <input [nbDatepicker]="datepicker" [(ngModel)]="date" nbInput fullWidth placeholder="dd/mm/yyyy">
+    </div>
+    <label class="label">Time</label>
+    <div *ngFor="let period of periods; let i = index" class="form-control-group">
+      <ngb-timepicker [(ngModel)]="period.startTime" [minuteStep]="minuteStep" [spinners]="false" class="inline"
+        [disabled]="disabled">
+      </ngb-timepicker>
+      <span class="label m-l-10 m-r-10">To</span>
+      <ngb-timepicker [(ngModel)]="period.endTime" [minuteStep]="minuteStep" [spinners]="false" class="inline"
+        [disabled]="disabled">
+      </ngb-timepicker>
+      <nb-icon *ngIf="!disabled" icon="minus-square-outline" class="link text-red m-l-5"
+        (click)="removePeriod(i)">
+      </nb-icon>
+    </div>
+    <div *ngIf="periods.length < 5 && !disabled" class="text-center">
+      <button nbButton status="success" size="tiny" (click)="addPeriod()">
+        <nb-icon icon="plus-outline" nbTooltip="Add Available Time"></nb-icon>
+      </button>
+    </div>
+    <small *ngIf="disabled" class="text-red">
+      * This day have a Interview Appointment, Can't edit.
+    </small>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="default" (click)="ref.close(result)">Cancel</button>
+    <button *ngIf="!disabled" nbButton status="success" (click)="save()" [disabled]="!isVisibleSave()">Save</button>
+  </nb-card-footer>
+</nb-card>

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -15,6 +15,7 @@ import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup
 import { PopupExamInfoComponent } from '../../../component/popup-exam-info/popup-exam-info.component';
 import { PopupExamScoreComponent } from '../../../component/popup-exam-score/popup-exam-score.component';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
+import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -186,20 +187,19 @@ export class ExamDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
-      data: { type: 'C', content: 'Do you want to ' + button.button + '?' }
-    });
-    confirm.afterClosed().subscribe(result => {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    setButtonId(button._id);
+    this.dialogService.open(PopupPreviewEmailComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
       if (result) {
-        this.candidateService.candidateFlowApprove(item._id, this.refStageId, button._id).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.search();
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
+        this.search();
       }
     });
   }

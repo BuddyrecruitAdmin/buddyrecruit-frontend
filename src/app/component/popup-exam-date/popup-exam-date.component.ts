@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import { MatDialog } from '@angular/material';
-import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
+import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
+import { LocationService } from '../../pages/setting/location/location.service'
+import { DropDownValue } from '../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-popup-exam-date',
@@ -19,22 +21,25 @@ export class PopupExamDateComponent implements OnInit {
   flowId: any;
   candidateId: any;
   stageId: any;
+  buttonId: any;
   innerWidth: any;
   innerHeight: any;
   candidateName: string;
   jrName: string;
-  examDate: Date;
-  examTime: any;
+  date: Date;
+  time: any;
+  location: any;
+  locations: DropDownValue[];
   loading: boolean;
-  result: boolean = false;
   canApprove: boolean;
 
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupExamDateComponent>,
     private utilitiesService: UtilitiesService,
-    public matDialog: MatDialog,
+    private dialogService: NbDialogService,
     private toastrService: NbToastrService,
+    private locationService: LocationService,
   ) {
     this.role = getRole();
     this.flowId = getFlowId();
@@ -50,34 +55,64 @@ export class PopupExamDateComponent implements OnInit {
     this.canApprove = false;
     this.candidateName = '';
     this.jrName = '';
-    this.examDate = null;
-    this.examTime = null;
+    this.date = null;
+    this.time = null;
+    this.location = null;
+    this.locations = [];
     if (this.flowId) {
+      this.getLocation();
       this.getDetail();
     } else {
       this.ref.close();
     }
   }
 
+  getLocation() {
+    this.locations = [];
+    this.locations.push({
+      label: '- Select Location -',
+      value: null,
+    });
+    this.locationService.getList().subscribe(response => {
+      const locations = response.data.filter(element => {
+        return element.active && !element.isDeleted;
+      });
+      if (locations.length) {
+        locations.forEach(element => {
+          this.locations.push({
+            label: element.name,
+            value: element._id,
+          })
+        });
+        const location = locations.find(element => {
+          return element.isDefault;
+        });
+        if (location) {
+          this.location = location._id;
+        }
+      }
+    });
+  }
+
   getDetail() {
+    this.loading = true;
     this.candidateService.getDetail(this.candidateId).subscribe(response => {
+      this.loading = false;
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
+
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.examInfo.date)) {
-          this.examDate = new Date(response.data.candidateFlow.examInfo.date);
-          this.examTime = {
-            hour: this.examDate.getHours() || 0,
-            minute: this.examDate.getMinutes() || 0,
-            second: 0
-          }
+          this.location = response.data.candidateFlow.examInfo.refLocation._id || this.location;
+          this.date = new Date(response.data.candidateFlow.examInfo.date);
+          this.time = this.utilitiesService.convertDateToTimePicker(this.date);
         }
         if (response.data.candidateFlow.refStage.name === 'Appointment for Exam') {
           this.canApprove = true;
         }
       }
-      this.loading = false;
     });
   }
 
@@ -100,28 +135,42 @@ export class PopupExamDateComponent implements OnInit {
     const request = this.setRequest();
     this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.candidateService.candidateFlowApprove(this.flowId, this.stageId, request).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            if (response.code === ResponseCode.Success) {
-              this.showToast('success', 'Success Message', response.message);
-            } else {
-              this.showToast('danger', 'Error Message', response.message);
-            }
-            this.loading = false;
-            this.ref.close(true);
-          }
-        });
+        this.previewEmail();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.ref.close();
       }
     });
   }
 
+  previewEmail() {
+    setFlowId(this.flowId);
+    setCandidateId(this.candidateId);
+    setButtonId(this.buttonId);
+    this.dialogService.open(PopupPreviewEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      setButtonId();
+      if (result) {
+        this.ref.close(true);
+      }
+      this.loading = false;
+    });
+  }
+
   setRequest(): any {
-    let date = new Date(this.examDate);
-    date.setHours(this.examTime.hour);
-    date.setMinutes(this.examTime.minute);
+    let date = new Date(this.date);
+    date.setHours(this.time.hour);
+    date.setMinutes(this.time.minute);
     const data = {
       examInfo: {
         date: date,
+        refLocation: this.location,
         flag: true
       }
     };

@@ -22,6 +22,7 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
 import { CandidateListComponent } from './candidate/candidate-list/candidate-list.component';
 import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
 import { HomeComponent } from './home/home.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,12 @@ const routes: Routes = [
         path: 'home',
         component: HomeComponent,
       },
+      // Calendar
+      {
+        path: 'calendar',
+        component: CalendarComponent,
+      },
+      // Candidate
       {
         path: 'candidate/list',
         component: CandidateListComponent,

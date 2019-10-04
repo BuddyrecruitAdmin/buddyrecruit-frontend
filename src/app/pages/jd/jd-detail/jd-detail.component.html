@@ -34,7 +34,7 @@
           <div class="col-md-12">
             <div class="form-control-group">
               <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
-              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a email"
+              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a keyword"
                 placeholder="+" [ngModelOptions]="{ standalone: true }">
               </tag-input>
               <small *ngIf="touched" class="text-red">{{ sErrorKey }}</small>

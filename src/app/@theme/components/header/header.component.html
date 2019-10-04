@@ -3,7 +3,7 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo">Buddy Recruit</a>
+    <a *ngIf="!userPictureOnly" class="logo">Buddy Recruit</a>
   </div>
   <!-- <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
@@ -12,18 +12,21 @@
 
 <div class="header-container">
   <nb-actions size="small">
-
-    <!-- <nb-action class="control-item">
-      <nb-search type="rotate-layout"></nb-search>
-    </nb-action> -->
-    <!-- <nb-action class="control-item" icon="email-outline"></nb-action> -->
-    <!-- <nb-action class="control-item" icon="settings-2-outline"></nb-action> -->
-    <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [nbContextMenu]="userMenu"
-               [onlyPicture]="userPictureOnly"
-               [name]="user?.name"
-               [title]="user?.title"
-               [picture]="user?.picture">
+    <nb-action class="control-item">
+      <nb-search type="rotate-layout" nbTooltip="Search" nbTooltipPlacement="bottom"></nb-search>
+    </nb-action>
+    <nb-action class="control-item">
+      <nb-icon icon="calendar-outline" class="link" (click)="gotoCalendar()" nbTooltip="Calendar"
+        nbTooltipPlacement="bottom"></nb-icon>
+      <nb-badge text="!" status="danger" position="top right" style="top: -8px; right: 10px;"></nb-badge>
+    </nb-action>
+    <nb-action class="control-item">
+      <nb-icon icon="email-outline" class="link" nbTooltip="Notification" nbTooltipPlacement="bottom"></nb-icon>
+      <nb-badge text="2" status="danger" position="top right" style="top: -8px; right: 8px;"></nb-badge>
+    </nb-action>
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']">
+      <nb-user [nbContextMenu]="userMenu" [onlyPicture]="userPictureOnly" [name]="user?.name" [title]="user?.title"
+        [picture]="user?.picture">
       </nb-user>
     </nb-action>
   </nb-actions>

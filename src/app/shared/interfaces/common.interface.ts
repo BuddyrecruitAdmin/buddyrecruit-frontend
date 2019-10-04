@@ -23,7 +23,7 @@ export interface Authentication {
 
 export interface DropDownValue {
   label: string;
-  value: string;
+  value: any;
 }
 
 export interface DropDownGroup {

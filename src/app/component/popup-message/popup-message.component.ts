@@ -24,7 +24,7 @@ export class PopupMessageComponent implements OnInit {
       case "C": { // Confirmation
         this.data.title = this.data.title || "Confirmation";
         this.data.content = this.data.content || "Are you sure?";
-        this.data.btnText = this.data.btnText || "OKAY";
+        this.data.btnText = this.data.btnText || "YES";
         break;
       }
       case "I": { // Information

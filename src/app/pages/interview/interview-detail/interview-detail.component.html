@@ -90,17 +90,17 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <label class="label text-light-gray m-r-5">Appointment Info</label>
-                  <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Appointment Info"
-                    (click)="openPopupAppointmentInfo(item)"></nb-icon>
+                  <label class="label text-light-gray m-r-5">Interview Date</label>
+                  <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Interview Date"
+                    (click)="openPopupInterviewDate(item)"></nb-icon>
                   <div class="m-l-15">
                     <div class="text-group">
-                      <label class="label">Date</label>
-                      <span>{{ utilitiesService.convertDateTime(item.pendingAppointmentInfo?.date) || '-' }}</span>
+                      <label class="label">Interview Location</label>
+                      <span>{{ item.pendingInterviewInfo?.refLocation?.name || '-' }}</span>
                     </div>
                     <div class="text-group">
-                      <label class="label">Location</label>
-                      <span>{{ item.pendingAppointmentInfo?.location?.name || '-' }}</span>
+                      <label class="label">Interview Date</label>
+                      <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.date) || '-' }}</span>
                     </div>
                   </div>
                   <div *ngIf="item.refStage?.name === 'Interview Score'" class="m-t-5">

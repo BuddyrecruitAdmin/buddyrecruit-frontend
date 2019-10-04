@@ -292,4 +292,65 @@ export class UtilitiesService {
     }
     return width;
   }
+
+  convertDateToTimePicker(date: Date): any {
+    let time = {
+      hour: 0,
+      minute: 0,
+      second: 0,
+    };
+    if (this.dateIsValid(date)) {
+      date = new Date(date);
+      time.hour = date.getHours();
+      time.minute = date.getMinutes();
+      time.second = date.getSeconds();
+    }
+    return time;
+  }
+
+  convertTimePickerToDate(time: any, date: Date = new Date()) {
+    date = new Date(date);
+    if (time && time.hour !== undefined && time.minute !== undefined) {
+      date.setHours(time.hour);
+      date.setMinutes(time.minute);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+    }
+    return date;
+  }
+
+  findButtonIdByStage(stageId: any): string {
+    let buttonId;
+    if (stageId) {
+      const role = getRole();
+      if (role && role.refAuthorize && role.refAuthorize.processFlow
+        && role.refAuthorize.processFlow.exam && role.refAuthorize.processFlow.exam.steps.length) {
+        const step = role.refAuthorize.processFlow.exam.steps.find(element => {
+          return element.refStage._id === stageId;
+        });
+        if (step) {
+          buttonId = step._id;
+        }
+      }
+    }
+    return buttonId;
+  }
+
+  getDefaultStartTime(hour: number = 9): Date {
+    let date = new Date();
+    date.setHours(hour);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+  }
+
+  getDefaultEndTime(hour: number = 17): Date {
+    let date = new Date();
+    date.setHours(hour);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+  }
 }

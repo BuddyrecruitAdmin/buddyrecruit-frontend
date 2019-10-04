@@ -30,7 +30,9 @@ import {
   NbProgressBarModule,
   NbChatModule,
   NbBadgeModule,
-  NbPopoverModule
+  NbPopoverModule,
+  NbStepperModule,
+  NbAlertModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -82,6 +84,9 @@ import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 import { FileUploadModule } from 'ng2-file-upload';
 import { TagInputModule } from 'ngx-chips';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PagesComponent } from './pages.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
@@ -104,6 +109,7 @@ import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.
 import { CandidateListComponent } from './candidate/candidate-list/candidate-list.component';
 import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
 import { HomeComponent } from './home/home.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   imports: [
@@ -140,6 +146,8 @@ import { HomeComponent } from './home/home.component';
     NbChatModule,
     NbBadgeModule,
     NbPopoverModule,
+    NbStepperModule,
+    NbAlertModule,
 
     A11yModule,
     CdkStepperModule,
@@ -187,6 +195,11 @@ import { HomeComponent } from './home/home.component';
     ChartsModule,
     TagInputModule,
     FileUploadModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
+    NgbModalModule
   ],
   declarations: [
     PagesComponent,
@@ -210,6 +223,7 @@ import { HomeComponent } from './home/home.component';
     HomeComponent,
     CandidateListComponent,
     CandidateDetailComponent,
+    CalendarComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -45,6 +45,7 @@ export class ExamListComponent implements OnInit {
       divisions: any,
     }
   };
+  showStepper: boolean;
 
   constructor(
     private router: Router,
@@ -56,6 +57,13 @@ export class ExamListComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
+    if (this.devices.isMobile || this.devices.isTablet) {
+      this.isGridLayout = true;
+      this.showStepper = false;
+    } else {
+      this.isGridLayout = false;
+      this.showStepper = true;
+    }
   }
 
   ngOnInit() {
@@ -80,11 +88,6 @@ export class ExamListComponent implements OnInit {
         departments: [],
         divisions: []
       }
-    }
-    if (this.devices.isMobile || this.devices.isTablet) {
-      this.isGridLayout = true;
-    } else {
-      this.isGridLayout = false;
     }
     this.search();
   }
