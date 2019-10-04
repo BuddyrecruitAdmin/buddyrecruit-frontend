@@ -21,6 +21,8 @@
 @import './layout';
 @import './overrides';
 
+@import "../../../../node_modules/angular-calendar/css/angular-calendar.css";
+
 // install the framework and custom global styles
 @include nb-install() {
 
@@ -190,30 +192,37 @@
   }
 
   .form-control {
-    border: 1px solid var(--color-light-gray);
-    border-radius: 8px;
-    height: 36px;
-    min-width: 75px;
+    background-color: #f7f9fc;
+    border-color: #edf1f7;
+    border-style: solid;
+    border-width: 1px;
+    color: #1a2138;
+    font-family: Open Sans, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.5rem;
+    padding: 0.4375rem 1.125rem;
+    -webkit-appearance: none;
+    transition-duration: 0.15s;
+    transition-property: border, background-color, color, box-shadow;
+    transition-timing-function: ease-in;
   }
-  .form-control:focus {
+  .form-control:hover {
     border-color: var(--color-green);
   }
+  .form-control:focus {
+    outline: none;
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 0.375rem #e4e9f2;
+  }
   .form-control[disabled],
-  fieldset[disabled] .form-control {
-    /* background-color: var(--color-light-gray); */
-    background-color: rgba(210, 214, 217, 0.5);
-    color: #000000;
-    cursor: not-allowed;
+  .form-control[readonly] {
+    background-color: #f7f9fc;
+    border-color: #edf1f7;
+    color: #c5cee0;
   }
-  .form-control[disabled]:focus,
-  fieldset[disabled] .form-control:focus {
-    border: 1px solid var(--color-light-gray);
-  }
-  .form-control[readonly],
-  .form-control[readonly]:focus {
-    border: 1px dashed var(--color-light-gray);
-    background-color: inherit;
-    cursor: not-allowed;
+  fieldset {
+    padding: 0;
   }
 
   nb-dialog-container {
@@ -268,6 +277,9 @@
   .content-header .action button {
     vertical-align: top;
   }  
+  .content-header nb-stepper .step-content {
+    display: none;
+  }
 
   // --------------------------------------------------------------------
   // TEXT COLOR
@@ -439,8 +451,8 @@
   // --------------------------------------------------------------------
   // INPUT
 
-  [nbInput]:hover,
-  [nbInput]:focus {
+  [nbInput]:not([disabled]):hover,
+  [nbInput]:not([disabled]):focus {
     border-color: var(--color-green);
   }
 
@@ -695,29 +707,29 @@
   }
 
   // --------------------------------------------------------------------
-  // Table
+  // Badge
 
-  nb-badge {
+  nb-badge, .badge {
     background: var(--color-light-gray);
     color: var(--color-black);
   }
-  nb-badge.status-primary {
+  nb-badge.status-primary, .badge-primary {
     background: var(--color-blue);
     color: var(--color-white);
   }
-  nb-badge.status-success {
+  nb-badge.status-success, .badge-success {
     background: var(--color-green);
     color: var(--color-white);
   }
-  nb-badge.status-danger {
+  nb-badge.status-danger, .badge-danger {
     background: var(--color-red);
     color: var(--color-white);
   }
-  nb-badge.status-warning {
+  nb-badge.status-warning, .badge-warning {
     background: var(--color-orange);
     color: var(--color-white);
   }
-  nb-badge.status-info {
+  nb-badge.status-info, .badge-info {
     background: var(--color-aqua);
     color: var(--color-white);
   }
@@ -728,6 +740,20 @@
   nb-popover {
     min-width: 300px;
     padding: 1rem;
+  }
+
+  // --------------------------------------------------------------------
+  // Stepper
+
+  nb-stepper .header .connector {
+    background-color: #ffffff;
+  }
+  nb-stepper .header .step.selected,
+  nb-stepper .header .step.selected .label span {
+    color: var(--color-green);
+  }
+  nb-stepper .header .step.selected .label-index {
+    border-color: var(--color-green);
   }
 
   // --------------------------------------------------------------------
@@ -799,31 +825,46 @@
   }
 
   // --------------------------------------------------------------------
+  // Calendar
+
+  .cal-event-title {    
+    color: var(--color-white);
+  }
+  .cal-event-action {
+    color: var(--color-light-gray);
+  }
+  .cal-event-action:hover {
+    opacity: 0.8;
+  }
+  .cal-event-action .fa-pencil-alt {
+    color: var(--color-orange);
+  }
+  .cal-event-action .fa-times {
+    color: var(--color-red);
+  }
+
+  // --------------------------------------------------------------------
   // Scrollbar
 
-  // width
   ::-webkit-scrollbar {
     width: 8px;
   }
-  // Track
   ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px #EEEEEE;
     border-radius: 0px;
     background-color: #EEEEEE;
   } 
-  // Handle
   ::-webkit-scrollbar-thumb {
     background: #A1A1A1;
     border-radius: 0px;
   }
-  // Handle on hover
   ::-webkit-scrollbar-thumb:hover {
-    // background: #919191;
     background: var(--color-light-gray);
   }
 
   // --------------------------------------------------------------------
   // ALL
+
   .h-100 {
     height: 100%;
   }
@@ -887,6 +928,9 @@
   .p-l-15 {
     padding-left: 15px;
   }
+  .pull-left {
+    float: left;
+  }
   .pull-right {
     float: right;
   }
@@ -894,7 +938,8 @@
     color: var(--color-green);
     cursor: pointer;
   }
-  .link.underline {
+  .link.underline,
+  .link.underline:hover {
     text-decoration: underline;
   }
   .link:hover {
@@ -999,7 +1044,6 @@
     background-color: rgba(0, 176, 156, 0.3);
     cursor: pointer;
   }
-  // RADIO BUTTON
   .mat-radio-inner-circle {
     background-color: var(--color-green);
   }
@@ -1008,10 +1052,14 @@
   }
   .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
     border-color:var(--color-green);
-  }  
+  }
+  ngb-timepicker.inline fieldset {
+    display: inline-block;
+  }
 
   // --------------------------------------------------------------------
   // TAG INPUT
+
   .ng2-tag-input {
     border: 1px solid var(--color-light-gray) !important;
     border-radius: 8px !important;
@@ -1058,6 +1106,10 @@
     cursor: pointer;
     background-color: var(--color-green);
   }
+  
+  .cal-month-view .cal-day-badge {
+    background-color: var(--color-red);
+  }
 
   // --------------------------------------------------------------------
   // MOBILE && TABLET
@@ -1099,23 +1151,23 @@
   }
 
   /* Thank you for your information */
-.thank {
-  height: 100%;
-  background: #d2d6de;
-}
-.thank-wrapper {
-  max-width: 600px;
-  margin: 0 auto;
-  padding-top: 8%;
-  text-align: center;
-}
-.thank-wrapper p {
-  color: #737373;
-}
-.language {
-  width: 75px;
-  margin-top: -5px;
-  float: right;
-}
+  .thank {
+    height: 100%;
+    background: #d2d6de;
+  }
+  .thank-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 8%;
+    text-align: center;
+  }
+  .thank-wrapper p {
+    color: #737373;
+  }
+  .language {
+    width: 75px;
+    margin-top: -5px;
+    float: right;
+  }
 }
 

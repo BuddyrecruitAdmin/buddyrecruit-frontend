@@ -1,8 +1,17 @@
 <div class="content-header with-shadow">
-  <div class="breadcrumb">
+  <div *ngIf="!showStepper" class="breadcrumb">
     <h4>Onboard</h4>
   </div>
+  <nb-stepper *ngIf="showStepper" orientation="horizontal" disableStepNavigation selectedIndex="5">
+    <nb-step label="Talent Pool"></nb-step>
+    <nb-step label="Pending Exam"></nb-step>
+    <nb-step label="Pending Appointment"></nb-step>
+    <nb-step label="Pending Interview"></nb-step>
+    <nb-step label="Pending Sign Contract"></nb-step>
+    <nb-step label="Onboard"></nb-step>
+  </nb-stepper>
 </div>
+
 
 <nb-card>
   <nb-card-body>

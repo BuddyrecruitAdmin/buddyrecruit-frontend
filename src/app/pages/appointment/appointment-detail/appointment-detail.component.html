@@ -6,6 +6,15 @@
   </div>
 </div>
 
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  <span>
+    Your available date is empty. Do you want to configure now ?
+    <a class="link underline m-l-5" [routerLink]="'/calendar'"><b>Yes</b></a>
+    <span class="m-l-5 m-r-5">/</span>
+    <a class="link underline" (click)="showTips = !showTips"><b>No</b></a>
+  </span>
+</nb-alert>
+
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -110,17 +119,17 @@
                     </div>
                   </div>
                   <div class="m-t-5">
-                    <label class="label text-light-gray m-r-5">Appointment Info</label>
+                    <label class="label text-light-gray m-r-5">Interview Date</label>
                     <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Appointment Info"
                       (click)="openPopupAppointmentDate(item)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
-                        <label class="label">Appointment Date</label>
-                        <span>{{ utilitiesService.convertDateTime(item.pendingAppointmentInfo?.date) || '-' }}</span>
+                        <label class="label">Interview Location</label>
+                        <span>{{ item.pendingInterviewInfo?.refLocation?.name || '-' }}</span>
                       </div>
                       <div class="text-group">
-                        <label class="label">Appointment Location</label>
-                        <span>{{ item.pendingAppointmentInfo?.location?.name || '-' }}</span>
+                        <label class="label">Interview Date</label>
+                        <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.startDate) || '-' }}</span>
                       </div>
                     </div>
                   </div>
@@ -147,11 +156,11 @@
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button *ngIf="item.pendingAppointmentInfo?.flag" nbButton status="success"
+                    <button *ngIf="item.pendingInterviewInfo?.flag" nbButton status="success"
                       [nbTooltip]="button.button" (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
-                    <button *ngIf="!item.pendingAppointmentInfo?.flag" nbButton status="success"
+                    <button *ngIf="!item.pendingInterviewInfo?.flag" nbButton status="success"
                       [nbTooltip]="item.refStage?.name" (click)="openPopupAppointmentDate(item)">
                       <nb-icon icon="calendar"></nb-icon>
                     </button>

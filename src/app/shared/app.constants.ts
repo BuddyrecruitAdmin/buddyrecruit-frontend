@@ -54,6 +54,8 @@ export const FlowId = 'FlowId';
 export const Keyword = 'Keyword';
 export const TabName = "TabName";
 export const Collapse = "Collapse";
+export const ButtonId = "ButtonId";
+export const DateTime = "DateTime";
 
 export enum DayOfWeek {
   Sunday = 0,

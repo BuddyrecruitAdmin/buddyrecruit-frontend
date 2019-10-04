@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -11,11 +11,11 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import { PopupCommentComponent } from '../../../component/popup-comment/popup-comment.component';
 import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
-import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup-exam-date.component';
-import { PopupExamInfoComponent } from '../../../component/popup-exam-info/popup-exam-info.component';
-import { PopupExamScoreComponent } from '../../../component/popup-exam-score/popup-exam-score.component';
+import { PopupInterviewDateComponent } from '../../../component/popup-interview-date/popup-interview-date.component';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
+import { PopupSignContractComponent } from '../../../component/popup-sign-contract/popup-sign-contract.component';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
+import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -187,20 +187,20 @@ export class InterviewDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
-      data: { type: 'C', content: 'Do you want to ' + button.button + '?' }
-    });
-    confirm.afterClosed().subscribe(result => {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    setButtonId(button._id);
+    this.dialogService.open(PopupPreviewEmailComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      setButtonId();
       if (result) {
-        this.candidateService.candidateFlowApprove(item._id, this.refStageId, button._id).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.search();
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
+        this.search();
       }
     });
   }
@@ -251,6 +251,7 @@ export class InterviewDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
+      setCandidateId();
       if (result) {
         this.search();
       }
@@ -279,32 +280,17 @@ export class InterviewDetailComponent implements OnInit {
     });
   }
 
-  openPopupExamDate(item: any) {
+  openPopupInterviewDate(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
-    this.dialogService.open(PopupExamDateComponent,
+    this.dialogService.open(PopupInterviewDateComponent,
       {
         closeOnBackdropClick: false,
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
       setFlowId();
-      if (result) {
-        this.search();
-      }
-    });
-  }
-
-  openPopupAppointmentInfo(item: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    this.dialogService.open(PopupExamInfoComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
+      setCandidateId();
       if (result) {
         this.search();
       }
@@ -321,6 +307,24 @@ export class InterviewDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openPopupSignContract(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupSignContractComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
       if (result) {
         this.search();
       }
@@ -331,7 +335,7 @@ export class InterviewDetailComponent implements OnInit {
     let isDisplay = false;
     if (stageName === item.refStage.name) {
       if ('Interview Taken' === item.refStage.name) {
-        // if (!this.utilitiesService.dateIsValid(item.pendingAppointmentInfo.date)) {
+        // if (!this.utilitiesService.dateIsValid(item.pendingInterviewInfo.date)) {
         isDisplay = true;
         // }
       } else if ('Interview Score' === item.refStage.name) {

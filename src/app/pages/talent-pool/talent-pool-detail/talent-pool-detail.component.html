@@ -80,11 +80,20 @@
                     <label class="label">Email</label>
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
-                  <div *ngIf="item.examInfo?.flag" class="text-group">
-                    <label class="label">Exam Date</label>
-                    <span>{{ utilitiesService.convertDateTime(item.examInfo?.date) || '-' }}</span>
+                  <div *ngIf="item.examInfo?.flag">
+                    <label class="label text-light-gray m-r-5">Exam Date</label>
                     <nb-icon *ngIf="tab.name === 'PENDING'" icon="edit-2-outline" class="link"
                       nbTooltip="Edit Exam Date" (click)="appointmentExam(item)"></nb-icon>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Exam Location</label>
+                        <span>{{ item.examInfo?.refLocation?.name || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Exam Date</label>
+                        <span>{{ utilitiesService.convertDateTime(item.examInfo?.date) || '-' }}</span>
+                      </div>
+                    </div>
                   </div>
                   <div class="text-group">
                     <span class="link underline" nbTooltip="See more detail" (click)="info(item)">

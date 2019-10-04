@@ -5,10 +5,16 @@ export const API_ENDPOINT = {
     ME: "me",
     FORGOTTEN: "forgotten",
     CONFIRMPASSWORD: "changePassword",
-    SESSION: "session"
-  },
-  SHARED: {
-    REASONREJECT: "rejectReason"
+    SESSION: "session",
+    CALENDAR: {
+      LIST: "user/calendar/list",
+      BY_JR: "user/calendar/jr",
+      EDIT: "user/calendar/edit",
+    },
+    WORKING_DAYS: {
+      LIST: "user/workingDays/list",
+      EDIT: "user/workingDays/edit",
+    }
   },
   JOBDESCRIPTION: {
     LIST: "jd/list",
@@ -65,6 +71,9 @@ export const API_ENDPOINT = {
       },
       DETAIL: "candidate/flow/detail",
       EDIT: "candidate/flow/edit",
+      PREVIEW_EMAIL: "candidate/flow/previewEmail",
+      RESEND_EMAIL: "candidate/flow/resendEmail",
+      SEND_EMAIL: "candidate/flow/sendEmail",
     },
     LIST: "candidate/list",
     DETAIL: "candidate/detail",
@@ -184,34 +193,6 @@ export const API_ENDPOINT = {
     UPLOAD: "jd/upload",
     DOWNLOAD: "jd/download"
   },
-  LOCATION: {
-    LIST: "location"
-  },
-  PREVIEW_EMAIL: {
-    DETAIL: "previewEmail"
-  },
-  COUNT_CANDIDATE_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_EXAM_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_APPOINTMENT_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_INTERVIEW_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_SIGNCONTRACT_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_ONBOARD_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  PROFILE: {
-    DETAIL: "profile",
-    UPDATE: "profile/changeProfile"
-  },
   APPFORM: {
     ACTION: "appForm/action",
     DETAIL: "appForm/detail",
@@ -228,5 +209,5 @@ export const API_ENDPOINT = {
   },
   AUTHORIZE: {
     LIST: "authorize/list"
-  }
+  },
 };

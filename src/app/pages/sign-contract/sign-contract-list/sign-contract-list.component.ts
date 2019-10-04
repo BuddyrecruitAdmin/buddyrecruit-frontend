@@ -45,6 +45,7 @@ export class SignContractListComponent implements OnInit {
       divisions: any,
     }
   };
+  showStepper: boolean;
 
   constructor(
     private router: Router,
@@ -56,6 +57,13 @@ export class SignContractListComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
+    if (this.devices.isMobile || this.devices.isTablet) {
+      this.isGridLayout = true;
+      this.showStepper = false;
+    } else {
+      this.isGridLayout = false;
+      this.showStepper = true;
+    }
   }
 
   ngOnInit() {
@@ -81,11 +89,7 @@ export class SignContractListComponent implements OnInit {
         divisions: []
       }
     }
-    if (this.devices.isMobile || this.devices.isTablet) {
-      this.isGridLayout = true;
-    } else {
-      this.isGridLayout = false;
-    }
+
     this.search();
   }
 
@@ -205,6 +209,11 @@ export class SignContractListComponent implements OnInit {
     setJdName(item.refJD.position);
     setJrId(item._id);
     this.router.navigate(["/sign-contract/detail"]);
+  }
+
+  navigate(link: string) {
+    console.log(link);
+    this.router.navigate([link]);
   }
 
   changePaging(event) {

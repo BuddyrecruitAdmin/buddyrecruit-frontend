@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
+import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
 
 @Component({
   selector: 'ngx-popup-exam-info',
@@ -18,6 +19,7 @@ export class PopupExamInfoComponent implements OnInit {
   flowId: any;
   candidateId: any;
   stageId: any;
+  buttonId: any;
   innerWidth: any;
   innerHeight: any;
   candidateName: string;
@@ -32,7 +34,7 @@ export class PopupExamInfoComponent implements OnInit {
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupExamInfoComponent>,
     private utilitiesService: UtilitiesService,
-    public matDialog: MatDialog,
+    private dialogService: NbDialogService,
     private toastrService: NbToastrService,
   ) {
     this.role = getRole();
@@ -65,6 +67,8 @@ export class PopupExamInfoComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
+
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingExamInfo.availableDate)) {
           this.availableDate = new Date(response.data.candidateFlow.pendingExamInfo.availableDate);
         }
@@ -97,18 +101,31 @@ export class PopupExamInfoComponent implements OnInit {
     const request = this.setRequest();
     this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.candidateService.candidateFlowApprove(this.flowId, this.stageId, request).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            if (response.code === ResponseCode.Success) {
-              this.showToast('success', 'Success Message', response.message);
-            } else {
-              this.showToast('danger', 'Error Message', response.message);
-            }
-            this.loading = false;
-            this.ref.close(true);
-          }
-        });
+        this.previewEmail();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.ref.close();
       }
+    });
+  }
+
+  previewEmail() {
+    setFlowId(this.flowId);
+    setCandidateId(this.candidateId);
+    setButtonId(this.buttonId);
+    this.dialogService.open(PopupPreviewEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      setButtonId();
+      if (result) {
+        this.ref.close(true);
+      }
+      this.loading = false;
     });
   }
 
