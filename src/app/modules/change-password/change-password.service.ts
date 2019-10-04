@@ -16,8 +16,9 @@ export class ChangePasswordService extends NetworkService {
     super('ChangePasswordService', httpClient, errorHandler);
   }
 
-  submitPassword(password: string): Observable<ApiResponse> {
+  submitPassword(_id: string,password: string): Observable<ApiResponse> {
     const body = {
+      _id : _id,
       password : password
     };
     return this.post(API_ENDPOINT.USERS.CONFIRMPASSWORD, body);

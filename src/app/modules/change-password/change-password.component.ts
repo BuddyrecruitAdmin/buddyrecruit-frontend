@@ -22,6 +22,7 @@ import { Router, ActivatedRoute } from "@angular/router";
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
+  _id : string;
   paawordForm: FormGroup;
   newPassword: AbstractControl;
   confirmPassword: AbstractControl;
@@ -32,10 +33,16 @@ export class ChangePasswordComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private service: ChangePasswordService,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      if(params.id){
+        this._id = params.id;
+      }
+    })
     this.changeText = false;
     this.paawordForm = this.formBuilder.group({
       newpassword: [null, [Validators.required, Validators.minLength(6)]],
@@ -50,7 +57,7 @@ export class ChangePasswordComponent implements OnInit {
     this.touched = true;
     console.log(value.newpassword, value.confirmpassword)
     if (value.newpassword === value.confirmpassword) {
-      this.service.submitPassword(value.newpassword).subscribe(response => {
+      this.service.submitPassword(this._id,value.newpassword).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.changeText = true;
         }
