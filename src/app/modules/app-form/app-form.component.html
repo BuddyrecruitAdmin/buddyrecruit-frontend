@@ -62,8 +62,8 @@
       <div class="row">
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
-            <input type="text" [(ngModel)]="appforms.refPosition_2" placeholder="{{ 'POSITION2' | translate }}" nbInput
-              fullWidth>
+            <input type="text" [(ngModel)]="appforms.refPosition_2" [disabled]="!edtiable"
+              placeholder="{{ 'POSITION2' | translate }}" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -193,7 +193,8 @@
         <div class="col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'GENDER' | translate }}<small class="text-red">*</small></label>
-            <nb-radio-group [formControl]="sexGroup" [(ngModel)]="appforms.personalInformation.sex" name="gender">
+            <nb-radio-group [formControl]="sexGroup" [disabled]="!edtiable"
+              [(ngModel)]="appforms.personalInformation.sex" name="gender">
               <nb-radio value="male"> {{ 'MALE' | translate }}</nb-radio>
               <nb-radio value="female">{{ 'FEMALE' | translate }}</nb-radio>
               <nb-radio value="notspecified">{{ 'NOT_SPECIFIED' | translate }}</nb-radio>
@@ -204,8 +205,8 @@
         <div class="col-lg-2" *ngIf="appforms.personalInformation.sex === 'male'">
           <div class="form-control-group">
             <label class="label">{{ 'MILITARY_STATUS' | translate }}<small class="text-red">*</small></label>
-            <nb-radio-group (click)="changeText()" [(ngModel)]="appforms.personalInformation.militaryStatus"
-              name="military">
+            <nb-radio-group (click)="changeText()" [disabled]="!edtiable"
+              [(ngModel)]="appforms.personalInformation.militaryStatus" name="military">
               <nb-radio value="Exempted"> {{ 'EXEMPTED' | translate }}</nb-radio>
               <nb-radio value="Served"> {{ 'SERVED' | translate }}</nb-radio>
               <nb-radio value="NotServed"> {{ 'NOT_YET_SERVED' | translate }}</nb-radio>
@@ -216,7 +217,8 @@
         <div class="col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'MARITAL_STATUS' | translate }}</label>
-            <nb-radio-group [(ngModel)]="appforms.personalInformation.maritalStatus" name="martital">
+            <nb-radio-group [(ngModel)]="appforms.personalInformation.maritalStatus" [disabled]="!edtiable"
+              name="martital">
               <nb-radio value="single">{{ 'SINGLE' | translate }}</nb-radio>
               <nb-radio value="married">{{ 'MARRIED' | translate }}</nb-radio>
             </nb-radio-group>
@@ -322,28 +324,29 @@
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'NUMBER_MEMBER_FAMILY' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfSibling" placeholder="" nbInput
-              fullWidth>
+            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfSibling" [disabled]="!edtiable"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'MALE' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfMale" placeholder="" nbInput fullWidth>
+            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfMale" [disabled]="!edtiable"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'FEMALE' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfFemale" placeholder="" nbInput
-              fullWidth>
+            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfFemale" [disabled]="!edtiable"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'YOUR_CHILD_OF_FAMILY' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.rankOfSibling" placeholder="" nbInput
-              fullWidth>
+            <input type="number" [(ngModel)]="appforms.familyInformation.rankOfSibling" [disabled]="!edtiable"
+              placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -353,14 +356,14 @@
       <nb-card *ngFor="let education of appforms.education;let i = index">
         <nb-card-body>
           <div class="pull-right">
-            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete"
+            <nb-icon *ngIf="edtiable" icon="close-outline" class="link" status="danger" nbTooltip="Delete"
               (click)="remove('Education',i)">
             </nb-icon>
           </div>
           <div class="row">
             <div class="col-md-4">
-              <label>{{ 'EDUCATION_LEVEL' | translate }}<small class="text-red">*</small></label>
-              <select class="form-control" [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }"
+              <label class="label">{{ 'EDUCATION_LEVEL' | translate }}<small class="text-red">*</small></label>
+              <select [disabled]="!edtiable" [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }"
                 Faria-hidden="true" fullWidth>
                 <option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</option>
               </select>
@@ -368,14 +371,14 @@
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'FROM' | translate }}<small class="text-red">*</small></label>
-                <input name="dateFrom" type="date" nbInput fullWidth [(ngModel)]="education.from"
+                <input name="dateFrom" [disabled]="!edtiable" type="date" nbInput fullWidth [(ngModel)]="education.from"
                   [value]="education.from | date:'yyyy-MM-dd'" />
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'TO' | translate }}<small class="text-red">*</small></label>
-                <input name="dateTo" type="date" nbInput fullWidth [(ngModel)]="education.to"
+                <input name="dateTo" [disabled]="!edtiable" type="date" nbInput fullWidth [(ngModel)]="education.to"
                   [value]="education.to | date:'yyyy-MM-dd'" />
               </div>
             </div>
@@ -384,13 +387,15 @@
             <div class="col-md-6">
               <div class="form-control-group">
                 <label class="label">{{ 'INSTITUTION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="education.institution" placeholder="" nbInput fullWidth>
+                <input type="text" [disabled]="!edtiable" [(ngModel)]="education.institution" placeholder="" nbInput
+                  fullWidth>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-control-group">
                 <label class="label">{{ 'MAJOR' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="education.major" placeholder="" nbInput fullWidth>
+                <input type="text" [disabled]="!edtiable" [(ngModel)]="education.major" placeholder="" nbInput
+                  fullWidth>
               </div>
             </div>
           </div>
@@ -398,7 +403,7 @@
       </nb-card>
       <div class="box-body text-center btnBottom">
         <button nbButton type="button" status="success" size="small" (click)="add('Education')"
-          [disabled]="appforms.education.length === 5">
+          [disabled]="appforms.education.length === 5 || !edtiable">
           {{ 'ADD_MORE_EDUCATION' | translate }}
         </button>
       </div>
@@ -408,25 +413,26 @@
       <nb-card *ngFor="let workExp of appforms.workExperience;let i = index">
         <nb-card-body>
           <div class="pull-right">
-            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete" (click)="remove('workExp',i)">
+            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete" (click)="remove('workExp',i)"
+              *ngIf="edtiable">
             </nb-icon>
           </div>
           <div class="row">
             <div class="col-md-4">
               <label class="label">{{ 'COMPANY' | translate }}<small class="text-red">*</small></label>
-              <input type="text" [(ngModel)]="workExp.company" placeholder="" nbInput fullWidth>
+              <input type="text" [disabled]="!edtiable" [(ngModel)]="workExp.company" placeholder="" nbInput fullWidth>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'FROM' | translate }}<small class="text-red">*</small></label>
-                <input type="date" nbInput fullWidth [(ngModel)]="workExp.from" name="comFrom"
+                <input type="date" [disabled]="!edtiable" nbInput fullWidth [(ngModel)]="workExp.from" name="comFrom"
                   [value]="workExp.from | date:'yyyy-MM-dd'" />
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'TO' | translate }}<small class="text-red">*</small></label>
-                <input type="date" nbInput fullWidth [(ngModel)]="workExp.to" name="comTo"
+                <input type="date" [disabled]="!edtiable" nbInput fullWidth [(ngModel)]="workExp.to" name="comTo"
                   [value]="workExp.to | date:'yyyy-MM-dd'" />
               </div>
             </div>
@@ -435,13 +441,15 @@
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'POSITION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="workExp.position" placeholder="" nbInput fullWidth>
+                <input type="text" [disabled]="!edtiable" [(ngModel)]="workExp.position" placeholder="" nbInput
+                  fullWidth>
               </div>
             </div>
             <div class="col-md-8">
               <div class="form-control-group">
                 <label class="label">{{ 'JOB_DESCRIPTION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="workExp.jobDescription" placeholder="" nbInput fullWidth>
+                <input type="text" [disabled]="!edtiable" [(ngModel)]="workExp.jobDescription" placeholder="" nbInput
+                  fullWidth>
               </div>
             </div>
           </div>
@@ -449,13 +457,15 @@
             <div class="col-md-4">
               <div class="form-control-group">
                 <label class="label">{{ 'SALARY' | translate }}<small class="text-red">*</small></label>
-                <input type="number" [(ngModel)]="workExp.salary" placeholder="" nbInput fullWidth>
+                <input type="number" [disabled]="!edtiable" [(ngModel)]="workExp.salary" placeholder="" nbInput
+                  fullWidth>
               </div>
             </div>
             <div class="col-md-8">
               <div class="form-control-group">
                 <label class="label">{{ 'REASONS_OF_RESIGNATION' | translate }}<small class="text-red">*</small></label>
-                <input type="text" [(ngModel)]="workExp.reasonResignation" placeholder="" nbInput fullWidth>
+                <input type="text" [disabled]="!edtiable" [(ngModel)]="workExp.reasonResignation" placeholder="" nbInput
+                  fullWidth>
               </div>
             </div>
           </div>
@@ -463,7 +473,7 @@
       </nb-card>
       <div class="box-body text-center btnBottom">
         <button nbButton type="button" status="success" size="small" (click)="add('workExp')"
-          [disabled]="appforms.workExperience.length === 5">
+          [disabled]="appforms.workExperience.length === 5 ||!edtiable">
           {{ 'ADD_MORE_WORKING_EXPERIENCE' | translate }}
         </button>
       </div>
@@ -474,7 +484,8 @@
       <nb-card *ngFor="let langu of appforms.languageAbility;let i = index">
         <nb-card-body>
           <div class="pull-right" *ngIf="langu.language != 'Thai' && langu.language != 'English'">
-            <nb-icon icon="close-outline" class="link" status="danger" nbTooltip="Delete" (click)="remove('langu',i)">
+            <nb-icon *ngIf="edtiable" icon="close-outline" class="link" status="danger" nbTooltip="Delete"
+              (click)="remove('langu',i)">
             </nb-icon>
           </div>
           <div class="row">
@@ -485,7 +496,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
               <label>{{ 'SPEAKING' | translate }}<small class="text-red">*</small></label>
-              <nb-radio-group [(ngModel)]="langu.speaking" [name]="'speaking'+i">
+              <nb-radio-group [disabled]="!edtiable" [(ngModel)]="langu.speaking" [name]="'speaking'+i">
                 <nb-radio value="good">{{ 'GOOD' | translate }}</nb-radio>
                 <nb-radio value="fair">{{ 'FAIR' | translate }}</nb-radio>
                 <nb-radio value="poor">{{ 'POOR' | translate }}</nb-radio>
@@ -493,7 +504,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
               <label>{{ 'WRITING' | translate }}<small class="text-red">*</small></label>
-              <nb-radio-group [(ngModel)]="langu.writing" [name]="'writing'+i">
+              <nb-radio-group [disabled]="!edtiable" [(ngModel)]="langu.writing" [name]="'writing'+i">
                 <nb-radio value="good">{{ 'GOOD' | translate }}</nb-radio>
                 <nb-radio value="fair">{{ 'FAIR' | translate }}</nb-radio>
                 <nb-radio value="poor">{{ 'POOR' | translate }}</nb-radio>
@@ -501,7 +512,7 @@
             </div>
             <div class="col-sm-3 col-md-3">
               <label>{{ 'READING' | translate }}<small class="text-red">*</small></label>
-              <nb-radio-group [(ngModel)]="langu.reading" [name]="'reading'+i">
+              <nb-radio-group [disabled]="!edtiable" [(ngModel)]="langu.reading" [name]="'reading'+i">
                 <nb-radio value="good">{{ 'GOOD' | translate }}</nb-radio>
                 <nb-radio value="fair">{{ 'FAIR' | translate }}</nb-radio>
                 <nb-radio value="poor">{{ 'POOR' | translate }}</nb-radio>
@@ -512,7 +523,7 @@
       </nb-card>
       <div class="box-body text-center btnBottom">
         <button nbButton type="button" status="success" size="small" (click)="add('langu')"
-          [disabled]="appforms.languageAbility.length === 5">
+          [disabled]="appforms.languageAbility.length === 5 || !edtiable">
           {{ 'LANGUAGE_ADD' | translate }}
         </button>
       </div>
@@ -522,9 +533,10 @@
         <div class="col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'I_CAN_WORK_UP_COUNTRY' | translate }}<small class="text-red">*</small></label>
-            <nb-radio-group [formControl]="workCountry" [(ngModel)]="appforms.workUpcountry.answer" name="answer">
-              <nb-radio [value]="true">Yes</nb-radio>
-              <nb-radio [value]="false">No</nb-radio>
+            <nb-radio-group [disabled]="!edtiable" [formControl]="workCountry"
+              [(ngModel)]="appforms.workUpcountry.answer" name="answer">
+              <nb-radio value="true">Yes</nb-radio>
+              <nb-radio value="false">No</nb-radio>
             </nb-radio-group>
             <small *ngIf="touched && workCountry.errors" class="text-red">{{ sErrorWorkCountry }}</small>
           </div>
@@ -534,7 +546,8 @@
         <div class="col-lg-6">
           <div class="form-control-group">
             <label class="label"> {{ 'OTHERS_PLEASE_MENTION' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.workUpcountry.remark" placeholder="" nbInput fullWidth>
+            <input type="text" [disabled]="!edtiable" [(ngModel)]="appforms.workUpcountry.remark" placeholder="" nbInput
+              fullWidth>
           </div>
         </div>
       </div>
@@ -588,12 +601,13 @@
       <label>{{'SOURCES_JOB_INFORMATION' | translate}}</label>
       <div class="row">
         <div class="col-md-2 col-lg-2" *ngFor="let ref of appforms.knowCompanyFrom;">
-          <nb-checkbox status="success" [(ngModel)]="ref.isSelected">{{ref.source}}</nb-checkbox>
+          <mat-checkbox status="success" [disabled]="!edtiable" [(ngModel)]="ref.isSelected">{{ref.source}}
+          </mat-checkbox>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-lg-4  offset-md-8">
-          <input *ngIf="appforms.knowCompanyFrom[4].isSelected" type="text"
+          <input *ngIf="appforms.knowCompanyFrom[4].isSelected" [disabled]="!edtiable" type="text"
             [(ngModel)]="appforms.knowCompanyFrom[4].remark" placeholder="remark" nbInput fullWidth>
         </div>
       </div>
@@ -604,13 +618,15 @@
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
             <label class="label">{{ 'NAME' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.relativeEmployee.firstname" placeholder="" nbInput fullWidth>
+            <input type="text" [disabled]="!edtiable" [(ngModel)]="appforms.relativeEmployee.firstname" placeholder=""
+              nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
             <label class="label">{{ 'SURNAME' | translate }}</label>
-            <input type="text" [(ngModel)]="appforms.relativeEmployee.lastname" placeholder="" nbInput fullWidth>
+            <input type="text" [disabled]="!edtiable" [(ngModel)]="appforms.relativeEmployee.lastname" placeholder=""
+              nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -619,17 +635,18 @@
       <div class="row">
         <div class="col-lg-1">
           <div class="form-control-group">
-            <nb-radio-group [formControl]="sick" [(ngModel)]="appforms.contagiousDisease.answer" name="">
+            <nb-radio-group [disabled]="!edtiable" [formControl]="sick" [(ngModel)]="appforms.contagiousDisease.answer"
+              name="">
               <nb-radio [value]="true">Yes</nb-radio>
               <nb-radio [value]="false">No</nb-radio>
             </nb-radio-group>
           </div>
-          <small *ngIf="touched && sick.errors" class="text-red">{{ sErrorSick }}</small>
         </div>
         <div class="col-lg-7" *ngIf="appforms.contagiousDisease.answer">
           <input type="text" [(ngModel)]="appforms.contagiousDisease.remark" placeholder="remark" nbInput fullWidth>
         </div>
       </div>
+      <small *ngIf="touched && sick.errors" class="text-red">{{ sErrorSick }}</small><br>
       <!-- Intriduce -->
       <label>{{ 'REMARK' | translate }}<small class="text-red">*</small></label>
       <div class="row">
@@ -642,8 +659,8 @@
         <small class="text-red">{{ sErrorAll }}</small>
       </div>
     </nb-card-body>
-    <nb-card-footer>
-      <button nbButton size="small" status="success" (click)="save()" [disabled]="!edtiable">SAVE</button>
+    <nb-card-footer *ngIf="edtiable">
+      <button nbButton size="small" status="success" (click)="save()">SAVE</button>
     </nb-card-footer>
   </nb-card>
   <!-- Thank you for your information  External-->

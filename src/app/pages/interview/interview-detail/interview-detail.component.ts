@@ -22,6 +22,8 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
+import { elementAt } from 'rxjs/operators';
+import { debug } from 'util';
 
 @Component({
   selector: 'ngx-interview-detail',
@@ -37,11 +39,8 @@ export class InterviewDetailComponent implements OnInit {
   steps: any;
   items: any;
   itemSelected: any;
-  comments: any;
-
   collapseAll: boolean;
   tabSelected: string;
-
   keyword: string;
   paging: IPaging;
   pageEvent: PageEvent;
@@ -50,7 +49,8 @@ export class InterviewDetailComponent implements OnInit {
   devices: Devices;
   loading: boolean;
   count: Count;
-
+  rankName: any;
+  score: any;
   constructor(
     private router: Router,
     private service: InterviewService,
@@ -107,7 +107,6 @@ export class InterviewDetailComponent implements OnInit {
 
   ngOnInit() {
     this.items = [];
-    this.comments = [];
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -139,11 +138,39 @@ export class InterviewDetailComponent implements OnInit {
       ]
     };
     this.items = [];
+    this.score = [];
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
-        this.items.map(item => {
+        this.items.map((item, index) => {
           item.collapse = this.collapseAll;
+          // this.score[index] =this.showScore(item);
+
+          let sum = 0;
+          let totalPass = 0;
+          let totalCompare = 0;
+          let totalReject = 0;
+          item.pendingInterviewScoreInfo.evaluation.map((element) => {
+            if (this.role._id === element.createdInfo.refUser) {
+              item.score = element.point;
+              item.comment = element.additionalComment
+            }
+            sum = sum + element.point;
+            if (element.rank.selected === 1) {
+              totalPass += 1;
+            }
+            else if (element.rank.selected === 2) {
+              totalCompare += 1;
+            } else {
+              totalReject += 1;
+            }
+          })
+          item.avg = sum / item.pendingInterviewScoreInfo.evaluation.length;
+          let fullResult = '';
+          fullResult = 'ผ่าน' + ' : ' + totalPass + ' , ' + 'ไม่ผ่าน' + ' : '
+            + totalReject + ' , ' + 'รอเทียบ' + ' : ' + totalCompare;
+          fullResult = fullResult.trim();
+          item.result = fullResult;
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -221,6 +248,61 @@ export class InterviewDetailComponent implements OnInit {
       }
     });
   }
+
+  showScore(item: any) {
+    // let score;
+    // item.pendingInterviewScoreInfo.evaluation.map(element => {
+    //   if (this.role._id === element.createdInfo.refUser) {
+    //     score = element.point;
+    //   }
+    // })
+    // return score;
+  }
+
+  sumAvg(item: any) {
+    // let sumScore = 0;
+    // let total;
+    // total = item.pendingInterviewScoreInfo.evaluation.length;
+    // item.pendingInterviewScoreInfo.evaluation.map(element => {
+    //   sumScore = sumScore + element.point;
+    // })
+    // sumScore = sumScore / total;
+    // return sumScore;
+  }
+
+  addComment(item: any) {
+    // let comment;
+    // item.pendingInterviewScoreInfo.evaluation.map(element => {
+    //   if (this.role._id === element.createdInfo.refUser) {
+    //     comment = element.additionalComment
+    //   }
+    // })
+    // return comment;
+  }
+
+  setResult(item: any) {
+    // console.log(item)
+    // let totalPass = 0;
+    // let totalCompare = 0;
+    // let totalReject = 0;
+    // item.pendingInterviewScoreInfo.evaluation.map(element => {
+    //   if (element.rank.selected === 1) {
+    //     totalPass += 1;
+    //   } else
+    //     if (element.rank.selected === 2) {
+    //       totalCompare += 1;
+    //     } else {
+    //       totalReject += 1;
+    //     }
+    // })
+    // let fullResult = '';
+    // fullResult = 'ผ่าน' + ' : ' + totalPass + ' , ' + 'ไม่ผ่าน' + ' : ' 
+    // + totalReject + ' , ' + 'รอเทียบ' + ' : ' + totalCompare;
+    // fullResult = fullResult.trim();
+    // console.log(fullResult)
+    // return fullResult;
+  }
+
 
   revoke(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {

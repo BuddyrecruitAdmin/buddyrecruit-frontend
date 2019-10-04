@@ -5,6 +5,8 @@ import { ModulesComponent } from './modules.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AppFormComponent } from './app-form/app-form.component';
+import { ForgotComponent } from './forgot/forgot.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 const routes: Routes = [
   {
     path: '',
@@ -17,6 +19,14 @@ const routes: Routes = [
       {
         path: 'logout',
         component: LogoutComponent,
+      },
+      {
+        path: 'forgot',
+        component: ForgotComponent,
+      },
+      {
+        path: 'changepassword/:id',
+        component: ChangePasswordComponent,
       },
       {
         path: 'appform/:id',  //cant view

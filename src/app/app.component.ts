@@ -13,13 +13,22 @@ import { getToken } from './shared/services/auth.service';
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-
+  url: any;
   constructor(
     private analytics: AnalyticsService,
     private router: Router,
   ) {
+    debugger
     if (!getToken()) {
-      this.router.navigate(["/auth/login"]);
+      this.url = window.location.pathname.slice(0, 14);
+      if (this.url != "/auth/appform/") {
+        if (this.url != "/auth/forgot") {
+          this.url = window.location.pathname.slice(0, 21);
+          if (this.url != "/auth/changepassword/") {
+            this.router.navigate(["/auth/login"]);
+          }
+        }
+      }
     }
   }
 

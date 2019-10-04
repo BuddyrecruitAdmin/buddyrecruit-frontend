@@ -131,10 +131,11 @@ export class AppFormComponent implements OnInit {
         this._id = params.id;
         if (params.action === "view") {
           this.isUser = true;
-          // this.setDisabled();
+          this.setDisabled();
+          this.edtiable = false;
           this.getDetail();
         } else {
-          this.edtiable = false;
+          this.edtiable = true;
           this.getDetail();
           // this.setDisabled();
         }
@@ -382,6 +383,7 @@ export class AppFormComponent implements OnInit {
     this.sErrorEmerTel = MESSAGE[4];
     this.sErrorSick = MESSAGE[4];
     this.sErrorAboutSelf = MESSAGE[4];
+    // this.applicationForm.disable();
   }
 
   setDisabled() {
@@ -570,6 +572,18 @@ export class AppFormComponent implements OnInit {
 
   setLang(lang: string) {
     this.translate.use(lang);
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
   }
 
 }

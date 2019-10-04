@@ -37,7 +37,8 @@ export class ProfileService extends NetworkService {
       notifyEmail: item.notifyEmail,
       passwordCur: item.passwordCur,
       passwordNew: item.passwordNew,
-      setting: item.setting
+      setting: item.setting,
+      attachment: item.attachment
 
 
     }

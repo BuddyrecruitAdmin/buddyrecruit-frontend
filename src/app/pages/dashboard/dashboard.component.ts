@@ -14,7 +14,6 @@ import { DashboardService } from './dashboard.service';
 	styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
 	thisYear = new Date().getFullYear();
 	stages = [
 		{
@@ -103,14 +102,17 @@ export class DashboardComponent implements OnInit {
 	];
 
 	// Company Reject Reason
-	public pieChart1Legend = true;
-	public pieChart1Type: ChartType = 'doughnut';
-	public pieChart1Options: ChartOptions = {
+	public barChartLegend = false;
+	public barChartType: string = 'horizontalBar';
+	public barChartOptions: ChartOptions = {
 		responsive: true,
-		aspectRatio: 1,
-		legend: {
-			position: 'right',
-		},
+		scales: { xAxes: [{}], yAxes: [{}] },
+		plugins: {
+			datalabels: {
+				anchor: 'end',
+				align: 'end',
+			}
+		}
 		// plugins: {
 		// 	datalabels: {
 		// 		formatter: (value, ctx) => {
@@ -120,38 +122,32 @@ export class DashboardComponent implements OnInit {
 		// 	},
 		// }
 	};
-	public pieChart1Labels: Label[] = [];
-	public pieChart1Data: number[] = [];
-	public pieChart1Plugins = [pluginDataLabels];
-	public pieChart1Colors: Color[] = [
+	public barChartLabels: Label[] = [];
+	public barChartData: ChartDataSets[];
+	public barChartPlugins = [pluginDataLabels];
+	public barChartColors: Color[] = [
 		{ backgroundColor: this.backgroundColor }
 	];
 
 	// Candidate Reject Reason
-	public pieChart2Legend = true;
-	public pieChart2Type: ChartType = 'doughnut';
-	public pieChart2Options: ChartOptions = {
+	public barChart2Legend = false;
+	public barChart2Type: string = 'horizontalBar';
+	public barChart2Options: ChartOptions = {
 		responsive: true,
-		aspectRatio: 1,
-		legend: {
-			position: 'right',
-		},
-		// plugins: {
-		// 	datalabels: {
-		// 		formatter: (value, ctx) => {
-		// 			const label = ctx.chart.data.labels[ctx.dataIndex];
-		// 			return label;
-		// 		},
-		// 	},
-		// }
+		scales: { xAxes: [{}], yAxes: [{}] },
+		plugins: {
+			datalabels: {
+				anchor: 'end',
+				align: 'end',
+			}
+		}
 	};
-	public pieChart2Labels: Label[] = [];
-	public pieChart2Data: number[] = [];
-	public pieChart2Plugins = [pluginDataLabels];
-	public pieChart2Colors: Color[] = [
+	public barChart2Labels: Label[] = [];
+	public barChart2Data: ChartDataSets[];
+	public barChart2Plugins = [pluginDataLabels];
+	public barChart2Colors: Color[] = [
 		{ backgroundColor: this.backgroundColor }
 	];
-
 	constructor(
 		private router: Router,
 		private service: DashboardService,
@@ -169,6 +165,9 @@ export class DashboardComponent implements OnInit {
 			this.legendLabel = true;
 			this.aspectRatio = 2;
 		}
+		this.bubbleChartData = [];
+		this.barChartData = [];
+		this.barChart2Data = [];
 		this.getDashboard();
 	}
 
@@ -189,13 +188,13 @@ export class DashboardComponent implements OnInit {
 			.subscribe(response => {
 				// res => this.getDashboardSuccess(res),
 				// err => this.getDashboardFailed(err)
+				this.loading = false;
 				this.getDashboardSuccess(response);
 			});
 	}
 	getDashboardSuccess(res: any) {
 		const that = this;
 		let thisYear = this.thisYear;
-
 		if (this.enabledRecruitStatus) {
 			this.recruiteData = res.data;
 			this.setChartRecruitmentStatus();
@@ -227,8 +226,9 @@ export class DashboardComponent implements OnInit {
 			});
 			this.filterRejection.departments = this.removeDups(this.filterRejection.departments);
 			this.filterRejection.positions = this.removeDups(this.filterRejection.positions);
+			// this.loading = false;
 		}
-		this.loading = false;
+
 	}
 	getDashboardFailed(err: any) { }
 
@@ -279,9 +279,8 @@ export class DashboardComponent implements OnInit {
 				return item2.position === item1;
 			});
 
-			const startDate = new Date(item.duration.start_date);
-			const endDate = new Date(item.onboard_date);
-
+			const startDate = new Date(item.duration.startDate);
+			const endDate = new Date(item.onboardDate);
 			const workingDays = that.getDiffDaysBetween2Date(startDate, today);
 			const targetDays = that.getDiffDaysBetween2Date(startDate, endDate);
 
@@ -441,10 +440,11 @@ export class DashboardComponent implements OnInit {
 		this.filterRejection.departments = this.removeDups(this.filterRejection.departments);
 		this.filterRejection.positions = this.removeDups(this.filterRejection.positions);
 
-		this.pieChart1Labels = [];
-		this.pieChart1Data = [];
+		this.barChartLabels = [];
+		this.barChartData = [];
 
 		let reasonKey = [];
+		let arrayTest = [];
 		rejection.company.map(function (item) {
 			reasonKey.push(item.reason);
 		});
@@ -455,26 +455,26 @@ export class DashboardComponent implements OnInit {
 				return item2.reason === item1;
 			});
 			const percent = that.calPercentageBetween2Number(arrayReason.length, rejection.company.length);
-			that.pieChart1Labels.push(item1);
-			that.pieChart1Data.push(percent);
+			that.barChartLabels.push(item1);
+			arrayTest.push(percent);
 		});
-		const sum = parseFloat(this.pieChart1Data.reduce((a, b) => a + b).toFixed(1));
-		if (sum !== 100) {
-			const index = this.getLargestNumInArrayIndex(this.pieChart1Data);
-			this.pieChart1Data[index] = parseFloat((this.pieChart1Data[index] - (sum - 100)).toFixed(1));
-		}
-
+		// const sum = parseFloat(this.barChartData.reduce((a, b) => a + b).toFixed(1));
+		// if (sum !== 100) {
+		// 	const index = this.getLargestNumInArrayIndex(this.barChartData);
+		// 	this.barChartData[index] = parseFloat((this.barChartData[index] - (sum - 100)).toFixed(1));
+		// }
+		that.barChartData.push({ data: arrayTest });
 		const colors = [];
-		this.pieChart1Labels.map(function (item, index) {
+		this.barChartLabels.map(function (item, index) {
 			const color = that.getColorByIndex(index);
 			colors.push(color);
 		});
-		this.pieChart1Colors = [
+		this.barChartColors = [
 			{ backgroundColor: colors }
 		];
-		this.pieChart1Legend = this.legendLabel;
-		this.pieChart1Options.legend.position = this.legendPosition;
-		this.pieChart1Options.aspectRatio = this.aspectRatio;
+		// this.barChartLegend = this.legendLabel;
+		// this.barChartOptions.legend.position = this.legendPosition;
+		// this.barChartOptions.aspectRatio = this.aspectRatio;
 	}
 
 	// ------------------------------------------------------------------
@@ -508,9 +508,10 @@ export class DashboardComponent implements OnInit {
 		this.filterRejection.departments = this.removeDups(this.filterRejection.departments);
 		this.filterRejection.positions = this.removeDups(this.filterRejection.positions);
 
-		this.pieChart2Labels = [];
-		this.pieChart2Data = [];
+		this.barChart2Labels = [];
+		this.barChart2Data = [];
 		let reasonKey = [];
+		let arrayTest2 = [];
 		rejection.candidate.map(function (item) {
 			reasonKey.push(item.reason);
 		});
@@ -521,26 +522,29 @@ export class DashboardComponent implements OnInit {
 				return item2.reason === item1;
 			});
 			const percent = that.calPercentageBetween2Number(arrayReason.length, rejection.candidate.length);
-			that.pieChart2Labels.push(item1);
-			that.pieChart2Data.push(percent);
+			that.barChart2Labels.push(item1);
+			arrayTest2.push(percent);
 		});
-		const sum = parseFloat(this.pieChart2Data.reduce((a, b) => a + b).toFixed(1));
-		if (sum !== 100) {
-			const index = this.getLargestNumInArrayIndex(this.pieChart2Data);
-			this.pieChart2Data[index] = parseFloat((this.pieChart2Data[index] - (sum - 100)).toFixed(1));
-		}
+		that.barChart2Data.push({
+			data: arrayTest2
+		})
+		// const sum = parseFloat(this.barChart2Data.reduce((a, b) => a + b).toFixed(1));
+		// if (sum !== 100) {
+		// 	const index = this.getLargestNumInArrayIndex(this.barChart2Data);
+		// 	this.barChart2Data[index] = parseFloat((this.barChart2Data[index] - (sum - 100)).toFixed(1));
+		// }
 
 		const colors = [];
-		this.pieChart1Labels.map(function (item, index) {
+		this.barChartLabels.map(function (item, index) {
 			const color = that.getColorByIndex(index);
 			colors.push(color);
 		});
-		this.pieChart1Colors = [
+		this.barChartColors = [
 			{ backgroundColor: colors }
 		];
-		this.pieChart2Legend = this.legendLabel;
-		this.pieChart2Options.legend.position = this.legendPosition;
-		this.pieChart2Options.aspectRatio = this.aspectRatio;
+		// this.barChart2Legend = this.legendLabel;
+		// this.barChart2Options.legend.position = this.legendPosition;
+		// this.barChart2Options.aspectRatio = this.aspectRatio;
 	}
 
 	// ------------------------------------------------------------------

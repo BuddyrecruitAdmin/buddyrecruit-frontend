@@ -173,6 +173,14 @@ export const API_ENDPOINT = {
     DASHBOARD_DELETE: "dashboard/delete",
     DASHBOARD_DETAIL: "dashboard/detail",
 
+    EVALUATION_CREATE: "evaluation/create",
+    EVALUATION_LIST: "evaluation/list",
+    EVALUATION_DELETE: "evaluation/delete",
+    EVALUATION_DETAIL: "evaluation/detail",
+    EVALUATION_EDIT: "evaluation/edit",
+    EVALUATION_CANDIDATE_DETAIL: "candidateEva/detail",
+    EVALUATION_CANDIDATE_EDIT: "candidateEva/edit",
+
     MAIL_TEMPLATE_CREATE: "mailTemplate/create",
     MAIL_ACTION_LIST: "mailAction/list",
     MAIL_TEMPLATE_LIST: "mailTemplate/list",
@@ -202,7 +210,8 @@ export const API_ENDPOINT = {
     DASHBOARD: "dashboard"
   },
   REPORT: {
-    ACTION: "report"
+    ACTION: "report",
+    LIST: "report/candidate"
   },
   HERO: {
     LIST: "hero/list"

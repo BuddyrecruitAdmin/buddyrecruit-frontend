@@ -1,0 +1,71 @@
+<div class="content-header with-shadow">
+  <div class="row">
+    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.jobPosition.editable, 
+        'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
+      <h3>Evaluation</h3>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
+      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/evaluation-detail/create'">
+        CREATE</button>
+    </div>
+  </div>
+</div>
+
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body></nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!loading">
+  <nb-card-body>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th scope="col" class="text-left">Name</th>
+            <th scope="col" style="width: 150px;">Last Update By</th>
+            <th scope="col" style="width: 150px;">Last Update Date</th>
+            <th scope="col" style="width: 160px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items;">
+            <td class="text-left link" (click)="openPopupEvaluation(item)">{{ item.name || item._id }}</td>
+            <td>
+              {{ item.lastChangedInfo?.refUser?.firstname }}
+              {{ item.lastChangedInfo?.refUser?.lastname }}
+            </td>
+            <td>{{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}</td>
+            <td class="actions">
+              <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                [routerLink]="'/setting/evaluation-detail/edit/'+item._id">
+                <nb-icon icon="edit-outline"></nb-icon>
+              </button>
+              <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
+                [routerLink]="'/setting/evaluation-detail/duplicate/'+item._id">
+                <nb-icon icon="copy-outline"></nb-icon>
+              </button>
+              <button nbButton status="danger" size="tiny" nbTooltip="Delete"
+                (click)="delete(item)">
+                <nb-icon icon="trash-2-outline"></nb-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+      [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+    </mat-paginator>
+  </nb-card-body>
+</nb-card>
