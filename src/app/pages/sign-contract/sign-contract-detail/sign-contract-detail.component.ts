@@ -27,9 +27,6 @@ import { CandidateService } from '../../candidate/candidate.service';
   styleUrls: ['./sign-contract-detail.component.scss']
 })
 export class SignContractDetailComponent implements OnInit {
-  selectedIndex = 4;
-  stepLabels = [];
-
   role: any;
   jrId: any;
   jrName: any;
@@ -296,20 +293,6 @@ export class SignContractDetailComponent implements OnInit {
         this.search();
       }
     });
-  }
-
-  displayButton(item: any, stageName: string): boolean {
-    let isDisplay = false;
-    if (stageName === item.refStage.name) {
-      // if ('Interview Taken' === item.refStage.name) {
-      //   isDisplay = true;
-      // } else if ('Interview Score' === item.refStage.name) {
-      //   if (!item.pendingInterviewInfo.examScore || !item.pendingInterviewInfo.attitudeScore) {
-      //     isDisplay = true;
-      //   }
-      // }
-    }
-    return isDisplay;
   }
 
   changePaging(event) {

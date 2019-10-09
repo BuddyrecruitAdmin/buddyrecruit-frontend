@@ -29,6 +29,7 @@ export class PopupEvaluationComponent implements OnInit {
   evaluation: any;
   scoring: any;
   editable: boolean;
+
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupEvaluationComponent>,
@@ -67,8 +68,8 @@ export class PopupEvaluationComponent implements OnInit {
         label: 'ไม่ดี',
         value: 1
       },
-    ],
-      this.loading = true;
+    ];
+    this.loading = true;
     this.candidateName = '';
     this.editable = false;
     this.jrName = '';

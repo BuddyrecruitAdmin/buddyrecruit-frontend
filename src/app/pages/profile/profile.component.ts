@@ -1,13 +1,11 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
-import { ResponseCode, Paging } from '../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../shared/interfaces/common.interface';
+import { ResponseCode } from '../../shared/app.constants';
 import { getRole } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
-import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -18,7 +16,10 @@ import { API_ENDPOINT } from '../../shared/constants';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
+import { Location } from '@angular/common';
+
 const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
+
 @Component({
   selector: 'ngx-profile',
   templateUrl: './profile.component.html',
@@ -51,15 +52,14 @@ export class ProfileComponent implements OnInit {
   email: AbstractControl;
   dialogRef: NbDialogRef<any>;
   profileDetail: any;
-  alertType: string;
-  alertMessage: string;
-  private _alertMessage = new Subject<string>();
+
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
+    private location: Location,
   ) {
     this.role = getRole();
   }
@@ -88,7 +88,6 @@ export class ProfileComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.profileDetail = response.data;
         this.url = response.data.imagePath;
-        console.log(this.profileDetail)
       }
     });
     this.loginForm = this.formBuilder.group({
@@ -152,9 +151,13 @@ export class ProfileComponent implements OnInit {
     return isValid;
 
   }
+
+  cancel() {
+    this.location.back();
+  }
+
   save() {
     if (this.bHasFile) {
-      console.log(this.profileDetail)
       this.uploader.uploadItem(
         this.uploader.queue[this.uploader.queue.length - 1]
       )
@@ -168,7 +171,6 @@ export class ProfileComponent implements OnInit {
       confirm.afterClosed().subscribe(result => {
         if (result) {
           const request = this.setRequest();
-          console.log(request)
           this.service.edit(request).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
@@ -199,7 +201,6 @@ export class ProfileComponent implements OnInit {
     }
     const FileSize = files.item(0).size / 1024 / 1024; // in MB
     if (FileSize > 10) {
-      this.setAlertMessage("E", MESSAGE[121]);
       this.bHasFile = false;
       this.profileDetail.attachment.originalname = "";
       this.profileDetail.attachment.uploadName = "";
@@ -210,29 +211,6 @@ export class ProfileComponent implements OnInit {
       this.profileDetail.attachment.originalname = files.item(0).name;
       this.profileDetail.attachment.uploadName = "";
       this.fileToUpload = files.item(0);
-      this.alertMessage = null;
-    }
-  }
-
-  setAlertMessage(type: string, message: string) {
-    this._alertMessage.next(message); // build message
-    switch (type) {
-      case "S": {
-        this.alertType = "success";
-        break;
-      }
-      case "E": {
-        this.alertType = "danger";
-        break;
-      }
-      case "W": {
-        this.alertType = "warning";
-        break;
-      }
-      case "I": {
-        this.alertType = "info";
-        break;
-      }
     }
   }
 
@@ -240,9 +218,11 @@ export class ProfileComponent implements OnInit {
     const request = _.cloneDeep(this.profileDetail);
     return request;
   }
+
   togglePassword() {
     this.isChangePassword = !this.isChangePassword;
   }
+
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {
       status: type,

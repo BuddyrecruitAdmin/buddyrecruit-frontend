@@ -74,7 +74,7 @@ export class PopupExamInfoComponent implements OnInit {
         }
         this.afterSignContract = response.data.candidateFlow.pendingExamInfo.afterSignContract;
         this.remark = response.data.candidateFlow.pendingExamInfo.remark;
-        if (response.data.candidateFlow.refStage.name === 'Exam Taken') {
+        if (response.data.candidateFlow.refStage.order === 201) {
           this.canApprove = true;
         }
       }

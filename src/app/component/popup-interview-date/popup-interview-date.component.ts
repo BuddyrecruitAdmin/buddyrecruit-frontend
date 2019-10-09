@@ -36,8 +36,8 @@ export class PopupInterviewDateComponent implements OnInit {
   innerHeight: any;
   candidateName: string;
   jrName: string;
-  date: Date;
-  time: any;
+  date: string;
+  time: string;
   location: any;
   locations: DropDownValue[];
   loading: boolean;
@@ -129,10 +129,11 @@ export class PopupInterviewDateComponent implements OnInit {
         this.stageId = response.data.candidateFlow.refStage._id;
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
 
-        this.location = response.data.candidateFlow.pendingInterviewInfo.refLocation._id || this.location;
+        this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingInterviewInfo.startDate)) {
-          this.date = new Date(response.data.candidateFlow.pendingInterviewInfo.startDate);
-          this.time = new Date(response.data.candidateFlow.pendingInterviewInfo.startDate);
+          this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
+          this.setDropdownTime(this.date);
+          this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
         }
         if (response.data.candidateFlow.refStage.refMain.name === 'Pending Appointment') {
           this.canApprove = true;
@@ -151,10 +152,9 @@ export class PopupInterviewDateComponent implements OnInit {
     if (this.userInterviews) {
       this.userInterviews.forEach(user => {
         user.calendar.availableDates.forEach(element => {
-          const date = new Date(element.startDate);
           this.dropdownDate.push({
-            label: this.utilitiesService.convertDate(date),
-            value: date
+            label: this.utilitiesService.convertDate(element.startDate),
+            value: element.startDate
           });
         });
       });
@@ -173,6 +173,7 @@ export class PopupInterviewDateComponent implements OnInit {
 
   setDropdownTime(iDate?: any) {
     iDate = new Date(iDate);
+    this.time = undefined;
     this.dropdownTime = [];
     this.dropdownTime.push({
       label: '- Select Interview Time -',
@@ -189,7 +190,7 @@ export class PopupInterviewDateComponent implements OnInit {
               const endHour = addHours(startOfDay(startDate), hour + 1);
               this.dropdownTime.push({
                 label: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
-                value: addHours(startOfDay(startDate), hour)
+                value: JSON.parse(JSON.stringify(startHour))
               });
             }
           }

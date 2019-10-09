@@ -14,6 +14,12 @@ export const API_ENDPOINT = {
     WORKING_DAYS: {
       LIST: "user/workingDays/list",
       EDIT: "user/workingDays/edit",
+    },
+    NOTIFICATION: {
+      CHECK_NEW: "notification/checkNew",
+      LIST: "notification/list",
+      MARK_AS_READ: "notification/markAsRead",
+      MARK_AS_SEEN: "notification/markAsSeen",
     }
   },
   JOBDESCRIPTION: {

@@ -22,7 +22,7 @@
       <ngb-timepicker [(ngModel)]="signTime" [minuteStep]="minuteStep" [spinners]="false" required=""></ngb-timepicker>
     </div>
     <div class="form-control-group">
-      <label class="label">Agree Start Date <span class="text-red">*</span></label>
+      <label class="label">Agree Start Date</label>
       <nb-datepicker #datepicker2 format="dd/MM/yyyy"></nb-datepicker>
       <input [nbDatepicker]="datepicker2" [(ngModel)]="agreeDate" nbInput placeholder="dd/mm/yyyy">
     </div>
@@ -35,9 +35,8 @@
     <div class="footer-collapse">
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()"
-      [disabled]="!canApprove && (!signDate || !signTime)">SAVE</button>
-    <button *ngIf="canApprove" nbButton status="success" (click)="sendEmail()" [disabled]="!signDate || !signTime">SEND
+    <button nbButton status="primary" (click)="save()">SAVE</button>
+    <button nbButton status="success" (click)="sendEmail()" [disabled]="!signDate || !signTime">SEND
       EMAIL</button>
   </nb-card-footer>
 </nb-card>

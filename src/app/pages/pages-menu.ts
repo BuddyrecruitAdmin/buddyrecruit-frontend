@@ -53,25 +53,25 @@ export const MENU_PROCESS_FLOW: NbMenuItem[] = [
   },
   {
     title: 'Talent Pool',
-    icon: 'person-add-outline',
+    icon: 'person-done-outline',
     link: '/talent-pool/list',
     hidden: false,
   },
   {
     title: 'Pending Exam',
-    icon: 'person-add-outline',
+    icon: 'edit-outline',
     link: '/exam/list',
     hidden: false,
   },
   {
     title: 'Pending Appointment',
-    icon: 'person-add-outline',
+    icon: 'clock-outline',
     link: '/appointment/list',
     hidden: false,
   },
   {
     title: 'Pending Interview',
-    icon: 'person-add-outline',
+    icon: 'people-outline',
     link: '/interview/list',
     hidden: false,
   },
@@ -83,7 +83,7 @@ export const MENU_PROCESS_FLOW: NbMenuItem[] = [
   },
   {
     title: 'Onboard',
-    icon: 'person-add-outline',
+    icon: 'checkmark-circle-outline',
     link: '/onboard/list',
     hidden: false,
   },

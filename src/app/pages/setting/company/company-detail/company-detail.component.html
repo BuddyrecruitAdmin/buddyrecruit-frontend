@@ -136,22 +136,41 @@
             <nb-radio [value]="false">No</nb-radio>
           </nb-radio-group>
         </div>
-        <div *ngIf="role.refHero.isSuperAdmin" class="form-control-group">
-          <label class="label">Is Subsidiary Company</label>
-          <nb-radio-group [(ngModel)]="companyDetail.isSubCompany" name="isSubCompany" class="inline">
-            <nb-radio [value]="true">Yes</nb-radio>
-            <nb-radio [value]="false">No</nb-radio>
-          </nb-radio-group>
-        </div>
-        <div *ngIf="role.refHero.isSuperAdmin" class="form-control-group">
-          <label class="label">Parent Company <span *ngIf="companyDetail.isSubCompany" class="text-red">*</span></label>
-          <nb-select placeholder="Select Parent Company" [(ngModel)]="companyDetail.refParent" fullWidth
-            [disabled]="!companyDetail.isSubCompany">
-            <nb-option [disabled]="!companyDetail.isSubCompany" *ngFor="let companyOption of companyOptions" [value]="companyOption.value">
-              {{ companyOption.label }}
-            </nb-option>
-          </nb-select>
-          <small *ngIf="errMsg.refParent" class="text-red">{{ errMsg.refParent }}</small>
+        <div *ngIf="role.refHero.isSuperAdmin">
+          <div class="form-control-group">
+            <label class="label">Is Subsidiary Company</label>
+            <nb-radio-group [(ngModel)]="companyDetail.isSubCompany" name="isSubCompany" class="inline">
+              <nb-radio [value]="true">Yes</nb-radio>
+              <nb-radio [value]="false">No</nb-radio>
+            </nb-radio-group>
+          </div>
+          <div class="form-control-group">
+            <label class="label">Parent Company <span *ngIf="companyDetail.isSubCompany"
+                class="text-red">*</span></label>
+            <nb-select placeholder="Select Parent Company" [(ngModel)]="companyDetail.refParent" fullWidth
+              [disabled]="!companyDetail.isSubCompany">
+              <nb-option [disabled]="!companyDetail.isSubCompany" *ngFor="let companyOption of companyOptions"
+                [value]="companyOption.value">
+                {{ companyOption.label }}
+              </nb-option>
+            </nb-select>
+            <small *ngIf="errMsg.refParent" class="text-red">{{ errMsg.refParent }}</small>
+          </div>
+          <hr>
+          <div class="form-control-group">
+            <label class="label">Trial version</label>
+            <mat-checkbox [(ngModel)]="companyDetail.isTrial">Yes</mat-checkbox>
+          </div>
+          <div class="form-control-group">
+            <label class="label">Number of JR <span class="text-red">*</span></label>
+            <input type="number" [(ngModel)]="companyDetail.maxJR" nbInput fullWidth placeholder="Number of JR">
+            <small *ngIf="errMsg.maxJR" class="text-red">{{ errMsg.maxJR }}</small>
+          </div>
+          <div class="form-control-group">
+            <label class="label">Number of User <span class="text-red">*</span></label>
+            <input type="number" [(ngModel)]="companyDetail.maxUser" nbInput fullWidth placeholder="Number of User">
+            <small *ngIf="errMsg.maxUser" class="text-red">{{ errMsg.maxUser }}</small>
+          </div>
         </div>
       </div>
     </div>

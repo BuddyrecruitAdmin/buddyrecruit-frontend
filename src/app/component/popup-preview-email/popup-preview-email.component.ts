@@ -80,6 +80,9 @@ export class PopupPreviewEmailComponent implements OnInit {
           this.previewEmail = false;
           this.nextStep();
         }
+      } else {
+        this.previewEmail = false;
+        this.nextStep();
       }
       this.loading = false;
     });

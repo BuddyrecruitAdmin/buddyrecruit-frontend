@@ -74,6 +74,8 @@ import {
 import { ComponentsModule } from '../component/component.module';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { IndexComponent } from './index/index.component';
+
 @NgModule({
   imports: [
     ModulesRoutingModule,
@@ -145,7 +147,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     AppFormComponent,
     TranslatePipe,
     ForgotComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    IndexComponent
   ],
   providers: [
     TranslateService,

@@ -114,15 +114,15 @@
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Sign Contract Date</label>
-                        <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
-                      </div>
-                      <div class="text-group">
-                        <label class="label">Email Sent Date</label>
-                        <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.mail?.date) || '-' }}</span>
+                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Agree Start Date</label>
-                        <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
+                        <span>{{ utilitiesService.convertDate(item.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Email Sent Date</label>
+                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo?.mail?.date) || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Note</label>
@@ -153,8 +153,8 @@
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button *ngIf="!displayButton(item, item.refStage.name)" nbButton status="success"
-                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                    <button [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date)"
+                      nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">

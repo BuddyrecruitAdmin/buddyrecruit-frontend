@@ -24,6 +24,7 @@ import {
   NbDialogModule,
   NbWindowModule,
   NbAccordionModule,
+  NbAlertModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -143,6 +144,7 @@ import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation
     NbDialogModule.forRoot(),
     NbWindowModule.forChild(),
     NbAccordionModule,
+    NbAlertModule,
 
     A11yModule,
     CdkStepperModule,

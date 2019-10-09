@@ -48,10 +48,10 @@
           <label class="label">Admin Email</label>
           <span [nbTooltip]="item.adminEmail">{{ item.adminEmail }}</span>
         </div>
-        <div *ngIf="item.companySize" class="text-group">
+        <!-- <div *ngIf="item.companySize" class="text-group">
           <label class="label">Company Size</label>
           <span>{{ item.companySize }}</span>
-        </div>
+        </div> -->
         <div class="text-group">
           <label class="label">Transferable</label>
           <nb-icon *ngIf="item.transferable" icon="checkmark-outline" class="text-green"></nb-icon>
@@ -63,7 +63,7 @@
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
-        <!-- <hr> -->
+        <hr>
         <div class="text-group">
           <label class="label">Last update by</label>
           <span>
@@ -73,7 +73,7 @@
         </div>
         <div class="text-group">
           <label class="label">Last update date</label>
-          <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
+          <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
         </div>
       </nb-card-body>
     </nb-card>

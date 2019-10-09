@@ -31,7 +31,7 @@ export class PopupCommentComponent implements OnInit {
     public matDialog: MatDialog,
   ) {
     this.role = getRole();
-    this.innerWidth = window.innerWidth * 0.4;
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
   }
 
@@ -61,7 +61,7 @@ export class PopupCommentComponent implements OnInit {
             this.items.push({
               _id: element._id,
               name: this.utilitiesService.setFullname(element.refUser),
-              title: this.utilitiesService.convertDateTime(element.date),
+              title: this.utilitiesService.convertDateTimeFromSystem(element.date),
               picture: '../../../assets/images/avatar.png',
               message: element.message,
               accent: element.refUser._id === this.role._id ? 'success' : 'default',

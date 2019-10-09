@@ -16,10 +16,17 @@
     </div>
     <div *ngIf="role.refAuthorize.configuration.user.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/setting/user-detail'">Create</button>
+        [routerLink]="'/setting/user-detail'" [disabled]="isOverQuota">Create</button>
     </div>
   </div>
 </div>
+
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  <span>
+    ไม่สามารถสร้าง User เพิ่มได้ เนื่องจากจำนวน User ครบที่กำหนดแล้ว, หากต้องการความช่วยเหลือ!
+    <a class="link underline m-l-5"><b>ติดต่อเรา</b></a>
+  </span>
+</nb-alert>
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let item of items;">
@@ -71,7 +78,7 @@
         </div>
         <div class="text-group">
           <label class="label">Last update date</label>
-          <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
+          <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
         </div>
       </nb-card-body>
     </nb-card>
