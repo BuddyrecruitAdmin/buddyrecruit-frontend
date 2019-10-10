@@ -161,6 +161,15 @@ export class InterviewListComponent implements OnInit {
     }
   }
 
+  clearFilter() {
+    if (this.filter.selected.departments.length || this.filter.selected.divisions.length) {
+      this.filter.selected.departments = [];
+      this.filter.selected.divisions = [];
+      this.filter.data.divisions = _.cloneDeep(this.filter.temp.divisions);
+      this.search();
+    }
+  }
+
   changeFilter(calculate: boolean = true) {
     if (calculate) {
       this.filter.data.divisions = [];

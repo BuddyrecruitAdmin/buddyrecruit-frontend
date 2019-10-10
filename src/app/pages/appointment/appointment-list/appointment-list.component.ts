@@ -73,7 +73,7 @@ export class AppointmentListComponent implements OnInit {
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
-    }
+    };
     this.filter = {
       isFilter: true,
       data: {
@@ -88,7 +88,7 @@ export class AppointmentListComponent implements OnInit {
         departments: [],
         divisions: []
       }
-    }
+    };
     this.search();
   }
 
@@ -154,6 +154,15 @@ export class AppointmentListComponent implements OnInit {
   filterToggle() {
     this.filter.isFilter = !this.filter.isFilter;
     if (!this.filter.isFilter) {
+      this.filter.selected.departments = [];
+      this.filter.selected.divisions = [];
+      this.filter.data.divisions = _.cloneDeep(this.filter.temp.divisions);
+      this.search();
+    }
+  }
+
+  clearFilter() {
+    if (this.filter.selected.departments.length || this.filter.selected.divisions.length) {
       this.filter.selected.departments = [];
       this.filter.selected.divisions = [];
       this.filter.data.divisions = _.cloneDeep(this.filter.temp.divisions);

@@ -100,7 +100,7 @@
                     </div>
                     <div class="text-group">
                       <label class="label">Interview Date</label>
-                      <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.date) || '-' }}</span>
+                      <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.startDate) || '-' }}</span>
                     </div>
                   </div>
                   <div *ngIf="item.refStage?.name === 'Interview Score'" class="m-t-5">
@@ -149,15 +149,15 @@
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button *ngIf="!displayButton(item, item.refStage.name)" nbButton status="success"
-                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                    <button *ngIf="item.button.nextStep" nbButton status="success" [nbTooltip]="button.button"
+                      (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
-                    <button *ngIf="displayButton(item, 'Interview Taken')" nbButton status="success"
-                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                    <button *ngIf="item.button.interviewTaken" nbButton status="success" [nbTooltip]="button.button"
+                      (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
-                    <button *ngIf="displayButton(item, 'Interview Score')" nbButton status="success"
+                    <button *ngIf="item.button.interviewScore" nbButton status="success"
                       nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)">
                       <nb-icon icon="edit-2-outline"></nb-icon>
                     </button>

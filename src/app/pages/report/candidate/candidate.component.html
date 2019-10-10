@@ -126,7 +126,7 @@
               </td>
               <td>
                 <span style="font-size: 14px;" [nbTooltip]="item?.actionDate">
-                  {{ utilitiesService.convertDateTime(item?.actionDate) || '-' }}
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.actionDate) || '-' }}
                 </span>
               </td>
               <td *ngIf="checked">

@@ -45,7 +45,7 @@
               {{ item.lastChangedInfo?.refUser?.firstname }}
               {{ item.lastChangedInfo?.refUser?.lastname }}
             </td>
-            <td>{{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}</td>
+            <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
             <td class="actions">
               <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                 [routerLink]="'/setting/evaluation-detail/edit/'+item._id">

@@ -12,7 +12,6 @@
   </nb-stepper>
 </div>
 
-
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -59,6 +58,13 @@
                 {{ option.label }}
               </nb-option>
             </nb-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <button nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
+              Clear Filter
+            </button>
           </div>
         </div>
       </div>

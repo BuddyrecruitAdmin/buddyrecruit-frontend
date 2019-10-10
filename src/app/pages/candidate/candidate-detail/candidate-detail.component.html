@@ -1,16 +1,3 @@
-<!-- <div class="content-header with-shadow">
-  <div class="breadcrumb">
-    <span (click)="gotoStage()" class="link">
-      {{ item.candidateFlow?.refStage?.refMain?.name || 'STAGE' }}
-    </span>
-    <span class="fa fa-angle-right"></span>
-    <span (click)="gotoJR()" class="link">
-      {{ item.candidateFlow?.refJR?.refJD?.position || 'JOB POSITION' }}
-    </span>
-    <span class="fa fa-angle-right"></span>
-    <span> {{ utilitiesService.setFullname(item) }}</span>
-  </div>
-</div> -->
 <div class="content-header with-shadow">
   <div class="breadcrumb">
     <h5>
@@ -20,7 +7,6 @@
     </h5>
   </div>
 </div>
-
 
 <nb-card accent="success" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
   nbSpinnerMessage="Loading...">
@@ -43,6 +29,8 @@
 
     <div class="row">
       <div class="col-md-6">
+
+        <!-- Process Flow -->
         <label class="label topic" style="margin-top: 0;">Process Flow</label>
         <div class="m-l-15">
           <div class="text-group">
@@ -64,8 +52,10 @@
               nbTooltip="See More Job Positon">{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
           </div>
         </div>
+
+        <!-- Exam Info -->
         <div *ngIf="item.candidateFlow?.examInfo?.flag">
-          <label class="label topic" style="margin-top: 0;">Exam Info</label>
+          <label class="label topic">Exam Info</label>
           <div class="m-l-15">
             <div class="text-group">
               <label class="label">Exam Date</label>
@@ -74,7 +64,7 @@
             <div *ngIf="item.candidateFlow?.pendingExamInfo?.flag">
               <div class="text-group">
                 <label class="label">Available Date</label>
-                <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingExamInfo?.availableDate) || '-' }}</span>
+                <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingExamInfo?.availableDate) || '-' }}</span>
               </div>
               <div class="text-group">
                 <label class="label">After Sign Contract</label>
@@ -86,29 +76,104 @@
               </div>
             </div>
           </div>
-          <div *ngIf="item.candidateFlow?.pendingExamScoreInfo?.flag">
-            <label class="label topic" style="margin-top: 0;">Exam Score</label>
-            <div class="m-l-15">
-              <div class="text-group">
-                <label class="label">Exam Score</label>
-                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examScore || '-' }}</span>
-              </div>
-              <div class="text-group">
-                <label class="label">Exam Remark</label>
-                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
-              </div>
-              <div class="text-group">
-                <label class="label">Attitude Score</label>
-                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '-' }}</span>
-              </div>
-              <div class="text-group">
-                <label class="label">Attitude Remark</label>
-                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
-              </div>
+        </div>
+
+        <!-- Exam Score -->
+        <div *ngIf="item.candidateFlow?.pendingExamScoreInfo?.flag">
+          <label class="label topic">Exam Score</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Exam Score</label>
+              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examScore || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Exam Remark</label>
+              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Attitude Score</label>
+              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Attitude Remark</label>
+              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
             </div>
           </div>
         </div>
+
+        <!-- Interview Info -->
+        <div *ngIf="item.candidateFlow?.pendingInterviewInfo?.flag">
+          <label class="label topic">Interview Info</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Interview Location</label>
+              <span>{{ item.candidateFlow?.pendingInterviewInfo?.refLocation?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Interview Date</label>
+              <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingInterviewInfo?.startDate) || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interview Score -->
+        <div *ngIf="item.candidateFlow?.pendingInterviewScoreInfo?.flag">
+          <label class="label topic">Interview Score</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Score</label>
+              <span>{{ interviewScore.score || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Average Score</label>
+              <span>{{  interviewScore.avgScore || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Result</label>
+              <span>{{  interviewScore.result || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Remark</label>
+              <span>{{  interviewScore.remark || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sign Contract Info -->
+        <div *ngIf="item.candidateFlow?.pendingSignContractInfo?.sign?.flag">
+          <label class="label topic">Sign Contract Info</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Sign Contract Date</label>
+              <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Agree Start Date</label>
+              <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Email Sent Date</label>
+              <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.mail?.date) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Note</label>
+              <span>{{ item.candidateFlow?.pendingSignContractInfo?.note || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onboard Info -->
+        <div *ngIf="item.candidateFlow?.onboard?.flag">
+          <label class="label topic">Onboard Info</label>
+          <div class="text-group">
+            <label class="label">Onboard Date</label>
+            <span>{{ utilitiesService.convertDate(item.candidateFlow?.onboard?.date) || '-' }}</span>
+          </div>
+        </div>
+
       </div>
+
+      <!-- CV Score -->
       <div class="col-md-6">
         <label class="label topic" style="margin-top: 0;">CV Score</label>
         <div class="m-l-15">
@@ -171,6 +236,7 @@
       </div>
     </div>
 
+    <!-- Personal Details -->
     <div class="row">
       <div class="col-md-12">
         <label class="label topic">Personal Details</label>
@@ -209,18 +275,11 @@
       </div>
     </div>
 
+    <!-- Work Experience -->
     <div class="row">
       <div class="col-md-12">
         <label class="label topic">Work Experience</label>
         <div class="m-l-15">
-          <!-- <div class="text-group">
-            <label class="label">Latest Position</label>
-            <span>{{ item.workExperience?.latestPostision || item.workExperience?.lastPosition || '-' }}</span>
-          </div>
-          <div class="text-group">
-            <label class="label">Latest Company</label>
-            <span>{{ item.workExperience?.latestCompany || item.workExperience?.lastCompany || '-' }}</span>
-          </div> -->
           <div class="text-group">
             <label class="label">Duration</label>
             <span>{{ 
@@ -229,9 +288,10 @@
             </span>
           </div>
           <label *ngIf="item.workExperience?.work.length" class="label">Detail :</label>
-          <div *ngFor="let exp of item.workExperience?.work">
-            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-            <span>{{ utilitiesService.convertWorkExpToText(exp) }} </span>
+          <div class="m-l-15">
+            <div *ngFor="let exp of item.workExperience?.work">
+              <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+            </div>
           </div>
         </div>
       </div>
@@ -239,36 +299,32 @@
         <label class="label topic">Education</label>
         <div class="m-l-15">
           <div *ngFor="let education of item.education">
-            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-            <span>{{ utilitiesService.convertEducationToText(education) }} </span>
+            <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
           </div>
         </div>
       </div>
     </div>
 
-    <div>
-      <label class="label topic">Hard Skills</label>
-      <div class="m-l-15">
-        <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-        <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) }}</span>
-      </div>
+    <!-- Hard Skills -->
+    <label class="label topic">Hard Skills</label>
+    <div class="m-l-15">
+      <span>• {{ utilitiesService.convertStringArrayToLongText(item.hardSkill) }}</span>
     </div>
-    <div>
-      <label class="label topic">Soft Skills</label>
-      <div class="m-l-15">
-        <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-        <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) }}</span>
-      </div>
+
+    <!-- Soft Skills -->
+    <label class="label topic">Soft Skills</label>
+    <div class="m-l-15">
+      <span>• {{ utilitiesService.convertStringArrayToLongText(item.softSkill) }}</span>
     </div>
-    <div>
-      <label class="label topic">Certificate</label>
-      <div class="m-l-15">
-        <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-        <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) }}</span>
-      </div>
+
+    <!-- Certificate -->
+    <label class="label topic">Certificate</label>
+    <div class="m-l-15">
+      <span>• {{ utilitiesService.convertStringArrayToLongText(item.certificate) }}</span>
     </div>
 
   </nb-card-body>
+
   <nb-card-footer>
     <span *ngFor="let button of steps">
       <span *ngIf="button.editable && button.refStage._id === item.candidateFlow.refStage._id">
@@ -287,4 +343,5 @@
       </span>
     </span>
   </nb-card-footer>
+
 </nb-card>

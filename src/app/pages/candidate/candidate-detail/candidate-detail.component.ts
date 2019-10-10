@@ -33,6 +33,12 @@ export class CandidateDetailComponent implements OnInit {
   candidateId: any;
   item: any;
   loading: boolean;
+  interviewScore = {
+    score: '',
+    avgScore: '',
+    result: '',
+    remark: '',
+  };
 
   constructor(
     private router: Router,
@@ -55,13 +61,12 @@ export class CandidateDetailComponent implements OnInit {
 
   back() {
     this.location.back();
-    // this.router.navigate(['/candidate/list']);
   }
 
   getDetail() {
+    this.loading = true;
     this.service.getDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        debugger;
         this.item = response.data;
       }
       this.loading = false;

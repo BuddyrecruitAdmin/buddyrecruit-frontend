@@ -64,7 +64,7 @@
                 </div>
                 <div class="text-group">
                   <label class="label">Last update date</label>
-                  {{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}
+                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
                 </div>
               </nb-card-body>
             </nb-card>
@@ -111,7 +111,7 @@
                 </div>
                 <div class="text-group">
                   <label class="label">Last update date</label>
-                  {{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}
+                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
                 </div>
               </nb-card-body>
             </nb-card>

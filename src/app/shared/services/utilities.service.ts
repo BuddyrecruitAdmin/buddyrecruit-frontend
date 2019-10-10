@@ -292,7 +292,7 @@ export class UtilitiesService {
     const devices = this.getDevice();
     switch (true) {
       case devices.isMobile:
-        width = width * 0.8;
+        width = width * 0.85;
         break;
       case devices.isTablet:
         width = width * 0.7;

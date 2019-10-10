@@ -64,7 +64,7 @@ export class CalendarComponent implements OnInit {
   viewDate: Date = new Date();
   refresh: Subject<any> = new Subject();
   events: CalendarEvent[];
-  activeDayIsOpen: boolean = true;
+  activeDayIsOpen: boolean = false;
   actions: CalendarEventAction[] = [
     {
       label: '<i class="fa fa-fw fa-pencil-alt"></i>',
@@ -83,6 +83,7 @@ export class CalendarComponent implements OnInit {
 
   role: any;
   innerHeight: any;
+  innerWidth: any;
   byWorkingDays: boolean;
   excludeDays: number[];
   dialogDate: Date;
@@ -90,6 +91,8 @@ export class CalendarComponent implements OnInit {
 
   calendarData: any;
   workingDays: any;
+  candidateFlow: any;
+  event: any = {};
 
   constructor(
     private service: CalendarService,
@@ -99,10 +102,11 @@ export class CalendarComponent implements OnInit {
   ) {
     this.role = getRole();
     this.innerHeight = window.innerHeight * 0.8;
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
   }
 
   ngOnInit() {
-    this.byWorkingDays = true;
+    this.byWorkingDays = false;
     this.events = [];
     this.excludeDays = [];
     this.dialogDate = new Date();
@@ -172,6 +176,14 @@ export class CalendarComponent implements OnInit {
             });
           }
         }
+      });
+    }
+
+    if (this.events.length) {
+      this.events.sort(function (a, b) {
+        const aa = new Date(a.start);
+        const bb = new Date(b.start);
+        return aa < bb ? -1 : aa > bb ? 1 : 0;
       });
     }
   }
@@ -323,10 +335,11 @@ export class CalendarComponent implements OnInit {
   }
 
   openPopupInterviewInfo(flowId: any) {
-    const candidateFlow = this.calendarData.interviewDates.find(element => {
+    const refCandidateFlow = this.calendarData.interviewDates.find(element => {
       return element.refCandidateFlow._id === flowId;
     });
-    if (candidateFlow) {
+    if (refCandidateFlow.refCandidateFlow) {
+      this.candidateFlow = refCandidateFlow.refCandidateFlow;
       this.dialogService.open(this.dialog2, {
         closeOnBackdropClick: true,
         hasScroll: true,
@@ -383,6 +396,7 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
+    this.event = event;
     if (event.color === colors.red) {
       this.openPopupInterviewInfo(event.id);
     } else {

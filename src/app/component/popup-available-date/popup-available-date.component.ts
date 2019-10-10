@@ -112,6 +112,7 @@ export class PopupAvailableDateComponent implements OnInit {
     this.calendarService.edit(request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
+        this.getAvailabelDate();
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
@@ -152,8 +153,6 @@ export class PopupAvailableDateComponent implements OnInit {
           isValid = false;
         }
       });
-    } else {
-      isValid = false;
     }
     return isValid;
   }

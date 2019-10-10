@@ -8,6 +8,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
+import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
   selector: 'ngx-popup-sign-date',
@@ -29,7 +30,6 @@ export class PopupSignDateComponent implements OnInit {
   agreeDate: Date;
   note: string;
   loading: boolean;
-  canApprove: boolean;
 
   constructor(
     private candidateService: CandidateService,
@@ -49,7 +49,6 @@ export class PopupSignDateComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.canApprove = false;
     this.candidateName = '';
     this.jrName = '';
     this.signDate = null;
@@ -75,13 +74,10 @@ export class PopupSignDateComponent implements OnInit {
           this.signDate = new Date(response.data.candidateFlow.pendingSignContractInfo.sign.date);
           this.signTime = this.utilitiesService.convertDateToTimePicker(this.signDate);
         }
-        if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.mail.date)) {
-          this.agreeDate = new Date(response.data.candidateFlow.pendingSignContractInfo.mail.date);
+        if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+          this.agreeDate = new Date(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate);
         }
         this.note = response.data.candidateFlow.pendingSignContractInfo.note;
-        // if (response.data.candidateFlow.refStage.name === 'Sign Contract') {
-        //   this.canApprove = true;
-        // }
       }
       this.loading = false;
     });

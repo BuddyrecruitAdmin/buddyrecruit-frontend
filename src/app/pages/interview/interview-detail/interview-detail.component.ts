@@ -144,6 +144,7 @@ export class InterviewDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map((item, index) => {
           item.collapse = this.collapseAll;
+          item.button = this.setButton(item);
           // this.score[index] =this.showScore(item);
 
           let sum = 0;
@@ -164,7 +165,7 @@ export class InterviewDetailComponent implements OnInit {
             } else {
               totalReject += 1;
             }
-          })
+          });
           item.avg = sum / item.pendingInterviewScoreInfo.evaluation.length;
           let fullResult = '';
           fullResult = 'ผ่าน' + ' : ' + totalPass + ' , ' + 'ไม่ผ่าน' + ' : '
@@ -177,6 +178,35 @@ export class InterviewDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  setButton(item: any): any {
+    let button = {
+      nextStep: false,
+      interviewTaken: false,
+      interviewScore: false,
+    };
+    switch (item.refStage.order) {
+      case 401:
+        if (item.pendingInterviewInfo) {
+          if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
+            button.nextStep = true;
+          } else {
+            button.interviewTaken = true;
+          }
+        }
+        break;
+      case 402:
+        if (item.pendingInterviewScoreInfo) {
+          if (item.pendingInterviewScoreInfo.evaluation.length) {
+            button.nextStep = true;
+          } else {
+            button.interviewScore = true;
+          }
+        }
+        break;
+    }
+    return button;
   }
 
   setTabCount(count: Count) {
@@ -411,22 +441,6 @@ export class InterviewDetailComponent implements OnInit {
         this.search();
       }
     });
-  }
-
-  displayButton(item: any, stageName: string): boolean {
-    let isDisplay = false;
-    if (stageName === item.refStage.name) {
-      if ('Interview Taken' === item.refStage.name) {
-        // if (!this.utilitiesService.dateIsValid(item.pendingInterviewInfo.date)) {
-        isDisplay = true;
-        // }
-      } else if ('Interview Score' === item.refStage.name) {
-        if (!item.pendingInterviewInfo.examScore || !item.pendingInterviewInfo.attitudeScore) {
-          isDisplay = true;
-        }
-      }
-    }
-    return isDisplay;
   }
 
   changePaging(event) {

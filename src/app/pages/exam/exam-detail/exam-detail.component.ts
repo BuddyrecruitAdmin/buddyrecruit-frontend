@@ -144,12 +144,42 @@ export class ExamDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
+          item.button = this.setButton(item);
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
       }
       this.loading = false;
     });
+  }
+
+  setButton(item: any): any {
+    let button = {
+      nextStep: false,
+      examTaken: false,
+      examScore: false,
+    };
+    switch (item.refStage.order) {
+      case 201:
+        if (item.pendingExamInfo) {
+          if (this.utilitiesService.dateIsValid(item.pendingExamInfo.availableDate) || item.pendingExamInfo.afterSignContract) {
+            button.nextStep = true;
+          } else {
+            button.examTaken = true;
+          }
+        }
+        break;
+      case 202:
+        if (item.pendingExamScoreInfo) {
+          if (item.pendingExamScoreInfo.examScore && item.pendingExamScoreInfo.attitudeScore) {
+            button.nextStep = true;
+          } else {
+            button.examScore = true;
+          }
+        }
+        break;
+    }
+    return button;
   }
 
   setTabCount(count: Count) {
@@ -324,23 +354,6 @@ export class ExamDetailComponent implements OnInit {
         this.search();
       }
     });
-  }
-
-  displayButton(item: any, stageName: string): boolean {
-    let isDisplay = false;
-    if (stageName === item.refStage.name) {
-      if ('Exam Taken' === item.refStage.name) {
-        if (!this.utilitiesService.dateIsValid(item.pendingExamInfo.availableDate)
-          && !item.pendingExamInfo.afterSignContract) {
-          isDisplay = true;
-        }
-      } else if ('Exam Score' === item.refStage.name) {
-        if (!item.pendingExamScoreInfo.examScore || !item.pendingExamScoreInfo.attitudeScore) {
-          isDisplay = true;
-        }
-      }
-    }
-    return isDisplay;
   }
 
   changePaging(event) {

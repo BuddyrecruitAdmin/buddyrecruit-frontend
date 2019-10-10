@@ -579,7 +579,7 @@
     .topic {
       color: var(--color-light-gray);
       margin-bottom: 0.5rem;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
   }
 
@@ -760,6 +760,55 @@
   }
   nb-stepper .header .step.selected .label-index {
     border-color: var(--color-green);
+  }
+
+
+  // --------------------------------------------------------------------
+  // Notification
+
+  .notification-card {
+    position: absolute;
+    width: 400px;
+    top: 40px;
+    right: 0;
+    z-index: 1001;
+    // border: 1px solid #dddfe2;
+
+    nb-card-header {
+      border-bottom: 1px solid #dddfe2;
+      padding: 10px;
+    }
+    nb-card-body {
+      overflow-y: scroll;
+      padding: 0;
+    }
+    nb-card-body .notification-body {
+      padding: 1rem;
+    }
+    nb-card-body .notification-body:not(:last-child) {
+      border-bottom: 1px solid #dddfe2;
+    }
+    nb-card-body .notification-body.unread {
+      background-color: #edf2fa;
+    }
+    nb-card-body .notification-body:hover {
+      background-color: #f3f3f3;
+    }
+    nb-card-footer {
+      border-top: 1px solid #dddfe2;
+    }
+    nb-user .user-picture {
+      border: 1px solid var(--color-green);
+    }
+    nb-user .user-name {
+      color: var(--color-black);
+      font-size: 0.85rem;
+      line-height: 1rem;
+    }
+    nb-user .user-title {
+      color: var(--color-gray);
+      margin-top: 5px;
+    }
   }
 
   // --------------------------------------------------------------------
@@ -1239,7 +1288,8 @@
   }
   
   .cal-month-view .cal-day-badge {
-    background-color: var(--color-red);
+    display: none;
+    background-color: var(--color-blue);
   }
 
   // --------------------------------------------------------------------
@@ -1260,9 +1310,6 @@
     }
     
     .content-header {
-      h1, h2, h3, h4, h5 {
-        margin-bottom: 1.5rem;
-      }
       .input-group {
         margin-bottom: 1rem;
       }

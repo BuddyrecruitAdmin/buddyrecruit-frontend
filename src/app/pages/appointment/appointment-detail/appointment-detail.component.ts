@@ -146,12 +146,28 @@ export class AppointmentDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
+          item.button = this.setButton(item);
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
       }
       this.loading = false;
     });
+  }
+
+  setButton(item: any): any {
+    let button = {
+      nextStep: false,
+      interviewDate: false,
+    };
+    if (item.pendingInterviewInfo) {
+      if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
+        button.nextStep = true;
+      } else {
+        button.interviewDate = true;
+      }
+    }
+    return button;
   }
 
   setTabCount(count: Count) {
@@ -192,7 +208,6 @@ export class AppointmentDetailComponent implements OnInit {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     setButtonId(button._id);
-    debugger;
     this.dialogService.open(PopupPreviewEmailComponent,
       {
         closeOnBackdropClick: true,
