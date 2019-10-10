@@ -380,8 +380,8 @@ export class InterviewDetailComponent implements OnInit {
   }
 
   openPopupEvaluation(item: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
+    // setFlowId(item._id);
+    setCandidateId(item._id);
     this.dialogService.open(PopupEvaluationComponent,
       {
         closeOnBackdropClick: false,

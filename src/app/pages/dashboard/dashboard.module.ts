@@ -19,7 +19,8 @@ import {
 	NbAccordionModule,
 	NbButtonModule,
 	NbIconModule,
-	NbInputModule
+	NbInputModule,
+	NbSelectModule
 } from '@nebular/theme';
 const routes: Routes = [{
 	path: '',
@@ -46,7 +47,8 @@ const routes: Routes = [{
 		NbAccordionModule,
 		NbButtonModule,
 		NbIconModule,
-		NbInputModule
+		NbInputModule,
+		NbSelectModule
 	],
 	declarations: [DashboardComponent]
 })

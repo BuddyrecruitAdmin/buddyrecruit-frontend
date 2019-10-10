@@ -65,4 +65,8 @@ export class JrService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_LIST, { action });
   }
 
+  getListUsers(departmentId: any, divisionId: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.JOBREQUEST.USERS, { departmentId, divisionId });
+  }
+
 }

@@ -58,7 +58,7 @@
     <div class="m-b-20">
       <label class="text-black"><b>ระดับคะแนน / Rank </b><span class="text-red">*</span></label>
       <div class="m-l-20">
-        <nb-radio-group [(ngModel)]="evaluation.rank.selected" name="rank" status="success">
+        <nb-radio-group disabled [(ngModel)]="evaluation.rank.selected" name="rank" status="success">
           <nb-radio *ngFor="let choice of evaluation.rank.options" name="rank" [value]="choice.value">
             {{ choice.subject }} <span class="text-gray">( {{ choice.min }} - {{ choice.max }} คะแนน )</span>
           </nb-radio>

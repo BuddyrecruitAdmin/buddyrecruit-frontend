@@ -1,3 +1,193 @@
-<p>
-  feedback works!
-</p>
+<div class="content-header with-shadow">
+  <div class="breadcrumb">
+    <h4>Feedback Report</h4>
+  </div>
+</div>
+<!-- card search -->
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 ">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <span>
+          <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Developer View</nb-checkbox>
+        </span>
+      </div>
+    </div>
+    <div class="filter-block" *ngIf="!checked">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Candidate Name</label>
+            <nb-select multiple [(selected)]="filter.selected.candidateName" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let option of filter.data.candidateName" [value]="option.value">
+                {{option.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Job Position</label>
+            <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let job of filter.data.jobPosition" [value]="job.value">
+                {{job.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Field Name</label>
+            <nb-select multiple [(selected)]="filter.selected.fieldName" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let field of filter.data.fieldName" [value]="field.value">
+                {{field.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-control-group">
+            <label>Create By</label>
+            <nb-select multiple [(selected)]="filter.selected.createBy" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let cre of filter.data.createBy" [value]="cre.value">
+                {{cre.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Developer View -->
+    <div class="filter-block" *ngIf="checked">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label>Candidate ID</label>
+            <nb-select multiple [(selected)]="filter.selected.candidateId" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let can of filter.data.candidateId" [value]="can.value">
+                {{can.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label>Field Name</label>
+            <nb-select multiple [(selected)]="filter.selected.fieldName" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let field of filter.data.fieldName" [value]="field.value">
+                {{field.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label>
+              Create By</label>
+            <nb-select multiple [(selected)]="filter.selected.createBy" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let cre of filter.data.createBy" [value]="cre.value">
+                {{cre.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+<!-- data and filter  *ngIf="!loading && items.length"-->
+<div>
+  <nb-card>
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th *ngIf="!checked" scope="col" style="font-size: 14px;">Candidate Name</th>
+              <th *ngIf="!checked" scope="col" style="width: 170px;font-size: 14px;">Job Position</th>
+              <th *ngIf="checked" scope="col" style="width: 170px;font-size: 14px;">Candidate ID</th>
+              <th scope="col" style="width: 150px;font-size: 14px;">Field Name</th>
+              <th scope="col" style="width: 100px;font-size: 14px;">Comment</th>
+              <th scope="col" style="width: 100px;font-size: 14px;">Create Date</th>
+              <th scope="col" style="width: 110px;font-size: 14px;">Create By</th>
+              <th *ngIf="checked" scope="col" style="width: 60px;font-size: 14px;">Checklist</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--  -->
+            <tr *ngFor="let item of items;">
+              <td *ngIf="!checked" class="text-left">
+                <span style="font-size: 14px;" class="link"
+                  [nbTooltip]="utilitiesService.setFullname(item.refCandidate)" (click)="info(item)">
+                  {{utilitiesService.setFullname(item.refCandidate) || '-' }}
+                </span>
+              </td>
+              <td *ngIf="!checked">
+                <span style="font-size: 14px;" [nbTooltip]="item?.refJR?.refJD?.position">
+                  {{ item?.refJR?.refJD?.position || '-' }}
+                </span>
+              </td>
+              <td *ngIf="checked" class="text-left">
+                <span (click)="info(item)" class="link" style="font-size: 14px;">
+                  {{ item?.refCandidate._id || '-' }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span style="font-size: 14px;" [nbTooltip]="item?.fieldName">
+                  {{ item?.fieldName || '-' }}
+                </span>
+              </td>
+              <td>
+                <span style="font-size: 14px;" [nbTooltip]="item?.remark">
+                  {{ item?.remark || '-' }}
+                </span>
+              </td>
+              <td>
+                <span style="font-size: 14px;"
+                  [nbTooltip]="utilitiesService.convertDateTimeFromSystem(item?.createdInfo?.date)">
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.createdInfo?.date) || '-' }}
+                </span>
+              </td>
+              <td *ngIf="!checked">
+                <span style="font-size: 14px;" [nbTooltip]="utilitiesService.setFullname(item?.createdInfo?.refUser)">
+                  {{ utilitiesService.setFullname(item?.createdInfo?.refUser) || '-' }}
+                </span>
+              </td>
+              <td *ngIf="checked">
+                <span style="font-size: 14px;" [nbTooltip]="item?.createdInfo?.refUser?._id">
+                  {{ item?.createdInfo?.refUser?._id || '-' }}
+                </span>
+              </td>
+              <td *ngIf="checked">
+                <span>
+                  <mat-checkbox [(ngModel)]="item.checkList" (change)="checkList(item,$event)"></mat-checkbox>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+        [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
+</div>

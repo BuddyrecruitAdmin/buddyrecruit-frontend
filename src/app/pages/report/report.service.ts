@@ -19,15 +19,24 @@ export class ReportService extends NetworkService {
 
   getList(criteria: any = undefined): Observable<ApiResponse> {
     const body = {
-      criteria : criteria
+      criteria: criteria
     }
     return this.post(API_ENDPOINT.REPORT.LIST, body);
+  }
+  getListReport(criteria: any = undefined): Observable<ApiResponse> {
+    const body = {
+      criteria: criteria
+    }
+    return this.post(API_ENDPOINT.REPORT.LISTFEEDBACK, body);
   }
 
   getPositionList(criteria: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.JOBDESCRIPTION.LIST, { criteria });
   }
 
+  edit(_id: any, checkList: boolean): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.REPORT.EDIT, { _id, checkList });
+  }
   // deleteItem(item: any): Observable<ApiResponse> {
   //   const body = {
   //     _id: item._id

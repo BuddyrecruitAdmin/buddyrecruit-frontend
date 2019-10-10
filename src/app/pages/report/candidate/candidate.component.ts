@@ -46,7 +46,7 @@ export class CandidateComponent implements OnInit {
   ) {
     this.role = getRole();
   }
-  
+
   ngOnInit() {
     this.loading = true;
     this.checked = true;
@@ -132,7 +132,13 @@ export class CandidateComponent implements OnInit {
   getList() {
     this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        console.log(response.data)
+        console.log(response)
+        this.paging.length = response.totalDataSize;
+        console.log(this.paging.length)
+        if (!this.items.length && this.paging.pageIndex > 0) {
+          this.paging.pageIndex--;
+          this.search();
+        }
         this.items = response.data;
         this.items.forEach(element => {
           //job status

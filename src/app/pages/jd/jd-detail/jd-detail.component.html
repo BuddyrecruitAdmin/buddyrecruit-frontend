@@ -230,23 +230,25 @@
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="low" value="workEXPline.low"
                     [(ngModel)]="workEXPline.low" [disabled]="checkPreview" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
+                    onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective />
                 </div>
               </td>
               <td>
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="high" value="workEXPline.high"
                     [(ngModel)]="workEXPline.high" [disabled]="checkPreview" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
+                    onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective />
                 </div>
               </td>
               <td>
-                <input type="number" min="0" max="100" value="workEXPline.percent" [(ngModel)]="workEXPline.percent"
-                  [disabled]="checkPreview" [ngClass]="{
+                <div class="input-group">
+                  <input type="number" min="0" max="100" value="workEXPline.percent" [(ngModel)]="workEXPline.percent"
+                    [disabled]="checkPreview" [ngClass]="{
                         'has-error': workEXPline.flagError,
                         'has-success': !workEXPline.flagError
-                      }" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;"
-                  appNumberDirective />
+                      }" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput
+                    appNumberDirective />
+                </div>
               </td>
               <td>
                 <button *ngIf="modeEditable" [disabled]="checkPreview" class="btn btn-danger"
@@ -296,10 +298,11 @@
             <tr *ngFor="let ss of jd.weightScore.softSkill.weight; let i = index">
               <td>{{ i + 1 }}.</td>
               <td>
-                <input type="text" value="ss.skill" [(ngModel)]="ss.skill" [disabled]="!modeEditable || checkPreview" />
+                <input nbInput type="text" value="ss.skill" [(ngModel)]="ss.skill"
+                  [disabled]="!modeEditable || checkPreview" />
               </td>
               <td>
-                <input type="number" value="ss.percent" min="0" max="100" [(ngModel)]="ss.percent"
+                <input nbInput type="number" value="ss.percent" min="0" max="100" [(ngModel)]="ss.percent"
                   [disabled]="!modeEditable || checkPreview" (input)="onChangePercentSoftSkill()"
                   pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
@@ -357,10 +360,11 @@
             <tr *ngFor="let hs of jd.weightScore.hardSkill.weight; let i = index">
               <td>{{ i + 1 }}.</td>
               <td>
-                <input type="text" value="hs.skill" [(ngModel)]="hs.skill" [disabled]="!modeEditable || checkPreview" />
+                <input nbInput type="text" value="hs.skill" [(ngModel)]="hs.skill"
+                  [disabled]="!modeEditable || checkPreview" />
               </td>
               <td>
-                <input type="number" min="0" max="100" value="hs.percent" [(ngModel)]="hs.percent"
+                <input nbInput type="number" min="0" max="100" value="hs.percent" [(ngModel)]="hs.percent"
                   [disabled]="!modeEditable || checkPreview" (input)="onChangePercentHardSkill()"
                   pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
@@ -418,11 +422,11 @@
             <tr *ngFor="let cert of jd.weightScore.certificate.weight; let i = index">
               <td>{{ i + 1 }}.</td>
               <td>
-                <input type="text" value="cert.name" [(ngModel)]="cert.name"
+                <input nbInput type="text" value="cert.name" [(ngModel)]="cert.name"
                   [disabled]="!modeEditable || checkPreview" />
               </td>
               <td>
-                <input type="number" value="cert.percent" min="0" max="100" [(ngModel)]="cert.percent"
+                <input nbInput type="number" value="cert.percent" min="0" max="100" [(ngModel)]="cert.percent"
                   [disabled]="!modeEditable || checkPreview" (input)="onChangePercentCertificate()"
                   pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
               </td>
@@ -472,7 +476,7 @@
               <td>
                 <input type="number" min="0" max="100" value="edu.percent" [(ngModel)]="edu.percent"
                   [disabled]="!modeEditable || checkPreview" pattern="/^-?\d+\.?\d*$/"
-                  onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
+                  onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective />
               </td>
             </tr>
           </tbody>

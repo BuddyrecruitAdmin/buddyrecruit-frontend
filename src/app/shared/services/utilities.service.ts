@@ -79,6 +79,26 @@ export class UtilitiesService {
     }
   }
 
+  convertDateTimeFromSystem(date: Date): string {
+    if (this.dateIsValid(date)) {
+      let text = '';
+      const dateArray = date.toString().split('T')[0].split('-');
+      const TimeArray = date.toString().split('T')[1].split('.')[0].split(':');
+      text += dateArray[2];
+      text += '/';
+      text += dateArray[1];
+      text += '/';
+      text += dateArray[0];
+      text += ' ';
+      text += TimeArray[0];
+      text += ':';
+      text += TimeArray[1];
+      return text;
+    } else {
+      return null;
+    }
+  }
+
   getFullYear(date: Date): string {
     if (this.dateIsValid(date)) {
       date = new Date(date);
