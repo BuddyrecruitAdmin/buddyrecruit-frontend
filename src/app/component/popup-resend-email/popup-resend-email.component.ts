@@ -59,7 +59,7 @@ export class PopupResendEmailComponent implements OnInit {
   }
 
   getReSendEmail() {
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+    this.candidateService.getCandidateDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.stageId = response.data.candidateFlow.refStage._id;
         this.isReject = response.data.candidateFlow.reject.flag;

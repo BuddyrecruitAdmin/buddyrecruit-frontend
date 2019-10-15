@@ -65,7 +65,7 @@ export class CandidateDetailComponent implements OnInit {
 
   getDetail() {
     this.loading = true;
-    this.service.getDetail(this.candidateId).subscribe(response => {
+    this.service.getDetailFlow(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
       }

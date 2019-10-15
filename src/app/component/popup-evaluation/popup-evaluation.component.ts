@@ -102,7 +102,7 @@ export class PopupEvaluationComponent implements OnInit {
   getDetail() {
     this.candidateService.getDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.candidateName = this.utilitiesService.setFullname(response.data);
+        // this.candidateName = this.utilitiesService.setFullname(response.data);
         // this.jrName = response.data.candidateFlow.refJR.refJD.position;
         // this.stageId = response.data.candidateFlow.refStage._id;
         response.data.map(element => {

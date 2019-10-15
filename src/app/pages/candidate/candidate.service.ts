@@ -30,10 +30,16 @@ export class CandidateService extends NetworkService {
     const body = {
       _id: refCandidateId
     };
-    return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_CANDIDATE_DETAIL, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_DETAIL, body);
   }
 
   getDetail(refCandidateId: string): Observable<ApiResponse> {
+    const body = {
+      _id: refCandidateId
+    };
+    return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_CANDIDATE_DETAIL, body);
+  }
+  getDetailFlow(refCandidateId: string): Observable<ApiResponse> {
     const body = {
       _id: refCandidateId
     };
@@ -124,5 +130,12 @@ export class CandidateService extends NetworkService {
       isReject: isReject
     };
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.SEND_EMAIL, body);
+  }
+
+  getCandidateDetail(refCandidateId: string): Observable<ApiResponse> {
+    const body = {
+      _id: refCandidateId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
   }
 }

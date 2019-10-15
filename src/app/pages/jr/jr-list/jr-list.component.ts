@@ -64,12 +64,16 @@ export class JrListComponent implements OnInit {
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
-        'refStatus',
-        'department',
+        'refStatus.name',
+        'department.name',
         'requiredExam',
         'remark',
-        'refJD',
+        'refJD.position',
         'refSource',
+        'capacity',
+        'lastChangedInfo.refUser.firstname',
+        'lastChangedInfo.refUser.lastname',
+        'lastChangedInfo.date'
       ]
     };
     this.items = [];

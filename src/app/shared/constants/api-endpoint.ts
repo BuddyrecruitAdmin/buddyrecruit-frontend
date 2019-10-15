@@ -40,6 +40,7 @@ export const API_ENDPOINT = {
     REJECT: "jr/reject",
     SOURCE: "source/mode/{mode}",
     ACTION: "jr/action",
+    USERS: "jr/users"
   },
   TALENT_POOL: {
     LIST: "talentPool/list",
@@ -202,6 +203,9 @@ export const API_ENDPOINT = {
     CANDIDATE_ORIGINAL: "candidate/cv",
     SAVE: "candidate/flow/action",
     ACCURACY: "candidate/accuracy",
+    CREATE: "candidate/accuracy/create",
+    LIST: "candidate/accuracy/list",
+    DELETE: "candidate/accuracy/delete",
   },
   FILE: {
     UPLOAD: "jd/upload",
@@ -217,7 +221,9 @@ export const API_ENDPOINT = {
   },
   REPORT: {
     ACTION: "report",
-    LIST: "report/candidate"
+    LIST: "report/candidate",
+    LISTFEEDBACK: "feedbackReport/list",
+    EDIT: "feedbackReport/edit"
   },
   HERO: {
     LIST: "hero/list"

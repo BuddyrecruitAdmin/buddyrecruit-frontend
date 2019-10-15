@@ -22,4 +22,12 @@ export class PopupRejectService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.REJECT_STAGE_LIST, body);
   }
 
+  getDetail(refCandidateId: string): Observable<ApiResponse> {
+    const body = {
+      _id: refCandidateId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
+  }
+
+
 }

@@ -1,10 +1,10 @@
 <div class="content-header with-shadow">
   <h3>Job Request <small class="text-cap">({{ state }})</small></h3>
 </div>
-<div class="row">
+<div class="row" *ngIf="!loading">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
+      <nb-card-header style="color:#8f9bb3">
         Description
       </nb-card-header>
       <nb-card-header>
@@ -12,9 +12,10 @@
           <div class="col-md-6">
             <div class="form-control-group">
               <label class="label" for="name">Job Position<span style="color:red">*</span></label>
-              <nb-select [(ngModel)]="jr.refJD" [ngModelOptions]="{ standalone: true }"
-                [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'" fullWidth>
-                <nb-option *ngFor="let job of JobPosition" [value]="job.value">
+              <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
+                [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'"
+                (selectedChange)="onChangeJobposition($event)" fullWidth>
+                <nb-option *ngFor="let job of JobPosition" [value]="job.value" [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'">
                   {{ job.label }}
                 </nb-option>
               </nb-select>
@@ -77,8 +78,22 @@
               <label class="label">Evaluation Template</label>
               <nb-select [(ngModel)]="jr.refEvaluation" [ngModelOptions]="{ standalone: true }" fullWidth
                 [disabled]="checkPreview">
-                <nb-option *ngFor="let eva of Evaluation" [value]="eva.value">
+                <nb-option *ngFor="let eva of Evaluation" [value]="eva.value" [disabled]="checkPreview">
                   {{ eva.label }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-control-group">
+              <label class="label">Users Interview <span class="text-red">*</span></label>
+              <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
+                [disabled]="checkPreview">
+                <nb-option [hidden]="user.group === 'disabled'" *ngFor="let user of Users" [value]="user.value"
+                  [disabled]="checkPreview">
+                  {{ user.label }}
                 </nb-option>
               </nb-select>
             </div>
@@ -118,3 +133,7 @@
     </nb-card>
   </div>
 </div>
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body></nb-card-body>
+</nb-card>

@@ -40,7 +40,7 @@
             [ngClass]="{ 'read' : notification.hidden, 'unread' : !notification.hidden}"
             (click)="onClickNotification(i)">
             <nb-user size="medium" [name]="notification.name" [title]="notification.title"
-              [picture]="notification.picture">
+              [picture]="user?.picture">
             </nb-user>
           </div>
         </nb-card-body>

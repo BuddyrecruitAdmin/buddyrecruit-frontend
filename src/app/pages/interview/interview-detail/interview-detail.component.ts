@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
@@ -18,7 +18,7 @@ import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component
 import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService,NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
@@ -51,6 +51,10 @@ export class InterviewDetailComponent implements OnInit {
   count: Count;
   rankName: any;
   score: any;
+  dialogRef: NbDialogRef<any>;
+  itemDialog: any;
+  innerWidth: any;
+  innerHeight: any;
   constructor(
     private router: Router,
     private service: InterviewService,
@@ -68,6 +72,8 @@ export class InterviewDetailComponent implements OnInit {
     this.jrName = getJdName();
     this.collapseAll = getCollapse();
     this.devices = this.utilitiesService.getDevice();
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.innerHeight = window.innerHeight * 0.8;
     this.refStageId = this.role.refCompany.menu.pendingInterview.refStage._id;
     const tabs = this.role.refCompany.menu.pendingInterview.refStage.tabs.filter(tab => {
       if (tab.relatedJobsDB) {
@@ -168,8 +174,8 @@ export class InterviewDetailComponent implements OnInit {
           });
           item.avg = sum / item.pendingInterviewScoreInfo.evaluation.length;
           let fullResult = '';
-          fullResult = 'ผ่าน' + ' : ' + totalPass + ' , ' + 'ไม่ผ่าน' + ' : '
-            + totalReject + ' , ' + 'รอเทียบ' + ' : ' + totalCompare;
+          fullResult = 'ผ่าน' + ' : ' + totalPass + ' , ' + 'รอพิจารณา' + ' : '
+            + totalCompare + ' , ' + 'ไม่ผ่าน' + ' : ' + totalReject;
           fullResult = fullResult.trim();
           item.result = fullResult;
         });
@@ -279,25 +285,15 @@ export class InterviewDetailComponent implements OnInit {
     });
   }
 
-  showScore(item: any) {
-    // let score;
-    // item.pendingInterviewScoreInfo.evaluation.map(element => {
-    //   if (this.role._id === element.createdInfo.refUser) {
-    //     score = element.point;
-    //   }
-    // })
-    // return score;
+  infoResult(item: any, dialog: TemplateRef<any>){
+    this.itemDialog = _.cloneDeep(item);
+    console.log(this.itemDialog)
+    console.log(this.role._id)
+    this.callDialog(dialog);
   }
 
-  sumAvg(item: any) {
-    // let sumScore = 0;
-    // let total;
-    // total = item.pendingInterviewScoreInfo.evaluation.length;
-    // item.pendingInterviewScoreInfo.evaluation.map(element => {
-    //   sumScore = sumScore + element.point;
-    // })
-    // sumScore = sumScore / total;
-    // return sumScore;
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
   addComment(item: any) {
@@ -410,8 +406,8 @@ export class InterviewDetailComponent implements OnInit {
   }
 
   openPopupEvaluation(item: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
+    // setFlowId(item._id);
+    setCandidateId(item._id);
     this.dialogService.open(PopupEvaluationComponent,
       {
         closeOnBackdropClick: false,

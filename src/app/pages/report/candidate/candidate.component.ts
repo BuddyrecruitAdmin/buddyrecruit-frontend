@@ -29,13 +29,15 @@ export class CandidateComponent implements OnInit {
       jobPosition: DropDownValue[],
       jobStatus: DropDownValue[],
       stage: DropDownValue[],
-      subStage: DropDownValue[]
+      subStage: DropDownValue[],
+      department: DropDownValue[],
     },
     selected: {
       jobPosition: any,
       jobStatus: any,
       stage: any,
-      subStage: any
+      subStage: any,
+      department: any,
     }
   };
   constructor(
@@ -46,7 +48,7 @@ export class CandidateComponent implements OnInit {
   ) {
     this.role = getRole();
   }
-  
+
   ngOnInit() {
     this.loading = true;
     this.checked = true;
@@ -56,13 +58,15 @@ export class CandidateComponent implements OnInit {
         jobPosition: [],
         jobStatus: [],
         stage: [],
-        subStage: []
+        subStage: [],
+        department: [],
       },
       selected: {
         jobPosition: [],
         jobStatus: [],
         stage: [],
-        subStage: []
+        subStage: [],
+        department: [],
       }
     }
     this.refresh();
@@ -106,8 +110,13 @@ export class CandidateComponent implements OnInit {
         'reject.remark',
         'reject.rejectBy.refUser.firstname',
         'reject.rejectBy.refUser.lastname',
+        'department.name'
       ],
       filters: [
+        {
+          name: 'department._id',
+          value: this.filter.selected.department
+        },
         {
           name: 'refJR.refJD._id',
           value: this.filter.selected.jobPosition
@@ -132,7 +141,13 @@ export class CandidateComponent implements OnInit {
   getList() {
     this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        console.log(response.data)
+        console.log(response)
+        this.paging.length = response.totalDataSize;
+        console.log(this.paging.length)
+        if (!this.items.length && this.paging.pageIndex > 0) {
+          this.paging.pageIndex--;
+          this.search();
+        }
         this.items = response.data;
         this.items.forEach(element => {
           //job status
@@ -150,10 +165,16 @@ export class CandidateComponent implements OnInit {
             label: element.refSubStage.name,
             value: element.refSubStage._id
           })
+          //department
+          this.filter.data.department.push({
+            label: element.department.name,
+            value: element.department._id
+          })
         })
         this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value")
         this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
         this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
+        this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
         this.items.map(item => {
           switch (item.refJR.refStatus.name) {
             case "Waiting for HR Confirm":
@@ -213,6 +234,20 @@ export class CandidateComponent implements OnInit {
         this.search();
       }
     });
+  }
+
+  clearFilter() {
+    if (this.filter.selected.jobPosition.length || this.filter.selected.jobStatus.length
+      || this.filter.selected.subStage.length || this.filter.selected.stage.length ||
+      this.filter.selected.department.length
+    ) {
+      this.filter.selected.jobPosition = [];
+      this.filter.selected.stage = [];
+      this.filter.selected.subStage = [];
+      this.filter.selected.jobStatus = [];
+      this.filter.selected.department = [];
+      this.search();
+    }
   }
 
   removeDuplicates(myArr, prop) {

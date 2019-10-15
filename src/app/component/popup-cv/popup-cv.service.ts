@@ -54,4 +54,15 @@ export class PopupCVService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.DELETE, body);
   }
 
+  check(_id: string, fieldName: string, fieldLabel: string, feedbackType: any = undefined, bugComment: any = undefined): Observable<ApiResponse> {
+    const body = {
+      refCandidate: _id,
+      fieldName: fieldName,
+      fieldText: fieldLabel,
+      feedbackType: feedbackType,
+      bugComment: bugComment
+    };
+    return this.post(API_ENDPOINT.CV.CREATE, body);
+  }
+
 }

@@ -33,7 +33,13 @@ export class MailTemplateDetailComponent implements OnInit {
   state: string;
   _id: string;
   getId: boolean;
-
+  loginForm: FormGroup;
+  bcc: AbstractControl;
+  cc: AbstractControl;
+  sErrorBcc: string;
+  sErrorcc: string;
+  str: any;
+  n: any;
   constructor(
     private service: MailTemplateService,
     private dialogService: NbDialogService,
@@ -42,6 +48,7 @@ export class MailTemplateDetailComponent implements OnInit {
     private toastrService: NbToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder,
   ) {
 
   }
@@ -143,9 +150,42 @@ export class MailTemplateDetailComponent implements OnInit {
   }
 
   validation(): boolean {
+    debugger
     console.log(this.itemDialog)
     this.touched = true;
     let isValid = true;
+    if (this.itemDialog.cc.length > 0) {
+      this.itemDialog.cc.map(cc => {
+        this.n = cc.value.search("@");
+        if (this.n > 0) {
+          this.str = cc.value.slice(this.n + 1);
+          this.n = this.str.search("@");
+          if (this.n != -1) {
+            this.sErrorcc = MESSAGE[9];
+            isValid = false
+          }
+        } else {
+          this.sErrorcc = MESSAGE[9];
+          isValid = false;
+        }
+      })
+    }
+    if (this.itemDialog.bcc.length > 0) {
+      this.itemDialog.bcc.map(bcc => {
+        this.n = bcc.value.search("@");
+        if (this.n > 0) {
+          this.str = bcc.value.slice(this.n + 1);
+          this.n = this.str.search("@");
+          if (this.n != -1) {
+            this.sErrorBcc = MESSAGE[9];
+            isValid = false
+          }
+        } else {
+          this.sErrorBcc = MESSAGE[9];
+          isValid = false;
+        }
+      })
+    }
     if (this.itemDialog.name === undefined || this.itemDialog.name === "") {
       this.sErrorHeader = MESSAGE[4];
       isValid = false;
@@ -164,8 +204,6 @@ export class MailTemplateDetailComponent implements OnInit {
     } else {
       this.sErrorEmailType = "";
     }
-
-
     return isValid;
 
   }
