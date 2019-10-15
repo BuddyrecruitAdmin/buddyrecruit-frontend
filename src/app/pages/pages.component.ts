@@ -73,7 +73,7 @@ export class PagesComponent {
           }
         }
         // Reporting
-        if ((menu.report && menu.report.active && menu.report.reports)) {
+        if (!role.refCompany.isTrial && (menu.report && menu.report.active && menu.report.reports)) {
           let menuReport: NbMenuItem[];
           menuReport = [];
           // group
