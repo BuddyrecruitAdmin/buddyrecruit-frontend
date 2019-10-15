@@ -67,6 +67,8 @@ export class PopupFeedbackComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.getList();
         this.TogglePage = 'history';
+        this.bugComment = "";
+        this.feedbackType = "missing";
       }
     })
   }

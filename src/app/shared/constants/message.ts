@@ -163,4 +163,5 @@ export const MESSAGE = {
   153: "Gabs must be 1 point",
   154: "Please enter new name of evaluation",
   155: "Please select users interview",
+  156: "Total educatuin score must be equal maximum score",
 };

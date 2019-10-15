@@ -119,6 +119,9 @@
                       <div class="text-group">
                         <label class="label">Result</label>
                         <span>{{ item.result || '-'}}</span>
+                        <span class="link underline" nbTooltip="See more result" (click)="infoResult(item,dialog)">
+                          <nb-icon icon="info-outline"></nb-icon>
+                        </span>
                       </div>
                       <div class="text-group">
                         <label class="label">Remark</label>
@@ -246,4 +249,43 @@
               itemSelected.weightScore?.certificate?.total)" status="danger" size="tiny">
     </nb-progress-bar>
   </div>
+</ng-template>
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+    <nb-card-header>
+      <div class="title">
+        <label [nbTooltip]="candidateName">Result</label>
+        <small class="status text-gray m-0">
+          {{utilitiesService.setFullname(itemDialog.refCandidate)}}
+        </small>
+      </div>
+      <div class="actions">
+        <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+      </div>
+    </nb-card-header>
+    <nb-card-body *ngIf="!loading" class="dialog-body">
+      <h6 *ngIf="!itemDialog.pendingInterviewScoreInfo?.evaluation?.length" class="text-gray text-center">No Comment
+      </h6>
+      <div class="post">
+        <nb-card *ngFor="let item of itemDialog.pendingInterviewScoreInfo.evaluation"
+          [accent]="item.createdInfo.refUser._id === this.role._id ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <nb-user size="medium" [name]="utilitiesService.setFullname(item.createdInfo.refUser)"
+                [title]="item.title" [picture]="item.picture"></nb-user>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div *ngIf="item.rank.selected === 1"><span class="fas fa-check"
+                style="color: var(--color-green);">ผ่าน</span><br>{{ item.additionalComment }} </div>
+            <div *ngIf="item.rank.selected === 2"><span>รอพิจารณา</span><br>{{ item.additionalComment }}</div>
+            <div *ngIf="item.rank.selected === 3"><span class="fas fa-times"
+                style="color: var(--color-red);">ไม่ผ่าน</span><br>{{ item.additionalComment }} </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </nb-card-body>
+  </nb-card>
 </ng-template>

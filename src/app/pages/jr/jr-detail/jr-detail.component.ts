@@ -51,6 +51,7 @@ export class JrDetailComponent implements OnInit {
   jobId: any;
   jobStatus: any;
   tempJob: any;
+  loading: any;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -65,6 +66,7 @@ export class JrDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.initialModel();
     this.initialEvaluation();
     this.activatedRoute.params.subscribe(params => {
@@ -101,6 +103,7 @@ export class JrDetailComponent implements OnInit {
         this.jobDB = false;
         this.jr.capacity = 0;
         this.jobStatus = "notUsed";
+        this.loading = false;
         this.initialStartDropDown();
       }
     });
@@ -227,6 +230,15 @@ export class JrDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.jr = response.data;
+          if (this.utilitiesService.dateIsValid(response.data.duration.startDate)) {
+            this.jr.duration.startDate = new Date(response.data.duration.startDate);
+          }
+          if (this.utilitiesService.dateIsValid(response.data.duration.endDate)) {
+            this.jr.duration.endDate = new Date(response.data.duration.endDate);
+          }
+          if (this.utilitiesService.dateIsValid(response.data.onboardDate)) {
+            this.jr.onboardDate = new Date(response.data.onboardDate);
+          }
           this.jr.userInterviews = this.jr.userInterviews.map(element => {
             return element.refUser
           });
@@ -260,6 +272,7 @@ export class JrDetailComponent implements OnInit {
         this.jobDB = true;
       }
     });
+    this.loading = false;
   }
 
   save() {

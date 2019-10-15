@@ -456,7 +456,10 @@
   [nbInput]:not([disabled]):focus {
     border-color: var(--color-green);
   }
-
+  [nbInput]:disabled{
+    color: #000000;
+    cursor: not-allowed;
+  }
   .input-group {
     .input-group-addon {
       position: absolute;

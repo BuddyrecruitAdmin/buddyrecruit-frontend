@@ -78,7 +78,6 @@ export class PopupCvComponent implements OnInit {
 
   ngOnInit() {
     this.flowId = getCandidateId();
-    this._id = getCandidateId();
     setCandidateId();
     this.editable = false;
     this.buttonText = 'edit';
@@ -137,6 +136,9 @@ export class PopupCvComponent implements OnInit {
     this.service.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
+        if (this.utilitiesService.dateIsValid(response.data.birth)) {
+          this.items.birth = new Date(response.data.birth);
+        }
         if (this.items.workExperience.totalExpMonth != null || this.items.workExperience.totalExpMonth != undefined) {
           this.totalMonth = this.items.workExperience.totalExpMonth;
           if (this.totalMonth >= 12) {

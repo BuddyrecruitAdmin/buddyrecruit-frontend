@@ -4,7 +4,7 @@
 <div class="row">
   <div class="col-md-12">
     <nb-card>
-      <nb-card-header>
+      <nb-card-header style="color:#8f9bb3">
         Description
       </nb-card-header>
       <nb-card-header>
@@ -72,7 +72,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group">
-              <label for="name">Department <span style="color:red">*</span></label>
+              <label class="label" for="name">Department <span style="color:red">*</span></label>
               <nb-select [disabled]="checkPreview" [(ngModel)]="jd.departmentId" [ngModelOptions]="{ standalone: true }"
                 fullWidth (selectedChange)="onChangeDepartment($event)">
                 <nb-option [disabled]="checkPreview" *ngFor="let department of departMentAdmin"
@@ -85,7 +85,7 @@
           </div>
           <div class="col-md-6" *ngIf="checkDivision">
             <div class="form-control-group">
-              <label for="name">Division <span style="color:red">*</span></label>
+              <label class="label" for="name">Division <span style="color:red">*</span></label>
               <nb-select [disabled]="divisionOptions.length <= 1 || checkPreview" [(ngModel)]="jd.divisionId"
                 [ngModelOptions]="{ standalone: true }" fullWidth>
                 <nb-option [disabled]="checkPreview" *ngFor="let option of divisionOptions" [value]="option.value">
@@ -97,7 +97,7 @@
           </div>
         </div>
       </nb-card-header>
-      <nb-card-header>
+      <nb-card-header style="color:#8f9bb3">
         Score (%)
       </nb-card-header>
       <nb-card-body>
@@ -105,7 +105,7 @@
           <!-- Work Experience -->
           <div class="col-sm-4 col-md-4">
             <div class="form-group">
-              <label for="inputEXP">
+              <label class="label" for="inputEXP">
                 Work Experience <span style="color:red">*</span>
               </label>
               <div class="input-group">
@@ -120,7 +120,7 @@
             </div>
             <!-- HARD SKILL -->
             <div class="form-group">
-              <label for="inputEXP">
+              <label class="label" for="inputEXP">
                 Hard Skill<span style="color:red">*</span>
               </label>
               <div class="input-group">
@@ -137,7 +137,7 @@
           <!-- Education  -->
           <div class="col-sm-4 col-md-4">
             <div class="form-group">
-              <label for="inputEXP">
+              <label class="label" for="inputEXP">
                 Education <span style="color:red">*</span>
               </label>
               <div class="input-group">
@@ -152,7 +152,7 @@
             </div>
             <!-- SOFT SKILL -->
             <div class="form-group">
-              <label for="inputEXP">
+              <label class="label" for="inputEXP">
                 Soft Skill <span style="color:red">*</span>
               </label>
               <div class="input-group">
@@ -169,7 +169,7 @@
           <div class="col-sm-4 col-md-4">
             <!--Certificate-->
             <div class="form-group">
-              <label for="inputEXP">
+              <label class="label" for="inputEXP">
                 Certificate <span style="color:red">*</span>
               </label>
               <div class="input-group">
@@ -202,15 +202,17 @@
 </div>
 <!-- ExperienceBox -->
 <ng-template #ExperienceBox let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+  <nb-card [style.max-height.px]="innerHeight" [style.width.px]="innerWidth">
     <nb-card-header>
       <div>
-        Work Experience ( Max {{ jd.weightScore.workExperience.total }} % )
-        <small>( % of Work experience must not exceed {{ jd.weightScore.workExperience.total }} % )</small>
-        <div class="pull-right">
+        <span style="color:#8f9bb3">
+          Work Experience ( Max {{ jd.weightScore.workExperience.total }} % )
+        </span>
+        <div *ngIf="!checkPreview" class="pull-right">
           <button nbButton *ngIf="modeEditable" class="btn btn-sm btn-success" status="primary"
             (click)="addOption('WORKEXP')" [disabled]="!isAddWork || checkPreview">ADD</button>
         </div>
+        <br> <small>( % of Work experience must not exceed {{ jd.weightScore.workExperience.total }} % )</small>
       </div>
     </nb-card-header>
     <nb-card-body class="dialog-body">
@@ -230,14 +232,14 @@
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="low" value="workEXPline.low"
                     [(ngModel)]="workEXPline.low" [disabled]="checkPreview" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective />
+                    onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective />
                 </div>
               </td>
               <td>
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="high" value="workEXPline.high"
                     [(ngModel)]="workEXPline.high" [disabled]="checkPreview" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective />
+                    onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective />
                 </div>
               </td>
               <td>
@@ -247,7 +249,7 @@
                         'has-error': workEXPline.flagError,
                         'has-success': !workEXPline.flagError
                       }" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput
-                    appNumberDirective />
+                    fullWidth appNumberDirective />
                 </div>
               </td>
               <td>
@@ -261,7 +263,7 @@
         </table>
       </div>
     </nb-card-body>
-    <small *ngIf="touched" class="text-red-right">{{ sErrorBox }}</small>
+    <small *ngIf="touched" class="text-red-right">{{ sErrorBoxW }}</small>
     <nb-card-footer>
       <button nbButton status="default" (click)="   close('WORKEXP')">Cancel</button>
       <button nbButton status="success" (click)="save('WORKEXP')" [disabled]="checkPreview">Save</button>
@@ -272,11 +274,11 @@
 <ng-template #SoftSkillBox let-data let-ref="dialogRef">
   <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
     <nb-card-header>
-      <label>
+      <label style="color:#8f9bb3">
         Soft skill ( Total {{ jd.weightScore.softSkill.total }} % , Current
         {{ iTotalSoftSkill }} %)
       </label>
-      <div class="pull-right">
+      <div *ngIf="!checkPreview" class="pull-right">
         <button nbButton *ngIf="modeEditable" class="btn btn-sm btn-success" status="primary"
           (click)="addOption('SOFTSKILL')" [disabled]="!isAddSoft || checkPreview">ADD</button>
       </div>
@@ -323,7 +325,7 @@
         </table>
       </div>
     </nb-card-body>
-    <small *ngIf="touched" class="text-red-right">{{ sErrorBox }}</small>
+    <small *ngIf="touched" class="text-red-right">{{ sErrorBoxS }}</small>
     <nb-card-footer>
       <button nbButton status="default" (click)="close('SOFTSKILL')">Cancel</button>
       <button nbButton status="success" (click)="save('SOFTSKILL')" [disabled]="checkPreview">Save</button>
@@ -334,9 +336,11 @@
 <ng-template #HardSkillBox let-data let-ref="dialogRef">
   <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
     <nb-card-header>
-      Hard skill ( Total {{ jd.weightScore.hardSkill.total }} % , Current
-      {{ iTotalHardSkill }} %)
-      <div class="pull-right">
+      <label style="color:#8f9bb3">
+        Hard skill ( Total {{ jd.weightScore.hardSkill.total }} % , Current
+        {{ iTotalHardSkill }} %)
+      </label>
+      <div *ngIf="!checkPreview" class="pull-right">
         <button nbButton *ngIf="modeEditable" class="btn btn-sm btn-success" status="primary"
           (click)="addOption('HARDSKILL')" [disabled]="!isAddHard || checkPreview">ADD</button>
       </div>
@@ -385,7 +389,7 @@
         </table>
       </div>
     </nb-card-body>
-    <small *ngIf="touched" class="text-red-right">{{ sErrorBox }}</small>
+    <small *ngIf="touched" class="text-red-right">{{ sErrorBoxH }}</small>
     <nb-card-footer>
       <button nbButton status="default" (click)="close('HARDSKILL')">Cancel</button>
       <button nbButton status="success" (click)="save('HARDSKILL')" [disabled]="checkPreview">Save</button>
@@ -396,9 +400,11 @@
 <ng-template #CertificateBox let-data let-ref="dialogRef">
   <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
     <nb-card-header>
-      Certificate ( Total {{ jd.weightScore.certificate.total }} % , Current
-      {{ iTotalCertificate }} %)
-      <div class="pull-right">
+      <label style="color:#8f9bb3">
+        Certificate ( Total {{ jd.weightScore.certificate.total }} % , Current
+        {{ iTotalCertificate }} %)
+      </label>
+      <div *ngIf="!checkPreview" class="pull-right">
         <button nbButton *ngIf="modeEditable" class="btn btn-sm btn-success" status="primary"
           (click)="addOption('CERTIFICATE')" [disabled]="!isAddCert">ADD</button>
       </div>
@@ -447,7 +453,7 @@
         </table>
       </div>
     </nb-card-body>
-    <small *ngIf="touched" class="text-red-right">{{ sErrorBox }}</small>
+    <small *ngIf="touched" class="text-red-right">{{ sErrorBoxC }}</small>
     <nb-card-footer>
       <button nbButton status="default" (click)="close('CERTIFICATE')">Cancel</button>
       <button nbButton status="success" (click)="save('CERTIFICATE')" [disabled]="checkPreview">Save</button>
@@ -457,7 +463,10 @@
 <!-- EducationBox -->
 <ng-template #EducationBox let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header>Education ( Max {{ jd.weightScore.education.total }} % )
+    <nb-card-header>
+      <label style="color:#8f9bb3">
+        Education ( Max {{ jd.weightScore.education.total }} % )
+      </label>
       <small>( % of Education must not exceed {{ jd.weightScore.education.total }} % )</small>
     </nb-card-header>
     <nb-card-body>

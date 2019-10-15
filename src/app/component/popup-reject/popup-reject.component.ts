@@ -68,7 +68,7 @@ export class PopupRejectComponent implements OnInit {
     this.loading = true;
     this.rejection = [];
 
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+    this.service.getDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;

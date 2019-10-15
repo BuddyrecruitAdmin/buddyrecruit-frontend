@@ -104,11 +104,19 @@
             <nb-select multiple [(selected)]="filter.selected.createBy" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let cre of filter.data.createBy" [value]="cre.value">
-                {{cre.label}}
+                {{cre.value}}
               </nb-option>
             </nb-select>
           </div>
         </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col text-center">
+        <button nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
+          Clear Filter
+        </button>
       </div>
     </div>
   </nb-card-body>
@@ -124,6 +132,7 @@
               <th *ngIf="!checked" scope="col" style="font-size: 14px;">Candidate Name</th>
               <th *ngIf="!checked" scope="col" style="width: 170px;font-size: 14px;">Job Position</th>
               <th *ngIf="checked" scope="col" style="width: 170px;font-size: 14px;">Candidate ID</th>
+              <th scope="col" style="width: 100px;font-size: 14px;">Field Type</th>
               <th scope="col" style="width: 150px;font-size: 14px;">Field Name</th>
               <th scope="col" style="width: 100px;font-size: 14px;">Comment</th>
               <th scope="col" style="width: 100px;font-size: 14px;">Create Date</th>
@@ -148,6 +157,11 @@
               <td *ngIf="checked" class="text-left">
                 <span (click)="info(item)" class="link" style="font-size: 14px;">
                   {{ item?.refCandidate._id || '-' }}
+                </span>
+              </td>
+              <td class="text-left">
+                <span style="font-size: 14px;" [nbTooltip]="item?.feedbackType">
+                  {{ item?.feedbackType || '-' }}
                 </span>
               </td>
               <td class="text-left">

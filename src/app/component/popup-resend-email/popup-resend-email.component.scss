@@ -1,0 +1,44 @@
+.username small {
+    color: #999;
+    font-weight: 100;
+  }
+  .mat-dialog-content {
+    display: block;
+    margin: 0 -24px;
+    padding: 0 24px;
+    max-height: 60vh;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .box-header {
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  .user-block {
+    line-height: 20px;
+  }
+  .user-block img {
+    width: 40px;
+    height: 40px;
+    float: left;
+    border: 2px solid #d2d6de;
+    padding: 2px;
+    border-radius: 50%;
+  }
+  .user-block .username {
+    display: block;
+    margin-left: 50px;
+  }
+  .user-block .username small {
+    color: #999;
+    font-weight: 100;
+  }
+  .user-block .description {
+    display: block;
+    margin-left: 50px;
+    color: #999;
+    font-size: 13px;
+  }
+  .angular-editor-textarea { 
+    min-height: 200px !important;
+  }

@@ -29,8 +29,8 @@
     <nb-card accent="success" *ngIf="!loading">
       <nb-card-header>
         <div class="title">
-          <a class="link" [routerLink]="'/jd/detail/preview/'+item._id"
-            [nbTooltip]="item.position"><label>{{ item.position }}</label></a>
+          <label class="link" [routerLink]="'/jd/detail/preview/'+item._id"
+            [nbTooltip]="item.position">{{ item.position }}</label>
         </div>
         <div class="actions">
           <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="edit-outline" class="link" nbTooltip="Edit"

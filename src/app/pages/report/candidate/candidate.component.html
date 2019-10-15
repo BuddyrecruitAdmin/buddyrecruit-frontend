@@ -1,33 +1,48 @@
 <div class="content-header with-shadow">
-  <div class="breadcrumb">
-    <h4>Candidate Report</h4>
+  <div class="row">
+    <div class="col-sm-7">
+      <h3>Candidate Report</h3>
+    </div>
+    <div class="col-sm-5">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- card search -->
 <nb-card>
   <nb-card-body>
-    <div class="row">
-      <div class="col-xs-12 col-md-6 ">
-        <div class="input-group">
-          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
-          <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
-          </div>
+    <div class="filter-block">
+      <div class="row">
+        <div class="col-md-1">
+          <label class="label" style="margin-top: 10px;">Filters:</label>
+        </div>
+        <div class="col-md-3">
+          <span>
+            <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox>
+          </span>
         </div>
       </div>
-      <div class="col-md-4">
-        <span>
-          <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox>
-        </span>
-      </div>
-    </div>
-    <div class="filter-block">
-      <label class="label">Filters:</label>
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="form-control-group">
-            <label>Jop Position</label>
+            <label>Department</label>
+            <nb-select multiple [(selected)]="filter.selected.department" (selectedChange)="search(true)" fullWidth
+              placeholder="All">
+              <nb-option *ngFor="let dep of filter.data.department" [value]="dep.value">
+                {{dep.label}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label>Job Position</label>
             <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let option of filter.data.jobPosition" [value]="option.value">
@@ -36,9 +51,9 @@
             </nb-select>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="form-control-group">
-            <label>Jop Status</label>
+            <label>Job Status</label>
             <nb-select multiple [(selected)]="filter.selected.jobStatus" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let option of filter.data.jobStatus" [value]="option.value">
@@ -47,7 +62,9 @@
             </nb-select>
           </div>
         </div>
-        <div class="col-md-3">
+      </div>
+      <div class="row">
+        <div class="col-md-4">
           <div class="form-control-group">
             <label>Stage</label>
             <nb-select multiple [(selected)]="filter.selected.stage" (selectedChange)="search(true)" placeholder="All"
@@ -56,7 +73,7 @@
             </nb-select>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="form-control-group">
             <label>Sub Stage</label>
             <nb-select multiple [(selected)]="filter.selected.subStage" (selectedChange)="search(true)"
@@ -65,8 +82,14 @@
             </nb-select>
           </div>
         </div>
+        <div class="col-md-4">
+          <button style="margin-top: 28px;" nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
+            Clear Filter
+          </button>
+        </div>
       </div>
     </div>
+    <br>
   </nb-card-body>
 </nb-card>
 <!--  -->
@@ -88,10 +111,10 @@
               <th scope="col" style="width: 170px;font-size: 14px;">Job Status</th>
               <th scope="col" style="width: 150px;font-size: 14px;">Candidate Name</th>
               <th scope="col" style="width: 100px;font-size: 14px;">Stage</th>
-              <th scope="col" style="width: 100px;font-size: 14px;">Sub Stage</th>
-              <th scope="col" style="width: 110px;font-size: 14px;">Action Date</th>
+              <th scope="col" style="width: 120px;font-size: 14px;">Sub Stage</th>
+              <th scope="col" style="width: 100px;font-size: 14px;">Action Date</th>
               <th *ngIf="checked" scope="col" style="font-size: 14px;">Reject Reason</th>
-              <th *ngIf="checked" scope="col" style="width: 110px;font-size: 14px;">Reject By</th>
+              <th *ngIf="checked" scope="col" style="width: 90px;font-size: 14px;">Reject By</th>
             </tr>
           </thead>
           <tbody>

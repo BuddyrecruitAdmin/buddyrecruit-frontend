@@ -72,10 +72,10 @@
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let app of appAll;">
-                  <nb-checkbox [(ngModel)]="app.value" class="txt-body">
+                <div class="col-lg-6" *ngFor="let int of inAll;">
+                  <nb-checkbox [(ngModel)]="int.value" class="txt-body">
                     <div class="txt-body">
-                      {{app.label}}
+                      {{int.label}}
                     </div>
                   </nb-checkbox>
                 </div>

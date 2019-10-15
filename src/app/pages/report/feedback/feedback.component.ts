@@ -23,6 +23,8 @@ export class FeedbackComponent implements OnInit {
   criteria: Criteria;
   loading: boolean;
   items: any;
+  tempCheck: any;
+  tempUnCheck: any;
   filter: {
     data: {
       jobPosition: DropDownValue[],
@@ -138,7 +140,6 @@ export class FeedbackComponent implements OnInit {
     this.service.getListReport(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.paging.length = response.totalDataSize;
-console.log(response)
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
           this.search();
@@ -171,7 +172,7 @@ console.log(response)
         this.filter.data.fieldName = this.removeDuplicates(this.filter.data.fieldName, "value");
         this.filter.data.createBy = this.removeDuplicates(this.filter.data.createBy, "value");
         this.filter.data.candidateId = this.removeDuplicates(this.filter.data.candidateId, "value");
-        console.log(this.items)
+
       }
     })
   }
@@ -200,6 +201,20 @@ console.log(response)
         this.search();
       }
     });
+  }
+
+  clearFilter() {
+    if (this.filter.selected.candidateId.length || this.filter.selected.candidateName.length
+      || this.filter.selected.createBy.length || this.filter.selected.fieldName.length
+      || this.filter.selected.jobPosition.length
+    ) {
+      this.filter.selected.candidateId = [];
+      this.filter.selected.createBy = [];
+      this.filter.selected.jobPosition = [];
+      this.filter.selected.fieldName = [];
+      this.filter.selected.candidateName = [];
+      this.search();
+    }
   }
 
   removeDuplicates(myArr, prop) {
