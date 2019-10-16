@@ -7,6 +7,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { IndexComponent } from './index/index.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -29,18 +31,17 @@ const routes: Routes = [
         component: ChangePasswordComponent,
       },
       {
-        path: 'appform/:id',  //cant view
+        path: 'appform/:id',
         component: AppFormComponent,
       },
       {
-        path: 'appform/:action/:id',// can view
+        path: 'appform/:action/:id',
         component: AppFormComponent,
       },
-      // {
-      //   path: 'layout',
-      //   loadChildren: () => import('./layout/layout.module')
-      //     .then(m => m.LayoutModule),
-      // },
+      {
+        path: 'index',
+        component: IndexComponent,
+      },
       {
         path: '**',
         redirectTo: 'login'

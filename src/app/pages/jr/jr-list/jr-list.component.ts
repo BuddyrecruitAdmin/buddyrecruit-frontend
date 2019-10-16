@@ -30,6 +30,9 @@ export class JrListComponent implements OnInit {
   txtReject: string;
   dialogRef: NbDialogRef<any>;
   loading: boolean;
+  isOverQuota: boolean;
+  showTips: boolean;
+
   constructor(
     private router: Router,
     private service: JrService,
@@ -43,6 +46,8 @@ export class JrListComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.isOverQuota = false;
+    this.showTips = false;
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -59,19 +64,25 @@ export class JrListComponent implements OnInit {
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
-        'refStatus',
-        'department',
+        'refStatus.name',
+        'department.name',
         'requiredExam',
         'remark',
-        'refJD',
+        'refJD.position',
         'refSource',
+        'capacity',
+        'lastChangedInfo.refUser.firstname',
+        'lastChangedInfo.refUser.lastname',
+        'lastChangedInfo.date'
       ]
     };
     this.items = [];
     this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.items = response.data;
         this.paging.length = response.totalDataSize;
+        this.isOverQuota = response.isOverQuota;
+        this.showTips = response.isOverQuota;
+        this.items = response.data;
         this.items.map(item => {
           switch (item.refStatus.name) {
             case "Waiting for HR Confirm":

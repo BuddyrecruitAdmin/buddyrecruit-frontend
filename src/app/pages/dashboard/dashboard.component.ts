@@ -195,6 +195,7 @@ export class DashboardComponent implements OnInit {
 	getDashboardSuccess(res: any) {
 		const that = this;
 		let thisYear = this.thisYear;
+		debugger
 		if (this.enabledRecruitStatus) {
 			this.recruiteData = res.data;
 			this.setChartRecruitmentStatus();

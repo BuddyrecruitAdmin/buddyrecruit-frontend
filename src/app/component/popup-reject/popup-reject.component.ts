@@ -7,9 +7,11 @@ import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '.
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
+import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 import { MESSAGE } from "../../shared/constants/message";
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-popup-reject',
@@ -39,6 +41,7 @@ export class PopupRejectComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
+    private dialogService: NbDialogService,
   ) {
     this.role = getRole();
     this.flowId = getFlowId();
@@ -65,7 +68,7 @@ export class PopupRejectComponent implements OnInit {
     this.loading = true;
     this.rejection = [];
 
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+    this.service.getDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
@@ -129,13 +132,15 @@ export class PopupRejectComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
+        this.loading = true;
         this.candidateService.candidateFlowReject(this.flowId, this.rejectId, this.remark).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.ref.close(true);
+            this.sendEmail();
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
+          this.loading = false;
         });
       }
     });
@@ -148,6 +153,7 @@ export class PopupRejectComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
+        this.loading = true;
         this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
@@ -155,8 +161,24 @@ export class PopupRejectComponent implements OnInit {
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
+          this.loading = false;
         });
       }
+    });
+  }
+
+  sendEmail() {
+    setFlowId(this.flowId);
+    setCandidateId(this.candidateId);
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      this.ref.close(true);
     });
   }
 

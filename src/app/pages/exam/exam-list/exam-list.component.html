@@ -1,7 +1,15 @@
 <div class="content-header with-shadow">
-  <div class="breadcrumb">
+  <div *ngIf="!showStepper" class="breadcrumb">
     <h4>Pending Exam</h4>
   </div>
+  <nb-stepper *ngIf="showStepper" orientation="horizontal" disableStepNavigation selectedIndex="1">
+    <nb-step label="Talent Pool"></nb-step>
+    <nb-step label="Pending Exam"></nb-step>
+    <nb-step label="Pending Appointment"></nb-step>
+    <nb-step label="Pending Interview"></nb-step>
+    <nb-step label="Pending Sign Contract"></nb-step>
+    <nb-step label="Onboard"></nb-step>
+  </nb-stepper>
 </div>
 
 <nb-card>
@@ -50,6 +58,13 @@
                 {{ option.label }}
               </nb-option>
             </nb-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <button nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
+              Clear Filter
+            </button>
           </div>
         </div>
       </div>

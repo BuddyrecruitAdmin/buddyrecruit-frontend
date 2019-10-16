@@ -80,6 +80,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 import { TagInputModule } from 'ngx-chips';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+
 import { PopupMessageComponent } from './popup-message/popup-message.component';
 import { PopupCommentComponent } from './popup-comment/popup-comment.component';
 import { PopupJrInfoComponent } from './popup-jr-info/popup-jr-info.component';
@@ -89,6 +91,13 @@ import { PopupExamInfoComponent } from './popup-exam-info/popup-exam-info.compon
 import { PopupExamScoreComponent } from './popup-exam-score/popup-exam-score.component';
 import { PopupEvaluationComponent } from './popup-evaluation/popup-evaluation.component';
 import { PopupCvComponent } from './popup-cv/popup-cv.component';
+import { PopupPreviewEmailComponent } from './popup-preview-email/popup-preview-email.component';
+import { PopupResendEmailComponent } from './popup-resend-email/popup-resend-email.component';
+import { PopupInterviewDateComponent } from './popup-interview-date/popup-interview-date.component';
+import { PopupSignContractComponent } from './popup-sign-contract/popup-sign-contract.component';
+import { PopupAvailableDateComponent } from './popup-available-date/popup-available-date.component';
+import { PopupSignDateComponent } from './popup-sign-date/popup-sign-date.component';
+import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.component';
 
 @NgModule({
   imports: [
@@ -168,6 +177,7 @@ import { PopupCvComponent } from './popup-cv/popup-cv.component';
     ChartModule,
     ChartsModule,
     TagInputModule,
+    AngularEditorModule,
   ],
   declarations: [
     PopupMessageComponent,
@@ -179,6 +189,13 @@ import { PopupCvComponent } from './popup-cv/popup-cv.component';
     PopupExamScoreComponent,
     PopupEvaluationComponent,
     PopupCvComponent,
+    PopupPreviewEmailComponent,
+    PopupResendEmailComponent,
+    PopupInterviewDateComponent,
+    PopupSignContractComponent,
+    PopupAvailableDateComponent,
+    PopupSignDateComponent,
+    PopupFeedbackComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -190,6 +207,13 @@ import { PopupCvComponent } from './popup-cv/popup-cv.component';
     PopupExamScoreComponent,
     PopupEvaluationComponent,
     PopupCvComponent,
+    PopupPreviewEmailComponent,
+    PopupResendEmailComponent,
+    PopupInterviewDateComponent,
+    PopupSignContractComponent,
+    PopupAvailableDateComponent,
+    PopupSignDateComponent,
+    PopupFeedbackComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -201,6 +225,13 @@ import { PopupCvComponent } from './popup-cv/popup-cv.component';
     PopupExamScoreComponent,
     PopupEvaluationComponent,
     PopupCvComponent,
+    PopupPreviewEmailComponent,
+    PopupResendEmailComponent,
+    PopupInterviewDateComponent,
+    PopupSignContractComponent,
+    PopupAvailableDateComponent,
+    PopupSignDateComponent,
+    PopupFeedbackComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -5,10 +5,22 @@ export const API_ENDPOINT = {
     ME: "me",
     FORGOTTEN: "forgotten",
     CONFIRMPASSWORD: "changePassword",
-    SESSION: "session"
-  },
-  SHARED: {
-    REASONREJECT: "rejectReason"
+    SESSION: "session",
+    CALENDAR: {
+      LIST: "user/calendar/list",
+      BY_JR: "user/calendar/jr",
+      EDIT: "user/calendar/edit",
+    },
+    WORKING_DAYS: {
+      LIST: "user/workingDays/list",
+      EDIT: "user/workingDays/edit",
+    },
+    NOTIFICATION: {
+      CHECK_NEW: "notification/checkNew",
+      LIST: "notification/list",
+      MARK_AS_READ: "notification/markAsRead",
+      MARK_AS_SEEN: "notification/markAsSeen",
+    }
   },
   JOBDESCRIPTION: {
     LIST: "jd/list",
@@ -28,6 +40,7 @@ export const API_ENDPOINT = {
     REJECT: "jr/reject",
     SOURCE: "source/mode/{mode}",
     ACTION: "jr/action",
+    USERS: "jr/users"
   },
   TALENT_POOL: {
     LIST: "talentPool/list",
@@ -65,6 +78,9 @@ export const API_ENDPOINT = {
       },
       DETAIL: "candidate/flow/detail",
       EDIT: "candidate/flow/edit",
+      PREVIEW_EMAIL: "candidate/flow/previewEmail",
+      RESEND_EMAIL: "candidate/flow/resendEmail",
+      SEND_EMAIL: "candidate/flow/sendEmail",
     },
     LIST: "candidate/list",
     DETAIL: "candidate/detail",
@@ -187,38 +203,13 @@ export const API_ENDPOINT = {
     CANDIDATE_ORIGINAL: "candidate/cv",
     SAVE: "candidate/flow/action",
     ACCURACY: "candidate/accuracy",
+    CREATE: "candidate/accuracy/create",
+    LIST: "candidate/accuracy/list",
+    DELETE: "candidate/accuracy/delete",
   },
   FILE: {
     UPLOAD: "jd/upload",
     DOWNLOAD: "jd/download"
-  },
-  LOCATION: {
-    LIST: "location"
-  },
-  PREVIEW_EMAIL: {
-    DETAIL: "previewEmail"
-  },
-  COUNT_CANDIDATE_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_EXAM_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_APPOINTMENT_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_INTERVIEW_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_SIGNCONTRACT_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  COUNT_ONBOARD_ALL_TAB: {
-    COUNT: "count_tab"
-  },
-  PROFILE: {
-    DETAIL: "profile",
-    UPDATE: "profile/changeProfile"
   },
   APPFORM: {
     ACTION: "appForm/action",
@@ -230,12 +221,14 @@ export const API_ENDPOINT = {
   },
   REPORT: {
     ACTION: "report",
-    LIST: "report/candidate"
+    LIST: "report/candidate",
+    LISTFEEDBACK: "feedbackReport/list",
+    EDIT: "feedbackReport/edit"
   },
   HERO: {
     LIST: "hero/list"
   },
   AUTHORIZE: {
     LIST: "authorize/list"
-  }
+  },
 };

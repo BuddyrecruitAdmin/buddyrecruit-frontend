@@ -37,7 +37,7 @@
         <div *ngIf="item.refUser && item.date" class="m-l-20">
           <small>
             ( {{ utilitiesService.setFullname(item.refUser) }},
-            {{ utilitiesService.convertDateTime(item.date) }} )
+            {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
           </small>
         </div>
       </div>

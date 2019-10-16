@@ -180,13 +180,13 @@ export class EvaluationDetailComponent implements OnInit {
       rank: {
         options: [
           {
-            subject: 'ผ่าน และทาการนัดต้นสังกัดสัมภาษณ์',
+            subject: 'ผ่านการสัมภาษณ์',
             value: 1,
             min: 0,
             max: 25,
           },
           {
-            subject: 'รอเปรียบเทียบผู้สมัครคนอื่นๆ',
+            subject: 'รอพิจารณา',
             value: 2,
             min: 0,
             max: 0,

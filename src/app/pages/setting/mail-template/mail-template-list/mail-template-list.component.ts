@@ -74,6 +74,12 @@ export class MailTemplateListComponent implements OnInit {
     this.external = [];
     this.service.getListAll(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        this.paging.length = response.totalDataSize;
+
+        if (!response.data.length && this.paging.pageIndex > 0) {
+          this.paging.pageIndex--;
+          this.search();
+        }
         response.data.forEach(element => {
           if (element.type === "true") {
             this.internal.push(element)

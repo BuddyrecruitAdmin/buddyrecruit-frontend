@@ -1,0 +1,23 @@
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+.circle.circle-primary {
+  background-color: var(--color-blue);
+}
+.circle.circle-success {
+  background-color: var(--color-green);
+}
+.circle.circle-danger {
+  background-color: var(--color-red);
+}
+.cell-totals {
+  margin: 5px;
+  text-align: center;
+}
+.badge {
+  margin-right: 5px;
+}

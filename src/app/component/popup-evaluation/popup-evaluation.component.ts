@@ -29,6 +29,7 @@ export class PopupEvaluationComponent implements OnInit {
   evaluation: any;
   scoring: any;
   editable: boolean;
+
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupEvaluationComponent>,
@@ -67,8 +68,8 @@ export class PopupEvaluationComponent implements OnInit {
         label: 'ไม่ดี',
         value: 1
       },
-    ],
-      this.loading = true;
+    ];
+    this.loading = true;
     this.candidateName = '';
     this.editable = false;
     this.jrName = '';
@@ -101,7 +102,7 @@ export class PopupEvaluationComponent implements OnInit {
   getDetail() {
     this.candidateService.getDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.candidateName = this.utilitiesService.setFullname(response.data);
+        // this.candidateName = this.utilitiesService.setFullname(response.data);
         // this.jrName = response.data.candidateFlow.refJR.refJD.position;
         // this.stageId = response.data.candidateFlow.refStage._id;
         response.data.map(element => {

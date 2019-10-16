@@ -90,17 +90,17 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <label class="label text-light-gray m-r-5">Appointment Info</label>
-                  <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Appointment Info"
-                    (click)="openPopupAppointmentInfo(item)"></nb-icon>
+                  <label class="label text-light-gray m-r-5">Interview Date</label>
+                  <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Interview Date"
+                    (click)="openPopupInterviewDate(item)"></nb-icon>
                   <div class="m-l-15">
                     <div class="text-group">
-                      <label class="label">Date</label>
-                      <span>{{ utilitiesService.convertDateTime(item.pendingAppointmentInfo?.date) || '-' }}</span>
+                      <label class="label">Interview Location</label>
+                      <span>{{ item.pendingInterviewInfo?.refLocation?.name || '-' }}</span>
                     </div>
                     <div class="text-group">
-                      <label class="label">Location</label>
-                      <span>{{ item.pendingAppointmentInfo?.location?.name || '-' }}</span>
+                      <label class="label">Interview Date</label>
+                      <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.startDate) || '-' }}</span>
                     </div>
                   </div>
                   <div *ngIf="item.refStage?.name === 'Interview Score'" class="m-t-5">
@@ -119,6 +119,9 @@
                       <div class="text-group">
                         <label class="label">Result</label>
                         <span>{{ item.result || '-'}}</span>
+                        <span class="link underline" nbTooltip="See more result" (click)="infoResult(item,dialog)">
+                          <nb-icon icon="info-outline"></nb-icon>
+                        </span>
                       </div>
                       <div class="text-group">
                         <label class="label">Remark</label>
@@ -149,15 +152,15 @@
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button *ngIf="!displayButton(item, item.refStage.name)" nbButton status="success"
-                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                    <button *ngIf="item.button.nextStep" nbButton status="success" [nbTooltip]="button.button"
+                      (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
-                    <button *ngIf="displayButton(item, 'Interview Taken')" nbButton status="success"
-                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                    <button *ngIf="item.button.interviewTaken" nbButton status="success" [nbTooltip]="button.button"
+                      (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
-                    <button *ngIf="displayButton(item, 'Interview Score')" nbButton status="success"
+                    <button *ngIf="item.button.interviewScore" nbButton status="success"
                       nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)">
                       <nb-icon icon="edit-2-outline"></nb-icon>
                     </button>
@@ -246,4 +249,43 @@
               itemSelected.weightScore?.certificate?.total)" status="danger" size="tiny">
     </nb-progress-bar>
   </div>
+</ng-template>
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+    <nb-card-header>
+      <div class="title">
+        <label [nbTooltip]="candidateName">Result</label>
+        <small class="status text-gray m-0">
+          {{utilitiesService.setFullname(itemDialog.refCandidate)}}
+        </small>
+      </div>
+      <div class="actions">
+        <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+      </div>
+    </nb-card-header>
+    <nb-card-body *ngIf="!loading" class="dialog-body">
+      <h6 *ngIf="!itemDialog.pendingInterviewScoreInfo?.evaluation?.length" class="text-gray text-center">No Comment
+      </h6>
+      <div class="post">
+        <nb-card *ngFor="let item of itemDialog.pendingInterviewScoreInfo.evaluation"
+          [accent]="item.createdInfo.refUser._id === this.role._id ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <nb-user size="medium" [name]="utilitiesService.setFullname(item.createdInfo.refUser)"
+                [title]="item.title" [picture]="item.picture"></nb-user>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div *ngIf="item.rank.selected === 1"><span class="fas fa-check"
+                style="color: var(--color-green);">ผ่าน</span><br>{{ item.additionalComment }} </div>
+            <div *ngIf="item.rank.selected === 2"><span>รอพิจารณา</span><br>{{ item.additionalComment }}</div>
+            <div *ngIf="item.rank.selected === 3"><span class="fas fa-times"
+                style="color: var(--color-red);">ไม่ผ่าน</span><br>{{ item.additionalComment }} </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </nb-card-body>
+  </nb-card>
 </ng-template>

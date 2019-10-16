@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
+import { Criteria, Paging as IPaging, DropDownGroup } from '../../../shared/interfaces/common.interface';
 import { getRole } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
@@ -40,6 +40,7 @@ export class JrDetailComponent implements OnInit {
   action: any;
   JobPosition: DropDownValue[];
   Evaluation: DropDownValue[];
+  Users: DropDownGroup[];
   sErrorPosition: string;
   sErrorStart: string;
   sErrorEnd: string;
@@ -47,7 +48,10 @@ export class JrDetailComponent implements OnInit {
   sErrorCheck: string;
   sErrorCap: string;
   checkPreview: boolean;
+  jobId: any;
   jobStatus: any;
+  tempJob: any;
+  loading: any;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -62,6 +66,7 @@ export class JrDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.initialModel();
     this.initialEvaluation();
     this.activatedRoute.params.subscribe(params => {
@@ -74,19 +79,22 @@ export class JrDetailComponent implements OnInit {
         this.jobStatus = undefined;
         if (params.action === State.Edit) {
           this.state = State.Edit;
-          this.initialDropDown();
-          this.getDetailList();
+          this.initialStartDropDown().then((response) => {
+            this.getDetailList();
+          });
         }
         if (params.action === "duplicate") {
           this.state = "duplicate";
-          this.initialDropDown();
-          this.getDetailList();
+          this.initialStartDropDown().then((response) => {
+            this.getDetailList();
+          });
         }
         if (params.action === "preview") {
           this.state = "preview";
           this.checkPreview = true;
-          this.initialDropDown();
-          this.getDetailList();//preview
+          this.initialStartDropDown().then((response) => {
+            this.getDetailList();
+          });
         }
       } else {
         this.state = State.Create;
@@ -95,7 +103,8 @@ export class JrDetailComponent implements OnInit {
         this.jobDB = false;
         this.jr.capacity = 0;
         this.jobStatus = "notUsed";
-        this.initialDropDown();
+        this.loading = false;
+        this.initialStartDropDown();
       }
     });
 
@@ -135,27 +144,83 @@ export class JrDetailComponent implements OnInit {
       refSource: undefined,
       remark: "",
       refStatus: undefined,
-      refEvaluation: undefined
+      refEvaluation: undefined,
+      userInterviews: [],
     }
   }
 
+  async initialStartDropDown() {
+    await this.initialDropDown();
+    await this.initialUser();
+  }
+
   initialDropDown() {
-    this.JobPosition = [];
-    this.JobPosition.push({
-      label: "- Select JobPosition -",
-      value: undefined
-    });
-    this.service.getJopPositionList(this.jobStatus).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          console.log(response.data);
-          response.data.forEach(element => {
-            this.JobPosition.push({
-              label: element.position,
-              value: element._id
-            })
-          });
+    return new Promise((resolve) => {
+      this.JobPosition = [];
+      this.JobPosition.push({
+        label: "- Select Job Position -",
+        value: undefined
+      });
+      this.service.getJopPositionList(this.jobStatus).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            this.jobId = response.data;
+            response.data.forEach(element => {
+              this.JobPosition.push({
+                label: element.position,
+                value: element._id
+              })
+            });
+          }
         }
+        resolve();
+      });
+    });
+  }
+
+  initialUser() {
+    return new Promise((resolve) => {
+      this.Users = [];
+      this.Users.push({
+        label: "- Select Users -",
+        value: undefined,
+        group: "disabled"
+      });
+      this.service.getListUsers(undefined, undefined).subscribe(res => {
+        if (res.code === ResponseCode.Success) {
+          res.data.forEach(item => {
+            console.log(item)
+            this.Users.push({
+              label: this.utilitiesService.setFullname(item.refUser),
+              value: item._id,
+              group: "disabled"
+            })
+          })
+        }
+      })
+      resolve();
+    });
+  }
+
+  onChangeJobposition(value) {
+    console.log(this.Users)
+    console.log(this.jobId)
+    const jobId = this.jobId.find(elem => {
+      return elem._id === value;
+    });
+    this.Users.forEach(opt => {
+      opt.group = "disabled";
+    })
+    this.service.getListUsers(jobId.departmentId, jobId.divisionId).subscribe(res => {
+      if (res.code === ResponseCode.Success) {
+        res.data.forEach(item => {
+          this.Users.forEach(option => {
+            if (option.value === item._id) {
+              option.group = "enable";
+            }
+          })
+        })
+        console.log(this.Users)
       }
     });
   }
@@ -164,8 +229,24 @@ export class JrDetailComponent implements OnInit {
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          console.log(response.data);
           this.jr = response.data;
+          if (this.utilitiesService.dateIsValid(response.data.duration.startDate)) {
+            this.jr.duration.startDate = new Date(response.data.duration.startDate);
+          }
+          if (this.utilitiesService.dateIsValid(response.data.duration.endDate)) {
+            this.jr.duration.endDate = new Date(response.data.duration.endDate);
+          }
+          if (this.utilitiesService.dateIsValid(response.data.onboardDate)) {
+            this.jr.onboardDate = new Date(response.data.onboardDate);
+          }
+          this.jr.userInterviews = this.jr.userInterviews.map(element => {
+            return element.refUser
+          });
+          // this.tempJob = this.jr.userInterviews;
+          console.log(this.jr.userInterviews)
+          if (this.state != State.Create) {
+            this.onChangeJobposition(this.jr.refJD._id);
+          }
           if (this.state === State.Edit) {
             if (this.jr.refStatus.name === "Active" || this.jr.refStatus.name === "Inactive") {
               this.editCheck = true;
@@ -191,6 +272,7 @@ export class JrDetailComponent implements OnInit {
         this.jobDB = true;
       }
     });
+    this.loading = false;
   }
 
   save() {
@@ -254,6 +336,11 @@ export class JrDetailComponent implements OnInit {
       this.jr.refSource.push({
         name: "jobsDB",
       })
+    }
+    if (this.jr.userInterviews.length === 0) {
+      this.touchedCheck = true;
+      this.sErrorCheck = MESSAGE[155];
+      isValid = false;
     }
     if (this.jr.duration.startDate === null) {
       isValid = false;

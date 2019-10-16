@@ -39,6 +39,12 @@ export class CandidateService extends NetworkService {
     };
     return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_CANDIDATE_DETAIL, body);
   }
+  getDetailFlow(refCandidateId: string): Observable<ApiResponse> {
+    const body = {
+      _id: refCandidateId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
+  }
 
   candidateFlowEdit(flowId: string, data: any): Observable<ApiResponse> {
     const body = {
@@ -55,11 +61,12 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_CANDIDATE_EDIT, body);
   }
 
-  candidateFlowApprove(flowId: string, stageId: string, buttonId: string): Observable<ApiResponse> {
+  candidateFlowApprove(flowId: string, stageId: string, buttonId: string, data?: any): Observable<ApiResponse> {
     const body = {
       refCandidateFlowId: flowId,
       refStageId: stageId,
-      buttonId: buttonId
+      buttonId: buttonId,
+      data: data
     };
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.APPROVE, body);
   }
@@ -95,5 +102,40 @@ export class CandidateService extends NetworkService {
       refCandidateId: candidateId,
     };
     return this.post(API_ENDPOINT.CANDIDATE.UNBLOCK, body);
+  }
+
+  candidateFlowPreviewEmail(flowId: string, stageId: string, buttonId: string): Observable<ApiResponse> {
+    const body = {
+      refCandidateFlowId: flowId,
+      refStageId: stageId,
+      buttonId: buttonId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.FLOW.PREVIEW_EMAIL, body);
+  }
+
+  candidateFlowReSendEmail(flowId: string, stageId: string, isReject: boolean = false): Observable<ApiResponse> {
+    const body = {
+      refCandidateFlowId: flowId,
+      refStageId: stageId,
+      isReject: isReject
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.FLOW.RESEND_EMAIL, body);
+  }
+
+  candidateFlowSendEmail(flowId: string, stageId: string, data: any, isReject: boolean = false): Observable<ApiResponse> {
+    const body = {
+      refCandidateFlowId: flowId,
+      refStageId: stageId,
+      data: data,
+      isReject: isReject
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.FLOW.SEND_EMAIL, body);
+  }
+
+  getCandidateDetail(refCandidateId: string): Observable<ApiResponse> {
+    const body = {
+      _id: refCandidateId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
   }
 }

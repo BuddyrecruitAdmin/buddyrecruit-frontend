@@ -9,6 +9,8 @@ import {
   Keyword,
   TabName,
   Collapse,
+  ButtonId,
+  DateTime,
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -107,6 +109,15 @@ export function getTabName() {
   return (!tabName || tabName === null) ? undefined : tabName;
 }
 
+export function setButtonId(buttonId: string = null) {
+  localStorage.setItem(ButtonId, JSON.stringify(buttonId));
+}
+
+export function getButtonId() {
+  const buttonId = JSON.parse(localStorage.getItem(ButtonId));
+  return (!buttonId || buttonId === null) ? undefined : buttonId;
+}
+
 export function setCollapse(collapse: boolean = true) {
   localStorage.setItem(Collapse, JSON.stringify(collapse));
 }
@@ -114,4 +125,13 @@ export function setCollapse(collapse: boolean = true) {
 export function getCollapse() {
   const collapse = JSON.parse(localStorage.getItem(Collapse));
   return (collapse === undefined || collapse === null) ? true : collapse;
+}
+
+export function setDate(date: Date = null) {
+  localStorage.setItem(DateTime, JSON.stringify(date));
+}
+
+export function getDate() {
+  const date = JSON.parse(localStorage.getItem(DateTime));
+  return (date === undefined || date === null) ? new Date() : new Date(date);
 }

@@ -26,6 +26,8 @@ export class UserListComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   minPageSize = Paging.pageSizeOptions[0];
+  isOverQuota: boolean;
+  showTips: boolean;
 
   constructor(
     private router: Router,
@@ -38,6 +40,8 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isOverQuota = false;
+    this.showTips = false;
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -71,6 +75,8 @@ export class UserListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
+        this.isOverQuota = response.isOverQuota;
+        this.showTips = response.isOverQuota;
       }
     });
   }

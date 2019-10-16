@@ -1,11 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil, timeout } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { getRole } from '../../../shared/services/auth.service';
+import { Router } from "@angular/router";
+import { NbSearchService } from '@nebular/theme';
+import { setKeyword } from '../../../shared/services/auth.service';
+import { HeaderService } from './header.service';
+import { ResponseCode, Paging } from '../../../shared/app.constants';
+import { Paging as IPaging } from '../../../shared/interfaces/common.interface';
+import { UtilitiesService } from '../../../shared/services/utilities.service';
 
 @Component({
   selector: 'ngx-header',
@@ -44,12 +50,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { title: 'Log out', icon: 'log-out-outline', link: '/auth/logout' }
   ];
 
-  constructor(private sidebarService: NbSidebarService,
+  paging: IPaging;
+  notificationData: any;
+  notifications: any;
+  innerWidth: any;
+  innerHeight: any;
+  noticeHeight: any;
+  showNotice: boolean = false;
+  showSeeMore: boolean = true;
+  countUnread: number = 0;
+  countUnseen: number = 0;
+  loading: boolean;
+
+  constructor(
+    private router: Router,
+    private service: HeaderService,
+    private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService) {
+    private breakpointService: NbMediaBreakpointsService,
+    private searchService: NbSearchService,
+    private utilitiesService: UtilitiesService,
+  ) {
+    setKeyword();
+    this.searchService.onSearchSubmit().subscribe((data: any) => {
+      setKeyword(data.term);
+      this.router.navigate(['/candidate/list']);
+    });
+    this.innerWidth = window.innerWidth;
+    this.innerHeight = window.innerHeight;
+    this.noticeHeight = window.innerHeight * 0.7;
   }
 
   ngOnInit() {
@@ -67,10 +98,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       title: role.refHero.name,
       picture: imagePath,
     };
-    
-    // this.userService.getUsers()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((users: any) => this.user = users.nick);
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -86,6 +113,122 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //     takeUntil(this.destroy$),
     //   )
     //   .subscribe(themeName => this.currentTheme = themeName);
+
+    this.paging = {
+      length: 0,
+      pageIndex: 0,
+      pageSize: Paging.pageSizeOptions[0],
+      pageSizeOptions: Paging.pageSizeOptions
+    };
+    this.loading = true;
+    this.notificationData = [];
+    this.notifications = [];
+
+    this.checkNewNotification();
+    this.getNotification();
+    setInterval(() => { this.checkNewNotification(); }, 30000);
+  }
+
+  checkNewNotification() {
+    this.service.checkNew().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.count.unseen) {
+          this.countUnseen = response.count.unseen || 0;
+          this.countUnread = response.count.unread || 0;
+        }
+      }
+    });
+  }
+
+  openNotification() {
+    if (this.countUnseen) {
+      this.getNotification();
+    }
+  }
+
+  getNotification() {
+    let criteria = {
+      skip: this.paging.pageIndex * this.paging.pageSize,
+      limit: this.paging.pageSize
+    };
+    if (this.countUnseen) {
+      criteria.skip = 0;
+      criteria.limit = (this.paging.pageIndex * this.paging.pageSize) + this.paging.pageSize;
+      this.countUnseen = 0;
+      this.notificationData = [];
+      this.notifications = [];
+      this.service.markAsSeen().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+        }
+      });
+    }
+    this.service.getNotification(criteria).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.countUnread = response.count.unread || 0;
+        if (this.notifications.length >= response.count.data) {
+          this.showSeeMore = false;
+        }
+        response.data.forEach(element => {
+          this.notificationData.push(element);
+          this.notifications.push({
+            name: element.title,
+            title: this.utilitiesService.convertDateTimeFromSystem(element.fromUser.date) ||
+              this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+            picture: '../../../../assets/images/avatar.png',
+            hidden: element.readed
+          });
+        });
+        this.loading = false;
+      }
+    });
+  }
+
+  seeMore() {
+    this.paging.pageIndex++;
+    this.loading = true;
+    this.getNotification();
+  }
+
+  seeLess() {
+    this.paging = {
+      length: 0,
+      pageIndex: 0,
+      pageSize: Paging.pageSizeOptions[0],
+      pageSizeOptions: Paging.pageSizeOptions
+    };
+    this.showSeeMore = true;
+    this.loading = true;
+    this.notificationData = [];
+    this.notifications = [];
+    this.getNotification();
+  }
+
+  onClickNotification(index: number) {
+    const item = this.notificationData[index];
+    const ids = [item._id];
+    this.showNotice = false;
+    this.service.markAsRead(ids).subscribe(response => {
+      this.countUnread = response.count.unread || 0;
+      if (response.code === ResponseCode.Success) {
+        this.notifications[index].hidden = true;
+      }
+    });
+    this.router.navigate([item.link]);
+  }
+
+  markAllAsRead() {
+    let ids = [];
+    this.notificationData.forEach(element => {
+      ids.push(element._id);
+    });
+    this.service.markAsRead(ids).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.countUnread = response.count.unread || 0;
+        this.notifications.forEach(element => {
+          element.hidden = true;
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -93,14 +236,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // changeTheme(themeName: string) {
-  //   this.themeService.changeTheme(themeName);
-  // }
+  changeTheme(themeName: string) {
+    this.themeService.changeTheme(themeName);
+  }
 
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
     this.layoutService.changeLayoutSize();
     return false;
+  }
+
+  gotoCalendar() {
+    this.router.navigate(['/calendar']);
+  }
+
+  gotoProfile() {
+    this.showNotice = false;
+    this.router.navigate(['/profile']);
   }
 
 }

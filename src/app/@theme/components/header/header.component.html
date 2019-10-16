@@ -3,7 +3,7 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo">Buddy Recruit</a>
+    <a *ngIf="!userPictureOnly" class="logo">Buddy Recruit</a>
   </div>
   <!-- <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
@@ -12,19 +12,53 @@
 
 <div class="header-container">
   <nb-actions size="small">
-
-    <!-- <nb-action class="control-item">
-      <nb-search type="rotate-layout"></nb-search>
-    </nb-action> -->
-    <!-- <nb-action class="control-item" icon="email-outline"></nb-action> -->
-    <!-- <nb-action class="control-item" icon="settings-2-outline"></nb-action> -->
-    <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [nbContextMenu]="userMenu"
-               [onlyPicture]="userPictureOnly"
-               [name]="user?.name"
-               [title]="user?.title"
-               [picture]="user?.picture">
+    <nb-action class="control-item">
+      <nb-search type="rotate-layout" nbTooltip="Search" nbTooltipPlacement="bottom"></nb-search>
+    </nb-action>
+    <nb-action class="control-item">
+      <nb-icon icon="calendar-outline" class="link" (click)="gotoCalendar()" nbTooltip="Calendar"
+        nbTooltipPlacement="bottom"></nb-icon>
+      <!-- <nb-badge text="!" status="danger" position="top right" style="top: -8px; right: 10px;"></nb-badge> -->
+    </nb-action>
+    <nb-action class="control-item">
+      <nb-icon icon="bell-outline" class="link" nbTooltip="Notification" nbTooltipPlacement="bottom"
+        (click)="openNotification(); showNotice = !showNotice"></nb-icon>
+      <nb-badge *ngIf="countUnseen" [text]="countUnseen" status="danger" position="top right"
+        style="top: -8px; right: 8px;"></nb-badge>
+      <nb-card *ngIf="showNotice" class="notification-card" [nbSpinner]="loading" nbSpinnerStatus="success"
+        nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+        <nb-card-header>
+          <label class="label">Notification</label>
+          <div class="pull-right">
+            <small class="link" (click)="markAllAsRead()">Mark all as read</small>
+            <!-- <span class="m-l-5 m-r-5">·</span> -->
+            <!-- <small class="link" (click)="gotoProfile()">Notification Setting</small> -->
+          </div>
+        </nb-card-header>
+        <nb-card-body [style.max-height.px]="noticeHeight">
+          <div *ngFor="let notification of notifications; let i = index;" class="notification-body"
+            [ngClass]="{ 'read' : notification.hidden, 'unread' : !notification.hidden}"
+            (click)="onClickNotification(i)">
+            <nb-user size="medium" [name]="notification.name" [title]="notification.title"
+              [picture]="user?.picture">
+            </nb-user>
+          </div>
+        </nb-card-body>
+        <nb-card-footer class="p-0">
+          <div *ngIf="showSeeMore" class="link underline text-center" style="padding: 8px;">
+            <span *ngIf="showSeeMore" (click)="seeMore()">See More</span>
+            <!-- <span *ngIf="!showSeeMore" (click)="seeLess()">See Less</span> -->
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </nb-action>
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']">
+      <nb-user [nbContextMenu]="userMenu" nbContextMenuPlacement="bottom" [onlyPicture]="userPictureOnly"
+        [name]="user?.name" [title]="user?.title" [picture]="user?.picture">
       </nb-user>
     </nb-action>
   </nb-actions>
 </div>
+
+<div *ngIf="showNotice" class="overlay" [style.width.px]="innerWidth" [style.height.px]="innerHeight"
+  (click)="showNotice = false"></div>

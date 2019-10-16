@@ -6,6 +6,7 @@ export interface ApiResponse {
   message?: string;
   totalDataSize?: number;
   count?: Count;
+  isOverQuota?: boolean;
 }
 
 export interface Count {
@@ -14,6 +15,8 @@ export interface Count {
   pending?: number;
   selected?: number;
   rejected?: number;
+  unread?: number;
+  unseen?: number;
 }
 
 export interface Authentication {
@@ -23,7 +26,7 @@ export interface Authentication {
 
 export interface DropDownValue {
   label: string;
-  value: string;
+  value: any;
 }
 
 export interface DropDownGroup {

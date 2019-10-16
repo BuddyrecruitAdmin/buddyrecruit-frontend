@@ -13,12 +13,13 @@ import { PopupMessageComponent } from '../../../component/popup-message/popup-me
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 import { Subject } from 'rxjs/Subject';
 import { API_ENDPOINT } from '../../../shared/constants';
 import { environment } from '../../../../environments/environment';
 import { saveAs } from "file-saver";
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
+
 @Component({
   selector: 'ngx-jd-detail',
   templateUrl: './jd-detail.component.html',
@@ -69,6 +70,16 @@ export class JdDetailComponent implements OnInit {
   sErrorrefCheck: string;
   SErrorAll: string;
   sErrorBox: string;
+  sErrorBoxW: string;
+  sErrorBoxC: string;
+  checkZeroC: any;
+  checkDupC: any;
+  sErrorBoxS: string;
+  checkZeroS: any;
+  checkDupS: any;
+  sErrorBoxH: string;
+  checkZeroH: any;
+  checkDupH: any;
   sErrorKey: string;
   sErrorDe: string;
   tScore: any;
@@ -93,7 +104,7 @@ export class JdDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
-    this.innerWidth = window.innerWidth * 0.6;
+    this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.8;
   }
 
@@ -183,7 +194,7 @@ export class JdDetailComponent implements OnInit {
   initialDropdown() {
     this.positionMaster = [];
     this.positionMaster.push({
-      label: "- Select email Type -",
+      label: "- Select Position -",
       value: undefined
     });
     this.service.getPositionList().subscribe(response => {
@@ -202,7 +213,7 @@ export class JdDetailComponent implements OnInit {
     if (this.role.refHero.isAdmin === true) {
       this.departMentAdmin = [];
       this.departMentAdmin.push({
-        label: "- Select department Type -",
+        label: "- Select Department -",
         value: undefined
       });
       this.divisionAll = [];
@@ -519,7 +530,7 @@ export class JdDetailComponent implements OnInit {
           })
           this.eduTotal = eTotal;
           if (eScore != eTotal) {
-            this.sErrorBox = MESSAGE[53];
+            this.sErrorBox = MESSAGE[156];
             this.eduTotal = 0;
           } else {
             this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
@@ -549,13 +560,15 @@ export class JdDetailComponent implements OnInit {
               this.jd.weightScore.workExperience.weight[i].percent = 0;
             }
             if (this.jd.weightScore.workExperience.weight[i].low === this.jd.weightScore.workExperience.weight[i].high ||
-              this.jd.weightScore.workExperience.weight[i].percent === 0 ||
               this.jd.weightScore.workExperience.weight[i].high < this.jd.weightScore.workExperience.weight[i].low
             ) {
               this.checkCondition = false;
-              this.sErrorBox = MESSAGE[53];
+              this.sErrorBoxW = MESSAGE[62];
+            } else if (this.jd.weightScore.workExperience.weight[i].percent === 0) {
+              this.checkCondition = false;
+              this.sErrorBoxW = MESSAGE[63];
             } else if (this.jd.weightScore.workExperience.weight[i].percent != this.jd.weightScore.workExperience.total) {
-              this.sErrorBox = MESSAGE[53];
+              this.sErrorBoxW = MESSAGE[122];
             } else {
               this.checkMax = true;
               this.wCheck = this.jd.weightScore.workExperience.weight[i].percent;
@@ -578,13 +591,23 @@ export class JdDetailComponent implements OnInit {
       case "HARDSKILL": {
         let hTotal = 0;
         this.isChecked = true;
+        this.checkZeroS = false;
+        this.checkDupS = false;
         if (this.jd.weightScore.hardSkill.total != 0) {
           const hScore = this.jd.weightScore.hardSkill.total;
-          this.jd.weightScore.hardSkill.weight.map((element) => {
+          this.jd.weightScore.hardSkill.weight.map((element, index) => {
             hTotal += element.percent;
             if (element.percent === null) {
               element.percent = 0;
             }
+            this.jd.weightScore.hardSkill.weight.map((ele, i) => {
+              if (index != i) {
+                if (element.skill === ele.skill) {
+                  this.isChecked = false;
+                  this.checkDupH = true;
+                }
+              }
+            })
           })
           this.hardTotal = hTotal;
           let i = 0;
@@ -594,21 +617,27 @@ export class JdDetailComponent implements OnInit {
               this.jd.weightScore.hardSkill.weight[i].keyword.length === 0
             ) {
               this.isChecked = false;
+              if (this.jd.weightScore.hardSkill.weight[i].percent === 0) {
+                this.checkZeroH = true;
+              } else {
+                this.sErrorBoxH = MESSAGE[53];
+              }
             }
           }
           //final close
           if (this.isChecked) {
             if (hTotal != hScore) {
-              this.sErrorBox = MESSAGE[53];
+              this.sErrorBoxH = MESSAGE[69];
             } else {
               this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
               this.touched = false;
               this.dialogRef.close();
             }
-          } else {
-            this.sErrorBox = MESSAGE[53];
+          } else if (this.checkZeroH) {
+            this.sErrorBoxH = MESSAGE[73];
+          } else if (this.checkDupH) {
+            this.sErrorBoxH = MESSAGE[72];
           }
-
         } else {
           this.touched = false;
           this.dialogRef.close();
@@ -618,13 +647,23 @@ export class JdDetailComponent implements OnInit {
       case "SOFTSKILL": {
         let softTotal = 0;
         this.isChecked = true;
+        this.checkZeroS = false;
+        this.checkDupS = false;
         if (this.jd.weightScore.softSkill.total != 0) {
           const sScore = this.jd.weightScore.softSkill.total;
-          this.jd.weightScore.softSkill.weight.map((element) => {
+          this.jd.weightScore.softSkill.weight.map((element, index) => {
             softTotal += element.percent;
             if (element.percent === null) {
               element.percent = 0;
             }
+            this.jd.weightScore.softSkill.weight.map((ele, i) => {
+              if (index != i) {
+                if (element.skill === ele.skill) {
+                  this.isChecked = false;
+                  this.checkDupS = true;
+                }
+              }
+            })
           })
           this.softTotal = softTotal;
           let i = 0;
@@ -634,19 +673,26 @@ export class JdDetailComponent implements OnInit {
               this.jd.weightScore.softSkill.weight[i].keyword.length === 0
             ) {
               this.isChecked = false;
+              if (this.jd.weightScore.softSkill.weight[i].percent === 0) {
+                this.checkZeroS = true;
+              } else {
+                this.sErrorBoxS = MESSAGE[53];
+              }
             }
           }
           //final close
           if (this.isChecked) {
             if (softTotal != sScore) {
-              this.sErrorBox = MESSAGE[53];
+              this.sErrorBoxS = MESSAGE[53];
             } else {
               this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
               this.touched = false;
               this.dialogRef.close();
             }
-          } else {
-            this.sErrorBox = MESSAGE[53];
+          } else if (this.checkZeroS) {
+            this.sErrorBoxS = MESSAGE[77];
+          } else if (this.checkDupS) {
+            this.sErrorBoxS = MESSAGE[76];
           }
         } else {
           this.touched = false;
@@ -657,13 +703,23 @@ export class JdDetailComponent implements OnInit {
       case "CERTIFICATE": {
         let cTotal = 0;
         this.isChecked = true;
+        this.checkZeroC = false;
+        this.checkDupC = false;
         if (this.jd.weightScore.certificate.total != 0) {
           const cScore = this.jd.weightScore.certificate.total;
-          this.jd.weightScore.certificate.weight.map((element) => {
+          this.jd.weightScore.certificate.weight.map((element, index) => {
             cTotal += element.percent;
             if (element.percent === null) {
               element.percent = 0;
             }
+            this.jd.weightScore.certificate.weight.map((ele, i) => {
+              if (index != i) {
+                if (element.name === ele.name) {
+                  this.isChecked = false;
+                  this.checkDupC = true;
+                }
+              }
+            })
           })
           this.certificateTotal = cTotal;
           let i = 0;
@@ -673,19 +729,26 @@ export class JdDetailComponent implements OnInit {
               this.jd.weightScore.certificate.weight[i].keyword.length === 0
             ) {
               this.isChecked = false;
+              if (this.jd.weightScore.certificate.weight[i].percent === 0) {
+                this.checkZeroC = true;
+              } else {
+                this.sErrorBoxC = MESSAGE[53];
+              }
             }
           }
           //final close
           if (this.isChecked) {
             if (cTotal != cScore) {
-              this.sErrorBox = MESSAGE[53];
+              this.sErrorBoxC = MESSAGE[78];
             } else {
               this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
               this.touched = false;
               this.dialogRef.close();
             }
-          } else {
-            this.sErrorBox = MESSAGE[53];
+          } else if (this.checkZeroC) {
+            this.sErrorBoxC = MESSAGE[81];
+          } else if (this.checkDupC) {
+            this.sErrorBoxC = MESSAGE[80];
           }
         } else {
           this.touched = false;
@@ -734,52 +797,61 @@ export class JdDetailComponent implements OnInit {
   }
 
   saveAll() {
-    if (this.Validation()) {
-      const request = this.setRequest();
-      if (this.bHasFile) {
-        this.uploader.uploadItem(
-          this.uploader.queue[this.uploader.queue.length - 1]
-        );
+    if (this.bHasFile) {
+      this.uploader.uploadItem(
+        this.uploader.queue[this.uploader.queue.length - 1]
+      );
+      this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
+    } else
+      if (this.Validation()) {
+        const request = this.setRequest();
+        const confirm = this.matDialog.open(PopupMessageComponent, {
+          width: '40%',
+          data: { type: 'C' }
+        });
+        confirm.afterClosed().subscribe(result => {
+          if (result) {
+            if (this.state === State.Create) {
+              this.service.create(request).subscribe(response => {
+                if (response.code === ResponseCode.Success) {
+                  this.showToast('success', 'Success Message', response.message);
+                  this.router.navigate(['/jd/list']);
+                } else {
+                  this.showToast('danger', 'Error Message', response.message);
+                }
+              });
+            }
+            if (this.state === State.Edit) {
+              this.service.edit(request).subscribe(response => {
+                if (response.code === ResponseCode.Success) {
+                  this.showToast('success', 'Success Message', response.message);
+                  this.router.navigate(['/jd/list']);
+                } else {
+                  this.showToast('danger', 'Error Message', response.message);
+                }
+              });
+            }
+            if (this.state === "duplicate") {
+              this.service.create(request).subscribe(response => {
+                if (response.code === ResponseCode.Success) {
+                  this.showToast('success', 'Success Message', response.message);
+                  this.router.navigate(['/jd/list']);
+                } else {
+                  this.showToast('danger', 'Error Message', response.message);
+                }
+              });
+            }
+          }
+        });
       }
-      const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
-        data: { type: 'C' }
-      });
-      confirm.afterClosed().subscribe(result => {
-        if (result) {
-          if (this.state === State.Create) {
-            this.service.create(request).subscribe(response => {
-              if (response.code === ResponseCode.Success) {
-                this.showToast('success', 'Success Message', response.message);
-                this.router.navigate(['/jd/list']);
-              } else {
-                this.showToast('danger', 'Error Message', response.message);
-              }
-            });
-          }
-          if (this.state === State.Edit) {
-            this.service.edit(request).subscribe(response => {
-              if (response.code === ResponseCode.Success) {
-                this.showToast('success', 'Success Message', response.message);
-                this.router.navigate(['/jd/list']);
-              } else {
-                this.showToast('danger', 'Error Message', response.message);
-              }
-            });
-          }
-          if (this.state === "duplicate") {
-            this.service.create(request).subscribe(response => {
-              if (response.code === ResponseCode.Success) {
-                this.showToast('success', 'Success Message', response.message);
-                this.router.navigate(['/jd/list']);
-              } else {
-                this.showToast('danger', 'Error Message', response.message);
-              }
-            });
-          }
-        }
-      });
-    }
+  }
+
+  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+    let data = JSON.parse(response); //success server response
+    console.log(data.uploadname)
+    this.jd.attachment.uploadName = data.uploadname;
+    this.bHasFile = false;
+    this.saveAll();
   }
 
   downloadFilePress() {
@@ -823,10 +895,6 @@ export class JdDetailComponent implements OnInit {
       this.sErrorKey = MESSAGE[138];
     } else {
       this.sErrorKey = "";
-    }
-    if (this.sTotal != 100) {
-      isValid = false;
-      this.SErrorAll = MESSAGE[53];
     }
     if (this.state === State.Edit || this.state === "duplicate") {
       if (this.jd.weightScore.certificate.total != 0) {
@@ -882,6 +950,10 @@ export class JdDetailComponent implements OnInit {
     if (this.wCheck != this.jd.weightScore.workExperience.total) {
       isValid = false;
       this.SErrorAll = MESSAGE[64];
+    }
+    if (this.sTotal != 100) {
+      isValid = false;
+      this.SErrorAll = MESSAGE[56];
     }
     return isValid
   }

@@ -25,7 +25,7 @@ export interface Department {
   divisions: Division[];
 }
 export interface Division {
-  refDivision: any;
+  divisionId: any;
   name: string;
   control: Control;
 }
@@ -116,7 +116,7 @@ export class AuthorizeDetailComponent implements OnInit {
             break;
           case State.Edit:
             this.state = State.Edit;
-            this.getDeatail(params.id);
+            this.getDetail(params.id);
             break;
           case State.Duplicate:
             this.state = State.Duplicate;
@@ -307,7 +307,7 @@ export class AuthorizeDetailComponent implements OnInit {
                 if (department.hasDivision && department.divisions.length) {
                   department.divisions.forEach(division => {
                     divisions.push({
-                      refDivision: division._id,
+                      divisionId: division._id,
                       name: division.name,
                       control: this.initialControl()
                     })
@@ -352,36 +352,41 @@ export class AuthorizeDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          if (this.authDefault.length) {
-            const name = this.authDetail.name;
-            const auth = this.authDefault.find(element => {
-              return element.refHero === refHero && element.isDefault;
-            });
-            if (auth) {
-              this.authDetail.name = name;
-              this.authDetail.refHero = auth.refHero;
-              this.authDetail.processFlow = auth.processFlow;
-              this.authDetail.configuration = auth.configuration;
-              this.authDetail.showDashboard = auth.showDashboard;
-              this.authDetail.dashboards = auth.dashboards;
-              this.authDetail.jd = auth.jd;
-              this.authDetail.jr = auth.jr;
-              this.authDetail.showReport = auth.showReport;
-              this.authDetail.reports = auth.reports;
-              this.authDetail.showOriginalCV = auth.showOriginalCV;
-              this.authDetail.editCandidateInfo = auth.editCandidateInfo;
-              this.authDetail.showApplicationForm = auth.showApplicationForm;
-              this.authDetail.showSalary = auth.showSalary;
-              this.authDetail.closeJR = auth.closeJR;
-            }
-          }
           this.refHero = refHero;
+          this.setAuthDefault();
         } else {
           this.authDetail.refHero = this.refHero;
         }
       });
     } else {
       this.refHero = refHero;
+      this.setAuthDefault();
+    }
+  }
+
+  setAuthDefault() {
+    if (this.authDefault.length) {
+      const name = this.authDetail.name;
+      const auth = this.authDefault.find(element => {
+        return element.refHero === this.refHero && element.isDefault;
+      });
+      if (auth) {
+        this.authDetail.name = name;
+        this.authDetail.refHero = auth.refHero;
+        this.authDetail.processFlow = auth.processFlow;
+        this.authDetail.configuration = auth.configuration;
+        this.authDetail.showDashboard = auth.showDashboard;
+        this.authDetail.dashboards = auth.dashboards;
+        this.authDetail.jd = auth.jd;
+        this.authDetail.jr = auth.jr;
+        this.authDetail.showReport = auth.showReport;
+        this.authDetail.reports = auth.reports;
+        this.authDetail.showOriginalCV = auth.showOriginalCV;
+        this.authDetail.editCandidateInfo = auth.editCandidateInfo;
+        this.authDetail.showApplicationForm = auth.showApplicationForm;
+        this.authDetail.showSalary = auth.showSalary;
+        this.authDetail.closeJR = auth.closeJR;
+      }
     }
   }
 
@@ -414,7 +419,7 @@ export class AuthorizeDetailComponent implements OnInit {
         this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.getDeatail(request._id);
+            this.getDetail(request._id);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -423,7 +428,7 @@ export class AuthorizeDetailComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.getDeatail(request._id);
+            this.getDetail(request._id);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -456,7 +461,10 @@ export class AuthorizeDetailComponent implements OnInit {
         if (department.divisions && department.divisions.length) {
           department.divisions.forEach(division => {
             if (division.control.visible) {
-              divisions.push(division);
+              divisions.push({
+                refDivision: division.divisionId,
+                name: division.name,
+              });
             }
           });
         }
@@ -470,7 +478,7 @@ export class AuthorizeDetailComponent implements OnInit {
     return request;
   }
 
-  getDeatail(_id: any) {
+  getDetail(_id: any) {
     this.service.getDetail(_id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.authDetail = _.cloneDeep(response.data);
@@ -507,7 +515,7 @@ export class AuthorizeDetailComponent implements OnInit {
           if (this.departments[indexDepartment].divisions.length) {
             department.divisions.forEach(division => {
               const indexDivision
-                = this.departments[indexDepartment].divisions.findIndex(x => x.refDivision === division.refDivision);
+                = this.departments[indexDepartment].divisions.findIndex(x => x.divisionId === division.divisionId);
               if (indexDivision >= 0) {
                 this.departments[indexDepartment].divisions[indexDivision].control.visible = true;
               }

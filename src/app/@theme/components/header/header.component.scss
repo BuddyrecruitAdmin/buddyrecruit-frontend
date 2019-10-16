@@ -52,13 +52,25 @@
     }
   }
 
+  .overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    // pointer-events: none;
+  }
+
   @include media-breakpoint-down(sm) {
+    .logo-container {
+      width: auto;
+    }
     .control-item {
-      display: none;
+      // display: none;
+      display: block;
     }
     .user-action {
-      border: none;
-      padding: 0;
+      // border: none;
+      padding-right: 0;
     }
   }
 

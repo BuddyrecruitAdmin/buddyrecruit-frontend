@@ -2,8 +2,8 @@
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div>
-      <label class="label" [nbTooltip]="items.firstname + ' ' + items.lastname">{{items.firstname}}
-        {{items.lastname}}</label>
+      <span class="label-grey"
+        [nbTooltip]="items.candidateFlow?.refJR?.refJD?.position">{{items.candidateFlow?.refJR?.refJD?.position}}</span>
       <div class="pull-right">
         <button size="small" nbButton status="success" (click)="changeMode()">
           <span class="fa" [ngClass]="{ 'fa-eye': editable, 'fa-pencil-alt': !editable }"></span>
@@ -20,13 +20,31 @@
       <div class="row">
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
-            <label class="label">Name</label>
+            <label class="label">Name
+              <span class="fas fa-check" (click)="toggleCheck('Name', 'firstname')" [matTooltip]="Checked"
+                matTooltipPosition="above" [ngClass]="{
+                'icon-green': colorStatus.nameSuccess,
+                'icon-default': !colorStatus.nameSuccess }"></span>
+              <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Name', 'firstname')"
+                [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                  'icon-red': colorStatus.nameBug,
+                  'icon-default': !colorStatus.nameBug }"></span>
+            </label>
             <input type="text" [(ngModel)]="items.firstname" nbInput fullWidth [disabled]="!editable">
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
-            <label class="label">Surname</label>
+            <label class="label">Surname
+              <span class="fas fa-check" (click)="toggleCheck('Surname', 'lastname')" [matTooltip]="Checked"
+                matTooltipPosition="above" [ngClass]="{
+                'icon-green': colorStatus.lastSuccess,
+                'icon-default': !colorStatus.lastSuccess }"></span>
+              <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Surname', 'lastname')"
+                [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                  'icon-red': colorStatus.lastBug,
+                  'icon-default': !colorStatus.lastBug }"></span>
+            </label>
             <input type="text" [(ngModel)]="items.lastname" nbInput fullWidth [disabled]="!editable">
           </div>
         </div>
@@ -34,7 +52,16 @@
       <div class="row">
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
-            <label class="label">Birthday</label>
+            <label class="label">Birthday
+              <span class="fas fa-check" (click)="toggleCheck('Birthday', 'birthDay')" [matTooltip]="Checked"
+                matTooltipPosition="above" [ngClass]="{
+                'icon-green': colorStatus.dobSuccess,
+                'icon-default': !colorStatus.dobSuccess }"></span>
+              <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Birthday', 'birthDay')"
+                [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                  'icon-red': colorStatus.dobBug,
+                  'icon-default': !colorStatus.dobBug }"></span>
+            </label>
             <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
             <input [nbDatepicker]="startDate" [(ngModel)]="items.birth" nbInput fullWidth placeholder="dd/mm/yyyy"
               [disabled]="!editable">
@@ -42,26 +69,62 @@
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
-            <label class="label">Age</label>
+            <label class="label">Age
+              <span class="fas fa-check" (click)="toggleCheck('Age', 'age')" [matTooltip]="Checked"
+                matTooltipPosition="above" [ngClass]="{
+                'icon-green': colorStatus.ageSuccess,
+                'icon-default': !colorStatus.ageSuccess }"></span>
+              <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Age', 'age')"
+                [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                  'icon-red': colorStatus.ageBug,
+                  'icon-default': !colorStatus.ageBug }"></span>
+            </label>
             <input type="text" [(ngModel)]="items.age" nbInput fullWidth [disabled]="!editable">
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
           <div class="form-control-group">
-            <label class="label">Phone</label>
+            <label class="label">Phone
+              <span class="fas fa-check" (click)="toggleCheck('Phone', 'phone')" [matTooltip]="Checked"
+                matTooltipPosition="above" [ngClass]="{
+                'icon-green': colorStatus.phoneSuccess,
+                'icon-default': !colorStatus.phoneSuccess }"></span>
+              <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Phone', 'phone')"
+                [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                'icon-red': colorStatus.phoneBug,
+                'icon-default': !colorStatus.phoneBug }"></span>
+            </label>
             <input type="text" [(ngModel)]="items.phone" nbInput fullWidth [disabled]="!editable">
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <label class="label">Email</label>
+          <label class="label">Email
+            <span class="fas fa-check" (click)="toggleCheck('Email', 'email')" [matTooltip]="Checked"
+              matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.emailSuccess,
+              'icon-default': !colorStatus.emailSuccess }"></span>
+            <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Email', 'email')"
+              [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                'icon-red': colorStatus.emailBug,
+                'icon-default': !colorStatus.emailBug }"></span>
+          </label>
           <input type="text" [(ngModel)]="items.email" nbInput fullWidth [disabled]="!editable">
         </div>
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <label class="label">Address</label>
+          <label class="label">Address
+            <span class="fas fa-check" (click)="toggleCheck('Address', 'address')" [matTooltip]="Checked"
+              matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.addressSuccess,
+              'icon-default': !colorStatus.addressSuccess }"></span>
+            <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Address', 'address')"
+              [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+                'icon-red': colorStatus.addressBug,
+                'icon-default': !colorStatus.addressBug }"></span>
+          </label>
           <input type="text" [(ngModel)]="items.address" nbInput fullWidth [disabled]="!editable">
         </div>
       </div>
@@ -72,8 +135,15 @@
     <div class="border-padtop">
       <div class="title">
         <label class="label">CV Score
-          <span class="fa fa-bug" (click)="bugReport('CV Score', 'CV Score')" [matTooltip]="bugTooltip"
-            matTooltipPosition="above"></span></label>
+          <span class="fas fa-check" (click)="toggleCheck('CV Score', 'CV Score')" [matTooltip]="Checked"
+            matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.cvSuccess,
+              'icon-default': !colorStatus.cvSuccess }"></span>
+          <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('CV Score', 'CV Score')"
+            [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              'icon-red': colorStatus.cvBug,
+              'icon-default': !colorStatus.cvBug }"></span>
+        </label>
         <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore?.accumulativeScore }} /
           {{ items.candidateFlow?.weightScore?.total }}
@@ -174,7 +244,10 @@
         <nb-card *ngFor="let comment of items.candidateFlow?.pendingInterviewInfo.comments; let i = index">
           <nb-card-header>
             <div class="title">
-              <nb-user size="medium" [name]="utilitiesService.setFullname(comment.refUser)" [title]="utilitiesService.convertDate(comment.date)" src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg"></nb-user>
+              <nb-user size="medium" [name]="utilitiesService.setFullname(comment.refUser)"
+                [title]="utilitiesService.convertDate(comment.date)"
+                src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg">
+              </nb-user>
             </div>
           </nb-card-header>
           <nb-card-body>
@@ -200,8 +273,14 @@
     <div class="border-padtop">
       <div class="title">
         <label class="label">Work Experience
-          <span class="fa fa-bug" (click)="bugReport('Work Experience', 'Work Experience')" [matTooltip]="bugTooltip"
-            matTooltipPosition="above"></span>
+          <span class="fas fa-check" (click)="toggleCheck('Work Experience', 'Work Experience')" [matTooltip]="Checked"
+            matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.workSuccess,
+              'icon-default': !colorStatus.workSuccess }"></span>
+          <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Work Experience', 'Work Experience')"
+            [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              'icon-red': colorStatus.workBug,
+              'icon-default': !colorStatus.workBug }"></span>
         </label>
         <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore?.workExperience?.accumulativeScore }} /
@@ -234,8 +313,14 @@
     <div class="border-padtop">
       <div class="title">
         <label class="label">Education
-          <span class="fa fa-bug" (click)="bugReport('Education', 'Education')" [matTooltip]="bugTooltip"
-            matTooltipPosition="above"></span>
+          <span class="fas fa-check" (click)="toggleCheck('Education', 'Education')" [matTooltip]="Checked"
+            matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.eduSuccess,
+              'icon-default': !colorStatus.eduSuccess }"></span>
+          <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Education', 'Education')"
+            [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              'icon-red': colorStatus.eduBug,
+              'icon-default': !colorStatus.eduBug }"></span>
         </label>
         <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.education.accumulativeScore }} /
@@ -296,8 +381,14 @@
     <div class="border-padtop">
       <div class="title">
         <label class="label">Hard Skill
-          <span class="fa fa-bug" (click)="bugReport('Hard Skill', 'Hard Skill')" [matTooltip]="bugTooltip"
-            matTooltipPosition="above"></span>
+          <span class="fas fa-check" (click)="toggleCheck('Hard Skill', 'Hard Skill')" [matTooltip]="Checked"
+            matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.hardSuccess,
+              'icon-default': !colorStatus.hardSuccess }"></span>
+          <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Hard Skill', 'Hard Skill')"
+            [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              'icon-red': colorStatus.hardBug,
+              'icon-default': !colorStatus.hardBug }"></span>
         </label>
         <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.hardSkill.accumulativeScore }} /
@@ -329,8 +420,14 @@
     <div class="border-padtop">
       <div class="title">
         <label class="label">Soft Skill
-          <span class="fa fa-bug" (click)="bugReport('Soft Skill', 'Soft Skill')" [matTooltip]="bugTooltip"
-            matTooltipPosition="above"></span>
+          <span class="fas fa-check" (click)="toggleCheck('Soft Skill', 'Soft Skill')" [matTooltip]="Checked"
+            matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.softSuccess,
+              'icon-default': !colorStatus.softSuccess }"></span>
+          <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Soft Skill', 'Soft Skill')"
+            [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              'icon-red': colorStatus.softBug,
+              'icon-default': !colorStatus.softBug }"></span>
         </label>
         <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.softSkill.accumulativeScore }} /
@@ -364,8 +461,14 @@
     <div class="border-padtop">
       <div class="title">
         <label class="label">Certificate
-          <span class="fa fa-bug" (click)="bugReport('Certificate', 'Certificate')" [matTooltip]="bugTooltip"
-            matTooltipPosition="above"></span>
+          <span class="fas fa-check" (click)="toggleCheck('Certificate', 'Certificate')" [matTooltip]="Checked"
+            matTooltipPosition="above" [ngClass]="{
+              'icon-green': colorStatus.cerSuccess,
+              'icon-default': !colorStatus.cerSuccess }"></span>
+          <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Certificate', 'Certificate')"
+            [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              'icon-red': colorStatus.cerBug,
+              'icon-default': !colorStatus.cerBug }"></span>
         </label>
         <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.certificate.accumulativeScore }} /
@@ -399,8 +502,8 @@
   <nb-card-footer>
     <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)"
       [disabled]="!items.applicationForm">Original CV</button>
-    <button class="txt-left" size="small" nbButton ghost >Feedback</button>
+    <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button>
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
-    <button nbButton status="default" size="small" (click)="ref.close()">CLOSE</button>
+    <button nbButton status="default" size="small" (click)="ref.close(true)">CLOSE</button>
   </nb-card-footer>
 </nb-card>

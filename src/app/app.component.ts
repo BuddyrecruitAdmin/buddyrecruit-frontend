@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
     private analytics: AnalyticsService,
     private router: Router,
   ) {
-    debugger
     if (!getToken()) {
       this.url = window.location.pathname.slice(0, 14);
       if (this.url != "/auth/appform/") {

@@ -30,7 +30,10 @@ export interface CompanyDetail {
     hr: boolean;
     payroll: boolean;
     manager: boolean;
-  }
+  },
+  isTrial: boolean;
+  maxJR: number;
+  maxUser: number;
 }
 
 export interface ErrMsg {
@@ -41,6 +44,8 @@ export interface ErrMsg {
   companySize: string;
   adminEmail: string;
   refParent: string;
+  maxJR: string;
+  maxUser: string;
 }
 
 @Component({
@@ -106,7 +111,10 @@ export class CompanyDetailComponent implements OnInit {
         hr: false,
         payroll: false,
         manager: false,
-      }
+      },
+      isTrial: false,
+      maxJR: 0,
+      maxUser: 0,
     }
   }
 
@@ -118,7 +126,9 @@ export class CompanyDetailComponent implements OnInit {
       expiryDate: '',
       companySize: '',
       adminEmail: '',
-      refParent: ''
+      refParent: '',
+      maxJR: '',
+      maxUser: '',
     }
   }
 
@@ -263,11 +273,21 @@ export class CompanyDetailComponent implements OnInit {
       this.errMsg.refParent = 'Please Input Parent Company';
       isValid = false;
     }
+    if (!this.companyDetail.maxJR) {
+      this.errMsg.maxJR = 'Please Input Number of JR';
+      isValid = false;
+    }
+    if (!this.companyDetail.maxUser) {
+      this.errMsg.maxUser = 'Please Input Number of User';
+      isValid = false;
+    }
     return isValid;
   }
 
   setRequest(): CompanyDetail {
     const request = _.cloneDeep(this.companyDetail);
+    request.startDate = new Date(request.startDate);
+    request.expiryDate = new Date(request.expiryDate);
     switch (this.roleSelected) {
       case '1':
         request.hero.hr = true;
@@ -292,9 +312,6 @@ export class CompanyDetailComponent implements OnInit {
       default:
         break;
     }
-    // request.startDate.setTime(request.startDate.getTime() + Math.abs(request.startDate.getTimezoneOffset() * 60 * 1000));
-    // request.expiryDate.setTime(request.expiryDate.getTime() + Math.abs(request.expiryDate.getTimezoneOffset() * 60 * 1000));
-
     return request;
   }
 

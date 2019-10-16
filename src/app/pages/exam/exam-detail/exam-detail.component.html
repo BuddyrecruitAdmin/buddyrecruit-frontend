@@ -91,9 +91,13 @@
                 </div>
                 <div class="col-md-6">
                   <label class="label text-light-gray m-r-5">Exam Date</label>
-                  <nb-icon *ngIf="item.refStage?.name === 'Exam Taken'" icon="edit-2-outline" class="link"
+                  <nb-icon *ngIf="item.refStage?.order === 201" icon="edit-2-outline" class="link"
                     nbTooltip="Edit Exam Date" (click)="openPopupExamDate(item)"></nb-icon>
                   <div class="m-l-15">
+                    <div class="text-group">
+                      <label class="label">Exam Location</label>
+                      <span>{{ item.examInfo?.refLocation?.name || '-' }}</span>
+                    </div>
                     <div class="text-group">
                       <label class="label">Exam Date</label>
                       <span>{{ utilitiesService.convertDateTime(item.examInfo?.date) || '-' }}</span>
@@ -164,16 +168,16 @@
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button *ngIf="!displayButton(item, item.refStage.name)" nbButton status="success"
-                      [nbTooltip]="button.button" (click)="approve(item, button)">
+                    <button *ngIf="item.button.nextStep" nbButton status="success" [nbTooltip]="button.button"
+                      (click)="approve(item, button)">
                       <nb-icon icon="checkmark-circle-2"></nb-icon>
                     </button>
-                    <button *ngIf="displayButton(item, 'Exam Taken')" nbButton status="success"
-                      nbTooltip="Input Exam Info" (click)="openPopupExamInfo(item)">
+                    <button *ngIf="item.button.examTaken" nbButton status="success" nbTooltip="Input Exam Info"
+                      (click)="openPopupExamInfo(item)">
                       <nb-icon icon="edit-2-outline"></nb-icon>
                     </button>
-                    <button *ngIf="displayButton(item, 'Exam Score')" nbButton status="success"
-                      nbTooltip="Input Exam Score" (click)="openPopupExamScore(item)">
+                    <button *ngIf="item.button.examScore" nbButton status="success" nbTooltip="Input Exam Score"
+                      (click)="openPopupExamScore(item)">
                       <nb-icon icon="edit-2-outline"></nb-icon>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
