@@ -1,0 +1,49 @@
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+  <nb-card-header>
+    <div class="title">
+      <label [nbTooltip]="candidateName">Result</label>
+      <small class="status text-gray m-0">
+        {{utilitiesService.setFullname(item.refCandidate)}}
+      </small>
+    </div>
+    <div class="actions">
+      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="dialog-body">
+    <h6 *ngIf="!item.pendingInterviewScoreInfo?.evaluation?.length" class="text-gray text-center">No Comment
+    </h6>
+    <div>
+      <nb-card *ngIf="pass.length > 0" accent="success">
+        <nb-card-header>
+          <div class="title">
+            <span class="fas fa-check" style="color: var(--color-green);"> ผ่าน</span>
+          </div>
+        </nb-card-header>
+        <nb-card-body *ngFor="let pas of pass">
+          <nb-user size="medium" [name]="pas.name" [title]="pas.comment" [picture]="pas.picture"></nb-user>
+        </nb-card-body>
+      </nb-card>
+      <nb-card *ngIf="compare.length > 0" accent="warning">
+        <nb-card-header>
+          <div class="title">
+            <span class="fas fa-exclamation" style="color: var(--color-orange);"> รอพิจารณา</span>
+          </div>
+        </nb-card-header>
+        <nb-card-body *ngFor="let com of compare">
+          <nb-user size="medium" [name]="com.name" [title]="com.comment" [picture]="com.picture"></nb-user>
+        </nb-card-body>
+      </nb-card>
+      <nb-card *ngIf="notPass.length > 0" accent="danger">
+        <nb-card-header>
+          <div class="title">
+            <span class="fas fa-times" style="color: var(--color-red);"> ไม่ผ่าน</span>
+          </div>
+        </nb-card-header>
+        <nb-card-body *ngFor="let not of notPass">
+          <nb-user size="medium" [name]="not.name" [title]="not.comment" [picture]="not.picture"></nb-user>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </nb-card-body>
+</nb-card>

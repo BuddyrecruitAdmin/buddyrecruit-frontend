@@ -35,6 +35,7 @@ export class TalentPoolDetailComponent implements OnInit {
   steps: any;
   items: any;
   comments: any;
+  startFlag: boolean;
 
   collapseAll: boolean;
   tabSelected: string;
@@ -103,6 +104,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
       return step.refStage.refMain._id === this.role.refCompany.menu.talentPool.refStage._id && step.editable;
     });
+    this.startFlag = true;
   }
 
   ngOnInit() {
@@ -147,6 +149,13 @@ export class TalentPoolDetailComponent implements OnInit {
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
+        if (this.startFlag) {
+          if (this.items.length === 0) {
+            this.startFlag = false;
+            this.tabSelected = "PENDING";
+            this.search();
+          }
+        }
       }
       this.loading = false;
     });

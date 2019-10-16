@@ -34,6 +34,7 @@ import { ModulesComponent } from './modules.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AppFormComponent } from './app-form/app-form.component';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -138,7 +139,8 @@ import { IndexComponent } from './index/index.component';
     MatTooltipModule,
     MatTreeModule,
     TranslateModule.forRoot(),
-    NbSpinnerModule
+    NbSpinnerModule,
+    DigitOnlyModule
   ],
   declarations: [
     ModulesComponent,

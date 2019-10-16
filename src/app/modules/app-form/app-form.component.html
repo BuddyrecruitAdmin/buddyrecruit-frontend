@@ -124,7 +124,8 @@
           <div class="form-control-group">
             <label class="label">{{ 'POST_CODE' | translate }}<small class="text-red">*</small></label>
             <input type="number" [formControl]="postcode" [(ngModel)]="appforms.personalInformation.postCode"
-              placeholder="" nbInput fullWidth>
+              placeholder="" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==5) return false;" appNumberDirective nbInput fullWidth>
             <small *ngIf="touched && postcode.errors" class="text-red">{{ sErrorPostcode }}</small>
           </div>
         </div>
@@ -150,7 +151,8 @@
           <div class="form-control-group">
             <label class="label">{{ 'MOBILE' | translate }}<small class="text-red">*</small></label>
             <input type="number" [formControl]="mobile" [(ngModel)]="appforms.personalInformation.mobile"
-              placeholder="0123456789" nbInput fullWidth>
+              placeholder="0123456789" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==11) return false;" nbInput fullWidth>
             <small *ngIf="touched && mobile.errors" class="text-red">{{ sErrorMobile }}</small>
           </div>
         </div>
@@ -315,8 +317,9 @@
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'NUMBER_CHIDREN' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfChildren" placeholder="" nbInput
-              fullWidth>
+            <input type="number" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==2) return false;"
+              [(ngModel)]="appforms.familyInformation.numberOfChildren" placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -324,29 +327,35 @@
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'NUMBER_MEMBER_FAMILY' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfSibling" [disabled]="!edtiable"
-              placeholder="" nbInput fullWidth>
+            <input type="number" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==2) return false;"
+              [(ngModel)]="appforms.familyInformation.numberOfSibling" [disabled]="!edtiable" placeholder="" nbInput
+              fullWidth>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'MALE' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfMale" [disabled]="!edtiable"
-              placeholder="" nbInput fullWidth>
+            <input type="number" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==2) return false;" [(ngModel)]="appforms.familyInformation.numberOfMale"
+              [disabled]="!edtiable" placeholder="" nbInput fullWidth>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
           <div class="form-control-group">
             <label class="label">{{ 'FEMALE' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.numberOfFemale" [disabled]="!edtiable"
-              placeholder="" nbInput fullWidth>
+            <input type="number" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==2) return false;"
+              [(ngModel)]="appforms.familyInformation.numberOfFemale" [disabled]="!edtiable" placeholder="" nbInput
+              fullWidth>
           </div>
         </div>
         <div class="col-md-3 col-lg-3">
           <div class="form-control-group">
             <label class="label">{{ 'YOUR_CHILD_OF_FAMILY' | translate }}</label>
-            <input type="number" [(ngModel)]="appforms.familyInformation.rankOfSibling" [disabled]="!edtiable"
-              placeholder="" nbInput fullWidth>
+            <input type="number" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==2) return false;" [(ngModel)]="appforms.familyInformation.rankOfSibling"
+              [disabled]="!edtiable" placeholder="" nbInput fullWidth>
           </div>
         </div>
       </div>
@@ -363,8 +372,8 @@
           <div class="row">
             <div class="col-md-4">
               <label class="label">{{ 'EDUCATION_LEVEL' | translate }}<small class="text-red">*</small></label>
-              <select [disabled]="!edtiable" [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }"
-                Faria-hidden="true" fullWidth>
+              <select class="form-control" [disabled]="!edtiable" [(ngModel)]="education.refDegree"
+                [ngModelOptions]="{ standalone: true }" Faria-hidden="true" fullWidth>
                 <option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</option>
               </select>
             </div>
@@ -591,8 +600,9 @@
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{ 'TEL' | translate }}<small class="text-red">*</small></label>
-            <input type="number" [formControl]="emergencyTel" [(ngModel)]="appforms.contactEmergency.tel" placeholder=""
-              nbInput fullWidth>
+            <input type="number" [formControl]="emergencyTel" [(ngModel)]="appforms.contactEmergency.tel"
+              pattern="[0-9]*" inputmode="numeric" digitOnly onKeyPress="if(this.value.length==5) return false;"
+              placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencyTel.errors" class="text-red">{{ sErrorEmerTel }}</small>
           </div>
         </div>

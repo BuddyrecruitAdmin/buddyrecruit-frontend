@@ -15,7 +15,8 @@
               <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
                 [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'"
                 (selectedChange)="onChangeJobposition($event)" fullWidth>
-                <nb-option *ngFor="let job of JobPosition" [value]="job.value" [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'">
+                <nb-option *ngFor="let job of JobPosition" [value]="job.value"
+                  [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'">
                   {{ job.label }}
                 </nb-option>
               </nb-select>
@@ -96,6 +97,7 @@
                   {{ user.label }}
                 </nb-option>
               </nb-select>
+              <small *ngIf="touchedStart" class="text-red">{{ sErrorUser }}</small>
             </div>
           </div>
         </div>
@@ -124,8 +126,10 @@
             </div>
           </div>
         </div>
+        <div class="row pull-right">
+          <small *ngIf="touchedCheck" class="text-red-right">{{ sErrorCheck }}</small>
+        </div>
       </nb-card-header>
-      <small *ngIf="touchedCheck" class="text-red-right">{{ sErrorCheck }}</small>
       <nb-card-footer>
         <button nbButton status="default" (click)="back()">Cancel</button>
         <button *ngIf="!checkPreview" nbButton status="success" (click)="save()">Save</button>

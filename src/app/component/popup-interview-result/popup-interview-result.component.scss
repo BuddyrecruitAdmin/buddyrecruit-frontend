@@ -1,6 +1,4 @@
-.post {
-
-  nb-card {
+nb-card {
     margin-bottom: 1rem;
   }
 
@@ -15,13 +13,11 @@
   nb-card-body {
     min-height: auto;
   }
-}
-
-nb-card-body.dialog-body {
-  overflow-y: scroll;
-}
-
-nb-card-footer input {
-  width: calc(100% - 125px) !important;
-  max-width: 100% !important;
-}
+  nb-card-body.dialog-body {
+    overflow-y: scroll;
+  }
+  
+  nb-card-footer input {
+    width: calc(100% - 125px) !important;
+    max-width: 100% !important;
+  }

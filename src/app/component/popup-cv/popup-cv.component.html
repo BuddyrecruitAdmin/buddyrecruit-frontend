@@ -500,8 +500,10 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)"
-      [disabled]="!items.applicationForm">Original CV</button>
+    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)" disabled>Original
+      CV</button>
+    <button *ngIf="items.applicationForm" class="txt-left" size="small" nbButton status="info"
+      (click)="openApplication(items._id)">App Form</button>
     <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button>
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
     <button nbButton status="default" size="small" (click)="ref.close(true)">CLOSE</button>

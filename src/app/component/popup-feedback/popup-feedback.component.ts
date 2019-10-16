@@ -2,12 +2,10 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { PopupFeedbackService } from './popup-feedback.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, getBugId, getFieldLabel, getFieldName } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
-import { DropDownValue } from '../../shared/interfaces/common.interface';
-import { resolve } from 'dns';
 import { Router, ActivatedRoute } from "@angular/router";
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 
@@ -26,44 +24,52 @@ export class PopupFeedbackComponent implements OnInit {
   feedbackType: string;
   bugComment: string;
   bugLists: any;
+  bugId: any;
+  bugName: any;
+  bugLabel: any;
+  loading: boolean;
   constructor(
     private service: PopupFeedbackService,
-    private ref: MatDialogRef<PopupFeedbackComponent>,
+    private ref: NbDialogRef<PopupFeedbackComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
-    private toastrService: NbToastrService,
-    private router: Router,
-    @Inject(MAT_DIALOG_DATA) public data: {
-      _id: string,
-      fieldLabel: string,
-      fieldName: string,
-    }
   ) {
     this.role = getRole();
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.innerHeight = window.innerHeight * 0.6;
   }
 
   ngOnInit() {
     this.textareaHeight = "34";
-    console.log(this.data)
+    this.bugId = getBugId();
+    this.bugLabel = getFieldLabel();
+    this.bugName = getFieldName();
     this.TogglePage = 'comment';
-    this.feedbackType = '';
     this.bugComment = '';
     this.userKey = this.role._id;
     this.feedbackType = 'missing';
+    this.loading = false;
     this.getList();
   }
 
   getList() {
-    this.service.getList(this.data._id, this.data.fieldName, this.data.fieldLabel).subscribe(response => {
+    this.service.getList(this.bugId, this.bugName, this.bugLabel).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        console.log(response.data);
         this.bugLists = response.data;
+        this.bugLists.map(element => {
+          if(element.feedbackType === "missing"){
+           element.feedbackType = "Missing data";
+          }
+          if(element.feedbackType === "wrong"){
+            element.feedbackType = "Wrong data";
+          }
+        })
       }
     })
   }
 
   postBug() {
-    this.service.create(this.data._id, this.data.fieldName, this.data.fieldLabel, this.feedbackType, this.bugComment).subscribe(response => {
+    this.service.create(this.bugId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
         this.TogglePage = 'history';
@@ -74,7 +80,6 @@ export class PopupFeedbackComponent implements OnInit {
   }
 
   deleteBug(item: any) {
-    console.log(item)
     const dialogRef = this.matDialog.open(PopupMessageComponent, {
       width: '35%',
       data: {

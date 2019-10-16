@@ -56,6 +56,10 @@ export const TabName = "TabName";
 export const Collapse = "Collapse";
 export const ButtonId = "ButtonId";
 export const DateTime = "DateTime";
+export const BugId = "BugId";
+export const FieldLabel = "FieldLabel";
+export const FieldName = "FieldName";
+export const UserCandidate = "UserCandidate";
 
 export enum DayOfWeek {
   Sunday = 0,

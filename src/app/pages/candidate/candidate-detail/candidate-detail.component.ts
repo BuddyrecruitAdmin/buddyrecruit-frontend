@@ -77,6 +77,7 @@ export class CandidateDetailComponent implements OnInit {
     const menu = MENU_PROCESS_FLOW.find(element => {
       return element.title === this.item.candidateFlow.refStage.refMain.name;
     });
+    menu.link = menu.link.replace('detail', 'list');
     if (menu) {
       this.router.navigate([menu.link]);
     } else {

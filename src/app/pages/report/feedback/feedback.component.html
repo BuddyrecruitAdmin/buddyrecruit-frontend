@@ -1,29 +1,33 @@
 <div class="content-header with-shadow">
-  <div class="breadcrumb">
-    <h4>Feedback Report</h4>
+  <div class="row">
+    <div class="col-sm-7">
+      <h3>Feedback Report</h3>
+    </div>
+    <div class="col-sm-5">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+          (keyup.enter)="paging.pageIndex = 0; search(true)">
+        <div class="input-group-addon" nbTooltip="Search">
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- card search -->
 <nb-card>
   <nb-card-body>
     <div class="row">
-      <div class="col-xs-12 col-md-6 ">
-        <div class="input-group">
-          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
-          <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
-          </div>
-        </div>
+      <div class="col-md-1">
+        <label class="label" style="margin-top: 10px;">Filters:</label>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3" *ngIf="role.refHero.isAdmin || role.refHero.isSuperAdmin">
         <span>
           <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Developer View</nb-checkbox>
         </span>
       </div>
     </div>
     <div class="filter-block" *ngIf="!checked">
-      <label class="label">Filters:</label>
       <div class="row">
         <div class="col-md-3">
           <div class="form-control-group">
@@ -73,7 +77,6 @@
     </div>
     <!-- Developer View -->
     <div class="filter-block" *ngIf="checked">
-      <label class="label">Filters:</label>
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">

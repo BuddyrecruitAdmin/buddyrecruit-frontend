@@ -1,54 +1,10 @@
-<!-- <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
-  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."> -->
-<!-- <nb-card-header>
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+  nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+  <nb-card-header>
     <div class="title">
-      <label class="label">Send us yor feedback!</label>
-      <small class="status text-gray m-0">
-        Field: Test
-      </small>
+      <label>Send us your feedback!</label>
     </div>
     <div class="actions">
-      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
-    </div>
-  </nb-card-header>
-  <nb-card-body *ngIf="!loading" class="dialog-body">
-    <div class="col-sm-12 mg-b-10">
-      <nb-radio-group status="success" [(ngModel)]="bugType">
-        <nb-radio value="missing">Missing Data</nb-radio>
-        <nb-radio value="wrong">Wrong Data</nb-radio>
-        <nb-radio value="other">Other</nb-radio>
-      </nb-radio-group>
-    </div>
-  </nb-card-body>
-  <nb-card-footer *ngIf="!loading">
-    <div class="row">
-      <div class="col-sm-9 left">
-        <textarea [style.height.px]="textareaHeight" nbInput fullWidth placeholder="text here"></textarea>
-      </div>
-      <div class="col-sm-3">
-        <button mat-raised-button color="success" class="w-100 mg-0" type="button">
-          SEND
-        </button>
-      </div>
-    </div>
-  </nb-card-footer>
-</nb-card> -->
-<!-- <mat-radio-group [(ngModel)]="bugType">
-      <div class="row">
-        <div class="col-sm-12 mg-b-10">
-          <mat-radio-button value="missing">Missing data</mat-radio-button>
-        </div>
-        <div class="col-sm-12 mg-b-10">
-          <mat-radio-button value="wrong">Wrong data</mat-radio-button>
-        </div>
-        <div class="col-sm-12">
-          <mat-radio-button value="other">Other</mat-radio-button>
-        </div>
-      </div>
-    </mat-radio-group> -->
-<div mat-dialog-title class="with-border">
-  <div class="header-title">Send us your feedback!
-    <div class="pull-right">
       <mat-button-toggle-group #group="matButtonToggleGroup" [(ngModel)]="TogglePage">
         <mat-button-toggle value="comment" matTooltip="Comment">
           <span class="fa fa-comment-dots"></span>
@@ -58,27 +14,53 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-  </div>
-  <div class="header-desc">
-    <span class="opa-70">Field:</span>
-    <span class="text-green">{{ data.fieldLabel || data.fieldName }}</span>
-  </div>
-</div>
+    <span class="label">Field:</span>
+    <span class="label text-green">{{ bugLabel || bugName }}</span>
+  </nb-card-header>
+  <nb-card-body class="dialog-body" *ngIf="TogglePage === 'comment'">
+    <nb-radio-group [(ngModel)]="feedbackType">
+      <nb-radio value="missing">Missing data</nb-radio>
+      <nb-radio value="wrong">Wrong data</nb-radio>
+      <nb-radio value="other">Other</nb-radio>
+    </nb-radio-group>
+  </nb-card-body>
+  <nb-card-body class="dialog-body" *ngIf="TogglePage === 'history'">
+    <div>
+      <h4 *ngIf="bugLists.length === 0" class="text-center" style="margin: 40px 0 20px;">
+        No data
+      </h4>
+      <div class="post">
+        <nb-card *ngFor="let bugList of bugLists"
+          [accent]="bugList.createdInfo.refUser._id === this.role._id ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <nb-user size="medium" [name]="utilitiesService.setFullname(bugList.createdInfo.refUser)"
+                [title]="utilitiesService.convertDateTimeFromSystem(bugList.createdInfo.date)"
+                [picture]="bugList.picture"></nb-user>
+            </div>
+            <div class="actions">
+              <nb-icon *ngIf="bugList.createdInfo.refUser._id === userKey" icon="trash-2-outline" class="link text-red"
+                nbTooltip="Delete" (click)="deleteBug(bugList)"></nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <p style="padding-top: 10px;" class="comment-message"><span
+                [ngClass]="{ 'text-green' : bugList.feedbackType==='Correct', 'text-red' : bugList.feedbackType!='Correct' }">{{ bugList.feedbackType }}</span>
+              {{ bugList.remark || '' }}
+            </p>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer *ngIf="TogglePage === 'comment'">
+    <input class="pull-left" type="text" [(ngModel)]="bugComment" nbInput fullWidth placeholder="Message">
+    <button nbButton status="success" (click)="postBug()">SEND</button>
+  </nb-card-footer>
+</nb-card>
 
-<!-- <div mat-dialog-title>
-  <label class="label">Send us yor feedback!</label><br>
-  <small class="status text-gray m-0">
-    Field: <span class="label-green"> {{data.fieldLabel || data.fieldName}}</span>
-  </small>
-</div> -->
-<!-- <div class="border-padtop" mat-dialog-content>
-  <nb-radio-group status="success" [(ngModel)]="bugType">
-    <nb-radio value="missing">Missing Data</nb-radio>
-    <nb-radio value="wrong">Wrong Data</nb-radio>
-    <nb-radio value="other">Other</nb-radio>
-  </nb-radio-group>
-</div> -->
 
+<!-- 
 <div mat-dialog-content>
   <div *ngIf="TogglePage === 'comment'" class="post">
     <mat-radio-group [(ngModel)]="feedbackType">
@@ -99,21 +81,41 @@
     <h4 *ngIf="bugLists.length === 0" class="text-center" style="margin: 40px 0 20px;">
       No data
     </h4>
-    <div class="post" style="border-bottom: 1px solid #d2d6de;" *ngFor="let bugList of bugLists; let i = index">
-      <div class="user-block">
-        <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
-        <!-- <span class="fa fa-user"></span> -->
+    <div *ngFor="let bugList of bugLists; let i = index">
+      <div *ngIf="i > 0" class="post" style="border-top: 1px solid #d2d6de;">
+        <div class="user-block">
+          <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
 
-        <span class="username">
-          {{ utilitiesService.setFullname(bugList.createdInfo.refUser)  }}
-          <button mat-mini-fab color="danger" class="pull-right" type="button" tabindex="-1"
-            *ngIf="bugList.createdInfo.refUser._id === userKey" (click)="deleteBug(bugList)">
-            <i class="fa fa-trash-alt"></i>
-          </button>
-        </span>
-        <span class="description">{{ utilitiesService.convertDateTimeFromSystem(bugList.createdInfo.date) }}</span>
+          <span class="username">
+            {{ utilitiesService.setFullname(bugList.createdInfo.refUser)  }}
+            <button mat-mini-fab color="danger" class="pull-right" type="button" tabindex="-1"
+              *ngIf="bugList.createdInfo.refUser._id === userKey" (click)="deleteBug(bugList)">
+              <i class="fa fa-trash-alt"></i>
+            </button>
+          </span>
+          <span class="description">{{ utilitiesService.convertDateTimeFromSystem(bugList.createdInfo.date) }}</span>
+        </div>
+        <p style="padding-top: 10px;" class="comment-message"><span
+            [ngClass]="{ 'text-green' : bugList.feedbackType==='success', 'text-red' : bugList.feedbackType!='success' }">{{ bugList.feedbackType }}</span>
+          {{ bugList.remark || '' }}</p>
       </div>
-      <p style="padding-top: 10px;" class="comment-message">{{ bugList.feedbackType }}:  {{ bugList.remark || '' }}</p>
+      <div *ngIf="i === 0" class="post">
+        <div class="user-block">
+          <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
+
+          <span class="username">
+            {{ utilitiesService.setFullname(bugList.createdInfo.refUser)  }}
+            <button mat-mini-fab color="danger" class="pull-right" type="button" tabindex="-1"
+              *ngIf="bugList.createdInfo.refUser._id === userKey" (click)="deleteBug(bugList)">
+              <i class="fa fa-trash-alt"></i>
+            </button>
+          </span>
+          <span class="description">{{ utilitiesService.convertDateTimeFromSystem(bugList.createdInfo.date) }}</span>
+        </div>
+        <p style="padding-top: 10px;" class="comment-message"><span
+            [ngClass]="{ 'text-green' : bugList.feedbackType==='success', 'text-red' : bugList.feedbackType!='success' }">{{ bugList.feedbackType }}</span>
+          {{ bugList.remark || '' }}</p>
+      </div>
     </div>
   </div>
 </div>
@@ -127,10 +129,9 @@
       </textarea>
     </div>
     <div class="col-sm-3">
-      <!-- <button mat-raised-button color="success" class="w-100 mg-0" [disabled]="!bugComment" (click)="postBug()" -->
       <button mat-raised-button color="success" class="w-100 mg-0" (click)="postBug()" type="button">
         SEND
       </button>
     </div>
   </div>
-</div>
+</div> -->
