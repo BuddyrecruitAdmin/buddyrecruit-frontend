@@ -217,7 +217,7 @@ export class PopupCvComponent implements OnInit {
 
   delete(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '50%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'D' }
     });
     confirm.afterClosed().subscribe(result => {

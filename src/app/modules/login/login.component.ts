@@ -63,7 +63,6 @@ export class LoginComponent implements OnInit {
 
   login(value) {
     this.touched = true;
-    console.log(this.loginForm)
     this.loginService.login(value.username, value.password).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);

@@ -45,6 +45,7 @@ export class PopupInterviewDateComponent implements OnInit {
   dropdownDate: DropDownValue[];
   dropdownTime: DropDownValue[];
   userInterviews: any;
+  users: any[];
 
   constructor(
     private candidateService: CandidateService,
@@ -74,50 +75,62 @@ export class PopupInterviewDateComponent implements OnInit {
     this.time = null;
     this.location = null;
     this.buttonId = null;
+    this.users = [];
     if (this.flowId) {
-      this.getAvailableDate();
-      this.getLocation();
-      this.getDetail();
+      this.initialDropdown().then((response) => {
+        this.getDetail();
+      });
     } else {
       this.ref.close();
     }
   }
 
-  getLocation() {
-    this.locations = [];
-    this.locations.push({
-      label: '- Select Location -',
-      value: null,
-    });
-    this.locationService.getList().subscribe(response => {
-      const locations = response.data.filter(element => {
-        return element.active && !element.isDeleted;
-      });
-      if (locations.length) {
-        locations.forEach(element => {
-          this.locations.push({
-            label: element.name,
-            value: element._id,
-          })
-        });
-        const location = locations.find(element => {
-          return element.isDefault;
-        });
-        if (location) {
-          this.location = location._id;
-        }
-      }
-    });
+  async initialDropdown() {
+    this.getAvailableDate();
+    this.getLocation();
   }
 
   getAvailableDate() {
-    this.userInterviews = [];
-    this.calendarService.getListByJR(this.jrId).subscribe(response => {
-      if (response.data && response.data.userInterviews.length) {
-        this.userInterviews = response.data.userInterviews;
-        this.setDropdownDate();
-        this.setDropdownTime();
-      }
+    return new Promise((resolve) => {
+      this.userInterviews = [];
+      this.calendarService.getListByJR(this.jrId).subscribe(response => {
+        if (response.data && response.data.userInterviews.length) {
+          this.userInterviews = response.data.userInterviews;
+          this.setDropdownDate();
+          this.setDropdownTime();
+        }
+        resolve();
+      });
+    });
+  }
+
+  getLocation() {
+    return new Promise((resolve) => {
+      this.locations = [];
+      this.locations.push({
+        label: '- Select Location -',
+        value: null,
+      });
+      this.locationService.getList().subscribe(response => {
+        const locations = response.data.filter(element => {
+          return element.active && !element.isDeleted;
+        });
+        if (locations.length) {
+          locations.forEach(element => {
+            this.locations.push({
+              label: element.name,
+              value: element._id,
+            })
+          });
+          const location = locations.find(element => {
+            return element.isDefault;
+          });
+          if (location) {
+            this.location = location._id;
+          }
+        }
+        resolve();
+      });
     });
   }
 
@@ -134,6 +147,16 @@ export class PopupInterviewDateComponent implements OnInit {
           this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
           this.setDropdownTime(this.date);
           this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
+        }
+        if (response.data.candidateFlow.refJR.userInterviews.length) {
+          response.data.candidateFlow.refJR.userInterviews.forEach(element => {
+            this.users.push({
+              refUser: element.refUser._id,
+              name: this.utilitiesService.setFullname(element.refUser),
+              active: false
+            });
+          });
+          this.setUsers(this.date, this.time);
         }
         if (response.data.candidateFlow.refStage.refMain.name === 'Pending Appointment') {
           this.canApprove = true;
@@ -169,11 +192,12 @@ export class PopupInterviewDateComponent implements OnInit {
 
   onSelectDate(date: any) {
     this.setDropdownTime(date);
+    this.setUsers(date, null);
   }
 
   setDropdownTime(iDate?: any) {
     iDate = new Date(iDate);
-    this.time = undefined;
+    this.time = null;
     this.dropdownTime = [];
     this.dropdownTime.push({
       label: '- Select Interview Time -',
@@ -203,6 +227,48 @@ export class PopupInterviewDateComponent implements OnInit {
         bb = b.label.split('/').reverse().join();
       return aa < bb ? -1 : (aa > bb ? 1 : 0);
     });
+  }
+
+  onSelectTime(time: any) {
+    this.setUsers(this.date, time);
+  }
+
+  setUsers(date: any, time: any) {
+    let usersActive = [];
+    if (date || time) {
+      if (this.userInterviews.length) {
+        this.userInterviews.forEach(user => {
+          user.calendar.availableDates.forEach(element => {
+            const startDate = new Date(element.startDate);
+            const endDate = new Date(element.endDate);
+            if (time) {
+              if (new Date(startDate) <= new Date(time)) {
+                if (new Date(time) <= new Date(endDate)) {
+                  usersActive.push(user.refUser._id);
+                  return;
+                }
+              }
+            } else if (date) {
+              if (isSameDay(new Date(date), startDate)) {
+                usersActive.push(user.refUser._id);
+                return;
+              }
+            }
+          });
+        });
+      }
+    }
+    if (this.users.length) {
+      this.users.map(user => {
+        user.active = false;
+        const found = usersActive.find(element => {
+          return element === user.refUser;
+        });
+        if (found) {
+          user.active = true;
+        }
+      });
+    }
   }
 
   save() {

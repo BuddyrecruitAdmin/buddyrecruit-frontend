@@ -242,7 +242,7 @@ export class JrDetailComponent implements OnInit {
             this.jr.onboardDate = new Date(response.data.onboardDate);
           }
           this.jr.userInterviews = this.jr.userInterviews.map(element => {
-            return element.refUser
+            return element.refUser._id;
           });
           // this.tempJob = this.jr.userInterviews;
           console.log(this.jr.userInterviews)
@@ -281,7 +281,7 @@ export class JrDetailComponent implements OnInit {
     if (this.validation()) {
       const request = this.setRequest();
       const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: { type: 'C' }
       });
       confirm.afterClosed().subscribe(result => {

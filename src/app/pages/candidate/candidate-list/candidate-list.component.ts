@@ -2,16 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { CandidateService } from '../candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, DropDownValue } from '../../../shared/interfaces/common.interface';
-import { getRole, getKeyword, setKeyword, setCandidateId } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
+import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
+import { NbDialogService } from '@nebular/theme';
 import { PopupJrInfoComponent } from '../../../component/popup-jr-info/popup-jr-info.component';
 
 @Component({
@@ -37,7 +35,6 @@ export class CandidateListComponent implements OnInit {
     private service: CandidateService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
-    private toastrService: NbToastrService,
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
@@ -89,7 +86,14 @@ export class CandidateListComponent implements OnInit {
   }
 
   info(item: any) {
-
+    setJrId(item.candidateFlow.refJR._id);
+    setJdName(item.candidateFlow.refJR.refJD.position);
+    this.dialogService.open(PopupJrInfoComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => setJrId());
   }
 
   changePaging(event) {

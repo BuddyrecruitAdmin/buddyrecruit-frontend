@@ -31,7 +31,7 @@ export class CandidateDetailComponent implements OnInit {
   role: any;
   steps: any;
   candidateId: any;
-  item: any;
+  item: any = {};
   loading: boolean;
   interviewScore = {
     score: '',
@@ -65,7 +65,7 @@ export class CandidateDetailComponent implements OnInit {
 
   getDetail() {
     this.loading = true;
-    this.service.getDetailFlow(this.candidateId).subscribe(response => {
+    this.service.getDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
       }
@@ -102,7 +102,7 @@ export class CandidateDetailComponent implements OnInit {
 
   approve(item: any, button: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: 'Do you want to ' + button.button + '?' }
     });
     confirm.afterClosed().subscribe(result => {
@@ -137,7 +137,7 @@ export class CandidateDetailComponent implements OnInit {
 
   revoke(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[44] }
     });
     confirm.afterClosed().subscribe(result => {

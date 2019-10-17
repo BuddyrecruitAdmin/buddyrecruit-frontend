@@ -99,7 +99,8 @@ export class AuthorizeDetailComponent implements OnInit {
     private departmentService: DepartmentService,
     private companyService: CompanyService,
     private toastrService: NbToastrService,
-    public matDialog: MatDialog,
+    private matDialog: MatDialog,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
   }
@@ -343,7 +344,7 @@ export class AuthorizeDetailComponent implements OnInit {
   changeUserRole(refHero: string) {
     if (this.refHero && this.refHero !== refHero) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: {
           type: 'C',
           content: 'If you change User role, settings will change.',
@@ -401,7 +402,7 @@ export class AuthorizeDetailComponent implements OnInit {
       this.router.navigate(['/setting/authorize']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: { type: 'C', content: MESSAGE[31] }
       });
       confirm.afterClosed().subscribe(result => {

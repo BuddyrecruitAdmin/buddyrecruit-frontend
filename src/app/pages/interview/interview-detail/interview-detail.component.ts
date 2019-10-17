@@ -1,4 +1,4 @@
-import { Component, OnInit,TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
@@ -19,12 +19,13 @@ import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component
 import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService,NbDialogRef } from '@nebular/theme';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { elementAt } from 'rxjs/operators';
 import { debug } from 'util';
+import { CalendarService } from '../../calendar/calendar.service';
 
 @Component({
   selector: 'ngx-interview-detail',
@@ -56,6 +57,8 @@ export class InterviewDetailComponent implements OnInit {
   itemDialog: any;
   innerWidth: any;
   innerHeight: any;
+  showTips: boolean;
+
   constructor(
     private router: Router,
     private service: InterviewService,
@@ -64,6 +67,7 @@ export class InterviewDetailComponent implements OnInit {
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
+    public calendarService: CalendarService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -109,6 +113,26 @@ export class InterviewDetailComponent implements OnInit {
     });
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
       return step.refStage.refMain._id === this.role.refCompany.menu.pendingInterview.refStage._id && step.editable;
+    });
+    this.showTips = false;
+    this.calendarService.getListByJR(this.jrId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data.userInterviews.length) {
+          const calendar = response.data.userInterviews.find(element => {
+            return element.refUser._id === this.role._id;
+          });
+          if (calendar) {
+            const found = calendar.calendar.availableDates.find(element => {
+              return new Date(element.endDate) > new Date();
+            });
+            if (found) {
+              this.showTips = false;
+            } else {
+              this.showTips = true;
+            }
+          }
+        }
+      }
     });
   }
 
@@ -288,7 +312,7 @@ export class InterviewDetailComponent implements OnInit {
 
   revoke(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[44] }
     });
     confirm.afterClosed().subscribe(result => {

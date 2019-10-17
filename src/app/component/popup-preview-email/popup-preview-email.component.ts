@@ -90,7 +90,7 @@ export class PopupPreviewEmailComponent implements OnInit {
 
   nextStep() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: `Do you want to ${this.buttonName}?` }
     });
     confirm.afterClosed().subscribe(result => {

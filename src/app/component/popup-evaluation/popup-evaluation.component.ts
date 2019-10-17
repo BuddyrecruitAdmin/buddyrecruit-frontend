@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
+import { EvaluationService } from '../../pages/setting/evaluation/evaluation.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
 import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
@@ -32,6 +33,7 @@ export class PopupEvaluationComponent implements OnInit {
 
   constructor(
     private candidateService: CandidateService,
+    private evaluationService: EvaluationService,
     private ref: NbDialogRef<PopupEvaluationComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
@@ -84,7 +86,7 @@ export class PopupEvaluationComponent implements OnInit {
   }
 
   getDetailPreview() {
-    this.candidateService.getDetailPreview(this.flowId).subscribe(response => {
+    this.evaluationService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         // this.candidateName = this.utilitiesService.setFullname(response.data);
         // this.jrName = response.data.candidateFlow.refJR.refJD.position;
@@ -100,7 +102,7 @@ export class PopupEvaluationComponent implements OnInit {
   }
 
   getDetail() {
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+    this.candidateService.evaluationDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         // this.candidateName = this.utilitiesService.setFullname(response.data);
         // this.jrName = response.data.candidateFlow.refJR.refJD.position;
@@ -191,7 +193,7 @@ export class PopupEvaluationComponent implements OnInit {
       //     this.ref.close(true);
       //   });
       // }
-      this.candidateService.Edit(this.candidateId, request).subscribe(response => {
+      this.candidateService.evaluationEdit(this.candidateId, request).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.showToast('success', 'Success Message', response.message);
         } else {

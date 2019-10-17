@@ -365,7 +365,7 @@
       <nb-card *ngFor="let education of appforms.education;let i = index">
         <nb-card-body>
           <div class="pull-right">
-            <nb-icon *ngIf="edtiable" icon="close-outline" class="link" status="danger" nbTooltip="Delete"
+            <nb-icon *ngIf="edtiable" icon="close-outline" class="close" status="danger" nbTooltip="Delete"
               (click)="remove('Education',i)">
             </nb-icon>
           </div>

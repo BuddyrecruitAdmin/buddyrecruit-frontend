@@ -81,7 +81,7 @@ export class PopupFeedbackComponent implements OnInit {
 
   deleteBug(item: any) {
     const dialogRef = this.matDialog.open(PopupMessageComponent, {
-      width: '35%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: {
         type: "D"
       }

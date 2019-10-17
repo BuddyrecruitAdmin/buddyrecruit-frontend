@@ -72,6 +72,7 @@ export class CompanyDetailComponent implements OnInit {
     private companyTypeService: CompanyTypeService,
     private toastrService: NbToastrService,
     public matDialog: MatDialog,
+    private utilitiesService: UtilitiesService
   ) {
     this.role = getRole();
   }
@@ -211,7 +212,7 @@ export class CompanyDetailComponent implements OnInit {
       this.router.navigate(['/setting/company']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: { type: 'C', content: MESSAGE[31] }
       });
       confirm.afterClosed().subscribe(result => {

@@ -47,8 +47,8 @@
             class="link" nbTooltip="Edit" [routerLink]="'/jr/detail/edit/'+item._id">
           </nb-icon>
           <nb-icon icon="copy-outline"
-            *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm' && !isOverQuota" class="link"
-            nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
+            *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm' && !isOverQuota"
+            class="link" nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
           <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
             class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
         </div>
@@ -56,7 +56,8 @@
       <nb-card-body>
         <div class="text-group">
           <label class="label">Status</label>
-          <span class="label1" [ngClass]="item.refStatus.class">{{ item.refStatus.name}}</span>
+          <span class="label"
+            [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name}}</span>
         </div>
         <div class="text-group">
           <label class="label">Department</label>
