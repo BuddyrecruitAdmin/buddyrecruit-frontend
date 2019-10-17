@@ -47,6 +47,7 @@ export class JrDetailComponent implements OnInit {
   sErrorOn: string;
   sErrorCheck: string;
   sErrorCap: string;
+  sErrorUser: string;
   checkPreview: boolean;
   jobId: any;
   jobStatus: any;
@@ -133,7 +134,9 @@ export class JrDetailComponent implements OnInit {
   initialModel(): any {
     this.jr = {
       _id: undefined,
-      refJD: undefined,
+      refJD: {
+        _id: undefined
+      },
       capacity: undefined,
       duration: {
         startDate: null,
@@ -161,7 +164,7 @@ export class JrDetailComponent implements OnInit {
         label: "- Select Job Position -",
         value: undefined
       });
-      this.service.getJopPositionList(this.jobStatus).subscribe(response => {
+      this.service.getJobPositionList(this.jobStatus).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
             this.jobId = response.data;
@@ -189,7 +192,6 @@ export class JrDetailComponent implements OnInit {
       this.service.getListUsers(undefined, undefined).subscribe(res => {
         if (res.code === ResponseCode.Success) {
           res.data.forEach(item => {
-            console.log(item)
             this.Users.push({
               label: this.utilitiesService.setFullname(item.refUser),
               value: item._id,
@@ -339,6 +341,7 @@ export class JrDetailComponent implements OnInit {
     }
     if (this.jr.userInterviews.length === 0) {
       this.touchedCheck = true;
+      this.sErrorUser = MESSAGE[155];
       this.sErrorCheck = MESSAGE[155];
       isValid = false;
     }
@@ -346,11 +349,13 @@ export class JrDetailComponent implements OnInit {
       isValid = false;
       this.touchedStart = true;
       this.sErrorStart = MESSAGE[125];
+      this.sErrorCheck = MESSAGE[125];
     }
     if (this.jr.duration.endDate === null) {
       isValid = false;
       this.touchedEnd = true;
       this.sErrorEnd = MESSAGE[126];
+      this.sErrorCheck = MESSAGE[126];
     }
     if (this.jr.duration.startDate > this.jr.duration.endDate) {
       isValid = false;
@@ -368,15 +373,18 @@ export class JrDetailComponent implements OnInit {
       isValid = false;
       this.touchedOn = true;
       this.sErrorOn = MESSAGE[142];
+      this.sErrorCheck = MESSAGE[142];
     }
-    if (this.jr.refJD === undefined || this.jr.refJD === null) {
+    if (this.jr.refJD._id === undefined || this.jr.refJD._id === null) {
       this.touched = true;
       this.sErrorPosition = MESSAGE[141];
+      this.sErrorCheck = MESSAGE[141];
       isValid = false;
     }
     if (this.jr.capacity === null || this.jr.capacity === 0) {
       this.jr.capacity = 0;
       this.sErrorCap = MESSAGE[30];
+      this.sErrorCheck = MESSAGE[30];
       this.touchedCap = true;
       isValid = false;
     }

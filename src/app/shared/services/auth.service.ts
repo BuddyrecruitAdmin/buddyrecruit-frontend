@@ -12,6 +12,10 @@ import {
   ButtonId,
   DateTime,
   IsGridLayout,
+  BugId,
+  FieldLabel,
+  FieldName,
+  UserCandidate
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -144,4 +148,40 @@ export function setIsGridLayout(isGridLayout: boolean = true) {
 export function getIsGridLayout() {
   const isGridLayout = JSON.parse(localStorage.getItem(IsGridLayout));
   return (isGridLayout === undefined || isGridLayout === null) ? undefined : isGridLayout;
+}
+
+export function setBugId(bugId: any = null) {
+  localStorage.setItem(BugId, JSON.stringify(bugId));
+}
+
+export function getBugId() {
+  const bugId = JSON.parse(localStorage.getItem(BugId));
+  return (!bugId || bugId === null) ? undefined : bugId;
+}
+
+export function setFieldLabel(fieldLabel: any = null) {
+  localStorage.setItem(FieldLabel, JSON.stringify(fieldLabel));
+}
+
+export function getFieldLabel() {
+  const fieldLabel = JSON.parse(localStorage.getItem(FieldLabel));
+  return (!fieldLabel || fieldLabel === null) ? undefined : fieldLabel;
+}
+
+export function setFieldName(fieldName: any = null) {
+  localStorage.setItem(FieldName, JSON.stringify(fieldName));
+}
+
+export function getFieldName() {
+  const fieldName = JSON.parse(localStorage.getItem(FieldName));
+  return (!fieldName || fieldName === null) ? undefined : fieldName;
+}
+
+export function setUserCandidate(userCandidate: any = null) {
+  localStorage.setItem(UserCandidate, JSON.stringify(userCandidate));
+}
+
+export function getUserCandidate() {
+  const userCandidate = JSON.parse(localStorage.getItem(UserCandidate));
+  return (!userCandidate || userCandidate === null) ? undefined : userCandidate;
 }

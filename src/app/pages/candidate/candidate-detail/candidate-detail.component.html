@@ -327,7 +327,7 @@
 
   <nb-card-footer>
     <span *ngFor="let button of steps">
-      <span *ngIf="button.editable && button.refStage._id === item.candidateFlow.refStage._id">
+      <span *ngIf="button.editable && button.refStage._id === item.candidateFlow?.refStage?._id">
         <button nbButton status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
           <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
           <nb-badge *ngIf="item.candidateFlow?.comments.length" [text]="item.candidateFlow?.comments.length"

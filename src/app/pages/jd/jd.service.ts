@@ -27,13 +27,13 @@ export class JdService extends NetworkService {
     });
   }
 
-  // originalCV(id: String) {
-  //   const body = { id: id };
-  //   return this.httpClient.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body, {
-  //     responseType: "blob",
-  //     headers: new HttpHeaders().append("Content-Type", "application/json")
-  //   });
-  // }
+  originalCV(id: String) {
+    const body = { id: id };
+    return this.httpClient.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body, {
+      responseType: "blob",
+      headers: new HttpHeaders().append("Content-Type", "application/json")
+    });
+  }
 
   getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
     const body = {

@@ -219,7 +219,8 @@
   .form-control[readonly] {
     background-color: #f7f9fc;
     border-color: #edf1f7;
-    color: #c5cee0;
+    color: #000000;
+    cursor: not-allowed;
   }
   fieldset {
     padding: 0;

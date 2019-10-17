@@ -35,14 +35,17 @@
             <!-- <small class="link" (click)="gotoProfile()">Notification Setting</small> -->
           </div>
         </nb-card-header>
-        <nb-card-body [style.max-height.px]="noticeHeight">
+        <nb-card-body [style.max-height.px]="noticeHeight" *ngIf="notifications.length > 0">
           <div *ngFor="let notification of notifications; let i = index;" class="notification-body"
             [ngClass]="{ 'read' : notification.hidden, 'unread' : !notification.hidden}"
             (click)="onClickNotification(i)">
-            <nb-user size="medium" [name]="notification.name" [title]="notification.title"
-              [picture]="user?.picture">
+            <nb-user size="medium" [name]="notification.name" [title]="notification.title" [picture]="user?.picture">
             </nb-user>
           </div>
+        </nb-card-body>
+        <nb-card-body *ngIf="notifications.length === 0">
+          <br>
+          <div class="text-center text-gray">No data!</div>
         </nb-card-body>
         <nb-card-footer class="p-0">
           <div *ngIf="showSeeMore" class="link underline text-center" style="padding: 8px;">

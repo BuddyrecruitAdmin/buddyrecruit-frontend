@@ -1,13 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { PopupCVService } from './popup-cv.service';
 import { ResponseCode } from '../../shared/app.constants';
+import { JdService } from '../../pages/jd/jd.service';
+import { PopupCVService } from './popup-cv.service';
 import { NbDialogService, NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
-import { resolve } from 'dns';
 import { Router, ActivatedRoute } from "@angular/router";
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-feedback.component';
@@ -70,6 +70,7 @@ export class PopupCvComponent implements OnInit {
     private toastrService: NbToastrService,
     private router: Router,
     private dialogService: NbDialogService,
+    private jdService: JdService,
   ) {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
@@ -231,42 +232,46 @@ export class PopupCvComponent implements OnInit {
   }
 
   checkCV(id) {
-    this.router.navigate(['/auth/appform/view/' + id]);
+    this.jdService.originalCV(id)
+    .subscribe(data => this.downloadFile(data), function (error) {
+      //that.setAlertMessage("E", error.statusText);
+    });
   }
 
-  bugReport(fieldLabel, fieldName) {
-    this._id = {};
-    this._id = {
-      id: this.flowId,
-      fieldLabel: fieldLabel,
-      fieldName: fieldName
-    }
-    const confirm = this.matDialog.open(PopupFeedbackComponent, {
-      width: '45%',
-      data: {
-        _id: this.flowId,
-        fieldLabel: fieldLabel,
-        fieldName: fieldName
+  downloadFile(data: any) {
+    const blob = new Blob([data], { type: "text/pdf" });
+    const url = window.URL.createObjectURL(data);
+    window.open(url);
+  }
+
+  openApplication(id: any){
+    console.log(id)
+    const path = '/auth/appform/view/'+id;
+    console.log(path)
+    this.router.navigate([path])
+  }
+
+  bugReport(fieldLabel: any, fieldName: any) {
+    setBugId(this.flowId);
+    setFieldLabel(fieldLabel);
+    setFieldName(fieldName);
+    this.dialogService.open(PopupFeedbackComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+        context: this._id
       }
-    });
-    confirm.afterClosed().subscribe(result => {
-      setFlowId();
+    ).onClose.subscribe(result => {
+      setBugId();
+      setFieldLabel();
+      setFieldName();
       this.getList();
     });
-    // this.dialogService.open(PopupFeedbackComponent,
-    //   {
-    //     closeOnBackdropClick: false,
-    //     hasScroll: true,
-    //     context: this._id
-    //   }
-    // ).onClose.subscribe(result => {
-    //   setFlowId();
-    // });
   }
 
   changeColor(item) {
     item.accuracy.map(ele => {
-      if (ele.feedbackType === "success") {
+      if (ele.feedbackType === "Correct") {
         switch (ele.fieldName) {
           case "firstname":
             this.colorStatus.nameSuccess = true;
@@ -439,7 +444,7 @@ export class PopupCvComponent implements OnInit {
 
   toggleCheck(fieldLabel, fieldName) {
     this.checked = !this.checked;
-    this.service.check(this.flowId, fieldName, fieldLabel, "success").subscribe(response => {
+    this.service.check(this.flowId, fieldName, fieldLabel, "Correct").subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
       }
