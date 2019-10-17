@@ -15,7 +15,7 @@ import {
   BugId,
   FieldLabel,
   FieldName,
-  UserCandidate
+  UserCandidate,
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 

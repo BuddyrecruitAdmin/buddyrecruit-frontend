@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
-
+import { ProfileService } from '../../../pages/profile/profile.service';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil, timeout } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { title: 'Profile', icon: 'person-outline', link: '/profile' },
     { title: 'Log out', icon: 'log-out-outline', link: '/auth/logout' }
   ];
-
+  imagePath: any;
   paging: IPaging;
   notificationData: any;
   notifications: any;
@@ -65,6 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private service: HeaderService,
+    private proService: ProfileService,
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
@@ -85,20 +86,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-
     const role = getRole();
-    let imagePath = role.imagePath.split('images/');
-    if (imagePath.length && imagePath[1]) {
-      imagePath = role.imagePath;
-    } else {
-      imagePath = '../../../../assets/images/avatar.png';
-    }
-    this.user = {
-      name: `${role.firstname || ''} ${role.lastname || ''}`,
-      title: role.refHero.name,
-      picture: imagePath,
-    };
-
+    this.proService.getProfile(role.refHero._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.user = {
+          name: `${role.firstname || ''} ${role.lastname || ''}`,
+          title: role.refHero.name,
+          picture: response.data.imagePath,
+        };
+      }
+    });
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
