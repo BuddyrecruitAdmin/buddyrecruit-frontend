@@ -21,3 +21,13 @@
 .badge {
   margin-right: 5px;
 }
+
+table {
+  td.icon {
+    width: 35px;
+    vertical-align: top;
+  }
+  td.content {
+    padding-bottom: 10px;
+  }
+}

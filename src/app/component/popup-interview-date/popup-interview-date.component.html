@@ -8,7 +8,7 @@
       </small>
     </div>
     <div class="actions">
-      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+      <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
     </div>
   </nb-card-header>
   <nb-card-body class="dialog-body">
@@ -31,6 +31,14 @@
         [disabled]="!date">
         <nb-option *ngFor="let option of dropdownTime" [value]="option.value">{{ option.label }}</nb-option>
       </nb-select>
+    </div>
+    <div class="form-control-group">
+      <label class="label">Interview Users</label>
+      <div *ngFor="let user of users" [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
+        <nb-icon icon="person-outline"></nb-icon>
+        <span class="m-l-5">{{ user.name }}</span>
+        <nb-icon *ngIf="user.active" icon="checkmark-outline" class="text-green"></nb-icon>
+      </div>
     </div>
   </nb-card-body>
   <nb-card-footer>

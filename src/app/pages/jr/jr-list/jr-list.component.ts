@@ -84,30 +84,27 @@ export class JrListComponent implements OnInit {
         this.showTips = response.isOverQuota;
         this.items = response.data;
         this.items.map(item => {
-          switch (item.refStatus.name) {
-            case "Waiting for HR Confirm":
-              item.refStatus.class = "label1-warning";
+          switch (item.refStatus.status) {
+            case "JRS001": // Waiting for HR Confirm
+              item.refStatus.class = "label-warning";
               break;
-            case "Not Start":
-              item.refStatus.class = "label1-info";
+            case "JRS002": // Active
+              item.refStatus.class = "label-success";
               break;
-            case "In Progress":
-              item.refStatus.class = "label1-success";
+            case "JRS003": // Expired
+              item.refStatus.class = "label-primary";
               break;
-            case "Expired":
-              item.refStatus.class = "label1-default";
+            case "JRS004": // Rejected
+              item.refStatus.class = "label-danger";
               break;
-            case "Reject":
-              item.refStatus.class = "label1-danger";
+            case "JRS005": // Closed
+              item.refStatus.class = "label-gray";
               break;
-            case "Active":
-              item.refStatus.class = "label1-green";
-              break;
-            case "Inactive":
-              item.refStatus.class = "label1-black";
+            default:
+              item.refStatus.class = "label-gray";
               break;
           }
-        })
+        });
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
           this.search();
@@ -129,7 +126,7 @@ export class JrListComponent implements OnInit {
 
   delete(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'D' }
     });
     confirm.afterClosed().subscribe(result => {
@@ -148,7 +145,7 @@ export class JrListComponent implements OnInit {
 
   RejectSave() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C' }
     });
     confirm.afterClosed().subscribe(result => {
@@ -170,7 +167,7 @@ export class JrListComponent implements OnInit {
 
   Approve(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C' }
     });
     confirm.afterClosed().subscribe(result => {

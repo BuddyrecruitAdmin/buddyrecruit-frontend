@@ -7,7 +7,7 @@
       <nb-card-header style="color:#8f9bb3">
         Description
       </nb-card-header>
-      <nb-card-header>
+      <nb-card-body>
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group">
@@ -60,10 +60,14 @@
                 </div>
                 <span *ngIf="!modeEditable" class="input-group-addon right">Browse File</span>
               </div>
-              <button class="nbBtn" nbButton [disabled]="!jd.attachment.originalname || !modeEditable || checkPreview"
-                type="button" (click)="clearAttachFile()">Clear File
+            </div>
+            <div class="form-group">
+              <button nbButton status="primary" size="small" class="m-r-5"
+                [disabled]="!jd.attachment.originalname || !modeEditable || checkPreview"
+                (click)="clearAttachFile()">Clear File
               </button>
-              <button nbButton [disabled]="!jd.attachment.originalname || !jd.attachment.uploadName" type="button"
+              <button nbButton status="primary" size="small"
+                [disabled]="!jd.attachment.originalname || !jd.attachment.uploadName"
                 (click)="downloadFilePress()">Download
               </button>
             </div>
@@ -96,11 +100,8 @@
             </div>
           </div>
         </div>
-      </nb-card-header>
-      <nb-card-header style="color:#8f9bb3">
-        Score (%)
-      </nb-card-header>
-      <nb-card-body>
+        <hr>
+        <h5>Score (%)</h5>
         <div class="row">
           <!-- Work Experience -->
           <div class="col-sm-4 col-md-4">
@@ -190,7 +191,6 @@
             </div>
           </div>
         </div>
-
       </nb-card-body>
       <small *ngIf="touched" class="text-red-right">{{ SErrorAll }}</small>
       <nb-card-footer>
@@ -265,7 +265,7 @@
     </nb-card-body>
     <small *ngIf="touched" class="text-red-right">{{ sErrorBoxW }}</small>
     <nb-card-footer>
-      <button nbButton status="default" (click)="   close('WORKEXP')">Cancel</button>
+      <button nbButton status="default" (click)="close('WORKEXP')">Cancel</button>
       <button nbButton status="success" (click)="save('WORKEXP')" [disabled]="checkPreview">Save</button>
     </nb-card-footer>
   </nb-card>

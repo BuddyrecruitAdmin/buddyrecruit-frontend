@@ -280,7 +280,7 @@ export class RejectStageComponent implements OnInit {
     this.changeValue();
     const request = this.setRequest();
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C' }
     });
     confirm.afterClosed().subscribe(result => {

@@ -11,6 +11,7 @@ import {
   Collapse,
   ButtonId,
   DateTime,
+  IsGridLayout,
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -134,4 +135,13 @@ export function setDate(date: Date = null) {
 export function getDate() {
   const date = JSON.parse(localStorage.getItem(DateTime));
   return (date === undefined || date === null) ? new Date() : new Date(date);
+}
+
+export function setIsGridLayout(isGridLayout: boolean = true) {
+  localStorage.setItem(IsGridLayout, JSON.stringify(isGridLayout));
+}
+
+export function getIsGridLayout() {
+  const isGridLayout = JSON.parse(localStorage.getItem(IsGridLayout));
+  return (isGridLayout === undefined || isGridLayout === null) ? undefined : isGridLayout;
 }

@@ -243,7 +243,7 @@ export class TalentPoolDetailComponent implements OnInit {
 
   revoke(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[44] }
     });
     confirm.afterClosed().subscribe(result => {

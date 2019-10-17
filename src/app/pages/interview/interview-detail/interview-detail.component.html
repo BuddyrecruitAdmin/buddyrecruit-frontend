@@ -6,6 +6,15 @@
   </div>
 </div>
 
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  <span>
+    Your available date is empty. Do you want to configure now ?
+    <a class="link underline m-l-5" [routerLink]="'/calendar'"><b>Yes</b></a>
+    <span class="m-l-5 m-r-5">/</span>
+    <a class="link underline" (click)="showTips = !showTips"><b>No</b></a>
+  </span>
+</nb-alert>
+
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -262,7 +271,7 @@
         </small>
       </div>
       <div class="actions">
-        <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+        <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
       </div>
     </nb-card-header>
     <nb-card-body *ngIf="!loading" class="dialog-body">

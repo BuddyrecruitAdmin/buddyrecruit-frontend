@@ -56,6 +56,7 @@ export const TabName = "TabName";
 export const Collapse = "Collapse";
 export const ButtonId = "ButtonId";
 export const DateTime = "DateTime";
+export const IsGridLayout = "IsGridLayout";
 
 export enum DayOfWeek {
   Sunday = 0,

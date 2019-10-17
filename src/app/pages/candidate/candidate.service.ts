@@ -26,20 +26,7 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.LIST, body);
   }
 
-  getDetailPreview(refCandidateId: string): Observable<ApiResponse> {
-    const body = {
-      _id: refCandidateId
-    };
-    return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_DETAIL, body);
-  }
-
   getDetail(refCandidateId: string): Observable<ApiResponse> {
-    const body = {
-      _id: refCandidateId
-    };
-    return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_CANDIDATE_DETAIL, body);
-  }
-  getDetailFlow(refCandidateId: string): Observable<ApiResponse> {
     const body = {
       _id: refCandidateId
     };
@@ -52,13 +39,6 @@ export class CandidateService extends NetworkService {
       data: data
     };
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.EDIT, body);
-  }
-  Edit(flowId: string, data: any): Observable<ApiResponse> {
-    const body = {
-      _id: flowId,
-      data: data
-    };
-    return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_CANDIDATE_EDIT, body);
   }
 
   candidateFlowApprove(flowId: string, stageId: string, buttonId: string, data?: any): Observable<ApiResponse> {
@@ -137,5 +117,20 @@ export class CandidateService extends NetworkService {
       _id: refCandidateId
     };
     return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
+  }
+
+  evaluationDetail(refCandidateId: string): Observable<ApiResponse> {
+    const body = {
+      _id: refCandidateId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.EVALUATION.DETAIL, body);
+  }
+
+  evaluationEdit(flowId: string, data: any): Observable<ApiResponse> {
+    const body = {
+      _id: flowId,
+      data: data
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.EVALUATION.EDIT, body);
   }
 }

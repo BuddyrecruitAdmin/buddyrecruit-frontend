@@ -51,7 +51,8 @@ export class DepartmentDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private service: DepartmentService,
     private toastrService: NbToastrService,
-    public matDialog: MatDialog,
+    private matDialog: MatDialog,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
   }
@@ -125,7 +126,7 @@ export class DepartmentDetailComponent implements OnInit {
       this.router.navigate(['/setting/department']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: { type: 'C', content: MESSAGE[31] }
       });
       confirm.afterClosed().subscribe(result => {

@@ -105,8 +105,8 @@ export class UtilitiesService {
       let arrayDate = [];
       arrayDate = date
         .toISOString()
-        .split("T")[0]
-        .split("-");
+        .split('T')[0]
+        .split('-');
       return arrayDate[0];
     } else {
       return null;
@@ -182,7 +182,7 @@ export class UtilitiesService {
     let diffDays = 0;
     const date1 = new Date(beginDate);
     const date2 = new Date(endDate);
-    const diffTime = Math.abs(date2.getTime() - date1.getTime());
+    const diffTime = date2.getTime() - date1.getTime();
     diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
   }
@@ -373,4 +373,27 @@ export class UtilitiesService {
     date.setMilliseconds(0);
     return date;
   }
+
+  getJrStatusClass(jrStatus: string): string {
+    let statusClass = 'label-gray';
+    switch (jrStatus) {
+      case 'JRS001': // Waiting for HR Confirm
+        statusClass = 'label-warning';
+        break;
+      case 'JRS002': // Active
+        statusClass = 'label-success';
+        break;
+      case 'JRS003': // Expired
+        statusClass = 'label-primary';
+        break;
+      case 'JRS004': // Rejected
+        statusClass = 'label-danger';
+        break;
+      case 'JRS005': // Closed
+        statusClass = 'label-gray';
+        break;
+    }
+    return statusClass;
+  }
+
 }

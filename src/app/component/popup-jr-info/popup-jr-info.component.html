@@ -3,16 +3,16 @@
   <nb-card-header>
     <div class="title">
       <label [nbTooltip]="jrDetail.refJD?.position">{{ jrDetail.refJD?.position }}</label>
+      <small class="status">
+        Status: <label class="label"
+          [ngClass]="utilitiesService.getJrStatusClass(jrDetail.refStatus?.status)">{{ jrDetail.refStatus.name || '-' }}</label>
+      </small>
     </div>
     <div class="actions">
-      <nb-icon icon="close-outline" class="link" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+      <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
     </div>
   </nb-card-header>
   <nb-card-body class="dialog-body">
-    <div class="text-group">
-      <label class="label">Job Position</label>
-      <span>{{ jrDetail.refJD?.position || '-' }}</span>
-    </div>
     <div class="text-group">
       <label class="label">Capacity</label>
       <span>{{ jrDetail.capacity || '0' }}</span>
@@ -41,6 +41,14 @@
       <label class="label">Exam</label>
       <nb-icon *ngIf="jrDetail.requiredExam" icon="checkmark-outline" class="text-green"></nb-icon>
       <nb-icon *ngIf="!jrDetail.requiredExam" icon="close-outline" class="text-red"></nb-icon>
+    </div>
+    <div class="text-group">
+      <label class="label">User Interviews</label>
+      <span *ngIf="jrDetail.userInterviews.length === 0">-</span>
+      <div *ngFor="let user of jrDetail.userInterviews" class="m-l-10">
+        <nb-icon icon="person-outline"></nb-icon>
+        <span class="m-l-5">{{ utilitiesService.setFullname(user.refUser) }}</span>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>
