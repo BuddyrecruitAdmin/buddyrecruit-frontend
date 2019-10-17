@@ -40,7 +40,8 @@ export const API_ENDPOINT = {
     REJECT: "jr/reject",
     SOURCE: "source/mode/{mode}",
     ACTION: "jr/action",
-    USERS: "jr/users"
+    USERS: "jr/users",
+    CLOSE: "jr/close",
   },
   TALENT_POOL: {
     LIST: "talentPool/list",
@@ -81,6 +82,10 @@ export const API_ENDPOINT = {
       PREVIEW_EMAIL: "candidate/flow/previewEmail",
       RESEND_EMAIL: "candidate/flow/resendEmail",
       SEND_EMAIL: "candidate/flow/sendEmail",
+    },
+    EVALUATION: {
+      EDIT: "candidateEva/edit",
+      DETAIL: "candidateEva/detail",
     },
     LIST: "candidate/list",
     DETAIL: "candidate/detail",
@@ -185,8 +190,6 @@ export const API_ENDPOINT = {
     EVALUATION_DELETE: "evaluation/delete",
     EVALUATION_DETAIL: "evaluation/detail",
     EVALUATION_EDIT: "evaluation/edit",
-    EVALUATION_CANDIDATE_DETAIL: "candidateEva/detail",
-    EVALUATION_CANDIDATE_EDIT: "candidateEva/edit",
 
     MAIL_TEMPLATE_CREATE: "mailTemplate/create",
     MAIL_ACTION_LIST: "mailAction/list",

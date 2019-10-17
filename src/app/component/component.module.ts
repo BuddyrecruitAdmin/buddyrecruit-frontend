@@ -98,6 +98,7 @@ import { PopupSignContractComponent } from './popup-sign-contract/popup-sign-con
 import { PopupAvailableDateComponent } from './popup-available-date/popup-available-date.component';
 import { PopupSignDateComponent } from './popup-sign-date/popup-sign-date.component';
 import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.component';
+import { PopupInterviewResultComponent } from './popup-interview-result/popup-interview-result.component';
 
 @NgModule({
   imports: [
@@ -196,6 +197,7 @@ import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.componen
     PopupAvailableDateComponent,
     PopupSignDateComponent,
     PopupFeedbackComponent,
+    PopupInterviewResultComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -213,7 +215,8 @@ import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.componen
     PopupSignContractComponent,
     PopupAvailableDateComponent,
     PopupSignDateComponent,
-    PopupFeedbackComponent
+    PopupFeedbackComponent,
+    PopupInterviewResultComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -231,7 +234,8 @@ import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.componen
     PopupSignContractComponent,
     PopupAvailableDateComponent,
     PopupSignDateComponent,
-    PopupFeedbackComponent
+    PopupFeedbackComponent,
+    PopupInterviewResultComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

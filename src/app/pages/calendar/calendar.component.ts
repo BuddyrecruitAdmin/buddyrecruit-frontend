@@ -56,8 +56,7 @@ const colors: any = {
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-  @ViewChild('dialog1', { static: true }) dialog1: TemplateRef<any>;
-  @ViewChild('dialog2', { static: true }) dialog2: TemplateRef<any>;
+  @ViewChild('dialogInfo', { static: true }) dialogInfo: TemplateRef<any>;
 
   CalendarView = CalendarView;
   view: CalendarView = CalendarView.Month;
@@ -93,6 +92,7 @@ export class CalendarComponent implements OnInit {
   workingDays: any;
   candidateFlow: any;
   event: any = {};
+  users: any[];
 
   constructor(
     private service: CalendarService,
@@ -110,7 +110,6 @@ export class CalendarComponent implements OnInit {
     this.events = [];
     this.excludeDays = [];
     this.dialogDate = new Date();
-
     this.getCalendarData();
   }
 
@@ -133,16 +132,21 @@ export class CalendarComponent implements OnInit {
 
     if (this.calendarData.interviewDates) {
       this.calendarData.interviewDates.forEach(element => {
-        this.events.push({
-          id: element.refCandidateFlow._id,
-          start: new Date(element.startDate),
-          end: new Date(element.endDate),
-          title: this.buildTitle(element),
-          color: colors.red,
-          meta: {
-            type: 'danger'
-          }
-        });
+        const startDate = element.refCandidateFlow.pendingInterviewInfo.startDate;
+        const endDate = element.refCandidateFlow.pendingInterviewInfo.endDate;
+        if (this.utilitiesService.dateIsValid(startDate)
+          && this.utilitiesService.dateIsValid(endDate)) {
+          this.events.push({
+            id: element.refCandidateFlow._id,
+            start: new Date(startDate),
+            end: new Date(endDate),
+            title: this.buildTitle(element),
+            color: colors.red,
+            meta: {
+              type: 'danger'
+            }
+          });
+        }
       });
     }
 
@@ -340,11 +344,41 @@ export class CalendarComponent implements OnInit {
     });
     if (refCandidateFlow.refCandidateFlow) {
       this.candidateFlow = refCandidateFlow.refCandidateFlow;
-      this.dialogService.open(this.dialog2, {
+      this.getInterviewUsers(this.candidateFlow.refJR._id);
+      this.dialogService.open(this.dialogInfo, {
         closeOnBackdropClick: true,
         hasScroll: true,
       });
     }
+  }
+
+
+  getInterviewUsers(jrId: any) {
+    this.users = [];
+    this.service.getListByJR(jrId).subscribe(response => {
+      if (response.data && response.data.userInterviews.length) {
+        response.data.userInterviews.forEach(user => {
+          let active = false;
+          user.calendar.availableDates.forEach(element => {
+            const startDate = new Date(element.startDate);
+            const endDate = new Date(element.endDate);
+            if (this.candidateFlow.pendingInterviewInfo) {
+              if (new Date(startDate) <= new Date(this.candidateFlow.pendingInterviewInfo.startDate)) {
+                if (new Date(this.candidateFlow.pendingInterviewInfo.startDate) <= new Date(endDate)) {
+                  active = true;
+                  return;
+                }
+              }
+            }
+          });
+          this.users.push({
+            refUser: user.refUser._id,
+            name: this.utilitiesService.setFullname(user.refUser),
+            active: active
+          });
+        });
+      }
+    });
   }
 
   // CALENDAR LIB

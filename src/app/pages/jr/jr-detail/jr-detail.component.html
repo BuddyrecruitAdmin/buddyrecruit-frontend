@@ -7,15 +7,16 @@
       <nb-card-header style="color:#8f9bb3">
         Description
       </nb-card-header>
-      <nb-card-header>
+      <nb-card-body>
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group">
-              <label class="label" for="name">Job Position<span style="color:red">*</span></label>
+              <label class="label" for="name">Job Position <span class="text-red">*</span></label>
               <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
                 [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'"
                 (selectedChange)="onChangeJobposition($event)" fullWidth>
-                <nb-option *ngFor="let job of JobPosition" [value]="job.value" [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'">
+                <nb-option *ngFor="let job of JobPosition" [value]="job.value"
+                  [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'">
                   {{ job.label }}
                 </nb-option>
               </nb-select>
@@ -24,7 +25,7 @@
           </div>
           <div class="col-md-6">
             <div class="form-control-group">
-              <label class="label" for="name">Capacity <span style="color:red">*</span></label>
+              <label class="label" for="name">Capacity <span class="text-red">*</span></label>
               <input type="number" name="capacity" [(ngModel)]="jr.capacity" min="0.00" max="100.00" step="1.00"
                 pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput fullWidth
                 appNumberDirective [disabled]="editCheck || checkPreview" />
@@ -64,15 +65,18 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
             <div class="form-control-group">
-              <label class="label">Remark</label>
-              <textarea type="" nbInput fullWidth placeholder="Remark" [(ngModel)]="jr.remark"
-                [disabled]="checkPreview"></textarea>
+              <label class="label">Users Interview <span class="text-red">*</span></label>
+              <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
+                [disabled]="checkPreview">
+                <nb-option [hidden]="user.group === 'disabled'" *ngFor="let user of Users" [value]="user.value"
+                  [disabled]="checkPreview">
+                  {{ user.label }}
+                </nb-option>
+              </nb-select>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col-md-6">
             <div class="form-control-group">
               <label class="label">Evaluation Template</label>
@@ -86,16 +90,11 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="form-control-group">
-              <label class="label">Users Interview <span class="text-red">*</span></label>
-              <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
-                [disabled]="checkPreview">
-                <nb-option [hidden]="user.group === 'disabled'" *ngFor="let user of Users" [value]="user.value"
-                  [disabled]="checkPreview">
-                  {{ user.label }}
-                </nb-option>
-              </nb-select>
+              <label class="label">Remark</label>
+              <textarea type="" nbInput fullWidth placeholder="Remark" [(ngModel)]="jr.remark"
+                [disabled]="checkPreview"></textarea>
             </div>
           </div>
         </div>
@@ -124,8 +123,10 @@
             </div>
           </div>
         </div>
-      </nb-card-header>
-      <small *ngIf="touchedCheck" class="text-red-right">{{ sErrorCheck }}</small>
+        <div class="row pull-right">
+          <small *ngIf="touchedCheck" class="text-red-right">{{ sErrorCheck }}</small>
+        </div>
+      </nb-card-body>
       <nb-card-footer>
         <button nbButton status="default" (click)="back()">Cancel</button>
         <button *ngIf="!checkPreview" nbButton status="success" (click)="save()">Save</button>

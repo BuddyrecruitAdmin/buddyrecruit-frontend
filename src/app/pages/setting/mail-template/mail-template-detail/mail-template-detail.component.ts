@@ -125,7 +125,7 @@ export class MailTemplateDetailComponent implements OnInit {
 
   back() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[31] }
     });
     confirm.afterClosed().subscribe(result => {
@@ -215,7 +215,7 @@ export class MailTemplateDetailComponent implements OnInit {
       console.log(request)
       if (this.state === State.Create) {
         const confirm = this.matDialog.open(PopupMessageComponent, {
-          width: '40%',
+          width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
           data: { type: 'C' }
         });
         confirm.afterClosed().subscribe(result => {
@@ -234,7 +234,7 @@ export class MailTemplateDetailComponent implements OnInit {
       } else if (this.state === State.Edit) {
 
         const confirm = this.matDialog.open(PopupMessageComponent, {
-          width: '40%',
+          width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
           data: { type: 'C' }
         });
         confirm.afterClosed().subscribe(result => {

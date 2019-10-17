@@ -7,9 +7,10 @@
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 .mat-dialog-title {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 .mat-dialog-actions {
+  border-top: 1px solid #ffffff;
   margin-bottom: -12px;
 }
 .mat-dialog-actions button {

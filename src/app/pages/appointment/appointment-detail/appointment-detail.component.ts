@@ -20,6 +20,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
+import { CalendarService } from '../../calendar/calendar.service';
 
 @Component({
   selector: 'ngx-appointment-detail',
@@ -60,6 +61,7 @@ export class AppointmentDetailComponent implements OnInit {
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
+    public calendarService: CalendarService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -104,6 +106,26 @@ export class AppointmentDetailComponent implements OnInit {
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
       return step.refStage.refMain._id === this.role.refCompany.menu.pendingAppointment.refStage._id && step.editable;
     });
+    this.showTips = false;
+    this.calendarService.getListByJR(this.jrId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data.userInterviews.length) {
+          const calendar = response.data.userInterviews.find(element => {
+            return element.refUser._id === this.role._id;
+          });
+          if (calendar) {
+            const found = calendar.calendar.availableDates.find(element => {
+              return new Date(element.endDate) > new Date();
+            });
+            if (found) {
+              this.showTips = false;
+            } else {
+              this.showTips = true;
+            }
+          }
+        }
+      }
+    });
   }
 
   ngOnInit() {
@@ -116,7 +138,6 @@ export class AppointmentDetailComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     };
-    this.showTips = true;
   }
 
   onSelectTab(event: any) {
@@ -241,7 +262,7 @@ export class AppointmentDetailComponent implements OnInit {
 
   revoke(item: any) {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[44] }
     });
     confirm.afterClosed().subscribe(result => {

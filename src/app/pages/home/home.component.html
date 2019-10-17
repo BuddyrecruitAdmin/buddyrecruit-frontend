@@ -7,7 +7,8 @@
         <div class="col-sm-8 col-lg-6">
           <div class="form-control-group">
             <div class="input-group">
-              <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search">
+              <input type="text" [(ngModel)]="keyword" (keyup.enter)="search(true)" nbInput
+                fullWidth placeholder="Search">
               <div class="input-group-addon" nbTooltip="Search">
                 <nb-icon icon="search-outline" class="link" (click)="search()"></nb-icon>
               </div>

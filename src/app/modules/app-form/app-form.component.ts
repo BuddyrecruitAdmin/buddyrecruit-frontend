@@ -123,6 +123,7 @@ export class AppFormComponent implements OnInit {
   ngOnInit() {
     this.initialModel();
     this.loadForm();
+    this.getList();
     this.isUser = false;
     this.loading = true;
     this.innerHeight = window.innerHeight
@@ -157,7 +158,6 @@ export class AppFormComponent implements OnInit {
         }
       }
     })
-    this.getList();
   }
 
   initialModel(): any {
@@ -383,44 +383,10 @@ export class AppFormComponent implements OnInit {
     this.sErrorEmerTel = MESSAGE[4];
     this.sErrorSick = MESSAGE[4];
     this.sErrorAboutSelf = MESSAGE[4];
-    // this.applicationForm.disable();
   }
 
   setDisabled() {
     this.applicationForm.disable();
-    // this.lastname.disable();
-    // this.nickname.disable();
-    // this.positionApply.disable();
-    // this.salary.disable();
-    // this.presentAddress.disable();
-    // this.moo.disable();
-    // this.road.disable();
-    // this.district.disable();
-    // this.amphur.disable();
-    // this.province.disable();
-    // this.postcode.disable();
-    // this.mobile.disable();
-    // this.email.disable();
-    // this.age.disable();
-    // this.race.disable();
-    // this.nationality.disable();
-    // this.religion.disable();
-    // this.sexGroup.disable();
-    // this.fathername.disable();
-    // this.fathersurname.disable();
-    // this.fatheroccupation.disable();
-    // this.mothername.disable();
-    // this.mothersurname.disable();
-    // this.motheroccupation.disable();
-    // this.emergencyName.disable();
-    // this.emergencySurname.disable();
-    // this.emergencyRelation.disable();
-    // this.emergencyAddress.disable();
-    // this.emergencyTel.disable();
-    // this.aboutSelf.disable();
-    // this.dob.disable();
-    // this.sick.disable();
-    // this.workCountry.disable();
   }
 
   getList() {
@@ -513,7 +479,7 @@ export class AppFormComponent implements OnInit {
     let isValid = true;
     this.sErrorAll = "";
     this.touched = true;
-    console.log(this.appforms)
+    console.log(this.applicationForm)
     if (this.sexGroup.value === "male") {
       if (this.appforms.personalInformation.militaryStatus === undefined
         || this.appforms.personalInformation.militaryStatus === null) {
@@ -534,6 +500,16 @@ export class AppFormComponent implements OnInit {
             isValid = false;
             this.sErrorAll = MESSAGE[145];
           }
+          var startD = new Date(this.appforms.education[i].from);
+          var EndD = new Date(this.appforms.education[i].to);
+          if (startD.getTime() == EndD.getTime()) {
+            isValid = false;
+            this.sErrorAll = MESSAGE[95];
+          }
+          if (startD.getTime() > EndD.getTime()) {
+            isValid = false;
+            this.sErrorAll = MESSAGE[95];
+          }
         }
       }
       if (this.appforms.workExperience.length > 0) {
@@ -549,6 +525,16 @@ export class AppFormComponent implements OnInit {
           ) {
             isValid = false;
             this.sErrorAll = MESSAGE[146];
+          }
+          var startD = new Date(this.appforms.workExperience[i].from);
+          var EndD = new Date(this.appforms.workExperience[i].to);
+          if (startD.getTime() == EndD.getTime()) {
+            isValid = false;
+            this.sErrorAll = MESSAGE[95];
+          }
+          if (startD.getTime() > EndD.getTime()) {
+            isValid = false;
+            this.sErrorAll = MESSAGE[95];
           }
         }
       }

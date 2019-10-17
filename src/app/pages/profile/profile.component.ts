@@ -60,6 +60,7 @@ export class ProfileComponent implements OnInit {
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     private location: Location,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
   }
@@ -165,7 +166,7 @@ export class ProfileComponent implements OnInit {
     }
     if (this.validation()) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: '40%',
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: { type: 'C' }
       });
       confirm.afterClosed().subscribe(result => {

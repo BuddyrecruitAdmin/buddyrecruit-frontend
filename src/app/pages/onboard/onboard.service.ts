@@ -35,4 +35,11 @@ export class OnboardService extends NetworkService {
     };
     return this.post(API_ENDPOINT.ONBOARD.DETAIL, body);
   }
+
+  close(jrId: any): Observable<ApiResponse> {
+    const body = {
+      jrId: jrId
+    };
+    return this.post(API_ENDPOINT.JOBREQUEST.CLOSE, body);
+  }
 }

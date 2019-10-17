@@ -88,7 +88,7 @@ export class PopupSignContractComponent implements OnInit {
 
   toSignContract() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: 'Do you want to Sign Contract?' }
     });
     confirm.afterClosed().subscribe(result => {

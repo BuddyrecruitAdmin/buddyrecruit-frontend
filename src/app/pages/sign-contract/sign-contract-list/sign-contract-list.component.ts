@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, setJdId, setJdName, setJrId } from '../../../shared/services/auth.service';
+import { getRole, setJdId, setJdName, setJrId, setIsGridLayout, getIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -57,11 +57,12 @@ export class SignContractListComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
     if (this.devices.isMobile || this.devices.isTablet) {
-      this.isGridLayout = true;
+      this.isGridLayout = this.isGridLayout ? this.isGridLayout : true;
       this.showStepper = false;
     } else {
-      this.isGridLayout = false;
+      this.isGridLayout = this.isGridLayout ? this.isGridLayout : false;
       this.showStepper = true;
     }
   }
@@ -120,7 +121,7 @@ export class SignContractListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.items.map(item => {
-          item.daysBeforeExpiry = this.utilitiesService.calculateDuration2Date(new Date(), item.duration.endDate)
+          item.daysBeforeExpire = this.utilitiesService.calculateDuration2Date(new Date(), item.duration.endDate);
         });
         this.paging.length = response.totalDataSize;
         if (!this.filter.data.departments.length) {
@@ -200,6 +201,11 @@ export class SignContractListComponent implements OnInit {
       }
     }
     this.search();
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   info(item: any) {

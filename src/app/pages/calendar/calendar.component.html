@@ -208,44 +208,78 @@
   </div>
 </ng-template>
 
-<ng-template #dialog2 let-data let-ref="dialogRef">
+<ng-template #dialogInfo let-data let-ref="dialogRef">
   <nb-card [style.max-height.px]="innerHeight" [style.width.px]="innerWidth">
     <nb-card-header>
       <div class="title">
-        Interview Info
+        <label [nbTooltip]="candidateFlow.refJR?.refJD?.position || '-'">
+          {{ candidateFlow.refJR?.refJD?.position || '-' }}
+        </label>
+        <small class="status">
+          <span>{{ utilitiesService.convertDate(event?.start) || '-' }}</span>
+          <span> ⋅ </span>
+          <span>{{ utilitiesService.convertTime(event?.start) }}</span>
+          <span> - </span>
+          <span>{{ utilitiesService.convertTime(event?.end) }}</span>
+        </small>
       </div>
       <div class="actions">
-        <nb-icon icon="close-outline" class="link text-light-gray" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+        <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
       </div>
     </nb-card-header>
     <nb-card-body>
-      <div class="text-group">
-        <label class="label">Interview Date</label>
-        <span>{{ utilitiesService.convertDate(event?.start) || '-' }}</span>
-      </div>
-      <div class="text-group">
-        <label class="label">Interview Time</label>
-        <span>{{ utilitiesService.convertTime(event?.start) }}</span>
-        <span> - </span>
-        <span>{{ utilitiesService.convertTime(event?.end) }}</span>
-      </div>
-      <hr>
-      <div class="text-group">
-        <label class="label">Job Position</label>
-        <span>{{ candidateFlow.refJR?.refJD?.position || '-' }}</span>
-      </div>
-      <div class="text-group">
-        <label class="label">Candidate Name</label>
-        <span>{{ utilitiesService.setFullname(candidateFlow.refCandidate) || '-' }}</span>
-      </div>
-      <div class="text-group">
-        <label class="label">Phone</label>
-        <span>{{ candidateFlow.refCandidate?.phone || '-' }}</span>
-      </div>
-      <div class="text-group">
-        <label class="label">Email</label>
-        <span>{{ candidateFlow.refCandidate?.email || '-' }}</span>
-      </div>
+      <table>
+        <tr>
+          <td class="icon">
+            <nb-icon icon="pin-outline" nbTooltip="Location"></nb-icon>
+          </td>
+          <td class="content">
+            <div>{{ candidateFlow.pendingInterviewInfo?.refLocation?.name || '-' }}</div>
+            <div>
+              <small class="text-gray">{{ candidateFlow.pendingInterviewInfo?.refLocation?.address }}</small>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="icon">
+            <nb-icon icon="people-outline" nbTooltip="Users"></nb-icon>
+          </td>
+          <td class="content">
+            <div *ngFor="let user of users"
+              [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
+              <span>{{ user.name }}</span>
+              <nb-icon *ngIf="user.active" icon="checkmark-outline" class="text-green"></nb-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="label text-light-gray m-t-5 m-b-10">Candidate Info</div>
+      <table>
+        <tr>
+          <td class="icon">
+            <nb-icon icon="person-outline" nbTooltip="Name"></nb-icon>
+          </td>
+          <td class="content">
+            {{ utilitiesService.setFullname(candidateFlow.refCandidate) || '-' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="icon">
+            <nb-icon icon="phone-outline" nbTooltip="Phone"></nb-icon>
+          </td>
+          <td class="content">
+            {{ candidateFlow.refCandidate?.phone || '-' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="icon">
+            <nb-icon icon="email-outline" nbTooltip="Email"></nb-icon>
+          </td>
+          <td class="content">
+            {{ candidateFlow.refCandidate?.email || '-' }}
+          </td>
+        </tr>
+      </table>
     </nb-card-body>
   </nb-card>
 </ng-template>

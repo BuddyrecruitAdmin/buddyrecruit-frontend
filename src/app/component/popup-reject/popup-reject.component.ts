@@ -127,7 +127,7 @@ export class PopupRejectComponent implements OnInit {
 
   reject() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[43] }
     });
     confirm.afterClosed().subscribe(result => {
@@ -148,7 +148,7 @@ export class PopupRejectComponent implements OnInit {
 
   block() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: '40%',
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
       data: { type: 'C', content: MESSAGE[43] }
     });
     confirm.afterClosed().subscribe(result => {
