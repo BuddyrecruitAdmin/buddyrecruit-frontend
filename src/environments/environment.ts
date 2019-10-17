@@ -10,12 +10,7 @@ export const environment = {
    //API_URI: 'http://192.168.25.59:9101', // DEV P KG 2
   // API_URI: "http://192.168.35.120:4301", // QAS
   // API_URI: "http://192.168.15.44:4201", // PRD
-<<<<<<< HEAD
   API_URI: "https://p3-bkd.buddyrecruit.ai", // PRD
   // API_URI: 'http://192.168.35.161:9001', // DEV N gos
-=======
-  // API_URI: "https://buddyrecruit.ai:4301", // PRD
-  API_URI: 'http://192.168.35.90:9001', // DEV N gos
->>>>>>> 8874c4a6e7fe2f5206a150245bae90014408782d
   WriteLog: true
 };
