@@ -149,7 +149,6 @@ export class AppFormComponent implements OnInit {
     this.service.getDetail(this._id, this.isUser).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.loading = false;
-        console.log(response.data);
         if (this.isUser) {
           this.appforms = response.data;
           this.edtiable = false;
@@ -288,10 +287,10 @@ export class AppFormComponent implements OnInit {
       district: [null, Validators.required],
       amphur: [null, Validators.required],
       province: [null, Validators.required],
-      postcode: [null, Validators.required],
-      age: [null, Validators.required],
+      postcode: [null, [Validators.required,Validators.minLength(5)]],
+      age: [null, [Validators.required,Validators.maxLength(2)]],
       dob: [null, Validators.required],
-      mobile: [null, Validators.required],
+      mobile: [null, [Validators.required,Validators.minLength(9)]],
       email: [null, [Validators.required, Validators.email]],
       race: [null, Validators.required],
       nationality: [null, Validators.required],
@@ -309,11 +308,10 @@ export class AppFormComponent implements OnInit {
       emergencySurname: [null, Validators.required],
       emergencyRelation: [null, Validators.required],
       emergencyAddress: [null, Validators.required],
-      emergencyTel: [null, Validators.required],
+      emergencyTel: [null, [Validators.required,Validators.minLength(9)]],
       sick: [null, Validators.required],
       aboutSelf: [null, Validators.required],
     })
-    console.log(this.applicationForm)
     this.firstname = this.applicationForm.controls["firstname"];
     this.lastname = this.applicationForm.controls["lastname"];
     this.nickname = this.applicationForm.controls["nickname"];
@@ -479,7 +477,6 @@ export class AppFormComponent implements OnInit {
     let isValid = true;
     this.sErrorAll = "";
     this.touched = true;
-    console.log(this.applicationForm)
     if (this.sexGroup.value === "male") {
       if (this.appforms.personalInformation.militaryStatus === undefined
         || this.appforms.personalInformation.militaryStatus === null) {
