@@ -164,4 +164,5 @@ export const MESSAGE = {
   154: "Please enter new name of evaluation",
   155: "Please select users interview",
   156: "Total educatuin score must be equal maximum score",
+  157: "Please enter evaluation name",
 };

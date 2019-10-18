@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { PopupFeedbackService } from './popup-feedback.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, getBugId, getFieldLabel, getFieldName } from '../../shared/services/auth.service';
+import { getRole, getFlowId, getBugId, getFieldLabel, getFieldName,getBugCandidateId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -25,6 +25,7 @@ export class PopupFeedbackComponent implements OnInit {
   bugComment: string;
   bugLists: any;
   bugId: any;
+  bugCandidateId: any;
   bugName: any;
   bugLabel: any;
   loading: boolean;
@@ -44,6 +45,7 @@ export class PopupFeedbackComponent implements OnInit {
     this.bugId = getBugId();
     this.bugLabel = getFieldLabel();
     this.bugName = getFieldName();
+    this.bugCandidateId = getBugCandidateId();
     this.TogglePage = 'comment';
     this.bugComment = '';
     this.userKey = this.role._id;
@@ -53,7 +55,7 @@ export class PopupFeedbackComponent implements OnInit {
   }
 
   getList() {
-    this.service.getList(this.bugId, this.bugName, this.bugLabel).subscribe(response => {
+    this.service.getList(this.bugCandidateId, this.bugName, this.bugLabel).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.bugLists = response.data;
         this.bugLists.map(element => {
@@ -69,7 +71,7 @@ export class PopupFeedbackComponent implements OnInit {
   }
 
   postBug() {
-    this.service.create(this.bugId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
+    this.service.create(this.bugCandidateId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
         this.TogglePage = 'history';

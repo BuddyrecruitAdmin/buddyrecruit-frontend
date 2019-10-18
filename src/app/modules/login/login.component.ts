@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
     this.loginService.login(value.username, value.password).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);
-        this.showToast('success', '', response.data.message || 'Login Success');
+        this.showToast('success', response.data.message || 'Login Success','');
         const url = getUrl();
         if (url) {
           setUrl('');

@@ -53,6 +53,7 @@ export class JrDetailComponent implements OnInit {
   jobStatus: any;
   tempJob: any;
   loading: any;
+  editExam: boolean;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -105,6 +106,7 @@ export class JrDetailComponent implements OnInit {
         this.jr.capacity = 0;
         this.jobStatus = "notUsed";
         this.loading = false;
+        this.editExam = true;
         this.initialStartDropDown();
       }
     });
@@ -244,6 +246,11 @@ export class JrDetailComponent implements OnInit {
           this.jr.userInterviews = this.jr.userInterviews.map(element => {
             return element.refUser._id;
           });
+          if(this.jr.refStatus.name != 'Waiting for HR Confirm'){
+            this.editExam = false;
+          }else{
+            this.editExam = true;
+          }
           // this.tempJob = this.jr.userInterviews;
           console.log(this.jr.userInterviews)
           if (this.state != State.Create) {

@@ -261,6 +261,9 @@ export class JdDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.jd = response.data;
+          this.jd.weightScore.education.weight.map((ele,i) => {
+            ele.name = this.TempEdu[i].name;
+          })
           console.log(this.jd);
           this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
           this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);

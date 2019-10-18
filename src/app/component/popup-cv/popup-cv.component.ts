@@ -3,7 +3,7 @@ import { ResponseCode } from '../../shared/app.constants';
 import { JdService } from '../../pages/jd/jd.service';
 import { PopupCVService } from './popup-cv.service';
 import { NbDialogService, NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId,setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -24,6 +24,7 @@ export class PopupCvComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   flowId: any;
+  candidateId: any;
   items: any;
   accuracy: any;
   candidateName: string;
@@ -78,7 +79,9 @@ export class PopupCvComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.flowId = getCandidateId();
+    this.flowId = getFlowId();
+    this.candidateId = getCandidateId();
+    setFlowId();
     setCandidateId();
     this.editable = false;
     this.buttonText = 'edit';
@@ -139,6 +142,13 @@ export class PopupCvComponent implements OnInit {
         this.items = response.data;
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
+          console.log(this.items.birth)
+          console.log(this.items.birth === "01/01/1900")
+        }else{
+          this.items.birth = "";
+        }
+        if(this.items.age === -1){
+          this.items.age = "";
         }
         if (this.items.workExperience.totalExpMonth != null || this.items.workExperience.totalExpMonth != undefined) {
           this.totalMonth = this.items.workExperience.totalExpMonth;
@@ -233,9 +243,9 @@ export class PopupCvComponent implements OnInit {
 
   checkCV(id) {
     this.jdService.originalCV(id)
-    .subscribe(data => this.downloadFile(data), function (error) {
-      //that.setAlertMessage("E", error.statusText);
-    });
+      .subscribe(data => this.downloadFile(data), function (error) {
+        //that.setAlertMessage("E", error.statusText);
+      });
   }
 
   downloadFile(data: any) {
@@ -244,9 +254,9 @@ export class PopupCvComponent implements OnInit {
     window.open(url);
   }
 
-  openApplication(id: any){
+  openApplication(id: any) {
     console.log(id)
-    const path = '/auth/appform/view/'+id;
+    const path = '/auth/appform/view/' + id;
     console.log(path)
     this.router.navigate([path])
   }
@@ -255,6 +265,7 @@ export class PopupCvComponent implements OnInit {
     setBugId(this.flowId);
     setFieldLabel(fieldLabel);
     setFieldName(fieldName);
+    setBugCandidateId(this.candidateId)
     this.dialogService.open(PopupFeedbackComponent,
       {
         closeOnBackdropClick: true,
@@ -265,6 +276,7 @@ export class PopupCvComponent implements OnInit {
       setBugId();
       setFieldLabel();
       setFieldName();
+      setBugCandidateId();
       this.getList();
     });
   }
@@ -444,7 +456,7 @@ export class PopupCvComponent implements OnInit {
 
   toggleCheck(fieldLabel, fieldName) {
     this.checked = !this.checked;
-    this.service.check(this.flowId, fieldName, fieldLabel, "Correct").subscribe(response => {
+    this.service.check(this.candidateId, fieldName, fieldLabel, "Correct").subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
       }

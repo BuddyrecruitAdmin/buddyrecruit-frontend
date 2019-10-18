@@ -38,8 +38,6 @@
             <div class="form-control-group">
               <label class="label">Start Date <span class="text-red">*</span></label>
               <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-              <!-- <input [nbDatepicker]="startDate" [(ngModel)]="jr.duration.startDate"
-                [disabled]="checkPreview" nbInput fullWidth placeholder="dd/mm/yyyy"> -->
               <input [nbDatepicker]="startDate" [(ngModel)]="jr.duration.startDate" nbInput fullWidth
                 placeholder="dd/mm/yyyy" [disabled]="editCheck || checkPreview">
               <small *ngIf="touchedStart" class="text-red">{{ sErrorStart }}</small>
@@ -111,7 +109,8 @@
           <div class="col-sm-2 col-md-2">
             <label class="label">Exam</label>
             <div>
-              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview">Yes</mat-checkbox>
+              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam"
+                [disabled]="checkPreview || !editExam">Yes</mat-checkbox>
             </div>
           </div>
         </div>

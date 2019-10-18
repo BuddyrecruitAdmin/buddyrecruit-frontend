@@ -40,8 +40,6 @@
             [routerLink]="'/jd/detail/duplicate/'+item._id"></nb-icon>
           <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="trash-2-outline" class="link" nbTooltip="Delete"
             (click)="delete(item)"></nb-icon>
-          <!-- <nb-icon icon="arrow-ios-forward-outline" class="link" nbTooltip="preview"
-            [routerLink]="'/jd/detail/preview/'+item._id"></nb-icon> -->
         </div>
       </nb-card-header>
       <nb-card-body>
@@ -53,6 +51,7 @@
           <label class="label">Division</label>
           <span>{{ item.division.name || '-'}}</span>
         </div>
+        <i class="text-gray">
         <div class="text-group">
           <label class="label">Last update by</label>
           <span>
@@ -60,10 +59,13 @@
             {{ item.lastChangedInfo.refUser.lastname }}
           </span>
         </div>
+        </i>
+        <i class="text-gray">
         <div class="text-group">
           <label class="label">Last update date</label>
           <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
         </div>
+        </i>
       </nb-card-body>
     </nb-card>
   </div>
