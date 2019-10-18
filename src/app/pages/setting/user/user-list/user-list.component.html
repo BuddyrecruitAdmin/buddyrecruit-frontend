@@ -15,8 +15,8 @@
       </div>
     </div>
     <div *ngIf="role.refAuthorize.configuration.user.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/setting/user-detail'" [disabled]="isOverQuota">Create</button>
+      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/user-detail'"
+        [disabled]="isOverQuota">Create</button>
     </div>
   </div>
 </div>
@@ -30,7 +30,7 @@
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+    <nb-card [accent]="item.active ? 'success' : 'default'">
       <nb-card-header>
         <div class="title">
           <label [nbTooltip]="item.firstname + ' ' + item.lastname">{{ item.firstname }} {{ item.lastname }}</label>
@@ -65,21 +65,23 @@
         </div>
         <div class="text-group">
           <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
-        <div class="text-group">
-          <label class="label">Last update by</label>
-          <span>
-            {{ item.lastChangedInfo.refUser?.firstname }}
-            {{ item.lastChangedInfo.refUser?.lastname }}
-          </span>
-        </div>
-        <div class="text-group">
-          <label class="label">Last update date</label>
-          <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
-        </div>
+        <i class="text-gray">
+          <div class="text-group">
+            <label class="label">Last update by</label>
+            <span>
+              {{ item.lastChangedInfo.refUser.firstname }}
+              {{ item.lastChangedInfo.refUser.lastname }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Last update date</label>
+            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+          </div>
+        </i>
       </nb-card-body>
     </nb-card>
   </div>

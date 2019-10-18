@@ -20,14 +20,9 @@
   </div>
 </div>
 
-<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
-  nbSpinnerMessage="Loading...">
-  <nb-card-body></nb-card-body>
-</nb-card>
-
-<div class="row" *ngIf="!loading">
+<div class="row">
   <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+    <nb-card [accent]="item.active ? 'success' : 'default'">
       <nb-card-header>
         <div class="title">
           <label [nbTooltip]="item.name">{{ item.name }}</label>
@@ -58,11 +53,11 @@
         </div>
         <div class="text-group">
           <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
-        <div *ngIf="role.refHero.isSuperAdmin">
+        <i *ngIf="role.refHero.isSuperAdmin" class="text-gray">
           <div class="text-group">
             <label class="label">Last update by</label>
             <span>
@@ -74,7 +69,7 @@
             <label class="label">Last update date</label>
             <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
           </div>
-        </div>
+        </i>
       </nb-card-body>
     </nb-card>
   </div>
@@ -86,7 +81,7 @@
 </mat-paginator>
 
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card>
+  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-header>Dashboard</nb-card-header>
     <nb-card-body>
       <div class="form-control-group">

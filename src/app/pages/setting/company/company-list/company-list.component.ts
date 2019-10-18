@@ -63,7 +63,6 @@ export class CompanyListComponent implements OnInit {
         'lastChangedInfo.refUser.firstname',
         'lastChangedInfo.refUser.lastname',
         'lastChangedInfo.date',
-        
       ]
     };
     this.items = [];
@@ -71,6 +70,8 @@ export class CompanyListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
       }
     });
   }

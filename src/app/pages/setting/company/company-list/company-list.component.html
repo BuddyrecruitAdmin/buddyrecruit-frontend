@@ -21,7 +21,7 @@
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+    <nb-card [accent]="item.active ? 'success' : 'default'">
       <nb-card-header>
         <div class="title">
           <label [nbTooltip]="item.name">{{ item.name }}</label>
@@ -48,10 +48,6 @@
           <label class="label">Admin Email</label>
           <span [nbTooltip]="item.adminEmail">{{ item.adminEmail }}</span>
         </div>
-        <!-- <div *ngIf="item.companySize" class="text-group">
-          <label class="label">Company Size</label>
-          <span>{{ item.companySize }}</span>
-        </div> -->
         <div class="text-group">
           <label class="label">Transferable</label>
           <nb-icon *ngIf="item.transferable" icon="checkmark-outline" class="text-green"></nb-icon>
@@ -59,22 +55,23 @@
         </div>
         <div class="text-group">
           <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
-        <hr>
-        <div class="text-group">
-          <label class="label">Last update by</label>
-          <span>
-            {{ item.lastChangedInfo.refUser.firstname }}
-            {{ item.lastChangedInfo.refUser.lastname }}
-          </span>
-        </div>
-        <div class="text-group">
-          <label class="label">Last update date</label>
-          <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
-        </div>
+        <i class="text-gray">
+          <div class="text-group">
+            <label class="label">Last update by</label>
+            <span>
+              {{ item.lastChangedInfo.refUser.firstname }}
+              {{ item.lastChangedInfo.refUser.lastname }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Last update date</label>
+            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+          </div>
+        </i>
       </nb-card-body>
     </nb-card>
   </div>

@@ -23,7 +23,7 @@
 
 <div class="row">
   <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+    <nb-card [accent]="item.active ? 'success' : 'default'">
       <nb-card-header>
         <div class="title">
           <label [nbTooltip]="item.name">{{ item.name }}</label>
@@ -51,26 +51,28 @@
         </div>
         <div class="text-group">
           <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
-        <div class="text-group">
-          <label class="label">Last update by</label>
-          <span>
-            {{ item.lastChangedInfo.refUser.firstname }}
-            {{ item.lastChangedInfo.refUser.lastname }}
-          </span>
-        </div>
-        <div class="text-group">
-          <label class="label">Last update date</label>
-          <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
-        </div>
+        <i class="text-gray">
+          <div class="text-group">
+            <label class="label">Last update by</label>
+            <span>
+              {{ item.lastChangedInfo.refUser.firstname }}
+              {{ item.lastChangedInfo.refUser.lastname }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Last update date</label>
+            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+          </div>
+        </i>
       </nb-card-body>
     </nb-card>
   </div>
 </div>
 
-<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
-  [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
 </mat-paginator>

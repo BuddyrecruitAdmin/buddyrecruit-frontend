@@ -149,6 +149,9 @@ export class CalendarComponent implements OnInit {
         }
       });
     }
+    if (this.events.length) {
+      this.events = this.removeDuplicates(this.events, 'id');
+    }
 
     if (byWorkingDays === true) {
       this.excludeDay();
@@ -448,14 +451,20 @@ export class CalendarComponent implements OnInit {
 
   buildTitle(item: any) {
     let title = '';
-    title += this.utilitiesService.convertTime(item.startDate);
+    title += this.utilitiesService.convertTime(item.refCandidateFlow.pendingInterviewInfo.startDate);
     title += ' - ';
-    title += this.utilitiesService.convertTime(item.endDate);
+    title += this.utilitiesService.convertTime(item.refCandidateFlow.pendingInterviewInfo.endDate);
     title += ' : ';
     title += this.utilitiesService.setFullname(item.refCandidateFlow.refCandidate);
     title += ' ';
     title += `(${item.refCandidateFlow.refJR.refJD.position || '-'})`;
     return title;
+  }
+
+  removeDuplicates(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

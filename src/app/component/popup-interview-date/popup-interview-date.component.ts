@@ -145,9 +145,12 @@ export class PopupInterviewDateComponent implements OnInit {
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingInterviewInfo.startDate)) {
           this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
+          this.date = this.replaceAt(this.date, 11, '0');
+          this.date = this.replaceAt(this.date, 12, '0');
           this.setDropdownTime(this.date);
           this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
         }
+        debugger;
         if (response.data.candidateFlow.refJR.userInterviews.length) {
           response.data.candidateFlow.refJR.userInterviews.forEach(element => {
             this.users.push({
@@ -164,6 +167,10 @@ export class PopupInterviewDateComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  replaceAt(text: string, index: number, replacement: string) {
+    return text.substr(0, index) + replacement + text.substr(index + replacement.length);
   }
 
   setDropdownDate() {

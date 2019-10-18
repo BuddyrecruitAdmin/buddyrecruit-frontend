@@ -847,36 +847,42 @@
   // Labal
 
   .label-gray {
+    display: inline-block;
     color: var(--color-black);
     background: var(--color-light-gray);
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
   .label-primary {
+    display: inline-block;
     color: var(--color-white);
     background: var(--color-blue);
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
   .label-success {
+    display: inline-block;
     color: var(--color-white);
     background: var(--color-green);
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
   .label-danger {
+    display: inline-block;
     color: var(--color-white);
     background: var(--color-red);
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
   .label-warning {
+    display: inline-block;
     color: var(--color-white);
     background: var(--color-orange);
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
   .label-info {
+    display: inline-block;
     color: var(--color-white);
     background: var(--color-aqua);
     padding: 0.1rem 0.5rem;

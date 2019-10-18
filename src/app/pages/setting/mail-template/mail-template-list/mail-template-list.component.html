@@ -13,13 +13,13 @@
         </div>
       </div>
     </div>
-
     <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/mail-template-detail'">
         CREATE</button>
     </div>
   </div>
 </div>
+
 <!-- Tab switch -->
 <nb-card *ngIf="!loading">
   <nb-card-body>
@@ -27,11 +27,11 @@
       <nb-tab tabTitle="Internal">
         <!-- list all item  Internal   -->
         <div class="row">
-          <div class="col-md-6 col-lg-6" *ngFor="let item of internal;">
+          <div class="col-md-6 col-lg-6 m-b-20" *ngFor="let item of internal;">
             <nb-card accent="success">
               <nb-card-header>
                 <div class="title">
-                  <label nbTooltip="name">{{item.name}}</label>
+                  <label [nbTooltip]="item.name">{{item.name}}</label>
                 </div>
                 <div class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
@@ -43,10 +43,10 @@
               <nb-card-body>
                 <div class="text-group">
                   <label class="label">Subject</label>
-                  {{item.subject}}
+                  <span [nbTooltip]="item.subject">{{ item.subject }}</span>
                 </div>
                 <div class="text-group">
-                  <label class="label">remark</label>
+                  <label class="label">Remark</label>
                   {{item.remark || '-'}}
                 </div>
                 <div class="text-group">
@@ -57,15 +57,17 @@
                   <label class="label">BCC</label>
                   {{item.bcc || '-'}}
                 </div>
-                <div class="text-group">
-                  <label class="label">Last update by</label>
-                  {{ item.lastChangedInfo.refUser.firstname }}
-                  {{ item.lastChangedInfo.refUser.lastname }}
-                </div>
-                <div class="text-group">
-                  <label class="label">Last update date</label>
-                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
-                </div>
+                <i class="text-gray">
+                  <div class="text-group">
+                    <label class="label">Last update by</label>
+                    {{ item.lastChangedInfo.refUser.firstname }}
+                    {{ item.lastChangedInfo.refUser.lastname }}
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Last update date</label>
+                    {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
+                  </div>
+                </i>
               </nb-card-body>
             </nb-card>
           </div>
@@ -74,11 +76,11 @@
       <nb-tab tabTitle="External">
         <!-- list all item External  -->
         <div class="row">
-          <div class="col-sm-6 col-md-6 col-lg-6" *ngFor="let item of external;">
+          <div class="col-sm-6 col-md-6 col-lg-6 m-b-20" *ngFor="let item of external;">
             <nb-card accent="success">
               <nb-card-header>
                 <div class="title">
-                  <label nbTooltip="name">{{item.name}}</label>
+                  <label [nbTooltip]="item.name">{{item.name}}</label>
                 </div>
                 <div class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
@@ -90,10 +92,10 @@
               <nb-card-body>
                 <div class="text-group">
                   <label class="label">Subject</label>
-                  {{item.subject}}
+                  <span [nbTooltip]="item.subject">{{ item.subject }}</span>
                 </div>
                 <div class="text-group">
-                  <label class="label">remark</label>
+                  <label class="label">Remark</label>
                   {{item.remark || '-'}}
                 </div>
                 <div class="text-group">
@@ -104,15 +106,17 @@
                   <label class="label">BCC</label>
                   {{item.bcc || '-'}}
                 </div>
-                <div class="text-group">
-                  <label class="label">Last update by</label>
-                  {{ item.lastChangedInfo.refUser.firstname }}
-                  {{ item.lastChangedInfo.refUser.lastname }}
-                </div>
-                <div class="text-group">
-                  <label class="label">Last update date</label>
-                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
-                </div>
+                <i class="text-gray">
+                  <div class="text-group">
+                    <label class="label">Last update by</label>
+                    {{ item.lastChangedInfo.refUser.firstname }}
+                    {{ item.lastChangedInfo.refUser.lastname }}
+                  </div>
+                  <div class="text-group">
+                    <label class="label">Last update date</label>
+                    {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
+                  </div>
+                </i>
               </nb-card-body>
             </nb-card>
           </div>
@@ -121,6 +125,7 @@
     </nb-tabset>
   </nb-card-body>
 </nb-card>
+
 <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
   [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
 </mat-paginator>

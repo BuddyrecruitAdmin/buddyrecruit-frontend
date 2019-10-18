@@ -416,8 +416,8 @@ export class AuthorizeDetailComponent implements OnInit {
   save() {
     if (this.validation()) {
       const request = this.setRequest();
-      if (this.state === State.Create) {
-        this.service.create(request).subscribe(response => {
+      if (this.state === State.Edit) {
+        this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.getDetail(request._id);
@@ -426,7 +426,7 @@ export class AuthorizeDetailComponent implements OnInit {
           }
         });
       } else {
-        this.service.edit(request).subscribe(response => {
+        this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.getDetail(request._id);
