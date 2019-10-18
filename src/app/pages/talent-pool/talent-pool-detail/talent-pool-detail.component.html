@@ -82,8 +82,9 @@
                   </div>
                   <div *ngIf="item.examInfo?.flag">
                     <label class="label text-light-gray m-r-5">Exam Date</label>
-                    <nb-icon *ngIf="tab.name === 'PENDING'" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Exam Date" (click)="appointmentExam(item)"></nb-icon>
+                    <nb-icon *ngIf="tab.name === 'PENDING' && !(item.refJR?.refStatus?.status !== 'JRS002')"
+                      icon="edit-2-outline" class="link" nbTooltip="Edit Exam Date" (click)="appointmentExam(item)">
+                    </nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Exam Location</label>
@@ -182,13 +183,21 @@
                   <span *ngIf="button.editable && button.refStage?._id === item.refStage?._id">
                     <button
                       *ngIf="item.refStage?.name !== 'Appointment for Exam' || utilitiesService.dateIsValid(item.examInfo?.date)"
-                      nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
-                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                      nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)"
+                      [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button
                       *ngIf="item.refStage?.name === 'Appointment for Exam' && !utilitiesService.dateIsValid(item.examInfo?.date)"
-                      nbButton status="success" [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)">
-                      <nb-icon icon="calendar"></nb-icon>
+                      nbButton status="success" [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)"
+                      [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="calendar"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
                       <nb-icon icon="close-circle"></nb-icon>

@@ -100,8 +100,8 @@
                 </div>
                 <div class="col-md-6">
                   <label class="label text-light-gray m-r-5">Interview Date</label>
-                  <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Interview Date"
-                    (click)="openPopupInterviewDate(item)"></nb-icon>
+                  <nb-icon *ngIf="!(item.refJR?.refStatus?.status !== 'JRS002')" icon="edit-2-outline" class="link"
+                    nbTooltip="Edit Interview Date" (click)="openPopupInterviewDate(item)"></nb-icon>
                   <div class="m-l-15">
                     <div class="text-group">
                       <label class="label">Interview Location</label>
@@ -114,8 +114,8 @@
                   </div>
                   <div *ngIf="item.refStage?.name === 'Interview Score'" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Interview Info</label>
-                    <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Interview Info"
-                      (click)="openPopupEvaluation(item)"></nb-icon>
+                    <nb-icon *ngIf="!(item.refJR?.refStatus?.status !== 'JRS002')" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Interview Info" (click)="openPopupEvaluation(item)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Score</label>
@@ -162,16 +162,26 @@
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
                     <button *ngIf="item.button.nextStep" nbButton status="success" [nbTooltip]="button.button"
-                      (click)="approve(item, button)">
-                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                      (click)="approve(item, button)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button *ngIf="item.button.interviewTaken" nbButton status="success" [nbTooltip]="button.button"
-                      (click)="approve(item, button)">
-                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                      (click)="approve(item, button)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button *ngIf="item.button.interviewScore" nbButton status="success"
-                      nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)">
-                      <nb-icon icon="edit-2-outline"></nb-icon>
+                      nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)"
+                      [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="edit-2-outline"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
                       <nb-icon icon="close-circle"></nb-icon>

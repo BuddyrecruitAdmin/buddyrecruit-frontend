@@ -31,7 +31,8 @@ export class LocationComponent implements OnInit {
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
-  loading: boolean;
+  minPageSize = Paging.pageSizeOptions[0];
+
   constructor(
     private service: LocationService,
     private dialogService: NbDialogService,
@@ -43,7 +44,6 @@ export class LocationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = true;
     this.refresh();
   }
 
@@ -88,15 +88,15 @@ export class LocationComponent implements OnInit {
     this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
-        console.log(this.items)
         this.paging.length = response.totalDataSize;
 
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
           this.search();
         }
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
       }
-      this.loading = false;
     });
   }
 
@@ -168,7 +168,6 @@ export class LocationComponent implements OnInit {
       pageSize: event.pageSize,
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.loading = true;
     this.search();
   }
 

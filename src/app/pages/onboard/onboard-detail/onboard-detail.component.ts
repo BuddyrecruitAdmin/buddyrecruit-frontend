@@ -159,11 +159,11 @@ export class OnboardDetailComponent implements OnInit {
             break;
           case 'SELECTED':
             element.badgeText = count.selected;
-            element.badgeStatus = 'danger';
+            element.badgeStatus = 'default';
             break;
           case 'REJECTED':
             element.badgeText = count.rejected;
-            element.badgeStatus = 'danger';
+            element.badgeStatus = 'default';
             break;
           default:
             element.badgeText = '0';

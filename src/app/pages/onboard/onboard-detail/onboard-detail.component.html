@@ -134,8 +134,12 @@
               <span *ngIf="tab.name === 'PENDING'">
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
-                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                    <button nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)"
+                      [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
                       <nb-icon icon="close-circle"></nb-icon>

@@ -18,9 +18,14 @@
   </div>
 </div>
 
-<div class="row">
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body></nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading" class="row">
   <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card accent="success">
+    <nb-card [accent]="item.active ? 'success' : 'default'">
       <nb-card-header>
         <div class="title">
           <label [nbTooltip]="item.name">{{ item.name }}</label>
@@ -33,7 +38,7 @@
       <nb-card-body>
         <div class="text-group">
           <label class="label">Status</label>
-          <span [ngClass]="{ 'text-green' : item.active, 'text-red' : !item.active }">
+          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
@@ -58,7 +63,7 @@
 </mat-paginator>
 
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card>
+  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-header>Company Type</nb-card-header>
     <nb-card-body>
       <div class="form-control-group">

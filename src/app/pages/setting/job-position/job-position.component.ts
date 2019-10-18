@@ -31,6 +31,7 @@ export class JobPositionComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   loading: boolean;
+  minPageSize = Paging.pageSizeOptions[0];
 
   constructor(
     private service: JobPositionService,

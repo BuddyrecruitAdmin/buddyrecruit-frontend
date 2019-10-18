@@ -91,8 +91,9 @@
                 </div>
                 <div class="col-md-6">
                   <label class="label text-light-gray m-r-5">Exam Date</label>
-                  <nb-icon *ngIf="item.refStage?.order === 201" icon="edit-2-outline" class="link"
-                    nbTooltip="Edit Exam Date" (click)="openPopupExamDate(item)"></nb-icon>
+                  <nb-icon *ngIf="item.refStage?.order === 201 && !(item.refJR?.refStatus?.status !== 'JRS002')"
+                    icon="edit-2-outline" class="link" nbTooltip="Edit Exam Date" (click)="openPopupExamDate(item)">
+                  </nb-icon>
                   <div class="m-l-15">
                     <div class="text-group">
                       <label class="label">Exam Location</label>
@@ -105,8 +106,8 @@
                   </div>
                   <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Exam Info</label>
-                    <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Exam Info"
-                      (click)="openPopupExamInfo(item)"></nb-icon>
+                    <nb-icon *ngIf="!(item.refJR?.refStatus?.status !== 'JRS002')" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Exam Info" (click)="openPopupExamInfo(item)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Available Date</label>
@@ -124,8 +125,8 @@
                   </div>
                   <div *ngIf="item.refStage?.name === 'Exam Score'" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Exam Score</label>
-                    <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Exam Score"
-                      (click)="openPopupExamScore(item)"></nb-icon>
+                    <nb-icon *ngIf="!(item.refJR?.refStatus?.status !== 'JRS002')" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Exam Score" (click)="openPopupExamScore(item)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Exam Score</label>
@@ -169,16 +170,25 @@
                 <span *ngFor="let button of steps">
                   <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
                     <button *ngIf="item.button.nextStep" nbButton status="success" [nbTooltip]="button.button"
-                      (click)="approve(item, button)">
-                      <nb-icon icon="checkmark-circle-2"></nb-icon>
+                      (click)="approve(item, button)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button *ngIf="item.button.examTaken" nbButton status="success" nbTooltip="Input Exam Info"
-                      (click)="openPopupExamInfo(item)">
-                      <nb-icon icon="edit-2-outline"></nb-icon>
+                      (click)="openPopupExamInfo(item)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="edit-2-outline"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button *ngIf="item.button.examScore" nbButton status="success" nbTooltip="Input Exam Score"
-                      (click)="openPopupExamScore(item)">
-                      <nb-icon icon="edit-2-outline"></nb-icon>
+                      (click)="openPopupExamScore(item)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
+                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="edit-2-outline"></nb-icon>
+                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
+                        {{ item.refJR?.refStatus?.name }}
+                      </span>
                     </button>
                     <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
                       <nb-icon icon="close-circle"></nb-icon>

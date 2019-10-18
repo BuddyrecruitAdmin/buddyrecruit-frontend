@@ -125,10 +125,10 @@ export class PagesComponent {
         // if (configuration.division && configuration.division.visible) {
         //   menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[3]);
         // }
-        if (configuration.user && configuration.user.visible) {
+        if (configuration.authorize && configuration.authorize.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[4]);
         }
-        if (configuration.authorize && configuration.authorize.visible) {
+        if (configuration.user && configuration.user.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[5]);
         }
         if (configuration.jobPosition && configuration.jobPosition.visible) {

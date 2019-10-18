@@ -55,13 +55,12 @@
       </nb-card-header>
       <nb-card-body>
         <div class="text-group">
-          <label class="label">Status</label>
-          <span class="label"
-            [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name}}</span>
-        </div>
-        <div class="text-group">
           <label class="label">Department</label>
           <span>{{ item.department?.name || '-' }}</span>
+        </div>
+        <div class="text-group">
+          <label class="label">Capacity</label>
+          <span>{{ item.capacity }}</span>
         </div>
         <div class="text-group">
           <label class="label">End Date</label>
@@ -73,9 +72,11 @@
           <nb-icon *ngIf="!item.requiredExam" icon="close-outline" class="text-red"></nb-icon>
         </div>
         <div class="text-group">
-          <label class="label">Capacity</label>
-          <span>{{ item.capacity }}</span>
+          <label class="label">Status</label>
+          <span class="label"
+            [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name}}</span>
         </div>
+        <hr>
         <div class="text-group">
           <label class="label">Last update by</label>
           <span>
