@@ -61,7 +61,7 @@
                 <div class="col-md-6 m-b-15">
                   <div class="text-group">
                     <label class="label">Age</label>
-                    <span>{{ item.refCandidate?.age || '-' }}</span>
+                    <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
                   </div>
                   <div class="text-group">
                     <label class="label">Latest Position</label>
