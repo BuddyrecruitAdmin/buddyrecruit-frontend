@@ -9,6 +9,7 @@ import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { resolve } from 'dns';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { utimes } from 'fs';
+import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material';
 import { TranslateService } from '../../translate.service';
 import * as _ from 'lodash';
@@ -28,7 +29,7 @@ export class AppFormComponent implements OnInit {
   touched: boolean;
   applicationForm: FormGroup;
   degreeMaster: DropDownValue[];
-
+  actionView : boolean
   firstname: AbstractControl;
   lastname: AbstractControl;
   nickname: AbstractControl;
@@ -116,6 +117,7 @@ export class AppFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private location: Location,
   ) {
     this.role = getRole();
   }
@@ -126,11 +128,13 @@ export class AppFormComponent implements OnInit {
     this.getList();
     this.isUser = false;
     this.loading = true;
+    this.actionView = false;
     this.innerHeight = window.innerHeight
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this._id = params.id;
         if (params.action === "view") {
+          this.actionView = true;
           this.isUser = true;
           this.setDisabled();
           this.edtiable = false;
@@ -556,6 +560,11 @@ export class AppFormComponent implements OnInit {
   setLang(lang: string) {
     this.translate.use(lang);
   }
+
+  back() {
+    this.location.back();
+  }
+
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {

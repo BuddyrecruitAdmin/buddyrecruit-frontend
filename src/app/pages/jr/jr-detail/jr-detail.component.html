@@ -27,8 +27,8 @@
             <div class="form-control-group">
               <label class="label" for="name">Capacity <span class="text-red">*</span></label>
               <input type="number" name="capacity" [(ngModel)]="jr.capacity" min="0.00" max="100.00" step="1.00"
-                pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==2) return false;" nbInput fullWidth
-                appNumberDirective [disabled]="editCheck || checkPreview" />
+                onKeyPress="if(this.value.length==2) return false;" nbInput fullWidth appNumberDirective
+                [disabled]="editCheck || checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
               <small *ngIf="touchedCap" class="text-red">{{ sErrorCap }}</small>
             </div>
           </div>
@@ -109,8 +109,8 @@
           <div class="col-sm-2 col-md-2">
             <label class="label">Exam</label>
             <div>
-              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam"
-                [disabled]="checkPreview || !editExam">Yes</mat-checkbox>
+              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview || !editExam">Yes
+              </mat-checkbox>
             </div>
           </div>
         </div>

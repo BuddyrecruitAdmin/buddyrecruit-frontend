@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsModule } from '../component/component.module';
 import { PagesRoutingModule } from './pages-routing.module';
-
+import { DigitOnlyModule } from '@uiowa/digit-only';
 import {
   NbMenuModule,
   NbActionsModule,
@@ -199,7 +199,8 @@ import { CalendarComponent } from './calendar/calendar.component';
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    NgbModalModule
+    NgbModalModule,
+    DigitOnlyModule
   ],
   declarations: [
     PagesComponent,
