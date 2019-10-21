@@ -135,7 +135,7 @@ export class PopupInterviewDateComponent implements OnInit {
   }
 
   getDetail() {
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+    this.candidateService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;

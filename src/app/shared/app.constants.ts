@@ -58,6 +58,7 @@ export const ButtonId = "ButtonId";
 export const DateTime = "DateTime";
 export const IsGridLayout = "IsGridLayout";
 export const BugId = "BugId";
+export const BugCandidateId = "BugCandidateId";
 export const FieldLabel = "FieldLabel";
 export const FieldName = "FieldName";
 export const UserCandidate = "UserCandidate";

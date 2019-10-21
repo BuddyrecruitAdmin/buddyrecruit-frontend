@@ -212,6 +212,14 @@ export class DepartmentDetailComponent implements OnInit {
     this.service.getDetail(_id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.departmentDetail = _.cloneDeep(response.data);
+        if (this.departmentDetail.addresses.length === 0) {
+          this.departmentDetail.addresses.push({
+            address: '',
+            province: '',
+            postalCode: null,
+            location: '',
+          });
+        }
         if (this.departmentDetail.divisions) {
           const addresses = this.initialAddresses();
           this.departmentDetail.divisions.map(item => {

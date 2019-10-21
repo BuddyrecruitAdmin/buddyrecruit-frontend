@@ -485,6 +485,7 @@ export class AuthorizeDetailComponent implements OnInit {
   getDetail(_id: any) {
     this.service.getDetail(_id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        debugger
         this.authDetail = _.cloneDeep(response.data);
         this.refHero = this.authDetail.refHero;
         this.setDepartment();

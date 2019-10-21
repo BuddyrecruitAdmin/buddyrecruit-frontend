@@ -146,6 +146,9 @@ export class TalentPoolDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
+          if (item.refCandidate.age === -1) {
+            item.refCandidate.age = "";
+          }
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -288,7 +291,7 @@ export class TalentPoolDetailComponent implements OnInit {
   openCandidateDetail(item: any) {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
-    setCandidateId(item.refCandidate._id);
+    setCandidateId(item._id);
     this.router.navigate(["/candidate/detail"]);
   }
 

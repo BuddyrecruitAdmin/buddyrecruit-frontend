@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId,setUserCandidate } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -77,7 +77,7 @@ export class InterviewDetailComponent implements OnInit {
     this.jrName = getJdName();
     this.collapseAll = getCollapse();
     this.devices = this.utilitiesService.getDevice();
-    this.innerWidth = window.innerWidth *0.5;
+    this.innerWidth = window.innerWidth * 0.5;
     this.innerHeight = window.innerHeight * 0.8;
     this.refStageId = this.role.refCompany.menu.pendingInterview.refStage._id;
     const tabs = this.role.refCompany.menu.pendingInterview.refStage.tabs.filter(tab => {
@@ -177,7 +177,9 @@ export class InterviewDetailComponent implements OnInit {
           item.collapse = this.collapseAll;
           item.button = this.setButton(item);
           // this.score[index] =this.showScore(item);
-
+          if (item.refCandidate.age === -1) {
+            item.refCandidate.age = "";
+          }
           let sum = 0;
           let totalPass = 0;
           let totalCompare = 0;
@@ -346,22 +348,22 @@ export class InterviewDetailComponent implements OnInit {
     });
   }
 
-  infoResult(item: any){
+  infoResult(item: any) {
     setUserCandidate(item);
     this.dialogService.open(PopupInterviewResultComponent,
       {
         closeOnBackdropClick: true,
         hasScroll: true,
       }
-      ).onClose.subscribe(result => {
-        setUserCandidate();
-      })
+    ).onClose.subscribe(result => {
+      setUserCandidate();
+    })
   }
-  
+
   openCandidateDetail(item: any) {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
-    setCandidateId(item.refCandidate._id);
+    setCandidateId(item._id);
     this.router.navigate(["/candidate/detail"]);
   }
 

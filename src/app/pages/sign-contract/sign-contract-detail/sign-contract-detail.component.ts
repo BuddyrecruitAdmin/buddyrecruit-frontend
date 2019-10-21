@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -20,6 +20,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
+import { PopupInterviewResultComponent } from '../../../component/popup-interview-result/popup-interview-result.component';
 
 @Component({
   selector: 'ngx-sign-contract-detail',
@@ -142,12 +143,52 @@ export class SignContractDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
+          if (item.refCandidate.age === -1) {
+            item.refCandidate.age = "";
+          }
+          let sum = 0;
+          let totalPass = 0;
+          let totalCompare = 0;
+          let totalReject = 0;
+          item.pendingInterviewScoreInfo.evaluation.map((element) => {
+            if (this.role._id === element.createdInfo.refUser._id) {
+              item.score = element.point;
+              item.comment = element.additionalComment
+            }
+            sum = sum + element.point;
+            if (element.rank.selected === 1) {
+              totalPass += 1;
+            }
+            else if (element.rank.selected === 2) {
+              totalCompare += 1;
+            } else {
+              totalReject += 1;
+            }
+          });
+          item.avg = sum / item.pendingInterviewScoreInfo.evaluation.length;
+          let fullResult = '';
+          fullResult = 'ผ่าน' + ' : ' + totalPass + ' , ' + 'รอพิจารณา' + ' : '
+            + totalCompare + ' , ' + 'ไม่ผ่าน' + ' : ' + totalReject;
+          fullResult = fullResult.trim();
+          item.result = fullResult;
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
       }
       this.loading = false;
     });
+  }
+
+  infoResult(item: any) {
+    setUserCandidate(item);
+    this.dialogService.open(PopupInterviewResultComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setUserCandidate();
+    })
   }
 
   setTabCount(count: Count) {
@@ -259,7 +300,7 @@ export class SignContractDetailComponent implements OnInit {
   openCandidateDetail(item: any) {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
-    setCandidateId(item.refCandidate._id);
+    setCandidateId(item._id);
     this.router.navigate(["/candidate/detail"]);
   }
 
