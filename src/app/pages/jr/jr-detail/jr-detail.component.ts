@@ -107,6 +107,7 @@ export class JrDetailComponent implements OnInit {
         this.jobStatus = "notUsed";
         this.loading = false;
         this.editExam = true;
+        this.checkPreview = false;
         this.initialStartDropDown();
       }
     });
