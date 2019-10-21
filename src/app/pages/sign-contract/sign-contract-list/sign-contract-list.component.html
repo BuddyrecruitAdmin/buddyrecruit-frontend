@@ -141,9 +141,9 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" class="text-left">Name</th>
-              <th scope="col" class="text-left" style="width: 200px;">Department</th>
-              <th scope="col" class="text-left" style="width: 150px;">Division</th>
+              <th scope="col">Name</th>
+              <th scope="col" style="width: 200px;">Department</th>
+              <th scope="col" style="width: 150px;">Division</th>
               <th scope="col" style="width: 90px;">Status</th>
               <th scope="col" style="width: 110px;">Days before expire</th>
               <th scope="col" style="width: 70px;">Pending</th>
@@ -152,17 +152,17 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
-              <td class="text-left">
+              <td [ngClass]="{'text-left' : item.refJD.position }">
                 <span class="link" [nbTooltip]="item.refJD?.position" (click)="edit(item)">
                   {{ item.refJD?.position || '-' }}
                 </span>
               </td>
-              <td class="text-left">
+              <td [ngClass]="{'text-left' : item.departmentName }">
                 <span [nbTooltip]="item.departmentName">
                   {{ item.departmentName || '-' }}
                 </span>
               </td>
-              <td class="text-left">
+              <td [ngClass]="{'text-left' : item.divisionName }">
                 <span [nbTooltip]="item.divisionName">
                   {{ item.divisionName || '-' }}
                 </span>
