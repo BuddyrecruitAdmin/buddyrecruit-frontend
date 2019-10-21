@@ -93,6 +93,7 @@ export class JdDetailComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   checkDivision: boolean;
+  activeOnly : boolean;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -109,8 +110,9 @@ export class JdDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initialDropdown();
+    this.activeOnly = true;
     this.initialModel();
+    this.initialDropdown();
     this.checkDivision = false;
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
@@ -223,7 +225,7 @@ export class JdDetailComponent implements OnInit {
         value: undefined,
         group: undefined
       });
-      this.service.getDepartmentList().subscribe(response => {
+      this.service.getDepartmentList(this.activeOnly).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
             response.data.forEach(element => {
