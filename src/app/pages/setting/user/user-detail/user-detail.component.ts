@@ -17,8 +17,8 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 export interface User {
   _id?: any;
   refCompany?: any;
-  refDepartment?: any;
-  refDivision?: any;
+  departmentId?: any;
+  divisionId?: any;
   refHero?: any;
   refAuthorize?: any;
   title: string;
@@ -31,8 +31,8 @@ export interface User {
 }
 export interface ErrMsg {
   refCompany: string;
-  refDepartment: string;
-  refDivision: string;
+  departmentId: string;
+  divisionId: string;
   refHero: string;
   refAuthorize: string;
   title: string;
@@ -96,8 +96,8 @@ export class UserDetailComponent implements OnInit {
     return {
       _id: undefined,
       refCompany: undefined,
-      refDepartment: undefined,
-      refDivision: undefined,
+      departmentId: undefined,
+      divisionId: undefined,
       refHero: undefined,
       refAuthorize: undefined,
       title: undefined,
@@ -113,8 +113,8 @@ export class UserDetailComponent implements OnInit {
   initialErrMsg(): ErrMsg {
     return {
       refCompany: '',
-      refDepartment: '',
-      refDivision: '',
+      departmentId: '',
+      divisionId: '',
       refHero: '',
       refAuthorize: '',
       title: '',
@@ -339,12 +339,12 @@ export class UserDetailComponent implements OnInit {
       this.errMsg.notifyEmail = 'Please Input Notify Email';
       isValid = false;
     }
-    if (!this.userDetail.refDepartment) {
-      this.errMsg.refDepartment = 'Please Select Department';
+    if (!this.userDetail.departmentId) {
+      this.errMsg.departmentId = 'Please Select Department';
       isValid = false;
     }
-    if (this.divisionOptions.length > 1 && !this.userDetail.refDivision) {
-      this.errMsg.refDivision = 'Please Select Division';
+    if (this.divisionOptions.length > 1 && !this.userDetail.divisionId) {
+      this.errMsg.divisionId = 'Please Select Division';
       isValid = false;
     }
     if (!this.userDetail.refHero) {
@@ -373,7 +373,7 @@ export class UserDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.userDetail = _.cloneDeep(response.data);
         this.userDetailTemp = _.cloneDeep(this.userDetail);
-        this.onChangeDepartment(this.userDetail.refDepartment);
+        this.onChangeDepartment(this.userDetail.departmentId);
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
