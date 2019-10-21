@@ -26,9 +26,9 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.LIST, body);
   }
 
-  getDetail(refCandidateId: string): Observable<ApiResponse> {
+  getDetail(flowId: string): Observable<ApiResponse> {
     const body = {
-      _id: refCandidateId
+      _id: flowId
     };
     return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
   }

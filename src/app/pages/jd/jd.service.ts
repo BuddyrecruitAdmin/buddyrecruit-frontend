@@ -70,8 +70,8 @@ export class JdService extends NetworkService {
   getPositionList(criteria: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.POSITION_LIST, { criteria });
   }
-  getDepartmentList(criteria: any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.DEPARTMENT_LIST, { criteria });
+  getDepartmentList(activeOnly: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.DEPARTMENT_LIST, { activeOnly });
   }
   getEducationList(criteria: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.JOBDESCRIPTION.EDUCATION, { criteria });

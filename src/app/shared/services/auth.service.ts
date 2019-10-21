@@ -13,6 +13,7 @@ import {
   DateTime,
   IsGridLayout,
   BugId,
+  BugCandidateId,
   FieldLabel,
   FieldName,
   UserCandidate,
@@ -184,4 +185,13 @@ export function setUserCandidate(userCandidate: any = null) {
 export function getUserCandidate() {
   const userCandidate = JSON.parse(localStorage.getItem(UserCandidate));
   return (!userCandidate || userCandidate === null) ? undefined : userCandidate;
+}
+
+export function setBugCandidateId(bugCandidateId: any = null) {
+  localStorage.setItem(BugCandidateId, JSON.stringify(bugCandidateId));
+}
+
+export function getBugCandidateId() {
+  const bugCandidateId = JSON.parse(localStorage.getItem(BugCandidateId));
+  return (!bugCandidateId || bugCandidateId === null) ? undefined : bugCandidateId;
 }

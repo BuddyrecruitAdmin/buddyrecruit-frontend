@@ -369,7 +369,10 @@ export class AuthorizeDetailComponent implements OnInit {
     if (this.authDefault.length) {
       const name = this.authDetail.name;
       const auth = this.authDefault.find(element => {
-        return element.refHero === this.refHero && element.isDefault;
+        return element.refHero === this.refHero 
+        && element.isDefault 
+        && element.processFlow.exam.steps.length
+        && element.processFlow.noExam.steps.length;
       });
       if (auth) {
         this.authDetail.name = name;
@@ -482,9 +485,10 @@ export class AuthorizeDetailComponent implements OnInit {
   getDetail(_id: any) {
     this.service.getDetail(_id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        debugger
         this.authDetail = _.cloneDeep(response.data);
+        this.refHero = this.authDetail.refHero;
         this.setDepartment();
-        this.changeUserRole(this.authDetail.refHero);
         this.authDetailTemp = _.cloneDeep(this.authDetail);
       } else {
         this.showToast('danger', 'Error Message', response.message);

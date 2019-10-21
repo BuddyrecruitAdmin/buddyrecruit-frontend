@@ -15,6 +15,7 @@ export interface Count {
   pending?: number;
   selected?: number;
   rejected?: number;
+  started?: number;
   unread?: number;
   unseen?: number;
 }

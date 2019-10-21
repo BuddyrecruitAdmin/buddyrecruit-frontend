@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, DropDownValue } from '../../../shared/interfaces/common.interface';
-import { getRole, getCandidateId, setCandidateId, setFlowId, setJdId, setJdName, setJrId } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, getCandidateId, setCandidateId, setFlowId, setJdId, setJdName, setJrId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -30,6 +30,7 @@ export interface CandidateDetail {
 export class CandidateDetailComponent implements OnInit {
   role: any;
   steps: any;
+  flowId: any;
   candidateId: any;
   item: any = {};
   loading: boolean;
@@ -50,6 +51,7 @@ export class CandidateDetailComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.flowId = getFlowId() || '';
     this.candidateId = getCandidateId() || '';
     // setCandidateId();
     this.steps = this.role.refAuthorize.processFlow.exam.steps;

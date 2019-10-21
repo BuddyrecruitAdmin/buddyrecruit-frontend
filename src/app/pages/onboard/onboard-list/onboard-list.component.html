@@ -123,7 +123,7 @@
               </span>
             </div>
           </nb-card-body>
-          <nb-card-footer *ngIf="item.canClose">
+          <nb-card-footer *ngIf="item.canClose && role.refAuthorize?.closeJR?.visible">
             <button nbButton status="default" size="small" nbTooltip="Close JR" (click)="close(item)">CLOSE</button>
           </nb-card-footer>
         </nb-card>
@@ -144,9 +144,9 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" class="text-left">Name</th>
-              <th scope="col" class="text-left" style="width: 200px;">Department</th>
-              <th scope="col" class="text-left" style="width: 150px;">Division</th>
+              <th scope="col" >Name</th>
+              <th scope="col" style="width: 200px;">Department</th>
+              <th scope="col" style="width: 150px;">Division</th>
               <th scope="col" style="width: 90px;">Status</th>
               <th scope="col" style="width: 120px;">Days before expire</th>
               <th scope="col" style="width: 70px;">Pending</th>
@@ -155,17 +155,17 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
-              <td class="text-left">
+              <td [ngClass]="{'text-left' : item.refJD.position }">
                 <span class="link" [nbTooltip]="item.refJD?.position" (click)="edit(item)">
                   {{ item.refJD?.position || '-' }}
                 </span>
               </td>
-              <td class="text-left">
+              <td [ngClass]="{'text-left' : item.departmentName }">
                 <span [nbTooltip]="item.departmentName">
                   {{ item.departmentName || '-' }}
                 </span>
               </td>
-              <td class="text-left">
+              <td [ngClass]="{'text-left' : item.divisionName }">
                 <span [nbTooltip]="item.divisionName">
                   {{ item.divisionName || '-' }}
                 </span>
@@ -192,8 +192,8 @@
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
-                <button *ngIf="item.canClose" nbButton status="danger" size="tiny" nbTooltip="Close"
-                  (click)="close(item)">
+                <button *ngIf="item.canClose && role.refAuthorize?.closeJR?.visible" nbButton status="danger"
+                  size="tiny" nbTooltip="Close" (click)="close(item)">
                   <nb-icon icon="close-circle-outline"></nb-icon>
                 </button>
               </td>

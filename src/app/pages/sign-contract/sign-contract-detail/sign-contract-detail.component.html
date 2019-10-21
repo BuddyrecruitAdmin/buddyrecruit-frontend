@@ -61,7 +61,7 @@
                 <div class="col-md-6 m-b-15">
                   <div class="text-group">
                     <label class="label">Age</label>
-                    <span>{{ item.refCandidate?.age || '-' }}</span>
+                    <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
                   </div>
                   <div class="text-group">
                     <label class="label">Latest Position</label>
@@ -95,15 +95,22 @@
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Score</label>
-                        <span>{{ item.pendingInterviewInfo?.score || '-' }}</span>
+                        <span>{{ item.score || '-' }}</span>
                       </div>
                       <div class="text-group">
-                        <label class="label">Result</label>
-                        <span>{{ item.pendingInterviewInfo?.passed || '-' }}</span>
+                        <label class="label">Avg. Score</label>
+                        <span>{{ item.avg || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Result <span class="link underline" nbTooltip="See more result"
+                            (click)="infoResult(item)">
+                            <nb-icon icon="info-outline"></nb-icon>
+                          </span></label>
+                        <span>{{ item.result || '-'}}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Remark</label>
-                        <span>{{ item.pendingInterviewInfo?.remark || '-' }}</span>
+                        <span>{{ item.comment || '-' }}</span>
                       </div>
                     </div>
                   </div>

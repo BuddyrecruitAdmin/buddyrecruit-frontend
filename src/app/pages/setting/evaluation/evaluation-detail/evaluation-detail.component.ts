@@ -264,7 +264,7 @@ export class EvaluationDetailComponent implements OnInit {
   validation(): boolean {
     let isValid = true;
     if (this.evaluation.name === undefined || this.evaluation.name === "") {
-      this.sErrorCheck = MESSAGE[158];
+      this.sErrorCheck = MESSAGE[157];
       isValid = false;
     }
     // check basic

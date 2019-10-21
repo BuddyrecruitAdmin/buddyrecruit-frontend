@@ -112,8 +112,8 @@
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="exp"
                   (input)="onChangeScore($event, 'WORKEXP')" [(ngModel)]="jd.weightScore.workExperience.total"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
-                  appNumberDirective [disabled]="checkPreview">
+                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly>
                 <div class="input-group-addon" nbTooltip="Search">
                   <nb-icon icon="settings-2" class="link" (click)="open(ExperienceBox)"></nb-icon>
                 </div>
@@ -127,8 +127,8 @@
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="hard"
                   (input)="onChangeScore($event, 'HARDSKILL')" [(ngModel)]="jd.weightScore.hardSkill.total"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
-                  appNumberDirective [disabled]="checkPreview" />
+                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
                 <div class="input-group-addon" nbTooltip="Search">
                   <nb-icon icon="settings-2" class="link" (click)="open(HardSkillBox)"></nb-icon>
                 </div>
@@ -144,8 +144,8 @@
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="edu"
                   (input)="onChangeScore($event, 'EDUCATION')" [(ngModel)]="jd.weightScore.education.total"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
-                  appNumberDirective [disabled]="checkPreview" />
+                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
                 <div class="input-group-addon" nbTooltip="Search">
                   <nb-icon icon="settings-2" class="link" (click)="open(EducationBox)"></nb-icon>
                 </div>
@@ -159,8 +159,8 @@
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="soft"
                   (input)="onChangeScore($event, 'SOFTSKILL')" [(ngModel)]="jd.weightScore.softSkill.total"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
-                  appNumberDirective [disabled]="checkPreview" />
+                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
                 <div class="input-group-addon" nbTooltip="Search">
                   <nb-icon icon="settings-2" class="link" (click)="open(SoftSkillBox)"></nb-icon>
                 </div>
@@ -176,8 +176,8 @@
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="cert"
                   (input)="onChangeScore($event, 'CERTIFICATE')" [(ngModel)]="jd.weightScore.certificate.total"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
-                  appNumberDirective [disabled]="checkPreview" />
+                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                  appNumberDirective [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
                 <div class="input-group-addon" nbTooltip="Search">
                   <nb-icon icon="settings-2" class="link" (click)="open(CertificateBox)"></nb-icon>
                 </div>
@@ -231,15 +231,15 @@
               <td>
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="low" value="workEXPline.low"
-                    [(ngModel)]="workEXPline.low" [disabled]="checkPreview" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective />
+                    [(ngModel)]="workEXPline.low" [disabled]="checkPreview" 
+                    onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
                 </div>
               </td>
               <td>
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="high" value="workEXPline.high"
-                    [(ngModel)]="workEXPline.high" [disabled]="checkPreview" pattern="/^-?\d+\.?\d*$/"
-                    onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective />
+                    [(ngModel)]="workEXPline.high" [disabled]="checkPreview" 
+                    onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
                 </div>
               </td>
               <td>
@@ -248,8 +248,8 @@
                     [disabled]="checkPreview" [ngClass]="{
                         'has-error': workEXPline.flagError,
                         'has-success': !workEXPline.flagError
-                      }" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" nbInput
-                    fullWidth appNumberDirective />
+                      }"  onKeyPress="if(this.value.length==3) return false;" nbInput
+                    fullWidth appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
                 </div>
               </td>
               <td>
@@ -306,7 +306,7 @@
               <td>
                 <input nbInput type="number" value="ss.percent" min="0" max="100" [(ngModel)]="ss.percent"
                   [disabled]="!modeEditable || checkPreview" (input)="onChangePercentSoftSkill()"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
+                   onKeyPress="if(this.value.length==3) return false;" appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
@@ -370,7 +370,7 @@
               <td>
                 <input nbInput type="number" min="0" max="100" value="hs.percent" [(ngModel)]="hs.percent"
                   [disabled]="!modeEditable || checkPreview" (input)="onChangePercentHardSkill()"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
+                   onKeyPress="if(this.value.length==3) return false;" appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
@@ -434,7 +434,7 @@
               <td>
                 <input nbInput type="number" value="cert.percent" min="0" max="100" [(ngModel)]="cert.percent"
                   [disabled]="!modeEditable || checkPreview" (input)="onChangePercentCertificate()"
-                  pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==3) return false;" appNumberDirective />
+                   onKeyPress="if(this.value.length==3) return false;" appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
@@ -484,8 +484,8 @@
               <td class="col-left">{{ edu.name }}</td>
               <td>
                 <input type="number" min="0" max="100" value="edu.percent" [(ngModel)]="edu.percent"
-                  [disabled]="!modeEditable || checkPreview" pattern="/^-?\d+\.?\d*$/"
-                  onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective />
+                  [disabled]="!modeEditable || checkPreview" 
+                  onKeyPress="if(this.value.length==3) return false;" nbInput appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
               </td>
             </tr>
           </tbody>

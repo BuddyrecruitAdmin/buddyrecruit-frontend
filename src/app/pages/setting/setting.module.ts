@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ThemeModule } from '../../@theme/theme.module';
 import { ComponentsModule } from '../../component/component.module';
 import { SettingRoutingModule } from './setting-routing.module';
-
+import { DigitOnlyModule } from '@uiowa/digit-only';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -124,7 +124,7 @@ import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation
     ThemeModule,
     ComponentsModule,
     SettingRoutingModule,
-
+    DigitOnlyModule,
     NbActionsModule,
     NbButtonModule,
     NbCardModule,
