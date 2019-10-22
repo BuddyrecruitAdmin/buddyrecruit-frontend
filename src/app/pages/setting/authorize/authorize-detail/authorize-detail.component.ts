@@ -369,10 +369,10 @@ export class AuthorizeDetailComponent implements OnInit {
     if (this.authDefault.length) {
       const name = this.authDetail.name;
       const auth = this.authDefault.find(element => {
-        return element.refHero === this.refHero 
-        && element.isDefault 
-        && element.processFlow.exam.steps.length
-        && element.processFlow.noExam.steps.length;
+        return element.refHero === this.refHero
+          && element.isDefault
+          && element.processFlow.exam.steps.length
+          && element.processFlow.noExam.steps.length;
       });
       if (auth) {
         this.authDetail.name = name;
@@ -390,6 +390,13 @@ export class AuthorizeDetailComponent implements OnInit {
         this.authDetail.showApplicationForm = auth.showApplicationForm;
         this.authDetail.showSalary = auth.showSalary;
         this.authDetail.closeJR = auth.closeJR;
+
+        this.authDetail.processFlow.exam.steps.map(element => {
+          element.disabled = element.editable;
+        });
+        this.authDetail.processFlow.noExam.steps.map(element => {
+          element.disabled = element.editable;
+        });
       }
     }
   }
@@ -423,7 +430,8 @@ export class AuthorizeDetailComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.getDetail(request._id);
+            this.router.navigate(['/setting/authorize']);
+            // this.getDetail(request._id);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -432,7 +440,8 @@ export class AuthorizeDetailComponent implements OnInit {
         this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.getDetail(request._id);
+            this.router.navigate(['/setting/authorize']);
+            // this.getDetail(request._id);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -488,6 +497,7 @@ export class AuthorizeDetailComponent implements OnInit {
         this.authDetail = _.cloneDeep(response.data);
         this.refHero = this.authDetail.refHero;
         this.setDepartment();
+        this.setDisabledProcessFlow();
         this.authDetailTemp = _.cloneDeep(this.authDetail);
       } else {
         this.showToast('danger', 'Error Message', response.message);
@@ -503,6 +513,7 @@ export class AuthorizeDetailComponent implements OnInit {
         this.authDetail.name = '';
         this.refHero = this.authDetail.refHero;
         this.setDepartment();
+        this.setDisabledProcessFlow();
         this.authDetailTemp = _.cloneDeep(this.authDetail);
       } else {
         this.showToast('danger', 'Error Message', response.message);
@@ -528,6 +539,156 @@ export class AuthorizeDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  setDisabledProcessFlow() {
+    if (this.authDefault.length) {
+      const auth = this.authDefault.find(element => {
+        return element.refHero === this.refHero
+          && element.isDefault
+          && element.processFlow.exam.steps.length
+          && element.processFlow.noExam.steps.length;
+      });
+      if (auth) {
+        this.authDetail.processFlow.exam.steps.map(step => {
+          step.disabled = false;
+          const found = auth.processFlow.exam.steps.find(element => {
+            return element._id === step._id;
+          });
+          if (found) {
+            step.disabled = found.editable;
+          }
+        });
+        this.authDetail.processFlow.noExam.steps.map(step => {
+          step.disabled = false;
+          const found = auth.processFlow.noExam.steps.find(element => {
+            return element._id === step._id;
+          });
+          if (found) {
+            step.disabled = found.editable;
+          }
+        });
+      }
+    }
+  }
+
+  onChangeCheckbox(topic, choice) {
+    if (!topic || !choice) {
+      return;
+    }
+    switch (topic) {
+      case 'JD':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.jd.visible) {
+            this.authDetail.jd.editable = false;
+          }
+        } else {
+          this.authDetail.jd.visible = this.authDetail.jd.editable;
+        }
+        break;
+      case 'JR':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.jr.visible) {
+            this.authDetail.jr.editable = false;
+          }
+        } else {
+          this.authDetail.jr.visible = this.authDetail.jr.editable;
+        }
+        break;
+      case 'COMPANY':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.company.visible) {
+            this.authDetail.configuration.company.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.company.visible = this.authDetail.configuration.company.editable;
+        }
+        break;
+      case 'DEPARTMENT':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.department.visible) {
+            this.authDetail.configuration.department.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.department.visible = this.authDetail.configuration.department.editable;
+        }
+        break;
+      case 'AUTHORIZE':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.authorize.visible) {
+            this.authDetail.configuration.authorize.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.authorize.visible = this.authDetail.configuration.authorize.editable;
+        }
+        break;
+      case 'USER':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.user.visible) {
+            this.authDetail.configuration.user.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.user.visible = this.authDetail.configuration.user.editable;
+        }
+        break;
+      case 'JOBPOSITION':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.jobPosition.visible) {
+            this.authDetail.configuration.jobPosition.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.jobPosition.visible = this.authDetail.configuration.jobPosition.editable;
+        }
+        break;
+      case 'LOCATION':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.location.visible) {
+            this.authDetail.configuration.location.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.location.visible = this.authDetail.configuration.location.editable;
+        }
+        break;
+      case 'MAIL':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.mailTemplate.visible) {
+            this.authDetail.configuration.mailTemplate.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.mailTemplate.visible = this.authDetail.configuration.mailTemplate.editable;
+        }
+        break;
+      case 'REJECTION':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.rejection.visible) {
+            this.authDetail.configuration.rejection.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.rejection.visible = this.authDetail.configuration.rejection.editable;
+        }
+        break;
+      case 'DASHBOARD':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.dashboard.visible) {
+            this.authDetail.configuration.dashboard.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.dashboard.visible = this.authDetail.configuration.dashboard.editable;
+        }
+        break;
+      case 'REPORT':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.report.visible) {
+            this.authDetail.configuration.report.editable = false;
+          }
+        } else {
+          this.authDetail.configuration.report.visible = this.authDetail.configuration.report.editable;
+        }
+        break;
+      default:
+        break;
+    }
+
   }
 
   onSelectChangeDepartment(index: any) {
