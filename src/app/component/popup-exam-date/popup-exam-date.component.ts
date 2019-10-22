@@ -96,7 +96,7 @@ export class PopupExamDateComponent implements OnInit {
 
   getDetail() {
     this.loading = true;
-    this.candidateService.getDetail(this.candidateId).subscribe(response => {
+    this.candidateService.getDetail(this.flowId).subscribe(response => {
       this.loading = false;
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);

@@ -18,7 +18,7 @@ export interface User {
   _id?: any;
   refCompany?: any;
   departmentId?: any;
-  refDivision?: any;
+  divisionId?: any;
   refHero?: any;
   refAuthorize?: any;
   title: string;
@@ -32,7 +32,7 @@ export interface User {
 export interface ErrMsg {
   refCompany: string;
   departmentId: string;
-  refDivision: string;
+  divisionId: string;
   refHero: string;
   refAuthorize: string;
   title: string;
@@ -97,7 +97,7 @@ export class UserDetailComponent implements OnInit {
       _id: undefined,
       refCompany: undefined,
       departmentId: undefined,
-      refDivision: undefined,
+      divisionId: undefined,
       refHero: undefined,
       refAuthorize: undefined,
       title: undefined,
@@ -114,7 +114,7 @@ export class UserDetailComponent implements OnInit {
     return {
       refCompany: '',
       departmentId: '',
-      refDivision: '',
+      divisionId: '',
       refHero: '',
       refAuthorize: '',
       title: '',
@@ -343,8 +343,8 @@ export class UserDetailComponent implements OnInit {
       this.errMsg.departmentId = 'Please Select Department';
       isValid = false;
     }
-    if (this.divisionOptions.length > 1 && !this.userDetail.refDivision) {
-      this.errMsg.refDivision = 'Please Select Division';
+    if (this.divisionOptions.length > 1 && !this.userDetail.divisionId) {
+      this.errMsg.divisionId = 'Please Select Division';
       isValid = false;
     }
     if (!this.userDetail.refHero) {
