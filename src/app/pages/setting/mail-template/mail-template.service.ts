@@ -19,8 +19,8 @@ export class MailTemplateService extends NetworkService {
   getList(criteria: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.MAIL_ACTION_LIST, { criteria });
   }
-  getListAll(criteria: any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_LIST, { criteria });
+  getListAll(tabName: string,criteria: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_LIST, { tabName,criteria });
   }
 
   getDetail(id: any): Observable<ApiResponse> {

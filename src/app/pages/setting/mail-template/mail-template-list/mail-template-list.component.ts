@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { color } from 'd3-color';
 @Component({
   selector: 'ngx-mail-template-list',
   templateUrl: './mail-template-list.component.html',
@@ -26,6 +27,7 @@ export class MailTemplateListComponent implements OnInit {
   criteria: Criteria;
   dialogRef: NbDialogRef<any>;
   itemDialog: any;
+  tabSelected: string;
   minPageSize = Paging.pageSizeOptions[0];
   loading: boolean;
 
@@ -48,7 +50,6 @@ export class MailTemplateListComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.search();
   }
 
   search() {
@@ -72,14 +73,9 @@ export class MailTemplateListComponent implements OnInit {
     };
     this.internal = [];
     this.external = [];
-    this.service.getListAll(this.criteria).subscribe(response => {
+    this.service.getListAll(this.tabSelected, this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.paging.length = response.totalDataSize;
-
-        if (!response.data.length && this.paging.pageIndex > 0) {
-          this.paging.pageIndex--;
-          this.search();
-        }
+        this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         response.data.forEach(element => {
           if (element.type === "true") {
             this.internal.push(element)
@@ -88,9 +84,18 @@ export class MailTemplateListComponent implements OnInit {
           }
         });
       }
-      console.log(response)// หาย
       this.loading = false;
     });
+  }
+
+  onSelectTab(event: any) {
+    if (event.tabTitle === "Internal") {
+      this.tabSelected = "I";
+    } else {
+      this.tabSelected = "E";
+    }
+    this.paging.pageIndex = 0;
+    this.search();
   }
 
   callDialog(dialog: TemplateRef<any>) {

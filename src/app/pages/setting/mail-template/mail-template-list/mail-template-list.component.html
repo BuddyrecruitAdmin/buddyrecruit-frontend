@@ -21,9 +21,9 @@
 </div>
 
 <!-- Tab switch -->
-<nb-card *ngIf="!loading">
+<nb-card>
   <nb-card-body>
-    <nb-tabset fullWidth>
+    <nb-tabset fullWidth (changeTab)="onSelectTab($event)">
       <nb-tab tabTitle="Internal">
         <!-- list all item  Internal   -->
         <div class="row">

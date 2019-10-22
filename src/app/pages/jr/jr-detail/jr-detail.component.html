@@ -103,7 +103,7 @@
               <mat-checkbox class="label" [(ngModel)]="emailCheck" disabled>Email</mat-checkbox>
             </div>
             <div>
-              <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="checkPreview">JobsDB</mat-checkbox>
+              <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="editCheck || checkPreview">JobsDB</mat-checkbox>
             </div>
           </div>
           <div class="col-sm-2 col-md-2">
