@@ -21,6 +21,7 @@
       </div>
     </div>
     <button nbButton fullWidth status="success" type="submit" class="m-b-10">Login</button>
+    <small *ngIf="loginError" class="text-red">{{ loginError }}</small>
   </form>
   <br>
   <small>

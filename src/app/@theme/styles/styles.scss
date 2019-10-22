@@ -219,7 +219,7 @@
   .form-control[readonly] {
     background-color: #f7f9fc;
     border-color: #edf1f7;
-    color: #000000;
+    color: #c5cee0;
     cursor: not-allowed;
   }
   fieldset {
@@ -458,7 +458,6 @@
     border-color: var(--color-green);
   }
   [nbInput]:disabled{
-    color: #000000;
     cursor: not-allowed;
   }
   .input-group {
@@ -766,6 +765,12 @@
     border-color: var(--color-green);
   }
 
+  // --------------------------------------------------------------------
+  // Toastr
+
+  nb-toastr-container {
+    margin-top: 5rem;
+  }
 
   // --------------------------------------------------------------------
   // Notification

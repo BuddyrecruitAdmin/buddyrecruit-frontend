@@ -21,6 +21,7 @@ export interface CompanyDetail {
   expiryDate: Date;
   companySize: number;
   adminEmail: string;
+  adminPassword: string;
   activeJobsDB: boolean;
   activeExam: boolean;
   transferable: boolean;
@@ -34,6 +35,14 @@ export interface CompanyDetail {
   isTrial: boolean;
   maxJR: number;
   maxUser: number;
+  smtpHost: string;
+  smtpPort: string;
+  imapHost: string;
+  imapPort: string;
+  intEmailUser: string;
+  intEmailPass: string;
+  extEmailUser: string;
+  extEmailPass: string;
 }
 
 export interface ErrMsg {
@@ -46,6 +55,14 @@ export interface ErrMsg {
   refParent: string;
   maxJR: string;
   maxUser: string;
+  smtpHost: string;
+  smtpPort: string;
+  imapHost: string;
+  imapPort: string;
+  intEmailUser: string;
+  intEmailPass: string;
+  extEmailUser: string;
+  extEmailPass: string;
 }
 
 @Component({
@@ -79,19 +96,18 @@ export class CompanyDetailComponent implements OnInit {
 
   ngOnInit() {
     this.roleSelected = '4';
-    this.initialDropdown();
     this.companyDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
-
-    this.activatedRoute.params.subscribe(params => {
-      if (params.id) {
-        this.state = State.Edit;
-        this._id = params.id;
-        console.log(this.state)
-        this.getDetail();
-      } else {
-        this.state = State.Create;
-      }
+    this.initialDropdown().then((response) => {
+      this.activatedRoute.params.subscribe(params => {
+        if (params.id) {
+          this.state = State.Edit;
+          this._id = params.id;
+          this.getDetail();
+        } else {
+          this.state = State.Create;
+        }
+      });
     });
   }
 
@@ -103,6 +119,7 @@ export class CompanyDetailComponent implements OnInit {
       expiryDate: null,
       companySize: null,
       adminEmail: '',
+      adminPassword: 'Reset@123',
       activeJobsDB: false,
       activeExam: true,
       transferable: false,
@@ -116,6 +133,14 @@ export class CompanyDetailComponent implements OnInit {
       isTrial: false,
       maxJR: 0,
       maxUser: 0,
+      smtpHost: '',
+      smtpPort: '',
+      imapHost: '',
+      imapPort: '',
+      intEmailUser: '',
+      intEmailPass: '',
+      extEmailUser: '',
+      extEmailPass: ''
     }
   }
 
@@ -130,54 +155,75 @@ export class CompanyDetailComponent implements OnInit {
       refParent: '',
       maxJR: '',
       maxUser: '',
+      smtpHost: '',
+      smtpPort: '',
+      imapHost: '',
+      imapPort: '',
+      intEmailUser: '',
+      intEmailPass: '',
+      extEmailUser: '',
+      extEmailPass: ''
     }
   }
 
-  initialDropdown() {
-    this.typeOptions = [];
-    this.typeOptions.push({
-      label: "- Select Company Type -",
-      value: undefined
-    });
-    this.companyTypeService.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          const companyType = response.data.filter(element => {
-            return element.active;
-          });
-          if (companyType) {
-            companyType.forEach(element => {
-              this.typeOptions.push({
-                label: element.name,
-                value: element._id
-              });
-            });
-          }
-        }
-      }
-    });
+  async initialDropdown() {
+    await this.getCompanyType();
+    await this.getParentCompany();
+  }
 
-    this.companyOptions = [];
-    this.companyOptions.push({
-      label: "- Select Parent Company -",
-      value: undefined
-    });
-    this.service.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          const company = response.data.filter(element => {
-            return element.active;
-          });
-          if (company) {
-            company.forEach(element => {
-              this.companyOptions.push({
-                label: element.name,
-                value: element._id
-              });
+  getCompanyType() {
+    return new Promise((resolve) => {
+      this.typeOptions = [];
+      this.typeOptions.push({
+        label: "- Select Company Type -",
+        value: undefined
+      });
+      this.companyTypeService.getList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            const companyType = response.data.filter(element => {
+              return element.active;
             });
+            if (companyType) {
+              companyType.forEach(element => {
+                this.typeOptions.push({
+                  label: element.name,
+                  value: element._id
+                });
+              });
+            }
           }
         }
-      }
+        resolve();
+      });
+    });
+  }
+
+  getParentCompany() {
+    return new Promise((resolve) => {
+      this.companyOptions = [];
+      this.companyOptions.push({
+        label: "- Select Parent Company -",
+        value: undefined
+      });
+      this.service.getList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            const company = response.data.filter(element => {
+              return element.active;
+            });
+            if (company) {
+              company.forEach(element => {
+                this.companyOptions.push({
+                  label: element.name,
+                  value: element._id
+                });
+              });
+            }
+          }
+        }
+        resolve();
+      });
     });
   }
 
@@ -230,6 +276,7 @@ export class CompanyDetailComponent implements OnInit {
         this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
+            this.router.navigate(['/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -238,6 +285,7 @@ export class CompanyDetailComponent implements OnInit {
         this.service.update(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
+            this.router.navigate(['/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -250,37 +298,76 @@ export class CompanyDetailComponent implements OnInit {
     let isValid = true;
     this.errMsg = this.initialErrMsg();
 
-    if (!this.companyDetail.refCompanyType) {
-      this.errMsg.refCompanyType = 'Please Input Company Type';
-      isValid = false;
-    }
-    if (!this.companyDetail.name) {
-      this.errMsg.name = 'Please Input Name';
-      isValid = false;
-    }
-    if (!this.companyDetail.startDate) {
-      this.errMsg.startDate = 'Please Input Start Date';
-      isValid = false;
-    }
-    if (!this.companyDetail.expiryDate) {
-      this.errMsg.expiryDate = 'Please Input Expiry Date';
-      isValid = false;
-    }
-    if (!this.companyDetail.adminEmail) {
-      this.errMsg.adminEmail = 'Please Input Admin Email';
-      isValid = false;
-    }
-    if (this.companyDetail.isSubCompany && !this.companyDetail.refParent) {
-      this.errMsg.refParent = 'Please Input Parent Company';
-      isValid = false;
-    }
-    if (!this.companyDetail.maxJR) {
-      this.errMsg.maxJR = 'Please Input Number of JR';
-      isValid = false;
-    }
-    if (!this.companyDetail.maxUser) {
-      this.errMsg.maxUser = 'Please Input Number of User';
-      isValid = false;
+    if (this.role.refHero.isSuperAdmin) {
+      if (!this.companyDetail.refCompanyType) {
+        this.errMsg.refCompanyType = 'Please Input Company Type';
+        isValid = false;
+      }
+      if (!this.companyDetail.name) {
+        this.errMsg.name = 'Please Input Name';
+        isValid = false;
+      }
+      if (!this.companyDetail.startDate) {
+        this.errMsg.startDate = 'Please Input Start Date';
+        isValid = false;
+      }
+      if (!this.companyDetail.expiryDate) {
+        this.errMsg.expiryDate = 'Please Input Expiry Date';
+        isValid = false;
+      }
+      if (!this.companyDetail.adminEmail) {
+        this.errMsg.adminEmail = 'Please Input Admin Email';
+        isValid = false;
+      }
+      if (this.companyDetail.isSubCompany && !this.companyDetail.refParent) {
+        this.errMsg.refParent = 'Please Input Parent Company';
+        isValid = false;
+      }
+      if (!this.companyDetail.maxJR) {
+        this.errMsg.maxJR = 'Please Input Number of JR';
+        isValid = false;
+      }
+      if (!this.companyDetail.maxUser) {
+        this.errMsg.maxUser = 'Please Input Number of User';
+        isValid = false;
+      }
+    } else {
+      if (!this.companyDetail.name) {
+        this.errMsg.name = 'Please Input Name';
+        isValid = false;
+      }
+      if (!this.companyDetail.smtpHost) {
+        this.errMsg.smtpHost = 'Please Input SMTP Server';
+        isValid = false;
+      }
+      if (!this.companyDetail.smtpPort) {
+        this.errMsg.smtpPort = 'Please Input SMTP Port';
+        isValid = false;
+      }
+      if (!this.companyDetail.imapHost) {
+        this.errMsg.imapHost = 'Please Input IMAP Host';
+        isValid = false;
+      }
+      if (!this.companyDetail.imapPort) {
+        this.errMsg.imapPort = 'Please Input IMAP Port';
+        isValid = false;
+      }
+      if (!this.companyDetail.intEmailUser) {
+        this.errMsg.intEmailUser = 'Please Input Internal Email';
+        isValid = false;
+      }
+      if (!this.companyDetail.intEmailPass) {
+        this.errMsg.intEmailPass = 'Please Input Internal Password';
+        isValid = false;
+      }
+      if (!this.companyDetail.extEmailUser) {
+        this.errMsg.extEmailUser = 'Please Input External Email';
+        isValid = false;
+      }
+      if (!this.companyDetail.extEmailPass) {
+        this.errMsg.extEmailPass = 'Please Input External Password';
+        isValid = false;
+      }
     }
     return isValid;
   }
@@ -312,6 +399,9 @@ export class CompanyDetailComponent implements OnInit {
         break;
       default:
         break;
+    }
+    if (!request.isSubCompany) {
+      request.refParent = undefined;
     }
     return request;
   }
