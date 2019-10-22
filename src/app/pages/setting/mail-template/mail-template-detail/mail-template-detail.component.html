@@ -7,18 +7,18 @@
   </nb-card-header>
   <nb-card-body>
     <div class="row">
-
       <div class="col-md-6">
         <div class="form-control-group">
           <label class="label">Email Type <span style="color:red">*</span></label>
-          <nb-select *ngIf="getId" placeholder="Select Email Type" [(ngModel)]="itemDialog.action"
-            [disabled]="checkEdit" fullWidth>
-            <nb-option [disabled]="checkEdit" *ngFor="let typeOption of typeOptions" [value]="typeOption.value" (click)="getType()">
+          <nb-select  *ngIf="getId" [ placeholder="Select Email Type" [(ngModel)]="itemDialog.refAction._id" [disabled]="checkEdit"
+            fullWidth>
+            <nb-option [disabled]="checkEdit" *ngFor="let typeOption of typeOptions" [value]="typeOption.value"
+              (click)="getType()">
               {{ typeOption.label }}
             </nb-option>
           </nb-select>
-          <input type="text" *ngIf="!getId" [(ngModel)]="itemDialog.action" nbInput fullWidth placeholder="name"
-            [disabled]="checkEdit">
+          <input type="text" *ngIf="!getId" [(ngModel)]="itemDialog.refAction.name" nbInput fullWidth placeholder="name"
+            disabled>
           <small *ngIf="touched" class="text-red">{{ sErrorEmailType }}</small>
         </div>
         <div class="form-control-group">
@@ -60,13 +60,14 @@
         </div>
       </div>
     </div>
-
-  </nb-card-body>
-  <div class="col-md-12">
-    <div mat-dialog-content class="mat-typography">
-      <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html"></angular-editor>
+    <div class="row">
+    <div class="col-md-12">
+      <div mat-dialog-content class="mat-typography">
+        <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html"></angular-editor>
+      </div>
     </div>
-  </div>
+    </div>
+  </nb-card-body>
   <nb-card-footer>
     <button nbButton status="default" (click)="back()">Cancel</button>
     <button nbButton status="success" (click)="save()">Save</button>

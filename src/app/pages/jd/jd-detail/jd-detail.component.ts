@@ -95,6 +95,7 @@ export class JdDetailComponent implements OnInit {
   innerHeight: any;
   checkDivision: boolean;
   activeOnly: boolean;
+  workMax: boolean;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -233,6 +234,15 @@ export class JdDetailComponent implements OnInit {
                 value: element._id
               });
             });
+            this.positionMaster.sort(function (a, b) {
+              if (a.label < b.label) {
+                return -1;
+              }
+              if (a.label > b.label) {
+                return 1;
+              }
+              return 0;
+            });
           }
         }
         resolve();
@@ -327,7 +337,6 @@ export class JdDetailComponent implements OnInit {
 
   onChangeDepartment(value) {
     this.divisionOptions = [];
-    this.jd.divisionId = "";
     this.divisionOptions.push({
       label: '- Select Division -',
       value: undefined,
@@ -474,12 +483,23 @@ export class JdDetailComponent implements OnInit {
   addOption(option: string) {
     switch (option) {
       case "WORKEXP": {
-        this.jd.weightScore.workExperience.weight.push({
-          low: 0,
-          high: 0,
-          percent: 0,
-          flagError: false
-        });
+        if (this.jd.weightScore.workExperience.weight.length > 0) {
+          let i;
+          i = this.jd.weightScore.workExperience.weight.length - 1;
+          this.jd.weightScore.workExperience.weight.push({
+            low: this.jd.weightScore.workExperience.weight[i].high,
+            high: 0,
+            percent: 0,
+            flagError: false
+          });
+        } else {
+          this.jd.weightScore.workExperience.weight.push({
+            low: 0,
+            high: 0,
+            percent: 0,
+            flagError: false
+          });
+        }
         break;
       }
       case "HARDSKILL": {
@@ -601,6 +621,10 @@ export class JdDetailComponent implements OnInit {
       case "WORKEXP": {
         this.checkCondition = true;
         this.checkMax = false;
+        debugger
+        this.jd.weightScore.workExperience.weight.sort(function (a, b) {
+          return a.low - b.low;
+        });
         if (this.jd.weightScore.workExperience.total != 0) {
           let i = 0;
           for (i = 0; i < this.jd.weightScore.workExperience.weight.length; i++) {
@@ -613,6 +637,16 @@ export class JdDetailComponent implements OnInit {
             if (this.jd.weightScore.workExperience.weight[i].percent === null) {
               this.jd.weightScore.workExperience.weight[i].percent = 0;
             }
+            if (this.jd.weightScore.workExperience.weight[i].percent > this.jd.weightScore.workExperience.total) {
+              this.checkCondition = false;
+              this.sErrorBoxW = MESSAGE[64];
+            }
+            if (i > 0) {
+              if (this.jd.weightScore.workExperience.weight[i - 1].high != this.jd.weightScore.workExperience.weight[i].low) {
+                this.checkCondition = false;
+                this.sErrorBoxW = MESSAGE[65];
+              }
+            }
             if (this.jd.weightScore.workExperience.weight[i].low === this.jd.weightScore.workExperience.weight[i].high ||
               this.jd.weightScore.workExperience.weight[i].high < this.jd.weightScore.workExperience.weight[i].low
             ) {
@@ -621,9 +655,7 @@ export class JdDetailComponent implements OnInit {
             } else if (this.jd.weightScore.workExperience.weight[i].percent === 0) {
               this.checkCondition = false;
               this.sErrorBoxW = MESSAGE[63];
-            } else if (this.jd.weightScore.workExperience.weight[i].percent != this.jd.weightScore.workExperience.total) {
-              this.sErrorBoxW = MESSAGE[122];
-            } else {
+            } else if (this.jd.weightScore.workExperience.weight[i].percent === this.jd.weightScore.workExperience.total) {
               this.checkMax = true;
               this.wCheck = this.jd.weightScore.workExperience.weight[i].percent;
             }
@@ -633,6 +665,8 @@ export class JdDetailComponent implements OnInit {
               this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
               this.touched = false;
               this.dialogRef.close();
+            } else {
+              this.sErrorBoxW = MESSAGE[122];
             }
           }
         } else {
@@ -824,26 +858,31 @@ export class JdDetailComponent implements OnInit {
       case "EDUCATION": {
         //ต้องเกบ temp เข้าไปด้วย
         this.jd.weightScore.education.weight = _.cloneDeep(this.TempEdu);
+        this.sErrorBox = "";
         this.dialogRef.close();
         break;
       }
       case "CERTIFICATE": {
         this.jd.weightScore.certificate.weight = _.cloneDeep(this.TempCer);
+        this.sErrorBoxC = "";
         this.dialogRef.close();
         break;
       }
       case "HARDSKILL": {
         this.jd.weightScore.hardSkill.weight = _.cloneDeep(this.TempHard);
+        this.sErrorBoxH = "";
         this.dialogRef.close();
         break;
       }
       case "SOFTSKILL": {
         this.jd.weightScore.softSkill.weight = _.cloneDeep(this.TempSoft);
+        this.sErrorBoxS = "";
         this.dialogRef.close();
         break;
       }
       case "WORKEXP": {
         this.jd.weightScore.workExperience.weight = _.cloneDeep(this.TempWork);
+        this.sErrorBoxW = "";
         this.dialogRef.close();
         break;
       }

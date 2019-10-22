@@ -160,7 +160,7 @@ export const MESSAGE = {
   150: "Please complete data in evaluation category",
   151: "Min and Max cannot be equal",
   152: "Max score must be greater than min",
-  153: "Gabs must be 1 point",
+  153: "Gaps must be 1 point",
   154: "Please enter new name of evaluation",
   155: "Please select users interview",
   156: "Total educatuin score must be equal maximum score",

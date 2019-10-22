@@ -114,7 +114,7 @@
                   (input)="onChangeScore($event, 'WORKEXP')" [(ngModel)]="jd.weightScore.workExperience.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly>
-                <div class="input-group-addon" nbTooltip="Search">
+                <div class="input-group-addon" nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(ExperienceBox)"></nb-icon>
                 </div>
               </div>
@@ -129,7 +129,7 @@
                   (input)="onChangeScore($event, 'HARDSKILL')" [(ngModel)]="jd.weightScore.hardSkill.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Search">
+                <div class="input-group-addon" nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(HardSkillBox)"></nb-icon>
                 </div>
               </div>
@@ -146,7 +146,7 @@
                   (input)="onChangeScore($event, 'EDUCATION')" [(ngModel)]="jd.weightScore.education.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Search">
+                <div class="input-group-addon" nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(EducationBox)"></nb-icon>
                 </div>
               </div>
@@ -161,7 +161,7 @@
                   (input)="onChangeScore($event, 'SOFTSKILL')" [(ngModel)]="jd.weightScore.softSkill.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Search">
+                <div class="input-group-addon" nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(SoftSkillBox)"></nb-icon>
                 </div>
               </div>
@@ -178,7 +178,7 @@
                   (input)="onChangeScore($event, 'CERTIFICATE')" [(ngModel)]="jd.weightScore.certificate.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Search">
+                <div class="input-group-addon" nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(CertificateBox)"></nb-icon>
                 </div>
               </div>

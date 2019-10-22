@@ -45,7 +45,7 @@ export class MailTemplateService extends NetworkService {
       bcc: item.bcc,
       html: item.html,
       type: item.type,
-      action: item.action,
+      action: item.refAction._id,
     }
     return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_CREATE, body);
   }
