@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,TemplateRef } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { getRole } from '../../shared/services/auth.service';
@@ -17,6 +17,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Location } from '@angular/common';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
 
@@ -52,7 +53,8 @@ export class ProfileComponent implements OnInit {
   email: AbstractControl;
   dialogRef: NbDialogRef<any>;
   profileDetail: any;
-
+  imageChangedEvent: any;
+  croppedImage: any;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -192,6 +194,8 @@ export class ProfileComponent implements OnInit {
   }
 
   onFileInput(files: FileList) {
+    console.log(files)
+    console.log(this.croppedImage)
     if (files && files[0]) {
       var reader = new FileReader();
       if (files[0] != undefined || files[0] != null) {
@@ -223,6 +227,28 @@ export class ProfileComponent implements OnInit {
 
   togglePassword() {
     this.isChangePassword = !this.isChangePassword;
+  }
+
+  fileChangeEvent(event: any,dialog: TemplateRef<any>): void {
+  console.log("Check")
+    this.imageChangedEvent = event;
+    this.callDialog(dialog);
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+  }
+  imageLoaded() {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

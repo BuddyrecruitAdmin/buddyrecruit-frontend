@@ -110,6 +110,7 @@ import { CandidateListComponent } from './candidate/candidate-list/candidate-lis
 import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   imports: [
@@ -200,7 +201,8 @@ import { CalendarComponent } from './calendar/calendar.component';
       useFactory: adapterFactory
     }),
     NgbModalModule,
-    DigitOnlyModule
+    DigitOnlyModule,
+    ImageCropperModule
   ],
   declarations: [
     PagesComponent,

@@ -54,17 +54,18 @@ export class MailTemplateDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initialDropdown();
     this.itemDialog = {
       _id: undefined,
       name: undefined,
       subject: undefined,
       remark: undefined,
-      cc: undefined,
-      bcc: undefined,
+      cc: [],
+      bcc: [],
       html: undefined,
       type: undefined,
-      action: undefined,
+      refAction: {
+        _id: undefined
+      },
     }
     this.itemDialog.type = "true";
     this.checkEdit = false;
@@ -74,16 +75,17 @@ export class MailTemplateDetailComponent implements OnInit {
         this.state = State.Edit;
         this._id = params.id;
         this.getId = false;
-        console.log(this.state)
-        this.getDetail();
+        this.initialDropdown().then((response) => {
+          this.getDetail();
+        });
       } else {
+        this.initialDropdown();
         this.state = State.Create;
-        console.log(this.state)
       }
     });
   }
 
-  initialDropdown() {
+  async initialDropdown() {
     this.typeOptions = [];
     this.typeOptions.push({
       label: "- Select email Type -",
@@ -107,7 +109,6 @@ export class MailTemplateDetailComponent implements OnInit {
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          console.log(response.data)
           this.itemDialog = response.data
           if (this.itemDialog.type === "I") {
             this.itemDialog.type = "true"
@@ -115,12 +116,9 @@ export class MailTemplateDetailComponent implements OnInit {
             this.itemDialog.type = "false"
           }
           this.checkEdit = true;
-          this.itemDialog.action = this.itemDialog.refAction.name;
-          console.log(this.itemDialog.action)
         }
       }
     });
-    console.log(this.itemDialog)
   }
 
   back() {
@@ -136,7 +134,7 @@ export class MailTemplateDetailComponent implements OnInit {
   }
 
   getType() {
-    this._id = this.itemDialog.action
+    this._id = this.itemDialog.refAction._id;
     this.service.getDetailEmail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
@@ -150,10 +148,10 @@ export class MailTemplateDetailComponent implements OnInit {
   }
 
   validation(): boolean {
-    debugger
-    console.log(this.itemDialog)
     this.touched = true;
     let isValid = true;
+    this.sErrorcc = "";
+    this.sErrorBcc = "";
     if (this.itemDialog.cc.length > 0) {
       this.itemDialog.cc.map(cc => {
         this.n = cc.value.search("@");
@@ -163,6 +161,13 @@ export class MailTemplateDetailComponent implements OnInit {
           if (this.n != -1) {
             this.sErrorcc = MESSAGE[9];
             isValid = false
+          } else {
+            let checkFinal;
+            checkFinal = this.str.search(/\./);
+            if (checkFinal < 1) {
+              this.sErrorcc = MESSAGE[9];
+              isValid = false;
+            }
           }
         } else {
           this.sErrorcc = MESSAGE[9];
@@ -198,7 +203,7 @@ export class MailTemplateDetailComponent implements OnInit {
     } else {
       this.sErrorSubject = "";
     }
-    if (this.itemDialog.action === undefined || this.itemDialog.action === null) {
+    if (!this.itemDialog.refAction._id) {
       this.sErrorEmailType = MESSAGE[136];
       isValid = false;
     } else {
@@ -211,8 +216,6 @@ export class MailTemplateDetailComponent implements OnInit {
   save() {
     if (this.validation()) {
       const request = this.setRequest();
-      console.log(this.itemDialog.cc)
-      console.log(request)
       if (this.state === State.Create) {
         const confirm = this.matDialog.open(PopupMessageComponent, {
           width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -232,7 +235,6 @@ export class MailTemplateDetailComponent implements OnInit {
         });
 
       } else if (this.state === State.Edit) {
-
         const confirm = this.matDialog.open(PopupMessageComponent, {
           width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
           data: { type: 'C' }
@@ -242,6 +244,7 @@ export class MailTemplateDetailComponent implements OnInit {
             this.service.edit(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
+                this.router.navigate(['/setting/mail-template']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -256,7 +259,6 @@ export class MailTemplateDetailComponent implements OnInit {
       this.itemDialog.cc = this.itemDialog.cc.map(gobj => {  //array.object to array
         if (gobj.value) {
           gobj = gobj.value;
-          console.log(gobj);
           return gobj;
         }
         return gobj;
@@ -266,7 +268,6 @@ export class MailTemplateDetailComponent implements OnInit {
       this.itemDialog.bcc = this.itemDialog.bcc.map(gobj => {  //array.object to array
         if (gobj.value) {
           gobj = gobj.value;
-          console.log(gobj);
           return gobj;
         }
         return gobj;

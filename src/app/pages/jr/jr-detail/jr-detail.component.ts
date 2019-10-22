@@ -76,7 +76,7 @@ export class JrDetailComponent implements OnInit {
         this._id = params.id;
         this.duplicateCheck = false;
         this.editCheck = false;
-        this.emailCheck = false;
+        this.emailCheck = true;
         this.jobDB = false;
         this.jobStatus = undefined;
         if (params.action === State.Edit) {
@@ -101,7 +101,7 @@ export class JrDetailComponent implements OnInit {
       } else {
         this.state = State.Create;
         this.jr.requiredExam = false;
-        this.emailCheck = false;
+        this.emailCheck = true;
         this.jobDB = false;
         this.jr.capacity = 0;
         this.jobStatus = "notUsed";

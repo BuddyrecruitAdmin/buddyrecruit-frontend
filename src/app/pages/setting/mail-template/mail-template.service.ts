@@ -19,8 +19,8 @@ export class MailTemplateService extends NetworkService {
   getList(criteria: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.MAIL_ACTION_LIST, { criteria });
   }
-  getListAll(criteria: any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_LIST, { criteria });
+  getListAll(tabName: string,criteria: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_LIST, { tabName,criteria });
   }
 
   getDetail(id: any): Observable<ApiResponse> {
@@ -45,7 +45,7 @@ export class MailTemplateService extends NetworkService {
       bcc: item.bcc,
       html: item.html,
       type: item.type,
-      action: item.action,
+      action: item.refAction._id,
     }
     return this.post(API_ENDPOINT.CONFIGURATION.MAIL_TEMPLATE_CREATE, body);
   }

@@ -40,7 +40,7 @@
             autocomplete="off" [ngClass]="{ 'status-danger': errMsg.username }">
           <small *ngIf="errMsg.username" class="text-red">{{ errMsg.username }}</small>
         </div>
-        <div class="form-control-group">
+        <div *ngIf="editable" class="form-control-group">
           <label class="label">Password <small>(Initial) </small> <span class="text-red">*</span></label>
           <div class="input-group">
             <input type="{{ showPassword ? 'text' : 'password' }}" [(ngModel)]="userDetail.password" nbInput fullWidth
