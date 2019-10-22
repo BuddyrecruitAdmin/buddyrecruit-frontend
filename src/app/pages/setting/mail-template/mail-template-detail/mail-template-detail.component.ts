@@ -163,6 +163,13 @@ export class MailTemplateDetailComponent implements OnInit {
           if (this.n != -1) {
             this.sErrorcc = MESSAGE[9];
             isValid = false
+          } else {
+            let checkFinal;
+            checkFinal = this.str.search(/\./);
+            if (checkFinal < 1) {
+              this.sErrorcc = MESSAGE[9];
+              isValid = false;
+            }
           }
         } else {
           this.sErrorcc = MESSAGE[9];

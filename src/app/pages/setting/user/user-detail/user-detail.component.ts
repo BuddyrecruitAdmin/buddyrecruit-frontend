@@ -18,7 +18,7 @@ export interface User {
   _id?: any;
   refCompany?: any;
   departmentId?: any;
-  refDivision?: any;
+  divisionId?: any;
   refHero?: any;
   refAuthorize?: any;
   title: string;
@@ -32,7 +32,7 @@ export interface User {
 export interface ErrMsg {
   refCompany: string;
   departmentId: string;
-  refDivision: string;
+  divisionId: string;
   refHero: string;
   refAuthorize: string;
   title: string;
@@ -62,7 +62,7 @@ export class UserDetailComponent implements OnInit {
   authOptions: DropDownValue[];
   useSameUsername: boolean = true;
   loading = true;
-
+  editable: boolean;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -79,9 +79,11 @@ export class UserDetailComponent implements OnInit {
   ngOnInit() {
     this.userDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
+    this.editable = true;
     this.initialDropdown().then((response) => {
       this.activatedRoute.params.subscribe(params => {
         if (params.id) {
+          this.editable = false;
           this.state = State.Edit;
           this.getDeatail(params.id);
         } else {
@@ -97,7 +99,7 @@ export class UserDetailComponent implements OnInit {
       _id: undefined,
       refCompany: undefined,
       departmentId: undefined,
-      refDivision: undefined,
+      divisionId: undefined,
       refHero: undefined,
       refAuthorize: undefined,
       title: undefined,
@@ -114,7 +116,7 @@ export class UserDetailComponent implements OnInit {
     return {
       refCompany: '',
       departmentId: '',
-      refDivision: '',
+      divisionId: '',
       refHero: '',
       refAuthorize: '',
       title: '',
@@ -338,13 +340,37 @@ export class UserDetailComponent implements OnInit {
     if (!this.useSameUsername && !this.userDetail.notifyEmail) {
       this.errMsg.notifyEmail = 'Please Input Notify Email';
       isValid = false;
+    } else if (!this.useSameUsername) {
+      if (this.userDetail.notifyEmail) {
+        let checkAt;
+        checkAt = this.userDetail.notifyEmail.search("@");
+        if (checkAt > 1) {
+          let checkDot;
+          checkDot = this.userDetail.notifyEmail.slice(checkAt + 1);
+          checkAt = checkDot.search("@");
+          if (checkAt != -1) {
+            this.errMsg.notifyEmail = MESSAGE[9];
+            isValid = false;
+          } else {
+            let checkFinal;
+            checkFinal = checkDot.search(/\./);
+            if (checkFinal < 1) {
+              this.errMsg.notifyEmail = MESSAGE[9];
+              isValid = false;
+            }
+          }
+        } else {
+          this.errMsg.notifyEmail = MESSAGE[9];
+          isValid = false;
+        }
+      }
     }
     if (!this.userDetail.departmentId) {
       this.errMsg.departmentId = 'Please Select Department';
       isValid = false;
     }
-    if (this.divisionOptions.length > 1 && !this.userDetail.refDivision) {
-      this.errMsg.refDivision = 'Please Select Division';
+    if (this.divisionOptions.length > 1 && !this.userDetail.divisionId) {
+      this.errMsg.divisionId = 'Please Select Division';
       isValid = false;
     }
     if (!this.userDetail.refHero) {

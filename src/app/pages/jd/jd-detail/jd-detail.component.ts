@@ -19,6 +19,7 @@ import { API_ENDPOINT } from '../../../shared/constants';
 import { environment } from '../../../../environments/environment';
 import { saveAs } from "file-saver";
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
+import { UserService } from '../../setting/user/user.service';
 
 @Component({
   selector: 'ngx-jd-detail',
@@ -93,7 +94,7 @@ export class JdDetailComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   checkDivision: boolean;
-  activeOnly : boolean;
+  activeOnly: boolean;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -103,6 +104,7 @@ export class JdDetailComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    private userService: UserService,
   ) {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
@@ -112,33 +114,9 @@ export class JdDetailComponent implements OnInit {
   ngOnInit() {
     this.activeOnly = true;
     this.initialModel();
-    this.initialDropdown();
+    // this.initialDropdown();
+
     this.checkDivision = false;
-    this.activatedRoute.params.subscribe(params => {
-      if (params.id) {
-        this._id = params.id;
-        if (params.action === "edit") {
-          this.state = State.Edit;
-          this._id = params.id;
-          this.getDetail();
-        } else if (params.action === "duplicate") {
-          this.state = "duplicate";
-          this._id = params.id;
-          this.getDetail();
-        } else {
-          this.state = "View";
-          this.checkPreview = true;
-          this.getDetail();
-        }
-      } else {
-        this.state = State.Create;
-        this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
-        this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
-        this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
-        this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
-        this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
-      }
-    });
     this.bHasFile = false;
     this.modeEditable = true;
     this.fileToUpload = null;
@@ -152,6 +130,33 @@ export class JdDetailComponent implements OnInit {
     this.isAddSoft = false;
     this.isAddCert = false;
     this.isAddWork = false;
+    this.initialDropdown().then((response) => {
+      this.activatedRoute.params.subscribe(params => {
+        if (params.id) {
+          this._id = params.id;
+          if (params.action === "edit") {
+            this.state = State.Edit;
+            this._id = params.id;
+            this.getDetail();
+          } else if (params.action === "duplicate") {
+            this.state = "duplicate";
+            this._id = params.id;
+            this.getDetail();
+          } else {
+            this.state = "View";
+            this.checkPreview = true;
+            this.getDetail();
+          }
+        } else {
+          this.state = State.Create;
+          this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
+          this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
+          this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
+          this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
+          this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
+        }
+      });
+    });
   }
 
   initialModel(): any {
@@ -193,26 +198,51 @@ export class JdDetailComponent implements OnInit {
     return this.jd;
   }
 
-  initialDropdown() {
-    this.positionMaster = [];
-    this.positionMaster.push({
-      label: "- Select Position -",
-      value: undefined
-    });
-    this.service.getPositionList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.forEach(element => {
-            this.positionMaster.push({
-              label: element.name,
-              value: element._id
-            });
-          });
+  async initialDropdown() {
+    this.getPosition();
+    if (this.role.refHero.isAdmin) {
+      this.getDepartment();
+    } else {
+      this.userService.getDetail(this.role._id).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data.departmentId) {
+            this.jd.departmentId = response.data.departmentId;
+          }
+          if (response.data.divisionId) {
+            this.jd.divisionId = response.data.divisionId;
+          }
         }
-      }
+      });
+    }
+    this.getEducation();
+  }
+
+  getPosition() {
+    return new Promise((resolve) => {
+      this.positionMaster = [];
+      this.positionMaster.push({
+        label: "- Select Position -",
+        value: undefined
+      });
+      this.service.getPositionList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            response.data.forEach(element => {
+              this.positionMaster.push({
+                label: element.name,
+                value: element._id
+              });
+            });
+          }
+        }
+        resolve();
+      });
     });
-    this.divisionOptions = [];
-    if (this.role.refHero.isAdmin === true) {
+  }
+
+  getDepartment() {
+    return new Promise((resolve) => {
+      this.divisionOptions = [];
       this.departMentAdmin = [];
       this.departMentAdmin.push({
         label: "- Select Department -",
@@ -246,8 +276,12 @@ export class JdDetailComponent implements OnInit {
             });
           }
         }
+        resolve();
       });
-    }
+    });
+  }
+
+  getEducation() {
     this.service.getEducationList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
@@ -255,7 +289,7 @@ export class JdDetailComponent implements OnInit {
           this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
         }
       }
-    })
+    });
   }
 
   getDetail() {
@@ -263,7 +297,7 @@ export class JdDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.jd = response.data;
-          this.jd.weightScore.education.weight.map((ele,i) => {
+          this.jd.weightScore.education.weight.map((ele, i) => {
             ele.name = this.TempEdu[i].name;
           })
           console.log(this.jd);
@@ -317,27 +351,25 @@ export class JdDetailComponent implements OnInit {
 
   onChangeDepartmentAfter(value) {
     this.divisionOptions = [];
-    console.log(this.jd.departmentId)
-    // this.jd.divisionId = "";
     this.divisionOptions.push({
       label: '- Select Division -',
       value: undefined,
       group: undefined
     });
-    const division = this.divisionAll.filter(element => {
-      return element.group === value;
-    });
-    console.log(this.jd.divisionId)
-    if (division.length) {
-      this.checkDivision = true;
-      this.countDivision = division.length;
-      console.log(this.countDivision)
-      division.forEach(element => {
-        this.divisionOptions.push(element);
+    if (this.divisionAll) {
+      const division = this.divisionAll.filter(element => {
+        return element.group === value;
       });
-    } else {
-      this.checkDivision = false;
-      this.countDivision = 0;
+      if (division.length) {
+        this.checkDivision = true;
+        this.countDivision = division.length;
+        division.forEach(element => {
+          this.divisionOptions.push(element);
+        });
+      } else {
+        this.checkDivision = false;
+        this.countDivision = 0;
+      }
     }
   }
 
@@ -525,23 +557,40 @@ export class JdDetailComponent implements OnInit {
     switch (option) {
       case "EDUCATION": {
         let eTotal = 0;
+        let checkMax = false;
+        let checkEqual = false;
         if (this.jd.weightScore.education.total != 0) {
-          const eScore = this.jd.weightScore.education.total;
+          const eScore = this.jd.weightScore.education.total; //check outside
           this.jd.weightScore.education.weight.map((element) => {
-            eTotal += element.percent;
+            if (element.percent === eScore) {
+              checkEqual = true;
+            }
+            if (element.percent > eScore) {
+              checkMax = true;
+            }
             if (element.percent === null) {
               element.percent = 0;
             }
           })
-          this.eduTotal = eTotal;
-          if (eScore != eTotal) {
-            this.sErrorBox = MESSAGE[156];
-            this.eduTotal = 0;
+          if (checkMax) {
+            this.sErrorBox = MESSAGE[87];
+            this.sErrorBox = this.sErrorBox.replace("#1", eScore.toString())
+          } else if (!checkEqual) {
+            this.sErrorBox = MESSAGE[122];
           } else {
             this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
             this.touched = false;
             this.dialogRef.close();
           }
+          // this.eduTotal = eTotal;
+          // if (eScore != eTotal) {
+          //   this.sErrorBox = MESSAGE[156];
+          //   this.eduTotal = 0;
+          // } else {
+          //   this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
+          //   this.touched = false;
+          //   this.dialogRef.close();
+          // }
         } else {
           this.jd.weightScore.education.weightScore = _.cloneDeep(this.TempEdu)
           this.touched = false;
@@ -633,6 +682,7 @@ export class JdDetailComponent implements OnInit {
           if (this.isChecked) {
             if (hTotal != hScore) {
               this.sErrorBoxH = MESSAGE[69];
+              this.sErrorBoxH = this.sErrorBoxH.replace("#1", hScore.toString())
             } else {
               this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
               this.touched = false;
@@ -688,7 +738,8 @@ export class JdDetailComponent implements OnInit {
           //final close
           if (this.isChecked) {
             if (softTotal != sScore) {
-              this.sErrorBoxS = MESSAGE[53];
+              this.sErrorBoxS = MESSAGE[74];
+              this.sErrorBoxS = this.sErrorBoxS.replace("#1", sScore.toString())
             } else {
               this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
               this.touched = false;
@@ -745,6 +796,7 @@ export class JdDetailComponent implements OnInit {
           if (this.isChecked) {
             if (cTotal != cScore) {
               this.sErrorBoxC = MESSAGE[78];
+              this.sErrorBoxC = this.sErrorBoxC.replace("#1", cScore.toString())
             } else {
               this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
               this.touched = false;
@@ -886,9 +938,11 @@ export class JdDetailComponent implements OnInit {
       this.sErrorrefCheck = "";
 
     }
-    if (this.jd.departmentId === null || this.jd.departmentId === undefined) {
-      isValid = false;
-      this.sErrorDe = MESSAGE[140];
+    if (this.role.refHero.isAdmin === true) {
+      if (!this.jd.departmentId) {
+        isValid = false;
+        this.sErrorDe = MESSAGE[140];
+      }
     }
     if (this.countDivision > 0) {
       if (this.jd.divisionId === undefined || this.jd.divisionId === "" || this.jd.divisionId === null) {
@@ -965,22 +1019,62 @@ export class JdDetailComponent implements OnInit {
 
   setRequest(): any {
     if (this.jd.weightScore.certificate.weight.length > 0) {
-      this.convertArray(this.jd.weightScore.certificate.weight);
+      // this.convertArray(this.jd.weightScore.certificate.weight);
+      this.jd.weightScore.certificate.weight.map(weight => {
+        if (weight.keyword.length) {
+          weight.keyword = weight.keyword.map(element => {
+            if (element.value) {
+              return element.value;
+            } else if (element) {
+              return element;
+            }
+          });
+        }
+      });
     }
     if (this.jd.weightScore.softSkill.weight.length > 0) {
-      this.convertArray(this.jd.weightScore.softSkill.weight);
+      // this.convertArray(this.jd.weightScore.softSkill.weight);
+      this.jd.weightScore.softSkill.weight.map(weight => {
+        if (weight.keyword.length) {
+          weight.keyword = weight.keyword.map(element => {
+            if (element.value) {
+              return element.value;
+            } else if (element) {
+              return element;
+            }
+          });
+        }
+      });
     }
     if (this.jd.weightScore.hardSkill.weight.length > 0) {
-      this.convertArray(this.jd.weightScore.hardSkill.weight);
+      // this.convertArray(this.jd.weightScore.hardSkill.weight);
+      this.jd.weightScore.hardSkill.weight.map(weight => {
+        if (weight.keyword.length) {
+          weight.keyword = weight.keyword.map(element => {
+            if (element.value) {
+              return element.value;
+            } else if (element) {
+              return element;
+            }
+          });
+        }
+      });
     }
     if (this.jd.keywordSearch.length > 0) {
-      this.jd.keywordSearch = this.jd.keywordSearch.map(gobj => {  //array.object to array
-        if (gobj.value) {
-          gobj = gobj.value;
-          return gobj;
+      this.jd.keywordSearch = this.jd.keywordSearch.map(element => {
+        if (element.value) {
+          return element.value;
+        } else if (element) {
+          return element;
         }
-        return gobj;
-      })
+      });
+      // this.jd.keywordSearch = this.jd.keywordSearch.map(gobj => {  //array.object to array
+      //   if (gobj.value) {
+      //     gobj = gobj.value;
+      //     return gobj;
+      //   }
+      //   return gobj;
+      // });
     }
     if (this.state === "duplicate") {
       this.jd._id = undefined;

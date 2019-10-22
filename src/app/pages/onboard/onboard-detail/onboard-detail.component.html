@@ -61,7 +61,7 @@
                 <div class="col-md-6 m-b-15">
                   <div class="text-group">
                     <label class="label">Age</label>
-                    <span>{{ item.refCandidate?.age || '-' }}</span>
+                    <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
                   </div>
                   <div class="text-group">
                     <label class="label">Latest Position</label>
@@ -95,7 +95,7 @@
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Sign Contract Date</label>
-                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+                        <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Agree Start Date</label>
