@@ -321,6 +321,11 @@
     text-align: right;
     margin-right: 25px;
   }
+  .text-red-left{
+    color: var(--color-red) !important;
+    text-align: left;
+    margin-right: 25px;
+  }
 
   // --------------------------------------------------------------------
   // BUTTON
@@ -1279,7 +1284,7 @@
     margin-top: 1px;
     border-radius: 4px;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 11px 12px;
     cursor: pointer;
     background-color: var(--color-green);
     color:#ffffff;
