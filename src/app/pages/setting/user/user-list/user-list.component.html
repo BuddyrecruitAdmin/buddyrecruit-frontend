@@ -36,7 +36,7 @@
           <label [nbTooltip]="item.firstname + ' ' + item.lastname">{{ item.firstname }} {{ item.lastname }}</label>
         </div>
         <div class="actions">
-          <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/user-detail/'+item._id">
+          <nb-icon *ngIf="role.refHero.isAdmin" icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/user-detail/'+item._id">
           </nb-icon>
           <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="!item.active">
           </nb-icon>
