@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.proService.getProfile(role.refHero._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.user = {
-          name: `${role.firstname || ''} ${role.lastname || ''}`,
+          name: this.utilitiesService.setFullname(response.data),
           title: role.refHero.name,
           picture: response.data.imagePath,
         };
