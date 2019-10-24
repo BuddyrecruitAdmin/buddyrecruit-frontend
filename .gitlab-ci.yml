@@ -16,6 +16,7 @@ before_script:
   # - npm i npm@latest -g
   # - rm -rf node_modules
   - npm install
+  - npm update
   - rm -rf /dist
  
 build-qas:
@@ -38,6 +39,7 @@ build-prod:
     # - qas
   script: 
     - npm run build
+
   artifacts:
     when: on_success
     untracked: true
