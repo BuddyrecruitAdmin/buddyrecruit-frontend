@@ -17,7 +17,7 @@ import { PopupCommentComponent } from '../../../component/popup-comment/popup-co
 import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
 import { MESSAGE } from "../../../shared/constants/message";
 import { MENU_PROCESS_FLOW } from "../../pages-menu";
-
+import { JdService } from '../../../pages/jd/jd.service';
 export interface CandidateDetail {
 
 }
@@ -49,6 +49,7 @@ export class CandidateDetailComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
+    private jdService: JdService,
   ) {
     this.role = getRole();
     this.flowId = getFlowId() || '';
@@ -169,6 +170,19 @@ export class CandidateDetailComponent implements OnInit {
         this.getDetail();
       }
     });
+  }
+
+  checkCV(id) {
+    this.jdService.originalCV(id)
+      .subscribe(data => this.downloadFile(data), function (error) {
+        //that.setAlertMessage("E", error.statusText);
+      });
+  }
+
+  downloadFile(data: any) {
+    const blob = new Blob([data], { type: "text/pdf" });
+    const url = window.URL.createObjectURL(data);
+    window.open(url);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

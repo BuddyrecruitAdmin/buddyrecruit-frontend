@@ -253,7 +253,7 @@
           </div>
           <div class="text-group">
             <label class="label">Age</label>
-            <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) }}</span>
+            <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) || '-' }}</span>
           </div>
         </div>
       </div>
@@ -326,6 +326,8 @@
   </nb-card-body>
 
   <nb-card-footer>
+    <button style="float: left;" nbButton status="success" (click)="checkCV(item._id)">Original
+      CV</button>
     <span *ngFor="let button of steps">
       <span *ngIf="button.editable && button.refStage._id === item.candidateFlow?.refStage?._id">
         <button nbButton status="info" nbTooltip="Comment" (click)="openPopupComment(item)">

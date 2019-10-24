@@ -10,8 +10,8 @@
       <div class="col-md-6">
         <div class="form-control-group">
           <label class="label">Email Type <span style="color:red">*</span></label>
-          <nb-select  *ngIf="getId" [ placeholder="Select Email Type" [(ngModel)]="itemDialog.refAction._id" [disabled]="checkEdit"
-            fullWidth>
+          <nb-select *ngIf="getId" placeholder="Select Email Type" [(ngModel)]="itemDialog.refAction._id"
+            [disabled]="checkEdit" fullWidth>
             <nb-option [disabled]="checkEdit" *ngFor="let typeOption of typeOptions" [value]="typeOption.value"
               (click)="getType()">
               {{ typeOption.label }}
@@ -61,11 +61,11 @@
       </div>
     </div>
     <div class="row">
-    <div class="col-md-12">
-      <div mat-dialog-content class="mat-typography">
-        <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html"></angular-editor>
+      <div class="col-md-12">
+        <div mat-dialog-content class="mat-typography">
+          <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html"></angular-editor>
+        </div>
       </div>
-    </div>
     </div>
   </nb-card-body>
   <nb-card-footer>

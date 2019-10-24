@@ -100,17 +100,19 @@
       </div>
       <div class="row">
         <div class="col-lg-12">
-          <label class="label">Email
-            <span class="fas fa-check" (click)="toggleCheck('Email', 'email')" [matTooltip]="Checked"
-              matTooltipPosition="above" [ngClass]="{
+          <div class="form-control-group">
+            <label class="label">Email
+              <span class="fas fa-check" (click)="toggleCheck('Email', 'email')" [matTooltip]="Checked"
+                matTooltipPosition="above" [ngClass]="{
               'icon-green': colorStatus.emailSuccess,
               'icon-default': !colorStatus.emailSuccess }"></span>
-            <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Email', 'email')"
-              [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
+              <span class="fas fa-times" style="padding-left: 5px" (click)="bugReport('Email', 'email')"
+                [matTooltip]="bugTooltip" matTooltipPosition="above" [ngClass]="{
                 'icon-red': colorStatus.emailBug,
                 'icon-default': !colorStatus.emailBug }"></span>
-          </label>
-          <input type="text" [(ngModel)]="items.email" nbInput fullWidth [disabled]="!editable">
+            </label>
+            <input type="text" [(ngModel)]="items.email" nbInput fullWidth [disabled]="!editable">
+          </div>
         </div>
       </div>
       <div class="row">
@@ -500,7 +502,7 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)" disabled>Original
+    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)">Original
       CV</button>
     <button *ngIf="items.applicationForm" class="txt-left" size="small" nbButton status="info"
       (click)="openApplication(items._id)">App Form</button>

@@ -621,7 +621,6 @@ export class JdDetailComponent implements OnInit {
       case "WORKEXP": {
         this.checkCondition = true;
         this.checkMax = false;
-        debugger
         this.jd.weightScore.workExperience.weight.sort(function (a, b) {
           return a.low - b.low;
         });

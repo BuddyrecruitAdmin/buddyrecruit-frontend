@@ -73,7 +73,7 @@
                   </div>
                   <div class="text-group">
                     <label class="label">Work Experience</label>
-                    <span>{{ item.refCandidate?.workExperience?.totalExpMonth || '-' }}</span>
+                    <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
                   </div>
                   <div class="text-group">
                     <label class="label">Phone</label>

@@ -113,6 +113,7 @@ export class PopupAvailableDateComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
         this.getAvailabelDate();
+        this.ref.close(true);
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
@@ -148,11 +149,30 @@ export class PopupAvailableDateComponent implements OnInit {
       isValid = false;
     }
     if (this.periods.length) {
-      this.periods.forEach(element => {
+      let arr = [];
+      this.periods.sort(function (a, b) {
+        return a.startTime.hour - b.startTime.hour;
+      });
+      this.periods.forEach((element, index) => {
         if (!element.startTime || !element.endTime) {
           isValid = false;
         }
+        if (element.startTime === element.endTime) {
+          isValid = false;
+        }
+        if (element.startTime > element.endTime) {
+          isValid = false;
+        }
+        arr[index] = element
+        if (index > 0) {
+          console.log(arr[index-1].endTime.hour)
+          if (arr[index - 1].endTime.hour > element.startTime.hour) {
+            isValid = false
+          }
+        }
       });
+    } else {
+      isValid = false;
     }
     return isValid;
   }

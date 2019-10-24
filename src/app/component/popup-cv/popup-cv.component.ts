@@ -142,8 +142,6 @@ export class PopupCvComponent implements OnInit {
         this.items = response.data;
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
-          console.log(this.items.birth)
-          console.log(this.items.birth === "01/01/1900")
         }else{
           this.items.birth = "";
         }
@@ -156,6 +154,9 @@ export class PopupCvComponent implements OnInit {
             this.totalYear = Math.floor(this.totalMonth / 12);
             this.totalMonth = this.totalMonth % 12;
           } else {
+            if(this.totalMonth === -1){
+              this.totalMonth = 0;
+            }
             this.totalYear = 0;
           }
         }
@@ -249,6 +250,7 @@ export class PopupCvComponent implements OnInit {
   }
 
   downloadFile(data: any) {
+    debugger
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
     window.open(url);

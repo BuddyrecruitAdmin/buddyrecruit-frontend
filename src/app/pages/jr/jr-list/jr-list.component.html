@@ -47,7 +47,7 @@
             class="link" nbTooltip="Edit" [routerLink]="'/jr/detail/edit/'+item._id">
           </nb-icon>
           <nb-icon icon="copy-outline"
-            *ngIf="item.refStatus.name != 'Active' && item.refStatus.name != 'Waiting for HR Confirm' && !isOverQuota"
+            *ngIf="!isOverQuota"
             class="link" nbTooltip="Duplicate" [routerLink]="'/jr/detail/duplicate/'+item._id"></nb-icon>
           <nb-icon *ngIf="item.refStatus.name != 'Active' && role.refAuthorize.jr.editable" icon="trash-2-outline"
             class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>

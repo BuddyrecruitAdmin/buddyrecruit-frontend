@@ -214,7 +214,7 @@ export class UtilitiesService {
       let ageDate = new Date(ageDifMs);
       return Math.abs(ageDate.getUTCFullYear() - 1970);
     } else {
-      return 0;
+      return undefined;
     }
   }
 
@@ -237,6 +237,9 @@ export class UtilitiesService {
       }
     }
     text = text.trim();
+    if(month === -1){
+      return text = "";
+    }
     return text;
   }
 
