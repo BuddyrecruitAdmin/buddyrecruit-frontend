@@ -42,17 +42,19 @@
             {{ item.active ? 'Active': 'Inactive' }}
           </span>
         </div>
-        <div class="text-group">
-          <label class="label">Last update by</label>
-          <span>
-            {{ item.lastChangedInfo.refUser.firstname }}
-            {{ item.lastChangedInfo.refUser.lastname }}
-          </span>
-        </div>
-        <div class="text-group">
-          <label class="label">Last update date</label>
-          <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
-        </div>
+        <i class="text-gray">
+          <div class="text-group">
+            <label class="label">Last update by</label>
+            <span>
+              {{ item.lastChangedInfo.refUser.firstname }}
+              {{ item.lastChangedInfo.refUser.lastname }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Last update date</label>
+            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+          </div>
+        </i>
       </nb-card-body>
     </nb-card>
   </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { MESSAGE } from "../../shared/constants/message";
+import { Router } from '@angular/router';
+import { MESSAGE } from '../../shared/constants/message';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { LoginService } from './login.service';
 import { ResponseCode } from '../../shared/app.constants';
@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
   sErrorPassword: string;
   sForgotPassword: string;
   touched: boolean;
+  loginError: string;
 
   config: ToasterConfig;
   destroyByClick = true;
@@ -45,7 +46,7 @@ export class LoginComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     if (getToken()) {
-      this.router.navigate(["/home"]);
+      this.router.navigate(['/home']);
     }
   }
 
@@ -54,15 +55,17 @@ export class LoginComponent implements OnInit {
       username: [null, [Validators.required]],
       password: [null, [Validators.required, Validators.minLength(6)]],
     });
-    this.userName = this.loginForm.controls["username"];
-    this.password = this.loginForm.controls["password"];
+    this.userName = this.loginForm.controls['username'];
+    this.password = this.loginForm.controls['password'];
     this.sErrorUserName = MESSAGE[51];
     this.sErrorPassword = MESSAGE[50];
     this.sForgotPassword = MESSAGE[52];
+    this.loginError = '';
   }
 
   login(value) {
     this.touched = true;
+    this.loginError = '';
     this.loginService.login(value.username, value.password).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);
@@ -94,7 +97,8 @@ export class LoginComponent implements OnInit {
           }
         }
       } else {
-        this.showToast('danger', '', response.data.message || 'Login Fail');
+        this.loginError = response.message;
+        this.showToast('danger', '', response.message || 'Login Fail');
       }
     });
   }

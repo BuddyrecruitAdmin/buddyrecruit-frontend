@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "smartrecruit": "smartrecruit"
+  },
+  "targets": {
+    "smartrecruit": {
+      "hosting": {
+        "p3buddyrecruit": [
+          "p3buddyrecruit"
+        ],
+        "p3buddyrecruit-qas": [
+          "p3buddyrecruit-qas"
+        ]
+      }
+    }
+  }
+}
