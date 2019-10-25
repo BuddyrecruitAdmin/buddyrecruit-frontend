@@ -64,70 +64,77 @@
             </nb-tab>
             <nb-tab tabTitle="SETTING">
               <div class="form-control-group">
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.company.active" class="group-checkbox">
                   <label class="label">Company</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.company.visible"
                     (change)="onChangeCheckbox('COMPANY','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.company.editable"
                     (change)="onChangeCheckbox('COMPANY','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.department.active" class="group-checkbox">
                   <label class="label">Department</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.department.visible"
                     (change)="onChangeCheckbox('DEPARTMENT','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.department.editable"
                     (change)="onChangeCheckbox('DEPARTMENT','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.authorize.active" class="group-checkbox">
                   <label class="label">Authorize</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.authorize.visible"
                     (change)="onChangeCheckbox('AUTHORIZE','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.authorize.editable"
                     (change)="onChangeCheckbox('AUTHORIZE','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.user.active" class="group-checkbox">
                   <label class="label">User</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.user.visible"
                     (change)="onChangeCheckbox('USER','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.user.editable"
                     (change)="onChangeCheckbox('USER','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.jobPosition.active" class="group-checkbox">
                   <label class="label">Job Position</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.jobPosition.visible"
                     (change)="onChangeCheckbox('JOBPOSITION','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.jobPosition.editable"
                     (change)="onChangeCheckbox('JOBPOSITION','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.evaluation.active" class="group-checkbox">
+                  <label class="label">Evaluation</label>
+                  <mat-checkbox [(ngModel)]="authDetail.configuration.evaluation.visible"
+                    (change)="onChangeCheckbox('EVALUATION','VISIBLE')">Visible</mat-checkbox>
+                  <mat-checkbox [(ngModel)]="authDetail.configuration.evaluation.editable"
+                    (change)="onChangeCheckbox('EVALUATION','EDITABLE')">Editable</mat-checkbox>
+                </div>
+                <div *ngIf="authDetail.configuration.location.active" class="group-checkbox">
                   <label class="label">Location</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.location.visible"
                     (change)="onChangeCheckbox('LOCATION','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.location.editable"
                     (change)="onChangeCheckbox('LOCATION','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.mailTemplate.active" class="group-checkbox">
                   <label class="label">Mail Template</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.mailTemplate.visible"
                     (change)="onChangeCheckbox('MAIL','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.mailTemplate.editable"
                     (change)="onChangeCheckbox('MAIL','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.rejection.active" class="group-checkbox">
                   <label class="label">Rejection</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.rejection.visible"
                     (change)="onChangeCheckbox('REJECTION','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.rejection.editable"
                     (change)="onChangeCheckbox('REJECTION','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.dashboard.active" class="group-checkbox">
                   <label class="label">Dashboard</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.dashboard.visible"
                     (change)="onChangeCheckbox('DASHBOARD','VISIBLE')">Visible</mat-checkbox>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.dashboard.editable"
                     (change)="onChangeCheckbox('DASHBOARD','EDITABLE')">Editable</mat-checkbox>
                 </div>
-                <div class="group-checkbox">
+                <div *ngIf="authDetail.configuration.report.active" class="group-checkbox">
                   <label class="label">Report</label>
                   <mat-checkbox [(ngModel)]="authDetail.configuration.report.visible"
                     (change)="onChangeCheckbox('REPORT','VISIBLE')">Visible</mat-checkbox>

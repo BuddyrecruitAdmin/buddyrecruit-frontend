@@ -661,10 +661,11 @@
     .select-button:active {
       border-color: var(--color-green);
     }
-    .select-button:disabled{
+    .select-button:disabled {
       cursor: not-allowed;
-      background-color: #F7F9FC;
-      color: #000000;
+      color: #c5cee0;
+      background-color: #f7f9fc;
+      border-color: #f7f9fc;
     }
   }
   nb-option:hover,
@@ -1050,6 +1051,9 @@
   .text-cap {
     text-transform: capitalize;
   }
+  .first-letter-cap:first-letter {
+    text-transform: uppercase;
+  }
   .text-no-data {
     text-align: center;
     color: var(--color-light-gray);
@@ -1102,6 +1106,10 @@
   }
   .mat-checkbox label.mat-checkbox-layout {
     display: inline-flex;
+  }
+  .mat-checkbox-disabled.mat-checkbox-checked .mat-checkbox-background,
+  .mat-checkbox-disabled.mat-checkbox-indeterminate .mat-checkbox-background {
+    background-color: #b0b0b0;
   }
   .group-checkbox {
     margin-left: 1.5rem;

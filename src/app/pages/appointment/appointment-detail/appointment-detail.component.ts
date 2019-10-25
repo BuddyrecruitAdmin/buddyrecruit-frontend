@@ -168,9 +168,6 @@ export class AppointmentDetailComponent implements OnInit {
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.button = this.setButton(item);
-          if (item.refCandidate.age === -1) {
-            item.refCandidate.age = "";
-          }
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);

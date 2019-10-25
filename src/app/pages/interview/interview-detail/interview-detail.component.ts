@@ -177,9 +177,6 @@ export class InterviewDetailComponent implements OnInit {
           item.collapse = this.collapseAll;
           item.button = this.setButton(item);
           // this.score[index] =this.showScore(item);
-          if (item.refCandidate.age === -1) {
-            item.refCandidate.age = "";
-          }
           let sum = 0;
           let totalPass = 0;
           let totalCompare = 0;

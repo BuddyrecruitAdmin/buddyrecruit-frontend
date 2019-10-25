@@ -60,9 +60,12 @@ export class UserDetailComponent implements OnInit {
   divisionAll: DropDownGroup[];
   roleOptions: DropDownValue[];
   authOptions: DropDownValue[];
+  authAll: DropDownGroup[];
   useSameUsername: boolean = true;
   loading = true;
   editable: boolean;
+  adminId: any;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -80,6 +83,7 @@ export class UserDetailComponent implements OnInit {
     this.userDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
     this.editable = true;
+    this.adminId = '';
     this.initialDropdown().then((response) => {
       this.activatedRoute.params.subscribe(params => {
         if (params.id) {
@@ -211,27 +215,43 @@ export class UserDetailComponent implements OnInit {
                   const hr = hero.data.find(hr => {
                     return hr.isHR === true;
                   });
-                  this.roleOptions.push({
-                    label: hr.name,
-                    value: hr._id
-                  });
+                  if (hr) {
+                    this.roleOptions.push({
+                      label: hr.name,
+                      value: hr._id
+                    });
+                  }
                 }
                 if (company.data.hero.manager) {
                   const manager = hero.data.find(manager => {
                     return manager.isManager === true;
                   });
-                  this.roleOptions.push({
-                    label: manager.name,
-                    value: manager._id
-                  });
+                  if (manager) {
+                    this.roleOptions.push({
+                      label: manager.name,
+                      value: manager._id
+                    });
+                  }
                 }
                 if (company.data.hero.payroll) {
                   const payroll = hero.data.find(payroll => {
                     return payroll.isPayroll === true;
                   });
+                  if (payroll) {
+                    this.roleOptions.push({
+                      label: payroll.name,
+                      value: payroll._id
+                    });
+                  }
+                }
+                const admin = hero.data.find(admin => {
+                  return admin.isAdmin === true;
+                });
+                if (admin) {
+                  this.adminId = admin._id;
                   this.roleOptions.push({
-                    label: payroll.name,
-                    value: payroll._id
+                    label: admin.name,
+                    value: admin._id
                   });
                 }
               }
@@ -247,6 +267,7 @@ export class UserDetailComponent implements OnInit {
 
   getAuths() {
     return new Promise((resolve) => {
+      this.authAll = [];
       this.authOptions = [];
       this.authOptions.push({
         label: '- Select Authorize Role -',
@@ -255,9 +276,10 @@ export class UserDetailComponent implements OnInit {
       this.service.getAuthRoleList(undefined, this.role.refCompany._id).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           response.data.forEach(element => {
-            this.authOptions.push({
+            this.authAll.push({
               label: element.name || element._id,
-              value: element._id
+              value: element._id,
+              group: element.refHero
             });
           });
         }
@@ -365,13 +387,15 @@ export class UserDetailComponent implements OnInit {
         }
       }
     }
-    if (!this.userDetail.departmentId) {
-      this.errMsg.departmentId = 'Please Select Department';
-      isValid = false;
-    }
-    if (this.divisionOptions.length > 1 && !this.userDetail.divisionId) {
-      this.errMsg.divisionId = 'Please Select Division';
-      isValid = false;
+    if (this.userDetail.refHero !== this.adminId) {
+      if (!this.userDetail.departmentId) {
+        this.errMsg.departmentId = 'Please Select Department';
+        isValid = false;
+      }
+      if (this.divisionOptions.length > 1 && !this.userDetail.divisionId) {
+        this.errMsg.divisionId = 'Please Select Division';
+        isValid = false;
+      }
     }
     if (!this.userDetail.refHero) {
       this.errMsg.refHero = 'Please Select User Role';
@@ -400,6 +424,7 @@ export class UserDetailComponent implements OnInit {
         this.userDetail = _.cloneDeep(response.data);
         this.userDetailTemp = _.cloneDeep(this.userDetail);
         this.onChangeDepartment(this.userDetail.departmentId);
+        this.onChangeRole(this.userDetail.refHero);
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
@@ -413,13 +438,41 @@ export class UserDetailComponent implements OnInit {
       value: undefined,
       group: undefined
     });
-    const division = this.divisionAll.filter(element => {
+    const divisions = this.divisionAll.filter(element => {
       return element.group === value;
     });
-    if (division.length) {
-      division.forEach(element => {
+    if (divisions.length) {
+      divisions.forEach(element => {
         this.divisionOptions.push(element);
       });
+    }
+  }
+
+  onChangeRole(value) {
+    this.authOptions = [];
+    this.authOptions.push({
+      label: '- Select Authorize Role -',
+      value: undefined
+    });
+    const auths = this.authAll.filter(element => {
+      return element.group === value;
+    });
+    if (auths.length) {
+      auths.forEach(element => {
+        this.authOptions.push(element);
+      });
+    }
+    if (this.adminId && this.userDetail.refHero === this.adminId) {
+      this.userDetail.departmentId = undefined;
+      this.userDetail.divisionId = undefined;
+    }
+    if (this.userDetail.refAuthorize) {
+      const found = this.authOptions.find(element => {
+        return element.value === this.userDetail.refAuthorize;
+      });
+      if (!found) {
+        this.userDetail.refAuthorize = undefined;
+      }
     }
   }
 
