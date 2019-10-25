@@ -146,7 +146,7 @@ export class TalentPoolDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
-          if (item.refCandidate.age === -1) {
+          if (item.refCandidate && item.refCandidate.age === -1) {
             item.refCandidate.age = "";
           }
         });

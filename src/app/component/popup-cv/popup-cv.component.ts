@@ -250,7 +250,6 @@ export class PopupCvComponent implements OnInit {
   }
 
   downloadFile(data: any) {
-    debugger
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
     window.open(url);

@@ -40,7 +40,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of items;">
-            <td class="text-left link" (click)="openPopupEvaluation(item)">{{ item.name || item._id }}</td>
+            <td class="text-left link" nbTooltip="Preview" (click)="openPopupEvaluation(item)">
+              {{ item.name || item._id }}</td>
             <td>
               {{ item.lastChangedInfo?.refUser?.firstname }}
               {{ item.lastChangedInfo?.refUser?.lastname }}
@@ -55,8 +56,7 @@
                 [routerLink]="'/setting/evaluation-detail/duplicate/'+item._id">
                 <nb-icon icon="copy-outline"></nb-icon>
               </button>
-              <button nbButton status="danger" size="tiny" nbTooltip="Delete"
-                (click)="delete(item)">
+              <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)">
                 <nb-icon icon="trash-2-outline"></nb-icon>
               </button>
             </td>

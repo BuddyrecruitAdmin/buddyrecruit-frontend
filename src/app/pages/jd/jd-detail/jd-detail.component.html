@@ -73,7 +73,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="role.refHero.isAdmin" class="row">
+        <div class="row">
           <div class="col-md-6">
             <div class="form-control-group">
               <label class="label" for="name">Department <span style="color:red">*</span></label>
@@ -84,7 +84,7 @@
                   {{ department.label }}
                 </nb-option>
               </nb-select>
-              <!-- <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorrefCheck }}</small> -->
+              <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorDe }}</small>
             </div>
           </div>
           <div class="col-md-6" *ngIf="checkDivision">
@@ -96,7 +96,7 @@
                   {{ option.label }}
                 </nb-option>
               </nb-select>
-              <!-- <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorrefCheck }}</small> -->
+              <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorDivision }}</small>
             </div>
           </div>
         </div>
@@ -231,14 +231,14 @@
               <td>
                 <div class="input-group">
                   <input type="number" min="0" max="100" name="low" value="workEXPline.low"
-                    [(ngModel)]="workEXPline.low" [disabled]="checkPreview"
+                    [(ngModel)]="workEXPline.low" [disabled]="checkPreview || i != 0"
                     onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                     pattern="[0-9]*" inputmode="numeric" digitOnly />
                 </div>
               </td>
               <td>
                 <div class="input-group">
-                  <input type="number" min="0" max="100" name="high" value="workEXPline.high"
+                  <input (input)="onChanheWork(i)" type="number" min="0" max="100" name="high" value="workEXPline.high"
                     [(ngModel)]="workEXPline.high" [disabled]="checkPreview"
                     onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                     pattern="[0-9]*" inputmode="numeric" digitOnly />

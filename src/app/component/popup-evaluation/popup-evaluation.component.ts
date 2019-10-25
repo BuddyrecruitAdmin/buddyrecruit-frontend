@@ -30,7 +30,7 @@ export class PopupEvaluationComponent implements OnInit {
   evaluation: any;
   scoring: any;
   editable: boolean;
-
+  state: string;
   constructor(
     private candidateService: CandidateService,
     private evaluationService: EvaluationService,
@@ -75,7 +75,9 @@ export class PopupEvaluationComponent implements OnInit {
     this.candidateName = '';
     this.editable = false;
     this.jrName = '';
+    this.state = "";
     if (this.flowId) {
+      this.state = "Preview";
       this.getDetailPreview();
     } else if (this.candidateId) {
       this.editable = true;

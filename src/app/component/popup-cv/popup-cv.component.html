@@ -343,7 +343,7 @@
               <div class="col-md-6 form-group">
                 <label class="control-label">Degree
                 </label>
-                <nb-select [(ngModel)]="education.refDegree._id" [ngModelOptions]="{ standalone: true }"
+                <nb-select [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }"
                   [disabled]="!editable" Faria-hidden="true" fullWidth>
                   <nb-option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</nb-option>
                 </nb-select>
@@ -352,7 +352,7 @@
                 <label class="control-label">GPA
                 </label>
                 <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
-                  [ngModelOptions]="{standalone: true}" nbInput />
+                  [ngModelOptions]="{standalone: true}" nbInput fullWidth/>
               </div>
             </div>
             <div class="row">
