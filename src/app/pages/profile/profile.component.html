@@ -8,7 +8,7 @@
       <nb-card-body>
         <div class="box-body box-profile">
           <img class="img-default" (click)="fileInput.click()"
-            [src]="url ? url : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
+            [src]="croppedImageTest ? croppedImageTest : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
           <br>
           <a (click)="fileInput.click()"><span class="fa fa-images"></span>
             <input #fileInput type="file" (change)="onFileInput($event.target.files)" style="display:none;"
@@ -183,21 +183,21 @@
 <!-- popup -->
 <!-- 
 <a (click)="fileInput.click()">click me
-  <input (click)="fileInput.click()" #fileInput type="file" (change)="fileChangeEvent($event,dialog)"
-    style="display:none;" accept="image/*" ng2FileSelect [uploader]="uploader" /></a>
+  <input #fileInput type="file" (change)="fileChangeEvent($event,dialog,$event.target.files)" style="display:none;"
+    accept="image/*" ng2FileSelect [uploader]="uploader" /></a>
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
       <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="3 / 3"
         [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" ></image-cropper>
 
       <img [src]="croppedImage" />
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" (click)="save()" >Save</button>
+      <button nbButton status="default" (click)="close()">Cancel</button>
+      <button nbButton status="success" (click)="saveNewImage(imageChangedEvent)">Save</button>
     </nb-card-footer>
   </nb-card>
 </ng-template> -->

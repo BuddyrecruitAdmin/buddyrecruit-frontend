@@ -462,7 +462,10 @@
   [nbInput]:not([disabled]):focus {
     border-color: var(--color-green);
   }
-  [nbInput]:disabled{
+  [nbInput]:disabled {
+    background-color: #f7f9fc;
+    border-color: #edf1f7;
+    color: #c5cee0;
     cursor: not-allowed;
   }
   .input-group {
@@ -493,14 +496,14 @@
   }
 
   .input-hidding {
-  width: 92px;
-  height: 34px;
-  opacity: 0;
-  position: absolute;
-  margin-left: -12px;
-  margin-top: -10px;
-  cursor: pointer;
-}
+    width: 92px;
+    height: 34px;
+    opacity: 0;
+    position: absolute;
+    margin-left: -12px;
+    margin-top: -10px;
+    cursor: pointer;
+  }
   .text-group {
 
     line-height: 1.5rem;

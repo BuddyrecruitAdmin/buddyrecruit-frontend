@@ -63,7 +63,6 @@ export class JdListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
-        console.log(this.items)
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
           this.search();

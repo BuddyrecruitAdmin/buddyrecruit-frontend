@@ -1,4 +1,4 @@
-import { Component, OnInit,TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { getRole } from '../../shared/services/auth.service';
@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
   profileDetail: any;
   imageChangedEvent: any;
   croppedImage: any;
+  croppedImageTest: any;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -229,13 +230,15 @@ export class ProfileComponent implements OnInit {
     this.isChangePassword = !this.isChangePassword;
   }
 
-  fileChangeEvent(event: any,dialog: TemplateRef<any>): void {
-  console.log("Check")
+  fileChangeEvent(event: any, dialog: TemplateRef<any> , files : FileList): void {
+    console.log(files)
     this.imageChangedEvent = event;
     this.callDialog(dialog);
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
+    this.croppedImageTest = this.croppedImage;
+    console.log(event)
   }
   imageLoaded() {
     // show cropper
@@ -245,6 +248,21 @@ export class ProfileComponent implements OnInit {
   }
   loadImageFailed() {
     // show message
+  }
+
+  saveNewImage(files: FileList) {
+    console.log(files)
+    console.log(this.croppedImage )
+    this.uploader.uploadItem(
+      this.uploader.queue[this.uploader.queue.length - 1]
+    )
+    this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
+
+  }
+
+  close() {
+    this.croppedImage = "";
+    this.dialogRef.close()
   }
 
   callDialog(dialog: TemplateRef<any>) {
