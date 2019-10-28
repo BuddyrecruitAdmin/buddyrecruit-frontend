@@ -27,9 +27,17 @@ export class JdService extends NetworkService {
     });
   }
 
+  // originalCV(id: String) {
+  //   const body = { _id: id };
+  //   return this.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body);
+  // }
+
   originalCV(id: String) {
-    const body = { _id: id };
-    return this.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body);
+    const body = { id: id };
+    return this.httpClient.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body, {
+      responseType: "blob",
+      headers: new HttpHeaders().append("Content-Type", "application/json")
+    });
   }
 
   getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
