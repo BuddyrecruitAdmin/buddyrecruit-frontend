@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.user = {
           name: this.utilitiesService.setFullname(response.data),
           title: role.refHero.name,
-          picture: response.data.imagePath,
+          picture: response.data.imageData,
         };
       }
     });

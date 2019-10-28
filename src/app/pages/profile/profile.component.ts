@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
   profileDetail: any;
   imageChangedEvent: any;
   croppedImage: any;
-  croppedImageTest: any;
+  innerHeight: any;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -66,6 +66,7 @@ export class ProfileComponent implements OnInit {
     private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
+    this.innerHeight = window.innerHeight;
   }
 
   ngOnInit() {
@@ -83,6 +84,7 @@ export class ProfileComponent implements OnInit {
       pendIn: undefined,
       pendSign: undefined,
       talentPool: undefined,
+      imageData: undefined,
       attachment: {
         originalname: undefined,
         uploadName: undefined,
@@ -91,7 +93,9 @@ export class ProfileComponent implements OnInit {
     this.service.getProfile(this.role.refHero._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.profileDetail = response.data;
-        this.url = response.data.imagePath;
+        if (response.data.imageData) {
+          this.url = response.data.imageData;
+        }
       }
     });
     this.loginForm = this.formBuilder.group({
@@ -161,11 +165,14 @@ export class ProfileComponent implements OnInit {
   }
 
   save() {
-    if (this.bHasFile) {
-      this.uploader.uploadItem(
-        this.uploader.queue[this.uploader.queue.length - 1]
-      )
-      this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
+    // if (this.bHasFile) {
+    //   this.uploader.uploadItem(
+    //     this.uploader.queue[this.uploader.queue.length - 1]
+    //   )
+    //   this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
+    // }
+    if (this.croppedImage) {
+      this.profileDetail.imageData = this.croppedImage;
     }
     if (this.validation()) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
@@ -194,34 +201,37 @@ export class ProfileComponent implements OnInit {
     this.profileDetail.attachment.uploadName = data.uploadname;
   }
 
-  onFileInput(files: FileList) {
-    console.log(files)
-    console.log(this.croppedImage)
-    if (files && files[0]) {
-      var reader = new FileReader();
-      if (files[0] != undefined || files[0] != null) {
-        reader.onload = (event) => { // called once readAsDataURL is completed
-          this.url = reader.result;
-        }
-      }
-      reader.readAsDataURL(files[0]); // read file as data url
-    }
-    const FileSize = files.item(0).size / 1024 / 1024; // in MB
-    if (FileSize > 10) {
-      this.bHasFile = false;
-      this.profileDetail.attachment.originalname = "";
-      this.profileDetail.attachment.uploadName = "";
-      this.fileToUpload = null;
-      return;
-    } else {
-      this.bHasFile = true;
-      this.profileDetail.attachment.originalname = files.item(0).name;
-      this.profileDetail.attachment.uploadName = "";
-      this.fileToUpload = files.item(0);
-    }
-  }
+  // onFileInput(files: FileList) {
+  //   console.log(files)
+  //   console.log(this.croppedImage)
+  //   if (files && files[0]) {
+  //     var reader = new FileReader();
+  //     if (files[0] != undefined || files[0] != null) {
+  //       reader.onload = (event) => { // called once readAsDataURL is completed
+  //         this.url = reader.result;
+  //       }
+  //     }
+  //     reader.readAsDataURL(files[0]); // read file as data url
+  //   }
+  //   const FileSize = files.item(0).size / 1024 / 1024; // in MB
+  //   if (FileSize > 10) {
+  //     this.bHasFile = false;
+  //     this.profileDetail.attachment.originalname = "";
+  //     this.profileDetail.attachment.uploadName = "";
+  //     this.fileToUpload = null;
+  //     return;
+  //   } else {
+  //     this.bHasFile = true;
+  //     this.profileDetail.attachment.originalname = files.item(0).name;
+  //     this.profileDetail.attachment.uploadName = "";
+  //     this.fileToUpload = files.item(0);
+  //   }
+  // }
 
   setRequest(): any {
+    if (this.url) {
+      this.profileDetail.imageData = this.url;
+    }
     const request = _.cloneDeep(this.profileDetail);
     return request;
   }
@@ -230,15 +240,18 @@ export class ProfileComponent implements OnInit {
     this.isChangePassword = !this.isChangePassword;
   }
 
-  fileChangeEvent(event: any, dialog: TemplateRef<any> , files : FileList): void {
+  fileChangeEvent(event: any, dialog: TemplateRef<any>, files: FileList): void {
     console.log(files)
+    const FileSize = files.item(0).size / 1024 / 1024; // in MB
     this.imageChangedEvent = event;
-    this.callDialog(dialog);
+    if (FileSize > 10) {
+      this.showToast('danger', 'Error Message', 'file size more than 10 mb');
+    } else {
+      this.callDialog(dialog);
+    }
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
-    this.croppedImageTest = this.croppedImage;
-    console.log(event)
   }
   imageLoaded() {
     // show cropper
@@ -251,13 +264,8 @@ export class ProfileComponent implements OnInit {
   }
 
   saveNewImage(files: FileList) {
-    console.log(files)
-    console.log(this.croppedImage )
-    this.uploader.uploadItem(
-      this.uploader.queue[this.uploader.queue.length - 1]
-    )
-    this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
-
+    this.url = this.croppedImage;
+    this.dialogRef.close();
   }
 
   close() {

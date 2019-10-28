@@ -8,13 +8,18 @@
       <nb-card-body>
         <div class="box-body box-profile">
           <img class="img-default" (click)="fileInput.click()"
-            [src]="croppedImageTest ? croppedImageTest : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
+            [src]="url ? url : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
           <br>
-          <a (click)="fileInput.click()"><span class="fa fa-images"></span>
+          <!-- <a (click)="fileInput.click()"><span class="fa fa-images"></span>
             <input #fileInput type="file" (change)="onFileInput($event.target.files)" style="display:none;"
               accept="image/*" ng2FileSelect [uploader]="uploader" />
-            Select Profile Picture</a>
-          <h6 class="text-ellipsis text-center" [nbTooltip]="profileDetail.firstname + ' ' + profileDetail.lastname">
+            Select Profile Picture</a> -->
+
+          <a style="cursor: pointer;" (click)="fileInput.click()"><span class="fa fa-images"></span>
+            <input #fileInput type="file" (change)="fileChangeEvent($event,dialog,$event.target.files)"
+              style="display:none;" accept="image/*" />Select Profile Picture</a>
+
+          <h6 class="text-ellipsis text-center">
             {{ profileDetail.firstname }} {{ profileDetail.lastname }}
           </h6>
 
@@ -24,7 +29,7 @@
             </div>
             <div class="card-content2">
               <div class="card-title">Company</div>
-              <div class="card-desc" [nbTooltip]="profileDetail.refCompany?.name">
+              <div class="card-desc">
                 {{ profileDetail.refCompany?.name || '-' }}
               </div>
             </div>
@@ -35,7 +40,7 @@
             </div>
             <div class="card-content2">
               <div class="card-title">Department</div>
-              <div class="card-desc" [nbTooltip]="profileDetail.thisDepartments?.name">
+              <div class="card-desc">
                 {{ profileDetail.thisDepartments?.name || '-' }}
               </div>
             </div>
@@ -46,7 +51,7 @@
             </div>
             <div class="card-content2">
               <div class="card-title">Position</div>
-              <div class="card-desc" [nbTooltip]="role.refHero.name">
+              <div class="card-desc">
                 {{ role.refHero.name || '-' }}
               </div>
             </div>
@@ -181,23 +186,27 @@
   </div>
 </div>
 <!-- popup -->
-<!-- 
-<a (click)="fileInput.click()">click me
+
+<!-- <a (click)="fileInput.click()">click me
   <input #fileInput type="file" (change)="fileChangeEvent($event,dialog,$event.target.files)" style="display:none;"
-    accept="image/*" ng2FileSelect [uploader]="uploader" /></a>
+    accept="image/*" ng2FileSelect [uploader]="uploader" /></a> -->
 
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.height.px]="innerHeight">
     <nb-card-body>
-      <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="3 / 3"
-        [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" ></image-cropper>
-
-      <img [src]="croppedImage" />
+      <div style="text-align:center;">
+        <span>Preview profile</span><br>
+        <img class="img-default" [src]="croppedImage" />
+      </div>
+      <div>
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="3 / 3"
+          [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+          (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+      </div>
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="close()">Cancel</button>
       <button nbButton status="success" (click)="saveNewImage(imageChangedEvent)">Save</button>
     </nb-card-footer>
   </nb-card>
-</ng-template> -->
+</ng-template>

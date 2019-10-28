@@ -38,8 +38,8 @@ export class ProfileService extends NetworkService {
       passwordCur: item.passwordCur,
       passwordNew: item.passwordNew,
       setting: item.setting,
-      attachment: item.attachment
-
+      attachment: item.attachment,
+      imageData: item.imageData
 
     }
     return this.post(API_ENDPOINT.CONFIGURATION.USER_PROFILE_EDIT, body);

@@ -62,7 +62,7 @@ export class PopupCommentComponent implements OnInit {
               _id: element._id,
               name: this.utilitiesService.setFullname(element.refUser),
               title: this.utilitiesService.convertDateTimeFromSystem(element.date),
-              picture: '../../../assets/images/avatar.png',
+              picture: this.role.imagePath,
               message: element.message,
               accent: element.refUser._id === this.role._id ? 'success' : 'default',
               canDelete: element.refUser._id === this.role._id ? true : false,
