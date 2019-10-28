@@ -136,16 +136,18 @@ export class OnboardListComponent implements OnInit {
               value: department._id
             });
             department.divisions.forEach(division => {
-              this.filter.data.divisions.push({
-                label: division.name,
-                value: division._id,
-                group: department._id
-              });
-              this.filter.temp.divisions.push({
-                label: division.name,
-                value: division._id,
-                group: department._id
-              });
+              if (!division.isDeleted) {
+                this.filter.data.divisions.push({
+                  label: division.name,
+                  value: division._id,
+                  group: department._id
+                });
+                this.filter.temp.divisions.push({
+                  label: division.name,
+                  value: division._id,
+                  group: department._id
+                });
+              }
             });
           });
         }

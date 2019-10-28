@@ -143,9 +143,6 @@ export class SignContractDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
-          if (item.refCandidate.age === -1) {
-            item.refCandidate.age = "";
-          }
           let sum = 0;
           let totalPass = 0;
           let totalCompare = 0;

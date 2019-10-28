@@ -27,11 +27,13 @@
           <label [nbTooltip]="item.name">{{ item.name }}</label>
         </div>
         <div class="actions">
-          <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
+          <nb-icon *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" icon="edit-outline" class="link"
+            nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
           </nb-icon>
           <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
-            utilitiesService.isDateGreaterThanToday(item.startDate) || 
-            utilitiesService.isDateLowerThanToday(item.expiryDate)">
+            refHero.isSuperAdmin && 
+            ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
+              utilitiesService.isDateLowerThanToday(item.expiryDate))">
           </nb-icon>
         </div>
       </nb-card-header>

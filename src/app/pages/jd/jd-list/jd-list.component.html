@@ -38,7 +38,7 @@
           </nb-icon>
           <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="copy-outline" class="link" nbTooltip="Duplicate"
             [routerLink]="'/jd/detail/duplicate/'+item._id"></nb-icon>
-          <nb-icon *ngIf="role.refAuthorize.jd.editable" icon="trash-2-outline" class="link" nbTooltip="Delete"
+          <nb-icon *ngIf="role.refAuthorize.jd.editable && !item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
             (click)="delete(item)"></nb-icon>
         </div>
       </nb-card-header>

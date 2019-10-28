@@ -150,7 +150,6 @@ export class PopupInterviewDateComponent implements OnInit {
           this.setDropdownTime(this.date);
           this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
         }
-        debugger;
         if (response.data.candidateFlow.refJR.userInterviews.length) {
           response.data.candidateFlow.refJR.userInterviews.forEach(element => {
             this.users.push({

@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit {
   position: NbGlobalPosition = NbGlobalPhysicalPosition.TOP_RIGHT;
   preventDuplicates = false;
   status: NbComponentStatus = 'primary';
+  loading: boolean;
 
   constructor(
     private router: Router,
@@ -61,17 +62,19 @@ export class LoginComponent implements OnInit {
     this.sErrorPassword = MESSAGE[50];
     this.sForgotPassword = MESSAGE[52];
     this.loginError = '';
+    this.loading = false;
   }
 
   login(value) {
+    this.loading = true;
     this.touched = true;
     this.loginError = '';
     this.loginService.login(value.username, value.password).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         setAuthentication({ token: response.data.token, role: response.data } as any);
-        this.showToast('success', response.data.message || 'Login Success','');
+        this.showToast('success', response.data.message || 'Login Success', '');
         const url = getUrl();
-        if (url) {
+        if (url && url !== '/auth/login') {
           setUrl('');
           this.router.navigate([url]);
         } else {
@@ -99,6 +102,7 @@ export class LoginComponent implements OnInit {
       } else {
         this.loginError = response.message;
         this.showToast('danger', '', response.message || 'Login Fail');
+        this.loading = false;
       }
     });
   }

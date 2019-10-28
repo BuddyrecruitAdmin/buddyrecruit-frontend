@@ -6,6 +6,7 @@ import { getRole } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
+import { DropdownService } from '../../../shared/services/dropdown.service';
 import * as _ from 'lodash';
 import { MESSAGE } from '../../../shared/constants/message';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -58,6 +59,7 @@ export class JrDetailComponent implements OnInit {
     private service: JrService,
     private dialogService: NbDialogService,
     private utilitiesService: UtilitiesService,
+    private dropdownService: DropdownService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,
@@ -192,7 +194,7 @@ export class JrDetailComponent implements OnInit {
         value: undefined,
         group: "disabled"
       });
-      this.service.getListUsers(undefined, undefined).subscribe(res => {
+      this.dropdownService.getUser().subscribe(res => {
         if (res.code === ResponseCode.Success) {
           res.data.forEach(item => {
             this.Users.push({
@@ -203,20 +205,19 @@ export class JrDetailComponent implements OnInit {
           })
         }
       })
+      console.log(this.Users)
       resolve();
     });
   }
 
   onChangeJobposition(value) {
-    console.log(this.Users)
-    console.log(this.jobId)
     const jobId = this.jobId.find(elem => {
       return elem._id === value;
     });
     this.Users.forEach(opt => {
       opt.group = "disabled";
     })
-    this.service.getListUsers(jobId.departmentId, jobId.divisionId).subscribe(res => {
+    this.dropdownService.getUser(jobId.departmentId, jobId.divisionId).subscribe(res => {
       if (res.code === ResponseCode.Success) {
         res.data.forEach(item => {
           this.Users.forEach(option => {

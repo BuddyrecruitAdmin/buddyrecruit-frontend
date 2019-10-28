@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
@@ -84,24 +84,27 @@ export class JrListComponent implements OnInit {
         this.showTips = response.isOverQuota;
         this.items = response.data;
         this.items.map(item => {
+          item.canDelete = true;
           switch (item.refStatus.status) {
-            case "JRS001": // Waiting for HR Confirm
-              item.refStatus.class = "label-warning";
+            case 'JRS001': // Waiting for HR Confirm
+              item.refStatus.class = 'label-warning';
               break;
-            case "JRS002": // Active
-              item.refStatus.class = "label-success";
+            case 'JRS002': // Active
+              item.refStatus.class = 'label-success';
+              item.canDelete = false;
               break;
-            case "JRS003": // Expired
-              item.refStatus.class = "label-primary";
+            case 'JRS003': // Expired
+              item.refStatus.class = 'label-primary';
+              item.canDelete = false;
               break;
-            case "JRS004": // Rejected
-              item.refStatus.class = "label-danger";
+            case 'JRS004': // Rejected
+              item.refStatus.class = 'label-danger';
               break;
-            case "JRS005": // Closed
-              item.refStatus.class = "label-gray";
+            case 'JRS005': // Closed
+              item.refStatus.class = 'label-gray';
               break;
             default:
-              item.refStatus.class = "label-gray";
+              item.refStatus.class = 'label-gray';
               break;
           }
         });
@@ -150,7 +153,7 @@ export class JrListComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.action("reject", this.itemSelected).subscribe(response => {
+        this.service.action('reject', this.itemSelected).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.search();
@@ -172,7 +175,7 @@ export class JrListComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.action("confirm", item).subscribe(response => {
+        this.service.action('confirm', item).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.search();

@@ -81,6 +81,7 @@ export class CompanyDetailComponent implements OnInit {
   errMsg: ErrMsg;
   _id: string;
   role: any;
+  loading: boolean;
 
   constructor(
     private router: Router,
@@ -106,6 +107,7 @@ export class CompanyDetailComponent implements OnInit {
           this.getDetail();
         } else {
           this.state = State.Create;
+          this.loading = false;
         }
       });
     });
@@ -228,6 +230,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   getDetail() {
+    this.loading = true;
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
@@ -244,6 +247,7 @@ export class CompanyDetailComponent implements OnInit {
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }
       }
+      this.loading = false;
     });
   }
 

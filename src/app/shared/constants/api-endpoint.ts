@@ -234,4 +234,9 @@ export const API_ENDPOINT = {
   AUTHORIZE: {
     LIST: "authorize/list"
   },
+  DROPDOWN: {
+    DEPARTMENT: "dropdown/department",
+    JOBPOSITION: "dropdown/position",
+    USER: "dropdown/user",
+  }
 };

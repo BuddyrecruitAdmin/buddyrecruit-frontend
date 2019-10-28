@@ -17,6 +17,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 export interface Control {
   visible: boolean;
   editable: boolean;
+  active: boolean;
 }
 export interface Department {
   departmentId: any;
@@ -52,6 +53,7 @@ export interface Auth {
     authorize: Control;
     user: Control;
     jobPosition: Control;
+    evaluation: Control;
     location: Control;
     mailTemplate: Control;
     rejection: Control;
@@ -146,46 +148,62 @@ export class AuthorizeDetailComponent implements OnInit {
         company: {
           visible: false,
           editable: false,
+          active: true
         },
         dashboard: {
           visible: false,
           editable: false,
+          active: true
         },
         department: {
           visible: false,
           editable: false,
+          active: true
         },
         division: {
           visible: false,
           editable: false,
+          active: true
         },
         authorize: {
           visible: false,
           editable: false,
+          active: true
         },
         user: {
           visible: false,
           editable: false,
+          active: true
         },
         jobPosition: {
           visible: false,
           editable: false,
+          active: true
+        },
+        evaluation: {
+          visible: false,
+          editable: false,
+          active: true
         },
         location: {
           visible: false,
           editable: false,
+          active: true
         },
         mailTemplate: {
           visible: false,
           editable: false,
+          active: true
         },
         rejection: {
           visible: false,
           editable: false,
+          active: true
         },
         report: {
           visible: false,
           editable: false,
+          active: true
         },
       },
       showDashboard: false,
@@ -193,10 +211,12 @@ export class AuthorizeDetailComponent implements OnInit {
       jd: {
         visible: true,
         editable: true,
+        active: true
       },
       jr: {
         visible: true,
         editable: true,
+        active: true
       },
       showReport: false,
       reports: [],
@@ -219,6 +239,7 @@ export class AuthorizeDetailComponent implements OnInit {
     return {
       visible: false,
       editable: false,
+      active: true,
     }
   }
 
@@ -431,7 +452,6 @@ export class AuthorizeDetailComponent implements OnInit {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/setting/authorize']);
-            // this.getDetail(request._id);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -441,7 +461,6 @@ export class AuthorizeDetailComponent implements OnInit {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/setting/authorize']);
-            // this.getDetail(request._id);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -583,7 +602,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.jd.editable = false;
           }
         } else {
-          this.authDetail.jd.visible = this.authDetail.jd.editable;
+          if (this.authDetail.jd.editable) {
+            this.authDetail.jd.visible = true;
+          }
         }
         break;
       case 'JR':
@@ -592,7 +613,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.jr.editable = false;
           }
         } else {
-          this.authDetail.jr.visible = this.authDetail.jr.editable;
+          if (this.authDetail.jr.editable) {
+            this.authDetail.jr.visible = true;
+          }
         }
         break;
       case 'COMPANY':
@@ -601,7 +624,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.company.editable = false;
           }
         } else {
-          this.authDetail.configuration.company.visible = this.authDetail.configuration.company.editable;
+          if (this.authDetail.configuration.company.editable) {
+            this.authDetail.configuration.company.visible = true;
+          }
         }
         break;
       case 'DEPARTMENT':
@@ -610,7 +635,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.department.editable = false;
           }
         } else {
-          this.authDetail.configuration.department.visible = this.authDetail.configuration.department.editable;
+          if (this.authDetail.configuration.department.editable) {
+            this.authDetail.configuration.department.visible = true;
+          }
         }
         break;
       case 'AUTHORIZE':
@@ -619,7 +646,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.authorize.editable = false;
           }
         } else {
-          this.authDetail.configuration.authorize.visible = this.authDetail.configuration.authorize.editable;
+          if (this.authDetail.configuration.authorize.editable) {
+            this.authDetail.configuration.authorize.visible = true;
+          }
         }
         break;
       case 'USER':
@@ -628,7 +657,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.user.editable = false;
           }
         } else {
-          this.authDetail.configuration.user.visible = this.authDetail.configuration.user.editable;
+          if (this.authDetail.configuration.user.editable) {
+            this.authDetail.configuration.user.visible = true;
+          }
         }
         break;
       case 'JOBPOSITION':
@@ -637,7 +668,20 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.jobPosition.editable = false;
           }
         } else {
-          this.authDetail.configuration.jobPosition.visible = this.authDetail.configuration.jobPosition.editable;
+          if (this.authDetail.configuration.jobPosition.editable) {
+            this.authDetail.configuration.jobPosition.visible = true;
+          }
+        }
+        break;
+      case 'EVALUATION':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.evaluation.visible) {
+            this.authDetail.configuration.evaluation.editable = false;
+          }
+        } else {
+          if (this.authDetail.configuration.evaluation.editable) {
+            this.authDetail.configuration.evaluation.visible = true;
+          }
         }
         break;
       case 'LOCATION':
@@ -646,7 +690,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.location.editable = false;
           }
         } else {
-          this.authDetail.configuration.location.visible = this.authDetail.configuration.location.editable;
+          if (this.authDetail.configuration.location.editable) {
+            this.authDetail.configuration.location.visible = true;
+          }
         }
         break;
       case 'MAIL':
@@ -655,7 +701,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.mailTemplate.editable = false;
           }
         } else {
-          this.authDetail.configuration.mailTemplate.visible = this.authDetail.configuration.mailTemplate.editable;
+          if (this.authDetail.configuration.mailTemplate.editable) {
+            this.authDetail.configuration.mailTemplate.visible = true;
+          }
         }
         break;
       case 'REJECTION':
@@ -664,7 +712,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.rejection.editable = false;
           }
         } else {
-          this.authDetail.configuration.rejection.visible = this.authDetail.configuration.rejection.editable;
+          if (this.authDetail.configuration.rejection.editable) {
+            this.authDetail.configuration.rejection.visible = true;
+          }
         }
         break;
       case 'DASHBOARD':
@@ -673,7 +723,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.dashboard.editable = false;
           }
         } else {
-          this.authDetail.configuration.dashboard.visible = this.authDetail.configuration.dashboard.editable;
+          if (this.authDetail.configuration.rejection.editable) {
+            this.authDetail.configuration.rejection.visible = true;
+          }
         }
         break;
       case 'REPORT':
@@ -682,7 +734,9 @@ export class AuthorizeDetailComponent implements OnInit {
             this.authDetail.configuration.report.editable = false;
           }
         } else {
-          this.authDetail.configuration.report.visible = this.authDetail.configuration.report.editable;
+          if (this.authDetail.configuration.report.editable) {
+            this.authDetail.configuration.report.visible = true;
+          }
         }
         break;
       default:

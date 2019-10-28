@@ -12,7 +12,7 @@
   nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="utilitiesService.setFullname(item)">
+      <label class="text-cap" [nbTooltip]="utilitiesService.setFullname(item)">
         {{ utilitiesService.setFullname(item) }}
       </label>
       <small class="status">
@@ -245,7 +245,7 @@
         <div class="m-l-15">
           <div class="text-group">
             <label class="label">Name</label>
-            <span>{{ utilitiesService.setFullname(item) || '-' }}</span>
+            <span class="text-cap">{{ utilitiesService.setFullname(item) || '-' }}</span>
           </div>
           <div class="text-group">
             <label class="label">Birthday</label>

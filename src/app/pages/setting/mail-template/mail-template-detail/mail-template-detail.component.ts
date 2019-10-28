@@ -154,40 +154,44 @@ export class MailTemplateDetailComponent implements OnInit {
     this.sErrorBcc = "";
     if (this.itemDialog.cc.length > 0) {
       this.itemDialog.cc.map(cc => {
-        this.n = cc.value.search("@");
-        if (this.n > 0) {
-          this.str = cc.value.slice(this.n + 1);
-          this.n = this.str.search("@");
-          if (this.n != -1) {
-            this.sErrorcc = MESSAGE[9];
-            isValid = false
-          } else {
-            let checkFinal;
-            checkFinal = this.str.search(/\./);
-            if (checkFinal < 1) {
+        if (cc.value) {
+          this.n = cc.value.search("@");
+          if (this.n > 0) {
+            this.str = cc.value.slice(this.n + 1);
+            this.n = this.str.search("@");
+            if (this.n != -1) {
               this.sErrorcc = MESSAGE[9];
-              isValid = false;
+              isValid = false
+            } else {
+              let checkFinal;
+              checkFinal = this.str.search(/\./);
+              if (checkFinal < 1) {
+                this.sErrorcc = MESSAGE[9];
+                isValid = false;
+              }
             }
+          } else {
+            this.sErrorcc = MESSAGE[9];
+            isValid = false;
           }
-        } else {
-          this.sErrorcc = MESSAGE[9];
-          isValid = false;
         }
       })
     }
     if (this.itemDialog.bcc.length > 0) {
       this.itemDialog.bcc.map(bcc => {
-        this.n = bcc.value.search("@");
-        if (this.n > 0) {
-          this.str = bcc.value.slice(this.n + 1);
-          this.n = this.str.search("@");
-          if (this.n != -1) {
+        if (bcc.value) {
+          this.n = bcc.value.search("@");
+          if (this.n > 0) {
+            this.str = bcc.value.slice(this.n + 1);
+            this.n = this.str.search("@");
+            if (this.n != -1) {
+              this.sErrorBcc = MESSAGE[9];
+              isValid = false
+            }
+          } else {
             this.sErrorBcc = MESSAGE[9];
-            isValid = false
+            isValid = false;
           }
-        } else {
-          this.sErrorBcc = MESSAGE[9];
-          isValid = false;
         }
       })
     }

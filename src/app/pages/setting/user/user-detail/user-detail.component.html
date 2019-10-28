@@ -13,6 +13,50 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-control-group">
+          <label class="label">User Role <span class="text-red">*</span></label>
+          <nb-select placeholder="Select User Role" [(ngModel)]="userDetail.refHero" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.refHero }" (selectedChange)="onChangeRole($event)">
+            <nb-option *ngFor="let option of roleOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.refHero" class="text-red">{{ errMsg.refHero }}</small>
+        </div>
+        <div class="form-control-group">
+          <label class="label">Authorize Role <span class="text-red">*</span></label>
+          <nb-select placeholder="Select Authorize Role" [(ngModel)]="userDetail.refAuthorize" fullWidth
+            [ngClass]="{ 'status-danger': errMsg.refAuthorize }" [disabled]="!userDetail.refHero">
+            <nb-option *ngFor="let option of authOptions" [value]="option.value">
+              {{ option.label }}
+            </nb-option>
+          </nb-select>
+          <small *ngIf="errMsg.refAuthorize" class="text-red">{{ errMsg.refAuthorize }}</small>
+        </div>
+        <div *ngIf="userDetail.refHero !== adminId">
+          <div class="form-control-group">
+            <label class="label">Department <span class="text-red">*</span></label>
+            <nb-select placeholder="Select Department" [(ngModel)]="userDetail.departmentId" fullWidth
+              [ngClass]="{ 'status-danger': errMsg.departmentId }" (selectedChange)="onChangeDepartment($event)">
+              <nb-option *ngFor="let option of departmentOptions" [value]="option.value">
+                {{ option.label }}
+              </nb-option>
+            </nb-select>
+            <small *ngIf="errMsg.departmentId" class="text-red">{{ errMsg.departmentId }}</small>
+          </div>
+          <div class="form-control-group">
+            <label class="label">Division <span *ngIf="userDetail.divisionId" class="text-red">*</span></label>
+            <nb-select placeholder="Select Division" [(ngModel)]="userDetail.divisionId" fullWidth
+              [ngClass]="{ 'status-danger': errMsg.divisionId }" [disabled]="divisionOptions.length <= 1">
+              <nb-option *ngFor="let option of divisionOptions" [value]="option.value">
+                {{ option.label }}
+              </nb-option>
+            </nb-select>
+            <small *ngIf="errMsg.divisionId" class="text-red">{{ errMsg.divisionId }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-control-group">
           <label class="label">Title</label>
           <nb-select placeholder="Select Title" [(ngModel)]="userDetail.title" fullWidth
             [ngClass]="{ 'status-danger': errMsg.title }">
@@ -60,48 +104,6 @@
             class="m-t-5" autocomplete="off" [ngClass]="{ 'status-danger': errMsg.notifyEmail }"
             [disabled]="useSameUsername">
           <small *ngIf="errMsg.notifyEmail" class="text-red">{{ errMsg.notifyEmail }}</small>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-control-group">
-          <label class="label">Department <span class="text-red">*</span></label>
-          <nb-select placeholder="Select Department" [(ngModel)]="userDetail.departmentId" fullWidth
-            [ngClass]="{ 'status-danger': errMsg.departmentId }" (selectedChange)="onChangeDepartment($event)">
-            <nb-option *ngFor="let option of departmentOptions" [value]="option.value">
-              {{ option.label }}
-            </nb-option>
-          </nb-select>
-          <small *ngIf="errMsg.departmentId" class="text-red">{{ errMsg.departmentId }}</small>
-        </div>
-        <div class="form-control-group">
-          <label class="label">Division <span *ngIf="userDetail.divisionId" class="text-red">*</span></label>
-          <nb-select placeholder="Select Division" [(ngModel)]="userDetail.divisionId" fullWidth
-            [ngClass]="{ 'status-danger': errMsg.divisionId }" [disabled]="divisionOptions.length <= 1">
-            <nb-option *ngFor="let option of divisionOptions" [value]="option.value">
-              {{ option.label }}
-            </nb-option>
-          </nb-select>
-          <small *ngIf="errMsg.divisionId" class="text-red">{{ errMsg.divisionId }}</small>
-        </div>
-        <div class="form-control-group">
-          <label class="label">User Role <span class="text-red">*</span></label>
-          <nb-select placeholder="Select User Role" [(ngModel)]="userDetail.refHero" fullWidth
-            [ngClass]="{ 'status-danger': errMsg.refHero }">
-            <nb-option *ngFor="let option of roleOptions" [value]="option.value">
-              {{ option.label }}
-            </nb-option>
-          </nb-select>
-          <small *ngIf="errMsg.refHero" class="text-red">{{ errMsg.refHero }}</small>
-        </div>
-        <div class="form-control-group">
-          <label class="label">Authorize Role <span class="text-red">*</span></label>
-          <nb-select placeholder="Select Authorize Role" [(ngModel)]="userDetail.refAuthorize" fullWidth
-            [ngClass]="{ 'status-danger': errMsg.refAuthorize }">
-            <nb-option *ngFor="let option of authOptions" [value]="option.value">
-              {{ option.label }}
-            </nb-option>
-          </nb-select>
-          <small *ngIf="errMsg.refAuthorize" class="text-red">{{ errMsg.refAuthorize }}</small>
         </div>
       </div>
     </div>

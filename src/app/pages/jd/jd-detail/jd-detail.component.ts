@@ -5,6 +5,7 @@ import { getRole } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import { DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
+import { DropdownService } from '../../../shared/services/dropdown.service';
 import * as _ from 'lodash';
 import { MESSAGE } from '../../../shared/constants/message';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -96,6 +97,7 @@ export class JdDetailComponent implements OnInit {
   checkDivision: boolean;
   activeOnly: boolean;
   workMax: boolean;
+  sErrorDivision: string;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -106,6 +108,7 @@ export class JdDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
+    private dropdownService: DropdownService,
   ) {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
@@ -201,20 +204,19 @@ export class JdDetailComponent implements OnInit {
 
   async initialDropdown() {
     this.getPosition();
-    if (this.role.refHero.isAdmin) {
-      this.getDepartment();
-    } else {
-      this.userService.getDetail(this.role._id).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          if (response.data.departmentId) {
-            this.jd.departmentId = response.data.departmentId;
-          }
-          if (response.data.divisionId) {
-            this.jd.divisionId = response.data.divisionId;
-          }
-        }
-      });
-    }
+    this.getDepartment();
+    // else {
+    //   this.userService.getDetail(this.role._id).subscribe(response => {
+    //     if (response.code === ResponseCode.Success) {
+    //       if (response.data.departmentId) {
+    //         this.jd.departmentId = response.data.departmentId;
+    //       }
+    //       if (response.data.divisionId) {
+    //         this.jd.divisionId = response.data.divisionId;
+    //       }
+    //     }
+    //   });
+    // }
     this.getEducation();
   }
 
@@ -225,7 +227,7 @@ export class JdDetailComponent implements OnInit {
         label: "- Select Position -",
         value: undefined
       });
-      this.service.getPositionList().subscribe(response => {
+      this.dropdownService.getPosition().subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
             response.data.forEach(element => {
@@ -265,7 +267,7 @@ export class JdDetailComponent implements OnInit {
         value: undefined,
         group: undefined
       });
-      this.service.getDepartmentList(this.activeOnly).subscribe(response => {
+      this.dropdownService.getDepartment().subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
             response.data.forEach(element => {
@@ -274,7 +276,6 @@ export class JdDetailComponent implements OnInit {
                 value: element._id
               });
               if (element.hasDivision && element.divisions.length) {
-                console.log(element)
                 element.divisions.forEach(division => {
                   this.divisionAll.push({
                     group: element._id,
@@ -310,7 +311,6 @@ export class JdDetailComponent implements OnInit {
           this.jd.weightScore.education.weight.map((ele, i) => {
             ele.name = this.TempEdu[i].name;
           })
-          console.log(this.jd);
           this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
           this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
           this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
@@ -348,7 +348,6 @@ export class JdDetailComponent implements OnInit {
     if (division.length) {
       this.checkDivision = true;
       this.countDivision = division.length;
-      console.log(this.countDivision)
       division.forEach(element => {
         this.divisionOptions.push(element);
       });
@@ -584,6 +583,7 @@ export class JdDetailComponent implements OnInit {
           this.jd.weightScore.education.weight.map((element) => {
             if (element.percent === eScore) {
               checkEqual = true;
+              this.eduTotal = element.percent;
             }
             if (element.percent > eScore) {
               checkMax = true;
@@ -941,6 +941,15 @@ export class JdDetailComponent implements OnInit {
       }
   }
 
+  onChanheWork(i: any) {
+    console.log(i)// i start 0 
+    if (this.jd.weightScore.workExperience.weight.length > 1) {
+      if (i + 1 != this.jd.weightScore.workExperience.weight.length) {
+        this.jd.weightScore.workExperience.weight[i + 1].low = this.jd.weightScore.workExperience.weight[i].high;
+      }
+    }
+  }
+
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     let data = JSON.parse(response); //success server response
     console.log(data.uploadname)
@@ -976,16 +985,21 @@ export class JdDetailComponent implements OnInit {
       this.sErrorrefCheck = "";
 
     }
-    if (this.role.refHero.isAdmin === true) {
-      if (!this.jd.departmentId) {
-        isValid = false;
-        this.sErrorDe = MESSAGE[140];
-      }
+    if (!this.jd.departmentId) {
+      isValid = false;
+      this.sErrorDe = MESSAGE[140];
+    } else {
+      this.sErrorDe = "";
     }
     if (this.countDivision > 0) {
       if (this.jd.divisionId === undefined || this.jd.divisionId === "" || this.jd.divisionId === null) {
         isValid = false;
+        this.sErrorDivision = MESSAGE[158];
+      } else {
+        this.sErrorDivision = "";
       }
+    } else {
+      this.sErrorDivision = "";
     }
     if (this.jd.keywordSearch.length === 0) {
       isValid = false;
@@ -1015,7 +1029,9 @@ export class JdDetailComponent implements OnInit {
       if (this.jd.weightScore.education.total != 0) {
         this.eduTotal = 0;
         this.jd.weightScore.education.weight.map((element) => {
-          this.eduTotal += element.percent;
+          if (this.jd.weightScore.education.total === element.percent) {
+            this.eduTotal = element.percent;
+          }
         })
       }
       if (this.jd.weightScore.workExperience.total != 0) {
@@ -1041,12 +1057,12 @@ export class JdDetailComponent implements OnInit {
     }
     if (this.eduTotal != this.jd.weightScore.education.total) {
       isValid = false;
-      this.SErrorAll = MESSAGE[66];
+      this.SErrorAll = "% of max education is not equal to total education score";
 
     }
     if (this.wCheck != this.jd.weightScore.workExperience.total) {
       isValid = false;
-      this.SErrorAll = MESSAGE[64];
+      this.SErrorAll = "% of max work experience is not equal to total work experience score";
     }
     if (this.sTotal != 100) {
       isValid = false;
