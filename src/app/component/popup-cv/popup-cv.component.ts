@@ -3,7 +3,7 @@ import { ResponseCode } from '../../shared/app.constants';
 import { JdService } from '../../pages/jd/jd.service';
 import { PopupCVService } from './popup-cv.service';
 import { NbDialogService, NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId,setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -142,10 +142,10 @@ export class PopupCvComponent implements OnInit {
         this.items = response.data;
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
-        }else{
+        } else {
           this.items.birth = "";
         }
-        if(this.items.age === -1){
+        if (this.items.age === -1) {
           this.items.age = "";
         }
         if (this.items.workExperience.totalExpMonth != null || this.items.workExperience.totalExpMonth != undefined) {
@@ -154,7 +154,7 @@ export class PopupCvComponent implements OnInit {
             this.totalYear = Math.floor(this.totalMonth / 12);
             this.totalMonth = this.totalMonth % 12;
           } else {
-            if(this.totalMonth === -1){
+            if (this.totalMonth === -1) {
               this.totalMonth = 0;
             }
             this.totalYear = 0;
@@ -243,10 +243,12 @@ export class PopupCvComponent implements OnInit {
   }
 
   checkCV(id) {
-    this.jdService.originalCV(id)
-      .subscribe(data => this.downloadFile(data), function (error) {
-        //that.setAlertMessage("E", error.statusText);
-      });
+    this.jdService.originalCV(id, this.role._id)
+      .subscribe(data =>
+        this.downloadFile(data), function (error) {
+
+          //that.setAlertMessage("E", error.statusText);
+        });
   }
 
   downloadFile(data: any) {
@@ -263,7 +265,7 @@ export class PopupCvComponent implements OnInit {
   }
 
   bugReport(fieldLabel: any, fieldName: any) {
-    setBugId(this.flowId);
+    setBugId(this.items.candidateFlow._id);
     setFieldLabel(fieldLabel);
     setFieldName(fieldName);
     setBugCandidateId(this.candidateId)
@@ -457,7 +459,7 @@ export class PopupCvComponent implements OnInit {
 
   toggleCheck(fieldLabel, fieldName) {
     this.checked = !this.checked;
-    this.service.check(this.candidateId, fieldName, fieldLabel, "Correct").subscribe(response => {
+    this.service.check(this.items.candidateFlow._id, this.candidateId, fieldName, fieldLabel, "Correct").subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
       }

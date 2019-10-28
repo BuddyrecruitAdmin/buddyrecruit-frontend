@@ -221,7 +221,7 @@ export class CandidateComponent implements OnInit {
   }
 
   info(item: any) {
-    // setFlowId(item._id);
+    setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     this.dialogService.open(PopupCvComponent,
       {

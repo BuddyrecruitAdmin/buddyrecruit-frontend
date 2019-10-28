@@ -7,6 +7,7 @@ import { ApiResponse } from '../../shared/interfaces/common.interface';
 import { API_ENDPOINT } from "../../shared/constants";
 import { environment } from '../../../environments/environment';
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.DOWNLOAD;
+const URL2 = environment.API_URI + "/" + API_ENDPOINT.CV.CANDIDATE_ORIGINAL;
 @Injectable({
   providedIn: "root"
 })
@@ -32,9 +33,10 @@ export class JdService extends NetworkService {
   //   return this.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body);
   // }
 
-  originalCV(id: String) {
-    const body = { id: id };
-    return this.httpClient.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body, {
+  originalCV(id: String, userId: string) {
+    const body = { _id: id,
+    userId : userId };
+    return this.httpClient.post(URL2, body, {
       responseType: "blob",
       headers: new HttpHeaders().append("Content-Type", "application/json")
     });
