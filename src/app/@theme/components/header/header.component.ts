@@ -4,7 +4,7 @@ import { ProfileService } from '../../../pages/profile/profile.service';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil, timeout } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { getRole } from '../../../shared/services/auth.service';
+import { getRole, setFlowId } from '../../../shared/services/auth.service';
 import { Router } from "@angular/router";
 import { NbSearchService } from '@nebular/theme';
 import { setKeyword } from '../../../shared/services/auth.service';
@@ -210,6 +210,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.notifications[index].hidden = true;
       }
     });
+    if (item.refCandidateFlow) {
+      setFlowId(item.refCandidateFlow);
+    }
     this.router.navigate([item.link]);
   }
 

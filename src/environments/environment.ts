@@ -12,6 +12,6 @@ export const environment = {
   // API_URI: "http://192.168.15.44:4201", // PRD
   // API_URI: "https://p3-bkd.buddyrecruit.ai", // PRD
   // API_URI: "https://buddyrecruit.ai:4301", // PRD
-  API_URI: 'http://192.168.35.80:9001', // DEV N gos
+  API_URI: 'http://192.168.35.92:9001', // DEV N gos
   WriteLog: true
 };
