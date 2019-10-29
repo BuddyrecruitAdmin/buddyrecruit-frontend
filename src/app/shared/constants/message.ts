@@ -133,7 +133,7 @@ export const MESSAGE = {
   123: 'Do you want to delete Job Position [Master] ?',
   124: 'Do you want to save Job Position [Master] ?',
   125: 'Please input start date.',
-  126: 'Please input expiry date.',
+  126: 'Please input end date.',
   127: 'Please input internal password.',
   128: 'Please input external password.',
   129: 'Please input password.',

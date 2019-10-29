@@ -62,7 +62,7 @@
                 [routerLink]="'/setting/authorize/duplicate/'+item._id">
                 <nb-icon icon="copy-outline"></nb-icon>
               </button>
-              <button *ngIf="item.canDelete" nbButton status="danger" size="tiny" nbTooltip="Delete"
+              <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
                 (click)="delete(item)">
                 <nb-icon icon="trash-2-outline"></nb-icon>
               </button>
@@ -91,7 +91,7 @@
           <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
             [routerLink]="'/setting/authorize/duplicate/'+item._id">
           </nb-icon>
-          <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
+          <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
           </nb-icon>
         </div>
       </nb-card-header>

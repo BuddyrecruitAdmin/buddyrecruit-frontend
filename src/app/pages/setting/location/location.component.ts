@@ -54,6 +54,7 @@ export class LocationComponent implements OnInit {
       address: undefined,
       active: undefined,
       isDefault: undefined,
+      isUsed: undefined
     }
     return itemDialog;
   }

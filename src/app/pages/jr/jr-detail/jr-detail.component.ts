@@ -18,6 +18,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { request } from 'https';
 import { elementAt } from 'rxjs/operators';
+
 @Component({
   selector: 'ngx-jr-detail',
   templateUrl: './jr-detail.component.html',
@@ -49,12 +50,14 @@ export class JrDetailComponent implements OnInit {
   sErrorCheck: string;
   sErrorCap: string;
   sErrorUser: string;
+  sErrorEvaluation: string;
   checkPreview: boolean;
   jobId: any;
   jobStatus: any;
   tempJob: any;
   loading: any;
   editExam: boolean;
+
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -190,7 +193,7 @@ export class JrDetailComponent implements OnInit {
     return new Promise((resolve) => {
       this.Users = [];
       this.Users.push({
-        label: "- Select Users -",
+        label: "- Select Users Interview -",
         value: undefined,
         group: "disabled"
       });
@@ -248,9 +251,9 @@ export class JrDetailComponent implements OnInit {
           this.jr.userInterviews = this.jr.userInterviews.map(element => {
             return element.refUser._id;
           });
-          if(this.jr.refStatus.name != 'Waiting for HR Confirm'){
+          if (this.jr.refStatus.name != 'Waiting for HR Confirm') {
             this.editExam = false;
-          }else{
+          } else {
             this.editExam = true;
           }
           // this.tempJob = this.jr.userInterviews;
@@ -338,6 +341,8 @@ export class JrDetailComponent implements OnInit {
     this.touchedCheck = false;
     this.touchedCap = false;
     this.jr.refSource = [];
+    this.sErrorUser = '';
+    this.sErrorEvaluation = '';
     if (this.emailCheck === true) {
       this.jr.refSource.push({
         name: "Email",
@@ -395,6 +400,10 @@ export class JrDetailComponent implements OnInit {
       this.sErrorCap = MESSAGE[30];
       this.sErrorCheck = MESSAGE[30];
       this.touchedCap = true;
+      isValid = false;
+    }
+    if (!this.jr.refEvaluation) {
+      this.sErrorEvaluation = 'Please select evaluation template';
       isValid = false;
     }
     return isValid;

@@ -17,6 +17,7 @@ export interface Division {
   name: string;
   useDepartmentAddress: boolean;
   addresses: Addresses[];
+  isUsed: false,
 }
 export interface Department {
   _id?: string;
@@ -26,6 +27,7 @@ export interface Department {
   addresses: Addresses[];
   divisions?: Division[];
   active: boolean;
+  isUsed: boolean;
 }
 export interface ErrMsg {
   name: string;
@@ -45,6 +47,7 @@ export class DepartmentDetailComponent implements OnInit {
   departmentDetail: Department;
   departmentDetailTemp: Department;
   errMsg: ErrMsg;
+  divisionLocked: boolean;
 
   constructor(
     private router: Router,
@@ -60,6 +63,7 @@ export class DepartmentDetailComponent implements OnInit {
   ngOnInit() {
     this.departmentDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
+    this.divisionLocked = false;
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this.state = State.Edit;
@@ -79,6 +83,7 @@ export class DepartmentDetailComponent implements OnInit {
       addresses: [this.initialAddresses()],
       divisions: [],
       active: true,
+      isUsed: false,
     }
   }
 
@@ -87,7 +92,8 @@ export class DepartmentDetailComponent implements OnInit {
       _id: undefined,
       name: '',
       useDepartmentAddress: true,
-      addresses: [this.initialAddresses()]
+      addresses: [this.initialAddresses()],
+      isUsed: false,
     }
   }
 
@@ -225,6 +231,12 @@ export class DepartmentDetailComponent implements OnInit {
           this.departmentDetail.divisions.map(item => {
             item.addresses = item.addresses || [addresses];
           });
+          const found = this.departmentDetail.divisions.find(element => {
+            return element.isUsed;
+          });
+          if (found) {
+            this.divisionLocked = true;
+          }
         }
         this.departmentDetailTemp = _.cloneDeep(this.departmentDetail);
       } else {

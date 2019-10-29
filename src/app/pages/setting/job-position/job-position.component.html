@@ -33,7 +33,7 @@
         </div>
         <div class="actions">
           <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
-          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+          <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
         </div>
       </nb-card-header>
       <nb-card-body>
@@ -51,13 +51,13 @@
           <div class="text-group">
             <label class="label">Last update by</label>
             <span>
-              {{ item.lastChangedInfo.refUser.firstname }}
-              {{ item.lastChangedInfo.refUser.lastname }}
+              {{ item.lastChangedInfo?.refUser?.firstname }}
+              {{ item.lastChangedInfo?.refUser?.lastname }}
             </span>
           </div>
           <div class="text-group">
             <label class="label">Last update date</label>
-            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
           </div>
         </i>
       </nb-card-body>
@@ -85,7 +85,7 @@
       </div>
       <div>
         <label class="label">Status</label>
-        <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id">
+        <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id || itemDialog.isUsed">
           <nb-radio *ngFor="let status of statusList" [value]="status.value">
             {{ status.label }}
           </nb-radio>

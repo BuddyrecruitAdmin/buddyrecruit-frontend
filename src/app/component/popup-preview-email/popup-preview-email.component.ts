@@ -25,6 +25,7 @@ export class PopupPreviewEmailComponent implements OnInit {
   stageId: any;
   mailOptions: any;
   mailType: any;
+  actionUser: any;
   previewEmail: boolean;
   sendEmail: boolean;
   today: Date;
@@ -59,6 +60,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     this.canApprove = false;
     this.mailOptions = {};
     this.mailType = '';
+    this.actionUser = [];
     this.previewEmail = false;
     this.sendEmail = true;
     this.today = new Date();
@@ -75,6 +77,7 @@ export class PopupPreviewEmailComponent implements OnInit {
         if (response.data.mailOptions) {
           this.mailOptions = response.data.mailOptions;
           this.mailType = response.data.type;
+          this.actionUser = response.data.actionUser;
           this.previewEmail = true;
         } else {
           this.previewEmail = false;
@@ -117,7 +120,8 @@ export class PopupPreviewEmailComponent implements OnInit {
     if (this.sendEmail) {
       data = {
         mailOptions: this.mailOptions,
-        mailType: this.mailType
+        mailType: this.mailType,
+        actionUser: this.actionUser,
       }
     }
     return data;

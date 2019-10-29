@@ -6,7 +6,7 @@
   <nb-card-header>
     Department Detail
     <div class="pull-right">
-      <mat-checkbox [(ngModel)]="departmentDetail.active">Active</mat-checkbox>
+      <mat-checkbox [(ngModel)]="departmentDetail.active" [disabled]="departmentDetail.isUsed">Active</mat-checkbox>
     </div>
   </nb-card-header>
   <nb-card-body>
@@ -47,7 +47,7 @@
                   <label class="label">Postal code <span class="text-red">*</span></label>
                   <input type="number" [(ngModel)]="address.postalCode" nbInput fullWidth placeholder="Postal Code"
                     [ngClass]="{ 'status-danger': errMsg.postalCode }" max="99999"
-                    onKeyPress="if(this.value.length==5) return false;" digitOnly >
+                    onKeyPress="if(this.value.length==5) return false;" digitOnly>
                   <small *ngIf="errMsg.postalCode" class="text-red">{{ errMsg.postalCode }}</small>
                 </div>
               </div>
@@ -58,7 +58,8 @@
       <div class="col-md-6">
         <div class="form-control-group">
           <label class="label">Has Division</label>
-          <nb-radio-group [(ngModel)]="departmentDetail.hasDivision" name="hasDivision" class="inline">
+          <nb-radio-group [(ngModel)]="departmentDetail.hasDivision" name="hasDivision" class="inline"
+            [disabled]="divisionLocked">
             <nb-radio name="hasDivision" [value]="true">Yes</nb-radio>
             <nb-radio name="hasDivision" [value]="false">No</nb-radio>
           </nb-radio-group>
@@ -68,7 +69,8 @@
           <div class="division-bg">
             <nb-card *ngFor="let division of departmentDetail.divisions; let i = index">
               <nb-card-body>
-                <div class="icon-close link" nbTooltip="Remove Division" (click)="removeDivision(i)">
+                <div *ngIf="!division.isUsed" class="icon-close link" nbTooltip="Remove Division"
+                  (click)="removeDivision(i)">
                   <nb-icon icon="close-outline"></nb-icon>
                 </div>
                 <div class="form-control-group">
@@ -101,7 +103,8 @@
                         <div class="form-control-group">
                           <label class="label">Postal code <span class="text-red">*</span></label>
                           <input type="text" [(ngModel)]="address.postalCode" nbInput fullWidth
-                            placeholder="Postal Code" max="99999" onKeyPress="if(this.value.length==5) return false;" digitOnly >
+                            placeholder="Postal Code" max="99999" onKeyPress="if(this.value.length==5) return false;"
+                            digitOnly>
                         </div>
                       </div>
                     </div>

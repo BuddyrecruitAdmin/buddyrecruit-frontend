@@ -98,12 +98,15 @@ export class PagesComponent {
         || (configuration.companyType && configuration.companyType.visible)
         || (configuration.department && configuration.department.visible)
         || (configuration.division && configuration.division.visible)
+        || (configuration.authorize && configuration.authorize.visible)
+        || (configuration.user && configuration.user.visible)
         || (configuration.jobPosition && configuration.jobPosition.visible)
+        || (configuration.evaluation && configuration.evaluation.visible)
         || (configuration.location && configuration.location.visible)
         || (configuration.mailTemplate && configuration.mailTemplate.visible)
         || (configuration.rejection && configuration.rejection.visible)
+        || (configuration.dashboard && configuration.dashboard.visible)
         || (configuration.report && configuration.report.visible)
-        || (configuration.user && configuration.user.visible)
       ) {
         let menuSetting: NbMenuItem[];
         menuSetting = [];
@@ -134,7 +137,7 @@ export class PagesComponent {
         if (configuration.jobPosition && configuration.jobPosition.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
-        if (configuration.jobPosition && configuration.jobPosition.visible) {
+        if (configuration.evaluation && configuration.evaluation.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[7]);
         }
         if (configuration.location && configuration.location.visible) {

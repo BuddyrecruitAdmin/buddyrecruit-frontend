@@ -11,7 +11,7 @@
   <nb-card-header>
     Authorize Detail
     <div class="pull-right">
-      <mat-checkbox [(ngModel)]="authDetail.active">Active</mat-checkbox>
+      <mat-checkbox [(ngModel)]="authDetail.active" [disabled]="authDetail.isUsed">Active</mat-checkbox>
     </div>
   </nb-card-header>
   <nb-card-body>

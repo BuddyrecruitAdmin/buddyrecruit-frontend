@@ -120,9 +120,14 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   onSelectTab(event: any) {
-    if (!this.tabSelected && getTabName()) {
-      this.tabSelected = getTabName();
-      setTabName();
+    if (this.startFlag) {
+      this.startFlag = false;
+      if (getTabName()) {
+        this.tabSelected = getTabName();
+        setTabName();
+      } else {
+        this.tabSelected = 'PENDING';
+      }
     } else {
       this.tabSelected = event.tabTitle;
     }
@@ -149,13 +154,6 @@ export class TalentPoolDetailComponent implements OnInit {
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
-        if (this.startFlag) {
-          if (this.items.length === 0) {
-            this.startFlag = false;
-            this.tabSelected = "PENDING";
-            this.search();
-          }
-        }
       }
       this.loading = false;
     });
