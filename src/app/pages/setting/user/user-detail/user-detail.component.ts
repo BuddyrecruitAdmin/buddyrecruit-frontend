@@ -143,7 +143,7 @@ export class UserDetailComponent implements OnInit {
     return new Promise((resolve) => {
       this.prefixOptions = [];
       this.prefixOptions.push({
-        label: 'Select Title',
+        label: '- Select Title -',
         value: undefined
       });
       for (const item in Prefix) {

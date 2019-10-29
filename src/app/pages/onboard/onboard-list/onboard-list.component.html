@@ -91,8 +91,10 @@
               <label class="link" [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</label>
             </div>
             <div class="actions">
-              <span class="label"
-                [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">{{ item.pending }}</span>
+              <span class="label" [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">
+                <span>{{ item.pending }}</span>
+                <span *ngIf="item.pendingAll">/{{ item.pendingAll }}</span>
+              </span>
               <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
             </div>
           </nb-card-header>
@@ -144,7 +146,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" >Name</th>
+              <th scope="col">Name</th>
               <th scope="col" style="width: 200px;">Department</th>
               <th scope="col" style="width: 150px;">Division</th>
               <th scope="col" style="width: 90px;">Status</th>
@@ -181,16 +183,17 @@
                 </span>
               </td>
               <td>
-                <span class="label" [ngClass]="{ 'label-danger' : item.pending }">
-                  {{ item.pending || '0' }}
+                <span class="label" [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">
+                  <span>{{ item.pending }}</span>
+                  <span *ngIf="item.pendingAll">/{{ item.pendingAll }}</span>
                 </span>
               </td>
               <td class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
-                <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
-                  <nb-icon icon="edit-outline"></nb-icon>
+                <button nbButton status="primary" size="tiny" nbTooltip="Preview" (click)="edit(item)">
+                  <nb-icon icon="arrowhead-right-outline"></nb-icon>
                 </button>
                 <button *ngIf="item.canClose && role.refAuthorize?.closeJR?.visible" nbButton status="danger"
                   size="tiny" nbTooltip="Close" (click)="close(item)">
