@@ -143,6 +143,7 @@ export class SignContractDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
+          item.condition = this.setCondition(item);
           let sum = 0;
           let totalPass = 0;
           let totalCompare = 0;
@@ -174,6 +175,42 @@ export class SignContractDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  setCondition(item: any): any {
+    let condition = {
+      icon: {
+        signContract: false
+      },
+      button: {
+        step: {},
+        nextStep: false,
+        reject: false,
+        revoke: false,
+        comment: false,
+      },
+      isExpired: false
+    };
+    const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+      return step.refStage._id === item.refStage._id;
+    });
+    if (step) {
+      condition.button.step = step;
+      condition.button.comment = true;
+      if (step.editable) {
+        if (this.tabSelected === 'PENDING') {
+          condition.icon.signContract = true;
+          condition.button.nextStep = true;
+          condition.button.reject = true;
+        } else {
+          condition.button.revoke = true;
+        }
+      }
+    }
+    if (item.refJR.refStatus.status !== 'JRS002') {
+      condition.isExpired = true;
+    }
+    return condition;
   }
 
   infoResult(item: any) {

@@ -151,12 +151,80 @@ export class TalentPoolDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
+          item.condition = this.setCondition(item);
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
       }
       this.loading = false;
     });
+  }
+
+  setCondition(item: any): any {
+    let condition = {
+      icon: {
+        examDate: false
+      },
+      button: {
+        step: {},
+        nextStep: false,
+        examDate: false,
+        reject: false,
+        revoke: false,
+        comment: false
+      },
+      isExpired: false
+    };
+    let thisStage: any;
+    let nextStage: any;
+    if (item.refJR.requiredExam) {
+      thisStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+        return step.refStage._id === item.refStage._id;
+      });
+      nextStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+        return step.refStage._id === thisStage.refNextStage;
+      });
+    } else {
+      thisStage = this.role.processFlow.noExam.steps.find(step => {
+        return step.refStage._id === item.refStage._id;
+      });
+      nextStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+        return step.refStage._id === thisStage.refNextStage;
+      });
+    }
+    if (thisStage) {
+      condition.button.step = thisStage;
+      condition.button.comment = true;
+      switch (this.tabSelected) {
+        case 'NOT BUY':
+          break;
+        case 'PENDING':
+          if (thisStage.editable) {
+            condition.button.nextStep = true;
+            condition.button.reject = true;
+            if (thisStage.refStage.refMain._id !== nextStage.refStage.refMain._id) {
+              if (item.refJR.requiredExam) {
+                condition.icon.examDate = true;
+                if (!this.utilitiesService.dateIsValid(item.examInfo.date)) {
+                  condition.button.nextStep = false;
+                  condition.button.examDate = true;
+                }
+              }
+            }
+          }
+          break;
+        case 'SELECTED':
+          break;
+        case 'REJECTED':
+          condition.button.revoke = true;
+          break;
+      }
+      if (item.refJR.refStatus.status !== 'JRS002') {
+        condition.isExpired = true;
+        condition.icon.examDate = false;
+      }
+    }
+    return condition;
   }
 
   setTabCount(count: Count) {

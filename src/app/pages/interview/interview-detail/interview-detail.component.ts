@@ -175,7 +175,7 @@ export class InterviewDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map((item, index) => {
           item.collapse = this.collapseAll;
-          item.button = this.setButton(item);
+          item.condition = this.setCondition(item);
           // this.score[index] =this.showScore(item);
           let sum = 0;
           let totalPass = 0;
@@ -210,33 +210,78 @@ export class InterviewDetailComponent implements OnInit {
     });
   }
 
-  setButton(item: any): any {
-    let button = {
-      nextStep: false,
-      interviewTaken: false,
-      interviewScore: false,
+  setCondition(item: any): any {
+    let condition = {
+      icon: {
+        interviewDate: false,
+        interviewScore: false,
+      },
+      button: {
+        step: {},
+        nextStep: false,
+        interviewDate: false,
+        interviewScore: false,
+        reject: false,
+        revoke: false,
+        comment: false,
+      },
+      isExpired: false
     };
-    switch (item.refStage.order) {
-      case 401:
-        if (item.pendingInterviewInfo) {
-          if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
-            button.nextStep = true;
-          } else {
-            button.interviewTaken = true;
-          }
+    const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+      return step.refStage._id === item.refStage._id;
+    });
+    if (step) {
+      condition.button.step = step;
+      condition.button.comment = true;
+      if (step.editable) {
+        switch (item.refStage.order) {
+          case 401: // Interview Taken
+            if (this.tabSelected === 'PENDING') {
+              condition.icon.interviewDate = true;
+              condition.button.reject = true;
+              if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
+                condition.button.nextStep = true;
+              } else {
+                condition.button.interviewDate = true;
+              }
+            } else {
+              condition.button.revoke = true;
+            }
+            break;
+          case 402: // Interview Score
+            if (this.tabSelected === 'PENDING') {
+              condition.button.reject = true;
+              if (item.pendingInterviewScoreInfo.evaluation.length) {
+                condition.button.nextStep = true;
+              } else {
+                if (item.refJR.userInterviews.length) {
+                  const found = item.refJR.userInterviews.find(element => {
+                    return element.refUser === this.role._id;
+                  });
+                  if (found) {
+                    condition.button.interviewScore = true;
+                  }
+                }
+              }
+            }
+            break;
         }
-        break;
-      case 402:
-        if (item.pendingInterviewScoreInfo) {
-          if (item.pendingInterviewScoreInfo.evaluation.length) {
-            button.nextStep = true;
-          } else {
-            button.interviewScore = true;
-          }
+      }
+      if (item.refJR.userInterviews.length) {
+        const found = item.refJR.userInterviews.find(element => {
+          return element.refUser === this.role._id;
+        });
+        if (found) {
+          condition.icon.interviewScore = true;
         }
-        break;
+      }
     }
-    return button;
+    if (item.refJR.refStatus.status !== 'JRS002') {
+      condition.isExpired = true;
+      condition.icon.interviewDate = false;
+      condition.icon.interviewScore = false;
+    }
+    return condition;
   }
 
   setTabCount(count: Count) {
