@@ -193,20 +193,23 @@
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.height.px]="innerHeight">
-    <nb-card-body>
+    <nb-card-header *ngIf="previewPicture">
       <div style="text-align:center;">
         <span>Preview profile</span><br>
         <img class="img-default" [src]="croppedImage" />
       </div>
+    </nb-card-header>
+    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="">
       <div>
-        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="3 / 3"
-          [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-          (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"></image-cropper>
+        <image-cropper class="img-fluid" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+          [aspectRatio]="3 / 3" [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"
+          [resizeToWidth]="100" [resizeToHeight]="100"></image-cropper>
       </div>
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="close()">Cancel</button>
-      <button nbButton status="success" (click)="saveNewImage(imageChangedEvent)">Save</button>
+      <button *ngIf="previewPicture" nbButton status="success" (click)="saveNewImage()">Save</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

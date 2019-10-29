@@ -32,7 +32,7 @@ import {
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 // import { NbMomentDateModule } from '@nebular/moment';
 // import { NbDateFnsDateModule } from '@nebular/date-fns';
-
+import { DigitOnlyModule } from '@uiowa/digit-only';
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -179,6 +179,7 @@ import { PopupInterviewResultComponent } from './popup-interview-result/popup-in
     ChartsModule,
     TagInputModule,
     AngularEditorModule,
+    DigitOnlyModule
   ],
   declarations: [
     PopupMessageComponent,

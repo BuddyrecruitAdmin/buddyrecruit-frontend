@@ -148,14 +148,14 @@ export class PopupEvaluationComponent implements OnInit {
   validation(): boolean {
     let isValid = true;
     let invalid: any;
-    invalid = this.evaluation.basicApplications.find(element => {
-      if (!element.selected) {
-        return element;
-      }
-    });
-    if (invalid) {
-      return false;
-    }
+    // invalid = this.evaluation.basicApplications.find(element => {
+    //   if (!element.selected) {
+    //     return element;
+    //   }
+    // });
+    // if (invalid) {
+    //   return false;
+    // }
     invalid = this.evaluation.evaCategories.find(element => {
       if (!element.selected) {
         return element;
