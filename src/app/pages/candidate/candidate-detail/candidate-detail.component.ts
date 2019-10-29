@@ -173,7 +173,7 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   checkCV(id) {
-    this.jdService.originalCV(id)
+    this.jdService.originalCV(id, this.role._id)
       .subscribe(data => this.downloadFile(data), function (error) {
         //that.setAlertMessage("E", error.statusText);
       });

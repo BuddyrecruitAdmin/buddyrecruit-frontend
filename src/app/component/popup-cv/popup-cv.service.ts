@@ -54,8 +54,9 @@ export class PopupCVService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.DELETE, body);
   }
 
-  check(_id: string, fieldName: string, fieldLabel: string, feedbackType: any = undefined, bugComment: any = undefined): Observable<ApiResponse> {
+  check(flowId: string,_id: string, fieldName: string, fieldLabel: string, feedbackType: any = undefined, bugComment: any = undefined): Observable<ApiResponse> {
     const body = {
+      refCandidateFlow: flowId,
       refCandidate: _id,
       fieldName: fieldName,
       fieldText: fieldLabel,

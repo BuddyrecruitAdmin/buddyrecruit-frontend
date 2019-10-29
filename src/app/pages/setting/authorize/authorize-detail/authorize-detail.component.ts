@@ -71,6 +71,7 @@ export interface Auth {
   showApplicationForm: boolean;
   showSalary: boolean;
   closeJR: boolean;
+  isUsed?: boolean;
 }
 export interface ErrMsg {
   name: string;

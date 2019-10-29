@@ -71,7 +71,7 @@ export class PopupFeedbackComponent implements OnInit {
   }
 
   postBug() {
-    this.service.create(this.bugCandidateId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
+    this.service.create(this.bugId,this.bugCandidateId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
         this.TogglePage = 'history';

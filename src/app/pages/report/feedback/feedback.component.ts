@@ -189,7 +189,7 @@ export class FeedbackComponent implements OnInit {
 
   info(item: any) {
     console.log(item)
-    setFlowId(item._id);
+    setFlowId(item.refCandidateFlow);
     setCandidateId(item.refCandidate._id);
     this.dialogService.open(PopupCvComponent,
       {

@@ -1324,6 +1324,24 @@
     background-color: var(--color-blue);
   }
 
+  
+  // --------------------------------------------------------------------
+  // HAS ERROR
+
+  .form-control-group.has-error {
+    input,
+    input:hover,
+    input:focus,
+    input:active,
+    nb-select .select-button,
+    nb-select .select-button:hover,
+    nb-select .select-button:focus,
+    nb-select .select-button:active {
+      border-color: var(--color-red);
+    }
+
+  }
+
   // --------------------------------------------------------------------
   // MOBILE && TABLET
 

@@ -203,8 +203,8 @@ export class JdDetailComponent implements OnInit {
   }
 
   async initialDropdown() {
-    this.getPosition();
-    this.getDepartment();
+    await this.getPosition();
+    await this.getDepartment();
     // else {
     //   this.userService.getDetail(this.role._id).subscribe(response => {
     //     if (response.code === ResponseCode.Success) {
@@ -217,7 +217,7 @@ export class JdDetailComponent implements OnInit {
     //     }
     //   });
     // }
-    this.getEducation();
+    await this.getEducation();
   }
 
   getPosition() {

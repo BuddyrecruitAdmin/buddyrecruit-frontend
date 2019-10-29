@@ -56,7 +56,7 @@
                 [routerLink]="'/setting/evaluation-detail/duplicate/'+item._id">
                 <nb-icon icon="copy-outline"></nb-icon>
               </button>
-              <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)">
+              <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)">
                 <nb-icon icon="trash-2-outline"></nb-icon>
               </button>
             </td>

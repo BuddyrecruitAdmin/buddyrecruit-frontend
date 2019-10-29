@@ -40,8 +40,9 @@ export class PopupFeedbackService extends NetworkService {
   //   return this.post(API_ENDPOINT.CANDIDATE.EDIT, { items });
   // }
 
-  create(_id: string, fieldName: string, fieldLabel: string, feedbackType: string, bugComment: string): Observable<ApiResponse> {
+  create(flowId: string,_id: string, fieldName: string, fieldLabel: string, feedbackType: string, bugComment: string): Observable<ApiResponse> {
     const body = {
+      refCandidateFlow: flowId,
       refCandidate: _id,
       fieldName: fieldName,
       fieldText: fieldLabel,

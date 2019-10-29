@@ -34,10 +34,10 @@
                   <label [nbTooltip]="item.name">{{item.name}}</label>
                 </div>
                 <div class="actions">
-                  <nb-icon *ngIf="role.refAuthorize.jd.mailTemplate" icon="edit-outline" class="link" nbTooltip="Edit"
+                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="edit-outline" class="link" nbTooltip="Edit"
                     [routerLink]="'/setting/mail-template-detail/'+item._id">
                   </nb-icon>
-                  <nb-icon *ngIf="role.refAuthorize.jd.mailTemplate" icon="trash-2-outline" class="link"
+                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="trash-2-outline" class="link"
                     nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>
               </nb-card-header>
@@ -84,10 +84,10 @@
                   <label [nbTooltip]="item.name">{{item.name}}</label>
                 </div>
                 <div class="actions">
-                  <nb-icon *ngIf="role.refAuthorize.jd.mailTemplate" icon="edit-outline" class="link" nbTooltip="Edit"
+                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="edit-outline" class="link" nbTooltip="Edit"
                     [routerLink]="'/setting/mail-template-detail/'+item._id">
                   </nb-icon>
-                  <nb-icon *ngIf="role.refAuthorize.jd.mailTemplate" icon="trash-2-outline" class="link"
+                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="trash-2-outline" class="link"
                     nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>
               </nb-card-header>

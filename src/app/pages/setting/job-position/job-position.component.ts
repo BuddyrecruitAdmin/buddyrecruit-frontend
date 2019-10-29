@@ -53,7 +53,8 @@ export class JobPositionComponent implements OnInit {
       _id: undefined,
       name: undefined,
       remark: undefined,
-      active: undefined
+      active: undefined,
+      isUsed: undefined,
     }
     return itemDialog;
   }
@@ -87,7 +88,6 @@ export class JobPositionComponent implements OnInit {
     this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
-        console.log(this.items)
         this.paging.length = response.totalDataSize;
 
         if (!this.items.length && this.paging.pageIndex > 0) {
