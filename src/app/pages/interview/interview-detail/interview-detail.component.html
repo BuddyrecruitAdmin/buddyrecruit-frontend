@@ -100,7 +100,7 @@
                 </div>
                 <div class="col-md-6">
                   <label class="label text-light-gray m-r-5">Interview Date</label>
-                  <nb-icon *ngIf="!(item.refJR?.refStatus?.status !== 'JRS002')" icon="edit-2-outline" class="link"
+                  <nb-icon *ngIf="item.condition.icon.interviewDate" icon="edit-2-outline" class="link"
                     nbTooltip="Edit Interview Date" (click)="openPopupInterviewDate(item)"></nb-icon>
                   <div class="m-l-15">
                     <div class="text-group">
@@ -112,9 +112,9 @@
                       <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.startDate) || '-' }}</span>
                     </div>
                   </div>
-                  <div *ngIf="item.refStage?.name === 'Interview Score'" class="m-t-5">
+                  <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Interview Info</label>
-                    <nb-icon *ngIf="!(item.refJR?.refStatus?.status !== 'JRS002')" icon="edit-2-outline" class="link"
+                    <nb-icon *ngIf="item.condition.icon.interviewScore" icon="edit-2-outline" class="link"
                       nbTooltip="Edit Interview Info" (click)="openPopupEvaluation(item)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
@@ -152,51 +152,51 @@
                   <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
                 </button>
               </div>
-              <button *ngIf="tab.name !== 'SELECTED'" nbButton status="info" nbTooltip="Comment"
+
+              <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
                 <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
                   position="top right"></nb-badge>
               </button>
-              <span *ngIf="tab.name === 'PENDING'">
-                <span *ngFor="let button of steps">
-                  <span *ngIf="button.editable && button.refStage._id === item.refStage._id">
-                    <button *ngIf="item.button.nextStep" nbButton status="success" [nbTooltip]="button.button"
-                      (click)="approve(item, button)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
-                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
-                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
-                        {{ item.refJR?.refStatus?.name }}
-                      </span>
-                    </button>
-                    <button *ngIf="item.button.interviewTaken" nbButton status="success" [nbTooltip]="button.button"
-                      (click)="approve(item, button)" [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
-                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="checkmark-circle-2"></nb-icon>
-                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
-                        {{ item.refJR?.refStatus?.name }}
-                      </span>
-                    </button>
-                    <button *ngIf="item.button.interviewScore" nbButton status="success"
-                      nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)"
-                      [disabled]="item.refJR?.refStatus?.status !== 'JRS002'">
-                      <nb-icon *ngIf="item.refJR?.refStatus?.status === 'JRS002'" icon="edit-2-outline"></nb-icon>
-                      <span *ngIf="item.refJR?.refStatus?.status !== 'JRS002'">
-                        {{ item.refJR?.refStatus?.name }}
-                      </span>
-                    </button>
-                    <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
-                      <nb-icon icon="close-circle"></nb-icon>
-                    </button>
-                  </span>
+
+              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
+                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
+                [disabled]="item.condition.isExpired">
+                <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
                 </span>
-              </span>
-              <span *ngIf="tab.name === 'REJECTED'">
-                <span *ngFor="let button of steps">
-                  <button *ngIf="button.editable && button.refStage._id === item.refStage._id" nbButton status="primary"
-                    nbTooltip="Revoke" (click)="revoke(item)">
-                    <nb-icon icon="undo"></nb-icon>
-                  </button>
+              </button>
+
+              <button *ngIf="item.condition.button.interviewDate" nbButton status="success"
+                nbTooltip="Edit Interview Date" (click)="openPopupInterviewDate(item)"
+                [disabled]="item.condition.isExpired">
+                <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
                 </span>
-              </span>
+              </button>
+
+              <button *ngIf="item.condition.button.interviewScore" nbButton status="success"
+                nbTooltip="Input Interview Score" (click)="openPopupEvaluation(item)"
+                [disabled]="item.condition.isExpired">
+                <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
+                </span>
+              </button>
+
+              <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
+                (click)="reject(item)">
+                <nb-icon icon="close-circle"></nb-icon>
+              </button>
+
+              <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
+                (click)="revoke(item)">
+                <nb-icon icon="undo"></nb-icon>
+              </button>
+
             </nb-card-footer>
           </nb-card>
           <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"

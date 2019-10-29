@@ -287,10 +287,12 @@
               utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
             </span>
           </div>
-          <label *ngIf="item.workExperience?.work.length" class="label">Detail :</label>
-          <div class="m-l-15">
-            <div *ngFor="let exp of item.workExperience?.work">
-              <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+          <div *ngIf="item.workExperience?.work.length">
+            <label class="label">Detail :</label>
+            <div class="m-l-15">
+              <div *ngFor="let exp of item.workExperience?.work">
+                <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+              </div>
             </div>
           </div>
         </div>
@@ -301,6 +303,7 @@
           <div *ngFor="let education of item.education">
             <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
           </div>
+          <span *ngIf="!item.education.length">-</span>
         </div>
       </div>
     </div>
@@ -308,19 +311,22 @@
     <!-- Hard Skills -->
     <label class="label topic">Hard Skills</label>
     <div class="m-l-15">
-      <span>• {{ utilitiesService.convertStringArrayToLongText(item.hardSkill) }}</span>
+      <span *ngIf="item.hardSkill.length">• </span>
+      <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
     </div>
 
     <!-- Soft Skills -->
     <label class="label topic">Soft Skills</label>
     <div class="m-l-15">
-      <span>• {{ utilitiesService.convertStringArrayToLongText(item.softSkill) }}</span>
+      <span *ngIf="item.softSkill.length">• </span>
+      <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
     </div>
 
     <!-- Certificate -->
     <label class="label topic">Certificate</label>
     <div class="m-l-15">
-      <span>• {{ utilitiesService.convertStringArrayToLongText(item.certificate) }}</span>
+      <span *ngIf="item.certificate.length">• </span>
+      <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
     </div>
 
   </nb-card-body>

@@ -167,7 +167,7 @@ export class AppointmentDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
-          item.button = this.setButton(item);
+          item.condition = this.setCondition(item);
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -176,19 +176,46 @@ export class AppointmentDetailComponent implements OnInit {
     });
   }
 
-  setButton(item: any): any {
-    let button = {
-      nextStep: false,
-      interviewDate: false,
+  setCondition(item: any): any {
+    let condition = {
+      icon: {
+        interviewDate: false,
+      },
+      button: {
+        step: {},
+        nextStep: false,
+        interviewDate: false,
+        reject: false,
+        revoke: false,
+        comment: false,
+      },
+      isExpired: false
     };
-    if (item.pendingInterviewInfo) {
-      if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
-        button.nextStep = true;
-      } else {
-        button.interviewDate = true;
+    const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+      return step.refStage._id === item.refStage._id;
+    });
+    if (step) {
+      condition.button.step = step;
+      condition.button.comment = true;
+      if (step.editable) {
+        if (this.tabSelected === 'PENDING') {
+          condition.icon.interviewDate = true;
+          condition.button.reject = true;
+          if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
+            condition.button.nextStep = true;
+          } else {
+            condition.button.interviewDate = true;
+          }
+        } else {
+          condition.button.revoke = true;
+        }
       }
     }
-    return button;
+    if (item.refJR.refStatus.status !== 'JRS002') {
+      condition.isExpired = true;
+      condition.icon.interviewDate = false;
+    }
+    return condition;
   }
 
   setTabCount(count: Count) {

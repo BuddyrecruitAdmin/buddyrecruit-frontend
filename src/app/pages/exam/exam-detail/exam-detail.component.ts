@@ -101,7 +101,7 @@ export class ExamDetailComponent implements OnInit {
       })
     });
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
-      return step.refStage.refMain._id === this.role.refCompany.menu.pendingExam.refStage._id && step.editable;
+      return step.refStage.refMain._id === this.refStageId;
     });
   }
 
@@ -144,7 +144,7 @@ export class ExamDetailComponent implements OnInit {
         this.items = response.data;
         this.items.map(item => {
           item.collapse = this.collapseAll;
-          item.button = this.setButton(item);
+          item.condition = this.setCondition(item);
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -153,33 +153,72 @@ export class ExamDetailComponent implements OnInit {
     });
   }
 
-  setButton(item: any): any {
-    let button = {
-      nextStep: false,
-      examTaken: false,
-      examScore: false,
+  setCondition(item: any): any {
+    let condition = {
+      icon: {
+        examDate: false,
+        examInfo: false,
+        examScore: false,
+      },
+      button: {
+        step: {},
+        nextStep: false,
+        examTaken: false,
+        examScore: false,
+        reject: false,
+        revoke: false,
+        comment: false,
+      },
+      isExpired: false
     };
-    switch (item.refStage.order) {
-      case 201:
-        if (item.pendingExamInfo) {
-          if (this.utilitiesService.dateIsValid(item.pendingExamInfo.availableDate) || item.pendingExamInfo.afterSignContract) {
-            button.nextStep = true;
-          } else {
-            button.examTaken = true;
-          }
+    const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+      return step.refStage._id === item.refStage._id;
+    });
+    if (step) {
+      condition.button.step = step;
+      condition.button.comment = true;
+      if (step.editable) {
+        switch (item.refStage.order) {
+          case 201: // Exam Taken
+            if (this.tabSelected === 'PENDING') {
+              condition.icon.examDate = true;
+              condition.icon.examInfo = true;
+              condition.button.reject = true;
+              if (item.pendingExamInfo) {
+                if (this.utilitiesService.dateIsValid(item.pendingExamInfo.availableDate) || item.pendingExamInfo.afterSignContract) {
+                  condition.button.nextStep = true;
+                } else {
+                  condition.button.examTaken = true;
+                }
+              }
+            } else {
+              condition.button.revoke = true;
+            }
+            break;
+          case 202: // Exam Score
+            if (this.tabSelected === 'PENDING') {
+              condition.icon.examInfo = true;
+              condition.icon.examScore = true;
+              condition.button.reject = true;
+              if (item.pendingExamScoreInfo) {
+                if (item.pendingExamScoreInfo.examScore && item.pendingExamScoreInfo.attitudeScore) {
+                  condition.button.nextStep = true;
+                } else {
+                  condition.button.examScore = true;
+                }
+              }
+            }
+            break;
         }
-        break;
-      case 202:
-        if (item.pendingExamScoreInfo) {
-          if (item.pendingExamScoreInfo.examScore && item.pendingExamScoreInfo.attitudeScore) {
-            button.nextStep = true;
-          } else {
-            button.examScore = true;
-          }
-        }
-        break;
+      }
     }
-    return button;
+    if (item.refJR.refStatus.status !== 'JRS002') {
+      condition.isExpired = true;
+      condition.icon.examDate = false;
+      condition.icon.examInfo = false;
+      condition.icon.examScore = false;
+    }
+    return condition;
   }
 
   setTabCount(count: Count) {
