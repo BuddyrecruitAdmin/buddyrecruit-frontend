@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { getRole } from '../../shared/services/auth.service';
@@ -26,8 +26,11 @@ const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
+
 export class ProfileComponent implements OnInit {
+  @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
   role: any;
+  loading: boolean;
   url: any;
   file: any;
   res: string;
@@ -56,6 +59,7 @@ export class ProfileComponent implements OnInit {
   imageChangedEvent: any;
   croppedImage: any;
   innerHeight: any;
+  previewPicture: boolean;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -195,11 +199,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-    let data = JSON.parse(response); //success server response
-    console.log(data.uploadname)
-    this.profileDetail.attachment.uploadName = data.uploadname;
-  }
+  // onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+  //   let data = JSON.parse(response); //success server response
+  //   console.log(data.uploadname)
+  //   this.profileDetail.attachment.uploadName = data.uploadname;
+  // }
 
   // onFileInput(files: FileList) {
   //   console.log(files)
@@ -241,40 +245,49 @@ export class ProfileComponent implements OnInit {
   }
 
   fileChangeEvent(event: any, dialog: TemplateRef<any>, files: FileList): void {
-    console.log(files)
+    this.previewPicture = false;
     const FileSize = files.item(0).size / 1024 / 1024; // in MB
     this.imageChangedEvent = event;
     if (FileSize > 10) {
       this.showToast('danger', 'Error Message', 'file size more than 10 mb');
     } else {
+      this.loading = true;
       this.callDialog(dialog);
     }
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
+    console.log(event)
   }
   imageLoaded() {
+    this.loading = false;
     // show cropper
   }
   cropperReady() {
+    this.previewPicture  = true;
     // cropper ready
   }
   loadImageFailed() {
+    this.showToast('danger', 'Error Message', "can't load image");
     // show message
   }
 
-  saveNewImage(files: FileList) {
+  saveNewImage() {
     this.url = this.croppedImage;
     this.dialogRef.close();
   }
 
   close() {
     this.croppedImage = "";
+    this.fileInput.nativeElement.value = "";
     this.dialogRef.close()
   }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+    this.dialogRef.onClose.subscribe(reuslt =>
+      this.fileInput.nativeElement.value = ""
+      )
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
