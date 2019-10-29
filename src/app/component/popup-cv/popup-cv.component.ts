@@ -242,13 +242,17 @@ export class PopupCvComponent implements OnInit {
     });
   }
 
+  getGpa(value){
+    console.log(value)
+  }
+
   checkCV(id) {
+    const that = this;
     this.jdService.originalCV(id, this.role._id)
       .subscribe(data =>
-        this.downloadFile(data), function (error) {
-
-          //that.setAlertMessage("E", error.statusText);
-        });
+        this.downloadFile(data), error =>
+        this.showToast('danger', 'Error Message', "can't find original CV")
+      );
   }
 
   downloadFile(data: any) {

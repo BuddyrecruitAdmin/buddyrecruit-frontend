@@ -81,7 +81,8 @@
                   'icon-red': colorStatus.ageBug,
                   'icon-default': !colorStatus.ageBug }"></span>
             </label>
-            <input type="text" [(ngModel)]="items.age" nbInput fullWidth [disabled]="!editable">
+            <input type="text" [(ngModel)]="items.age" nbInput fullWidth [disabled]="!editable" pattern="[0-9]*"
+              inputmode="numeric" digitOnly onKeyPress="if(this.value.length==2) return false;">
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
@@ -96,7 +97,8 @@
                 'icon-red': colorStatus.phoneBug,
                 'icon-default': !colorStatus.phoneBug }"></span>
             </label>
-            <input type="text" [(ngModel)]="items.phone" nbInput fullWidth [disabled]="!editable">
+            <input type="text" [(ngModel)]="items.phone" nbInput fullWidth [disabled]="!editable" pattern="[0-9]*"
+              inputmode="numeric" digitOnly onKeyPress="if(this.value.length==11) return false;">
           </div>
         </div>
       </div>
@@ -296,13 +298,15 @@
           <div class="col-md-2 col-lg-2">
             <div class="form-control-group">
               <label class="label">Year</label>
-              <input type="text" [(ngModel)]="totalYear" nbInput fullWidth [disabled]="!editable">
+              <input type="text" [(ngModel)]="totalYear" nbInput fullWidth [disabled]="!editable" pattern="[0-9]*"
+                inputmode="numeric" digitOnly onKeyPress="if(this.value.length==2) return false;">
             </div>
           </div>
           <div class="col-md-2 col-lg-2">
             <div class="form-control-group">
               <label class="label">Month</label>
-              <input type="text" [(ngModel)]="totalMonth" nbInput fullWidth [disabled]="!editable">
+              <input type="text" [(ngModel)]="totalMonth" nbInput fullWidth [disabled]="!editable" pattern="[0-9]*"
+                inputmode="numeric" digitOnly onKeyPress="if(this.value.length==2 ) return false;">
             </div>
           </div>
         </div>
@@ -354,7 +358,8 @@
                 <label class="control-label">GPA
                 </label>
                 <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
-                  [ngModelOptions]="{standalone: true}" nbInput fullWidth />
+                  [ngModelOptions]="{standalone: true}" onKeyPress="getGpa(this.value.length)" nbInput
+                  fullWidth pattern="[0-9]*" decimal="true" inputmode="numeric" digitOnly />
               </div>
             </div>
             <div class="row">

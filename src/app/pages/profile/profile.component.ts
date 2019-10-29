@@ -169,12 +169,6 @@ export class ProfileComponent implements OnInit {
   }
 
   save() {
-    // if (this.bHasFile) {
-    //   this.uploader.uploadItem(
-    //     this.uploader.queue[this.uploader.queue.length - 1]
-    //   )
-    //   this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
-    // }
     if (this.croppedImage) {
       this.profileDetail.imageData = this.croppedImage;
     }
@@ -198,40 +192,7 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
-
-  // onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
-  //   let data = JSON.parse(response); //success server response
-  //   console.log(data.uploadname)
-  //   this.profileDetail.attachment.uploadName = data.uploadname;
-  // }
-
-  // onFileInput(files: FileList) {
-  //   console.log(files)
-  //   console.log(this.croppedImage)
-  //   if (files && files[0]) {
-  //     var reader = new FileReader();
-  //     if (files[0] != undefined || files[0] != null) {
-  //       reader.onload = (event) => { // called once readAsDataURL is completed
-  //         this.url = reader.result;
-  //       }
-  //     }
-  //     reader.readAsDataURL(files[0]); // read file as data url
-  //   }
-  //   const FileSize = files.item(0).size / 1024 / 1024; // in MB
-  //   if (FileSize > 10) {
-  //     this.bHasFile = false;
-  //     this.profileDetail.attachment.originalname = "";
-  //     this.profileDetail.attachment.uploadName = "";
-  //     this.fileToUpload = null;
-  //     return;
-  //   } else {
-  //     this.bHasFile = true;
-  //     this.profileDetail.attachment.originalname = files.item(0).name;
-  //     this.profileDetail.attachment.uploadName = "";
-  //     this.fileToUpload = files.item(0);
-  //   }
-  // }
-
+  
   setRequest(): any {
     if (this.url) {
       this.profileDetail.imageData = this.url;
@@ -257,7 +218,6 @@ export class ProfileComponent implements OnInit {
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
-    console.log(event)
   }
   imageLoaded() {
     this.loading = false;
