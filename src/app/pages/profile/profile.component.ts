@@ -220,10 +220,10 @@ export class ProfileComponent implements OnInit {
     this.croppedImage = event.base64;
   }
   imageLoaded() {
-    this.loading = false;
     // show cropper
   }
   cropperReady() {
+    this.loading = false;
     this.previewPicture  = true;
     // cropper ready
   }

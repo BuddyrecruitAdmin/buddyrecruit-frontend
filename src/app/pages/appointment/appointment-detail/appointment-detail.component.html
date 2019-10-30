@@ -133,6 +133,19 @@
                       </div>
                     </div>
                   </div>
+                  <div *ngIf="item.reject.flag" class="text-group">
+                    <label class="label">Reject By</label>
+                    <span
+                      style="color: orange">{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
+                  </div>
+                  <div *ngIf="item.reject.flag" class="text-group">
+                    <label class="label">Reject Reason</label>
+                    <span style="color: orange">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                  </div>
+                  <div *ngIf="item.reject.flag && item.reject.remark" class="text-group">
+                    <label class="label">Reject Reason</label>
+                    <span style="color: orange">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                  </div>
                 </div>
               </div>
             </nb-card-body>
@@ -164,8 +177,9 @@
                 </span>
               </button>
 
-              <button *ngIf="item.condition.button.interviewDate" nbButton status="success" [nbTooltip]="item.refStage?.name"
-                (click)="openPopupAppointmentDate(item)" [disabled]="item.condition.isExpired">
+              <button *ngIf="item.condition.button.interviewDate" nbButton status="success"
+                [nbTooltip]="item.refStage?.name" (click)="openPopupAppointmentDate(item)"
+                [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
