@@ -185,10 +185,10 @@ export class TalentPoolDetailComponent implements OnInit {
         return step.refStage._id === thisStage.refNextStage;
       });
     } else {
-      thisStage = this.role.processFlow.noExam.steps.find(step => {
+      thisStage = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === item.refStage._id;
       });
-      nextStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+      nextStage = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === thisStage.refNextStage;
       });
     }
