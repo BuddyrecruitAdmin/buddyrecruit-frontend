@@ -155,7 +155,7 @@
                   position="top right"></nb-badge>
               </button>
 
-              <button *ngIf="item.button.nextStep" nbButton status="success"
+              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
                 [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
@@ -164,7 +164,7 @@
                 </span>
               </button>
 
-              <button *ngIf="item.button.interviewDate" nbButton status="success" [nbTooltip]="item.refStage?.name"
+              <button *ngIf="item.condition.button.interviewDate" nbButton status="success" [nbTooltip]="item.refStage?.name"
                 (click)="openPopupAppointmentDate(item)" [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
