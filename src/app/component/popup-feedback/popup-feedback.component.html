@@ -36,7 +36,7 @@
             <div class="title">
               <nb-user size="medium" [name]="utilitiesService.setFullname(bugList.createdInfo.refUser)"
                 [title]="utilitiesService.convertDateTimeFromSystem(bugList.createdInfo.date)"
-                [picture]="bugList.picture"></nb-user>
+                [picture]="bugList.createdInfo.refUser.imageData"></nb-user>
             </div>
             <div class="actions">
               <nb-icon *ngIf="bugList.createdInfo.refUser._id === userKey" icon="trash-2-outline" class="link text-red"

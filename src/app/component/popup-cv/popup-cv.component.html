@@ -251,25 +251,11 @@
           <nb-card-header>
             <div class="title">
               <nb-user size="medium" [name]="utilitiesService.setFullname(comment.refUser)"
-                [title]="utilitiesService.convertDate(comment.date)"
-                src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg">
+                [title]="utilitiesService.convertDate(comment.date)" [picture]="comment.refUser.imageData">
               </nb-user>
             </div>
           </nb-card-header>
           <nb-card-body>
-            <!-- <div class="row">
-              <div class="label-pad">
-                <img class="img-circle"
-                  src="https://previews.123rf.com/images/solargaria/solargaria1709/solargaria170900008/85425363-user-icon-male-with-beard-icon-hipster-flat-icon-avatar-of-man-with-beard-flat-internet-icon-in-roun.jpg"
-                  alt="user image">
-              </div>
-              <div class="txt-padTop">
-                <span class="username"> {{ comment.refUser.firstname }} {{comment.refUser.lastname}}</span>
-                <div> <span class="label">{{ utilitiesService.convertDate(comment.date) }}</span>
-                </div>
-              </div>
-            </div>
-            <p>{{ comment.message }}</p> -->
             {{ comment.message }}
           </nb-card-body>
         </nb-card>
@@ -358,8 +344,8 @@
                 <label class="control-label">GPA
                 </label>
                 <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
-                  [ngModelOptions]="{standalone: true}" onKeyPress="getGpa(this.value.length)" nbInput
-                  fullWidth pattern="[0-9]*" decimal="true" inputmode="numeric" digitOnly />
+                  [ngModelOptions]="{standalone: true}" onKeyPress="if(this.value.length==4) return false;" nbInput
+                  fullWidth pattern="[0-9]*" decimal="true" inputmode="numeric" fullWidth digitOnly />
               </div>
             </div>
             <div class="row">

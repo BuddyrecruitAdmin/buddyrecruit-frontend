@@ -188,23 +188,22 @@
 <!-- popup -->
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.height.px]="innerHeight">
-    <nb-card-header *ngIf="previewPicture">
-      <div style="text-align:center;">
-        <span>Preview profile</span><br>
-        <img class="img-default" [src]="croppedImage" />
-      </div>
-    </nb-card-header>
     <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="">
+      <div *ngIf="previewPicture" style="text-align:center;">
+        <span>Preview profile</span><br>
+        <!-- <nb-icon class="link" icon="corner-left-down-outline" (click)="rotateLeft()"></nb-icon> -->
+        <img class="img-preview" [src]="croppedImage" />
+        <!-- <nb-icon class="link" icon="corner-down-left-outline" (click)="rotateRight()"></nb-icon> -->
+      </div>
       <div>
-        <image-cropper class="img-fluid" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-          [aspectRatio]="3 / 3" [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)"
-          (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"
-          [resizeToWidth]="100" [resizeToHeight]="100"></image-cropper>
+        <image-cropper class="img-fluid" [imageChangedEvent]="imageChangedEvent" [resizeToWidth]="128" format="png"
+          (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()" [maintainAspectRatio]="true" [aspectRatio]="1 / 1"></image-cropper>
       </div>
     </nb-card-body>
-    <nb-card-footer>
+    <nb-card-footer *ngIf="previewPicture">
       <button nbButton status="default" (click)="close()">Cancel</button>
-      <button *ngIf="previewPicture" nbButton status="success" (click)="saveNewImage()">Save</button>
+      <button nbButton status="success" (click)="saveNewImage()">Save</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

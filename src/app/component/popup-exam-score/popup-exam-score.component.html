@@ -34,7 +34,7 @@
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()">SAVE</button>
-    <button nbButton status="success" (click)="passToAppointment()" [disabled]="!examScore || !attitudeScore">
+    <button nbButton status="success" (click)="passToAppointment()" [disabled]="examScore < 0 || attitudeScore < 0">
       PASS TO APPOINTMENT
     </button>
   </nb-card-footer>

@@ -20,6 +20,16 @@
   background-color: var(--color-green);
   cursor: pointer;
 }
+.img-preview {
+  padding: 3px;
+  border: none;
+  position: relative;
+  margin: 10px auto 10px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--color-green);
+}
 .img-default span {
   color: #fff;
   font-size: 70px;
@@ -157,4 +167,7 @@ nb-user.user-picture {
   width:100x;
   height: 95px;
   border: 1px solid var(--color-green);
+}
+image-cropper {
+  max-height: 61vh;
 }
