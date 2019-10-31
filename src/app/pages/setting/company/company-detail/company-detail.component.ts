@@ -82,6 +82,7 @@ export class CompanyDetailComponent implements OnInit {
   _id: string;
   role: any;
   loading: boolean;
+  buttonLoading: boolean;
 
   constructor(
     private router: Router,
@@ -97,6 +98,7 @@ export class CompanyDetailComponent implements OnInit {
 
   ngOnInit() {
     this.roleSelected = '4';
+    this.buttonLoading = false;
     this.companyDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
     this.initialDropdown().then((response) => {
@@ -117,7 +119,7 @@ export class CompanyDetailComponent implements OnInit {
     return {
       refCompanyType: undefined,
       name: '',
-      startDate: null,
+      startDate: new Date(),
       expiryDate: null,
       companySize: null,
       adminEmail: '',
@@ -275,9 +277,11 @@ export class CompanyDetailComponent implements OnInit {
 
   save() {
     if (this.validation()) {
+      this.buttonLoading = true;
       const request = this.setRequest();
       if (this.state === State.Create) {
         this.service.create(request).subscribe(response => {
+          this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/setting/company']);
@@ -287,6 +291,7 @@ export class CompanyDetailComponent implements OnInit {
         });
       } else if (this.state === State.Edit) {
         this.service.update(request).subscribe(response => {
+          this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/setting/company']);
@@ -304,19 +309,19 @@ export class CompanyDetailComponent implements OnInit {
 
     if (this.role.refHero.isSuperAdmin) {
       if (!this.companyDetail.refCompanyType) {
-        this.errMsg.refCompanyType = 'Please Input Company Type';
+        this.errMsg.refCompanyType = 'Please select company type';
         isValid = false;
       }
       if (!this.companyDetail.name) {
-        this.errMsg.name = 'Please Input Name';
+        this.errMsg.name = 'Please enter name';
         isValid = false;
       }
       if (!this.companyDetail.startDate) {
-        this.errMsg.startDate = 'Please Input Start Date';
+        this.errMsg.startDate = 'Please select start date';
         isValid = false;
       }
       if (!this.companyDetail.expiryDate) {
-        this.errMsg.expiryDate = 'Please Input Expiry Date';
+        this.errMsg.expiryDate = 'Please select expiry date';
         isValid = false;
       }
       if (!this.companyDetail.adminEmail) {

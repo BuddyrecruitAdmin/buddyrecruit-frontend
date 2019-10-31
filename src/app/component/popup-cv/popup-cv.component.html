@@ -345,7 +345,7 @@
                 </label>
                 <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
                   [ngModelOptions]="{standalone: true}" onKeyPress="if(this.value.length==4) return false;" nbInput
-                  fullWidth pattern="[0-9]*" decimal="true" inputmode="numeric" digitOnly />
+                  fullWidth pattern="[0-9]*" decimal="true" inputmode="numeric" fullWidth digitOnly />
               </div>
             </div>
             <div class="row">

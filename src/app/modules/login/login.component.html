@@ -21,7 +21,7 @@
       </div>
     </div>
     <button nbButton fullWidth status="success" type="submit" class="m-b-10" [nbSpinner]="loading"
-      nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="">Login</button>
+      nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="" [disabled]="loading">Login</button>
     <small *ngIf="loginError" class="text-red">{{ loginError }}</small>
   </form>
   <br>

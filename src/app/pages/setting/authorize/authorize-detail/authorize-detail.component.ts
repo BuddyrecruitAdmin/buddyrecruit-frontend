@@ -59,6 +59,7 @@ export interface Auth {
     rejection: Control;
     dashboard: Control;
     report: Control;
+    blacklist: Control;
   };
   showDashboard: boolean;
   dashboards: any;
@@ -202,6 +203,11 @@ export class AuthorizeDetailComponent implements OnInit {
           active: true
         },
         report: {
+          visible: false,
+          editable: false,
+          active: true
+        },
+        blacklist: {
           visible: false,
           editable: false,
           active: true
@@ -737,6 +743,17 @@ export class AuthorizeDetailComponent implements OnInit {
         } else {
           if (this.authDetail.configuration.report.editable) {
             this.authDetail.configuration.report.visible = true;
+          }
+        }
+        break;
+      case 'BLACKLIST':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.blacklist.visible) {
+            this.authDetail.configuration.blacklist.editable = false;
+          }
+        } else {
+          if (this.authDetail.configuration.blacklist.editable) {
+            this.authDetail.configuration.blacklist.visible = true;
           }
         }
         break;

@@ -141,6 +141,13 @@
                   <mat-checkbox [(ngModel)]="authDetail.configuration.report.editable"
                     (change)="onChangeCheckbox('REPORT','EDITABLE')">Editable</mat-checkbox>
                 </div>
+                <div *ngIf="authDetail.configuration.blacklist.active" class="group-checkbox">
+                  <label class="label">Blacklist</label>
+                  <mat-checkbox [(ngModel)]="authDetail.configuration.blacklist.visible"
+                    (change)="onChangeCheckbox('BLACKLIST','VISIBLE')">Visible</mat-checkbox>
+                  <mat-checkbox [(ngModel)]="authDetail.configuration.blacklist.editable"
+                    (change)="onChangeCheckbox('BLACKLIST','EDITABLE')">Editable</mat-checkbox>
+                </div>
               </div>
             </nb-tab>
             <nb-tab tabTitle="OTHERS">

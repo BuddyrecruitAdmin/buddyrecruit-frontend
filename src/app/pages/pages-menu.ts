@@ -205,5 +205,9 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     link: '/setting/report',
     hidden: false,
   },
-
+  {
+    title: 'Blacklist',
+    link: '/setting/blacklist',
+    hidden: false,
+  },
 ];
