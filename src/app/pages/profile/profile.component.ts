@@ -17,8 +17,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Location } from '@angular/common';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
-
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
 
 @Component({
@@ -29,6 +28,7 @@ const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_
 
 export class ProfileComponent implements OnInit {
   @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
+  // @ViewChild(ImageCropperComponent, { static: true }) imageCropper: ImageCropperComponent;
   role: any;
   loading: boolean;
   url: any;
@@ -56,8 +56,8 @@ export class ProfileComponent implements OnInit {
   email: AbstractControl;
   dialogRef: NbDialogRef<any>;
   profileDetail: any;
-  imageChangedEvent: any;
-  croppedImage: any;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
   innerHeight: any;
   previewPicture: boolean;
   constructor(
@@ -192,7 +192,7 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
-  
+
   setRequest(): any {
     if (this.url) {
       this.profileDetail.imageData = this.url;
@@ -224,7 +224,7 @@ export class ProfileComponent implements OnInit {
   }
   cropperReady() {
     this.loading = false;
-    this.previewPicture  = true;
+    this.previewPicture = true;
     // cropper ready
   }
   loadImageFailed() {
@@ -237,6 +237,13 @@ export class ProfileComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  // rotateLeft() {
+  //   this.imageCropper.rotateLeft();
+  // }
+  // rotateRight() {
+  //   this.imageCropper.rotateRight();
+  // }
+
   close() {
     this.croppedImage = "";
     this.fileInput.nativeElement.value = "";
@@ -247,7 +254,7 @@ export class ProfileComponent implements OnInit {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
     this.dialogRef.onClose.subscribe(reuslt =>
       this.fileInput.nativeElement.value = ""
-      )
+    )
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

@@ -256,9 +256,8 @@ export class JrDetailComponent implements OnInit {
           } else {
             this.editExam = true;
           }
-          // this.tempJob = this.jr.userInterviews;
-          console.log(this.jr.userInterviews)
           if (this.state != State.Create) {
+            this.loading = false;
             this.onChangeJobposition(this.jr.refJD._id);
           }
           if (this.state === State.Edit) {
@@ -286,7 +285,6 @@ export class JrDetailComponent implements OnInit {
         this.jobDB = true;
       }
     });
-    this.loading = false;
   }
 
   save() {
