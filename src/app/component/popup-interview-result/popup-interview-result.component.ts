@@ -41,19 +41,22 @@ export class PopupInterviewResultComponent implements OnInit {
       if (element.rank.selected === 1) {
         this.pass.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
-          comment: element.additionalComment
+          comment: element.additionalComment,
+          picture: element.createdInfo.refUser.imageData
         })
       }
       if (element.rank.selected === 2) {
         this.compare.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
-          comment: element.additionalComment
+          comment: element.additionalComment,
+          picture: element.createdInfo.refUser.imageData
         })
       }
       if (element.rank.selected === 3) {
         this.notPass.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
-          comment: element.additionalComment
+          comment: element.additionalComment,
+          picture: element.createdInfo.refUser.imageData
         })
       }
     });

@@ -1122,13 +1122,6 @@ export class JdDetailComponent implements OnInit {
           return element;
         }
       });
-      // this.jd.keywordSearch = this.jd.keywordSearch.map(gobj => {  //array.object to array
-      //   if (gobj.value) {
-      //     gobj = gobj.value;
-      //     return gobj;
-      //   }
-      //   return gobj;
-      // });
     }
     if (this.state === "duplicate") {
       this.jd._id = undefined;
