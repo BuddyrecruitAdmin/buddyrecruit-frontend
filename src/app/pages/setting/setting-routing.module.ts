@@ -21,6 +21,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RejectStageComponent } from './reject-stage/reject-stage.component';
 import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
+import { BlacklistComponent } from './blacklist/blacklist.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -125,6 +127,10 @@ const routes: Routes = [
       {
         path: 'authorize/:action/:id',
         component: AuthorizeDetailComponent,
+      },
+      {
+        path: 'blacklist',
+        component: BlacklistComponent,
       },
       {
         path: '**',

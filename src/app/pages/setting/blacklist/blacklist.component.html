@@ -1,10 +1,6 @@
 <div class="content-header with-shadow">
   <div class="breadcrumb">
-    <h5>
-      <span class="link text-gray" (click)="back()">
-        <nb-icon icon="arrow-ios-back-outline" style="font-size: 100%;"></nb-icon>Home
-      </span>
-    </h5>
+    <h5>Blacklist</h5>
   </div>
 </div>
 
@@ -14,31 +10,20 @@
       <div class="col-xs-12 col-md-6 ">
         <div class="input-group">
           <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
+            (keyup.enter)="paging.pageIndex = 0; search()">
           <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
           </div>
         </div>
       </div>
       <div class="col-xs-12 col-md-6 actions-block">
         <nb-actions size="small" class="h-100 pull-right">
           <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
-            (click)="isGridLayout = true">
+            (click)="changeLayout(true)">
           </nb-action>
           <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
-            (click)="isGridLayout = false"></nb-action>
+            (click)="changeLayout(false)"></nb-action>
         </nb-actions>
-      </div>
-    </div>
-    <div class="m-t-20">
-      <label class="label">Filters:</label>
-      <div>
-        <nb-checkbox [(ngModel)]="filterAll" (checkedChange)="changeFilterAll($event)">All</nb-checkbox>
-      </div>
-      <div class="row">
-        <div *ngFor="let filter of filters" class="col-md-3">
-          <nb-checkbox [(ngModel)]="filter.active" (checkedChange)="changeFilter($event)">{{ filter.text }}</nb-checkbox>
-        </div>
       </div>
     </div>
   </nb-card-body>
@@ -58,32 +43,32 @@
     <div class="row">
       <div class="col-lg-6" *ngFor="let item of items;">
         <nb-card style="margin-bottom: 1rem;">
-          <nb-card-header class="link" (click)="edit(item)">
+          <nb-card-header>
             <div class="title">
-              <label class="link" [nbTooltip]="utilitiesService.setFullname(item)">
-                {{ utilitiesService.setFullname(item) }}
+              <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+                {{ utilitiesService.setFullname(item.refCandidate) }}
               </label>
             </div>
             <div class="actions">
-              <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
+              <nb-icon icon="undo" class="link" nbTooltip="Unblock" (click)="unblock(item)"></nb-icon>
             </div>
           </nb-card-header>
           <nb-card-body>
             <div class="text-group">
               <label class="label">Department</label>
-              <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
+              <span>{{ item.refCandidateFlow?.refJR?.department?.name || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Division</label>
-              <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
+              <span>{{ item.refCandidateFlow?.refJR?.division?.name || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Job Position</label>
-              <span>{{ item.candidateFlow?.refJR?.refJD?.position || '-' }}</span>
+              <span>{{ item.refCandidateFlow?.refJR?.refJD?.position || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Stage</label>
-              <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+              <span>{{ item.refCandidateFlow?.refStage?.refMain?.name || '-' }}</span>
             </div>
             <div class="text-right ">
               <span class="link" nbTooltip="See more detail" (click)="info(item)">
@@ -120,28 +105,28 @@
           <tbody>
             <tr *ngFor="let item of items;">
               <td class="text-left">
-                <span class="link" [nbTooltip]="utilitiesService.setFullname(item)" (click)="edit(item)">
-                  {{ utilitiesService.setFullname(item) }}
+                <span [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+                  {{ utilitiesService.setFullname(item.refCandidate) }}
                 </span>
               </td>
               <td class="text-left">
-                <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
+                <span>{{ item.refCandidateFlow?.refJR?.department?.name || '-' }}</span>
               </td>
               <td class="text-left">
-                <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
+                <span>{{ item.refCandidateFlow?.refJR?.division?.name || '-' }}</span>
               </td>
               <td class="text-left">
-                <span>{{ item.candidateFlow?.refJR?.refJD?.position || '-' }}</span>
+                <span>{{ item.refCandidateFlow?.refJR?.refJD?.position || '-' }}</span>
               </td>
               <td class="text-left">
-                <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+                <span>{{ item.refCandidateFlow?.refStage?.refMain?.name || '-' }}</span>
               </td>
               <td class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
-                <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
-                  <nb-icon icon="edit-outline"></nb-icon>
+                <button nbButton status="primary" size="tiny" nbTooltip="Unblock" (click)="unblock(item)">
+                  <nb-icon icon="undo"></nb-icon>
                 </button>
               </td>
             </tr>

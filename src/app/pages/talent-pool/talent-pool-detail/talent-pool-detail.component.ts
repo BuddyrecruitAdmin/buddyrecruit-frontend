@@ -216,7 +216,9 @@ export class TalentPoolDetailComponent implements OnInit {
         case 'SELECTED':
           break;
         case 'REJECTED':
-          condition.button.revoke = true;
+          if (thisStage.editable) {
+            condition.button.revoke = true;
+          }
           break;
       }
       if (item.refJR.refStatus.status !== 'JRS002') {

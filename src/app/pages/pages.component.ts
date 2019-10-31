@@ -156,6 +156,9 @@ export class PagesComponent {
         if (configuration.report && configuration.report.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[13]);
         }
+        if (configuration.blacklist && configuration.blacklist.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
+        }
         menuSetting.forEach(element => {
           this.menu.push(element);
         });

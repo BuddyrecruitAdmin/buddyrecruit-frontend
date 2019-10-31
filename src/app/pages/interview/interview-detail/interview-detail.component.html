@@ -112,7 +112,7 @@
                       <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.startDate) || '-' }}</span>
                     </div>
                   </div>
-                  <div class="m-t-5">
+                  <div *ngIf="item.refStage.order === 402" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Interview Info</label>
                     <nb-icon *ngIf="item.condition.icon.interviewScore" icon="edit-2-outline" class="link"
                       nbTooltip="Edit Interview Info" (click)="openPopupEvaluation(item)"></nb-icon>

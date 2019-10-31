@@ -117,12 +117,11 @@ export class PopupPreviewEmailComponent implements OnInit {
 
   setRequest(): any {
     let data = {};
-    if (this.sendEmail) {
-      data = {
-        mailOptions: this.mailOptions,
-        mailType: this.mailType,
-        actionUser: this.actionUser,
-      }
+    data = {
+      flagSendEmail: this.sendEmail,
+      mailOptions: this.mailOptions,
+      mailType: this.mailType,
+      actionUser: this.actionUser,
     }
     return data;
   }

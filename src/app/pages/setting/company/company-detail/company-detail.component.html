@@ -77,45 +77,55 @@
   <nb-card-body>
     <div *ngIf="role.refHero.isSuperAdmin" class="row">
       <div class="col-md-6">
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.refCompanyType }">
           <label class="label">Company Type <span class="text-red">*</span></label>
-          <nb-select placeholder="Select Company Type" [(ngModel)]="companyDetail.refCompanyType" fullWidth>
+          <nb-select [(ngModel)]="companyDetail.refCompanyType" fullWidth>
             <nb-option *ngFor="let typeOption of typeOptions" [value]="typeOption.value">{{ typeOption.label }}
             </nb-option>
           </nb-select>
           <small *ngIf="errMsg.refCompanyType" class="text-red">{{ errMsg.refCompanyType }}</small>
         </div>
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.name }">
           <label class="label">Name <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="companyDetail.name" nbInput fullWidth placeholder="Name">
+          <input type="text" [(ngModel)]="companyDetail.name" nbInput fullWidth>
           <small *ngIf="errMsg.name" class="text-red">{{ errMsg.name }}</small>
         </div>
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.startDate }">
           <label class="label">Start Date <span class="text-red">*</span></label>
           <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-          <input [nbDatepicker]="startDate" [(ngModel)]="companyDetail.startDate" nbInput fullWidth
-            placeholder="dd/mm/yyyy">
-          <small *ngIf="errMsg.startDate" class="text-red">{{ errMsg.startDate }}</small>
+          <div class="input-group">
+            <input [nbDatepicker]="startDate" [(ngModel)]="companyDetail.startDate" nbInput fullWidth
+              style="cursor: pointer;">
+            <div class="input-group-addon" style="pointer-events: none;">
+              <nb-icon icon="calendar-outline"></nb-icon>
+            </div>
+            <small *ngIf="errMsg.startDate" class="text-red">{{ errMsg.startDate }}</small>
+          </div>
         </div>
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.expiryDate }">
           <label class="label">Expiry Date <span class="text-red">*</span></label>
           <nb-datepicker #expiryDate format="dd/MM/yyyy"></nb-datepicker>
-          <input [nbDatepicker]="expiryDate" [(ngModel)]="companyDetail.expiryDate" nbInput fullWidth
-            placeholder="dd/mm/yyyy">
-          <small *ngIf="errMsg.expiryDate" class="text-red">{{ errMsg.expiryDate }}</small>
+          <div class="input-group">
+            <input [nbDatepicker]="expiryDate" [(ngModel)]="companyDetail.expiryDate" nbInput fullWidth
+              style="cursor: pointer;">
+            <div class="input-group-addon" style="pointer-events: none;">
+              <nb-icon icon="calendar-outline"></nb-icon>
+            </div>
+            <small *ngIf="errMsg.expiryDate" class="text-red">{{ errMsg.expiryDate }}</small>
+          </div>
         </div>
         <div class="form-control-group">
           <label class="label">Company Size </label>
-          <input type="number" [(ngModel)]="companyDetail.companySize" nbInput fullWidth placeholder="Company Size">
+          <input type="number" [(ngModel)]="companyDetail.companySize" nbInput>
         </div>
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.adminEmail }">
           <label class="label">Admin Username / Email <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth placeholder="Useraname / Email">
+          <input type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth>
           <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
         </div>
         <div *ngIf="state === 'create'" class="form-control-group">
           <label class="label">Admin Password <small>(Initial Password)</small></label>
-          <input type="text" [(ngModel)]="companyDetail.adminPassword" nbInput fullWidth disabled>
+          <input type="text" [(ngModel)]="companyDetail.adminPassword" nbInput fullWidth>
         </div>
       </div>
       <div class="col-md-6">
@@ -151,8 +161,7 @@
           <div *ngIf="companyDetail.isSubCompany" class="form-control-group">
             <label class="label">Parent Company <span *ngIf="companyDetail.isSubCompany"
                 class="text-red">*</span></label>
-            <nb-select placeholder="Select Parent Company" [(ngModel)]="companyDetail.refParent" fullWidth
-              [disabled]="!companyDetail.isSubCompany">
+            <nb-select [(ngModel)]="companyDetail.refParent" fullWidth [disabled]="!companyDetail.isSubCompany">
               <nb-option [disabled]="!companyDetail.isSubCompany" *ngFor="let companyOption of companyOptions"
                 [value]="companyOption.value">
                 {{ companyOption.label }}
@@ -168,15 +177,21 @@
               <nb-radio [value]="false">No</nb-radio>
             </nb-radio-group>
           </div>
-          <div class="form-control-group">
-            <label class="label">Number of JR <span class="text-red">*</span></label>
-            <input type="number" [(ngModel)]="companyDetail.maxJR" nbInput placeholder="Number of JR">
-            <small *ngIf="errMsg.maxJR" class="text-red">{{ errMsg.maxJR }}</small>
-          </div>
-          <div class="form-control-group">
-            <label class="label">Number of User <span class="text-red">*</span></label>
-            <input type="number" [(ngModel)]="companyDetail.maxUser" nbInput placeholder="Number of User">
-            <small *ngIf="errMsg.maxUser" class="text-red">{{ errMsg.maxUser }}</small>
+          <div *ngIf="!companyDetail.isSubCompany">
+            <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.maxJR }">
+              <label class="label">Number of JR <span class="text-red">*</span></label>
+              <input type="number" [(ngModel)]="companyDetail.maxJR" nbInput>
+              <div>
+                <small *ngIf="errMsg.maxJR" class="text-red">{{ errMsg.maxJR }}</small>
+              </div>
+            </div>
+            <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.maxUser }">
+              <label class="label">Number of User <span class="text-red">*</span></label>
+              <input type="number" [(ngModel)]="companyDetail.maxUser" nbInput>
+              <div>
+                <small *ngIf="errMsg.maxUser" class="text-red">{{ errMsg.maxUser }}</small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -185,9 +200,9 @@
     <div *ngIf="!role.refHero.isSuperAdmin">
       <div class="row">
         <div class="col-md-12">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.name }">
             <label class="label">Name <span class="text-red">*</span></label>
-            <input type="text" [(ngModel)]="companyDetail.name" nbInput fullWidth placeholder="Name">
+            <input type="text" [(ngModel)]="companyDetail.name" nbInput fullWidth>
             <small *ngIf="errMsg.name" class="text-red">{{ errMsg.name }}</small>
           </div>
         </div>
@@ -197,29 +212,27 @@
           <div class="form-control-group">
             <label class="label">Start Date</label>
             <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-            <input [nbDatepicker]="startDate" [(ngModel)]="companyDetail.startDate" nbInput fullWidth
-              placeholder="dd/mm/yyyy" disabled>
+            <input [nbDatepicker]="startDate" [(ngModel)]="companyDetail.startDate" nbInput fullWidth disabled>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-control-group">
             <label class="label">Expiry Date</label>
             <nb-datepicker #expiryDate format="dd/MM/yyyy"></nb-datepicker>
-            <input [nbDatepicker]="expiryDate" [(ngModel)]="companyDetail.expiryDate" nbInput fullWidth
-              placeholder="dd/mm/yyyy" disabled>
+            <input [nbDatepicker]="expiryDate" [(ngModel)]="companyDetail.expiryDate" nbInput fullWidth disabled>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.smtpHost }">
             <label class="label">SMTP Server <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="companyDetail.smtpHost" nbInput fullWidth>
             <small *ngIf="errMsg.smtpHost" class="text-red">{{ errMsg.smtpHost }}</small>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.smtpPort }">
             <label class="label">SMTP Port <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="companyDetail.smtpPort" nbInput fullWidth>
             <small *ngIf="errMsg.smtpPort" class="text-red">{{ errMsg.smtpPort }}</small>
@@ -228,14 +241,14 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.imapHost }">
             <label class="label">IMAP Host <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="companyDetail.imapHost" nbInput fullWidth>
             <small *ngIf="errMsg.imapHost" class="text-red">{{ errMsg.imapHost }}</small>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.imapPort }">
             <label class="label">IMAP Port <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="companyDetail.imapPort" nbInput fullWidth>
             <small *ngIf="errMsg.imapPort" class="text-red">{{ errMsg.imapPort }}</small>
@@ -244,19 +257,18 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.intEmailUser }">
             <label class="label">Internal Email <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="companyDetail.intEmailUser" nbInput fullWidth>
             <small *ngIf="errMsg.intEmailUser" class="text-red">{{ errMsg.intEmailUser }}</small>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.intEmailPass }">
             <label class="label">Internal Password <span class="text-red">*</span></label>
             <div class="input-group">
               <input type="{{ showPassword1 ? 'text' : 'password' }}" [(ngModel)]="companyDetail.intEmailPass" nbInput
-                fullWidth placeholder="Password" autocomplete="off"
-                [ngClass]="{ 'status-danger': errMsg.intEmailPass }">
+                fullWidth autocomplete="off" [ngClass]="{ 'status-danger': errMsg.intEmailPass }">
               <div class="input-group-addon">
                 <nb-icon icon="{{ showPassword1 ? 'eye-off-outline' : 'eye-outline' }}"
                   (click)="showPassword1=!showPassword1">
@@ -269,19 +281,18 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.extEmailUser }">
             <label class="label">External Email <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="companyDetail.extEmailUser" nbInput fullWidth>
             <small *ngIf="errMsg.extEmailUser" class="text-red">{{ errMsg.extEmailUser }}</small>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="form-control-group">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.extEmailPass }">
             <label class="label">External Password <span class="text-red">*</span></label>
             <div class="input-group">
               <input type="{{ showPassword2 ? 'text' : 'password' }}" [(ngModel)]="companyDetail.extEmailPass" nbInput
-                fullWidth placeholder="Password" autocomplete="off"
-                [ngClass]="{ 'status-danger': errMsg.extEmailPass }">
+                fullWidth autocomplete="off" [ngClass]="{ 'status-danger': errMsg.extEmailPass }">
               <div class="input-group-addon">
                 <nb-icon icon="{{ showPassword2 ? 'eye-off-outline' : 'eye-outline' }}"
                   (click)="showPassword2=!showPassword2">
@@ -297,6 +308,7 @@
   </nb-card-body>
   <nb-card-footer>
     <button nbButton status="default" (click)="back()">Cancel</button>
-    <button nbButton status="success" (click)="save()">Save</button>
+    <button nbButton status="success" (click)="save()" [nbSpinner]="buttonLoading" nbSpinnerStatus="success"
+      nbSpinnerSize="tiny" [disabled]="buttonLoading">Save</button>
   </nb-card-footer>
 </nb-card>
