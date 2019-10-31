@@ -11,6 +11,8 @@ import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { Router, ActivatedRoute } from "@angular/router";
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-feedback.component';
+import { request } from 'https';
+import * as _ from 'lodash';
 @Component({
   selector: 'ngx-popup-cv',
   templateUrl: './popup-cv.component.html',
@@ -201,15 +203,48 @@ export class PopupCvComponent implements OnInit {
   }
 
   edit() {
-    console.log(this.items)
-    this.service.edit(this.items).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        this.ref.close();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
+    const request = this.setRequest();
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.edit(request).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.ref.close();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        })
       }
-    })
+    });
+  }
+
+  setRequest(): any {
+    if (this.items.hardSkill.length > 0) {
+      this.items.hardSkill = this.convertArray(this.items.hardSkill);
+    }
+    if (this.items.softSkill.length > 0) {
+      this.items.softSkill = this.convertArray(this.items.softSkill);
+    }
+    if (this.items.certificate.length > 0) {
+      this.items.certificate = this.convertArray(this.items.certificate);
+    }
+    const request = _.cloneDeep(this.items);
+    return request
+  }
+
+  convertArray(arr): any {
+    arr = arr.map(gobj => {  //array.object to array
+      if (gobj.value) {
+        gobj = gobj.value;
+        return gobj;
+      }
+      return gobj;
+    });
+    return arr;
   }
 
   comment() {
@@ -242,10 +277,6 @@ export class PopupCvComponent implements OnInit {
     });
   }
 
-  getGpa(value){
-    console.log(value)
-  }
-
   checkCV(id) {
     const that = this;
     this.jdService.originalCV(id, this.role._id)
@@ -262,9 +293,7 @@ export class PopupCvComponent implements OnInit {
   }
 
   openApplication(id: any) {
-    console.log(id)
     const path = '/auth/appform/view/' + id;
-    console.log(path)
     this.router.navigate([path])
   }
 
