@@ -43,9 +43,14 @@ export class PopupPreviewEmailComponent implements OnInit {
     this.flowId = getFlowId();
     this.candidateId = getCandidateId();
     this.buttonId = getButtonId();
-    const step = this.role.refAuthorize.processFlow.exam.steps.find(element => {
+    let step = this.role.refAuthorize.processFlow.exam.steps.find(element => {
       return element._id === this.buttonId;
     });
+    if (!step) {
+      step = this.role.refAuthorize.processFlow.noExam.steps.find(element => {
+        return element._id === this.buttonId;
+      });
+    }
     this.buttonName = step.button || 'Send';
     this.stageId = step.refStage._id;
     setFlowId();
