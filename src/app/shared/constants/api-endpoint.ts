@@ -92,6 +92,7 @@ export const API_ENDPOINT = {
     EDIT: "candidate/edit",
     BLOCK: "candidate/block",
     UNBLOCK: "candidate/unblock",
+    BLACKLIST: "candidate/blacklist",
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",

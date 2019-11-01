@@ -20,15 +20,17 @@
       </small>
     </div>
     <div class="actions">
-      <span class="fa fa-star text-orange">&nbsp;</span>
-      <span>{{ item.candidateFlow?.weightScore?.accumulativeScore || 0 }}</span>
-      <small>/{{ item.candidateFlow?.weightScore?.total || 0 }}</small>
+      <div class="link" [nbPopover]="score" nbPopoverTrigger="hint" nbPopoverPlacement="left">
+        <span class="fa fa-star text-orange">&nbsp;</span>
+        <span>{{ item.candidateFlow?.weightScore?.accumulativeScore || 0 }}</span>
+        <small>/{{ item.candidateFlow?.weightScore?.total || 0 }}</small>
+      </div>
     </div>
   </nb-card-header>
   <nb-card-body>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 m-b-20">
 
         <!-- Process Flow -->
         <label class="label topic" style="margin-top: 0;">Process Flow</label>
@@ -53,15 +55,25 @@
           </div>
         </div>
 
-        <!-- Exam Info -->
-        <div *ngIf="item.candidateFlow?.examInfo?.flag">
-          <label class="label topic">Exam Info</label>
-          <div class="m-l-15">
-            <div class="text-group">
-              <label class="label">Exam Date</label>
-              <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.examInfo?.date) || '-' }}</span>
+        <div *ngIf="item.candidateFlow.refJR.requiredExam">
+          <!-- Exam Date -->
+          <div *ngIf="condition.block.examDate">
+            <label class="label topic">Exam Date <span *ngIf="condition.icon.examDate" class="text-red">*</span></label>
+            <nb-icon *ngIf="condition.icon.examDate" icon="edit-2-outline" class="link" nbTooltip="Edit Exam Date"
+              (click)="openPopupExamDate(item)"></nb-icon>
+            <div class="m-l-15">
+              <div class="text-group">
+                <label class="label">Exam Date</label>
+                <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.examInfo?.date) || '-' }}</span>
+              </div>
             </div>
-            <div *ngIf="item.candidateFlow?.pendingExamInfo?.flag">
+          </div>
+          <!-- Exam Info -->
+          <div *ngIf="condition.block.examInfo">
+            <label class="label topic">Exam Info <span *ngIf="condition.icon.examInfo" class="text-red">*</span></label>
+            <nb-icon *ngIf="condition.icon.examInfo" icon="edit-2-outline" class="link" nbTooltip="Edit Exam Info"
+              (click)="openPopupExamInfo(item)"></nb-icon>
+            <div class="m-l-15">
               <div class="text-group">
                 <label class="label">Available Date</label>
                 <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingExamInfo?.availableDate) || '-' }}</span>
@@ -76,34 +88,39 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Exam Score -->
-        <div *ngIf="item.candidateFlow?.pendingExamScoreInfo?.flag">
-          <label class="label topic">Exam Score</label>
-          <div class="m-l-15">
-            <div class="text-group">
-              <label class="label">Exam Score</label>
-              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examScore || '-' }}</span>
-            </div>
-            <div class="text-group">
-              <label class="label">Exam Remark</label>
-              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
-            </div>
-            <div class="text-group">
-              <label class="label">Attitude Score</label>
-              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '-' }}</span>
-            </div>
-            <div class="text-group">
-              <label class="label">Attitude Remark</label>
-              <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+          <!-- Exam Score -->
+          <div *ngIf="condition.block.examScore">
+            <label class="label topic">Exam Score <span *ngIf="condition.icon.examScore"
+                class="text-red">*</span></label>
+            <nb-icon *ngIf="condition.icon.examScore" icon="edit-2-outline" class="link" nbTooltip="Edit Exam Score"
+              (click)="openPopupExamScore(item)"></nb-icon>
+            <div class="m-l-15">
+              <div class="text-group">
+                <label class="label">Exam Score</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examScore || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Exam Remark</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Attitude Score</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Attitude Remark</label>
+                <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Interview Info -->
-        <div *ngIf="item.candidateFlow?.pendingInterviewInfo?.flag">
-          <label class="label topic">Interview Info</label>
+        <div *ngIf="condition.block.interviewDate">
+          <label class="label topic">Interview Info <span *ngIf="condition.icon.interviewDate"
+              class="text-red">*</span></label>
+          <nb-icon *ngIf="condition.icon.interviewDate" icon="edit-2-outline" class="link"
+            nbTooltip="Edit Interview Info" (click)="openPopupInterviewDate(item)"></nb-icon>
           <div class="m-l-15">
             <div class="text-group">
               <label class="label">Interview Location</label>
@@ -117,31 +134,25 @@
         </div>
 
         <!-- Interview Score -->
-        <div *ngIf="item.candidateFlow?.pendingInterviewScoreInfo?.flag">
-          <label class="label topic">Interview Score</label>
-          <div class="m-l-15">
+        <div *ngIf="condition.block.interviewScore">
+          <label class="label topic">Interview Result <span *ngIf="condition.icon.interviewScore"
+              class="text-red">*</span></label>
+          <nb-icon *ngIf="condition.icon.interviewScore" icon="edit-2-outline" class="link"
+            nbTooltip="Edit Interview Result" (click)="openPopupInterviewScore(item)"></nb-icon>
+          <div *ngFor="let interviewScore of interviewScores" class="m-l-15">
             <div class="text-group">
-              <label class="label">Score</label>
-              <span>{{ interviewScore.score || '-' }}</span>
-            </div>
-            <div class="text-group">
-              <label class="label">Average Score</label>
-              <span>{{  interviewScore.avgScore || '-' }}</span>
-            </div>
-            <div class="text-group">
-              <label class="label">Result</label>
-              <span>{{  interviewScore.result || '-' }}</span>
-            </div>
-            <div class="text-group">
-              <label class="label">Remark</label>
-              <span>{{  interviewScore.remark || '-' }}</span>
+              <label class="label">{{ interviewScore.name }}</label>
+              <span>{{ interviewScore.result || '-' }}</span>
             </div>
           </div>
         </div>
 
         <!-- Sign Contract Info -->
-        <div *ngIf="item.candidateFlow?.pendingSignContractInfo?.sign?.flag">
-          <label class="label topic">Sign Contract Info</label>
+        <div *ngIf="condition.block.signContract">
+          <label class="label topic">Sign Contract Info <span *ngIf="condition.icon.signContract"
+              class="text-red">*</span></label>
+          <nb-icon *ngIf="condition.icon.signContract" icon="edit-2-outline" class="link"
+            nbTooltip="Edit Sign Contract Info" (click)="openPopupSignContractDate(item)"></nb-icon>
           <div class="m-l-15">
             <div class="text-group">
               <label class="label">Sign Contract Date</label>
@@ -163,85 +174,22 @@
         </div>
 
         <!-- Onboard Info -->
-        <div *ngIf="item.candidateFlow?.onboard?.flag">
+        <div *ngIf="condition.block.onboard">
           <label class="label topic">Onboard Info</label>
-          <div class="text-group">
-            <label class="label">Onboard Date</label>
-            <span>{{ utilitiesService.convertDate(item.candidateFlow?.onboard?.date) || '-' }}</span>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Onboard Date</label>
+              <span>{{ utilitiesService.convertDate(item.candidateFlow?.onboard?.date) || '-' }}</span>
+            </div>
           </div>
         </div>
 
       </div>
 
-      <!-- CV Score -->
       <div class="col-md-6">
-        <label class="label topic" style="margin-top: 0;">CV Score</label>
-        <div class="m-l-15">
-          <div class="m-b-10">
-            <div class="label">Work Experience
-              <span class="pull-right">
-                {{ item.candidateFlow?.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.workExperience?.total || 0 }}
-              </span>
-            </div>
-            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-              item.candidateFlow?.weightScore?.workExperience?.accumulativeScore,
-              item.candidateFlow?.weightScore?.workExperience?.total)" status="primary" size="tiny">
-            </nb-progress-bar>
-          </div>
-          <div class="m-b-10">
-            <div class="label">Education
-              <span class="pull-right">
-                {{ item.candidateFlow?.weightScore?.education?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.education?.total || 0 }}
-              </span>
-            </div>
-            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-              item.candidateFlow?.weightScore?.education?.accumulativeScore,
-              item.candidateFlow?.weightScore?.education?.total)" status="info" size="tiny">
-            </nb-progress-bar>
-          </div>
-          <div class="m-b-10">
-            <div class="label">Hard Skill
-              <span class="pull-right">
-                {{ item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.hardSkill?.total || 0 }}
-              </span>
-            </div>
-            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-              item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore,
-              item.candidateFlow?.weightScore?.hardSkill?.total)" status="success" size="tiny">
-            </nb-progress-bar>
-          </div>
-          <div class="m-b-10">
-            <div class="label">Soft Skill
-              <span class="pull-right">
-                {{ item.candidateFlow?.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.softSkill?.total || 0 }}
-              </span>
-            </div>
-            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-              item.candidateFlow?.weightScore?.softSkill?.accumulativeScore,
-              item.candidateFlow?.weightScore?.softSkill?.total)" status="warning" size="tiny">
-            </nb-progress-bar>
-          </div>
-          <div class="m-b-10">
-            <div class="label">Certificate
-              <span class="pull-right">
-                {{ item.candidateFlow?.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.certificate?.total || 0 }}
-              </span>
-            </div>
-            <nb-progress-bar [value]="utilitiesService.calculatePercentage(
-              item.candidateFlow?.weightScore?.certificate?.accumulativeScore,
-              item.candidateFlow?.weightScore?.certificate?.total)" status="danger" size="tiny">
-            </nb-progress-bar>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Personal Details -->
-    <div class="row">
-      <div class="col-md-12">
-        <label class="label topic">Personal Details</label>
-      </div>
-      <div class="col-md-6">
+        <!-- Personal Details -->
+        <label class="label topic" style="margin-top: 0;">Personal Details</label>
         <div class="m-l-15">
           <div class="text-group">
             <label class="label">Name</label>
@@ -255,10 +203,6 @@
             <label class="label">Age</label>
             <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) || '-' }}</span>
           </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="m-l-15">
           <div class="text-group">
             <label class="label">Phone</label>
             <span>{{ item.phone || '-' }}</span>
@@ -272,84 +216,140 @@
             <span>{{ item.address || '-' }}</span>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Work Experience -->
-    <div class="row">
-      <div class="col-md-12">
+        <!-- Work Experience -->
         <label class="label topic">Work Experience</label>
         <div class="m-l-15">
           <div class="text-group">
             <label class="label">Duration</label>
             <span>{{ 
-              utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
-              utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
+                utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
+                utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
             </span>
           </div>
-          <div *ngIf="item.workExperience?.work.length">
-            <label class="label">Detail :</label>
-            <div class="m-l-15">
-              <div *ngFor="let exp of item.workExperience?.work">
-                <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
-              </div>
-            </div>
+          <div *ngFor="let exp of item.workExperience?.work">
+            <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
           </div>
         </div>
-      </div>
-      <div class="col-md-12">
+
+        <!-- Education -->
         <label class="label topic">Education</label>
         <div class="m-l-15">
           <div *ngFor="let education of item.education">
             <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
           </div>
-          <span *ngIf="!item.education.length">-</span>
+          <span *ngIf="!item.education?.length">-</span>
         </div>
+
+        <!-- Hard Skills -->
+        <label class="label topic">Hard Skills</label>
+        <div class="m-l-15">
+          <span *ngIf="item.hardSkill?.length">• </span>
+          <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
+        </div>
+
+        <!-- Soft Skills -->
+        <label class="label topic">Soft Skills</label>
+        <div class="m-l-15">
+          <span *ngIf="item.softSkill?.length">• </span>
+          <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
+        </div>
+
+        <!-- Certificate -->
+        <label class="label topic">Certificate</label>
+        <div class="m-l-15">
+          <span *ngIf="item.certificate?.length">• </span>
+          <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
+        </div>
+
       </div>
     </div>
-
-    <!-- Hard Skills -->
-    <label class="label topic">Hard Skills</label>
-    <div class="m-l-15">
-      <span *ngIf="item.hardSkill.length">• </span>
-      <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
+    <div *ngIf="condition.button.errMsg" class="pull-right">
+      <label class="label text-red m-0">
+        * {{ condition.button.errMsg }}
+      </label>
     </div>
-
-    <!-- Soft Skills -->
-    <label class="label topic">Soft Skills</label>
-    <div class="m-l-15">
-      <span *ngIf="item.softSkill.length">• </span>
-      <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
-    </div>
-
-    <!-- Certificate -->
-    <label class="label topic">Certificate</label>
-    <div class="m-l-15">
-      <span *ngIf="item.certificate.length">• </span>
-      <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
-    </div>
-
   </nb-card-body>
-
   <nb-card-footer>
-    <button style="float: left;" nbButton status="success" (click)="checkCV(item._id)">Original
-      CV</button>
-    <span *ngFor="let button of steps">
-      <span *ngIf="button.editable && button.refStage._id === item.candidateFlow?.refStage?._id">
-        <button nbButton status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
-          <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-          <nb-badge *ngIf="item.candidateFlow?.comments.length" [text]="item.candidateFlow?.comments.length"
-            status="danger" position="top right">
-          </nb-badge>
-        </button>
-        <button nbButton status="success" [nbTooltip]="button.button" (click)="approve(item, button)">
-          <nb-icon icon="checkmark-circle-2"></nb-icon>
-        </button>
-        <button nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
-          <nb-icon icon="close-circle"></nb-icon>
-        </button>
-      </span>
-    </span>
+    <button *ngIf="role.refAuthorize?.showOriginalCV" style="float: left;" nbButton status="success"
+      (click)="checkCV(item._id)">Original CV</button>
+    <button *ngIf="condition.button.comment" nbButton status="info" nbTooltip="Comment"
+      (click)="openPopupComment(item)">
+      <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+      <nb-badge *ngIf="item.candidateFlow?.comments.length" [text]="item.candidateFlow?.comments.length" status="danger"
+        position="top right">
+      </nb-badge>
+    </button>
+    <button *ngIf="condition.button.nextStep" nbButton status="success" [nbTooltip]="condition.button.step.button"
+      (click)="approve(item, condition.button.step)" [disabled]="condition.button.disabled">
+      <nb-icon icon="checkmark-circle-2"></nb-icon>
+    </button>
+    <button *ngIf="condition.button.reject" nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
+      <nb-icon icon="close-circle"></nb-icon>
+    </button>
+    <button *ngIf="condition.button.revoke" nbButton status="primary" nbTooltip="Revoke" (click)="revoke(item)">
+      <nb-icon icon="undo"></nb-icon>
+    </button>
   </nb-card-footer>
-
 </nb-card>
+
+<ng-template #score>
+  <div class="text-center m-b-10">
+    <label class="label text-top text-black">CV Score</label>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Work Experience
+      <span class="pull-right">
+        {{ item.candidateFlow?.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.workExperience?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                item.candidateFlow?.weightScore?.workExperience?.accumulativeScore,
+                item.candidateFlow?.weightScore?.workExperience?.total)" status="primary" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Education
+      <span class="pull-right">
+        {{ item.candidateFlow?.weightScore?.education?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.education?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                item.candidateFlow?.weightScore?.education?.accumulativeScore,
+                item.candidateFlow?.weightScore?.education?.total)" status="info" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Hard Skill
+      <span class="pull-right">
+        {{ item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.hardSkill?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore,
+                item.candidateFlow?.weightScore?.hardSkill?.total)" status="success" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div class="m-b-10">
+    <div class="label">Soft Skill
+      <span class="pull-right">
+        {{ item.candidateFlow?.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.softSkill?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                item.candidateFlow?.weightScore?.softSkill?.accumulativeScore,
+                item.candidateFlow?.weightScore?.softSkill?.total)" status="warning" size="tiny">
+    </nb-progress-bar>
+  </div>
+  <div>
+    <div class="label">Certificate
+      <span class="pull-right">
+        {{ item.candidateFlow?.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.certificate?.total || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                item.candidateFlow?.weightScore?.certificate?.accumulativeScore,
+                item.candidateFlow?.weightScore?.certificate?.total)" status="danger" size="tiny">
+    </nb-progress-bar>
+  </div>
+</ng-template>

@@ -94,6 +94,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RejectStageComponent } from './reject-stage/reject-stage.component';
 import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
+import { BlacklistComponent } from './blacklist/blacklist.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation
     RejectStageComponent,
     EvaluationDetailComponent,
     EvaluationListComponent,
+    BlacklistComponent,
   ],
   imports: [
     CommonModule,

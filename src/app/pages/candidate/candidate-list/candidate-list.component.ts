@@ -29,6 +29,74 @@ export class CandidateListComponent implements OnInit {
   devices: Devices;
   loading: boolean;
   isGridLayout: boolean;
+  filterAll: boolean;
+  filters = [
+    {
+      text: 'Department',
+      filter: 'candidateFlow.refJR.department.name',
+      active: true,
+    },
+    {
+      text: 'Division',
+      filter: 'candidateFlow.refJR.division.name',
+      active: true,
+    },
+    {
+      text: 'JobPosition',
+      filter: 'candidateFlow.refJR.refJD.position',
+      active: true,
+    },
+    {
+      text: 'Stage',
+      filter: 'candidateFlow.refStage.refMain.name',
+      active: true,
+    },
+    {
+      text: 'Name',
+      filter: 'firstname',
+      active: true,
+    },
+    {
+      text: 'Phone',
+      filter: 'phone',
+      active: true,
+    },
+    {
+      text: 'Birthday (dd/mm/yyyy)',
+      filter: 'birth',
+      active: true,
+    },
+    {
+      text: 'Email',
+      filter: 'email',
+      active: true,
+    },
+    {
+      text: 'Age',
+      filter: 'age',
+      active: true,
+    },
+    {
+      text: 'Address',
+      filter: 'address',
+      active: true,
+    },
+    {
+      text: 'Education',
+      filter: 'university',
+      active: true,
+    },
+    {
+      text: 'HardSkill',
+      filter: 'hardSkill',
+      active: true,
+    },
+    {
+      text: 'SoftSkill',
+      filter: 'softSkill',
+      active: true,
+    }
+  ];
 
   constructor(
     private router: Router,
@@ -41,6 +109,7 @@ export class CandidateListComponent implements OnInit {
     this.keyword = getKeyword() || '';
     this.devices = this.utilitiesService.getDevice();
     setKeyword();
+    this.filterAll = true;
   }
 
   ngOnInit() {
@@ -60,11 +129,16 @@ export class CandidateListComponent implements OnInit {
 
   search() {
     this.loading = true;
+    const filter = this.filters.filter(element => {
+      return element.active;
+    }).map(element => {
+      return element.filter;
+    });
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
-      filter: []
+      filter: filter
     };
     this.items = [];
     this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
@@ -76,13 +150,28 @@ export class CandidateListComponent implements OnInit {
     });
   }
 
+  changeFilter(value) {
+    const found = this.filters.find(element => {
+      return !element.active;
+    });
+    if (found || !value) {
+      this.filterAll = false;
+    }
+  }
+
+  changeFilterAll(value) {
+    this.filters.map(element => {
+      element.active = value;
+    });
+  }
+
   back() {
     this.router.navigate(["/home"]);
   }
 
   edit(item: any) {
-    setFlowId(item._id)
-    setCandidateId(item.candidateFlow._id);
+    setFlowId(item.candidateFlow._id)
+    setCandidateId(item._id);
     this.router.navigate(["/candidate/detail"]);
   }
 

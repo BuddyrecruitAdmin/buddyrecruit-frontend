@@ -263,16 +263,16 @@ export class InterviewDetailComponent implements OnInit {
                   }
                 }
               }
+              if (item.refJR.userInterviews.length) {
+                const found = item.refJR.userInterviews.find(element => {
+                  return element.refUser === this.role._id;
+                });
+                if (found) {
+                  condition.icon.interviewScore = true;
+                }
+              }
             }
             break;
-        }
-      }
-      if (item.refJR.userInterviews.length) {
-        const found = item.refJR.userInterviews.find(element => {
-          return element.refUser === this.role._id;
-        });
-        if (found) {
-          condition.icon.interviewScore = true;
         }
       }
     }

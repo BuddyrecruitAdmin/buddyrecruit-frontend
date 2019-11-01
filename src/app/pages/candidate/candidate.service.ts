@@ -70,16 +70,17 @@ export class CandidateService extends NetworkService {
 
   candidateBlock(candidateId: string, flowId: string, remark: string): Observable<ApiResponse> {
     const body = {
-      refCandidateFlowId: flowId,
       refCandidateId: candidateId,
+      refCandidateFlowId: flowId,
       remark: remark
     };
     return this.post(API_ENDPOINT.CANDIDATE.BLOCK, body);
   }
 
-  candidateUnblock(candidateId: string): Observable<ApiResponse> {
+  candidateUnblock(candidateId: string, flowId: string): Observable<ApiResponse> {
     const body = {
       refCandidateId: candidateId,
+      refCandidateFlowId: flowId,
     };
     return this.post(API_ENDPOINT.CANDIDATE.UNBLOCK, body);
   }
@@ -133,4 +134,15 @@ export class CandidateService extends NetworkService {
     };
     return this.post(API_ENDPOINT.CANDIDATE.EVALUATION.EDIT, body);
   }
+
+  getBlacklist(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
+    const body = {
+      userData: {
+        refCompany: refCompany._id
+      },
+      criteria: criteria
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.BLACKLIST, body);
+  }
+
 }
