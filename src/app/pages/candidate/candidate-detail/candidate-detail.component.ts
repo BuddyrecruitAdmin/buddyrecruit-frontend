@@ -132,6 +132,9 @@ export class CandidateDetailComponent implements OnInit {
           }
         }
         this.setCondition(this.item);
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.location.back();
       }
       this.loading = false;
     });

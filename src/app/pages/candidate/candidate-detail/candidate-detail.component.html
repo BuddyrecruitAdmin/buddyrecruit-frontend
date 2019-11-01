@@ -55,7 +55,7 @@
           </div>
         </div>
 
-        <div *ngIf="item.candidateFlow.refJR.requiredExam">
+        <div *ngIf="item.candidateFlow?.refJR?.requiredExam">
           <!-- Exam Date -->
           <div *ngIf="condition.block.examDate">
             <label class="label topic">Exam Date <span *ngIf="condition.icon.examDate" class="text-red">*</span></label>
