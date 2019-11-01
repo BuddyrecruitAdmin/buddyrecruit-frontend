@@ -171,7 +171,7 @@ export class CandidateListComponent implements OnInit {
 
   edit(item: any) {
     setFlowId(item.candidateFlow._id)
-    setCandidateId(item._id);
+    setCandidateId(item.candidateFlow._id);
     this.router.navigate(["/candidate/detail"]);
   }
 
