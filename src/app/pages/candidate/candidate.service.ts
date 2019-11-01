@@ -68,11 +68,12 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.REVOKE, body);
   }
 
-  candidateBlock(candidateId: string, flowId: string, remark: string): Observable<ApiResponse> {
+  candidateBlock(candidateId: string, flowId: string, remark: string, refReject: string): Observable<ApiResponse> {
     const body = {
       refCandidateId: candidateId,
       refCandidateFlowId: flowId,
-      remark: remark
+      remark: remark,
+      refReject: refReject
     };
     return this.post(API_ENDPOINT.CANDIDATE.BLOCK, body);
   }

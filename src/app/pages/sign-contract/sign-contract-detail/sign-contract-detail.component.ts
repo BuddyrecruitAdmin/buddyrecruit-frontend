@@ -178,6 +178,7 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   setCondition(item: any): any {
+    debugger
     let condition = {
       icon: {
         signContract: false
@@ -188,6 +189,7 @@ export class SignContractDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         comment: false,
+        signInfo: false
       },
       isExpired: false
     };
@@ -202,6 +204,9 @@ export class SignContractDetailComponent implements OnInit {
           condition.icon.signContract = true;
           condition.button.nextStep = true;
           condition.button.reject = true;
+          if (!this.utilitiesService.convertDateTime(item.pendingSignContractInfo.sign.date) && !this.utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)) {
+            condition.button.signInfo = true;
+          }
         } else {
           condition.button.revoke = true;
         }

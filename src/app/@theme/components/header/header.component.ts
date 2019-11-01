@@ -169,9 +169,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.notificationData.push(element);
           this.notifications.push({
             name: element.title,
-            title: this.utilitiesService.convertDateTimeFromSystem(element.fromUser.date) ||
+            title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
               this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
-            picture: '../../../../assets/images/avatar.png',
+            picture: element.fromUser.refUser.imageData,
             hidden: element.readed
           });
         });
