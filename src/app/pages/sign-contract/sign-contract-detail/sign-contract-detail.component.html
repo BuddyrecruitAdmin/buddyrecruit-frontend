@@ -137,18 +137,28 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="item.reject.flag" class="text-group">
-                    <label class="label">Reject By</label>
-                    <span
-                      style="color: orange">{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
-                  </div>
-                  <div *ngIf="item.reject.flag" class="text-group">
-                    <label class="label">Reject Reason</label>
-                    <span style="color: orange">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
-                  </div>
-                  <div *ngIf="item.reject.flag && item.reject.remark" class="text-group">
-                    <label class="label">Reject Reason</label>
-                    <span style="color: orange">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                  <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
+                    <label class="label text-light-gray">Reject Info</label>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Reject Reason</label>
+                        <span class="text-red">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                      </div>
+                      <div *ngIf="item.reject.remark" class="text-group">
+                        <label class="label">Reject Remark</label>
+                        <span class="text-red">{{ item.reject.remark || '-' }}</span>
+                      </div>
+                      <i class="text-gray">
+                        <div class="text-group">
+                          <label class="label">Reject By</label>
+                          <span>{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Reject Date</label>
+                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-' }}</span>
+                        </div>
+                      </i>
+                    </div>
                   </div>
                 </div>
               </div>

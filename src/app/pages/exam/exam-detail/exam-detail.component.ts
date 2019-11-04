@@ -123,7 +123,8 @@ export class ExamDetailComponent implements OnInit {
       setTabName();
     } else {
       this.tabSelected = event.tabTitle;
-    }
+    }    
+    this.paging.pageIndex = 0;
     this.search();
   }
 

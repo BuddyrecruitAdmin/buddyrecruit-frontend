@@ -29,6 +29,7 @@ export class CandidateListComponent implements OnInit {
   devices: Devices;
   loading: boolean;
   isGridLayout: boolean;
+  isFilter: boolean;
   filterAll: boolean;
   filters = [
     {
@@ -109,6 +110,7 @@ export class CandidateListComponent implements OnInit {
     this.keyword = getKeyword() || '';
     this.devices = this.utilitiesService.getDevice();
     setKeyword();
+    this.isFilter = false;
     this.filterAll = true;
   }
 
@@ -184,6 +186,10 @@ export class CandidateListComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => setJrId());
+  }
+
+  filterToggle() {
+    this.isFilter = !this.isFilter;
   }
 
   changePaging(event) {

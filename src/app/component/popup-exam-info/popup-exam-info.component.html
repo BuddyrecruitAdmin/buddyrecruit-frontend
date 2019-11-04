@@ -15,12 +15,17 @@
     <div class="form-control-group">
       <label class="label">Available Date <span class="text-red">*</span></label>
       <nb-datepicker #date format="dd/MM/yyyy"></nb-datepicker>
-      <input [nbDatepicker]="date" [(ngModel)]="availableDate" nbInput placeholder="dd/mm/yyyy">
+      <div class="input-group">
+        <input [nbDatepicker]="date" [(ngModel)]="availableDate" nbInput fullWidth style="cursor: pointer;">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline"></nb-icon>
+        </div>
+      </div>
     </div>
     <div class="form-control-group">
       <label class="label">After Sign Contract (Days) <span class="text-red">*</span></label>
       <input type="number" [(ngModel)]="afterSignContract" nbInput placeholder="0" pattern="[0-9]*" inputmode="numeric"
-        digitOnly> 
+        digitOnly>
     </div>
     <div class="form-control-group m-0">
       <label class="label">Remark</label>

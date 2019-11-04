@@ -38,27 +38,42 @@
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedStart }">
               <label class="label">Start Date <span class="text-red">*</span></label>
               <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-              <input [nbDatepicker]="startDate" [(ngModel)]="jr.duration.startDate" nbInput fullWidth
-                placeholder="dd/mm/yyyy" [disabled]="editCheck || checkPreview">
-              <small *ngIf="touchedStart" class="text-red">{{ sErrorStart }}</small>
+              <div class="input-group">
+                <input [nbDatepicker]="startDate" [(ngModel)]="jr.duration.startDate" nbInput fullWidth
+                  [disabled]="editCheck || checkPreview" style="cursor: pointer;">
+                <div class="input-group-addon" style="pointer-events: none;">
+                  <nb-icon icon="calendar-outline"></nb-icon>
+                </div>
+                <small *ngIf="touchedStart" class="text-red">{{ sErrorStart }}</small>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedEnd }">
               <label class="label">End Date <span class="text-red">*</span></label>
               <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
-              <input [nbDatepicker]="endDate" [(ngModel)]="jr.duration.endDate" [disabled]="checkPreview" nbInput
-                fullWidth placeholder="dd/mm/yyyy">
-              <small *ngIf="touchedEnd" class="text-red">{{ sErrorEnd }}</small>
+              <div class="input-group">
+                <input [nbDatepicker]="endDate" [(ngModel)]="jr.duration.endDate" nbInput fullWidth
+                  [disabled]="checkPreview" style="cursor: pointer;">
+                <div class="input-group-addon" style="pointer-events: none;">
+                  <nb-icon icon="calendar-outline"></nb-icon>
+                </div>
+                <small *ngIf="touchedEnd" class="text-red">{{ sErrorEnd }}</small>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedOn }">
               <label class="label">Onboard Date <span class="text-red">*</span></label>
               <nb-datepicker #onboardDate format="dd/MM/yyyy"></nb-datepicker>
-              <input [nbDatepicker]="onboardDate" [(ngModel)]="jr.onboardDate" [disabled]="checkPreview" nbInput
-                fullWidth placeholder="dd/mm/yyyy">
-              <small *ngIf="touchedOn" class="text-red">{{ sErrorOn }}</small>
+              <div class="input-group">
+                <input [nbDatepicker]="onboardDate" [(ngModel)]="jr.onboardDate" nbInput fullWidth
+                  [disabled]="checkPreview" style="cursor: pointer;">
+                <div class="input-group-addon" style="pointer-events: none;">
+                  <nb-icon icon="calendar-outline"></nb-icon>
+                </div>
+                <small *ngIf="touchedOn" class="text-red">{{ sErrorOn }}</small>
+              </div>
             </div>
           </div>
         </div>

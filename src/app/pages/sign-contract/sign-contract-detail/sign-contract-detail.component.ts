@@ -123,6 +123,7 @@ export class SignContractDetailComponent implements OnInit {
     } else {
       this.tabSelected = event.tabTitle;
     }
+    this.paging.pageIndex = 0;
     this.search();
   }
 

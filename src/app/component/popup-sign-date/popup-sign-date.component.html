@@ -15,7 +15,12 @@
     <div class="form-control-group">
       <label class="label">Sign Contract Date <span class="text-red">*</span></label>
       <nb-datepicker #datepicker format="dd/MM/yyyy"></nb-datepicker>
-      <input [nbDatepicker]="datepicker" [(ngModel)]="signDate" nbInput placeholder="dd/mm/yyyy">
+      <div class="input-group">
+        <input [nbDatepicker]="datepicker" [(ngModel)]="signDate" nbInput fullWidth style="cursor: pointer;">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline"></nb-icon>
+        </div>
+      </div>
     </div>
     <div class="form-control-group">
       <label class="label">Sign Contract Time <span class="text-red">*</span></label>
@@ -24,7 +29,12 @@
     <div class="form-control-group">
       <label class="label">Agree Start Date</label>
       <nb-datepicker #datepicker2 format="dd/MM/yyyy"></nb-datepicker>
-      <input [nbDatepicker]="datepicker2" [(ngModel)]="agreeDate" nbInput placeholder="dd/mm/yyyy">
+      <div class="input-group">
+        <input [nbDatepicker]="datepicker2" [(ngModel)]="agreeDate" nbInput fullWidth style="cursor: pointer;">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline"></nb-icon>
+        </div>
+      </div>
     </div>
     <div class="form-control-group m-0">
       <label class="label">Note</label>

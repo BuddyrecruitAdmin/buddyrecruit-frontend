@@ -154,6 +154,7 @@ export class InterviewDetailComponent implements OnInit {
     } else {
       this.tabSelected = event.tabTitle;
     }
+    this.paging.pageIndex = 0;
     this.search();
   }
 
