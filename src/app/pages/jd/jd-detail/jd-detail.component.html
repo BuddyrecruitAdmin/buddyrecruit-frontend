@@ -10,15 +10,15 @@
       <nb-card-body>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-control-group">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedJobPo }">
               <label class="label">Job Position <span style="color:red">*</span></label>
               <input type="text" name="position" [(ngModel)]="jd.position" [disabled]="checkPreview" nbInput
                 fullWidth />
-              <small *ngIf="touched" class="text-red">{{ sErrorPosition }}</small>
+              <small *ngIf="touchedJobPo" class="text-red">{{ sErrorPosition }}</small>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-control-group">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedJobMail }">
               <label class="label">Job Position in email <span style="color:red">*</span></label>
               <nb-select [(ngModel)]="jd.refPosition" [ngModelOptions]="{ standalone: true }" [disabled]="checkPreview"
                 fullWidth>
@@ -26,18 +26,18 @@
                   {{ position.label }}
                 </nb-option>
               </nb-select>
-              <small *ngIf="touched" class="text-red">{{ sErrorrefCheck }}</small>
+              <small *ngIf="touchedJobMail" class="text-red">{{ sErrorrefCheck }}</small>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="form-control-group">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedCV }">
               <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
               <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a keyword"
                 placeholder="+" [ngModelOptions]="{ standalone: true }">
               </tag-input>
-              <small *ngIf="touched" class="text-red">{{ sErrorKey }}</small>
+              <small *ngIf="touchedCV" class="text-red">{{ sErrorKey }}</small>
             </div>
           </div>
         </div>
@@ -51,14 +51,14 @@
                     fullWidth />
                 </div>
                 <div class="input-group-append">
-                  <label for="file-upload" class="label custom-file-upload">
+                  <button (click)="fileInput.click()" [disabled]="!modeEditable || checkPreview"
+                    class="btn btn-outline-upload">
+                    <input #fileInput type="file" name="jd" (change)="onHandleFileInput($event.target.files)"
+                      ng2FileSelect [uploader]="uploader" [(ngModel)]="jd.attachment.originalname" accept="image/*"
+                      style="display:none;" />
                     Browse File
-                  </label>
-                  <input id="file-upload" type="file" name="jd" (change)="onHandleFileInput($event.target.files)"
-                    ng2FileSelect [uploader]="uploader" [disabled]="!modeEditable || checkPreview"
-                    [(ngModel)]="jd.attachment.originalname" accept="image/*" nbInput />
+                  </button>
                 </div>
-                <span *ngIf="!modeEditable" class="input-group-addon right">Browse File</span>
               </div>
             </div>
             <div class="form-group">
@@ -75,7 +75,7 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-control-group">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedDep }">
               <label class="label" for="name">Department <span style="color:red">*</span></label>
               <nb-select [disabled]="checkPreview" [(ngModel)]="jd.departmentId" [ngModelOptions]="{ standalone: true }"
                 fullWidth (selectedChange)="onChangeDepartment($event)">
@@ -84,11 +84,11 @@
                   {{ department.label }}
                 </nb-option>
               </nb-select>
-              <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorDe }}</small>
+              <small *ngIf="touchedDep || !jd.departmentId" class="text-red">{{ sErrorDe }}</small>
             </div>
           </div>
           <div class="col-md-6" *ngIf="checkDivision">
-            <div class="form-control-group">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedDi }">
               <label class="label" for="name">Division <span style="color:red">*</span></label>
               <nb-select [disabled]="divisionOptions.length <= 1 || checkPreview" [(ngModel)]="jd.divisionId"
                 [ngModelOptions]="{ standalone: true }" fullWidth>
@@ -96,7 +96,7 @@
                   {{ option.label }}
                 </nb-option>
               </nb-select>
-              <small *ngIf="touched || !jd.departmentId" class="text-red">{{ sErrorDivision }}</small>
+              <small *ngIf="touchedDi || !jd.departmentId" class="text-red">{{ sErrorDivision }}</small>
             </div>
           </div>
         </div>
@@ -191,9 +191,9 @@
             </div>
           </div>
         </div>
+        <small class="pull-right" *ngIf="touched || touchedOut" style="color: red">*{{ SErrorAll }}</small>
       </nb-card-body>
       <nb-card-footer>
-        <small *ngIf="touched" class="text-red-left">{{ SErrorAll }}</small>
         <button nbButton status="default" (click)="back()">Cancel</button>
         <button *ngIf="!checkPreview" nbButton status="success" (click)="saveAll()">Save</button>
       </nb-card-footer>
@@ -274,7 +274,7 @@
 </ng-template>
 <!-- SoftSkillBox -->
 <ng-template #SoftSkillBox let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+  <nb-card [style.max-width.px]="innerWidth" [style.max-height.px]="innerHeight">
     <nb-card-header>
       <label style="color:#8f9bb3">
         Soft skill ( Total {{ jd.weightScore.softSkill.total }} % , Current
@@ -296,7 +296,7 @@
               <th>No.</th>
               <th>Skill <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
-              <th style="width:50%">Keyword <span style="color:red">*</span></th>
+              <th>Keyword <span style="color:red">*</span></th>
               <th></th>
             </tr>
             <tr *ngFor="let ss of jd.weightScore.softSkill.weight; let i = index">
@@ -361,7 +361,7 @@
               <th>No.</th>
               <th>Skill <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
-              <th style="width:50%">Keyword <span style="color:red">*</span></th>
+              <th>Keyword <span style="color:red">*</span></th>
               <th></th>
             </tr>
             <tr *ngFor="let hs of jd.weightScore.hardSkill.weight; let i = index">
@@ -426,7 +426,7 @@
               <th>No.</th>
               <th>Name <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
-              <th style="width:50%">Keyword <span style="color:red">*</span></th>
+              <th>Keyword <span style="color:red">*</span></th>
               <th></th>
             </tr>
             <tr *ngFor="let cert of jd.weightScore.certificate.weight; let i = index">
@@ -467,7 +467,7 @@
 </ng-template>
 <!-- EducationBox -->
 <ng-template #EducationBox let-data let-ref="dialogRef">
-  <nb-card>
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
     <nb-card-header>
       <label style="color:#8f9bb3">
         Education ( Max {{ jd.weightScore.education.total }} % )
@@ -497,7 +497,9 @@
         </table>
       </div>
     </nb-card-body>
+
     <small *ngIf="touched" class="text-red-right">{{ sErrorBox }}</small>
+
     <nb-card-footer>
       <button nbButton status="default" (click)="close('EDUCATION')">Cancel</button>
       <button nbButton status="success" (click)="save('EDUCATION')" [disabled]="checkPreview">Save</button>

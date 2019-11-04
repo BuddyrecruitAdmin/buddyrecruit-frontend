@@ -1,7 +1,7 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.jobPosition.editable, 
-        'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
+    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.mailTemplate.editable, 
+        'col-sm-8':!role.refAuthorize.configuration.mailTemplate.editable}">
       <h3>Email</h3>
     </div>
     <div class="col-sm-4">
@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
+    <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/mail-template-detail'">
         CREATE</button>
     </div>
@@ -33,12 +33,11 @@
                 <div class="title">
                   <label [nbTooltip]="item.name">{{item.name}}</label>
                 </div>
-                <div class="actions">
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="edit-outline" class="link" nbTooltip="Edit"
+                <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
+                  <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                     [routerLink]="'/setting/mail-template-detail/'+item._id">
                   </nb-icon>
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="trash-2-outline" class="link"
-                    nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+                  <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>
               </nb-card-header>
               <nb-card-body>
@@ -83,12 +82,11 @@
                 <div class="title">
                   <label [nbTooltip]="item.name">{{item.name}}</label>
                 </div>
-                <div class="actions">
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="edit-outline" class="link" nbTooltip="Edit"
+                <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
+                  <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                     [routerLink]="'/setting/mail-template-detail/'+item._id">
                   </nb-icon>
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="trash-2-outline" class="link"
-                    nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+                  <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>
               </nb-card-header>
               <nb-card-body>

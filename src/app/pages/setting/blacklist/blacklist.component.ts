@@ -113,7 +113,7 @@ export class BlacklistComponent implements OnInit {
       setCandidateId();
     });
   }
-
+  
   changeLayout(value) {
     this.isGridLayout = value;
     setIsGridLayout(value);

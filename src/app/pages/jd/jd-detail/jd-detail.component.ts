@@ -34,6 +34,12 @@ export class JdDetailComponent implements OnInit {
   countDivision: any;
   checkG: boolean;
   touched: boolean;
+  touchedJobPo: boolean;
+  touchedJobMail: boolean;
+  touchedCV: boolean;
+  touchedDep: boolean;
+  touchedDi: boolean;
+  touchedOut: boolean;
   isChecked: boolean;
   isAddHard: boolean;
   isAddSoft: boolean;
@@ -111,7 +117,7 @@ export class JdDetailComponent implements OnInit {
     private dropdownService: DropdownService,
   ) {
     this.role = getRole();
-    this.innerWidth = window.innerWidth * 0.8;
+    this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
     this.innerHeight = window.innerHeight * 0.8;
   }
 
@@ -573,6 +579,7 @@ export class JdDetailComponent implements OnInit {
 
   save(option) {
     this.touched = true;
+    this.touchedOut =true;
     switch (option) {
       case "EDUCATION": {
         let eTotal = 0;
@@ -975,37 +982,45 @@ export class JdDetailComponent implements OnInit {
 
   Validation(): boolean {
     this.touched = true;
+    this.touchedJobPo = false;
+    this.touchedJobMail = false;
+    this.touchedCV = false;
+    this.touchedDep = false;
+    this.touchedDi = false;
     let isValid = true;
     this.SErrorAll = "";
     this.checkValue();
-    if (this.jd.refPosition === null || this.jd.refPosition === undefined) {
+    if (!this.jd.position) {
+      this.touchedJobPo = true;
+      isValid = false;
+      this.sErrorPosition = MESSAGE[141];
+      this.SErrorAll = MESSAGE[141];
+    }
+    if (!this.jd.refPosition) {
+      this.touchedJobMail = true;
       isValid = false;
       this.sErrorrefCheck = MESSAGE[139];
-    } else {
-      this.sErrorrefCheck = "";
-
-    }
-    if (!this.jd.departmentId) {
-      isValid = false;
-      this.sErrorDe = MESSAGE[140];
-    } else {
-      this.sErrorDe = "";
-    }
-    if (this.countDivision > 0) {
-      if (this.jd.divisionId === undefined || this.jd.divisionId === "" || this.jd.divisionId === null) {
-        isValid = false;
-        this.sErrorDivision = MESSAGE[158];
-      } else {
-        this.sErrorDivision = "";
-      }
-    } else {
-      this.sErrorDivision = "";
+      this.SErrorAll = MESSAGE[139];
     }
     if (this.jd.keywordSearch.length === 0) {
+      this.touchedCV = true;
       isValid = false;
       this.sErrorKey = MESSAGE[138];
-    } else {
-      this.sErrorKey = "";
+      this.SErrorAll = "Please press enter keyword to search in CV";
+    }
+    if (!this.jd.departmentId) {
+      this.touchedDep = true;
+      isValid = false;
+      this.sErrorDe = MESSAGE[140];
+      this.SErrorAll = MESSAGE[140];
+    }
+    if (this.countDivision > 0) {
+      if (!this.jd.divisionId) {
+        this.touchedDi = true;
+        isValid = false;
+        this.sErrorDivision = MESSAGE[158];
+        this.SErrorAll = MESSAGE[158];
+      }
     }
     if (this.state === State.Edit || this.state === "duplicate") {
       if (this.jd.weightScore.certificate.total != 0) {
@@ -1130,17 +1145,17 @@ export class JdDetailComponent implements OnInit {
     return request;
   }
 
-  convertArray(conA) {
-    conA.map(gobj => {  //array.object to array
-      gobj = gobj.keyword.map(mobj => {
-        if (mobj.value) {
-          mobj = mobj.value;
-          return mobj;
-        }
-        return mobj;
-      })
-    })
-  }
+  // convertArray(conA) {
+  //   conA.map(gobj => {  //array.object to array
+  //     gobj = gobj.keyword.map(mobj => {
+  //       if (mobj.value) {
+  //         mobj = mobj.value;
+  //         return mobj;
+  //       }
+  //       return mobj;
+  //     })
+  //   })
+  // }
 
   calculateTotal() {
     this.checkValue();
@@ -1152,19 +1167,19 @@ export class JdDetailComponent implements OnInit {
   }
 
   checkValue() {
-    if (isNaN(this.jd.weightScore.workExperience.total) || this.jd.weightScore.workExperience.total === null) {
+    if (!this.jd.weightScore.workExperience.total) {
       this.jd.weightScore.workExperience.total = 0;
     }
-    if (isNaN(this.jd.weightScore.softSkill.total) || this.jd.weightScore.softSkill.total === null) {
+    if (!this.jd.weightScore.softSkill.total) {
       this.jd.weightScore.softSkill.total = 0;
     }
-    if (isNaN(this.jd.weightScore.hardSkill.total) || this.jd.weightScore.hardSkill.total === null) {
+    if (!this.jd.weightScore.hardSkill.total) {
       this.jd.weightScore.hardSkill.total = 0;
     }
-    if (isNaN(this.jd.weightScore.education.total) || this.jd.weightScore.education.total === null) {
+    if (!this.jd.weightScore.education.total) {
       this.jd.weightScore.education.total = 0;
     }
-    if (isNaN(this.jd.weightScore.certificate.total) || this.jd.weightScore.certificate.total === null) {
+    if (!this.jd.weightScore.certificate.total) {
       this.jd.weightScore.certificate.total = 0;
     }
   }

@@ -178,7 +178,6 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   setCondition(item: any): any {
-    debugger
     let condition = {
       icon: {
         signContract: false
