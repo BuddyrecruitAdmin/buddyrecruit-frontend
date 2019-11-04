@@ -29,7 +29,6 @@ export class PopupExamInfoComponent implements OnInit {
   remark: string;
   loading: boolean;
   canApprove: boolean;
-
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupExamInfoComponent>,

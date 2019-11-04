@@ -10,19 +10,12 @@
           <img class="img-default" (click)="fileInput.click()"
             [src]="url ? url : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
           <br>
-          <!-- <a (click)="fileInput.click()"><span class="fa fa-images"></span>
-            <input #fileInput type="file" (change)="onFileInput($event.target.files)" style="display:none;"
-              accept="image/*" ng2FileSelect [uploader]="uploader" />
-            Select Profile Picture</a> -->
-
           <a style="cursor: pointer;" (click)="fileInput.click()"><span class="fa fa-images"></span>
             <input #fileInput type="file" (change)="fileChangeEvent($event,dialog,$event.target.files)"
               style="display:none;" accept="image/*" />Select Profile Picture</a>
-
           <h6 class="text-ellipsis text-center">
             {{ profileDetail.firstname }} {{ profileDetail.lastname }}
           </h6>
-
           <div class="cardNew">
             <div class="card-icon-left">
               <i class="fa fa-building"></i>
@@ -146,7 +139,6 @@
                 <small *ngIf="touched && passwordCur.errors" class="text-red">{{ sErrorPasswordCur }}</small>
               </div>
             </div>
-
             <div class="form-group">
               <label class="label" for="name">New Password<small class="text-red">*</small></label>
               <div class="input-group">
@@ -160,7 +152,6 @@
                 <small *ngIf="touched && passwordNew.errors" class="text-red">{{ sErrorPasswordNew }}</small>
               </div>
             </div>
-
             <div class="form-group">
               <label class="label" for="name">Confirm Password<small class="text-red">*</small></label>
               <div class="input-group">

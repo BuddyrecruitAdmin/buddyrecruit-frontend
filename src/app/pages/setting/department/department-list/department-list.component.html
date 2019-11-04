@@ -1,8 +1,8 @@
 <div class="content-header with-shadow">
   <div class="row">
     <div [ngClass]="{ 
-        'col-sm-6':role.refAuthorize.configuration.user.editable,
-        'col-sm-8':!role.refAuthorize.configuration.user.editable }">
+        'col-sm-6':role.refAuthorize.configuration.department.editable,
+        'col-sm-8':!role.refAuthorize.configuration.department.editable }">
       <h3>Department</h3>
     </div>
     <div class="col-sm-4">
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="role.refAuthorize.configuration.user.editable" class="col-sm-2">
+    <div *ngIf="role.refAuthorize.configuration.department.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create"
         [routerLink]="'/setting/department-detail'">Create</button>
     </div>

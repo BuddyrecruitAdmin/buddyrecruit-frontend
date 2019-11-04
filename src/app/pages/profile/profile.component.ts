@@ -14,8 +14,6 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 import { API_ENDPOINT } from '../../shared/constants';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs/Subject';
 import { Location } from '@angular/common';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
@@ -32,10 +30,6 @@ export class ProfileComponent implements OnInit {
   role: any;
   loading: boolean;
   url: any;
-  file: any;
-  res: string;
-  bHasFile: boolean;
-  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'profile' });
   loginForm: FormGroup;
   sErrorPassword: string;
   sErrorPasswordCur: string;
@@ -44,7 +38,6 @@ export class ProfileComponent implements OnInit {
   sErrorLastName: string;
   sErrorPasswordNew: string;
   sErrorEmail: string;
-  fileToUpload: File = null;
   isChangePassword = false;
   touched: boolean;
   firstName: AbstractControl;
@@ -120,8 +113,6 @@ export class ProfileComponent implements OnInit {
     this.sErrorPassword = MESSAGE[50];
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
-    this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
-    this.bHasFile = false;
   }
   validation(): boolean {
     this.touched = true;
@@ -161,7 +152,6 @@ export class ProfileComponent implements OnInit {
 
     }
     return isValid;
-
   }
 
   cancel() {
@@ -183,7 +173,9 @@ export class ProfileComponent implements OnInit {
           this.service.edit(request).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
-              location.reload();
+              setTimeout(() => {
+                location.reload();
+              }, 1500);
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }

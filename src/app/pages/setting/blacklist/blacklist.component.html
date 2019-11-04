@@ -44,8 +44,8 @@
       <div class="col-lg-6" *ngFor="let item of items;">
         <nb-card style="margin-bottom: 1rem;">
           <nb-card-header>
-            <div class="title">
-              <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+            <div class="title link">
+              <label (click)="info(item)" [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
                 {{ utilitiesService.setFullname(item.refCandidate) }}
               </label>
             </div>
@@ -119,8 +119,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
-              <td class="text-left">
-                <span [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+              <td class="text-left link">
+                <span (click)="info(item)" [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
                   {{ utilitiesService.setFullname(item.refCandidate) }}
                 </span>
               </td>

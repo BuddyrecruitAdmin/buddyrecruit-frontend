@@ -154,7 +154,7 @@ export class PopupRejectComponent implements OnInit {
     confirm.afterClosed().subscribe(result => {
       if (result) {
         this.loading = true;
-        this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark).subscribe(response => {
+        this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark,this.rejectId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.ref.close(true);

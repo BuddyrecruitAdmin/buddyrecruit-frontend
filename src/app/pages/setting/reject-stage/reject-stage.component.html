@@ -120,7 +120,7 @@
       </div>
     </div>
   </nb-card-body>
-  <nb-card-footer>
+  <nb-card-footer *ngIf="role.refAuthorize.configuration.rejection.editable">
     <div class="input-group-addon" nbTooltip="Search">
       <button nbButton status="success" (click)="saveAs()" style="float: right;">Save</button>
     </div>

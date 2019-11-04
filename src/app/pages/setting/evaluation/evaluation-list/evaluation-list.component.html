@@ -1,7 +1,7 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.jobPosition.editable, 
-        'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
+    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.evaluation.editable, 
+        'col-sm-8':!role.refAuthorize.configuration.evaluation.editable}">
       <h3>Evaluation</h3>
     </div>
     <div class="col-sm-4">
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
+    <div *ngIf="role.refAuthorize.configuration.evaluation.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/evaluation-detail/create'">
         CREATE</button>
     </div>
@@ -35,7 +35,8 @@
             <th scope="col" class="text-left">Name</th>
             <th scope="col" style="width: 150px;">Last Update By</th>
             <th scope="col" style="width: 150px;">Last Update Date</th>
-            <th scope="col" style="width: 160px;">Actions</th>
+            <th scope="col" style="width: 160px;" *ngIf="role.refAuthorize.configuration.evaluation.editable">Actions
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -47,7 +48,7 @@
               {{ item.lastChangedInfo?.refUser?.lastname }}
             </td>
             <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
-            <td class="actions">
+            <td class="actions" *ngIf="role.refAuthorize.configuration.evaluation.editable">
               <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                 [routerLink]="'/setting/evaluation-detail/edit/'+item._id">
                 <nb-icon icon="edit-outline"></nb-icon>
@@ -56,7 +57,8 @@
                 [routerLink]="'/setting/evaluation-detail/duplicate/'+item._id">
                 <nb-icon icon="copy-outline"></nb-icon>
               </button>
-              <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)">
+              <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
+                (click)="delete(item)">
                 <nb-icon icon="trash-2-outline"></nb-icon>
               </button>
             </td>
