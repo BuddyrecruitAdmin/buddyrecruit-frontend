@@ -75,35 +75,33 @@ export class MailTemplateDetailComponent implements OnInit {
         this.state = State.Edit;
         this._id = params.id;
         this.getId = false;
-        this.initialDropdown().then((response) => {
-          this.getDetail();
-        });
-      } else {
-        this.initialDropdown();
-        this.state = State.Create;
-      }
+        this.getDetail();
+        // this.initialDropdown().then((response) => {
+
+        // });
+      } 
     });
   }
 
-  async initialDropdown() {
-    this.typeOptions = [];
-    this.typeOptions.push({
-      label: "- Select email Type -",
-      value: undefined
-    });
-    this.service.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.forEach(element => {
-            this.typeOptions.push({
-              label: element.name,
-              value: element._id
-            });
-          });
-        }
-      }
-    });
-  }
+  // async initialDropdown() {
+  //   this.typeOptions = [];
+  //   this.typeOptions.push({
+  //     label: "- Select email Type -",
+  //     value: undefined
+  //   });
+  //   this.service.getList().subscribe(response => {
+  //     if (response.code === ResponseCode.Success) {
+  //       if (response.data) {
+  //         response.data.forEach(element => {
+  //           this.typeOptions.push({
+  //             label: element.name,
+  //             value: element._id
+  //           });
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
   getDetail() {
     this.service.getDetail(this._id).subscribe(response => {

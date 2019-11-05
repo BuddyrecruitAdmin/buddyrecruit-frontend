@@ -2,7 +2,7 @@
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="candidateName">{{ evaluation.name  || '-' }} <small>  {{ state }}</small></label>
+      <label [nbTooltip]="candidateName">{{ evaluation.name  || '-' }} <small> ({{ state }})</small></label>
       <!-- <small class="status text-gray m-0">
         {{ jrName || '-' }}
       </small> -->
@@ -22,7 +22,8 @@
           <span style="vertical-align: top;">{{ basic.subject }}</span>
         </label>
         <div class="m-l-20">
-          <nb-radio-group [(ngModel)]="basic.selected" [name]="basic.subject" class="inline" status="info" [disabled]="!editable">
+          <nb-radio-group [(ngModel)]="basic.selected" [name]="basic.subject" class="inline" status="info"
+            [disabled]="!editable">
             <nb-radio *ngFor="let choice of basic.options" [name]="basic.subject" [value]="choice.value">
               {{ choice.label }}
             </nb-radio>
