@@ -12,6 +12,7 @@ import { PopupMessageComponent } from '../../../../component/popup-message/popup
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { color } from 'd3-color';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
   selector: 'ngx-mail-template-list',
   templateUrl: './mail-template-list.component.html',
@@ -30,7 +31,13 @@ export class MailTemplateListComponent implements OnInit {
   tabSelected: string;
   minPageSize = Paging.pageSizeOptions[0];
   loading: boolean;
-
+  mailOptions: any;
+  innerWidth: any;
+  innerHeight: any;
+  editorConfig: AngularEditorConfig = {
+    editable: false,
+    showToolbar: false,
+  }
   constructor(
     private service: MailTemplateService,
     private utilitiesService: UtilitiesService,
@@ -39,6 +46,8 @@ export class MailTemplateListComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
+    this.innerHeight = window.innerHeight * 0.8;
   }
 
   ngOnInit() {
@@ -96,6 +105,11 @@ export class MailTemplateListComponent implements OnInit {
     }
     this.paging.pageIndex = 0;
     this.search();
+  }
+
+  preEmail(item: any, dialog: TemplateRef<any>) {
+    this.mailOptions = _.cloneDeep(item);
+    this.callDialog(dialog);
   }
 
   callDialog(dialog: TemplateRef<any>) {

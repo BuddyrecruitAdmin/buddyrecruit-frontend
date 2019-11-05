@@ -92,15 +92,19 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': sErrorEvaluation }">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedEva }">
               <label class="label">Evaluation Template <span class="text-red">*</span></label>
               <nb-select [(ngModel)]="jr.refEvaluation" [ngModelOptions]="{ standalone: true }" fullWidth
                 [disabled]="checkPreview">
-                <nb-option *ngFor="let eva of Evaluation" [value]="eva.value" [disabled]="checkPreview">
+                <nb-option *ngFor="let eva of Evaluation" (click)="selectedEva()" [value]="eva.value"
+                  [disabled]="checkPreview">
                   {{ eva.label }}
                 </nb-option>
               </nb-select>
-              <small *ngIf="sErrorEvaluation" class="text-red">{{ sErrorEvaluation }}</small>
+              <small *ngIf="touchedEva" class="text-red">{{ sErrorEvaluation }}</small>
+              <small *ngIf="jr.refEvaluation" class="link" (click)="openPopupEvaluation(jr.refEvaluation)">
+                <nb-icon icon="info-outline"></nb-icon>Click to see preview evaluation form
+              </small>
             </div>
           </div>
         </div>

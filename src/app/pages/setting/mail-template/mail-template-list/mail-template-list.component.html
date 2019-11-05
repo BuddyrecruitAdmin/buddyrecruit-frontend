@@ -1,7 +1,6 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.mailTemplate.editable, 
-        'col-sm-8':!role.refAuthorize.configuration.mailTemplate.editable}">
+    <div class="col-sm-8">
       <h3>Email</h3>
     </div>
     <div class="col-sm-4">
@@ -13,10 +12,10 @@
         </div>
       </div>
     </div>
-    <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="col-sm-2">
+    <!-- <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/mail-template-detail'">
         CREATE</button>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -31,13 +30,13 @@
             <nb-card accent="success">
               <nb-card-header>
                 <div class="title">
-                  <label [nbTooltip]="item.name">{{item.name}}</label>
+                  <label class="link" [nbTooltip]="item.name"
+                    (click)="preEmail(item,PreviewEmail)">{{item.name}}</label>
                 </div>
                 <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                     [routerLink]="'/setting/mail-template-detail/'+item._id">
                   </nb-icon>
-                  <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>
               </nb-card-header>
               <nb-card-body>
@@ -80,7 +79,8 @@
             <nb-card accent="success">
               <nb-card-header>
                 <div class="title">
-                  <label [nbTooltip]="item.name">{{item.name}}</label>
+                  <label class="link" [nbTooltip]="item.name"
+                    (click)="preEmail(item,PreviewEmail)">{{item.name}}</label>
                 </div>
                 <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
@@ -129,3 +129,40 @@
 <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
   [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
 </mat-paginator>
+
+<!-- PreviewEmail -->
+<ng-template #PreviewEmail let-data let-ref="dialogRef">
+  <nb-card [style.max-height.px]="innerHeight" [style.width.px]="innerWidth">
+    <nb-card-header>
+      <div class="box-header">
+        <h5 class="box-title">{{ mailOptions.subject }}
+        </h5>
+      </div>
+      <div class="user-block">
+        <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
+        <span class="username">
+          {{ mailOptions.from }}
+          <small class="pull-right">{{ utilitiesService.convertDateTime(today) }}</small>
+        </span>
+        <span class="description">
+          <strong>to:</strong> {{ mailOptions.to }}
+        </span>
+        <span *ngIf="mailOptions.cc.length" class="description">
+          <strong>cc:</strong> {{ mailOptions.cc }}
+        </span>
+        <span *ngIf="mailOptions.bcc.length" class="description">
+          <strong>bcc:</strong> {{ mailOptions.bcc }}
+        </span>
+      </div>
+    </nb-card-header>
+    <nb-card-body class="dialog-body">
+      <angular-editor placeholder="'Enter text here...'" [(ngModel)]="mailOptions.html" [config]="editorConfig">
+      </angular-editor>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="footer-collapse">
+        <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
