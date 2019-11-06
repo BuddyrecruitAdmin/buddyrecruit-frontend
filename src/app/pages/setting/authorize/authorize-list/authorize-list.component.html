@@ -4,8 +4,8 @@
       <h3>Authorize</h3>
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
-      <button *ngIf="role.refAuthorize.jr.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/employer/setting/authorize/create'">
+      <button *ngIf="role.refAuthorize.configuration.authorize.editable" nbButton fullWidth status="success"
+        nbTooltip="Create" [routerLink]="'/employer/setting/authorize/create'">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -50,14 +50,14 @@
   <div *ngIf="isGridLayout">
     <!-- Is Mobile -->
     <!-- *ngIf="devices.isMobile && !loading" -->
-    <div class="row"> 
+    <div class="row">
       <div class="col-lg-6" *ngFor="let item of items;">
         <nb-card [accent]="item.active ? 'success' : 'default'">
           <nb-card-header>
             <div class="title">
               <label [nbTooltip]="item.name || item._id">{{ item.name || item._id }}</label>
             </div>
-            <div class="actions">
+            <div class="actions" *ngIf="role.refAuthorize.configuration.authorize.editable">
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/setting/authorize/edit/'+item._id">
               </nb-icon>
@@ -111,7 +111,7 @@
               <th scope="col" style="width: 90px;">Status</th>
               <th scope="col" style="width: 150px;">Last Update By</th>
               <th scope="col" style="width: 150px;">Last Update Date</th>
-              <th scope="col" style="width: 160px;">Actions</th>
+              <th scope="col" style="width: 160px;" *ngIf="role.refAuthorize.configuration.authorize.editable">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -127,7 +127,7 @@
                 {{ item.lastChangedInfo?.refUser?.lastname }}
               </td>
               <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
-              <td class="actions">
+              <td class="actions" *ngIf="role.refAuthorize.configuration.authorize.editable">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/setting/authorize/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>

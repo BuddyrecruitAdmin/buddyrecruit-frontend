@@ -55,7 +55,7 @@
             <div class="title">
               <label [nbTooltip]="item.name">{{ item.name }}</label>
             </div>
-            <div class="actions">
+            <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="actions">
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
               <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
                 (click)="delete(item)">
@@ -108,14 +108,14 @@
               <th scope="col">Status</th>
               <th scope="col">Last update by</th>
 
-              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="width: 110px;">Actions</th>
+              <th *ngIf="role.refAuthorize.configuration.jobPosition.editable" scope="col" style="width: 110px;">Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
               <td class="text-left">
-                <span class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
-                  [nbTooltip]="item.name">{{ item.name }}</span>
+                <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
               <td>
                 <span>{{ item.remark || '-' }}</span>
@@ -131,7 +131,7 @@
                   {{ item.lastChangedInfo?.refUser?.lastname }}
                 </span>
               </td>
-              <td *ngIf="role.refAuthorize.jr.editable" class="actions">
+              <td *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item, dialog)">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>

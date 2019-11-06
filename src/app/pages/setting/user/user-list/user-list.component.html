@@ -4,8 +4,8 @@
       <h3>User</h3>
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
-      <button *ngIf="role.refAuthorize.jr.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/employer/setting/user-detail'" [disabled]="isOverQuota">
+      <button *ngIf="role.refAuthorize.configuration.user.editable" nbButton fullWidth status="success"
+        nbTooltip="Create" [routerLink]="'/employer/setting/user-detail'" [disabled]="isOverQuota">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -62,9 +62,9 @@
             <div class="title">
               <label [nbTooltip]="item.firstname + ' ' + item.lastname">{{ item.firstname }} {{ item.lastname }}</label>
             </div>
-            <div class="actions">
-              <nb-icon *ngIf="role.refAuthorize.configuration.department.editable" icon="edit-outline" class="link"
-                nbTooltip="Edit" [routerLink]="'/employer/setting/user-detail/'+item._id">
+            <div *ngIf="role.refAuthorize.configuration.user.editable" class="actions">
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/setting/user-detail/'+item._id">
               </nb-icon>
             </div>
           </nb-card-header>
@@ -131,7 +131,7 @@
               <th scope="col">Division</th>
               <th scope="col">User Role</th>
               <th scope="col">Status</th>
-              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="width: 110px;">Actions</th>
+              <th *ngIf="role.refAuthorize.configuration.user.editable" scope="col" style="width: 110px;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -156,7 +156,7 @@
                   {{ item.active ? 'Active': 'Inactive' }}
                 </span>
               </td>
-              <td *ngIf="role.refAuthorize.configuration.department.editable" class="actions">
+              <td *ngIf="role.refAuthorize.configuration.user.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/setting/user-detail/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>

@@ -11,7 +11,10 @@
         <small class="pull-right">{{ utilitiesService.convertDateTime(today) }}</small>
       </span>
       <span class="description">
-        <strong>to:</strong> {{ mailOptions.to }}
+        <strong>to:</strong>
+        <span *ngFor="let mailOption of mailOptions.to;let i = index" ><span *ngIf="i === 0">
+            {{ mailOption }}
+          </span><span *ngIf="i > 0" class="mailAfter"> {{ mailOption }}</span> </span>
       </span>
       <span *ngIf="mailOptions.cc.length" class="description">
         <strong>cc:</strong> {{ mailOptions.cc }}

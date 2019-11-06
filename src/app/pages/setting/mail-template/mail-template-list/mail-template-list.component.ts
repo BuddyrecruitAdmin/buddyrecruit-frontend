@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { MailTemplateService } from '../mail-template.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging,Devices } from '../../../../shared/interfaces/common.interface';
+import { getRole,getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -38,6 +38,8 @@ export class MailTemplateListComponent implements OnInit {
     editable: false,
     showToolbar: false,
   }
+  devices: Devices;
+  isGridLayout: boolean;
   constructor(
     private service: MailTemplateService,
     private utilitiesService: UtilitiesService,
@@ -48,6 +50,15 @@ export class MailTemplateListComponent implements OnInit {
     this.role = getRole();
     this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
     this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
@@ -143,6 +154,11 @@ export class MailTemplateListComponent implements OnInit {
       pageSizeOptions: Paging.pageSizeOptions
     }
     this.search();
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
