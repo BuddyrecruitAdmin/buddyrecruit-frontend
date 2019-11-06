@@ -4,24 +4,44 @@
     'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
       <h3>Job Position</h3>
     </div>
-    <div class="col-sm-4">
-      <div class="input-group">
-        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
-        <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
-        </div>
-      </div>
-    </div>
     <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">CREATE</button>
+      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">
+        <nb-icon icon="plus-outline"></nb-icon>CREATE
+      </button>
     </div>
   </div>
 </div>
 
-<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 ">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search()">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
+        </nb-actions>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
   nbSpinnerMessage="Loading...">
-  <nb-card-body></nb-card-body>
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
 </nb-card>
 
 <div class="row">
@@ -33,7 +53,8 @@
         </div>
         <div class="actions">
           <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
-          <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+          <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
+          </nb-icon>
         </div>
       </nb-card-header>
       <nb-card-body>
