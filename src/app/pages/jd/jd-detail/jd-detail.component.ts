@@ -917,7 +917,7 @@ export class JdDetailComponent implements OnInit {
               this.service.create(request).subscribe(response => {
                 if (response.code === ResponseCode.Success) {
                   this.showToast('success', 'Success Message', response.message);
-                  this.router.navigate(['/jd/list']);
+                  this.router.navigate(['/employer/jd/list']);
                 } else {
                   this.showToast('danger', 'Error Message', response.message);
                 }
@@ -927,7 +927,7 @@ export class JdDetailComponent implements OnInit {
               this.service.edit(request).subscribe(response => {
                 if (response.code === ResponseCode.Success) {
                   this.showToast('success', 'Success Message', response.message);
-                  this.router.navigate(['/jd/list']);
+                  this.router.navigate(['/employer/jd/list']);
                 } else {
                   this.showToast('danger', 'Error Message', response.message);
                 }
@@ -937,7 +937,7 @@ export class JdDetailComponent implements OnInit {
               this.service.create(request).subscribe(response => {
                 if (response.code === ResponseCode.Success) {
                   this.showToast('success', 'Success Message', response.message);
-                  this.router.navigate(['/jd/list']);
+                  this.router.navigate(['/employer/jd/list']);
                 } else {
                   this.showToast('danger', 'Error Message', response.message);
                 }
@@ -1209,7 +1209,7 @@ export class JdDetailComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/jd/list']);
+    this.router.navigate(['/employer/jd/list']);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

@@ -8,9 +8,9 @@
       </div>
       <ul class="navbar-nav ml-md-auto">
         <li class="nav-item active">
-          <a class="nav-link btn btn-outline-primary px-3" href="auth/login" role="button">
-            Log In
-          </a>
+          <button nbButton outline status="success" class="m-r-10" [routerLink]="'/employer/login'">Employer
+            Site</button>
+          <button nbButton outline status="primary" [routerLink]="'/jobseeker/login'">Sign In</button>
         </li>
       </ul>
     </div>
@@ -89,11 +89,11 @@
           </div>
         </div>
       </div>
-      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <a class="carousel-control-prev" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
       </a>
-      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <a class="carousel-control-next" role="button" data-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>

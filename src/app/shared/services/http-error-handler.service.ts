@@ -36,7 +36,7 @@ export class HttpErrorHandler {
       console.error('handleError error:', error); // log to console instead
       if (error.status === 401) {
         setUrl(this.router.url);
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['employer/login']);
         setAuthentication();
       }
       const message = (error.error instanceof ErrorEvent) ?

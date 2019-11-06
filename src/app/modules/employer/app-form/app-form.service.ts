@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { NetworkService } from '../../shared/services/network.service';
-import { HttpErrorHandler } from '../../shared/services/http-error-handler.service';
-import { ApiResponse } from '../../shared/interfaces/common.interface';
-import { API_ENDPOINT } from "../../shared/constants";
+import { NetworkService } from '../../../shared/services/network.service';
+import { HttpErrorHandler } from '../../../shared/services/http-error-handler.service';
+import { ApiResponse } from '../../../shared/interfaces/common.interface';
+import { API_ENDPOINT } from "../../../shared/constants";
 
 @Injectable({
   providedIn: "root"
@@ -23,7 +23,7 @@ export class AppFormService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.LIST, body);
   }
 
-  getDetail(_id,isUser): Observable<ApiResponse> {
+  getDetail(_id, isUser): Observable<ApiResponse> {
     const body = {
       _id: _id,
       isUser: isUser,

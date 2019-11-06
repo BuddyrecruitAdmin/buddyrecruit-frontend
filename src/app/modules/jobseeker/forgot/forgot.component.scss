@@ -1,0 +1,29 @@
+.login-image {
+    margin: auto;
+    margin-bottom: 15px;
+  }
+  .card {
+    width: 100%;
+    max-width: 375px;
+    padding: 30px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .full-width {
+    width: 100%;
+  }
+  .login-button {    
+    background-color: #35C4B2;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-weight: 800;
+  }
+  ::ng-deep nb-layout-column {
+    height: 80vw;
+  }

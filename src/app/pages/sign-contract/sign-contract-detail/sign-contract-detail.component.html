@@ -1,6 +1,6 @@
 <div class="content-header with-shadow">
   <div class="breadcrumb">
-    <span><a [routerLink]="'/sign-contract/list'" class="text-green">Pending Sign Contract</a></span>
+    <span><a [routerLink]="'/employer/sign-contract/list'" class="text-green">Pending Sign Contract</a></span>
     <span class="fa fa-angle-right"></span>
     <span>{{ jrName }}</span>
   </div>
@@ -192,13 +192,13 @@
               </button>
 
               <button *ngIf="item.condition.button.signInfo" nbButton status="success"
-              nbTooltip="Edit Sign Contract Date" (click)="openPopupSignContractDate(item)"
-              [disabled]="item.condition.isExpired">
-              <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
-              <span *ngIf="item.condition.isExpired">
-                {{ item.refJR?.refStatus?.name }}
-              </span>
-            </button>
+                nbTooltip="Edit Sign Contract Date" (click)="openPopupSignContractDate(item)"
+                [disabled]="item.condition.isExpired">
+                <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
+                </span>
+              </button>
 
               <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
                 (click)="reject(item)">

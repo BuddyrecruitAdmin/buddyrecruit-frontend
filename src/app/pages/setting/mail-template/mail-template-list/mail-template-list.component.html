@@ -14,7 +14,7 @@
       </div>
     </div>
     <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/mail-template-detail'">
+      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/employer/setting/mail-template-detail'">
         CREATE</button>
     </div>
   </div>
@@ -35,7 +35,7 @@
                 </div>
                 <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                    [routerLink]="'/setting/mail-template-detail/'+item._id">
+                    [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
                   </nb-icon>
                   <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>
@@ -84,7 +84,7 @@
                 </div>
                 <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                    [routerLink]="'/setting/mail-template-detail/'+item._id">
+                    [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
                   </nb-icon>
                   <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>

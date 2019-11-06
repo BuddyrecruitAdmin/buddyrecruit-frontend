@@ -1,6 +1,6 @@
 <div class="content-header with-shadow">
   <div class="breadcrumb">
-    <span><a [routerLink]="'/interview/list'" class="text-green">Pending Interview</a></span>
+    <span><a [routerLink]="'/employer/interview/list'" class="text-green">Pending Interview</a></span>
     <span class="fa fa-angle-right"></span>
     <span>{{ jrName }}</span>
   </div>
@@ -9,7 +9,7 @@
 <nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
   <span>
     Your available date is empty. Do you want to configure now ?
-    <a class="link underline m-l-5" [routerLink]="'/calendar'"><b>Yes</b></a>
+    <a class="link underline m-l-5" [routerLink]="'/employer/calendar'"><b>Yes</b></a>
     <span class="m-l-5 m-r-5">/</span>
     <a class="link underline" (click)="showTips = !showTips"><b>No</b></a>
   </span>

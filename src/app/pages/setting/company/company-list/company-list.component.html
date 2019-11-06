@@ -14,7 +14,7 @@
     </div>
     <div *ngIf="refHero.isSuperAdmin" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/setting/company-detail'">Create</button>
+        [routerLink]="'/employer/setting/company-detail'">Create</button>
     </div>
   </div>
 </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="actions">
           <nb-icon *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" icon="edit-outline" class="link"
-            nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
+            nbTooltip="Edit" [routerLink]="'/employer/setting/company-detail/'+item._id">
           </nb-icon>
           <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
             refHero.isSuperAdmin && 

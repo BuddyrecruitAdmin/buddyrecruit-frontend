@@ -243,7 +243,7 @@ export class EvaluationDetailComponent implements OnInit {
         this.service.create(this.evaluation).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/evaluation']);
+            this.router.navigate(['/employer/setting/evaluation']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -252,7 +252,7 @@ export class EvaluationDetailComponent implements OnInit {
         this.service.edit(this.evaluation).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/evaluation']);
+            this.router.navigate(['/employer/setting/evaluation']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }

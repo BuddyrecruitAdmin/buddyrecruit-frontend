@@ -226,7 +226,7 @@ export class OnboardListComponent implements OnInit {
     setJdId(item.refJD._id);
     setJdName(item.refJD.position);
     setJrId(item._id);
-    this.router.navigate(["/onboard/detail"]);
+    this.router.navigate(["/employer/onboard/detail"]);
   }
 
   close(item: any) {

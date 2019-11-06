@@ -16,7 +16,7 @@
     </div>
     <div *ngIf="role.refAuthorize.configuration.department.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/setting/department-detail'">Create</button>
+        [routerLink]="'/employer/setting/department-detail'">Create</button>
     </div>
   </div>
 </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="actions">
           <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-            [routerLink]="'/setting/department-detail/'+item._id">
+            [routerLink]="'/employer/setting/department-detail/'+item._id">
           </nb-icon>
           <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="!item.active">
           </nb-icon>

@@ -346,7 +346,7 @@ export class CandidateDetailComponent implements OnInit {
     if (menu) {
       this.router.navigate([menu.link]);
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/employer/home']);
     }
   }
 
@@ -361,7 +361,7 @@ export class CandidateDetailComponent implements OnInit {
       setJrId(this.item.candidateFlow.refJR._id);
       this.router.navigate([menu.link]);
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/employer/home']);
     }
   }
 

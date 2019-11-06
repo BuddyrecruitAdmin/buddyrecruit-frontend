@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jr.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/jr/detail/create'">
+        [routerLink]="'/employer/jr/detail/create'">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -60,13 +60,13 @@
         <nb-card>
           <nb-card-header>
             <div class="title">
-              <label class="link" [routerLink]="'/jr/detail/preview/'+item._id" [nbTooltip]="item.refJD?.position">
+              <label class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id" [nbTooltip]="item.refJD?.position">
                 {{ item.refJD?.position }}
               </label>
             </div>
             <div *ngIf="role.refAuthorize.jr.editable" class="actions">
               <nb-icon *ngIf="item.canEdit" icon="edit-outline" class="link" nbTooltip="Edit"
-                [routerLink]="'/jr/detail/edit/'+item._id">
+                [routerLink]="'/employer/jr/detail/edit/'+item._id">
               </nb-icon>
               <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="link" nbTooltip="Delete"
                 (click)="delete(item)"></nb-icon>
@@ -141,7 +141,7 @@
           <tbody>
             <tr *ngFor="let item of items;">
               <td class="text-left">
-                <span class="link" [routerLink]="'/jr/detail/preview/'+item._id"
+                <span class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
                   [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</span>
               </td>
               <td class="text-left">
@@ -166,7 +166,7 @@
               </td>
               <td *ngIf="role.refAuthorize.jr.editable" class="actions">
                 <button *ngIf="item.canEdit" nbButton status="primary" size="tiny" nbTooltip="Edit"
-                  [routerLink]="'/jr/detail/edit/'+item._id">
+                  [routerLink]="'/employer/jr/detail/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
                 <button *ngIf="item.canDelete" nbButton status="danger" size="tiny" nbTooltip="Delete"

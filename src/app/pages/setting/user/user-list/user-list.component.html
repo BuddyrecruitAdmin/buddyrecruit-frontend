@@ -15,7 +15,7 @@
       </div>
     </div>
     <div *ngIf="role.refAuthorize.configuration.user.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/user-detail'"
+      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/employer/setting/user-detail'"
         [disabled]="isOverQuota">Create</button>
     </div>
   </div>
@@ -36,7 +36,8 @@
           <label [nbTooltip]="item.firstname + ' ' + item.lastname">{{ item.firstname }} {{ item.lastname }}</label>
         </div>
         <div class="actions">
-          <nb-icon *ngIf="role.refAuthorize.configuration.department.editable" icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/user-detail/'+item._id">
+          <nb-icon *ngIf="role.refAuthorize.configuration.department.editable" icon="edit-outline" class="link"
+            nbTooltip="Edit" [routerLink]="'/employer/setting/user-detail/'+item._id">
           </nb-icon>
           <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="!item.active">
           </nb-icon>
