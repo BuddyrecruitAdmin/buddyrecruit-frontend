@@ -168,13 +168,13 @@ export class CandidateListComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(["/home"]);
+    this.router.navigate(["/employer/home"]);
   }
 
   edit(item: any) {
     setFlowId(item.candidateFlow._id)
     setCandidateId(item.candidateFlow._id);
-    this.router.navigate(["/candidate/detail"]);
+    this.router.navigate(["/employer/candidate/detail"]);
   }
 
   info(item: any) {

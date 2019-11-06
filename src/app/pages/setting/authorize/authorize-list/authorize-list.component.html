@@ -16,7 +16,7 @@
     </div>
     <div *ngIf="role.refAuthorize.configuration.authorize.editable" class="col-sm-2">
       <button nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/setting/authorize/create'">Create</button>
+        [routerLink]="'/employer/setting/authorize/create'">Create</button>
     </div>
   </div>
 </div>
@@ -55,11 +55,11 @@
             <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
             <td class="actions">
               <button nbButton status="primary" size="tiny" nbTooltip="Edit"
-                [routerLink]="'/setting/authorize/edit/'+item._id">
+                [routerLink]="'/employer/setting/authorize/edit/'+item._id">
                 <nb-icon icon="edit-outline"></nb-icon>
               </button>
               <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
-                [routerLink]="'/setting/authorize/duplicate/'+item._id">
+                [routerLink]="'/employer/setting/authorize/duplicate/'+item._id">
                 <nb-icon icon="copy-outline"></nb-icon>
               </button>
               <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
@@ -89,7 +89,7 @@
           <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/authorize/edit/'+item._id">
           </nb-icon>
           <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
-            [routerLink]="'/setting/authorize/duplicate/'+item._id">
+            [routerLink]="'/employer/setting/authorize/duplicate/'+item._id">
           </nb-icon>
           <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
           </nb-icon>

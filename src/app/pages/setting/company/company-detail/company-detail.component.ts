@@ -261,7 +261,7 @@ export class CompanyDetailComponent implements OnInit {
       companyDetail = _.cloneDeep(this.companyDetailTemp);
     }
     if (JSON.stringify(companyDetail) === JSON.stringify(this.companyDetail)) {
-      this.router.navigate(['/setting/company']);
+      this.router.navigate(['/employer/setting/company']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -269,7 +269,7 @@ export class CompanyDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/setting/company']);
+          this.router.navigate(['/employer/setting/company']);
         }
       });
     }
@@ -284,7 +284,7 @@ export class CompanyDetailComponent implements OnInit {
           this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/company']);
+            this.router.navigate(['/employer/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -294,7 +294,7 @@ export class CompanyDetailComponent implements OnInit {
           this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/company']);
+            this.router.navigate(['/employer/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }

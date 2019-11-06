@@ -224,7 +224,7 @@ export class InterviewListComponent implements OnInit {
     setJdId(item.refJD._id);
     setJdName(item.refJD.position);
     setJrId(item._id);
-    this.router.navigate(["/interview/detail"]);
+    this.router.navigate(["/employer/interview/detail"]);
   }
 
   changePaging(event) {

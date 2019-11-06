@@ -225,7 +225,7 @@ export class SignContractListComponent implements OnInit {
     setJdId(item.refJD._id);
     setJdName(item.refJD.position);
     setJrId(item._id);
-    this.router.navigate(["/sign-contract/detail"]);
+    this.router.navigate(["/employer/sign-contract/detail"]);
   }
 
   navigate(link: string) {

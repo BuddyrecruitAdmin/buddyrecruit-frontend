@@ -296,7 +296,7 @@ export class UserDetailComponent implements OnInit {
       userDetail = _.cloneDeep(this.userDetailTemp);
     }
     if (JSON.stringify(userDetail) === JSON.stringify(this.userDetail)) {
-      this.router.navigate(['/setting/user']);
+      this.router.navigate(['/employer/setting/user']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -304,7 +304,7 @@ export class UserDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/setting/user']);
+          this.router.navigate(['/employer/setting/user']);
         }
       });
     }

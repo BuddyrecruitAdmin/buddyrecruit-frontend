@@ -2,11 +2,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { ModulesComponent } from './modules.component';
-import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
-import { AppFormComponent } from './app-form/app-form.component';
-import { ForgotComponent } from './forgot/forgot.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
 import { IndexComponent } from './index/index.component';
 
 const routes: Routes = [
@@ -15,36 +10,23 @@ const routes: Routes = [
     component: ModulesComponent,
     children: [
       {
-        path: 'login',
-        component: LoginComponent,
-      },
-      {
-        path: 'logout',
-        component: LogoutComponent,
-      },
-      {
-        path: 'forgot',
-        component: ForgotComponent,
-      },
-      {
-        path: 'changepassword/:id',
-        component: ChangePasswordComponent,
-      },
-      {
-        path: 'appform/:id',
-        component: AppFormComponent,
-      },
-      {
-        path: 'appform/:action/:id',
-        component: AppFormComponent,
-      },
-      {
         path: 'index',
         component: IndexComponent,
       },
       {
+        path: 'employer',
+        loadChildren: () => import('./employer/employer.module')
+          .then(m => m.EmployerModule),
+      },
+      {
+        path: 'jobseeker',
+        loadChildren: () => import('./jobseeker/jobseeker.module')
+          .then(m => m.JobseekerModule),
+      },
+      {
         path: '**',
-        redirectTo: 'login'
+        redirectTo: '/index',
+        pathMatch: 'full'
       },
     ],
   },

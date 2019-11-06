@@ -129,7 +129,7 @@ export class DepartmentDetailComponent implements OnInit {
       departmentDetail = _.cloneDeep(this.departmentDetailTemp);
     }
     if (JSON.stringify(departmentDetail) === JSON.stringify(this.departmentDetail)) {
-      this.router.navigate(['/setting/department']);
+      this.router.navigate(['/employer/setting/department']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -137,7 +137,7 @@ export class DepartmentDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/setting/department']);
+          this.router.navigate(['/employer/setting/department']);
         }
       });
     }

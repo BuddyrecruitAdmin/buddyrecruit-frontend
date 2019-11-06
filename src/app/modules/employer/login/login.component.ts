@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MESSAGE } from '../../shared/constants/message';
+import { MESSAGE } from '../../../shared/constants/message';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { LoginService } from './login.service';
-import { ResponseCode } from '../../shared/app.constants';
-import { getToken, setAuthentication, getUrl, setUrl } from '../../shared/services/auth.service';
+import { ResponseCode } from '../../../shared/app.constants';
+import { getToken, setAuthentication, getUrl, setUrl } from '../../../shared/services/auth.service';
 import {
   NbComponentStatus,
   NbGlobalLogicalPosition,
@@ -21,6 +21,7 @@ import 'style-loader!angular2-toaster/toaster.css';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  token: any;
   loginForm: FormGroup;
 
   userName: AbstractControl;
@@ -46,8 +47,9 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private toastrService: NbToastrService
   ) {
-    if (getToken()) {
-      this.router.navigate(['/home']);
+    this.token = getToken();
+    if (this.token) {
+      this.router.navigate(['/employer/home']);
     }
   }
 
@@ -74,28 +76,28 @@ export class LoginComponent implements OnInit {
         setAuthentication({ token: response.data.token, role: response.data } as any);
         this.showToast('success', response.data.message || 'Login Success', '');
         const url = getUrl();
-        if (url && url !== '/auth/login') {
+        if (url && url !== '/employer/login') {
           setUrl('');
           this.router.navigate([url]);
         } else {
           switch (true) {
             case response.data.refHero.isSuperAdmin:
-              this.router.navigate(['/setting/company']);
+              this.router.navigate(['/employer/setting/company']);
               break;
             case response.data.refHero.isAdmin:
-              this.router.navigate(['/setting/company']);
+              this.router.navigate(['/employer/setting/company']);
               break;
             case response.data.refHero.isHR:
-              this.router.navigate(['/home']);
+              this.router.navigate(['/employer/home']);
               break;
             case response.data.refHero.isManager:
-              this.router.navigate(['/home']);
+              this.router.navigate(['/employer/home']);
               break;
             case response.data.refHero.isPayroll:
-              this.router.navigate(['/home']);
+              this.router.navigate(['/employer/home']);
               break;
             default:
-              this.router.navigate(['/home']);
+              this.router.navigate(['/employer/home']);
               break;
           }
         }

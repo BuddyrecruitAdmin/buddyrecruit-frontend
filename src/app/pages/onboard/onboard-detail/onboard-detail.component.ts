@@ -58,7 +58,7 @@ export class OnboardDetailComponent implements OnInit {
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
-      this.router.navigate(["/onboard/list"]);
+      this.router.navigate(["/employer/onboard/list"]);
     }
     this.role = getRole();
     this.jrName = getJdName();
@@ -296,7 +296,7 @@ export class OnboardDetailComponent implements OnInit {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
     setCandidateId(item._id);
-    this.router.navigate(["/candidate/detail"]);
+    this.router.navigate(["/employer/candidate/detail"]);
   }
 
   openPopupComment(item: any) {

@@ -30,10 +30,6 @@ export function setupTranslateFactory(
 import { TranslatePipe } from '../translate.pipe';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModulesComponent } from './modules.component';
-import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
-import { AppFormComponent } from './app-form/app-form.component';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import {
   MatAutocompleteModule,
@@ -72,9 +68,8 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material'
+import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
-import { ForgotComponent } from './forgot/forgot.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
 import { IndexComponent } from './index/index.component';
 
 @NgModule({
@@ -140,16 +135,11 @@ import { IndexComponent } from './index/index.component';
     MatTreeModule,
     TranslateModule.forRoot(),
     NbSpinnerModule,
-    DigitOnlyModule
+    DigitOnlyModule,
   ],
   declarations: [
     ModulesComponent,
-    LoginComponent,
-    LogoutComponent,
-    AppFormComponent,
     TranslatePipe,
-    ForgotComponent,
-    ChangePasswordComponent,
     IndexComponent
   ],
   providers: [

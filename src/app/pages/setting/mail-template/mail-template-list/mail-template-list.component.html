@@ -35,7 +35,7 @@
                 </div>
                 <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                    [routerLink]="'/setting/mail-template-detail/'+item._id">
+                    [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
                   </nb-icon>
                 </div>
               </nb-card-header>
@@ -84,7 +84,7 @@
                 </div>
                 <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
                   <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                    [routerLink]="'/setting/mail-template-detail/'+item._id">
+                    [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
                   </nb-icon>
                   <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
                 </div>

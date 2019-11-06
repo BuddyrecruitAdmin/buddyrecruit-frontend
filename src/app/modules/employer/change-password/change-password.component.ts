@@ -1,36 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ChangePasswordService } from './change-password.service';
-import { ResponseCode } from '../../shared/app.constants';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId } from '../../shared/services/auth.service';
-import { UtilitiesService } from '../../shared/services/utilities.service';
-import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
-import { DropDownValue } from '../../shared/interfaces/common.interface';
-import { resolve } from 'dns';
+import { ResponseCode } from '../../../shared/app.constants';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { utimes } from 'fs';
-import { MatDialog } from '@angular/material';
-import { TranslateService } from '../../translate.service';
 import * as _ from 'lodash';
 import 'style-loader!angular2-toaster/toaster.css';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { MESSAGE } from "../../shared/constants/message";
-import { Router, ActivatedRoute } from "@angular/router";
+import { MESSAGE } from "../../../shared/constants/message";
+import { ActivatedRoute } from "@angular/router";
+
 @Component({
   selector: 'ngx-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
-  _id : string;
+  _id: string;
   paawordForm: FormGroup;
   newPassword: AbstractControl;
   confirmPassword: AbstractControl;
   sErrorPassword: string;
   touched: boolean;
   changeText: boolean;
+
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     private service: ChangePasswordService,
     private toastrService: NbToastrService,
@@ -39,7 +31,7 @@ export class ChangePasswordComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
-      if(params.id){
+      if (params.id) {
         this._id = params.id;
       }
     })
@@ -55,9 +47,8 @@ export class ChangePasswordComponent implements OnInit {
 
   changePass(value) {
     this.touched = true;
-    console.log(value.newpassword, value.confirmpassword)
     if (value.newpassword === value.confirmpassword) {
-      this.service.submitPassword(this._id,value.newpassword).subscribe(response => {
+      this.service.submitPassword(this._id, value.newpassword).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.changeText = true;
         }
@@ -65,7 +56,6 @@ export class ChangePasswordComponent implements OnInit {
     } else {
       this.sErrorPassword = "Password doesn't match";
     }
-
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
@@ -79,5 +69,4 @@ export class ChangePasswordComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
-
 }
