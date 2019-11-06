@@ -60,7 +60,8 @@
         <nb-card>
           <nb-card-header>
             <div class="title">
-              <label class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id" [nbTooltip]="item.refJD?.position">
+              <label class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
+                [nbTooltip]="item.refJD?.position">
                 {{ item.refJD?.position }}
               </label>
             </div>
@@ -129,8 +130,8 @@
           <thead>
             <tr>
               <th scope="col" class="text-left">Job Request</th>
-              <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left">Division</th>
+              <th scope="col">Department</th>
+              <th scope="col">Division</th>
               <th scope="col">Capacity</th>
               <th scope="col">End Date</th>
               <th scope="col">Exam</th>
@@ -144,10 +145,10 @@
                 <span class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
                   [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.department?.name || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.division.name || '-' }}</span>
               </td>
               <td>

@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jr.editable" nbButton fullWidth status="success" nbTooltip="Create"
-      [routerLink]="'/employer/setting/user-detail'" [disabled]="isOverQuota">
+        [routerLink]="'/employer/setting/user-detail'" [disabled]="isOverQuota">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -64,10 +64,7 @@
             </div>
             <div class="actions">
               <nb-icon *ngIf="role.refAuthorize.configuration.department.editable" icon="edit-outline" class="link"
-                nbTooltip="Edit" [routerLink]="'/setting/user-detail/'+item._id">
-              </nb-icon>
-              <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
-                *ngIf="!item.active">
+                nbTooltip="Edit" [routerLink]="'/employer/setting/user-detail/'+item._id">
               </nb-icon>
             </div>
           </nb-card-header>
@@ -161,7 +158,7 @@
               </td>
               <td *ngIf="role.refAuthorize.configuration.department.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
-                  [routerLink]="'/setting/user-detail/'+item._id">
+                  [routerLink]="'/employer/setting/user-detail/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
               </td>

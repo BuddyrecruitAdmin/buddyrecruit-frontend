@@ -57,7 +57,7 @@
             </div>
             <div *ngIf="role.refAuthorize.configuration.company.editable" class="actions">
               <nb-icon *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" icon="edit-outline" class="link"
-                nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
+                nbTooltip="Edit" [routerLink]="'/employer/setting/company-detail/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
               refHero.isSuperAdmin && 
@@ -116,8 +116,8 @@
           <thead>
             <tr>
               <th scope="col" class="text-left">Company</th>
-              <th scope="col" class="text-left">Start Date</th>
-              <th scope="col" class="text-left">Expiry Date</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">Expiry Date</th>
               <th scope="col">Transferable</th>
               <th scope="col">Status</th>
               <th *ngIf="role.refAuthorize.configuration.company.editable" scope="col" style="width: 110px;">Actions
@@ -129,10 +129,10 @@
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ utilitiesService.convertDate(item.startDate) || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ utilitiesService.convertDate(item.expiryDate) || '-' }}</span>
               </td>
               <td>
@@ -145,17 +145,9 @@
                 </span>
               </td>
               <td *ngIf="role.refAuthorize.configuration.company.editable" class="actions">
-                <!-- <nb-icon *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" icon="edit-outline"
-                  class="link" nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
-                </nb-icon>
-                <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
-                refHero.isSuperAdmin && 
-                ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
-                  utilitiesService.isDateLowerThanToday(item.expiryDate))">
-                </nb-icon> -->
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" nbTooltip="Edit"
-                  [routerLink]="'/setting/company-detail/'+item._id">
+                  [routerLink]="'/employer/setting/company-detail/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
                 <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)" *ngIf="

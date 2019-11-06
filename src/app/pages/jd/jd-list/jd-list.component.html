@@ -57,7 +57,8 @@
                 [nbTooltip]="item.position">{{ item.position }}</label>
             </div>
             <div *ngIf="role.refAuthorize.jd.editable" class="actions">
-              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/employer/jd/detail/edit/'+item._id">
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/jd/detail/edit/'+item._id">
               </nb-icon>
               <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
                 [routerLink]="'/employer/jd/detail/duplicate/'+item._id"></nb-icon>
@@ -103,8 +104,8 @@
           <thead>
             <tr>
               <th scope="col" class="text-left">Job Position</th>
-              <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left">Division</th>
+              <th scope="col">Department</th>
+              <th scope="col">Division</th>
               <th *ngIf="role.refAuthorize.jd.editable" scope="col" style="width: 160px;">Actions</th>
             </tr>
           </thead>
@@ -114,10 +115,10 @@
                 <span class="link" [routerLink]="'/employer/jd/detail/preview/'+item._id"
                   [nbTooltip]="item.position">{{ item.position }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.department.name || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.division.name || '-' }}</span>
               </td>
               <td *ngIf="role.refAuthorize.jd.editable" class="actions">

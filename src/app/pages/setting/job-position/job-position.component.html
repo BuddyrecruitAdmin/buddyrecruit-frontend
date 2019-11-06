@@ -1,12 +1,12 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.jobPosition.editable, 
-    'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
+    <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>Job Position</h3>
     </div>
-    <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">
-        <nb-icon icon="plus-outline"></nb-icon>CREATE
+    <div class="col-sm-4 col-md-3 col-lg-2">
+      <button *ngIf="role.refAuthorize.configuration.jobPosition.editable" nbButton fullWidth status="success"
+        nbTooltip="Create" (click)="create(dialog)">
+        <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
   </div>
@@ -44,51 +44,115 @@
   </nb-card-body>
 </nb-card>
 
-<div class="row">
-  <div class="col-md-6 col-lg-6" *ngFor="let item of items;">
-    <nb-card *ngIf="!loading" [accent]="item.active ? 'success' : 'default'">
-      <nb-card-header>
-        <div class="title">
-          <label [nbTooltip]="item.name">{{ item.name }}</label>
-        </div>
-        <div class="actions">
-          <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
-          <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
-          </nb-icon>
-        </div>
-      </nb-card-header>
-      <nb-card-body>
-        <div class="text-group">
-          <label class="label">Remark</label>
-          <span>{{ item.remark || '-' }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Status</label>
-          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
-            {{ item.active ? 'Active': 'Inactive' }}
-          </span>
-        </div>
-        <i class="text-gray">
-          <div class="text-group">
-            <label class="label">Last update by</label>
-            <span>
-              {{ item.lastChangedInfo?.refUser?.firstname }}
-              {{ item.lastChangedInfo?.refUser?.lastname }}
-            </span>
-          </div>
-          <div class="text-group">
-            <label class="label">Last update date</label>
-            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
-          </div>
-        </i>
-      </nb-card-body>
-    </nb-card>
+<div *ngIf="!loading && items.length">
+
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-md-6 col-lg-6" *ngFor="let item of items;">
+        <nb-card *ngIf="!loading" [accent]="item.active ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <label [nbTooltip]="item.name">{{ item.name }}</label>
+            </div>
+            <div class="actions">
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
+              <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
+                (click)="delete(item)">
+              </nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="text-group">
+              <label class="label">Remark</label>
+              <span>{{ item.remark || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Status</label>
+              <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                {{ item.active ? 'Active': 'Inactive' }}
+              </span>
+            </div>
+            <i class="text-gray">
+              <div class="text-group">
+                <label class="label">Last update by</label>
+                <span>
+                  {{ item.lastChangedInfo?.refUser?.firstname }}
+                  {{ item.lastChangedInfo?.refUser?.lastname }}
+                </span>
+              </div>
+              <div class="text-group">
+                <label class="label">Last update date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
+              </div>
+            </i>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+    <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+      [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+    </mat-paginator>
   </div>
+
+  <!-- List Layout -->
+  <nb-card *ngIf="!isGridLayout">
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="text-left">Job Name</th>
+              <th scope="col">Remark</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last update by</th>
+
+              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="width: 110px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items;">
+              <td class="text-left">
+                <span class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
+                  [nbTooltip]="item.name">{{ item.name }}</span>
+              </td>
+              <td>
+                <span>{{ item.remark || '-' }}</span>
+              </td>
+              <td>
+                <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                  {{ item.active ? 'Active': 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <span>
+                  {{ item.lastChangedInfo?.refUser?.firstname }}
+                  {{ item.lastChangedInfo?.refUser?.lastname }}
+                </span>
+              </td>
+              <td *ngIf="role.refAuthorize.jr.editable" class="actions">
+                <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item, dialog)">
+                  <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+                <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
+                  (click)="delete(item)">
+                  <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+        [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+        (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
 </div>
 
-<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
-  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
-</mat-paginator>
+
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">

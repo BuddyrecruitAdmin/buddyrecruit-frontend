@@ -56,7 +56,7 @@
             </div>
             <div class="actions">
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                [routerLink]="'/setting/department-detail/'+item._id">
+                [routerLink]="'/employer/setting/department-detail/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
                 *ngIf="!item.active">
@@ -142,7 +142,7 @@
               </td>
               <td *ngIf="role.refAuthorize.configuration.department.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" icon="edit-outline" class="link"
-                  nbTooltip="Edit" [routerLink]="'/setting/department-detail/'+item._id">
+                  nbTooltip="Edit" [routerLink]="'/employer/setting/department-detail/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
                 <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)"
