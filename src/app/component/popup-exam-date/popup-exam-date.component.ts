@@ -10,7 +10,7 @@ import { NbDialogService } from '@nebular/theme';
 import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
 import { LocationService } from '../../pages/setting/location/location.service'
 import { DropDownValue } from '../../shared/interfaces/common.interface';
-
+import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 @Component({
   selector: 'ngx-popup-exam-date',
   templateUrl: './popup-exam-date.component.html',
@@ -160,6 +160,22 @@ export class PopupExamDateComponent implements OnInit {
         this.ref.close(true);
       }
       this.loading = false;
+    });
+  }
+
+  sendEmail() {
+    setFlowId(this.flowId);
+    setCandidateId(this.candidateId);
+    this.save();
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      this.ref.close(true);
     });
   }
 

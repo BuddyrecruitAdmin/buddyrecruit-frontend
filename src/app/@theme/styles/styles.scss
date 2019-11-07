@@ -540,6 +540,8 @@
     }
   }
 
+
+
   .input-hidding {
     width: 92px;
     height: 34px;
@@ -1394,6 +1396,14 @@
       border-color: var(--color-red) !important;
     }
 
+  }
+  .input-group.has-error{
+    input,
+    input:hover,
+    input:focus,
+    input:active{
+      border-color: var(--color-red);
+    }
   }
 
   // --------------------------------------------------------------------

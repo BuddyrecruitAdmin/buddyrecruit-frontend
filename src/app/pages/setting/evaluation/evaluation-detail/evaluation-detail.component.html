@@ -10,9 +10,10 @@
       <h5 class="text-center text-green">Applicant Evaluation Form</h5>
       <div class="row">
         <div class="col-md-12 col-lg-12">
-          <div class="form-control-group">
-            <label class="text-black"><b>ชื่อแบบฟอร์ม/Name Evaluation Form</b></label>
+          <div class="form-control-group" [ngClass]="{ 'has-error': touchedName }">
+            <label class="text-black"><b>ชื่อแบบฟอร์ม/Name Evaluation Form</b> <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="evaluation.name" name="name" [disabled]="preview" nbInput fullWidth>
+            <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
           </div>
         </div>
       </div>
@@ -25,19 +26,23 @@
           </nb-checkbox>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="evaluation.checked">
         <div class="col-lg-12" *ngFor="let basic of evaluation.basicApplications;let j = index">
-          <div class="form-control-group" style="padding-top:10px">
-            <nb-icon icon="corner-down-right-outline" class="text-light-gray"></nb-icon>
-            <input type="text" status="primary" [disabled]="!evaluation.checked || preview" [(ngModel)]="basic.subject"
-              nbInput>
+          <div class="form-control-group" style="padding-top:10px"
+            [ngClass]="{ 'has-error': touchedBasic && !basic.subject && evaluation.checked}">
+            <nb-icon icon="corner-down-right-outline"
+              [ngClass]="{ 'text-light-gray': !evaluation.checked,'text-blue': evaluation.checked }"></nb-icon>
+            <input [ngClass]="{ 'border-gray': !evaluation.checked,'border-blue': evaluation.checked }" type="text"
+              [disabled]="!evaluation.checked || preview" [(ngModel)]="basic.subject" nbInput>
             <nb-icon *ngIf="evaluation.checked" status="danger" icon="minus-square-outline" class="text-light-gray"
               class="link" (click)="deleteTopic(j,'basic')" nbTooltip="delete">
-            </nb-icon>
+            </nb-icon><br>
+            <small *ngIf="touchedBasic && !basic.subject && evaluation.checked" class="text-red"> &nbsp; &nbsp;
+              &nbsp;{{ sErrorBasic }}</small>
           </div>
           <div class="row">
             <div class="col-md-3 col-lg-3" *ngFor="let choice of basic.options;let i = index;">
-              <div class="input-group">
+              <div class="input-group" [ngClass]="{ 'has-error': touchedBasic && !choice.label}">
                 <input type="text" [disabled]="!evaluation.checked || preview" [(ngModel)]="choice.label"
                   name="chSelect" nbInput fullWidth>
                 <div class="input-group-addon" nbTooltip="delete">
@@ -76,13 +81,14 @@
       </div>
       <div class="row" *ngFor="let category of evaluation.evaCategories;let j = index">
         <div class="col-lg-7">
-          <div class="input-group form-control-group">
+          <div class="input-group form-control-group" [ngClass]="{ 'has-error': touchedBasic && !category.subject}">
             <input type="text" [(ngModel)]="category.subject" [disabled]="preview" nbInput fullWidth>
             <div class="input-group-addon" nbTooltip="delete">
               <nb-icon *ngIf="evaluation.evaCategories.length > 1" status="danger" icon="minus-square-outline"
                 class="text-light-gray" class="link" (click)="deleteTopic(j,'category')">
               </nb-icon>
             </div>
+            <small *ngIf="touchedBasic && !category.subject" class="text-red"> {{ sErrorCate }}</small>
           </div>
         </div>
       </div>
@@ -101,52 +107,68 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-3 col-lg-3">
             <div class="form-control-group">
               <label>{{ evaluation.rank.options[0].subject }}
               </label>
             </div>
           </div>
-          <div class="col-md-2 col-lg-2">
-            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[0].min" type="number" placeholder="Min" nbInput
-              fullWidth>
+          <div class="col-4 col-sm-4 col-md-2 col-lg-2">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedRank }">
+              <input (input)="inputScore(0)" [disabled]="preview" [(ngModel)]="evaluation.rank.options[0].min"
+                type="number" placeholder="Min" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                digitOnly>
+            </div>
           </div>
-          -
-          <div class="col-md-2 col-lg-2">
-            <input disabled [(ngModel)]="evaluation.rank.options[0].max" type="number" placeholder="Max" nbInput fullWidth>
+          <i style="padding-top:14px" class="fas fa-minus"></i>
+          <div class="col-4 col-sm-4 col-md-2 col-lg-2">
+            <div class="form-control-group">
+              <input disabled [(ngModel)]="evaluation.rank.options[0].max" type="number" placeholder="Max" nbInput
+                fullWidth>
+            </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-3 col-lg-3">
             <div class="form-control-group">
               <label>{{ evaluation.rank.options[1].subject }}
               </label>
             </div>
           </div>
-          <div class="col-md-2 col-lg-2">
-            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[1].min" type="number" placeholder="Min" nbInput
-              fullWidth>
+          <div class="col-4 col-sm-4 col-md-2 col-lg-2">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedRank }">
+              <input (input)="inputScore(1)" [disabled]="preview" [(ngModel)]="evaluation.rank.options[1].min"
+                type="number" placeholder="Min" onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth
+                digitOnly>
+            </div>
           </div>
-          -
-          <div class="col-md-2 col-lg-2">
-            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[1].max" type="number" placeholder="Max" nbInput
-              fullWidth>
+          <i style="padding-top:14px" class="fas fa-minus"></i>
+          <div class="col-4 col-sm-4 col-md-2 col-lg-2">
+            <div class="form-control-group">
+              <input disabled [(ngModel)]="evaluation.rank.options[1].max" type="number" placeholder="Max" nbInput
+                fullWidth>
+            </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-3 col-lg-3">
             <div class="form-control-group">
               <label>{{ evaluation.rank.options[2].subject }}
               </label>
             </div>
           </div>
-          <div class="col-md-2 col-lg-2">
-            <input disabled [(ngModel)]="evaluation.rank.options[2].min" type="number" placeholder="Min" nbInput fullWidth>
+          <div class="col-4 col-sm-4 col-md-2 col-lg-2">
+            <div class="form-control-group">
+              <input disabled [(ngModel)]="evaluation.rank.options[2].min" type="number" placeholder="Min" nbInput
+                fullWidth>
+            </div>
           </div>
-          -
-          <div class="col-md-2 col-lg-2">
-            <input [disabled]="preview" [(ngModel)]="evaluation.rank.options[2].max" type="number" placeholder="Max" nbInput
-              fullWidth>
+          <i style="padding-top:14px" class="fas fa-minus"></i>
+          <div class="col-4 col-sm-4 col-md-2 col-lg-2">
+            <div class="form-control-group">
+              <input disabled [(ngModel)]="evaluation.rank.options[2].max" type="number" placeholder="Max" nbInput
+                fullWidth>
+            </div>
           </div>
         </div>
       </div>

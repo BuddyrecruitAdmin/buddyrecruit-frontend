@@ -15,16 +15,27 @@
         <small class="pull-right">{{ utilitiesService.convertDateTime(today) }}</small>
       </span>
       <span class="description">
-        <strong>to:</strong> <span *ngFor="let mailOption of mailOptions.to;let i = index"><span *ngIf="i === 0">
+        <strong>to:</strong> <span *ngFor="let mailOption of mailOptions.to;let i = index">
+          <span *ngIf="i === 0">
             {{ mailOption }}
-          </span><span *ngIf="i > 0" class="mailAfter"> {{ mailOption }}</span> </span>
+          </span>
+          <span *ngIf="i > 0" class="mailAfter">
+            {{ mailOption }}
+          </span>
+        </span>
       </span>
       <span *ngIf="mailOptions.cc.length" class="description">
-        <strong>cc:</strong> {{ mailOptions.cc }}
-      </span>
-      <span *ngIf="mailOptions.bcc.length" class="description">
-        <strong>bcc:</strong> {{ mailOptions.bcc }}
-      </span>
+          <strong>cc:</strong>
+          <span *ngFor="let cc of mailOptions.cc;let i = index"><span *ngIf="i === 0">
+              {{ cc }}
+            </span><span *ngIf="i > 0" class="mailAfter"> {{ cc }}</span> </span>
+        </span>
+        <span *ngIf="mailOptions.bcc.length" class="description">
+          <strong>bcc:</strong>
+          <span *ngFor="let bcc of mailOptions.bcc;let i = index"><span *ngIf="i === 0">
+              {{ bcc }}
+            </span><span *ngIf="i > 0" class="mailAfter"> {{ bcc }}</span> </span>
+        </span>
     </div>
   </nb-card-header>
   <nb-card-body class="dialog-body">

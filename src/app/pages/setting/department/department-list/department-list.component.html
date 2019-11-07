@@ -146,7 +146,7 @@
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
                 <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)"
-                  *ngIf="!item.active">
+                  *ngIf="!item.active && item.isUsed">
                   <nb-icon icon="trash-2-outline"></nb-icon>
                 </button>
               </td>
