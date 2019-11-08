@@ -69,7 +69,8 @@
               <input [nbDatepicker]="startDate" [(ngModel)]="items.birth" nbInput fullWidth [disabled]="!editable"
                 style="cursor: pointer;">
               <div class="input-group-addon" style="pointer-events: none;">
-                <nb-icon icon="calendar-outline"></nb-icon>
+                <nb-icon icon="calendar-outline"
+                  [ngClass]="{ 'text-green': editable, 'text-light-gray': !editable }"></nb-icon>
               </div>
             </div>
           </div>
