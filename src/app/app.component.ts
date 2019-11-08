@@ -4,7 +4,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { getToken } from './shared/services/auth.service';
 
@@ -18,17 +18,17 @@ export class AppComponent implements OnInit {
     private analytics: AnalyticsService,
     private router: Router,
   ) {
-    if (!getToken()) {
-      this.url = window.location.pathname.slice(0, 14);
-      if (this.url != "/auth/appform/") {
-        if (this.url != "/auth/forgot") {
-          this.url = window.location.pathname.slice(0, 21);
-          if (this.url != "/auth/changepassword/") {
-            this.router.navigate(["/auth/login"]);
-          }
-        }
-      }
-    }
+    // if (!getToken()) {
+    //   this.url = window.location.pathname.slice(0, 18);
+    //   if (this.url !== '/employer/appform/') {
+    //     if (this.url !== '/employer/forgot') {
+    //       this.url = window.location.pathname.slice(0, 25);
+    //       if (this.url !== '/employer/changepassword/') {
+    //         this.router.navigate(['/employer/login']);
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   ngOnInit(): void {

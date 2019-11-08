@@ -129,7 +129,7 @@ export class DepartmentDetailComponent implements OnInit {
       departmentDetail = _.cloneDeep(this.departmentDetailTemp);
     }
     if (JSON.stringify(departmentDetail) === JSON.stringify(this.departmentDetail)) {
-      this.router.navigate(['/setting/department']);
+      this.router.navigate(['/employer/setting/department']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -137,7 +137,7 @@ export class DepartmentDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/setting/department']);
+          this.router.navigate(['/employer/setting/department']);
         }
       });
     }
@@ -150,7 +150,7 @@ export class DepartmentDetailComponent implements OnInit {
         this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/department']);
+            this.router.navigate(['/employer/setting/department']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -160,7 +160,7 @@ export class DepartmentDetailComponent implements OnInit {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.getDeatail(request._id);
-            this.router.navigate(['/setting/department']);
+            this.router.navigate(['/employer/setting/department']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }

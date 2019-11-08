@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { AuthorizeService } from '../authorize.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { getRole,getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -28,7 +28,7 @@ export class AuthorizeListComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   loading: boolean;
-
+  isGridLayout: boolean;
   constructor(
     private router: Router,
     private service: AuthorizeService,
@@ -38,6 +38,14 @@ export class AuthorizeListComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
@@ -88,6 +96,11 @@ export class AuthorizeListComponent implements OnInit {
         });
       }
     });
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   changePaging(event) {

@@ -52,16 +52,16 @@ export const JrId = 'JrId';
 export const CandidateId = 'CandidateId';
 export const FlowId = 'FlowId';
 export const Keyword = 'Keyword';
-export const TabName = "TabName";
-export const Collapse = "Collapse";
-export const ButtonId = "ButtonId";
-export const DateTime = "DateTime";
-export const IsGridLayout = "IsGridLayout";
-export const BugId = "BugId";
-export const BugCandidateId = "BugCandidateId";
-export const FieldLabel = "FieldLabel";
-export const FieldName = "FieldName";
-export const UserCandidate = "UserCandidate";
+export const TabName = 'TabName';
+export const Collapse = 'Collapse';
+export const ButtonId = 'ButtonId';
+export const DateTime = 'DateTime';
+export const IsGridLayout = 'IsGridLayout';
+export const BugId = 'BugId';
+export const BugCandidateId = 'BugCandidateId';
+export const FieldLabel = 'FieldLabel';
+export const FieldName = 'FieldName';
+export const UserCandidate = 'UserCandidate';
 
 export enum DayOfWeek {
   Sunday = 0,

@@ -1,73 +1,146 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.evaluation.editable, 
-        'col-sm-8':!role.refAuthorize.configuration.evaluation.editable}">
+    <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>Evaluation</h3>
     </div>
-    <div class="col-sm-4">
-      <div class="input-group">
-        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
-        <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="role.refAuthorize.configuration.evaluation.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/evaluation-detail/create'">
-        CREATE</button>
+    <div class="col-sm-4 col-md-3 col-lg-2">
+      <button *ngIf="role.refAuthorize.configuration.evaluation.editable" nbButton fullWidth status="success" nbTooltip="Create"
+        [routerLink]="'/employer/setting/evaluation-detail/create'">
+        <nb-icon icon="plus-outline"></nb-icon>Create
+      </button>
     </div>
   </div>
 </div>
 
-<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
-  nbSpinnerMessage="Loading...">
-  <nb-card-body></nb-card-body>
-</nb-card>
-
-<nb-card *ngIf="!loading">
+<nb-card>
   <nb-card-body>
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th scope="col" class="text-left">Name</th>
-            <th scope="col" style="width: 150px;">Last Update By</th>
-            <th scope="col" style="width: 150px;">Last Update Date</th>
-            <th scope="col" style="width: 160px;" *ngIf="role.refAuthorize.configuration.evaluation.editable">Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of items;">
-            <td class="text-left link" nbTooltip="Preview" (click)="openPopupEvaluation(item)">
-              {{ item.name || item._id }}</td>
-            <td>
-              {{ item.lastChangedInfo?.refUser?.firstname }}
-              {{ item.lastChangedInfo?.refUser?.lastname }}
-            </td>
-            <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
-            <td class="actions" *ngIf="role.refAuthorize.configuration.evaluation.editable">
-              <button nbButton status="primary" size="tiny" nbTooltip="Edit"
-                [routerLink]="'/setting/evaluation-detail/edit/'+item._id">
-                <nb-icon icon="edit-outline"></nb-icon>
-              </button>
-              <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
-                [routerLink]="'/setting/evaluation-detail/duplicate/'+item._id">
-                <nb-icon icon="copy-outline"></nb-icon>
-              </button>
-              <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
-                (click)="delete(item)">
-                <nb-icon icon="trash-2-outline"></nb-icon>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
+        </nb-actions>
+      </div>
     </div>
-    <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
-      [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
-    </mat-paginator>
   </nb-card-body>
 </nb-card>
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading && items.length">
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-lg-6 col-md-6" *ngFor="let item of items;">
+        <nb-card [accent]="item.isActive ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <label class="link" (click)="openPopupEvaluation(item)" [nbTooltip]="item.name">
+                {{ item.name || item._id }}
+              </label>
+            </div>
+            <div *ngIf="role.refAuthorize.configuration.evaluation.editable" class="actions">
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/setting/evaluation-detail/edit/'+item._id">
+              </nb-icon>
+              <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
+                [routerLink]="'/employer/setting/evaluation-detail/duplicate/'+item._id"></nb-icon>
+              <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
+                (click)="delete(item)"></nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <i class="text-gray">
+              <div class="text-group">
+                <label class="label">Last update by</label>
+                <span>
+                  {{ item.lastChangedInfo.refUser.firstname }}
+                  {{ item.lastChangedInfo.refUser.lastname }}
+                </span>
+              </div>
+              <div class="text-group">
+                <label class="label">Last update date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+              </div>
+            </i>
+          </nb-card-body>
+          <nb-card-footer *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'">
+            <button nbButton status="danger" (click)="Reject(item,dialog)">REJECT</button>
+            <button nbButton status="success" (click)="Approve(item)">APPROVE</button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+    <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+      [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+    </mat-paginator>
+  </div>
+
+
+  <!-- List Layout -->
+  <div *ngIf="!isGridLayout">
+    <nb-card *ngIf="!loading">
+      <nb-card-body>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th scope="col" class="text-left">Name</th>
+                <th scope="col" style="width: 150px;">Last Update By</th>
+                <th scope="col" style="width: 150px;">Last Update Date</th>
+                <th scope="col" style="width: 160px;" *ngIf="role.refAuthorize.configuration.evaluation.editable">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items;">
+                <td class="text-left link" nbTooltip="Preview" (click)="openPopupEvaluation(item)">
+                  {{ item.name || item._id }}</td>
+                <td>
+                  {{ item.lastChangedInfo?.refUser?.firstname }}
+                  {{ item.lastChangedInfo?.refUser?.lastname }}
+                </td>
+                <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
+                <td class="actions" *ngIf="role.refAuthorize.configuration.evaluation.editable">
+                  <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                    [routerLink]="'/employer/setting/evaluation-detail/edit/'+item._id">
+                    <nb-icon icon="edit-outline"></nb-icon>
+                  </button>
+                  <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
+                    [routerLink]="'/employer/setting/evaluation-detail/duplicate/'+item._id">
+                    <nb-icon icon="copy-outline"></nb-icon>
+                  </button>
+                  <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
+                    (click)="delete(item)">
+                    <nb-icon icon="trash-2-outline"></nb-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+          [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+        </mat-paginator>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

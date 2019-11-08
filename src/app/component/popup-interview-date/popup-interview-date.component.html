@@ -46,6 +46,8 @@
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()" [disabled]="!canApprove && (!date || !time)">SAVE</button>
+    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND
+      EMAIL</button>
     <button *ngIf="canApprove" nbButton status="success" (click)="passToInterview()" [disabled]="!date || !time">PASS
       TO INTERVIEW</button>
   </nb-card-footer>

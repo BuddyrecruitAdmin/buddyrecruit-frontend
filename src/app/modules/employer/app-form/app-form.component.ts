@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { AppFormService } from './app-form.service';
-import { ResponseCode } from '../../shared/app.constants';
+import { ResponseCode } from '../../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId } from '../../shared/services/auth.service';
-import { UtilitiesService } from '../../shared/services/utilities.service';
-import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
-import { DropDownValue } from '../../shared/interfaces/common.interface';
+import { getRole, getFlowId, setFlowId } from '../../../shared/services/auth.service';
+import { UtilitiesService } from '../../../shared/services/utilities.service';
+import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
+import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { resolve } from 'dns';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { utimes } from 'fs';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material';
-import { TranslateService } from '../../translate.service';
+import { TranslateService } from '../../../translate.service';
 import * as _ from 'lodash';
 import 'style-loader!angular2-toaster/toaster.css';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { MESSAGE } from "../../shared/constants/message";
+import { MESSAGE } from "../../../shared/constants/message";
 import { Router, ActivatedRoute } from "@angular/router";
 @Component({
   selector: 'ngx-app-form',

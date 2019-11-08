@@ -61,7 +61,7 @@ export class SignContractDetailComponent implements OnInit {
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
-      this.router.navigate(["/sign-contract/list"]);
+      this.router.navigate(["/employer/sign-contract/list"]);
     }
     this.role = getRole();
     this.jrName = getJdName();
@@ -340,7 +340,7 @@ export class SignContractDetailComponent implements OnInit {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
     setCandidateId(item._id);
-    this.router.navigate(["/candidate/detail"]);
+    this.router.navigate(["/employer/candidate/detail"]);
   }
 
   openPopupComment(item: any) {

@@ -1,84 +1,171 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':refHero.isSuperAdmin, 'col-sm-8':!refHero.isSuperAdmin}">
+    <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>Company</h3>
     </div>
-    <div class="col-sm-4">
-      <div class="input-group">
-        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
-        <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
+    <div class="col-sm-4 col-md-3 col-lg-2">
+      <button *ngIf="role.refAuthorize.configuration.company.editable" nbButton fullWidth status="success"
+        nbTooltip="Create" [routerLink]="'/employer/setting/company-detail'">
+        <nb-icon icon="plus-outline"></nb-icon>Create
+      </button>
+    </div>
+  </div>
+</div>
+
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
         </div>
       </div>
+      <div class="col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
+        </nb-actions>
+      </div>
     </div>
-    <div *ngIf="refHero.isSuperAdmin" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/setting/company-detail'">Create</button>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading && items.length">
+
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-lg-6" *ngFor="let item of items;">
+        <nb-card [accent]="item.active ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <label [nbTooltip]="item.name">{{ item.name }}</label>
+            </div>
+            <div *ngIf="role.refAuthorize.configuration.company.editable" class="actions">
+              <nb-icon *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" icon="edit-outline" class="link"
+                nbTooltip="Edit" [routerLink]="'/employer/setting/company-detail/'+item._id">
+              </nb-icon>
+              <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
+              refHero.isSuperAdmin && 
+              ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
+                utilitiesService.isDateLowerThanToday(item.expiryDate))">
+              </nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="text-group">
+              <label class="label">Start Date</label>
+              <span>{{ utilitiesService.convertDate(item.startDate) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Expiry Date</label>
+              <span>{{ utilitiesService.convertDate(item.expiryDate) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Transferable</label>
+              <nb-icon *ngIf="item.transferable" icon="checkmark-outline" class="text-green"></nb-icon>
+              <nb-icon *ngIf="!item.transferable" icon="close-outline" class="text-red"></nb-icon>
+            </div>
+            <div class="text-group">
+              <label class="label">Status</label>
+              <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                {{ item.active ? 'Active': 'Inactive' }}
+              </span>
+            </div>
+            <i class="text-gray">
+              <div class="text-group">
+                <label class="label">Last update by</label>
+                <span>
+                  {{ item.lastChangedInfo.refUser.firstname }}
+                  {{ item.lastChangedInfo.refUser.lastname }}
+                </span>
+              </div>
+              <div class="text-group">
+                <label class="label">Last update date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+              </div>
+            </i>
+          </nb-card-body>
+        </nb-card>
+      </div>
     </div>
+    <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+      [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+    </mat-paginator>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card [accent]="item.active ? 'success' : 'default'">
-      <nb-card-header>
-        <div class="title">
-          <label [nbTooltip]="item.name">{{ item.name }}</label>
-        </div>
-        <div class="actions">
-          <nb-icon *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" icon="edit-outline" class="link"
-            nbTooltip="Edit" [routerLink]="'/setting/company-detail/'+item._id">
-          </nb-icon>
-          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
-            refHero.isSuperAdmin && 
-            ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
-              utilitiesService.isDateLowerThanToday(item.expiryDate))">
-          </nb-icon>
-        </div>
-      </nb-card-header>
-      <nb-card-body>
-        <div class="text-group">
-          <label class="label">Start Date</label>
-          <span>{{ utilitiesService.convertDate(item.startDate) || '-' }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Expiry Date</label>
-          <span>{{ utilitiesService.convertDate(item.expiryDate) || '-' }}</span>
-        </div>
-        <div *ngIf="item.adminEmail" class="text-group">
-          <label class="label">Admin Email</label>
-          <span [nbTooltip]="item.adminEmail">{{ item.adminEmail }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Transferable</label>
-          <nb-icon *ngIf="item.transferable" icon="checkmark-outline" class="text-green"></nb-icon>
-          <nb-icon *ngIf="!item.transferable" icon="close-outline" class="text-red"></nb-icon>
-        </div>
-        <div class="text-group">
-          <label class="label">Status</label>
-          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
-            {{ item.active ? 'Active': 'Inactive' }}
-          </span>
-        </div>
-        <i class="text-gray">
-          <div class="text-group">
-            <label class="label">Last update by</label>
-            <span>
-              {{ item.lastChangedInfo.refUser.firstname }}
-              {{ item.lastChangedInfo.refUser.lastname }}
-            </span>
-          </div>
-          <div class="text-group">
-            <label class="label">Last update date</label>
-            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
-          </div>
-        </i>
-      </nb-card-body>
-    </nb-card>
-  </div>
-</div>
+  <!-- List Layout -->
+  <nb-card *ngIf="!isGridLayout">
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="text-left">Company</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">Expiry Date</th>
+              <th scope="col">Transferable</th>
+              <th scope="col">Status</th>
+              <th *ngIf="role.refAuthorize.configuration.company.editable" scope="col" style="width: 110px;">Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items;">
+              <td class="text-left">
+                <span [nbTooltip]="item.name">{{ item.name }}</span>
+              </td>
+              <td>
+                <span>{{ utilitiesService.convertDate(item.startDate) || '-' }}</span>
+              </td>
+              <td>
+                <span>{{ utilitiesService.convertDate(item.expiryDate) || '-' }}</span>
+              </td>
+              <td>
+                <nb-icon *ngIf="item.transferable" icon="checkmark-outline" class="text-green"></nb-icon>
+                <nb-icon *ngIf="!item.transferable" icon="close-outline" class="text-red"></nb-icon>
+              </td>
+              <td>
+                <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                  {{ item.active ? 'Active': 'Inactive' }}
+                </span>
+              </td>
+              <td *ngIf="role.refAuthorize.configuration.company.editable" class="actions">
+                <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                  *ngIf="refHero.isSuperAdmin || (refHero.isAdmin && item.active)" nbTooltip="Edit"
+                  [routerLink]="'/employer/setting/company-detail/'+item._id">
+                  <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+                <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)" *ngIf="
+                refHero.isSuperAdmin && 
+                ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
+                  utilitiesService.isDateLowerThanToday(item.expiryDate))">
+                  <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+        [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+        (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
 
-<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
-  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
-</mat-paginator>
+</div>

@@ -46,8 +46,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = 'default';
 
   userMenu = [
-    { title: 'Profile', icon: 'person-outline', link: '/profile' },
-    { title: 'Log out', icon: 'log-out-outline', link: '/auth/logout' }
+    { title: 'Profile', icon: 'person-outline', link: '/employer/profile' },
+    { title: 'Log out', icon: 'log-out-outline', link: '/employer/logout' }
   ];
   imagePath: any;
   paging: IPaging;
@@ -77,7 +77,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     setKeyword();
     this.searchService.onSearchSubmit().subscribe((data: any) => {
       setKeyword(data.term);
-      this.router.navigate(['/candidate/list']);
+      this.router.navigate(['/employer/candidate/list']);
     });
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
@@ -171,7 +171,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             name: element.title,
             title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
               this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
-            picture: element.fromUser.refUser.imageData,
+            picture: element.fromUser.refUser.imageData, 
             hidden: element.readed
           });
         });
@@ -247,12 +247,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   gotoCalendar() {
-    this.router.navigate(['/calendar']);
+    this.router.navigate(['/employer/calendar']);
   }
 
   gotoProfile() {
     this.showNotice = false;
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/employer/profile']);
   }
 
 }

@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jd.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/jd/detail/create'">
+        [routerLink]="'/employer/jd/detail/create'">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -53,14 +53,15 @@
         <nb-card>
           <nb-card-header>
             <div class="title">
-              <label class="link" [routerLink]="'/jd/detail/preview/'+item._id"
+              <label class="link" [routerLink]="'/employer/employer/jd/detail/preview/'+item._id"
                 [nbTooltip]="item.position">{{ item.position }}</label>
             </div>
             <div *ngIf="role.refAuthorize.jd.editable" class="actions">
-              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/jd/detail/edit/'+item._id">
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/jd/detail/edit/'+item._id">
               </nb-icon>
               <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
-                [routerLink]="'/jd/detail/duplicate/'+item._id"></nb-icon>
+                [routerLink]="'/employer/jd/detail/duplicate/'+item._id"></nb-icon>
               <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
                 (click)="delete(item)"></nb-icon>
             </div>
@@ -103,30 +104,30 @@
           <thead>
             <tr>
               <th scope="col" class="text-left">Job Position</th>
-              <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left">Division</th>
+              <th scope="col">Department</th>
+              <th scope="col">Division</th>
               <th *ngIf="role.refAuthorize.jd.editable" scope="col" style="width: 160px;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
               <td class="text-left">
-                <span class="link" [routerLink]="'/jd/detail/preview/'+item._id"
+                <span class="link" [routerLink]="'/employer/jd/detail/preview/'+item._id"
                   [nbTooltip]="item.position">{{ item.position }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.department.name || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.division.name || '-' }}</span>
               </td>
               <td *ngIf="role.refAuthorize.jd.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
-                  [routerLink]="'/jd/detail/edit/'+item._id">
+                  [routerLink]="'/employer/jd/detail/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
                 <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
-                  [routerLink]="'/jd/detail/duplicate/'+item._id">
+                  [routerLink]="'/employer/jd/detail/duplicate/'+item._id">
                   <nb-icon icon="copy-outline"></nb-icon>
                 </button>
                 <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"

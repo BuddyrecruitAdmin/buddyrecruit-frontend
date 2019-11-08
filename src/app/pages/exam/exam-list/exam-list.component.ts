@@ -224,7 +224,7 @@ export class ExamListComponent implements OnInit {
     setJdId(item.refJD._id);
     setJdName(item.refJD.position);
     setJrId(item._id);
-    this.router.navigate(["/exam/detail"]);
+    this.router.navigate(["/employer/exam/detail"]);
   }
 
   changePaging(event) {

@@ -1,5 +1,5 @@
 <div class="card">
-  <img class="login-image" width="80px" height="80px" src="../../../assets/images/logo.png" />
+  <img class="login-image" width="80px" height="80px" src="../../../../assets/images/logo.png" />
   <h6 class="text-center">Buddy Recruit</h6>
   <br>
   <form *ngIf="!changeText" [formGroup]="emailForm" (ngSubmit)="forgot(emailForm.value)">
@@ -16,6 +16,6 @@
     <label class="text-gray">Please check your email.</label>
   </div>
   <small>
-    <a [routerLink]="'/auth/login'"><b>Back to login</b></a>
+    <a [routerLink]="'/employer/login'"><b>Back to login</b></a>
   </small>
 </div>
