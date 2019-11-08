@@ -53,7 +53,7 @@
         <nb-card>
           <nb-card-header>
             <div class="title">
-              <label class="link" [routerLink]="'/employer/employer/jd/detail/preview/'+item._id"
+              <label class="link" [routerLink]="'/employer/jd/detail/preview/'+item._id"
                 [nbTooltip]="item.position">{{ item.position }}</label>
             </div>
             <div *ngIf="role.refAuthorize.jd.editable" class="actions">

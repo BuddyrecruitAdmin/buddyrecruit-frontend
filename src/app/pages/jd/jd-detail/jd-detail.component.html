@@ -289,7 +289,49 @@
         calculated "Total Soft Skill (%)" )</small>
     </nb-card-header>
     <nb-card-body class="dialog-body">
-      <div class="modal-body">
+      <!-- Mobile -->
+      <div *ngIf="devices.isMobile">
+        <nb-card *ngFor="let ss of jd.weightScore.softSkill.weight; let i = index">
+          <nb-card-header>
+            <div class="title">
+              <label>{{ i + 1 }}</label>
+            </div>
+            <div class="actions">
+              <nb-icon *ngIf="modeEditable && !checkPreview" icon="trash-2-outline" class="link" nbTooltip="Delete"
+                (click)="deleteOption(i, 'HARDSKILL')">
+              </nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <label class="control-label">Skill
+                </label><br>
+                <input nbInput type="text" value="ss.skill" [(ngModel)]="ss.skill"
+                  [disabled]="!modeEditable || checkPreview" fullWidth />
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <label class="control-label">%
+                </label><br>
+                <input nbInput type="number" min="0" max="100" value="ss.percent" [(ngModel)]="ss.percent"
+                  [disabled]="!modeEditable || checkPreview" (input)="onChangePercentSoftSkill()"
+                  onKeyPress="if(this.value.length==3) return false;" appNumberDirective pattern="[0-9]*"
+                  inputmode="numeric" digitOnly />
+              </div>
+              <div class="col-sm-4 col-md-4 form-group">
+                <label class="control-label">Keyword
+                </label>
+                <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
+                  [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
+                  [ngModelOptions]="{ standalone: true }">
+                </tag-input>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <!-- Desktop -->
+      <div class="modal-body" *ngIf="!devices.isMobile">
         <table class="table table table-bordered">
           <tbody>
             <tr>
@@ -354,7 +396,49 @@
       </small>
     </nb-card-header>
     <nb-card-body class="dialog-body">
-      <div class="modal-body">
+      <!-- Mobile -->
+      <div *ngIf="devices.isMobile">
+        <nb-card *ngFor="let hs of jd.weightScore.hardSkill.weight; let i = index">
+          <nb-card-header>
+            <div class="title">
+              <label>{{ i + 1 }}</label>
+            </div>
+            <div class="actions">
+              <nb-icon *ngIf="modeEditable && !checkPreview" icon="trash-2-outline" class="link" nbTooltip="Delete"
+                (click)="deleteOption(i, 'HARDSKILL')">
+              </nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <label class="control-label">Skill
+                </label><br>
+                <input nbInput type="text" value="hs.skill" [(ngModel)]="hs.skill"
+                  [disabled]="!modeEditable || checkPreview" fullWidth />
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <label class="control-label">%
+                </label><br>
+                <input nbInput type="number" min="0" max="100" value="hs.percent" [(ngModel)]="hs.percent"
+                  [disabled]="!modeEditable || checkPreview" (input)="onChangePercentHardSkill()"
+                  onKeyPress="if(this.value.length==3) return false;" appNumberDirective pattern="[0-9]*"
+                  inputmode="numeric" digitOnly />
+              </div>
+              <div class="col-sm-4 col-md-4 form-group">
+                <label class="control-label">Keyword
+                </label>
+                <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
+                  [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
+                  [ngModelOptions]="{ standalone: true }">
+                </tag-input>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <!-- Desktop -->
+      <div class="modal-body" *ngIf="!devices.isMobile">
         <table class="table table table-bordered">
           <tbody>
             <tr>
@@ -419,7 +503,49 @@
       </small>
     </nb-card-header>
     <nb-card-body class="dialog-body">
-      <div class="modal-body">
+      <!-- Mobile -->
+      <div *ngIf="devices.isMobile">
+        <nb-card *ngFor="let cert of jd.weightScore.certificate.weight; let i = index">
+          <nb-card-header>
+            <div class="title">
+              <label>{{ i + 1 }}</label>
+            </div>
+            <div class="actions">
+              <nb-icon *ngIf="modeEditable && !checkPreview" icon="trash-2-outline" class="link" nbTooltip="Delete"
+                (click)="deleteOption(i, 'HARDSKILL')">
+              </nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <label class="control-label">Name
+                </label><br>
+                <input nbInput type="text" value="cert.skill" [(ngModel)]="cert.name"
+                  [disabled]="!modeEditable || checkPreview" fullWidth />
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <label class="control-label">%
+                </label><br>
+                <input nbInput type="number" min="0" max="100" value="cert.percent" [(ngModel)]="cert.percent"
+                  [disabled]="!modeEditable || checkPreview" (input)="onChangePercentCertificate()"
+                  onKeyPress="if(this.value.length==3) return false;" appNumberDirective pattern="[0-9]*"
+                  inputmode="numeric" digitOnly />
+              </div>
+              <div class="col-sm-4 col-md-4 form-group">
+                <label class="control-label">Keyword
+                </label>
+                <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
+                  [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
+                  [ngModelOptions]="{ standalone: true }">
+                </tag-input>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <!-- Desktop -->
+      <div class="modal-body" *ngIf="!devices.isMobile">
         <table class="table table table-bordered">
           <tbody>
             <tr>
