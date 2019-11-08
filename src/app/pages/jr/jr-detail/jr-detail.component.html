@@ -42,7 +42,9 @@
                 <input [nbDatepicker]="startDate" [(ngModel)]="jr.duration.startDate" nbInput fullWidth
                   [disabled]="editCheck || checkPreview" style="cursor: pointer;">
                 <div class="input-group-addon" style="pointer-events: none;">
-                  <nb-icon icon="calendar-outline"></nb-icon>
+                  <nb-icon
+                    [ngClass]="{ 'text-green': !editCheck || !checkPreview, 'text-light-gray':  editCheck || checkPreview }"
+                    icon="calendar-outline"></nb-icon>
                 </div>
                 <small *ngIf="touchedStart" class="text-red">{{ sErrorStart }}</small>
               </div>
@@ -56,7 +58,8 @@
                 <input [nbDatepicker]="endDate" [(ngModel)]="jr.duration.endDate" nbInput fullWidth
                   [disabled]="checkPreview" style="cursor: pointer;">
                 <div class="input-group-addon" style="pointer-events: none;">
-                  <nb-icon icon="calendar-outline"></nb-icon>
+                  <nb-icon icon="calendar-outline"
+                    [ngClass]="{ 'text-green': !checkPreview, 'text-light-gray': checkPreview }"></nb-icon>
                 </div>
                 <small *ngIf="touchedEnd" class="text-red">{{ sErrorEnd }}</small>
               </div>
@@ -70,7 +73,8 @@
                 <input [nbDatepicker]="onboardDate" [(ngModel)]="jr.onboardDate" nbInput fullWidth
                   [disabled]="checkPreview" style="cursor: pointer;">
                 <div class="input-group-addon" style="pointer-events: none;">
-                  <nb-icon icon="calendar-outline"></nb-icon>
+                  <nb-icon icon="calendar-outline"
+                    [ngClass]="{ 'text-green': !checkPreview, 'text-light-gray': checkPreview }"></nb-icon>
                 </div>
                 <small *ngIf="touchedOn" class="text-red">{{ sErrorOn }}</small>
               </div>
