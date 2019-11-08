@@ -4,8 +4,8 @@
       <h3>Evaluation</h3>
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
-      <button *ngIf="role.refAuthorize.configuration.evaluation.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/employer/setting/evaluation-detail/create'">
+      <button *ngIf="role.refAuthorize.configuration.evaluation.editable" nbButton fullWidth status="success"
+        nbTooltip="Create" [routerLink]="'/employer/setting/evaluation-detail/create'">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -48,13 +48,12 @@
   <!-- Grid Layout -->
   <div *ngIf="isGridLayout">
     <div class="row">
-      <div class="col-lg-6 col-md-6" *ngFor="let item of items;">
-        <nb-card [accent]="item.isActive ? 'success' : 'default'">
+      <div class="col-md-6 col-lg-6" *ngFor="let item of items;">
+        <nb-card *ngIf="!loading" [accent]="item.isActive ? 'success' : 'default'">
           <nb-card-header>
             <div class="title">
-              <label class="link" (click)="openPopupEvaluation(item)" [nbTooltip]="item.name">
-                {{ item.name || item._id }}
-              </label>
+              <label class="link" [nbTooltip]="item.name"
+                (click)="openPopupEvaluation(item)">{{ item.name || item._id }}</label>
             </div>
             <div *ngIf="role.refAuthorize.configuration.evaluation.editable" class="actions">
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
@@ -71,20 +70,16 @@
               <div class="text-group">
                 <label class="label">Last update by</label>
                 <span>
-                  {{ item.lastChangedInfo.refUser.firstname }}
-                  {{ item.lastChangedInfo.refUser.lastname }}
+                  {{ item.lastChangedInfo?.refUser?.firstname }}
+                  {{ item.lastChangedInfo?.refUser?.lastname }}
                 </span>
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>
-          <nb-card-footer *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'">
-            <button nbButton status="danger" (click)="Reject(item,dialog)">REJECT</button>
-            <button nbButton status="success" (click)="Approve(item)">APPROVE</button>
-          </nb-card-footer>
         </nb-card>
       </div>
     </div>

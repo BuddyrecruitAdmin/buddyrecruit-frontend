@@ -76,6 +76,7 @@ export class PopupEvaluationComponent implements OnInit {
     this.editable = false;
     this.jrName = '';
     this.state = "";
+    this.evaluation = {};
     if (this.flowId) {
       this.state = "Preview";
       this.getDetailPreview();
@@ -90,10 +91,6 @@ export class PopupEvaluationComponent implements OnInit {
   getDetailPreview() {
     this.evaluationService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        // this.candidateName = this.utilitiesService.setFullname(response.data);
-        // this.jrName = response.data.candidateFlow.refJR.refJD.position;
-        // this.stageId = response.data.candidateFlow.refStage._id;
-        console.log(response.data)
         this.evaluation = response.data;
       } else {
         this.showToast('danger', 'Error Message', response.message);
@@ -106,9 +103,6 @@ export class PopupEvaluationComponent implements OnInit {
   getDetail() {
     this.candidateService.evaluationDetail(this.candidateId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        // this.candidateName = this.utilitiesService.setFullname(response.data);
-        // this.jrName = response.data.candidateFlow.refJR.refJD.position;
-        // this.stageId = response.data.candidateFlow.refStage._id;
         response.data.map(element => {
           if (this.role._id === element.createdInfo.refUser) {
             this.evaluation = element;
