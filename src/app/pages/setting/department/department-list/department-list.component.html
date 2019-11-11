@@ -59,7 +59,7 @@
                 [routerLink]="'/employer/setting/department-detail/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
-                *ngIf="!item.active">
+                *ngIf="!item.active && item.isUsed">
               </nb-icon>
             </div>
           </nb-card-header>
