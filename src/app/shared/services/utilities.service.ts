@@ -223,7 +223,7 @@ export class UtilitiesService {
     const nYear = Math.floor((month / 12));
     const nMonth = (month % 12);
     if (nYear) {
-      text += `${nYear} year `;
+      text += `${nYear} year`;
       if (nYear > 1) {
         text.trim();
         text += `s `;
