@@ -34,6 +34,7 @@ export interface ErrMsg {
   address: string;
   province: string;
   postalCode: string;
+  divisionName: string;
 }
 
 @Component({
@@ -112,6 +113,7 @@ export class DepartmentDetailComponent implements OnInit {
       address: '',
       province: '',
       postalCode: '',
+      divisionName: '',
     }
   }
 
@@ -190,6 +192,30 @@ export class DepartmentDetailComponent implements OnInit {
         this.errMsg.postalCode = 'Please Input Postal Code';
         isValid = false;
       }
+    }
+    if (this.departmentDetail.divisions.length) {
+      this.departmentDetail.divisions.forEach(element => {
+        if (!element.name) {
+          isValid = false;
+          this.errMsg.divisionName = 'Please Input Division Name';
+        }
+        if (!element.useDepartmentAddress) {
+          element.addresses.forEach(ele => {
+            if (!ele.address) {
+              isValid = false;
+              this.errMsg.address = 'Please Input Addrees';
+            }
+           if(!ele.province){
+             isValid = false;
+             this.errMsg.province = 'Please Input Province';
+           }
+           if(!ele.postalCode){
+            isValid = false;
+            this.errMsg.postalCode = 'Please Input Postcode';
+           }
+          })
+        }
+      });
     }
     return isValid
   }
