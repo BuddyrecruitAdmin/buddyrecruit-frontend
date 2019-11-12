@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { UserService } from '../user.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices } from '../../../../shared/interfaces/common.interface';
+import { getRole, getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -28,7 +28,8 @@ export class UserListComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   isOverQuota: boolean;
   showTips: boolean;
-
+  devices: Devices;
+  isGridLayout: boolean;
   constructor(
     private router: Router,
     private service: UserService,
@@ -37,6 +38,15 @@ export class UserListComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
@@ -50,6 +60,11 @@ export class UserListComponent implements OnInit {
       pageSizeOptions: Paging.pageSizeOptions
     }
     this.search();
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   search() {

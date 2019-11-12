@@ -543,6 +543,8 @@
     }
   }
 
+
+
   .input-hidding {
     width: 92px;
     height: 34px;
@@ -566,6 +568,7 @@
       margin-right: 0.25rem;
     }
   }
+
 
   // --------------------------------------------------------------------
   // CARD
@@ -1405,6 +1408,14 @@
       border-color: var(--color-red) !important;
     }
 
+  }
+  .input-group.has-error{
+    input,
+    input:hover,
+    input:focus,
+    input:active{
+      border-color: var(--color-red);
+    }
   }
 
   // --------------------------------------------------------------------

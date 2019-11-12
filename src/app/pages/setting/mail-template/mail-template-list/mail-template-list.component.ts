@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { MailTemplateService } from '../mail-template.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging,Devices } from '../../../../shared/interfaces/common.interface';
+import { getRole,getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -12,6 +12,7 @@ import { PopupMessageComponent } from '../../../../component/popup-message/popup
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { color } from 'd3-color';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
   selector: 'ngx-mail-template-list',
   templateUrl: './mail-template-list.component.html',
@@ -30,7 +31,15 @@ export class MailTemplateListComponent implements OnInit {
   tabSelected: string;
   minPageSize = Paging.pageSizeOptions[0];
   loading: boolean;
-
+  mailOptions: any;
+  innerWidth: any;
+  innerHeight: any;
+  editorConfig: AngularEditorConfig = {
+    editable: false,
+    showToolbar: false,
+  }
+  devices: Devices;
+  isGridLayout: boolean;
   constructor(
     private service: MailTemplateService,
     private utilitiesService: UtilitiesService,
@@ -39,6 +48,17 @@ export class MailTemplateListComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
+    this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
@@ -98,6 +118,11 @@ export class MailTemplateListComponent implements OnInit {
     this.search();
   }
 
+  preEmail(item: any, dialog: TemplateRef<any>) {
+    this.mailOptions = _.cloneDeep(item);
+    this.callDialog(dialog);
+  }
+
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
@@ -129,6 +154,11 @@ export class MailTemplateListComponent implements OnInit {
       pageSizeOptions: Paging.pageSizeOptions
     }
     this.search();
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

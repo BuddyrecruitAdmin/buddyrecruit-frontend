@@ -171,7 +171,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             name: element.title,
             title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
               this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
-            picture: element.fromUser.refUser.imageData,
+            picture: element.fromUser.refUser.imageData, 
             hidden: element.readed
           });
         });

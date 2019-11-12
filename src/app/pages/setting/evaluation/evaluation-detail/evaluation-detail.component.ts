@@ -29,6 +29,13 @@ export class EvaluationDetailComponent implements OnInit {
   state: any;
   preview: boolean;
   beforeName: string;
+  touchedName: boolean;
+  touchedBasic: boolean;
+  sErrorName: string;
+  sErrorBasic: string;
+  sErrorCate: string;
+  sErrorRank: string;
+  touchedRank: boolean;
   constructor(
     private service: EvaluationService,
     private dialogService: NbDialogService,
@@ -46,7 +53,6 @@ export class EvaluationDetailComponent implements OnInit {
     this.preview = false;
     this.sErrorCheck = "";
     this.activatedRoute.params.subscribe(params => {
-      console.log(params.id)
       if (params.action === "create") {
         this.state = "create";
       }
@@ -263,16 +269,22 @@ export class EvaluationDetailComponent implements OnInit {
 
   validation(): boolean {
     let isValid = true;
+    this.touchedName = false;
+    this.touchedBasic = false;
+    this.touchedRank = false;
     if (this.evaluation.name === undefined || this.evaluation.name === "") {
+      this.touchedName = true;
       this.sErrorCheck = MESSAGE[157];
+      this.sErrorName = MESSAGE[157];
       isValid = false;
     }
     // check basic
     if (this.evaluation.checked) {
-      this.evaluation.basicApplications.map((element) => {
+      this.evaluation.basicApplications.map((element, index) => {
         if (element.options.length > 0) {
           element.options.map((option, oindex) => {
             if (option.label === "") {
+              this.touchedBasic = true;
               this.sErrorCheck = MESSAGE[149];
               isValid = false;
             } else {
@@ -284,7 +296,9 @@ export class EvaluationDetailComponent implements OnInit {
           isValid = false;
         }
         if (element.subject === "") {
+          this.touchedBasic = true;
           this.sErrorCheck = MESSAGE[149];
+          this.sErrorBasic = MESSAGE[4];
           isValid = false;
         }
       });
@@ -292,6 +306,8 @@ export class EvaluationDetailComponent implements OnInit {
     // check category
     this.evaluation.evaCategories.map(element => {
       if (element.subject === "") {
+        this.touchedBasic = true;
+        this.sErrorCate = MESSAGE[150];
         isValid = false;
         this.sErrorCheck = MESSAGE[150];
       }
@@ -302,17 +318,17 @@ export class EvaluationDetailComponent implements OnInit {
       this.evaluation.rank.options[1].min - this.evaluation.rank.options[2].max != 1
     ) {
       this.sErrorCheck = MESSAGE[153];
+      this.touchedRank = true;
       isValid = false;
     }
     if (this.evaluation.rank.options[0].max === this.evaluation.rank.options[0].min ||
       this.evaluation.rank.options[1].max === this.evaluation.rank.options[1].min ||
       this.evaluation.rank.options[2].max === this.evaluation.rank.options[2].min ||
       this.evaluation.rank.options[1].max === this.evaluation.rank.options[0].min ||
-      this.evaluation.rank.options[2].max === this.evaluation.rank.options[1].min ||
-      this.evaluation.rank.options[2].max === this.evaluation.rank.options[2].min ||
-      this.evaluation.rank.options[1].max === this.evaluation.rank.options[1].min
+      this.evaluation.rank.options[2].max === this.evaluation.rank.options[1].min
     ) {
       this.sErrorCheck = MESSAGE[151];
+      this.touchedRank = true;
       isValid = false;
     }
     if (this.evaluation.rank.options[0].max < this.evaluation.rank.options[0].min ||
@@ -322,11 +338,13 @@ export class EvaluationDetailComponent implements OnInit {
       this.evaluation.rank.options[2].max > this.evaluation.rank.options[1].min
     ) {
       this.sErrorCheck = MESSAGE[152];
+      this.touchedRank = true;
       isValid = false;
     }
     if (this.state === "duplicate") {
       if (this.evaluation.name === this.beforeName) {
         this.sErrorCheck = MESSAGE[154];
+        this.touchedName = true;
         isValid = false;
       }
     }
@@ -371,6 +389,13 @@ export class EvaluationDetailComponent implements OnInit {
     return score;
   }
 
+  inputScore(event) {
+    if (event === 1) {
+      this.evaluation.rank.options[2].max = this.evaluation.rank.options[1].min - 1;
+    } else {
+      this.evaluation.rank.options[1].max = this.evaluation.rank.options[0].min - 1;
+    }
+  }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });

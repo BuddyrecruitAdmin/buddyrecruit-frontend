@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyService } from '../company.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices } from '../../../../shared/interfaces/common.interface';
+import { getRole, getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -19,11 +19,14 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 export class CompanyListComponent implements OnInit {
   refHero: any;
   items: [];
-
+  loading: boolean;
   keyword: string;
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
+  role: any;
+  devices: Devices;
+  isGridLayout: boolean;
   minPageSize = Paging.pageSizeOptions[0];
 
   constructor(
@@ -32,11 +35,21 @@ export class CompanyListComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService
   ) {
-    const role = getRole();
-    this.refHero = role.refHero;
+    this.role = getRole();
+    this.refHero = this.role.refHero;
+    this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
+    this.loading = true;
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -70,6 +83,7 @@ export class CompanyListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
+        this.loading = false;
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
@@ -93,6 +107,11 @@ export class CompanyListComponent implements OnInit {
         });
       }
     });
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   changePaging(event) {

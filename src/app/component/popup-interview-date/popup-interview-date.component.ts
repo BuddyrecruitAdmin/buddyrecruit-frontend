@@ -19,6 +19,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
   selector: 'ngx-popup-interview-date',
@@ -172,6 +173,12 @@ export class PopupInterviewDateComponent implements OnInit {
     return text.substr(0, index) + replacement + text.substr(index + replacement.length);
   }
 
+  convertDateTime(text: string) {
+    text = this.replaceAt(text, 11, '0');
+    text = this.replaceAt(text, 12, '0');
+    return text
+  }
+
   setDropdownDate() {
     this.dropdownDate = [];
     this.dropdownDate.push({
@@ -183,7 +190,7 @@ export class PopupInterviewDateComponent implements OnInit {
         user.calendar.availableDates.forEach(element => {
           this.dropdownDate.push({
             label: this.utilitiesService.convertDate(element.startDate),
-            value: element.startDate
+            value: this.convertDateTime(element.startDate)
           });
         });
       });
@@ -321,6 +328,22 @@ export class PopupInterviewDateComponent implements OnInit {
         this.ref.close(true);
       }
       this.loading = false;
+    });
+  }
+
+  sendEmail() {
+    setFlowId(this.flowId);
+    setCandidateId(this.candidateId);
+    this.save();
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      this.ref.close(true);
     });
   }
 

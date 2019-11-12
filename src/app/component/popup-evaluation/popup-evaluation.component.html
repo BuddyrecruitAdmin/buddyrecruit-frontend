@@ -2,7 +2,7 @@
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="candidateName">{{ evaluation.name  || '-' }} <small>  {{ state }}</small></label>
+      <label [nbTooltip]="candidateName">{{ evaluation.name  || '-' }} <small *ngIf="state"> ({{ state }})</small></label>
       <!-- <small class="status text-gray m-0">
         {{ jrName || '-' }}
       </small> -->
@@ -14,7 +14,7 @@
   <nb-card-body *ngIf="!loading" class="dialog-body">
     <h5 class="text-center text-green m-b-20">Applicant Evaluation Form</h5>
     <br>
-    <div *ngIf="evaluation.basicApplications.length" class="m-b-20">
+    <div *ngIf="evaluation.basicApplications.length && evaluation.checked" class="m-b-20">
       <label class="text-black m-b-20"><b>ข้อมูลเบื้องต้นของผู้สมัคร / Basic Applicant Information</b></label>
       <div *ngFor="let basic of evaluation.basicApplications" class="form-control-group m-l-15">
         <label class="m-0">
@@ -22,7 +22,8 @@
           <span style="vertical-align: top;">{{ basic.subject }}</span>
         </label>
         <div class="m-l-20">
-          <nb-radio-group [(ngModel)]="basic.selected" [name]="basic.subject" class="inline" status="info" [disabled]="!editable">
+          <nb-radio-group [(ngModel)]="basic.selected" [name]="basic.subject" class="inline" status="info"
+            [disabled]="!editable">
             <nb-radio *ngFor="let choice of basic.options" [name]="basic.subject" [value]="choice.value">
               {{ choice.label }}
             </nb-radio>

@@ -8,6 +8,7 @@ import { UtilitiesService } from '../../../shared/services/utilities.service';
 import { DropdownService } from '../../../shared/services/dropdown.service';
 import * as _ from 'lodash';
 import { MESSAGE } from '../../../shared/constants/message';
+import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
@@ -104,6 +105,7 @@ export class JdDetailComponent implements OnInit {
   activeOnly: boolean;
   workMax: boolean;
   sErrorDivision: string;
+  devices: Devices;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -117,6 +119,7 @@ export class JdDetailComponent implements OnInit {
     private dropdownService: DropdownService,
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
     this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
     this.innerHeight = window.innerHeight * 0.8;
   }
@@ -336,6 +339,9 @@ export class JdDetailComponent implements OnInit {
           }
           this.onChangeDepartmentAfter(this.jd.departmentId)
           this.calculateTotal();
+          this.onChangePercentCertificate();
+          this.onChangePercentHardSkill();
+          this.onChangePercentSoftSkill();
         }
       }
     });
@@ -482,6 +488,7 @@ export class JdDetailComponent implements OnInit {
   }
 
   open(dialog: TemplateRef<any>) {
+    this.devices = this.utilitiesService.getDevice();
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
