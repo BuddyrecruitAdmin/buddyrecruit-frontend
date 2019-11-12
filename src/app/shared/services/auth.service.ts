@@ -17,6 +17,7 @@ import {
   FieldLabel,
   FieldName,
   UserCandidate,
+  ContactId,
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -194,4 +195,13 @@ export function setBugCandidateId(bugCandidateId: any = null) {
 export function getBugCandidateId() {
   const bugCandidateId = JSON.parse(localStorage.getItem(BugCandidateId));
   return (!bugCandidateId || bugCandidateId === null) ? undefined : bugCandidateId;
+}
+
+export function setContactId(contactId: any = null) {
+  localStorage.setItem(ContactId, JSON.stringify(contactId));
+}
+
+export function getContactId() {
+  const contactId = JSON.parse(localStorage.getItem(ContactId));
+  return (!contactId || contactId === null) ? undefined : contactId;
 }

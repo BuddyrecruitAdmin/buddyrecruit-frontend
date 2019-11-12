@@ -3,6 +3,7 @@ import { ModulesRoutingModule } from './modules-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  NbAccordionModule,
   NbActionsModule,
   NbButtonModule,
   NbCardModule,
@@ -67,7 +68,9 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
-} from '@angular/material'
+} from '@angular/material';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
@@ -87,6 +90,7 @@ import { IndexComponent } from './index/index.component';
     NbSelectModule,
     NbTooltipModule,
     NbUserModule,
+    NbAccordionModule,
     NbActionsModule,
     NbRadioModule,
     NbListModule,
@@ -136,6 +140,8 @@ import { IndexComponent } from './index/index.component';
     TranslateModule.forRoot(),
     NbSpinnerModule,
     DigitOnlyModule,
+    NgbModule,
+    NgbCarouselModule
   ],
   declarations: [
     ModulesComponent,

@@ -62,6 +62,7 @@ export const BugCandidateId = 'BugCandidateId';
 export const FieldLabel = 'FieldLabel';
 export const FieldName = 'FieldName';
 export const UserCandidate = 'UserCandidate';
+export const ContactId = 'ContactId';
 
 export enum DayOfWeek {
   Sunday = 0,

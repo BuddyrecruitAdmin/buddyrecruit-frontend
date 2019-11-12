@@ -5,7 +5,7 @@ import { CompanyTypeService } from '../../company-type/company-type.service';
 import { ResponseCode, Paging, State } from '../../../../shared/app.constants';
 import { MESSAGE } from '../../../../shared/constants/message';
 import { DropDownValue } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { getRole, getContactId, setContactId } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -13,6 +13,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { ContactUsService } from '../../contact-us/contact-us.service';
 
 export interface CompanyDetail {
   refCompanyType: any;
@@ -81,6 +82,7 @@ export class CompanyDetailComponent implements OnInit {
   errMsg: ErrMsg;
   _id: string;
   role: any;
+  contactId: any;
   loading: boolean;
   buttonLoading: boolean;
 
@@ -91,13 +93,17 @@ export class CompanyDetailComponent implements OnInit {
     private companyTypeService: CompanyTypeService,
     private toastrService: NbToastrService,
     public matDialog: MatDialog,
-    private utilitiesService: UtilitiesService
+    private utilitiesService: UtilitiesService,
+    private contactUsService: ContactUsService,
   ) {
     this.role = getRole();
+    this.contactId = getContactId();
+    setContactId();
   }
 
   ngOnInit() {
-    this.roleSelected = '4';
+    this.roleSelected = '';
+    this.loading = true;
     this.buttonLoading = false;
     this.companyDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
@@ -109,6 +115,21 @@ export class CompanyDetailComponent implements OnInit {
           this.getDetail();
         } else {
           this.state = State.Create;
+          if (this.contactId) {
+            this.contactUsService.getDetail(this.contactId).subscribe(response => {
+              if (response.code === ResponseCode.Success) {
+                if (response.data) {
+                  this.companyDetail.name = response.data.companyName;
+                  this.companyDetail.companySize = response.data.numberEmployees;
+                  this.companyDetail.adminEmail = response.data.email;
+                  this.companyDetail.hero = response.data.hero;
+                  this.roleSelected = response.data.userRole.toString();
+                }
+              }
+            });
+          } else {
+            this.roleSelected = '4';
+          }
           this.loading = false;
         }
       });
@@ -284,6 +305,10 @@ export class CompanyDetailComponent implements OnInit {
           this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
+            if (this.contactId) {
+              this.contactUsService.isCreated(this.contactId).subscribe(response => {
+              });
+            }
             this.router.navigate(['/employer/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);

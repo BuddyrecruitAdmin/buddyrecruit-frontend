@@ -2,7 +2,8 @@
   <h3>Company <small class="text-cap">({{ state }})</small></h3>
 </div>
 
-<nb-card *ngIf="role.refHero.isSuperAdmin">
+<nb-card *ngIf="role.refHero.isSuperAdmin" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
   <nb-card-header>
     Select User Role
   </nb-card-header>

@@ -95,6 +95,7 @@ import { RejectStageComponent } from './reject-stage/reject-stage.component';
 import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 import { BlacklistComponent } from './blacklist/blacklist.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +120,7 @@ import { BlacklistComponent } from './blacklist/blacklist.component';
     EvaluationDetailComponent,
     EvaluationListComponent,
     BlacklistComponent,
+    ContactUsComponent,
   ],
   imports: [
     CommonModule,

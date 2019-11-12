@@ -58,6 +58,9 @@
 
   --color-dark-green: #34B76B;
 }
+:focus {
+  outline: none;
+}
 
 .nb-theme-default {
 
@@ -827,6 +830,10 @@
     margin-top: 5rem;
   }
 
+  nb-accordion nb-accordion-item-body .item-body {
+    overflow-y: scroll;
+  }
+
   // --------------------------------------------------------------------
   // Notification
 
@@ -1099,6 +1106,11 @@
   }
   .text-cap {
     text-transform: capitalize;
+  }
+  .text-dot {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .first-letter-cap:first-letter {
     text-transform: uppercase;

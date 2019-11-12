@@ -217,7 +217,7 @@ import { PopupInterviewResultComponent } from './popup-interview-result/popup-in
     PopupAvailableDateComponent,
     PopupSignDateComponent,
     PopupFeedbackComponent,
-    PopupInterviewResultComponent
+    PopupInterviewResultComponent,
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -236,7 +236,7 @@ import { PopupInterviewResultComponent } from './popup-interview-result/popup-in
     PopupAvailableDateComponent,
     PopupSignDateComponent,
     PopupFeedbackComponent,
-    PopupInterviewResultComponent
+    PopupInterviewResultComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

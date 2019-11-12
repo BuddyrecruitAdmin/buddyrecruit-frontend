@@ -1,6 +1,10 @@
 <div *ngIf="!token" class="card">
-  <img class="login-image" width="80px" height="80px" src="../../../../assets/images/logo.png" />
-  <h6 class="text-center">Buddy Recruit</h6>
+  <nb-icon class="link text-light-gray" icon="arrow-ios-back-outline" [routerLink]="'/index'"></nb-icon>
+  <div class="text-center">
+    <img width="80px" height="80px" src="../../../../assets/images/logo.png" />
+    <h6 class="m-0 text-green">Buddy Recruit</h6>
+    <small class="text-light-gray">(Employer)</small>
+  </div>
   <br>
   <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
     <div class="form-control-group">
@@ -24,8 +28,9 @@
       nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="" [disabled]="loading">Login</button>
     <small *ngIf="loginError" class="text-red">{{ loginError }}</small>
   </form>
-  <br>
-  <small>
-    <a [routerLink]="'/employer/forgot'"><b>{{ sForgotPassword }}</b></a>
-  </small>
+  <div>
+    <small class="pull-right">
+      <a [routerLink]="'/employer/forgot'"><b>{{ sForgotPassword }}</b></a>
+    </small>
+  </div>
 </div>
