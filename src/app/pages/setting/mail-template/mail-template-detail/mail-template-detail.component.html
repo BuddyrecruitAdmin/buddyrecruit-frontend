@@ -32,16 +32,16 @@
           <input type="text" [(ngModel)]="itemDialog.remark" nbInput fullWidth placeholder="remark">
         </div>
         <div class="form-control-group">
-          <label class="label">CC</label>
+          <label class="label">CC<small>(After input email please press enter)</small></label>
           <tag-input [(ngModel)]="itemDialog.cc" secondaryPlaceholder="Enter a email" placeholder="+"
-            [ngModelOptions]="{ standalone: true }">
+            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[32, 188]">
           </tag-input>
           <small *ngIf="touched" class="text-red">{{ sErrorcc }}</small>
         </div>
         <div class="form-control-group">
-          <label class="label">BCC</label>
+          <label class="label">BCC<small>(After input email please press enter)</small></label>
           <tag-input [(ngModel)]="itemDialog.bcc" secondaryPlaceholder="Enter a email" placeholder="+"
-            [ngModelOptions]="{ standalone: true }">
+            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[32, 188]">
           </tag-input>
           <small *ngIf="touched" class="text-red">{{ sErrorBcc }}</small>
         </div>

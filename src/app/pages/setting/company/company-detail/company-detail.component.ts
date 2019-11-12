@@ -85,7 +85,7 @@ export class CompanyDetailComponent implements OnInit {
   contactId: any;
   loading: boolean;
   buttonLoading: boolean;
-
+  editabled: boolean;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -105,11 +105,13 @@ export class CompanyDetailComponent implements OnInit {
     this.roleSelected = '';
     this.loading = true;
     this.buttonLoading = false;
+    this.editabled = true;
     this.companyDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
     this.initialDropdown().then((response) => {
       this.activatedRoute.params.subscribe(params => {
         if (params.id) {
+          this.editabled = false;
           this.state = State.Edit;
           this._id = params.id;
           this.getDetail();

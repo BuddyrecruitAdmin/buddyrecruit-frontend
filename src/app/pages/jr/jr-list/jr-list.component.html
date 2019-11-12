@@ -136,7 +136,7 @@
               <th scope="col">End Date</th>
               <th scope="col">Exam</th>
               <th scope="col">Status</th>
-              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="width: 110px;">Actions</th>
+              <th *ngIf="role.refAuthorize.jr.editable" scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -173,6 +173,14 @@
                 <button *ngIf="item.canDelete" nbButton status="danger" size="tiny" nbTooltip="Delete"
                   (click)="delete(item)">
                   <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
+                <button *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'" nbButton
+                  status="danger" outline size="tiny" (click)="Reject(item,dialog)" nbTooltip="Reject">
+                  <nb-icon icon="close-circle"></nb-icon>
+                </button>
+                <button *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'" nbButton
+                  status="success" outline size="tiny" (click)="Approve(item)" nbTooltip="Approve">
+                  <nb-icon icon="checkmark-circle-2"></nb-icon>
                 </button>
               </td>
             </tr>
