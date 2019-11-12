@@ -110,9 +110,11 @@
             <tr>
               <th scope="col" class="text-left">Location</th>
               <th scope="col" class="text-left">Address</th>
+              <th scope="col">Default</th>
               <th scope="col">Status</th>
               <th scope="col">Last update by</th>
-              <th *ngIf="role.refAuthorize.configuration.location.editable" scope="col" style="width: 110px;">Actions</th>
+              <th *ngIf="role.refAuthorize.configuration.location.editable" scope="col" style="width: 110px;">Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -126,6 +128,11 @@
               <td>
                 <nb-icon *ngIf="item.isDefault" icon="checkmark-outline" class="text-green"></nb-icon>
                 <nb-icon *ngIf="!item.isDefault" icon="close-outline" class="text-red"></nb-icon>
+              </td>
+              <td>
+                <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                  {{ item.active ? 'Active': 'Inactive' }}
+                </span>
               </td>
               <td>
                 <span> {{ item.lastChangedInfo.refUser.firstname }}

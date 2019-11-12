@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jr.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/employer/jr/detail/create'">
+        [routerLink]="'/employer/jr/detail/create'" [disabled]="isOverQuota">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
