@@ -214,6 +214,7 @@ export class SignContractDetailComponent implements OnInit {
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
       condition.isExpired = true;
+      condition.icon.signContract = false;
     }
     return condition;
   }

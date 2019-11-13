@@ -214,7 +214,7 @@ export class MailTemplateDetailComponent implements OnInit {
     return isValid;
 
   }
-
+  
   save() {
     if (this.validation()) {
       const request = this.setRequest();

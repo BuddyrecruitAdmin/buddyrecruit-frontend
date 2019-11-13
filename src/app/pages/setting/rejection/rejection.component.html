@@ -56,7 +56,8 @@
             </div>
             <div class="actions" *ngIf="role.refAuthorize.configuration.rejection.editable">
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
-              <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+              <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
+                (click)="delete(item)"></nb-icon>
             </div>
           </nb-card-header>
           <nb-card-body>
@@ -99,11 +100,12 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" class="text-left">Reason</th>
-              <th scope="col" class="text-left">Reson reject by</th>
-              <th scope="col" class="text-left">Status</th>
+              <th scope="col">Reason</th>
+              <th scope="col">Reson reject by</th>
+              <th scope="col">Status</th>
               <th scope="col">Last update by</th>
-              <th *ngIf="role.refAuthorize.configuration.rejection.editable" scope="col" style="width: 110px;">Actions</th>
+              <th *ngIf="role.refAuthorize.configuration.rejection.editable" scope="col" style="width: 110px;">Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -111,10 +113,10 @@
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.candidateFlag? 'Candidate': 'Company' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
                   {{ item.active ? 'Active': 'Inactive' }}
                 </span>

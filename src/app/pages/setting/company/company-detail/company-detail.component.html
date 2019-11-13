@@ -121,7 +121,7 @@
         </div>
         <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.adminEmail }">
           <label class="label">Admin Username / Email <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth>
+          <input type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth [disabled]="!editabled">
           <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
         </div>
         <div *ngIf="state === 'create'" class="form-control-group">

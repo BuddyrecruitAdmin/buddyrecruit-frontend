@@ -166,6 +166,14 @@ export class PopupCvComponent implements OnInit {
             this.totalYear = 0;
           }
         }
+        if (this.items.education.length > 0) {
+          this.items.education.map(ele => {
+            if (!ele.refDegree) {
+              ele.refDegree = { _id: undefined };
+              // return ele.refDegree
+            }
+          })
+        }
         if (this.items.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
           this.totalPass = 0;
           this.totalCompare = 0;
