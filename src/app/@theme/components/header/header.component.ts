@@ -123,7 +123,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.checkNewNotification();
     this.getNotification();
-    setInterval(() => { this.checkNewNotification(); }, 30000);
+    if (role) {
+      setInterval(() => {
+        if (role) {
+          this.checkNewNotification();
+        }
+      }, 30000);
+    }
   }
 
   checkNewNotification() {
@@ -171,7 +177,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             name: element.title,
             title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
               this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
-            picture: element.fromUser.refUser.imageData, 
+            picture: element.fromUser.refUser.imageData,
             hidden: element.readed
           });
         });
