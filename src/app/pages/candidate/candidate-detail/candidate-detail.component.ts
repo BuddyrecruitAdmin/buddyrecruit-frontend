@@ -118,7 +118,7 @@ export class CandidateDetailComponent implements OnInit {
           if (this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
             this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.forEach(element => {
               const refUser = this.item.candidateFlow.refJR.userInterviews.find(user => {
-                return user.refUser._id === element.createdInfo.refUser;
+                return user.refUser._id === element.createdInfo.refUser._id;
               });
               const result = element.rank.options.find(rank => {
                 return rank.value === element.rank.selected;
