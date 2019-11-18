@@ -19,7 +19,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
-
+import { PopupSignDateComponent } from '../../../component/popup-sign-date/popup-sign-date.component';
 @Component({
   selector: 'ngx-onboard-detail',
   templateUrl: './onboard-detail.component.html',
@@ -182,6 +182,7 @@ export class OnboardDetailComponent implements OnInit {
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
       condition.isExpired = true;
+      condition.icon.signContract = false;
     }
     return condition;
   }
@@ -297,6 +298,24 @@ export class OnboardDetailComponent implements OnInit {
     setCollapse(this.collapseAll);
     setCandidateId(item._id);
     this.router.navigate(["/employer/candidate/detail"]);
+  }
+
+  openPopupSignContractDate(item: any, button: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    setButtonId(button);
+    this.dialogService.open(PopupSignDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   openPopupComment(item: any) {
