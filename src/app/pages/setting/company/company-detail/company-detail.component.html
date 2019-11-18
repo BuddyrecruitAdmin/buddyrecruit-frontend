@@ -128,6 +128,20 @@
           <label class="label">Admin Password <small>(Initial Password)</small></label>
           <input type="text" [(ngModel)]="companyDetail.adminPassword" nbInput fullWidth>
         </div>
+        <div *ngFor="let address of companyDetail.addresses">
+          <div class="form-control-group m-b-10">
+            <label class="label">Address</label>
+            <textarea type="text" nbInput fullWidth placeholder="Address" [(ngModel)]="address.address"></textarea>
+          </div>
+          <div class="form-control-group">
+            <label class="label">Province</label>
+            <input type="text" [(ngModel)]="address.province" nbInput fullWidth>
+          </div>
+          <div class="form-control-group">
+            <label class="label">Postal code</label>
+            <input type="text" [(ngModel)]="address.postalCode" nbInput>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
         <div class="form-control-group">
@@ -212,15 +226,13 @@
         <div class="col-md-6">
           <div class="form-control-group">
             <label class="label">Start Date</label>
-            <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-            <input [nbDatepicker]="startDate" [(ngModel)]="companyDetail.startDate" nbInput fullWidth disabled>
+            <input [value]="utilitiesService.convertDate(companyDetail.startDate)" nbInput fullWidth disabled>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-control-group">
             <label class="label">Expiry Date</label>
-            <nb-datepicker #expiryDate format="dd/MM/yyyy"></nb-datepicker>
-            <input [nbDatepicker]="expiryDate" [(ngModel)]="companyDetail.expiryDate" nbInput fullWidth disabled>
+            <input [value]="utilitiesService.convertDate(companyDetail.expiryDate)" nbInput fullWidth disabled>
           </div>
         </div>
       </div>
@@ -304,7 +316,31 @@
           </div>
         </div>
       </div>
-
+      <div *ngFor="let address of companyDetail.addresses" class="row">
+        <div class="col-md-12">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.address }">
+            <label class="label">Address <span class="text-red">*</span></label>
+            <textarea type="text" nbInput fullWidth placeholder="Address" [(ngModel)]="address.address"></textarea>
+            <small *ngIf="errMsg.address" class="text-red">{{ errMsg.address }}</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.province }">
+            <label class="label">Province <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="address.province" nbInput fullWidth>
+            <small *ngIf="errMsg.province" class="text-red">{{ errMsg.province }}</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.postalCode }">
+            <label class="label">Postal code <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="address.postalCode" nbInput>
+            <div>
+              <small *ngIf="errMsg.postalCode" class="text-red">{{ errMsg.postalCode }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </nb-card-body>
   <nb-card-footer>

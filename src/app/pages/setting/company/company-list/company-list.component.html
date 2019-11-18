@@ -60,9 +60,7 @@
                 nbTooltip="Edit" [routerLink]="'/employer/setting/company-detail/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="
-              refHero.isSuperAdmin && 
-              ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
-                utilitiesService.isDateLowerThanToday(item.expiryDate))">
+              refHero.isSuperAdmin && utilitiesService.isDateLowerThanToday(item.expiryDate)">
               </nb-icon>
             </div>
           </nb-card-header>
@@ -151,9 +149,7 @@
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
                 <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)" *ngIf="
-                refHero.isSuperAdmin && 
-                ( utilitiesService.isDateGreaterThanToday(item.startDate) || 
-                  utilitiesService.isDateLowerThanToday(item.expiryDate))">
+                refHero.isSuperAdmin && utilitiesService.isDateLowerThanToday(item.expiryDate)">
                   <nb-icon icon="trash-2-outline"></nb-icon>
                 </button>
               </td>

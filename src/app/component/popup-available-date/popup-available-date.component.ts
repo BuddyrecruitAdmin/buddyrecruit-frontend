@@ -22,6 +22,7 @@ export class PopupAvailableDateComponent implements OnInit {
   periods: any;
   disabled: boolean;
   result: boolean;
+  errMsg: string;
 
   constructor(
     private calendarService: CalendarService,
@@ -40,6 +41,7 @@ export class PopupAvailableDateComponent implements OnInit {
     this.disabled = false;
     this.result = false;
     this.periods = [];
+    this.errMsg = '';
     this.getAvailabelDate();
   }
 
@@ -144,35 +146,32 @@ export class PopupAvailableDateComponent implements OnInit {
   }
 
   isVisibleSave(): boolean {
+    this.errMsg = '';
     let isValid = true;
     if (!this.utilitiesService.dateIsValid(this.date)) {
       isValid = false;
+      this.errMsg = 'Please select Date.';
     }
     if (this.periods.length) {
-      let arr = [];
-      this.periods.sort(function (a, b) {
-        return a.startTime.hour - b.startTime.hour;
-      });
       this.periods.forEach((element, index) => {
         if (!element.startTime || !element.endTime) {
           isValid = false;
+          this.errMsg = 'Please input Time.';
         }
-        if (element.startTime === element.endTime) {
-          isValid = false;
-        }
-        if (element.startTime > element.endTime) {
-          isValid = false;
-        }
-        arr[index] = element
-        if (index > 0) {
-          console.log(arr[index-1].endTime.hour)
-          if (arr[index - 1].endTime.hour > element.startTime.hour) {
-            isValid = false
+        if (element.startTime.hour === element.endTime.hour) {
+          if (element.startTime.minute >= element.endTime.minute) {
+            isValid = false;
+            this.errMsg = 'Start time must be earlier than end time.';
           }
+        }
+        if (element.startTime.hour > element.endTime.hour) {
+          isValid = false;
+          this.errMsg = 'Start time must be earlier than end time.';
         }
       });
     } else {
       isValid = false;
+      this.errMsg = 'Please input Time.';
     }
     return isValid;
   }

@@ -4,7 +4,7 @@ import { CompanyService } from '../company.service';
 import { CompanyTypeService } from '../../company-type/company-type.service';
 import { ResponseCode, Paging, State } from '../../../../shared/app.constants';
 import { MESSAGE } from '../../../../shared/constants/message';
-import { DropDownValue } from '../../../../shared/interfaces/common.interface';
+import { DropDownValue, Address } from '../../../../shared/interfaces/common.interface';
 import { getRole, getContactId, setContactId } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -44,6 +44,7 @@ export interface CompanyDetail {
   intEmailPass: string;
   extEmailUser: string;
   extEmailPass: string;
+  addresses: Address[];
 }
 
 export interface ErrMsg {
@@ -64,6 +65,9 @@ export interface ErrMsg {
   intEmailPass: string;
   extEmailUser: string;
   extEmailPass: string;
+  address: string;
+  province: string;
+  postalCode: string;
 }
 
 @Component({
@@ -167,7 +171,17 @@ export class CompanyDetailComponent implements OnInit {
       intEmailUser: '',
       intEmailPass: '',
       extEmailUser: '',
-      extEmailPass: ''
+      extEmailPass: '',
+      addresses: [this.initialAddress()]
+    }
+  }
+
+  initialAddress(): Address {
+    return {
+      address: '',
+      province: '',
+      postalCode: null,
+      location: '',
     }
   }
 
@@ -189,7 +203,10 @@ export class CompanyDetailComponent implements OnInit {
       intEmailUser: '',
       intEmailPass: '',
       extEmailUser: '',
-      extEmailPass: ''
+      extEmailPass: '',
+      address: '',
+      province: '',
+      postalCode: '',
     }
   }
 
@@ -269,6 +286,15 @@ export class CompanyDetailComponent implements OnInit {
           } else {
             this.roleSelected = '1';
           }
+          if (!this.companyDetail.addresses.length) {
+            this.companyDetail.addresses = [this.initialAddress()]
+          }
+          if (this.utilitiesService.dateIsValid(response.data.startDate)) {
+            this.companyDetail.startDate = new Date(response.data.startDate);
+          }
+          if (this.utilitiesService.dateIsValid(response.data.expiryDate)) {
+            this.companyDetail.expiryDate = new Date(response.data.expiryDate);
+          }
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }
       }
@@ -302,6 +328,7 @@ export class CompanyDetailComponent implements OnInit {
     if (this.validation()) {
       this.buttonLoading = true;
       const request = this.setRequest();
+      debugger;
       if (this.state === State.Create) {
         this.service.create(request).subscribe(response => {
           this.buttonLoading = false;
@@ -402,6 +429,18 @@ export class CompanyDetailComponent implements OnInit {
       }
       if (!this.companyDetail.extEmailPass) {
         this.errMsg.extEmailPass = 'Please Input External Password';
+        isValid = false;
+      }
+      if (!this.companyDetail.addresses[0].address) {
+        this.errMsg.address = 'Please Input Address';
+        isValid = false;
+      }
+      if (!this.companyDetail.addresses[0].province) {
+        this.errMsg.province = 'Please Input Province';
+        isValid = false;
+      }
+      if (!this.companyDetail.addresses[0].postalCode) {
+        this.errMsg.postalCode = 'Please Input Postal Code';
         isValid = false;
       }
     }

@@ -76,6 +76,10 @@
               <span>{{ item.numberEmployees || '-' }}</span>
             </div>
             <div class="text-group">
+              <label class="label">Plan To Use</label>
+              <span>{{ item.planToUse || '-' }}</span>
+            </div>
+            <!-- <div class="text-group">
               <label class="label">Role in the recruitment process</label>
               <div class="m-l-15">
                 <div class="text-group">
@@ -106,7 +110,7 @@
                   </span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="text-group">
               <label class="label">Message</label>
               <span *ngIf="item.remark" class="text-dot" [nbTooltip]="item.remark">{{ item.remark || '-' }}</span>
@@ -143,7 +147,8 @@
               <th scope="col">Phone</th>
               <th scope="col">Company Name</th>
               <th scope="col" style="width: 80px;">Number of Employees</th>
-              <th scope="col">Roles</th>
+              <!-- <th scope="col">Roles</th> -->
+              <th scope="col">Plan To Use</th>
               <th scope="col" style="width: 120px;">Actions</th>
             </tr>
           </thead>
@@ -166,10 +171,13 @@
               <td>
                 <span>{{ item.numberEmployees || '-' }}</span>
               </td>
-              <td class="text-left">
+              <!-- <td class="text-left">
                 <span *ngIf="item.hero?.hr">HR</span>
                 <span *ngIf="item.hero?.manager">+ Manager</span>
                 <span *ngIf="item.hero?.payroll">+ Payroll</span>
+              </td> -->
+              <td>
+                <span>{{ item.planToUse || '-' }}</span>
               </td>
               <td class="actions">
                 <button *ngIf="!utilitiesService.dateIsValid(item.createdDate)" nbButton status="success" size="tiny"

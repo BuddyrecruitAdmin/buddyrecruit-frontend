@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { DepartmentService } from '../department.service';
 import { ResponseCode, State } from '../../../../shared/app.constants';
 import { MESSAGE } from '../../../../shared/constants/message';
-import { Addresses } from '../../../../shared/interfaces/common.interface';
+import { Address } from '../../../../shared/interfaces/common.interface';
 import { getRole } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -16,7 +16,7 @@ export interface Division {
   _id?: string;
   name: string;
   useDepartmentAddress: boolean;
-  addresses: Addresses[];
+  addresses: Address[];
   isUsed: false,
 }
 export interface Department {
@@ -24,7 +24,7 @@ export interface Department {
   name: string;
   hasDivision: boolean;
   useCompanyAddress: boolean;
-  addresses: Addresses[];
+  addresses: Address[];
   divisions?: Division[];
   active: boolean;
   isUsed: boolean;
@@ -71,7 +71,7 @@ export class DepartmentDetailComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this.state = State.Edit;
-        this.getDeatail(params.id);
+        this.getDetail(params.id);
       } else {
         this.state = State.Create;
       }
@@ -84,7 +84,7 @@ export class DepartmentDetailComponent implements OnInit {
       name: '',
       hasDivision: false,
       useCompanyAddress: true,
-      addresses: [this.initialAddresses()],
+      addresses: [this.initialAddress()],
       divisions: [],
       active: true,
       isUsed: false,
@@ -96,12 +96,12 @@ export class DepartmentDetailComponent implements OnInit {
       _id: undefined,
       name: '',
       useDepartmentAddress: true,
-      addresses: [this.initialAddresses()],
+      addresses: [this.initialAddress()],
       isUsed: false,
     }
   }
 
-  initialAddresses(): Addresses {
+  initialAddress(): Address {
     return {
       address: '',
       province: '',
@@ -167,7 +167,7 @@ export class DepartmentDetailComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.getDeatail(request._id);
+            this.getDetail(request._id);
             this.router.navigate(['/employer/setting/department']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
@@ -211,14 +211,14 @@ export class DepartmentDetailComponent implements OnInit {
               isValid = false;
               this.errMsg.divisionAddress = 'Please Input Addrees';
             }
-           if(!ele.province){
-             isValid = false;
-             this.errMsg.divisionProvince = 'Please Input Province';
-           }
-           if(!ele.postalCode){
-            isValid = false;
-            this.errMsg.divisionPostalCode = 'Please Input Postcode';
-           }
+            if (!ele.province) {
+              isValid = false;
+              this.errMsg.divisionProvince = 'Please Input Province';
+            }
+            if (!ele.postalCode) {
+              isValid = false;
+              this.errMsg.divisionPostalCode = 'Please Input Postcode';
+            }
           })
         }
       });
@@ -248,7 +248,7 @@ export class DepartmentDetailComponent implements OnInit {
     return request;
   }
 
-  getDeatail(_id: any) {
+  getDetail(_id: any) {
     this.service.getDetail(_id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.departmentDetail = _.cloneDeep(response.data);
@@ -261,7 +261,7 @@ export class DepartmentDetailComponent implements OnInit {
           });
         }
         if (this.departmentDetail.divisions) {
-          const addresses = this.initialAddresses();
+          const addresses = this.initialAddress();
           this.departmentDetail.divisions.map(item => {
             item.addresses = item.addresses || [addresses];
           });
@@ -285,7 +285,7 @@ export class DepartmentDetailComponent implements OnInit {
 
   checkDivisionAddress(index: number) {
     if (!this.departmentDetail.divisions[index].addresses.length) {
-      this.departmentDetail.divisions[index].addresses.push(this.initialAddresses());
+      this.departmentDetail.divisions[index].addresses.push(this.initialAddress());
     }
   }
 

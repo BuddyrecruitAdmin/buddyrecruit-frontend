@@ -2,7 +2,7 @@
   <h3>User <small class="text-cap">({{ state }})</small></h3>
 </div>
 
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     User Detail
     <div class="pull-right">

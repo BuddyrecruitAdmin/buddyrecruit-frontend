@@ -25,6 +25,7 @@ export class CandidateComponent implements OnInit {
   loading: boolean;
   checked: boolean;
   filter: {
+    isFilter: boolean,
     data: {
       jobPosition: DropDownValue[],
       jobStatus: DropDownValue[],
@@ -54,6 +55,7 @@ export class CandidateComponent implements OnInit {
     this.checked = true;
     this.items = [];
     this.filter = {
+      isFilter: false,
       data: {
         jobPosition: [],
         jobStatus: [],
@@ -90,11 +92,12 @@ export class CandidateComponent implements OnInit {
       pageSize: event.pageSize,
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.loading = true;
     this.search();
   }
 
   search() {
+    this.items = [];
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
@@ -139,16 +142,16 @@ export class CandidateComponent implements OnInit {
   }
 
   getList() {
+    this.items = [];
+    this.loading = true;
     this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        console.log(response)
+        this.items = response.data;
         this.paging.length = response.totalDataSize;
-        console.log(this.paging.length)
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
           this.search();
         }
-        this.items = response.data;
         this.items.forEach(element => {
           //job status
           this.filter.data.jobStatus.push({
@@ -199,7 +202,7 @@ export class CandidateComponent implements OnInit {
               item.refJR.refStatus.class = "label-gray";
               break;
           }
-        })
+        });
         this.loading = false;
       }
     })
@@ -234,6 +237,14 @@ export class CandidateComponent implements OnInit {
         this.search();
       }
     });
+  }
+
+  filterToggle() {
+    this.filter.isFilter = !this.filter.isFilter;
+    if (!this.filter.isFilter) {
+      this.clearFilter();
+      this.search();
+    }
   }
 
   clearFilter() {

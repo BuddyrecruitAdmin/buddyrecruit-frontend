@@ -19,6 +19,7 @@ export interface ContactUs {
     payroll: boolean;
     manager: boolean;
   },
+  planToUse: string;
 }
 export interface ErrMsg {
   firstName: string;
@@ -28,6 +29,7 @@ export interface ErrMsg {
   phone: string;
   numberEmployees: string;
   userRole: string;
+  planToUse: string;
 }
 
 @Component({
@@ -66,6 +68,28 @@ export class IndexComponent implements OnInit {
       value: 4
     }
   ];
+  planOptions = [
+    {
+      label: 'As soon as possible',
+      value: 'As soon as possible'
+    },
+    {
+      label: 'Dec 2019',
+      value: 'Dec 2019'
+    },
+    {
+      label: 'Jan 2020',
+      value: 'Jan 2020'
+    },
+    {
+      label: 'Feb 2020',
+      value: 'Feb 2020'
+    },
+    {
+      label: 'After Feb 2020',
+      value: 'After Feb 2020'
+    },
+  ]
   isSubmitted = false;
 
   constructor(
@@ -119,13 +143,14 @@ export class IndexComponent implements OnInit {
       email: '',
       phone: '',
       numberEmployees: null,
-      userRole: 1,
+      userRole: null,
       remark: '',
       hero: {
         hr: false,
         payroll: false,
         manager: false,
       },
+      planToUse: 'As soon as possible'
     };
   }
 
@@ -138,6 +163,7 @@ export class IndexComponent implements OnInit {
       phone: '',
       numberEmployees: '',
       userRole: '',
+      planToUse: ''
     };
   }
 
@@ -156,33 +182,46 @@ export class IndexComponent implements OnInit {
     let isValid = true;
     this.errMsg = this.initialErrMsg();
     if (!this.contactUs.firstName) {
-      this.errMsg.firstName = 'Please enter first name';
+      this.errMsg.firstName = 'Please enter first name.';
       isValid = false;
     }
     if (!this.contactUs.lastName) {
-      this.errMsg.lastName = 'Please enter last name';
+      this.errMsg.lastName = 'Please enter last name.';
       isValid = false;
     }
     if (!this.contactUs.email) {
-      this.errMsg.email = 'Please enter work email';
+      this.errMsg.email = 'Please enter work email.';
+      isValid = false;
+    } else if (!this.utilitiesService.isValidEmail(this.contactUs.email)) {
+      this.errMsg.email = 'Incorrect email format. Please specify correct format.';
       isValid = false;
     }
     if (!this.contactUs.phone) {
-      this.errMsg.phone = 'Please enter phone number';
+      this.errMsg.phone = 'Please enter phone number.';
+      isValid = false;
+    } else if (!this.utilitiesService.isValidPhoneNumber(this.contactUs.phone)) {
+      this.errMsg.phone = 'Incorrect phone number format. Please specify correct format.';
       isValid = false;
     }
     if (!this.contactUs.companyName) {
-      this.errMsg.companyName = 'Please enter company name';
+      this.errMsg.companyName = 'Please enter company name.';
       isValid = false;
     }
     if (!this.contactUs.numberEmployees) {
-      this.errMsg.numberEmployees = 'Please enter number of empolyees';
+      this.errMsg.numberEmployees = 'Please enter number of empolyees.';
+      isValid = false;
+    } else if (!this.utilitiesService.isValidNumber(this.contactUs.numberEmployees.toString(), 7)) {
+      this.errMsg.numberEmployees = 'Please specify correct format.';
       isValid = false;
     }
-    if (!this.contactUs.userRole) {
-      this.errMsg.userRole = 'Please select role in the recruitment process';
+    if (!this.contactUs.planToUse) {
+      this.errMsg.planToUse = 'Please select plan to use.';
       isValid = false;
     }
+    // if (!this.contactUs.userRole) {
+    //   this.errMsg.userRole = 'Please select role in the recruitment process.';
+    //   isValid = false;
+    // }
     return isValid;
   }
 

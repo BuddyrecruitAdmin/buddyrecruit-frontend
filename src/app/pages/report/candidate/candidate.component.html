@@ -1,37 +1,38 @@
 <div class="content-header with-shadow">
-  <div class="row">
-    <div class="col-sm-7">
-      <h3>Candidate Report</h3>
-    </div>
-    <div class="col-sm-5">
-      <div class="input-group">
-        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="paging.pageIndex = 0; search(true)">
-        <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
-        </div>
-      </div>
-    </div>
-  </div>
+  <h3>Candidate Report</h3>
 </div>
+
 <!-- card search -->
 <nb-card>
   <nb-card-body>
-    <div class="filter-block">
-      <div class="row">
-        <div class="col-md-1">
-          <label class="label" style="margin-top: 10px;">Filters:</label>
+    <div class="row">
+      <div class="col-md-6 ">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
         </div>
-        <div class="col-md-3">
-          <span>
-            <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox>
-          </span>
+      </div>
+      <div class="col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
+            (click)="filterToggle()">
+          </nb-action>
+        </nb-actions>
+      </div>
+    </div>
+    <div *ngIf="filter.isFilter" class="filter-block">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="label text-light-gray">Filters:</label>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">
-            <label>Department</label>
+            <label class="label">Department</label>
             <nb-select multiple [(selected)]="filter.selected.department" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let dep of filter.data.department" [value]="dep.value">
@@ -42,7 +43,7 @@
         </div>
         <div class="col-md-4">
           <div class="form-control-group">
-            <label>Job Position</label>
+            <label class="label">Job Position</label>
             <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let option of filter.data.jobPosition" [value]="option.value">
@@ -53,7 +54,7 @@
         </div>
         <div class="col-md-4">
           <div class="form-control-group">
-            <label>Job Status</label>
+            <label class="label">Job Status</label>
             <nb-select multiple [(selected)]="filter.selected.jobStatus" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let option of filter.data.jobStatus" [value]="option.value">
@@ -66,7 +67,7 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">
-            <label>Stage</label>
+            <label class="label">Stage</label>
             <nb-select multiple [(selected)]="filter.selected.stage" (selectedChange)="search(true)" placeholder="All"
               fullWidth>
               <nb-option *ngFor="let stage of filter.data.stage" [value]="stage.value">{{stage.label}}</nb-option>
@@ -75,90 +76,97 @@
         </div>
         <div class="col-md-4">
           <div class="form-control-group">
-            <label>Sub Stage</label>
+            <label class="label">Sub Stage</label>
             <nb-select multiple [(selected)]="filter.selected.subStage" (selectedChange)="search(true)"
               placeholder="All" fullWidth>
               <nb-option *ngFor="let sub of filter.data.subStage" [value]="sub.value">{{sub.label}}</nb-option>
             </nb-select>
           </div>
         </div>
-        <div class="col-md-4">
-          <button style="margin-top: 28px;" nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
-            Clear Filter
-          </button>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-control-group">
+            <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-control-group">
+            <button nbButton status="default" class="pull-right" (click)="clearFilter()">
+              Clear Filter
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    <br>
   </nb-card-body>
 </nb-card>
-<!--  -->
+
 <nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
   nbSpinnerMessage="Loading...">
   <nb-card-body>
     <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
   </nb-card-body>
 </nb-card>
-<!-- data and filter -->
+
 <div *ngIf="!loading && items.length">
   <nb-card>
     <nb-card-body>
       <div class="table-responsive">
         <table class="table table-bordered table-striped">
           <thead>
-            <tr>
-              <th scope="col" style="font-size: 14px;">Job Position</th>
-              <th scope="col" style="width: 170px;font-size: 14px;">Job Status</th>
-              <th scope="col" style="width: 150px;font-size: 14px;">Candidate Name</th>
-              <th scope="col" style="width: 100px;font-size: 14px;">Stage</th>
-              <th scope="col" style="width: 120px;font-size: 14px;">Sub Stage</th>
-              <th scope="col" style="width: 100px;font-size: 14px;">Action Date</th>
-              <th *ngIf="checked" scope="col" style="font-size: 14px;">Reject Reason</th>
-              <th *ngIf="checked" scope="col" style="width: 90px;font-size: 14px;">Reject By</th>
+            <tr style="font-size: 14px;">
+              <th scope="col">Candidate Name</th>
+              <th scope="col" style="width: 170px;">Job Position</th>
+              <th scope="col" style="width: 90px;">Job Status</th>
+              <th scope="col" style="width: 120px;">Stage</th>
+              <th scope="col" style="width: 120px;">Sub Stage</th>
+              <th scope="col" style="width: 120px;">Last changed update</th>
+              <th *ngIf="checked" scope="col">Reject Reason</th>
+              <th *ngIf="checked" scope="col" style="width: 90px;">Reject By</th>
             </tr>
           </thead>
           <tbody>
             <!-- *ngFor="let item of items;" -->
-            <tr *ngFor="let item of items;">
+            <tr *ngFor="let item of items;" style="font-size: 14px;">
               <td class="text-left">
-                <span style="font-size: 14px;" [nbTooltip]="item?.refJR?.refJD?.position">
-                  {{ item?.refJR?.refJD?.position || '-' }}
-                </span>
-              </td>
-              <td>
-                <span style="font-size: 14px;" class="label1" [ngClass]="item.refJR.refStatus.class"
-                  [nbTooltip]="item?.refJR?.refStatus?.name">
-                  {{ item?.refJR?.refStatus?.name || '-' }}
-                </span>
-              </td>
-              <td class="text-left">
-                <span style="font-size: 14px;" class="link" (click)="info(item)"
+                <span class="link text-cap" (click)="info(item)"
                   [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
                   {{ utilitiesService.setFullname(item.refCandidate) }}
                 </span>
               </td>
+              <td class="text-left">
+                <span [nbTooltip]="item?.refJR?.refJD?.position">
+                  {{ item?.refJR?.refJD?.position || '-' }}
+                </span>
+              </td>
               <td>
-                <span style="font-size: 14px;" [nbTooltip]="item?.refStage?.name">
+                <small class="label" [ngClass]="item.refJR.refStatus.class">
+                  {{ item?.refJR?.refStatus?.name || '-' }}
+                </small>
+              </td>
+              <td>
+                <span>
                   {{ item?.refStage?.name || '-' }}
                 </span>
               </td>
               <td>
-                <span style="font-size: 14px;" [nbTooltip]="item?.refStage?.name">
+                <span>
                   {{ item?.refSubStage?.name || '-' }}
                 </span>
               </td>
               <td>
-                <span style="font-size: 14px;" [nbTooltip]="item?.actionDate">
+                <span>
                   {{ utilitiesService.convertDateTimeFromSystem(item?.actionDate) || '-' }}
                 </span>
               </td>
               <td *ngIf="checked">
-                <span style="font-size: 14px;">
+                <span>
                   {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
                 </span>
               </td>
               <td *ngIf="checked">
-                <span style="font-size: 14px;">
+                <span>
                   {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
                 </span>
               </td>
