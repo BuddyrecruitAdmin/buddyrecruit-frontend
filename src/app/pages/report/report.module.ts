@@ -21,7 +21,8 @@ import {
   NbTreeGridModule,
   NbDialogModule,
   NbWindowModule,
-  NbAccordionModule
+  NbAccordionModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -145,7 +146,8 @@ import { FeedbackComponent } from './feedback/feedback.component';
     Ng2SmartTableModule,
     NbDialogModule.forRoot(),
     NbWindowModule.forChild(),
-    NbAccordionModule
+    NbAccordionModule,
+    NbSpinnerModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

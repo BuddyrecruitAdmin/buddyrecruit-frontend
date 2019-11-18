@@ -30,6 +30,8 @@ export class UserListComponent implements OnInit {
   showTips: boolean;
   devices: Devices;
   isGridLayout: boolean;
+  loading: boolean;
+
   constructor(
     private router: Router,
     private service: UserService,
@@ -50,6 +52,7 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.isOverQuota = false;
     this.showTips = false;
     this.keyword = '';
@@ -68,6 +71,7 @@ export class UserListComponent implements OnInit {
   }
 
   search() {
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
@@ -93,6 +97,7 @@ export class UserListComponent implements OnInit {
         this.isOverQuota = response.isOverQuota;
         this.showTips = response.isOverQuota;
       }
+      this.loading = false;
     });
   }
 

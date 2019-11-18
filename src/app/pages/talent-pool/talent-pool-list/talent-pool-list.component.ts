@@ -31,7 +31,7 @@ export class TalentPoolListComponent implements OnInit {
   loading: boolean;
   isGridLayout: boolean;
   filter: {
-    isFilter: boolean;
+    isFilter: boolean,
     data: {
       departments: DropDownValue[],
       divisions: DropDownGroup[]

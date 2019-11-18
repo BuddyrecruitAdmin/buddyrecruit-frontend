@@ -63,7 +63,8 @@
             </div>
           </nb-card-header>
           <nb-card-body>
-            <div class="text-group">
+            <div class="text-group" (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint"
+              nbPopoverPlacement="top">
               <label class="label">Remark</label>
               <span>{{ item.remark || '-' }}</span>
             </div>
@@ -105,9 +106,8 @@
             <tr>
               <th scope="col">Job Name</th>
               <th scope="col">Remark</th>
-              <th scope="col">Status</th>
+              <th scope="col" style="width: 90px;">Status</th>
               <th scope="col">Last update by</th>
-
               <th *ngIf="role.refAuthorize.configuration.jobPosition.editable" scope="col" style="width: 110px;">Actions
               </th>
             </tr>
@@ -117,8 +117,9 @@
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
-              <td>
-                <span>{{ item.remark || '-' }}</span>
+              <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint" nbPopoverPlacement="top"
+                class="text-dot text-left" style="width: 300px;">
+                <div class="text-dot" style="width: 300px;">{{ item.remark || '-' }}</div>
               </td>
               <td>
                 <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
@@ -152,8 +153,6 @@
   </nb-card>
 </div>
 
-
-
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-header>
@@ -182,4 +181,8 @@
       <button nbButton status="success" (click)="save()" [disabled]="!itemDialog.name">Save</button>
     </nb-card-footer>
   </nb-card>
+</ng-template>
+
+<ng-template #remark>
+  {{ itemDialog.remark }}
 </ng-template>

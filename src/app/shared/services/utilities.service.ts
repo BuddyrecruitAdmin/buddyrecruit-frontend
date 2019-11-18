@@ -237,7 +237,7 @@ export class UtilitiesService {
       }
     }
     text = text.trim();
-    if(month === -1){
+    if (month === -1) {
       return text = "";
     }
     return text;
@@ -397,6 +397,37 @@ export class UtilitiesService {
         break;
     }
     return statusClass;
+  }
+
+  getRole(): any {
+    return getRole();
+  }
+
+  isValidEmail(email: string): boolean {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (email && regex.test(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isValidPhoneNumber(phone: string): boolean {
+    var regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    if (phone && regex.test(phone)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isValidNumber(number: string, digits: number): boolean {
+    var regex = /^\d*$/;
+    if (number && number.length <= digits && regex.test(number)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

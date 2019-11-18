@@ -809,6 +809,7 @@
 
   nb-popover {
     min-width: 300px;
+    max-width: 400px;
     padding: 1rem;
   }
 
@@ -1394,20 +1395,22 @@
     input:hover,
     input:focus,
     input:active,
+    textarea,
+    textarea:hover,
+    textarea:focus,
+    textarea:active,
     nb-select .select-button,
     nb-select .select-button:hover,
     nb-select .select-button:focus,
     nb-select .select-button:active {
       border-color: var(--color-red);
     }
-
   }
   .form-control-group.has-error {
     .ng2-tag-input,
     .ng2-tag-input.ng2-tag-input--focused {
       border-color: var(--color-red) !important;
     }
-
   }
   .input-group.has-error{
     input,
