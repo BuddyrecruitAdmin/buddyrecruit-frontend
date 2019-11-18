@@ -264,6 +264,7 @@ export class PopupCvComponent implements OnInit {
     if (this.items.certificate.length > 0) {
       this.items.certificate = this.convertArray(this.items.certificate);
     }
+    this.items.candidateFlow.comments = [];
     const request = _.cloneDeep(this.items);
     return request
   }

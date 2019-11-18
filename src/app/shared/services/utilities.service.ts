@@ -409,7 +409,7 @@ export class UtilitiesService {
       return true;
     } else {
       return false;
-    }
+    } 
   }
 
   isValidPhoneNumber(phone: string): boolean {
