@@ -65,8 +65,14 @@
                   'icon-default': !colorStatus.dobBug }"></span>
             </label>
             <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-            <input [nbDatepicker]="startDate" [(ngModel)]="items.birth" nbInput fullWidth placeholder="dd/mm/yyyy"
-              [disabled]="!editable">
+            <div class="input-group">
+              <input [nbDatepicker]="startDate" [(ngModel)]="items.birth" nbInput fullWidth [disabled]="!editable"
+                style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" [ngClass]="{ 'text-green': editable, 'text-light-gray': !editable }">
+                </nb-icon>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-md-2 col-lg-2">
@@ -243,11 +249,17 @@
 
     <!-- InterView -->
     <div class="border-padtop">
-      <div class="title" *ngIf="items.candidateFlow?.pendingInterviewInfo.flag">
-        <label class="label">Comments</label>
+      <div class="title" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+        <label class="label">Comments<span class="link underline" nbTooltip="See more result"
+            (click)="infoResult(items.candidateFlow)">
+            <nb-icon icon="info-outline"></nb-icon>
+          </span><span><span style="color : var(--color-green)">ผ่าน: </span>{{ totalPass }}, </span>
+          <span><span style="color : orange">รอพิจารณา: </span>{{ totalCompare}}, </span>
+          <span><span style="color : red">ไม่ผ่าน: </span>{{ totalReject }}</span>
+        </label>
       </div>
-      <div class="border-all box-pad box-header with-border">
-        <nb-card *ngFor="let comment of items.candidateFlow?.pendingInterviewInfo.comments; let i = index">
+      <!-- <div class="border-all box-pad box-header with-border">
+        <nb-card *ngFor="let comment of items.candidateFlow?.pendingInterviewScoreInfo.evaluation; let i = index">
           <nb-card-header>
             <div class="title">
               <nb-user size="medium" [name]="utilitiesService.setFullname(comment.refUser)"
@@ -259,7 +271,7 @@
             {{ comment.message }}
           </nb-card-body>
         </nb-card>
-      </div>
+      </div> -->
     </div>
     <!-- Work Experience -->
     <div class="border-padtop">
@@ -335,7 +347,7 @@
               <div class="col-md-6 form-group">
                 <label class="control-label">Degree
                 </label>
-                <nb-select [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }"
+                <nb-select [(ngModel)]="education.refDegree._id" [ngModelOptions]="{ standalone: true }"
                   [disabled]="!editable" Faria-hidden="true" fullWidth>
                   <nb-option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</nb-option>
                 </nb-select>
@@ -394,7 +406,7 @@
         <div class="row">
           <div class="col-lg-6">
             <tag-input [(ngModel)]="items.hardSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
-              [maxItems]="15" secondaryPlaceholder="Hard Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
+              [maxItems]="35" secondaryPlaceholder="Hard Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
           <div class="col-lg-6">
@@ -433,7 +445,7 @@
         <div class="row">
           <div class="col-lg-6">
             <tag-input [(ngModel)]="items.softSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
-              [maxItems]="15" secondaryPlaceholder="Soft Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
+              [maxItems]="35" secondaryPlaceholder="Soft Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
           <div class="col-lg-6">
@@ -474,7 +486,7 @@
         <div class="row">
           <div class="col-lg-6">
             <tag-input [(ngModel)]="items.certificate" [removable]="editable" [editable]="editable"
-              [disable]="!editable" [maxItems]="15" secondaryPlaceholder="Certificate" placeholder="+"
+              [disable]="!editable" [maxItems]="35" secondaryPlaceholder="Certificate" placeholder="+"
               [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>

@@ -7,4 +7,19 @@ nb-card-footer input {
   width: calc(100% - 125px) !important;
   max-width: 100% !important;
 }
-
+.btn-outline-upload{
+  color: var(--color-green);
+  background-color: transparent;
+  background-image: none;
+  border-color: var(--color-green);
+}
+.btn-outline-upload:disabled{
+  color: var(--color-light-gray);
+  background-color: transparent;
+  background-image: none;
+  border-color: var(--color-light-gray);
+  cursor: not-allowed;
+}
+[nbButton]:disabled {
+cursor: not-allowed;
+}

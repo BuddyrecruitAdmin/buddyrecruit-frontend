@@ -239,5 +239,12 @@ export const API_ENDPOINT = {
     DEPARTMENT: "dropdown/department",
     JOBPOSITION: "dropdown/position",
     USER: "dropdown/user",
+  },
+  CONTACT: {
+    CREATE: "contact/create",
+    LIST: "contact/list",
+    EDIT: "contact/edit",
+    DETAIL: "contact/detail",
+    DELETE: "contact/delete",
   }
 };

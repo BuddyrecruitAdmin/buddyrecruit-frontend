@@ -3,7 +3,7 @@ import { ResponseCode } from '../../shared/app.constants';
 import { JdService } from '../../pages/jd/jd.service';
 import { PopupCVService } from './popup-cv.service';
 import { NbDialogService, NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName, setUserCandidate } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -11,6 +11,7 @@ import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { Router, ActivatedRoute } from "@angular/router";
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-feedback.component';
+import { PopupInterviewResultComponent } from '../../component/popup-interview-result/popup-interview-result.component';
 import { request } from 'https';
 import * as _ from 'lodash';
 @Component({
@@ -22,6 +23,9 @@ export class PopupCvComponent implements OnInit {
   _id: any;
   role: any;
   totalYear: any;
+  totalPass: any;
+  totalCompare: any;
+  totalReject: any;
   totalMonth: any;
   innerWidth: any;
   innerHeight: any;
@@ -162,6 +166,34 @@ export class PopupCvComponent implements OnInit {
             this.totalYear = 0;
           }
         }
+        if (this.items.education.length > 0) {
+          this.items.education.map(ele => {
+            if (!ele.refDegree) {
+              ele.refDegree = { _id: undefined };
+              // return ele.refDegree
+            }
+          })
+        }
+        if (this.items.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
+          this.totalPass = 0;
+          this.totalCompare = 0;
+          this.totalReject = 0;
+          this.items.candidateFlow.pendingInterviewScoreInfo.evaluation.map((element) => {
+            if (element.rank.selected === 1) {
+              this.totalPass += 1;
+            }
+            else if (element.rank.selected === 2) {
+              this.totalCompare += 1;
+            } else {
+              this.totalReject += 1;
+            }
+          });
+          let fullResult = '';
+          fullResult = 'ผ่าน' + ' : ' + this.totalPass + ' , ' + 'รอพิจารณา' + ' : '
+            + this.totalCompare + ' , ' + 'ไม่ผ่าน' + ' : ' + this.totalReject;
+          fullResult = fullResult.trim();
+          this.items.result = fullResult;
+        }
         this.changeColor(this.items);
       } else {
         this.showToast('danger', 'Error Message', response.message);
@@ -232,6 +264,7 @@ export class PopupCvComponent implements OnInit {
     if (this.items.certificate.length > 0) {
       this.items.certificate = this.convertArray(this.items.certificate);
     }
+    this.items.candidateFlow.comments = [];
     const request = _.cloneDeep(this.items);
     return request
   }
@@ -293,7 +326,7 @@ export class PopupCvComponent implements OnInit {
   }
 
   openApplication(id: any) {
-    const path = '/auth/appform/view/' + id;
+    const path = '/employer/appform/view/' + id;
     this.router.navigate([path])
   }
 
@@ -315,6 +348,18 @@ export class PopupCvComponent implements OnInit {
       setBugCandidateId();
       this.getList();
     });
+  }
+
+  infoResult(item: any) {
+    setUserCandidate(item);
+    this.dialogService.open(PopupInterviewResultComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setUserCandidate();
+    })
   }
 
   changeColor(item) {

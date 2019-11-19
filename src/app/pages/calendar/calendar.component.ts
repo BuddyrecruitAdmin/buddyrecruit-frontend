@@ -355,7 +355,6 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-
   getInterviewUsers(jrId: any) {
     this.users = [];
     this.service.getListByJR(jrId).subscribe(response => {

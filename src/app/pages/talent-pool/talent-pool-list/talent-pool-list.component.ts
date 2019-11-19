@@ -31,7 +31,7 @@ export class TalentPoolListComponent implements OnInit {
   loading: boolean;
   isGridLayout: boolean;
   filter: {
-    isFilter: boolean;
+    isFilter: boolean,
     data: {
       departments: DropDownValue[],
       divisions: DropDownGroup[]
@@ -224,7 +224,7 @@ export class TalentPoolListComponent implements OnInit {
     setJdId(item.refJD._id);
     setJdName(item.refJD.position);
     setJrId(item._id);
-    this.router.navigate(["/talent-pool/detail"]);
+    this.router.navigate(["/employer/talent-pool/detail"]);
   }
 
   changePaging(event) {

@@ -58,6 +58,9 @@
 
   --color-dark-green: #34B76B;
 }
+:focus {
+  outline: none;
+}
 
 .nb-theme-default {
 
@@ -254,7 +257,7 @@
   .content-header h5 {
     font-family: inherit;
     font-weight: bold;
-    margin: 0;
+    // margin: 0;
     color: var(--color-gray);
   }  
   .content-header .breadcrumb {
@@ -438,6 +441,11 @@
     color: var(--color-white);
     opacity: 0.8;
   }
+  [nbButton].appearance-filled[disabled] {
+    background-color: #edf1f7;
+    border-color: #edf1f7;
+    color: #c5cee0;
+  }
 
   [nbButton].appearance-outline {
     background: none;
@@ -449,10 +457,50 @@
     background: var(--color-light-gray);
     opacity: 0.8;
   }
-  [nbButton].appearance-filled[disabled] {
-    background-color: #edf1f7;
-    border-color: #edf1f7;
-    color: #c5cee0;
+  [nbButton].appearance-outline.status-primary {
+    border-color: var(--color-blue);
+    color: var(--color-blue);
+  }
+  [nbButton].appearance-outline.status-primary:not([disabled]):hover {
+    border-color: var(--color-blue);
+    background-color: var(--color-blue);
+    color: var(--color-white);
+  }
+  [nbButton].appearance-outline.status-success {
+    border-color: var(--color-green);
+    color: var(--color-green);
+  }
+  [nbButton].appearance-outline.status-success:not([disabled]):hover {
+    border-color: var(--color-green);
+    background-color: var(--color-green);
+    color: var(--color-white);
+  }
+  [nbButton].appearance-outline.status-danger {
+    border-color: var(--color-red);
+    color: var(--color-red);
+  }
+  [nbButton].appearance-outline.status-danger:not([disabled]):hover {
+    border-color: var(--color-red);
+    background-color: var(--color-red);
+    color: var(--color-white);
+  }
+  [nbButton].appearance-outline.status-info {
+    border-color: var(--color-aqua);
+    color: var(--color-aqua);
+  }
+  [nbButton].appearance-outline.status-info:not([disabled]):hover {
+    border-color: var(--color-aqua);
+    background-color: var(--color-aqua);
+    color: var(--color-white);
+  }
+  [nbButton].appearance-outline.status-warning {
+    border-color: var(--color-orange);
+    color: var(--color-orange);
+  }
+  [nbButton].appearance-outline.status-warning:not([disabled]):hover {
+    border-color: var(--color-orange);
+    background-color: var(--color-orange);
+    color: var(--color-white);
   }
 
   // --------------------------------------------------------------------
@@ -495,6 +543,8 @@
     }
   }
 
+
+
   .input-hidding {
     width: 92px;
     height: 34px;
@@ -518,6 +568,7 @@
       margin-right: 0.25rem;
     }
   }
+
 
   // --------------------------------------------------------------------
   // CARD
@@ -758,6 +809,7 @@
 
   nb-popover {
     min-width: 300px;
+    max-width: 400px;
     padding: 1rem;
   }
 
@@ -780,6 +832,10 @@
 
   nb-toastr-container {
     margin-top: 5rem;
+  }
+
+  nb-accordion nb-accordion-item-body .item-body {
+    overflow-y: scroll;
   }
 
   // --------------------------------------------------------------------
@@ -1054,6 +1110,11 @@
   }
   .text-cap {
     text-transform: capitalize;
+  }
+  .text-dot {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .first-letter-cap:first-letter {
     text-transform: uppercase;
@@ -1334,13 +1395,30 @@
     input:hover,
     input:focus,
     input:active,
+    textarea,
+    textarea:hover,
+    textarea:focus,
+    textarea:active,
     nb-select .select-button,
     nb-select .select-button:hover,
     nb-select .select-button:focus,
     nb-select .select-button:active {
       border-color: var(--color-red);
     }
-
+  }
+  .form-control-group.has-error {
+    .ng2-tag-input,
+    .ng2-tag-input.ng2-tag-input--focused {
+      border-color: var(--color-red) !important;
+    }
+  }
+  .input-group.has-error{
+    input,
+    input:hover,
+    input:focus,
+    input:active{
+      border-color: var(--color-red);
+    }
   }
 
   // --------------------------------------------------------------------

@@ -42,3 +42,6 @@
   .angular-editor-textarea { 
     min-height: 200px !important;
   }
+  .mailAfter::before{
+    content: ',';
+  }

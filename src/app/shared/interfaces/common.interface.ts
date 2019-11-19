@@ -70,11 +70,12 @@ export interface Paging {
   pageSizeOptions: number[];
 }
 
-export interface Addresses {
+export interface Address {
   address: string;
   province: string;
   postalCode: Number;
   location?: string;
+  isDefault?: boolean;
 }
 
 export interface Devices {

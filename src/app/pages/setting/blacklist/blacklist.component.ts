@@ -67,8 +67,13 @@ export class BlacklistComponent implements OnInit {
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
-        'firstname',
-        'lastname',
+        'refCandidate.firstname',
+        'refCandidate.lastname',
+        'refCandidateFlow.refJR.refJD.position',
+        'refCandidateFlow.refJR.department.name',
+        'refCandidateFlow.refJR.division.name',
+        'refCandidateFlow.refStage.refMain.name',
+        'refReject.name',
       ]
     };
     this.items = [];
@@ -113,7 +118,7 @@ export class BlacklistComponent implements OnInit {
       setCandidateId();
     });
   }
-
+  
   changeLayout(value) {
     this.isGridLayout = value;
     setIsGridLayout(value);

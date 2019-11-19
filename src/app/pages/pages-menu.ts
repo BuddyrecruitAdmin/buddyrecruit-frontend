@@ -4,7 +4,7 @@ export const MENU_HOME: NbMenuItem[] = [
   {
     title: 'Home',
     icon: 'home-outline',
-    link: '/home',
+    link: '/employer/home',
     home: true,
     hidden: false,
   }
@@ -19,7 +19,7 @@ export const MENU_DASHBOARD: NbMenuItem[] = [
   {
     title: 'Dashboard',
     icon: 'pie-chart-outline',
-    link: '/dashboard',
+    link: '/employer/dashboard',
     home: true,
     hidden: false,
   }
@@ -34,13 +34,13 @@ export const MENU_MASTER_DATA: NbMenuItem[] = [
   {
     title: 'Job Description',
     icon: 'list-outline',
-    link: '/jd/list',
+    link: '/employer/jd/list',
     hidden: false,
   },
   {
     title: 'Job Request',
     icon: 'done-all-outline',
-    link: '/jr/list',
+    link: '/employer/jr/list',
     hidden: false,
   },
 ];
@@ -54,37 +54,37 @@ export const MENU_PROCESS_FLOW: NbMenuItem[] = [
   {
     title: 'Talent Pool',
     icon: 'person-done-outline',
-    link: '/talent-pool/list',
+    link: '/employer/talent-pool/list',
     hidden: false,
   },
   {
     title: 'Pending Exam',
     icon: 'edit-outline',
-    link: '/exam/list',
+    link: '/employer/exam/list',
     hidden: false,
   },
   {
     title: 'Pending Appointment',
     icon: 'clock-outline',
-    link: '/appointment/list',
+    link: '/employer/appointment/list',
     hidden: false,
   },
   {
     title: 'Pending Interview',
     icon: 'people-outline',
-    link: '/interview/list',
+    link: '/employer/interview/list',
     hidden: false,
   },
   {
     title: 'Pending Sign Contract',
     icon: 'person-add-outline',
-    link: '/sign-contract/list',
+    link: '/employer/sign-contract/list',
     hidden: false,
   },
   {
     title: 'Onboard',
     icon: 'checkmark-circle-outline',
-    link: '/onboard/list',
+    link: '/employer/onboard/list',
     hidden: false,
   },
 ];
@@ -108,12 +108,12 @@ export const MENU_REPORT: NbMenuItem[] = [
 export const MENU_REPORT_CHILD: NbMenuItem[] = [
   {
     title: 'Candidate Report',
-    link: '/report/candidate',
+    link: '/employer/report/candidate',
     hidden: false,
   },
   {
     title: 'Feedback Report',
-    link: '/report/feedback',
+    link: '/employer/report/feedback',
     hidden: false,
   },
 ];
@@ -137,77 +137,77 @@ export const MENU_SETTING: NbMenuItem[] = [
 export const MENU_SETTING_CHILD: NbMenuItem[] = [
   {
     title: 'Company Type',
-    link: '/setting/company-type',
+    link: '/employer/setting/company-type',
     hidden: false,
   },
   {
     title: 'Company',
-    link: '/setting/company',
+    link: '/employer/setting/company',
     hidden: false,
   },
   {
     title: 'Department',
-    link: '/setting/department',
+    link: '/employer/setting/department',
     hidden: false,
   },
   {
     title: 'Division',
-    link: '/setting/division',
+    link: '/employer/setting/division',
     hidden: false,
   },
   {
     title: 'Authorize',
-    link: '/setting/authorize',
+    link: '/employer/setting/authorize',
     hidden: false,
   },
   {
     title: 'User',
-    link: '/setting/user',
+    link: '/employer/setting/user',
     hidden: false,
   },
   {
     title: 'Job Position',
-    link: '/setting/job-position',
+    link: '/employer/setting/job-position',
     hidden: false,
   },
   {
     title: 'Evaluation',
-    link: '/setting/evaluation',
+    link: '/employer/setting/evaluation',
     hidden: false,
   },
   {
     title: 'Location',
-    link: '/setting/location',
+    link: '/employer/setting/location',
     hidden: false,
   },
   {
     title: 'Mail Template',
-    link: '/setting/mail-template',
+    link: '/employer/setting/mail-template',
     hidden: false,
   },
   {
     title: 'Rejection',
-    link: '/setting/rejection',
+    link: '/employer/setting/rejection',
     hidden: false,
   },
   {
     title: 'Reject Stage',
-    link: '/setting/reject-stage',
+    link: '/employer/setting/reject-stage',
     hidden: false,
   },
   {
     title: 'Dashboard',
-    link: '/setting/dashboard',
+    link: '/employer/setting/dashboard',
     hidden: false,
   },
   {
     title: 'Report',
-    link: '/setting/report',
+    link: '/employer/setting/report',
     hidden: false,
   },
   {
     title: 'Blacklist',
-    link: '/setting/blacklist',
+    link: '/employer/setting/blacklist',
     hidden: false,
   },
 ];

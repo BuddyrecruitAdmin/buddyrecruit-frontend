@@ -4,8 +4,8 @@ import { CompanyService } from '../company.service';
 import { CompanyTypeService } from '../../company-type/company-type.service';
 import { ResponseCode, Paging, State } from '../../../../shared/app.constants';
 import { MESSAGE } from '../../../../shared/constants/message';
-import { DropDownValue } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { DropDownValue, Address } from '../../../../shared/interfaces/common.interface';
+import { getRole, getContactId, setContactId } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -13,6 +13,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { ContactUsService } from '../../contact-us/contact-us.service';
 
 export interface CompanyDetail {
   refCompanyType: any;
@@ -43,6 +44,7 @@ export interface CompanyDetail {
   intEmailPass: string;
   extEmailUser: string;
   extEmailPass: string;
+  addresses: Address[];
 }
 
 export interface ErrMsg {
@@ -63,6 +65,9 @@ export interface ErrMsg {
   intEmailPass: string;
   extEmailUser: string;
   extEmailPass: string;
+  address: string;
+  province: string;
+  postalCode: string;
 }
 
 @Component({
@@ -81,9 +86,10 @@ export class CompanyDetailComponent implements OnInit {
   errMsg: ErrMsg;
   _id: string;
   role: any;
+  contactId: any;
   loading: boolean;
   buttonLoading: boolean;
-
+  editabled: boolean;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -91,24 +97,45 @@ export class CompanyDetailComponent implements OnInit {
     private companyTypeService: CompanyTypeService,
     private toastrService: NbToastrService,
     public matDialog: MatDialog,
-    private utilitiesService: UtilitiesService
+    private utilitiesService: UtilitiesService,
+    private contactUsService: ContactUsService,
   ) {
     this.role = getRole();
+    this.contactId = getContactId();
+    setContactId();
   }
 
   ngOnInit() {
-    this.roleSelected = '4';
+    this.roleSelected = '';
+    this.loading = true;
     this.buttonLoading = false;
+    this.editabled = true;
     this.companyDetail = this.initialModel();
     this.errMsg = this.initialErrMsg();
     this.initialDropdown().then((response) => {
       this.activatedRoute.params.subscribe(params => {
         if (params.id) {
+          this.editabled = false;
           this.state = State.Edit;
           this._id = params.id;
           this.getDetail();
         } else {
           this.state = State.Create;
+          if (this.contactId) {
+            this.contactUsService.getDetail(this.contactId).subscribe(response => {
+              if (response.code === ResponseCode.Success) {
+                if (response.data) {
+                  this.companyDetail.name = response.data.companyName;
+                  this.companyDetail.companySize = response.data.numberEmployees;
+                  this.companyDetail.adminEmail = response.data.email;
+                  this.companyDetail.hero = response.data.hero;
+                  this.roleSelected = response.data.userRole.toString();
+                }
+              }
+            });
+          } else {
+            this.roleSelected = '4';
+          }
           this.loading = false;
         }
       });
@@ -144,7 +171,17 @@ export class CompanyDetailComponent implements OnInit {
       intEmailUser: '',
       intEmailPass: '',
       extEmailUser: '',
-      extEmailPass: ''
+      extEmailPass: '',
+      addresses: [this.initialAddress()]
+    }
+  }
+
+  initialAddress(): Address {
+    return {
+      address: '',
+      province: '',
+      postalCode: null,
+      location: '',
     }
   }
 
@@ -166,7 +203,10 @@ export class CompanyDetailComponent implements OnInit {
       intEmailUser: '',
       intEmailPass: '',
       extEmailUser: '',
-      extEmailPass: ''
+      extEmailPass: '',
+      address: '',
+      province: '',
+      postalCode: '',
     }
   }
 
@@ -246,6 +286,15 @@ export class CompanyDetailComponent implements OnInit {
           } else {
             this.roleSelected = '1';
           }
+          if (!this.companyDetail.addresses.length) {
+            this.companyDetail.addresses = [this.initialAddress()]
+          }
+          if (this.utilitiesService.dateIsValid(response.data.startDate)) {
+            this.companyDetail.startDate = new Date(response.data.startDate);
+          }
+          if (this.utilitiesService.dateIsValid(response.data.expiryDate)) {
+            this.companyDetail.expiryDate = new Date(response.data.expiryDate);
+          }
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }
       }
@@ -261,7 +310,7 @@ export class CompanyDetailComponent implements OnInit {
       companyDetail = _.cloneDeep(this.companyDetailTemp);
     }
     if (JSON.stringify(companyDetail) === JSON.stringify(this.companyDetail)) {
-      this.router.navigate(['/setting/company']);
+      this.router.navigate(['/employer/setting/company']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -269,7 +318,7 @@ export class CompanyDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/setting/company']);
+          this.router.navigate(['/employer/setting/company']);
         }
       });
     }
@@ -279,12 +328,17 @@ export class CompanyDetailComponent implements OnInit {
     if (this.validation()) {
       this.buttonLoading = true;
       const request = this.setRequest();
+      debugger;
       if (this.state === State.Create) {
         this.service.create(request).subscribe(response => {
           this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/company']);
+            if (this.contactId) {
+              this.contactUsService.isCreated(this.contactId).subscribe(response => {
+              });
+            }
+            this.router.navigate(['/employer/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -294,7 +348,7 @@ export class CompanyDetailComponent implements OnInit {
           this.buttonLoading = false;
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/setting/company']);
+            this.router.navigate(['/employer/setting/company']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -375,6 +429,18 @@ export class CompanyDetailComponent implements OnInit {
       }
       if (!this.companyDetail.extEmailPass) {
         this.errMsg.extEmailPass = 'Please Input External Password';
+        isValid = false;
+      }
+      if (!this.companyDetail.addresses[0].address) {
+        this.errMsg.address = 'Please Input Address';
+        isValid = false;
+      }
+      if (!this.companyDetail.addresses[0].province) {
+        this.errMsg.province = 'Please Input Province';
+        isValid = false;
+      }
+      if (!this.companyDetail.addresses[0].postalCode) {
+        this.errMsg.postalCode = 'Please Input Postal Code';
         isValid = false;
       }
     }

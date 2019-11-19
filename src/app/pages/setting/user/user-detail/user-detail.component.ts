@@ -84,6 +84,7 @@ export class UserDetailComponent implements OnInit {
     this.errMsg = this.initialErrMsg();
     this.editable = true;
     this.adminId = '';
+    this.loading = true;
     this.initialDropdown().then((response) => {
       this.activatedRoute.params.subscribe(params => {
         if (params.id) {
@@ -92,9 +93,9 @@ export class UserDetailComponent implements OnInit {
           this.getDeatail(params.id);
         } else {
           this.state = State.Create;
+          this.loading = false;
         }
       });
-      this.loading = false;
     });
   }
 
@@ -112,7 +113,7 @@ export class UserDetailComponent implements OnInit {
       firstname: '',
       lastname: '',
       notifyEmail: '',
-      active: true
+      active: false
     }
   }
 
@@ -135,7 +136,7 @@ export class UserDetailComponent implements OnInit {
   async initialDropdown() {
     this.getPrefixs();
     this.getDepartments();
-    this.getAuths();
+    await this.getAuths();
     await this.getHeros();
   }
 
@@ -296,7 +297,7 @@ export class UserDetailComponent implements OnInit {
       userDetail = _.cloneDeep(this.userDetailTemp);
     }
     if (JSON.stringify(userDetail) === JSON.stringify(this.userDetail)) {
-      this.router.navigate(['/setting/user']);
+      this.router.navigate(['/employer/setting/user']);
     } else {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -304,7 +305,7 @@ export class UserDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.router.navigate(['/setting/user']);
+          this.router.navigate(['/employer/setting/user']);
         }
       });
     }
@@ -318,6 +319,7 @@ export class UserDetailComponent implements OnInit {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.getDeatail(request._id);
+            this.router.navigate(['/employer/setting/user']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -327,6 +329,7 @@ export class UserDetailComponent implements OnInit {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.getDeatail(request._id);
+            this.router.navigate(['/employer/setting/user']);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -363,28 +366,9 @@ export class UserDetailComponent implements OnInit {
       this.errMsg.notifyEmail = 'Please Input Notify Email';
       isValid = false;
     } else if (!this.useSameUsername) {
-      if (this.userDetail.notifyEmail) {
-        let checkAt;
-        checkAt = this.userDetail.notifyEmail.search("@");
-        if (checkAt > 1) {
-          let checkDot;
-          checkDot = this.userDetail.notifyEmail.slice(checkAt + 1);
-          checkAt = checkDot.search("@");
-          if (checkAt != -1) {
-            this.errMsg.notifyEmail = MESSAGE[9];
-            isValid = false;
-          } else {
-            let checkFinal;
-            checkFinal = checkDot.search(/\./);
-            if (checkFinal < 1) {
-              this.errMsg.notifyEmail = MESSAGE[9];
-              isValid = false;
-            }
-          }
-        } else {
-          this.errMsg.notifyEmail = MESSAGE[9];
-          isValid = false;
-        }
+      if (!this.utilitiesService.isValidEmail(this.userDetail.notifyEmail)) {
+        this.errMsg.notifyEmail = MESSAGE[9];
+        isValid = false;
       }
     }
     if (this.userDetail.refHero !== this.adminId) {
@@ -405,7 +389,6 @@ export class UserDetailComponent implements OnInit {
       this.errMsg.refAuthorize = 'Please Select Authorize Role';
       isValid = false;
     }
-
     return isValid
   }
 
@@ -419,6 +402,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   getDeatail(_id: any) {
+    this.loading = true;
     this.service.getDetail(_id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.userDetail = _.cloneDeep(response.data);
@@ -428,6 +412,7 @@ export class UserDetailComponent implements OnInit {
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
+      this.loading = false;
     });
   }
 

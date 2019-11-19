@@ -85,10 +85,12 @@ export class PopupPreviewEmailComponent implements OnInit {
           this.actionUser = response.data.actionUser;
           this.previewEmail = true;
         } else {
+          this.actionUser = response.data.actionUser;
           this.previewEmail = false;
           this.nextStep();
         }
       } else {
+        this.actionUser = response.data.actionUser;
         this.previewEmail = false;
         this.nextStep();
       }

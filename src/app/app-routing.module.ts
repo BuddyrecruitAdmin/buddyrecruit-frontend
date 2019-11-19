@@ -3,18 +3,18 @@ import { NgModule } from '@angular/core';
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: '',
     loadChildren: () => import('../app/modules/modules.module')
       .then(m => m.ModulesModule),
   },
-  {
-    path: '',
-    loadChildren: () => import('../app/pages/pages.module')
-      .then(m => m.PagesModule),
-  },
+  // {
+  //   path: 'employer',
+  //   loadChildren: () => import('../app/pages/pages.module')
+  //     .then(m => m.PagesModule),
+  // },
   {
     path: '**',
-    redirectTo: '/auth/login',
+    redirectTo: '/index',
     pathMatch: 'full'
   },
 ];

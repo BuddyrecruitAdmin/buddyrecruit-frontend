@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
@@ -224,7 +224,7 @@ export class AppointmentListComponent implements OnInit {
     setJdId(item.refJD._id);
     setJdName(item.refJD.position);
     setJrId(item._id);
-    this.router.navigate(["/appointment/detail"]);
+    this.router.navigate(['/employer/appointment/detail']);
   }
 
   changePaging(event) {

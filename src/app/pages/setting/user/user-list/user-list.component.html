@@ -1,22 +1,13 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 
-        'col-sm-6':role.refAuthorize.configuration.user.editable,
-        'col-sm-8':!role.refAuthorize.configuration.user.editable }">
+    <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>User</h3>
     </div>
-    <div class="col-sm-4">
-      <div class="input-group">
-        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="paging.pageIndex = 0; search(true)">
-        <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="role.refAuthorize.configuration.user.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/user-detail'"
-        [disabled]="isOverQuota">Create</button>
+    <div class="col-sm-4 col-md-3 col-lg-2">
+      <button *ngIf="role.refAuthorize.configuration.user.editable" nbButton fullWidth status="success"
+        nbTooltip="Create" [routerLink]="'/employer/setting/user-detail'" [disabled]="isOverQuota">
+        <nb-icon icon="plus-outline"></nb-icon>Create
+      </button>
     </div>
   </div>
 </div>
@@ -28,65 +19,157 @@
   </span>
 </nb-alert>
 
-<div class="row">
-  <div class="col-lg-6" *ngFor="let item of items;">
-    <nb-card [accent]="item.active ? 'success' : 'default'">
-      <nb-card-header>
-        <div class="title">
-          <label [nbTooltip]="item.firstname + ' ' + item.lastname">{{ item.firstname }} {{ item.lastname }}</label>
-        </div>
-        <div class="actions">
-          <nb-icon *ngIf="role.refAuthorize.configuration.department.editable" icon="edit-outline" class="link" nbTooltip="Edit" [routerLink]="'/setting/user-detail/'+item._id">
-          </nb-icon>
-          <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)" *ngIf="!item.active">
-          </nb-icon>
-        </div>
-      </nb-card-header>
-      <nb-card-body>
-        <div class="text-group">
-          <label class="label">Username</label>
-          <span>{{ item.username }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Department</label>
-          <span>{{ item.thisDepartments?.name || '-' }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Division</label>
-          <span>{{ item.thisDivision?.name || '-' }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">User Role</label>
-          <span>{{ item.refHero?.name || '-' }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Notify Email</label>
-          <span>{{ item.notifyEmail || '-' }}</span>
-        </div>
-        <div class="text-group">
-          <label class="label">Status</label>
-          <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
-            {{ item.active ? 'Active': 'Inactive' }}
-          </span>
-        </div>
-        <i class="text-gray">
-          <div class="text-group">
-            <label class="label">Last update by</label>
-            <span>
-              {{ item.lastChangedInfo.refUser.firstname }}
-              {{ item.lastChangedInfo.refUser.lastname }}
-            </span>
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
           </div>
-          <div class="text-group">
-            <label class="label">Last update date</label>
-            <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
-          </div>
-        </i>
-      </nb-card-body>
-    </nb-card>
-  </div>
-</div>
+        </div>
+      </div>
+      <div class="col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
+        </nb-actions>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
 
-<mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
-  [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
-</mat-paginator>
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading && items.length">
+
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-lg-6" *ngFor="let item of items;">
+        <nb-card [accent]="item.active ? 'success' : 'default'">
+          <nb-card-header>
+            <div class="title">
+              <label [nbTooltip]="item.firstname + ' ' + item.lastname">{{ item.firstname }} {{ item.lastname }}</label>
+            </div>
+            <div *ngIf="role.refAuthorize.configuration.user.editable" class="actions">
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/setting/user-detail/'+item._id">
+              </nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="text-group">
+              <label class="label">Username</label>
+              <span>{{ item.username }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Department</label>
+              <span>{{ item.thisDepartments?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Division</label>
+              <span>{{ item.thisDivision?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">User Role</label>
+              <span>{{ item.refHero?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Notify Email</label>
+              <span>{{ item.notifyEmail || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Status</label>
+              <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                {{ item.active ? 'Active': 'Inactive' }}
+              </span>
+            </div>
+            <i class="text-gray">
+              <div class="text-group">
+                <label class="label">Last update by</label>
+                <span>
+                  {{ item.lastChangedInfo.refUser.firstname }}
+                  {{ item.lastChangedInfo.refUser.lastname }}
+                </span>
+              </div>
+              <div class="text-group">
+                <label class="label">Last update date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+              </div>
+            </i>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+    <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+      [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+    </mat-paginator>
+  </div>
+
+  <!-- List Layout -->
+  <nb-card *ngIf="!isGridLayout">
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th scope="col" class="text-left">Name</th>
+              <th scope="col" class="text-left">Username</th>
+              <th scope="col" class="text-left">Department</th>
+              <th scope="col">Division</th>
+              <th scope="col">User Role</th>
+              <th scope="col">Status</th>
+              <th *ngIf="role.refAuthorize.configuration.user.editable" scope="col" style="width: 110px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items;">
+              <td class="text-left">
+                <span [nbTooltip]="item.firstname+' '+item.lastname ">{{ item.firstname }} {{ item.lastname }}</span>
+              </td>
+              <td class="text-left">
+                <span>{{ item.username || '-' }}</span>
+              </td>
+              <td>
+                <span>{{ item.thisDepartments?.name || '-' }}</span>
+              </td>
+              <td>
+                <span>{{ item.thisDivision?.name || '-' }}</span>
+              </td>
+              <td>
+                <span>{{ item.refHero?.name || '-' }}</span>
+              </td>
+              <td>
+                <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
+                  {{ item.active ? 'Active': 'Inactive' }}
+                </span>
+              </td>
+              <td *ngIf="role.refAuthorize.configuration.user.editable" class="actions">
+                <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                  [routerLink]="'/employer/setting/user-detail/'+item._id">
+                  <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+        [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+        (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
+</div>

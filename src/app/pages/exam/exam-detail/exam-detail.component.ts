@@ -62,7 +62,7 @@ export class ExamDetailComponent implements OnInit {
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
-      this.router.navigate(["/exam/list"]);
+      this.router.navigate(["/employer/exam/list"]);
     }
     this.role = getRole();
     this.jrName = getJdName();
@@ -123,7 +123,8 @@ export class ExamDetailComponent implements OnInit {
       setTabName();
     } else {
       this.tabSelected = event.tabTitle;
-    }
+    }    
+    this.paging.pageIndex = 0;
     this.search();
   }
 
@@ -329,7 +330,7 @@ export class ExamDetailComponent implements OnInit {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
     setCandidateId(item._id);
-    this.router.navigate(["/candidate/detail"]);
+    this.router.navigate(["/employer/candidate/detail"]);
   }
 
   openPopupComment(item: any) {

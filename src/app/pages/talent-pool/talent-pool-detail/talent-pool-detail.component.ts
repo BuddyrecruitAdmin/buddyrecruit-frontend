@@ -60,7 +60,7 @@ export class TalentPoolDetailComponent implements OnInit {
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
-      this.router.navigate(["/talent-pool/list"]);
+      this.router.navigate(["/employer/talent-pool/list"]);
     }
     this.role = getRole();
     this.jrName = getJdName();
@@ -131,6 +131,7 @@ export class TalentPoolDetailComponent implements OnInit {
     } else {
       this.tabSelected = event.tabTitle;
     }
+    this.paging.pageIndex = 0;
     this.search();
   }
 
@@ -357,7 +358,7 @@ export class TalentPoolDetailComponent implements OnInit {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
     setCandidateId(item._id);
-    this.router.navigate(["/candidate/detail"]);
+    this.router.navigate(["/employer/candidate/detail"]);
   }
 
   openPopupComment(item: any) {

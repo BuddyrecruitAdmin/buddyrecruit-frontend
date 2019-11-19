@@ -159,11 +159,20 @@ export class PagesComponent {
         if (configuration.blacklist && configuration.blacklist.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
         }
+
+        // is Super Admin
+        if (role.refHero.isSuperAdmin) {
+          menuSetting[1].children.push({
+            title: 'Contact List',
+            link: '/employer/setting/contact-list',
+            hidden: false,
+          });
+        }
+
         menuSetting.forEach(element => {
           this.menu.push(element);
         });
       }
-
     }
   }
 }

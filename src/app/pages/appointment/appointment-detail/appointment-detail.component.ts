@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
@@ -18,7 +18,7 @@ import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
-import { MESSAGE } from "../../../shared/constants/message";
+import { MESSAGE } from '../../../shared/constants/message';
 import { CandidateService } from '../../candidate/candidate.service';
 import { CalendarService } from '../../calendar/calendar.service';
 
@@ -65,7 +65,7 @@ export class AppointmentDetailComponent implements OnInit {
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
-      this.router.navigate(["/appointment/list"]);
+      this.router.navigate(['/employer/appointment/list']);
     }
     this.role = getRole();
     this.jrName = getJdName();
@@ -147,6 +147,7 @@ export class AppointmentDetailComponent implements OnInit {
     } else {
       this.tabSelected = event.tabTitle;
     }
+    this.paging.pageIndex = 0;
     this.search();
   }
 
@@ -326,7 +327,7 @@ export class AppointmentDetailComponent implements OnInit {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
     setCandidateId(item._id);
-    this.router.navigate(["/candidate/detail"]);
+    this.router.navigate(['/employer/candidate/detail']);
   }
 
   openPopupComment(item: any) {

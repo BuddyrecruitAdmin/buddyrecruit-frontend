@@ -150,9 +150,9 @@
               <th scope="col" style="width: 200px;">Department</th>
               <th scope="col" style="width: 150px;">Division</th>
               <th scope="col" style="width: 90px;">Status</th>
-              <th scope="col" style="width: 120px;">Days before expire</th>
+              <th scope="col" style="width: 110px;">Days before expire</th>
               <th scope="col" style="width: 70px;">Pending</th>
-              <th scope="col" style="width: 190px;">Actions</th>
+              <th scope="col" style="width: 110px;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -162,12 +162,12 @@
                   {{ item.refJD?.position || '-' }}
                 </span>
               </td>
-              <td [ngClass]="{'text-left' : item.departmentName }">
+              <td>
                 <span [nbTooltip]="item.departmentName">
                   {{ item.departmentName || '-' }}
                 </span>
               </td>
-              <td [ngClass]="{'text-left' : item.divisionName }">
+              <td>
                 <span [nbTooltip]="item.divisionName">
                   {{ item.divisionName || '-' }}
                 </span>

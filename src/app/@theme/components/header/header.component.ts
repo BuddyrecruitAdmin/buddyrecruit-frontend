@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
+  sss = getRole();
 
   themes = [
     {
@@ -46,8 +47,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = 'default';
 
   userMenu = [
-    { title: 'Profile', icon: 'person-outline', link: '/profile' },
-    { title: 'Log out', icon: 'log-out-outline', link: '/auth/logout' }
+    { title: 'Profile', icon: 'person-outline', link: '/employer/profile' },
+    { title: 'Log out', icon: 'log-out-outline', link: '/employer/logout' }
   ];
   imagePath: any;
   paging: IPaging;
@@ -61,6 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   countUnread: number = 0;
   countUnseen: number = 0;
   loading: boolean;
+  role: any;
 
   constructor(
     private router: Router,
@@ -74,10 +76,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private searchService: NbSearchService,
     private utilitiesService: UtilitiesService,
   ) {
+    this.role = getRole();
     setKeyword();
     this.searchService.onSearchSubmit().subscribe((data: any) => {
       setKeyword(data.term);
-      this.router.navigate(['/candidate/list']);
+      this.router.navigate(['/employer/candidate/list']);
     });
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
@@ -86,12 +89,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-    const role = getRole();
-    this.proService.getProfile(role.refHero._id).subscribe(response => {
+    this.proService.getProfile(this.role.refHero._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.user = {
           name: this.utilitiesService.setFullname(response.data),
-          title: role.refHero.name,
+          title: this.role.refHero.name,
           picture: response.data.imageData,
         };
       }
@@ -123,7 +125,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.checkNewNotification();
     this.getNotification();
-    setInterval(() => { this.checkNewNotification(); }, 30000);
+    if (this.role) {
+      setInterval(() => {
+        if (this.utilitiesService.getRole()) {
+          this.checkNewNotification();
+        }
+      }, 30000);
+    }
   }
 
   checkNewNotification() {
@@ -247,12 +255,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   gotoCalendar() {
-    this.router.navigate(['/calendar']);
+    this.router.navigate(['/employer/calendar']);
   }
 
   gotoProfile() {
     this.showNotice = false;
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/employer/profile']);
   }
 
 }

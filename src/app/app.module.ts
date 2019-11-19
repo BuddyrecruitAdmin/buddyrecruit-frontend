@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 import { TagInputModule } from 'ngx-chips';
 import { AppRoutingModule } from './app-routing.module';
 import { TranslateService } from './translate.service';
-import {TranslateModule} from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { NumberDirective } from "./shared/directive/number.directive";
 export function setupTranslateFactory(
   service: TranslateService): Function {
@@ -29,6 +29,7 @@ import {
   NbWindowModule,
   NbCardModule,
   NbButtonModule,
+  NbTooltipModule,
 } from '@nebular/theme';
 
 @NgModule({
@@ -55,11 +56,13 @@ import {
     }),
     CoreModule.forRoot(),
     NbCardModule,
-    NbButtonModule
+    NbButtonModule,
+    NbTooltipModule
   ],
   exports: [
     NbCardModule,
-    NbButtonModule
+    NbButtonModule,
+    NbTooltipModule
   ],
   bootstrap: [AppComponent],
   providers: [

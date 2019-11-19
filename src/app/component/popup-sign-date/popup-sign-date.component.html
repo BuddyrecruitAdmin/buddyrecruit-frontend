@@ -14,17 +14,29 @@
   <nb-card-body class="dialog-body">
     <div class="form-control-group">
       <label class="label">Sign Contract Date <span class="text-red">*</span></label>
-      <nb-datepicker #datepicker format="dd/MM/yyyy"></nb-datepicker>
-      <input [nbDatepicker]="datepicker" [(ngModel)]="signDate" nbInput placeholder="dd/mm/yyyy">
+      <nb-datepicker #datepicker format="dd/MM/yyyy" [disabled]="editable"></nb-datepicker>
+      <div class="input-group">
+        <input [nbDatepicker]="datepicker" [(ngModel)]="signDate" nbInput fullWidth style="cursor: pointer;"
+          [disabled]="editable">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline" [ngClass]="{ 'text-green' : !editable, 'text-gray' : editable}"></nb-icon>
+        </div>
+      </div>
     </div>
     <div class="form-control-group">
       <label class="label">Sign Contract Time <span class="text-red">*</span></label>
-      <ngb-timepicker [(ngModel)]="signTime" [minuteStep]="minuteStep" [spinners]="false" required=""></ngb-timepicker>
+      <ngb-timepicker [(ngModel)]="signTime" [minuteStep]="minuteStep" [spinners]="false" required=""
+        [disabled]="editable"></ngb-timepicker>
     </div>
     <div class="form-control-group">
       <label class="label">Agree Start Date</label>
       <nb-datepicker #datepicker2 format="dd/MM/yyyy"></nb-datepicker>
-      <input [nbDatepicker]="datepicker2" [(ngModel)]="agreeDate" nbInput placeholder="dd/mm/yyyy">
+      <div class="input-group">
+        <input [nbDatepicker]="datepicker2" [(ngModel)]="agreeDate" nbInput fullWidth style="cursor: pointer;">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline" class="text-green"></nb-icon>
+        </div>
+      </div>
     </div>
     <div class="form-control-group m-0">
       <label class="label">Note</label>
@@ -36,7 +48,7 @@
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()" [disabled]="!signDate || !signTime">SAVE</button>
-    <button nbButton status="success" (click)="sendEmail()" [disabled]="!signDate || !signTime">SEND
+    <button *ngIf="!editable" nbButton status="success" (click)="sendEmail()" [disabled]="!signDate || !signTime">SEND
       EMAIL</button>
   </nb-card-footer>
 </nb-card>

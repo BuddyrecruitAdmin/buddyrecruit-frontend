@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angula
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole } from '../../../shared/services/auth.service';
+import { getRole, setFlowId } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -18,7 +18,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { request } from 'https';
 import { elementAt } from 'rxjs/operators';
-
+import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
 @Component({
   selector: 'ngx-jr-detail',
   templateUrl: './jr-detail.component.html',
@@ -30,6 +30,7 @@ export class JrDetailComponent implements OnInit {
   state: string;
   jobDB: boolean;
   touched: boolean;
+  touchedEva: boolean;
   duplicateCheck: boolean;
   editCheck: boolean;
   touchedStart: boolean;
@@ -300,7 +301,7 @@ export class JrDetailComponent implements OnInit {
             this.service.create(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
-                this.router.navigate(['/jr/list']);
+                this.router.navigate(['/employer/jr/list']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -310,7 +311,7 @@ export class JrDetailComponent implements OnInit {
             this.service.edit(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
-                this.router.navigate(['/jr/list']);
+                this.router.navigate(['/employer/jr/list']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -319,7 +320,7 @@ export class JrDetailComponent implements OnInit {
             this.service.create(request).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 this.showToast('success', 'Success Message', response.message);
-                this.router.navigate(['/jr/list']);
+                this.router.navigate(['/employer/jr/list']);
               } else {
                 this.showToast('danger', 'Error Message', response.message);
               }
@@ -338,6 +339,7 @@ export class JrDetailComponent implements OnInit {
     this.touchedOn = false;
     this.touchedCheck = false;
     this.touchedCap = false;
+    this.touchedEva = false;
     this.jr.refSource = [];
     this.sErrorUser = '';
     this.sErrorEvaluation = '';
@@ -401,10 +403,33 @@ export class JrDetailComponent implements OnInit {
       isValid = false;
     }
     if (!this.jr.refEvaluation) {
+      this.touchedEva = true;
       this.sErrorEvaluation = 'Please select evaluation template';
       isValid = false;
     }
     return isValid;
+  }
+
+  selectedEva() {
+    if (this.jr.refEvaluation) {
+      this.touchedEva = false;
+    }else{
+      this.touchedEva = true;
+      this.sErrorEvaluation = 'Please select evaluation template';
+    }
+  }
+
+  openPopupEvaluation(item: any) {
+    setFlowId(item);
+    // setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupEvaluationComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+    });
   }
 
   setRequest(): any {
@@ -416,7 +441,7 @@ export class JrDetailComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/jr/list']);
+    this.router.navigate(['/employer/jr/list']);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

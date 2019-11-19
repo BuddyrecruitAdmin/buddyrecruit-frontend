@@ -20,7 +20,7 @@ const routes: Routes = [
       },
       {
         path: '**',
-        redirectTo: '/auth/login',
+        redirectTo: '/employer/home',
         pathMatch: 'full',
       },
     ],

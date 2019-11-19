@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId, getButtonId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -30,7 +30,7 @@ export class PopupSignDateComponent implements OnInit {
   agreeDate: Date;
   note: string;
   loading: boolean;
-
+  editable: boolean;
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupSignDateComponent>,
@@ -41,6 +41,8 @@ export class PopupSignDateComponent implements OnInit {
     this.role = getRole();
     this.flowId = getFlowId();
     this.candidateId = getCandidateId();
+    this.editable = getButtonId();
+    setButtonId();
     setFlowId();
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();

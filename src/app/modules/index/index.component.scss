@@ -1,142 +1,50 @@
 .font-family {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
-
+.navbar-brand img {
+  width: 60px;
+}
+.navbar-brand strong {
+  font-size: 32px;
+}
 .carousel {
   background-color: #222222;
 }
-
-#item-1.carousel-item {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)),
-    url("../../../assets/images/sec_1_03.jpg");
-}
-#item-2.carousel-item {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)),
-    url("../../../assets/images/sec_2_03.jpg");
-}
-#item-3.carousel-item {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)),
-    url("../../../assets/images/sec_3_03.jpg");
-}
-#item-4.carousel-item {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)),
-    url("../../../assets/images/sec_4_03.jpg");
-}
-
-.carousel-item {
+.picsum-img-wrapper {
+  opacity: 0.5;
   height: 100vh;
   min-height: 350px;
-  background: no-repeat center center scroll;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  overflow: hidden;
 }
-.carousel-caption {
-  text-shadow: none;
-  line-height: 1.4;
+.contact-us {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  z-index: 1030;
 }
-.carousel-caption h1 {
-  font-size: 4rem;
-  font-weight: 300;
+.thank {
+  margin: 2rem 0;
 }
-.carousel-caption .lead {
-  font-size: 2rem;
-  font-weight: 100;  
+nb-accordion-item {
+  width: 450px;
+  border-bottom-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
 }
-.carousel-indicators {
-  width: auto;
+nb-accordion-item-header {
+  padding: 15px !important;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background-color: var(--color-orange);
 }
-.carousel-indicators li {
-  height: 2.5px;
-  border: none;
+nb-accordion-item-body {
+  border-radius: 0;
+  overflow-y: scroll !important;
 }
-.carousel-indicators li.active {
-  margin: 1px;
-}
-.btn-outline-primary {
-  display: block;
-  padding: .75rem 2rem !important;
-  border-color: #ffffff;
-  border: 2px solid;
-  font-weight: 700;
-  font-size: 18px;
-  border-radius: .5rem !important;
-}
-.btn-primary {
-  color: #ffffff;
-  background-color: rgb(1, 198, 178);
-  border-color: rgb(1, 198, 178);
-}
-.btn-primary:hover,
-.btn-outline-primary:hover {
-  color: #01c6b2 !important;
-  background-color: #ffffff;
-  border-color: #01c6b2;
-  opacity: 1;
-}
-.btn-primary:active,
-.btn-outline-primary:active {
-  color: #ffffff !important;
-  background-color: rgb(2, 136, 123) !important;
-  border-color: #01c6b2;
-}
-.btn-lg {
-  font-weight: 700;
-  line-height: 1.5;
-  border-radius: 10px;
-}
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+nb-icon {
+  font-size: inherit;
 }
 
 @media (max-width: 767px) {
   .navbar-brand img {
-    width: 50px;
-    position: absolute;
-    top: 15px;
-    left: 15px;
-  }
-  .navbar-nav {
-    position: absolute;
-    right: 30px;
-    top: 15px;
-  }
-  .carousel-caption h1 {
-    font-size: 22px;
-  }
-  .carousel-caption .lead {
-    font-size: 16px;
-  }
-  .carousel-control-prev,
-  .carousel-control-next {
-    display: none;
-  }
-}
-
-@media (min-width: 768px) {
-  .mt-md-4 {
-    margin-top: 4rem!important;
-  }
-  .carousel-caption {
-    bottom: 100px;
-  }
-  .navbar-brand img {
-    max-height: 80px;
-  }
-  .navbar-brand strong {
-    font-size: 40px;
-  }
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-  .btn-lg {
-    padding: 8px 32px;
-    font-size: 1.5rem;
+    width: 40px;
   }
 }

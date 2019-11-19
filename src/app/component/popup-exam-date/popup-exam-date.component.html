@@ -22,7 +22,12 @@
     <div class="form-control-group">
       <label class="label">Exam Date <span class="text-red">*</span></label>
       <nb-datepicker #datepicker format="dd/MM/yyyy"></nb-datepicker>
-      <input [nbDatepicker]="datepicker" [(ngModel)]="date" nbInput placeholder="dd/mm/yyyy">
+      <div class="input-group">
+        <input [nbDatepicker]="datepicker" [(ngModel)]="date" nbInput fullWidth style="cursor: pointer;">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline" class="text-green"></nb-icon>
+        </div>
+      </div>
     </div>
     <div class="form-control-group m-0">
       <label class="label">Exam Time <span class="text-red">*</span></label>
@@ -34,6 +39,8 @@
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()" [disabled]="!canApprove && (!date || !time)">SAVE</button>
+    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND
+      EMAIL</button>
     <button *ngIf="canApprove" nbButton status="success" (click)="passToExam()" [disabled]="!date || !time">PASS
       TO EXAM</button>
   </nb-card-footer>

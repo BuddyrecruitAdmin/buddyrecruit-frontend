@@ -24,7 +24,8 @@ import {
   NbDialogModule,
   NbWindowModule,
   NbAccordionModule,
-  NbAlertModule
+  NbAlertModule,
+  NbPopoverModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -95,6 +96,7 @@ import { RejectStageComponent } from './reject-stage/reject-stage.component';
 import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 import { BlacklistComponent } from './blacklist/blacklist.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 @NgModule({
   declarations: [
@@ -119,6 +121,7 @@ import { BlacklistComponent } from './blacklist/blacklist.component';
     EvaluationDetailComponent,
     EvaluationListComponent,
     BlacklistComponent,
+    ContactUsComponent,
   ],
   imports: [
     CommonModule,
@@ -147,6 +150,7 @@ import { BlacklistComponent } from './blacklist/blacklist.component';
     NbWindowModule.forChild(),
     NbAccordionModule,
     NbAlertModule,
+    NbPopoverModule,
 
     A11yModule,
     CdkStepperModule,

@@ -1,0 +1,20 @@
+.card {
+  width: 100%;
+  max-width: 375px;
+  padding: 30px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.card img {
+  margin: auto;
+  margin-bottom: 10px;
+}
+::ng-deep nb-layout-column {
+  height: 80vw;
+}

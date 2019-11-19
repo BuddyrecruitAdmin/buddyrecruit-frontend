@@ -9,13 +9,18 @@
       <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
     </div>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body style="min-width: 400px;">
     <div class="form-control-group">
       <label class="label">Date
         <small class="text-gray">(click for change date)</small>
       </label>
       <nb-datepicker #datepicker format="dd/MM/yyyy" (dateChange)="changeDate($event)"></nb-datepicker>
-      <input [nbDatepicker]="datepicker" [(ngModel)]="date" nbInput fullWidth placeholder="dd/mm/yyyy">
+      <div class="input-group">
+        <input [nbDatepicker]="datepicker" [(ngModel)]="date" nbInput fullWidth style="cursor: pointer;">
+        <div class="input-group-addon" style="pointer-events: none;">
+          <nb-icon icon="calendar-outline"></nb-icon>
+        </div>
+      </div>
     </div>
     <label class="label">Time</label>
     <div *ngFor="let period of periods; let i = index" class="form-control-group">
@@ -26,8 +31,7 @@
       <ngb-timepicker [(ngModel)]="period.endTime" [minuteStep]="minuteStep" [spinners]="false" class="inline"
         [disabled]="disabled">
       </ngb-timepicker>
-      <nb-icon *ngIf="!disabled" icon="minus-square-outline" class="link text-red m-l-5"
-        (click)="removePeriod(i)">
+      <nb-icon *ngIf="!disabled" icon="minus-square-outline" class="link text-red m-l-5" (click)="removePeriod(i)">
       </nb-icon>
     </div>
     <div *ngIf="periods.length < 5 && !disabled" class="text-center">
@@ -35,9 +39,14 @@
         <nb-icon icon="plus-outline" nbTooltip="Add Available Time"></nb-icon>
       </button>
     </div>
-    <small *ngIf="disabled" class="text-red">
-      * This day have a Interview Appointment, Can't edit.
-    </small>
+    <div class="m-t-20">
+      <small *ngIf="disabled" class="text-red">
+        * This day have a Interview Appointment, Can't edit.
+      </small>
+      <small *ngIf="!disabled && errMsg" class="text-red">
+        * {{ errMsg }}
+      </small>
+    </div>
   </nb-card-body>
   <nb-card-footer>
     <button nbButton status="default" (click)="ref.close(result)">Cancel</button>

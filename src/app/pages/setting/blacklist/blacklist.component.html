@@ -1,6 +1,6 @@
 <div class="content-header with-shadow">
   <div class="breadcrumb">
-    <h5>Blacklist</h5>
+    <h3>Blacklist</h3>
   </div>
 </div>
 
@@ -44,13 +44,13 @@
       <div class="col-lg-6" *ngFor="let item of items;">
         <nb-card style="margin-bottom: 1rem;">
           <nb-card-header>
-            <div class="title">
-              <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+            <div class="title link">
+              <label (click)="info(item)" [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
                 {{ utilitiesService.setFullname(item.refCandidate) }}
               </label>
             </div>
             <div class="actions">
-              <nb-icon icon="undo" class="link" nbTooltip="Unblock" (click)="unblock(item)"></nb-icon>
+              <nb-icon icon="undo-outline" class="link" nbTooltip="Unblock" (click)="unblock(item)"></nb-icon>
             </div>
           </nb-card-header>
           <nb-card-body>
@@ -70,6 +70,20 @@
               <label class="label">Stage</label>
               <span>{{ item.refCandidateFlow?.refStage?.refMain?.name || '-' }}</span>
             </div>
+            <div class="text-group">
+              <label class="label">Blocked Reason</label>
+              <span class="text-red">{{ item.refReject?.name || '-' }}</span>
+            </div>
+            <i class="text-gray">
+              <div class="text-group">
+                <label class="label">Blocked By</label>
+                <span>{{ utilitiesService.setFullname(item.blockBy?.refUser) || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Blocked Date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.blockBy?.date) || '-' }}</span>
+              </div>
+            </i>
             <div class="text-right ">
               <span class="link" nbTooltip="See more detail" (click)="info(item)">
                 <nb-icon icon="info-outline"></nb-icon> See more detail
@@ -99,13 +113,14 @@
               <th scope="col" class="text-left">Division</th>
               <th scope="col" class="text-left">Job Position</th>
               <th scope="col" class="text-left">Stage</th>
+              <th scope="col" class="text-left">Blocked Reason</th>
               <th scope="col" style="width: 110px;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
-              <td class="text-left">
-                <span [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
+              <td class="text-left link">
+                <span (click)="info(item)" [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">
                   {{ utilitiesService.setFullname(item.refCandidate) }}
                 </span>
               </td>
@@ -121,12 +136,15 @@
               <td class="text-left">
                 <span>{{ item.refCandidateFlow?.refStage?.refMain?.name || '-' }}</span>
               </td>
+              <td class="text-left text-red">
+                <span>{{ item.refReject?.name || '-' }}</span>
+              </td>
               <td class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
                 <button nbButton status="primary" size="tiny" nbTooltip="Unblock" (click)="unblock(item)">
-                  <nb-icon icon="undo"></nb-icon>
+                  <nb-icon icon="undo-outline"></nb-icon>
                 </button>
               </td>
             </tr>

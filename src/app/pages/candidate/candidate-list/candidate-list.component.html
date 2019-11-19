@@ -22,6 +22,9 @@
       </div>
       <div class="col-xs-12 col-md-6 actions-block">
         <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : isFilter }"
+            (click)="filterToggle()">
+          </nb-action>
           <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
             (click)="isGridLayout = true">
           </nb-action>
@@ -30,14 +33,15 @@
         </nb-actions>
       </div>
     </div>
-    <div class="m-t-20">
+    <div *ngIf="isFilter" class="m-t-20">
       <label class="label">Filters:</label>
       <div>
         <nb-checkbox [(ngModel)]="filterAll" (checkedChange)="changeFilterAll($event)">All</nb-checkbox>
       </div>
       <div class="row">
         <div *ngFor="let filter of filters" class="col-md-3">
-          <nb-checkbox [(ngModel)]="filter.active" (checkedChange)="changeFilter($event)">{{ filter.text }}</nb-checkbox>
+          <nb-checkbox [(ngModel)]="filter.active" (checkedChange)="changeFilter($event)">{{ filter.text }}
+          </nb-checkbox>
         </div>
       </div>
     </div>

@@ -1,28 +1,129 @@
 <div class="content-header with-shadow">
-  <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.rejection.editable, 
-      'col-sm-8':!role.refAuthorize.configuration.rejection.editable}">
-      <h3>Reject Stage</h3>
-    </div>
-  </div>
+  <h3>Reject Stage</h3>
 </div>
-<!-- list item -->
-<nb-card accent="success">
+
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!loading">
+  <nb-card-body>
+    <nb-accordion multi>
+      <nb-accordion-item expanded="true">
+        <nb-accordion-item-header class="txt-header">
+          Talent Pool
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let item of talentPoolList;">
+              <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                {{ item.label }}
+              </nb-checkbox>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+
+      <nb-accordion-item>
+        <nb-accordion-item-header class="txt-header">
+          Pending Exam
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let item of examList;">
+              <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                {{ item.label }}
+              </nb-checkbox>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+
+      <nb-accordion-item>
+        <nb-accordion-item-header class="txt-header">
+          Pending Appointment
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let item of appointmentList;">
+              <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                {{ item.label }}
+              </nb-checkbox>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+
+      <nb-accordion-item>
+        <nb-accordion-item-header class="txt-header">
+          Pending Interview
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let item of interviewList;">
+              <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                {{ item.label }}
+              </nb-checkbox>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+
+      <nb-accordion-item>
+        <nb-accordion-item-header class="txt-header">
+          Pending Sign Contract
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let item of signList;">
+              <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                {{ item.label }}
+              </nb-checkbox>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+
+      <nb-accordion-item>
+        <nb-accordion-item-header class="txt-header">
+          Onboard
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="row">
+            <div class="col-lg-6" *ngFor="let item of onboardList;">
+              <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                {{ item.label }}
+              </nb-checkbox>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+
+    </nb-accordion>
+  </nb-card-body>
+  <nb-card-footer *ngIf="role.refAuthorize.configuration.rejection.editable">
+    <button nbButton status="success" (click)="save()">Save</button>
+  </nb-card-footer>
+</nb-card>
+
+<!-- <nb-card *ngIf="!loading" accent="success">
   <nb-card-body>
     <div class="row">
       <div class="col-sm-6 col-lg-6 col-md-6">
+
         <nb-accordion multi>
-          <nb-accordion-item>
+          <nb-accordion-item expanded="true">
             <nb-accordion-item-header class="txt-header">
               Talent Pool
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let item of talentAll;">
-                  <nb-checkbox [(ngModel)]="item.value" class="txt-body">
-                    <div class="txt-body">
-                      {{item.label}}
-                    </div>
+                <div class="col-lg-6" *ngFor="let item of talentPoolList;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                    {{ item.label }}
                   </nb-checkbox>
                 </div>
               </div>
@@ -35,11 +136,9 @@
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let exam of examAll;">
-                  <nb-checkbox [(ngModel)]="exam.value" class="txt-body">
-                    <div class="txt-body">
-                      {{exam.label}}
-                    </div>
+                <div class="col-lg-6" *ngFor="let item of examList;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                    {{ item.label }}
                   </nb-checkbox>
                 </div>
               </div>
@@ -52,11 +151,9 @@
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let app of appAll;">
-                  <nb-checkbox [(ngModel)]="app.value" class="txt-body">
-                    <div class="txt-body">
-                      {{app.label}}
-                    </div>
+                <div class="col-lg-6" *ngFor="let item of appointmentList;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                    {{ item.label }}
                   </nb-checkbox>
                 </div>
               </div>
@@ -64,7 +161,9 @@
           </nb-accordion-item>
         </nb-accordion>
       </div>
+
       <div class="col-sm-6 col-lg-6 col-md-6">
+
         <nb-accordion multi>
           <nb-accordion-item>
             <nb-accordion-item-header class="txt-header">
@@ -72,11 +171,9 @@
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let int of inAll;">
-                  <nb-checkbox [(ngModel)]="int.value" class="txt-body">
-                    <div class="txt-body">
-                      {{int.label}}
-                    </div>
+                <div class="col-lg-6" *ngFor="let item of interviewList;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                    {{ item.label }}
                   </nb-checkbox>
                 </div>
               </div>
@@ -89,11 +186,9 @@
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let sign of signAll;">
-                  <nb-checkbox [(ngModel)]="sign.value">
-                    <div class="txt-body">
-                      {{sign.label}}
-                    </div>
+                <div class="col-lg-6" *ngFor="let item of signList;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                    {{ item.label }}
                   </nb-checkbox>
                 </div>
               </div>
@@ -106,23 +201,20 @@
             </nb-accordion-item-header>
             <nb-accordion-item-body>
               <div class="row">
-                <div class="col-lg-6" *ngFor="let on of onAll;">
-                  <nb-checkbox [(ngModel)]="on.value">
-                    <div class="txt-body">
-                      {{on.label}}
-                    </div>
+                <div class="col-lg-6" *ngFor="let item of onboardList;">
+                  <nb-checkbox [(ngModel)]="item.value" class="txt-body" [disabled]="!item.active">
+                    {{ item.label }}
                   </nb-checkbox>
                 </div>
               </div>
             </nb-accordion-item-body>
           </nb-accordion-item>
         </nb-accordion>
+
       </div>
     </div>
   </nb-card-body>
-  <nb-card-footer>
-    <div class="input-group-addon" nbTooltip="Search">
-      <button nbButton status="success" (click)="saveAs()" style="float: right;">Save</button>
-    </div>
+  <nb-card-footer *ngIf="role.refAuthorize.configuration.rejection.editable">
+    <button nbButton status="success" (click)="save()">Save</button>
   </nb-card-footer>
-</nb-card>
+</nb-card> -->

@@ -2,8 +2,8 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
-import { getRole } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
+import { getRole, getIsGridLayout, setIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -32,6 +32,9 @@ export class JrListComponent implements OnInit {
   loading: boolean;
   isOverQuota: boolean;
   showTips: boolean;
+  minPageSize = Paging.pageSizeOptions[0];
+  devices: Devices;
+  isGridLayout: boolean;
 
   constructor(
     private router: Router,
@@ -42,6 +45,15 @@ export class JrListComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
@@ -59,6 +71,7 @@ export class JrListComponent implements OnInit {
   }
 
   search() {
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
@@ -84,6 +97,7 @@ export class JrListComponent implements OnInit {
         this.showTips = response.isOverQuota;
         this.items = response.data;
         this.items.map(item => {
+          item.canEdit = true;
           item.canDelete = true;
           switch (item.refStatus.status) {
             case 'JRS001': // Waiting for HR Confirm
@@ -99,9 +113,11 @@ export class JrListComponent implements OnInit {
               break;
             case 'JRS004': // Rejected
               item.refStatus.class = 'label-danger';
+              item.canEdit = false;
               break;
             case 'JRS005': // Closed
               item.refStatus.class = 'label-gray';
+              item.canEdit = false;
               break;
             default:
               item.refStatus.class = 'label-gray';
@@ -115,6 +131,11 @@ export class JrListComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   changePaging(event) {

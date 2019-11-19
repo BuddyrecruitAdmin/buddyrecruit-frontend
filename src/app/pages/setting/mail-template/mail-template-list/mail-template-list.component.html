@@ -1,24 +1,35 @@
 <div class="content-header with-shadow">
   <div class="row">
-    <div [ngClass]="{ 'col-sm-6':role.refAuthorize.configuration.jobPosition.editable, 
-        'col-sm-8':!role.refAuthorize.configuration.jobPosition.editable}">
+    <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>Email</h3>
-    </div>
-    <div class="col-sm-4">
-      <div class="input-group">
-        <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="this.paging.pageIndex = 0; search(true)">
-        <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="this.paging.pageIndex = 0; search(true)"></nb-icon>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="col-sm-2">
-      <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/setting/mail-template-detail'">
-        CREATE</button>
     </div>
   </div>
 </div>
+
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search(true)">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
+        </nb-actions>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
 
 <!-- Tab switch -->
 <nb-card>
@@ -26,102 +37,181 @@
     <nb-tabset fullWidth (changeTab)="onSelectTab($event)">
       <nb-tab tabTitle="Internal">
         <!-- list all item  Internal   -->
-        <div class="row">
-          <div class="col-md-6 col-lg-6 m-b-20" *ngFor="let item of internal;">
-            <nb-card accent="success">
-              <nb-card-header>
-                <div class="title">
-                  <label [nbTooltip]="item.name">{{item.name}}</label>
-                </div>
-                <div class="actions">
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="edit-outline" class="link" nbTooltip="Edit"
-                    [routerLink]="'/setting/mail-template-detail/'+item._id">
-                  </nb-icon>
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="trash-2-outline" class="link"
-                    nbTooltip="Delete" (click)="delete(item)"></nb-icon>
-                </div>
-              </nb-card-header>
-              <nb-card-body>
-                <div class="text-group">
-                  <label class="label">Subject</label>
-                  <span [nbTooltip]="item.subject">{{ item.subject }}</span>
-                </div>
-                <div class="text-group">
-                  <label class="label">Remark</label>
-                  {{item.remark || '-'}}
-                </div>
-                <div class="text-group">
-                  <label class="label">CC</label>
-                  {{item.cc || '-'}}
-                </div>
-                <div class="text-group">
-                  <label class="label">BCC</label>
-                  {{item.bcc || '-'}}
-                </div>
-                <i class="text-gray">
+        <div *ngIf="isGridLayout">
+          <div class="row">
+            <div class="col-md-6 col-lg-6 m-b-20" *ngFor="let item of internal;">
+              <nb-card accent="success">
+                <nb-card-header>
+                  <div class="title">
+                    <label class="link" [nbTooltip]="item.name"
+                      (click)="preEmail(item,PreviewEmail)">{{item.name}}</label>
+                  </div>
+                  <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
+                    <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                      [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
+                    </nb-icon>
+                  </div>
+                </nb-card-header>
+                <nb-card-body>
                   <div class="text-group">
-                    <label class="label">Last update by</label>
-                    {{ item.lastChangedInfo.refUser.firstname }}
-                    {{ item.lastChangedInfo.refUser.lastname }}
+                    <label class="label">Subject</label>
+                    <span [nbTooltip]="item.subject">{{ item.subject }}</span>
                   </div>
                   <div class="text-group">
-                    <label class="label">Last update date</label>
-                    {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
+                    <label class="label">Remark</label>
+                    {{item.remark || '-'}}
                   </div>
-                </i>
-              </nb-card-body>
-            </nb-card>
+                  <div class="text-group">
+                    <label class="label">CC</label>
+                    {{item.cc || '-'}}
+                  </div>
+                  <div class="text-group">
+                    <label class="label">BCC</label>
+                    {{item.bcc || '-'}}
+                  </div>
+                  <i class="text-gray">
+                    <div class="text-group">
+                      <label class="label">Last update by</label>
+                      {{ item.lastChangedInfo.refUser.firstname }}
+                      {{ item.lastChangedInfo.refUser.lastname }}
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Last update date</label>
+                      {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
+                    </div>
+                  </i>
+                </nb-card-body>
+              </nb-card>
+            </div>
           </div>
+        </div>
+
+        <div *ngIf="!isGridLayout">
+          <nb-card-body>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-left">Template</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Remark</th>
+                    <th *ngIf="role.refAuthorize.configuration.mailTemplate.editable" scope="col" style="width: 110px;">
+                      Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of internal;">
+                    <td class="text-left">
+                      <span class="link" [nbTooltip]="item.name"
+                        (click)="preEmail(item,PreviewEmail)">{{item.name}}</span>
+                    </td>
+                    <td>
+                      <span>{{ item.subject }}</span>
+                    </td>
+                    <td>
+                      <span> {{item.remark || '-'}}</span>
+                    </td>
+                    <td *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
+                      <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                        [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </nb-card-body>
         </div>
       </nb-tab>
       <nb-tab tabTitle="External">
         <!-- list all item External  -->
-        <div class="row">
-          <div class="col-sm-6 col-md-6 col-lg-6 m-b-20" *ngFor="let item of external;">
-            <nb-card accent="success">
-              <nb-card-header>
-                <div class="title">
-                  <label [nbTooltip]="item.name">{{item.name}}</label>
-                </div>
-                <div class="actions">
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="edit-outline" class="link" nbTooltip="Edit"
-                    [routerLink]="'/setting/mail-template-detail/'+item._id">
-                  </nb-icon>
-                  <nb-icon *ngIf="role.refAuthorize.configuration.mailTemplate.editable" icon="trash-2-outline" class="link"
-                    nbTooltip="Delete" (click)="delete(item)"></nb-icon>
-                </div>
-              </nb-card-header>
-              <nb-card-body>
-                <div class="text-group">
-                  <label class="label">Subject</label>
-                  <span [nbTooltip]="item.subject">{{ item.subject }}</span>
-                </div>
-                <div class="text-group">
-                  <label class="label">Remark</label>
-                  {{item.remark || '-'}}
-                </div>
-                <div class="text-group">
-                  <label class="label">CC</label>
-                  {{item.cc || '-'}}
-                </div>
-                <div class="text-group">
-                  <label class="label">BCC</label>
-                  {{item.bcc || '-'}}
-                </div>
-                <i class="text-gray">
+        <div *ngIf="isGridLayout">
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 m-b-20" *ngFor="let item of external;">
+              <nb-card accent="success">
+                <nb-card-header>
+                  <div class="title">
+                    <label class="link" [nbTooltip]="item.name"
+                      (click)="preEmail(item,PreviewEmail)">{{item.name}}</label>
+                  </div>
+                  <div *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
+                    <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+                      [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
+                    </nb-icon>
+                    <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"></nb-icon>
+                  </div>
+                </nb-card-header>
+                <nb-card-body>
                   <div class="text-group">
-                    <label class="label">Last update by</label>
-                    {{ item.lastChangedInfo.refUser.firstname }}
-                    {{ item.lastChangedInfo.refUser.lastname }}
+                    <label class="label">Subject</label>
+                    <span [nbTooltip]="item.subject">{{ item.subject }}</span>
                   </div>
                   <div class="text-group">
-                    <label class="label">Last update date</label>
-                    {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
+                    <label class="label">Remark</label>
+                    {{item.remark || '-'}}
                   </div>
-                </i>
-              </nb-card-body>
-            </nb-card>
+                  <div class="text-group">
+                    <label class="label">CC</label>
+                    {{item.cc || '-'}}
+                  </div>
+                  <div class="text-group">
+                    <label class="label">BCC</label>
+                    {{item.bcc || '-'}}
+                  </div>
+                  <i class="text-gray">
+                    <div class="text-group">
+                      <label class="label">Last update by</label>
+                      {{ item.lastChangedInfo.refUser.firstname }}
+                      {{ item.lastChangedInfo.refUser.lastname }}
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Last update date</label>
+                      {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}
+                    </div>
+                  </i>
+                </nb-card-body>
+              </nb-card>
+            </div>
           </div>
+        </div>
+
+        <div *ngIf="!isGridLayout">
+          <nb-card-body>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-left">Template</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Remark</th>
+                    <th *ngIf="role.refAuthorize.configuration.mailTemplate.editable" scope="col" style="width: 110px;">
+                      Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of external;">
+                    <td class="text-left">
+                      <span class="link" [nbTooltip]="item.name"
+                        (click)="preEmail(item,PreviewEmail)">{{item.name}}</span>
+                    </td>
+                    <td>
+                      <span>{{ item.subject }}</span>
+                    </td>
+                    <td>
+                      <span> {{item.remark || '-'}}</span>
+                    </td>
+                    <td *ngIf="role.refAuthorize.configuration.mailTemplate.editable" class="actions">
+                      <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                        [routerLink]="'/employer/setting/mail-template-detail/'+item._id">
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </nb-card-body>
         </div>
       </nb-tab>
     </nb-tabset>
@@ -131,3 +221,33 @@
 <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
   [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
 </mat-paginator>
+
+<!-- PreviewEmail -->
+<ng-template #PreviewEmail let-data let-ref="dialogRef">
+  <nb-card [style.max-height.px]="innerHeight" [style.width.px]="innerWidth">
+    <nb-card-header>
+      <div class="box-header">
+        <h5 class="box-title">{{ mailOptions.subject }}
+        </h5>
+      </div>
+      <div class="user-block">
+        <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
+        <span *ngIf="mailOptions.cc.length" class="description">
+          <strong>cc:</strong> {{ mailOptions.cc }}
+        </span>
+        <span *ngIf="mailOptions.bcc.length" class="description">
+          <strong>bcc:</strong> {{ mailOptions.bcc }}
+        </span>
+      </div>
+    </nb-card-header>
+    <nb-card-body class="dialog-body">
+      <angular-editor placeholder="'Enter text here...'" [(ngModel)]="mailOptions.html" [config]="editorConfig">
+      </angular-editor>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="footer-collapse">
+        <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

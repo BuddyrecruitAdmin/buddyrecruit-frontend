@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { JdService } from '../jd.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
-import { getRole } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
+import { getRole, getIsGridLayout, setIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+
 @Component({
   selector: 'ngx-jd-list',
   templateUrl: './jd-list.component.html',
@@ -23,7 +24,11 @@ export class JdListComponent implements OnInit {
   paging: IPaging;
   pageEvent: PageEvent;
   criteria: Criteria;
+  minPageSize = Paging.pageSizeOptions[0];
+  devices: Devices;
   loading: boolean;
+  isGridLayout: boolean;
+
   constructor(
     private router: Router,
     private service: JdService,
@@ -32,6 +37,15 @@ export class JdListComponent implements OnInit {
     private toastrService: NbToastrService
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
+    this.isGridLayout = getIsGridLayout();
+    if (!this.isGridLayout) {
+      if (this.devices.isMobile || this.devices.isTablet) {
+        this.isGridLayout = true;
+      } else {
+        this.isGridLayout = false;
+      }
+    }
   }
 
   ngOnInit() {
@@ -47,6 +61,7 @@ export class JdListComponent implements OnInit {
   }
 
   search() {
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
@@ -72,6 +87,11 @@ export class JdListComponent implements OnInit {
     });
   }
 
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
+  }
+
   changePaging(event) {
     this.paging = {
       length: event.length,
@@ -79,7 +99,6 @@ export class JdListComponent implements OnInit {
       pageSize: event.pageSize,
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.loading = true;
     this.search();
   }
 

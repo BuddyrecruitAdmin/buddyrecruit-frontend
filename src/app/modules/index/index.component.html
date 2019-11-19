@@ -1,103 +1,137 @@
 <div class="font-family">
 
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top mt-md-4">
-    <div class="container">
-      <div class="navbar-brand d-flex align-items-center" href="">
-        <img src="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
-        <strong class="pl-md-3 pl-2 d-none d-md-block"> Buddy Recruit</strong>
-      </div>
-      <ul class="navbar-nav ml-md-auto">
-        <li class="nav-item active">
-          <a class="nav-link btn btn-outline-primary px-3" href="auth/login" role="button">
-            Log In
-          </a>
-        </li>
-      </ul>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="navbar-brand d-flex align-items-center">
+      <img src="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
+      <strong class="pl-md-3 pl-2 d-none d-md-block">
+        <span class="text-green">B</span>uddy
+        <span class="text-green">R</span>ecruit
+      </strong>
     </div>
+    <ul class="navbar-nav ml-md-auto">
+      <li class="nav-item active">
+        <button nbButton outline status="success" [size]="size" class="m-r-10" [routerLink]="'/employer/login'">Employer
+          Site</button>
+        <button nbButton status="primary" [size]="size" [routerLink]="'/employer/login'">Sign In</button>
+      </li>
+    </ul>
   </nav>
 
-  <header>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-      </ol>
-      <div class="carousel-inner" role="listbox">
-        <!-- Slide One - Set the background image for this slide in the line below -->
-        <div id="item-1" class="carousel-item active">
-          <div class="carousel-caption text-left">
-            <h1>
-              Match : Get qualified candidates & Collaborate effectively
-            </h1>
-            <p class="lead">
-              Lack of understanding between the recruiters and hiring manager
-              ?
-            </p>
-            <!-- <a class="btn btn-primary btn-lg mb-5" href="#" role="button">
-                Register for Buddy Recruit
-              </a> -->
-          </div>
-        </div>
-        <!-- Slide Two - Set the background image for this slide in the line below -->
-        <div id="item-2" class="carousel-item">
-          <div class="carousel-caption text-left">
-            <h1>
-              Organize : Easy Application Tracking & effective onboarding.
-            </h1>
-            <p class="lead">
-              A modern , Intelligent & friendly applicant tracking system.
-            </p>
-            <!-- <a class="btn btn-primary btn-lg mb-5" href="#" role="button">
-                Register for Buddy Recruit
-              </a> -->
-          </div>
-        </div>
-        <!-- Slide Three - Set the background image for this slide in the line below -->
-        <div id="item-3" class="carousel-item">
-          <div class="carousel-caption text-left">
-            <h1>
-              Big Data : The hardest part of recruitment is screening &
-              evaluating candidate from a large application pool.
-            </h1>
-            <p class="lead">
-              <i class="fas fa-long-arrow-alt-right pr-3"></i>Candidate
-              screening is a BIG CHALLENGE.
-            </p>
-            <p class="lead">
-              <i class="fas fa-long-arrow-alt-right pr-3"></i>Inability in
-              using data effectively
-            </p>
-            <!-- <a class="btn btn-primary btn-lg mb-5" href="#" role="button"
-                >Register for Buddy Recruit
-              </a> -->
-          </div>
-        </div>
-        <div id="item-4" class="carousel-item">
-          <div class="carousel-caption text-left">
-            <h1>
-              Let " <strong style="font-weight: 600;">BUDDY RECRUIT</strong> "
-              help you!
-            </h1>
-            <p class="lead">
-              Your Buddy for Successful Recruitment
-            </p>
-            <!-- <a class="btn btn-primary btn-lg mb-5" href="#" role="button"
-                >Register for Buddy Recruit
-              </a> -->
-          </div>
-        </div>
+  <ngb-carousel *ngIf="images" [showNavigationArrows]="showNavigationArrows">
+    <ng-template ngbSlide *ngFor="let image of images">
+      <div class="picsum-img-wrapper">
+        <img class="img-fluid" [src]="image.img">
       </div>
-      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div>
-  </header>
+      <div class="carousel-caption">
+        <h3 class="text-white">{{ image.title }}</h3>
+        <p class="text-white">{{ image.remark }}</p>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+
+  <div class="contact-us">
+    <nb-accordion>
+      <!-- <nb-accordion-item [style.width.px]="innerWidth"> -->
+      <nb-accordion-item>
+        <nb-accordion-item-header>Contact Buddy Recruit for free Demo&Trial</nb-accordion-item-header>
+        <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">
+          <div class="label text-center text-gray m-b-20">
+            <div class="m-b-5">
+              Your <b class="text-black">BUDDY</b> for <span class="text-green">SUCCESSFUL</span> Recruitment.
+            </div>
+            <div>
+              Let Buddy Recruit help you make the <span class="text-black">RIGHT</span> hire, <span
+                class="text-black">FASTER</span>.
+            </div>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.firstName }">
+            <label class="label">First Name <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="contactUs.firstName" nbInput fullWidth>
+            <small *ngIf="errMsg.firstName" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.firstName }}
+            </small>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.lastName }">
+            <label class="label">Last Name <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="contactUs.lastName" nbInput fullWidth>
+            <small *ngIf="errMsg.lastName" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.lastName }}
+            </small>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.email }">
+            <label class="label">Work Email <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="contactUs.email" nbInput fullWidth>
+            <small *ngIf="errMsg.email" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.email }}
+            </small>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.phone }">
+            <label class="label">Phone Number <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="contactUs.phone" nbInput fullWidth>
+            <small *ngIf="errMsg.phone" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.phone }}
+            </small>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.companyName }">
+            <label class="label">Company Name <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="contactUs.companyName" nbInput fullWidth>
+            <small *ngIf="errMsg.companyName" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.companyName }}
+            </small>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.numberEmployees }">
+            <label class="label">Number of Employees <span class="text-red">*</span></label>
+            <input type="text" pattern="/^\d*$/" maxlength="7" [(ngModel)]="contactUs.numberEmployees" nbInput
+              fullWidth>
+            <small *ngIf="errMsg.numberEmployees" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.numberEmployees }}
+            </small>
+          </div>
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.planToUse }">
+            <label class="label">Plan To Use <span class="text-red">*</span></label>
+            <div class="m-l-15">
+              <nb-radio-group [(ngModel)]="contactUs.planToUse">
+                <nb-radio *ngFor="let option of planOptions" [value]="option.value">{{ option.label }}</nb-radio>
+              </nb-radio-group>
+              <small *ngIf="errMsg.planToUse" class="text-red">
+                <nb-icon icon="alert-circle-outline"></nb-icon>
+                {{ errMsg.planToUse }}
+              </small>
+            </div>
+          </div>
+          <!-- <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.userRole }">
+            <label class="label">Role in the recruitment process <span class="text-red">*</span></label>
+            <nb-radio-group [(ngModel)]="contactUs.userRole">
+              <nb-radio *ngFor="let option of roleOptions" [value]="option.value">{{ option.label }}</nb-radio>
+            </nb-radio-group>
+            <small *ngIf="errMsg.userRole" class="text-red">
+              <nb-icon icon="alert-circle-outline"></nb-icon>
+              {{ errMsg.userRole }}
+            </small>
+          </div> -->
+          <div class="form-control-group">
+            <label class="label">Message</label>
+            <textarea type="text" nbInput fullWidth [(ngModel)]="contactUs.remark"></textarea>
+          </div>
+          <hr>
+          <div class="m-t-20">
+            <button nbButton status="success" size="small" class="pull-right" (click)="submit()">Submit</button>
+          </div>
+        </nb-accordion-item-body>
+
+        <nb-accordion-item-body *ngIf="isSubmitted">
+          <div class="label text-center" style="margin: 2rem 0;">
+            Thank you for you information.
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+    </nb-accordion>
+  </div>
 
 </div>

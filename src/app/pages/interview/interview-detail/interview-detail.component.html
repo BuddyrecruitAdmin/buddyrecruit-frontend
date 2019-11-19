@@ -1,6 +1,6 @@
 <div class="content-header with-shadow">
   <div class="breadcrumb">
-    <span><a [routerLink]="'/interview/list'" class="text-green">Pending Interview</a></span>
+    <span><a [routerLink]="'/employer/interview/list'" class="text-green">Pending Interview</a></span>
     <span class="fa fa-angle-right"></span>
     <span>{{ jrName }}</span>
   </div>
@@ -9,7 +9,7 @@
 <nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
   <span>
     Your available date is empty. Do you want to configure now ?
-    <a class="link underline m-l-5" [routerLink]="'/calendar'"><b>Yes</b></a>
+    <a class="link underline m-l-5" [routerLink]="'/employer/calendar'"><b>Yes</b></a>
     <span class="m-l-5 m-r-5">/</span>
     <a class="link underline" (click)="showTips = !showTips"><b>No</b></a>
   </span>
@@ -138,18 +138,28 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="item.reject.flag" class="text-group">
-                    <label class="label">Reject By</label>
-                    <span
-                      style="color: orange">{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
-                  </div>
-                  <div *ngIf="item.reject.flag" class="text-group">
-                    <label class="label">Reject Reason</label>
-                    <span style="color: orange">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
-                  </div>
-                  <div *ngIf="item.reject.flag && item.reject.remark" class="text-group">
-                    <label class="label">Reject Reason</label>
-                    <span style="color: orange">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                  <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
+                    <label class="label text-light-gray">Reject Info</label>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Reject Reason</label>
+                        <span class="text-red">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                      </div>
+                      <div *ngIf="item.reject.remark" class="text-group">
+                        <label class="label">Reject Remark</label>
+                        <span class="text-red">{{ item.reject.remark || '-' }}</span>
+                      </div>
+                      <i class="text-gray">
+                        <div class="text-group">
+                          <label class="label">Reject By</label>
+                          <span>{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Reject Date</label>
+                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-' }}</span>
+                        </div>
+                      </i>
+                    </div>
                   </div>
                 </div>
               </div>

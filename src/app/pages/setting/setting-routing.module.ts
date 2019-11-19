@@ -22,6 +22,7 @@ import { RejectStageComponent } from './reject-stage/reject-stage.component';
 import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 import { BlacklistComponent } from './blacklist/blacklist.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 const routes: Routes = [
   {
@@ -133,8 +134,12 @@ const routes: Routes = [
         component: BlacklistComponent,
       },
       {
+        path: 'contact-list',
+        component: ContactUsComponent,
+      },
+      {
         path: '**',
-        redirectTo: '/auth/login',
+        redirectTo: '/employer/home',
         pathMatch: 'full',
       },
     ],
