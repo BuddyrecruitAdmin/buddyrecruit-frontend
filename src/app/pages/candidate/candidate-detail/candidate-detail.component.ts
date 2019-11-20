@@ -215,13 +215,13 @@ export class CandidateDetailComponent implements OnInit {
 
       // Set action
       if (step.editable) {
-        this.condition.button.nextStep = true;
-        this.condition.button.reject = true;
         if (item.candidateFlow.reject.flag) {
           if (step.refStage.order !== 202 && step.refStage.order !== 402) {
             this.condition.button.revoke = true;
           }
         } else {
+          this.condition.button.nextStep = true;
+          this.condition.button.reject = true;
           switch (step.refStage.order) {
             case 101:
               break;

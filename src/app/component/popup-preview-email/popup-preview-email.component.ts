@@ -79,15 +79,19 @@ export class PopupPreviewEmailComponent implements OnInit {
   getPreviewEmail() {
     this.candidateService.candidateFlowPreviewEmail(this.flowId, this.stageId, this.buttonId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        if (response.data.mailOptions) {
-          this.mailOptions = response.data.mailOptions;
-          this.mailType = response.data.type;
-          this.actionUser = response.data.actionUser;
-          this.previewEmail = true;
+        if (response.status === 'W') {
+          this.callPopupWarning(response.data);
         } else {
-          this.actionUser = response.data.actionUser;
-          this.previewEmail = false;
-          this.nextStep();
+          if (response.data.mailOptions) {
+            this.mailOptions = response.data.mailOptions;
+            this.mailType = response.data.type;
+            this.actionUser = response.data.actionUser;
+            this.previewEmail = true;
+          } else {
+            this.actionUser = response.data.actionUser;
+            this.previewEmail = false;
+            this.nextStep();
+          }
         }
       } else {
         this.actionUser = response.data.actionUser;
@@ -95,6 +99,56 @@ export class PopupPreviewEmailComponent implements OnInit {
         this.nextStep();
       }
       this.loading = false;
+    });
+  }
+
+  callPopupWarning(data: any) {
+    let type = 'C';
+    let contents = [];
+    if (data.otherJR && data.otherJR.length) {
+      const found = data.otherJR.find(element => {
+        return element.refStage.refMain.order === 600;
+      });
+      if (found) {
+        type = 'I';
+        contents.push(`ไม่สามารถทำรายการได้ เนื่องจากผู้สมัครได้เซ็นสัญญากับ`);
+        contents.push(`JR: ${found.refJR.refJD.position} - Department: ${found.refJR.departmentName} แล้ว`);
+      } else {
+        type = 'W';
+        contents.push('พบผู้สมัครอยู่หลาย JR ดังต่อไปนี้');
+        data.otherJR.map((element, index) => {
+          contents.push(`${index + 1}. JR: ${element.refJR.refJD.position} - Department: ${element.refJR.departmentName} (${element.refStage.refMain.name})`);
+        });
+        contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
+      }
+    }
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: type, contents: contents }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        if (data.mailOptions) {
+          this.mailOptions = data.mailOptions;
+          this.mailType = data.type;
+          this.actionUser = data.actionUser;
+          this.previewEmail = true;
+        } else {
+          this.loading = true;
+          const request = this.setRequest();
+          this.candidateService.candidateFlowApprove(this.flowId, this.stageId, this.buttonId, request).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+            this.loading = false;
+            this.ref.close(true);
+          });
+        }
+      } else {
+        this.ref.close();
+      }
     });
   }
 
