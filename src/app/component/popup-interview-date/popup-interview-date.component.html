@@ -22,14 +22,19 @@
     <div class="form-control-group">
       <label class="label">Interview Date <span class="text-red">*</span></label>
       <nb-select fullWidth placeholder="Select Date" [(ngModel)]="date" (selectedChange)="onSelectDate($event)">
-        <nb-option *ngFor="let option of dropdownDate" [value]="option.value">{{ option.label }}</nb-option>
+        <nb-option *ngFor="let option of dropdownDate" [value]="option.value"
+          [nbTooltip]="'staff available '+option.group">
+          {{ option.label }} <span class="text-red" *ngIf="option.group">&nbsp;&nbsp;({{ option.group }})</span>
+        </nb-option>
       </nb-select>
     </div>
     <div class="form-control-group">
       <label class="label">Interview Time <span class="text-red">*</span></label>
       <nb-select fullWidth placeholder="Select Time" [(ngModel)]="time" (selectedChange)="onSelectTime($event)"
         [disabled]="!date">
-        <nb-option *ngFor="let option of dropdownTime" [value]="option.value">{{ option.label }}</nb-option>
+        <nb-option *ngFor="let option of dropdownTime" [value]="option.value">{{ option.label }}<span class="text-red"
+            *ngIf="option.group" [nbTooltip]="'staff available '+option.group">&nbsp;&nbsp;({{ option.group }})</span>
+        </nb-option>
       </nb-select>
     </div>
     <div class="form-control-group">
