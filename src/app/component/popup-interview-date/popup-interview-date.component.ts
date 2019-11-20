@@ -159,8 +159,9 @@ export class PopupInterviewDateComponent implements OnInit {
               active: false
             });
           });
-          // this.setDropdownTime(this.date);
           this.setDropdownDate();
+          this.setDropdownTime(this.date);
+          this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
           this.setUsers(this.date, this.time);
         }
         if (response.data.candidateFlow.refStage.refMain.name === 'Pending Appointment') {
@@ -194,7 +195,7 @@ export class PopupInterviewDateComponent implements OnInit {
           this.dropdownDate.push({
             label: this.utilitiesService.convertDate(element.startDate),
             value: this.convertDateTime(element.startDate),
-            group: this.setTipUsers(this.convertDateTime(element.startDate), null)
+            group: this.setUsers(this.convertDateTime(element.startDate), null)
           });
         });
       });
@@ -233,7 +234,7 @@ export class PopupInterviewDateComponent implements OnInit {
               this.dropdownTime.push({
                 label: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
                 value: JSON.parse(JSON.stringify(startHour)),
-                group: this.setTipUsers(iDate, JSON.parse(JSON.stringify(startHour)))
+                group: this.setUsers(iDate, JSON.parse(JSON.stringify(startHour)))
               });
             }
           }
@@ -252,7 +253,7 @@ export class PopupInterviewDateComponent implements OnInit {
     this.setUsers(this.date, time);
   }
 
-  setTipUsers(date: any, time: any) {
+  setUsers(date: any, time: any) {
     this.sum = 0;
     let usersActive = [];
     if (date || time) {
@@ -293,44 +294,6 @@ export class PopupInterviewDateComponent implements OnInit {
       return this.sum;
     }
     return this.sum;
-  }
-
-  setUsers(date: any, time: any) {
-    let usersActive = [];
-    if (date || time) {
-      if (this.userInterviews.length) {
-        this.userInterviews.forEach(user => {
-          user.calendar.availableDates.forEach(element => {
-            const startDate = new Date(element.startDate);
-            const endDate = new Date(element.endDate);
-            if (time) {
-              if (new Date(startDate) <= new Date(time)) {
-                if (new Date(time) <= new Date(endDate)) {
-                  usersActive.push(user.refUser._id);
-                  return;
-                }
-              }
-            } else if (date) {
-              if (isSameDay(new Date(date), startDate)) {
-                usersActive.push(user.refUser._id);
-                return;
-              }
-            }
-          });
-        });
-      }
-    }
-    if (this.users.length) {
-      this.users.map(user => {
-        user.active = false;
-        const found = usersActive.find(element => {
-          return element === user.refUser;
-        });
-        if (found) {
-          user.active = true;
-        }
-      });
-    }
   }
 
   save() {

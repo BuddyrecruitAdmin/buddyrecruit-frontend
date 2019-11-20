@@ -459,6 +459,9 @@ export class AuthorizeDetailComponent implements OnInit {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/employer/setting/authorize']);
+            setTimeout(() => {
+              location.reload();
+            }, 1500);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }

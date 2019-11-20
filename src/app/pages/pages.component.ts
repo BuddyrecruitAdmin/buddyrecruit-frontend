@@ -156,9 +156,7 @@ export class PagesComponent {
         if (configuration.report && configuration.report.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[13]);
         }
-        if (configuration.blacklist && configuration.blacklist.visible) {
-          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
-        }
+        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
 
         // is Super Admin
         if (role.refHero.isSuperAdmin) {

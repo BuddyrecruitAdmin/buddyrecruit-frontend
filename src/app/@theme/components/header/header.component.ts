@@ -4,7 +4,7 @@ import { ProfileService } from '../../../pages/profile/profile.service';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil, timeout } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { getRole, setFlowId } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
 import { Router } from "@angular/router";
 import { NbSearchService } from '@nebular/theme';
 import { setKeyword } from '../../../shared/services/auth.service';
@@ -12,7 +12,7 @@ import { HeaderService } from './header.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Paging as IPaging } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
-
+import { AuthorizeService } from '../../../pages/setting/authorize/authorize.service';
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
@@ -75,8 +75,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private breakpointService: NbMediaBreakpointsService,
     private searchService: NbSearchService,
     private utilitiesService: UtilitiesService,
+    private authorizeService: AuthorizeService,
   ) {
     this.role = getRole();
+    if (this.role && this.role.refAuthorize) {
+      this.authorizeService.getDetail(this.role.refAuthorize._id).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.role.refAuthorize = response.data;
+          let token = getAuthentication();
+          token.role = this.role;
+          setAuthentication(token);
+        }
+      });
+    }
     setKeyword();
     this.searchService.onSearchSubmit().subscribe((data: any) => {
       setKeyword(data.term);
