@@ -4,7 +4,7 @@ import { ProfileService } from '../../../pages/profile/profile.service';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil, timeout } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { getRole, setFlowId, setAuthentication, getAuthentication } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
 import { Router } from "@angular/router";
 import { NbSearchService } from '@nebular/theme';
 import { setKeyword } from '../../../shared/services/auth.service';
@@ -13,7 +13,6 @@ import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Paging as IPaging } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import { AuthorizeService } from '../../../pages/setting/authorize/authorize.service';
-
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],

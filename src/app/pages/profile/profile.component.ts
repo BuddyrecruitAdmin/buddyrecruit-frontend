@@ -228,14 +228,7 @@ export class ProfileComponent implements OnInit {
     this.url = this.croppedImage;
     this.dialogRef.close();
   }
-
-  // rotateLeft() {
-  //   this.imageCropper.rotateLeft();
-  // }
-  // rotateRight() {
-  //   this.imageCropper.rotateRight();
-  // }
-
+  
   close() {
     this.croppedImage = "";
     this.fileInput.nativeElement.value = "";

@@ -31,17 +31,17 @@
           <label class="label">Remark</label>
           <input type="text" [(ngModel)]="itemDialog.remark" nbInput fullWidth placeholder="remark">
         </div>
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': sErrorcc }">
           <label class="label">CC<small>(After input email please press enter)</small></label>
           <tag-input [(ngModel)]="itemDialog.cc" secondaryPlaceholder="Enter a email" placeholder="+"
-            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[32, 188]">
+            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
           </tag-input>
           <small *ngIf="touched" class="text-red">{{ sErrorcc }}</small>
         </div>
-        <div class="form-control-group">
+        <div class="form-control-group" [ngClass]="{ 'has-error': sErrorBcc }">
           <label class="label">BCC<small>(After input email please press enter)</small></label>
           <tag-input [(ngModel)]="itemDialog.bcc" secondaryPlaceholder="Enter a email" placeholder="+"
-            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[32, 188]">
+            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
           </tag-input>
           <small *ngIf="touched" class="text-red">{{ sErrorBcc }}</small>
         </div>

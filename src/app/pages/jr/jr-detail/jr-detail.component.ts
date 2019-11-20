@@ -230,7 +230,6 @@ export class JrDetailComponent implements OnInit {
             }
           })
         })
-        console.log(this.Users)
       }
     });
   }

@@ -167,12 +167,6 @@ export class RejectStageComponent implements OnInit {
   }
 
   save() {
-    // const confirm = this.matDialog.open(PopupMessageComponent, {
-    //   width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-    //   data: { type: 'C', content: 'Are you sure?' }
-    // });
-    // confirm.afterClosed().subscribe(result => {
-    //   if (result) {
     const request = this.setRequest();
     this.service.edit(request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -180,9 +174,7 @@ export class RejectStageComponent implements OnInit {
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
-    })
-    //   }
-    // });
+    });
   }
 
   setRequest(): any {

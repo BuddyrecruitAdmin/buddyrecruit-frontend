@@ -79,7 +79,7 @@ export class MailTemplateDetailComponent implements OnInit {
         // this.initialDropdown().then((response) => {
 
         // });
-      } 
+      }
     });
   }
 
@@ -146,49 +146,70 @@ export class MailTemplateDetailComponent implements OnInit {
   }
 
   validation(): boolean {
+    const that = this;
     this.touched = true;
     let isValid = true;
     this.sErrorcc = "";
     this.sErrorBcc = "";
     if (this.itemDialog.cc.length > 0) {
+      // this.itemDialog.cc.map(cc => {
+      //   if (cc.value) {
+      //     this.n = cc.value.search("@");
+      //     if (this.n > 0) {
+      //       this.str = cc.value.slice(this.n + 1);
+      //       this.n = this.str.search("@");
+      //       if (this.n != -1) {
+      //         this.sErrorcc = MESSAGE[9];
+      //         isValid = false
+      //       } else {
+      //         let checkFinal;
+      //         checkFinal = this.str.search(/\./);
+      //         if (checkFinal < 1) {
+      //           this.sErrorcc = MESSAGE[9];
+      //           isValid = false;
+      //         }
+      //       }
+      //     } else {
+      //       this.sErrorcc = MESSAGE[9];
+      //       isValid = false;
+      //     }
+      //   }
+      // })
       this.itemDialog.cc.map(cc => {
         if (cc.value) {
-          this.n = cc.value.search("@");
-          if (this.n > 0) {
-            this.str = cc.value.slice(this.n + 1);
-            this.n = this.str.search("@");
-            if (this.n != -1) {
-              this.sErrorcc = MESSAGE[9];
-              isValid = false
-            } else {
-              let checkFinal;
-              checkFinal = this.str.search(/\./);
-              if (checkFinal < 1) {
-                this.sErrorcc = MESSAGE[9];
-                isValid = false;
-              }
-            }
-          } else {
+          if (!this.utilitiesService.isValidEmail(cc.value)) {
             this.sErrorcc = MESSAGE[9];
-            isValid = false;
+            isValid = false
+          }else{
+            this.sErrorcc = "";
           }
         }
       })
     }
     if (this.itemDialog.bcc.length > 0) {
+      // this.itemDialog.bcc.map(bcc => {
+      //   if (bcc.value) {
+      //     this.n = bcc.value.search("@");
+      //     if (this.n > 0) {
+      //       this.str = bcc.value.slice(this.n + 1);
+      //       this.n = this.str.search("@");
+      //       if (this.n != -1) {
+      //         this.sErrorBcc = MESSAGE[9];
+      //         isValid = false
+      //       }
+      //     } else {
+      //       this.sErrorBcc = MESSAGE[9];
+      //       isValid = false;
+      //     }
+      //   }
+      // })
       this.itemDialog.bcc.map(bcc => {
         if (bcc.value) {
-          this.n = bcc.value.search("@");
-          if (this.n > 0) {
-            this.str = bcc.value.slice(this.n + 1);
-            this.n = this.str.search("@");
-            if (this.n != -1) {
-              this.sErrorBcc = MESSAGE[9];
-              isValid = false
-            }
-          } else {
+          if (!this.utilitiesService.isValidEmail(bcc.value)) {
             this.sErrorBcc = MESSAGE[9];
-            isValid = false;
+            isValid = false
+          }else{
+            this.sErrorBcc = "";
           }
         }
       })
@@ -214,7 +235,7 @@ export class MailTemplateDetailComponent implements OnInit {
     return isValid;
 
   }
-  
+
   save() {
     if (this.validation()) {
       const request = this.setRequest();

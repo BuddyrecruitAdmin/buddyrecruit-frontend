@@ -48,7 +48,7 @@ export class MailTemplateListComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
-    this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
+    this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.8;
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();
