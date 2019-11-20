@@ -110,10 +110,10 @@
             <tr>
               <th scope="col" class="text-left">Name</th>
               <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left">Division</th>
-              <th scope="col" class="text-left">Job Position</th>
-              <th scope="col" class="text-left">Stage</th>
-              <th scope="col" class="text-left">Blocked Reason</th>
+              <th scope="col">Division</th>
+              <th scope="col">Job Position</th>
+              <th scope="col">Stage</th>
+              <th scope="col">Blocked Reason</th>
               <th scope="col" style="width: 110px;">Actions</th>
             </tr>
           </thead>
@@ -124,10 +124,10 @@
                   {{ utilitiesService.setFullname(item.refCandidate) }}
                 </span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.refCandidateFlow?.refJR?.department?.name || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.refCandidateFlow?.refJR?.division?.name || '-' }}</span>
               </td>
               <td class="text-left">
