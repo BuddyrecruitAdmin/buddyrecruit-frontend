@@ -143,11 +143,16 @@ export class IndexComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.innerHeight = window.innerHeight * 0.8;
-    this.innerWidth = window.innerWidth * 0.8;
+    this.innerWidth = window.innerWidth * 0.4;
     this.devices = this.utilitiesService.getDevice();
     if (this.devices.isMobile || this.devices.isTablet) {
       this.showNavigationArrows = false;
       this.size = 'small';
+      if (this.devices.isMobile) {
+        this.innerWidth = window.innerWidth * 0.96;
+      } else if (this.devices.isTablet) {
+        this.innerWidth = window.innerWidth * 0.65;
+      }
     } else {
       this.showNavigationArrows = true;
       this.size = 'medium';

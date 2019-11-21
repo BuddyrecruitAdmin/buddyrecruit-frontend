@@ -287,7 +287,7 @@
   <!-- Contact Us (fixed, bottom-right) -->
   <div id="register">
     <nb-accordion>
-      <nb-accordion-item>
+      <nb-accordion-item [style.width.px]="innerWidth">
         <nb-accordion-item-header>Contact Buddy Recruit for free Demo&Trial</nb-accordion-item-header>
         <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">
           <div class="label text-center text-gray m-b-20">
