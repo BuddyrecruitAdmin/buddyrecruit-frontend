@@ -459,18 +459,20 @@ export class AuthorizeDetailComponent implements OnInit {
             this.showToast('success', 'Success Message', response.message);
             if (this.role && this.role.refAuthorize) {
               this.service.getDetail(this.role.refAuthorize._id).subscribe(response => {
-                if (response.code === ResponseCode.Success) {
-                  this.role.refAuthorize = response.data;
-                  let token = getAuthentication();
-                  token.role = this.role;
-                  setAuthentication(token);
+                if (request._id === this.role.refAuthorize._id) {
+                  if (response.code === ResponseCode.Success) {
+                    this.role.refAuthorize = response.data;
+                    let token = getAuthentication();
+                    token.role = this.role;
+                    setAuthentication(token);
+                  }
+                  setTimeout(() => {
+                    location.reload();
+                  }, 1500);
                 }
               });
             }
             this.router.navigate(['/employer/setting/authorize']);
-            // setTimeout(() => {
-            //   location.reload();
-            // }, 1500);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }

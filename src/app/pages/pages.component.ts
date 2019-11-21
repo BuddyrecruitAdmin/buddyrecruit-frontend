@@ -29,7 +29,7 @@ export class PagesComponent {
       const menu = role.refCompany.menu;
       if (menu) {
         // Dashboard
-        if (menu.dashboard && menu.dashboard.active) {
+        if (menu.dashboard && menu.dashboard.active && role.refAuthorize.showDashboard ) {
           MENU.MENU_DASHBOARD.forEach(element => {
             this.menu.push(element);
           });
@@ -73,7 +73,7 @@ export class PagesComponent {
           }
         }
         // Reporting
-        if (menu.report && menu.report.active && menu.report.reports) {
+        if (menu.report && menu.report.active && menu.report.reports && role.refAuthorize.showReport) {
           let menuReport: NbMenuItem[];
           menuReport = [];
           // group
@@ -156,8 +156,9 @@ export class PagesComponent {
         if (configuration.report && configuration.report.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[13]);
         }
-        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
-
+        if (configuration.blacklist && configuration.blacklist.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
+        }
         // is Super Admin
         if (role.refHero.isSuperAdmin) {
           menuSetting[1].children.push({

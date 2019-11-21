@@ -4,7 +4,7 @@
     <div>
       <span class="label-grey"
         [nbTooltip]="items.candidateFlow?.refJR?.refJD?.position">{{items.candidateFlow?.refJR?.refJD?.position}}</span>
-      <div class="pull-right">
+      <div *ngIf="role.refAuthorize.editCandidateInfo" class="pull-right">
         <button size="small" nbButton status="success" (click)="changeMode()">
           <nb-icon *ngIf="editable" icon="eye-outline"></nb-icon>
           <nb-icon *ngIf="!editable" icon="edit-2-outline"></nb-icon>
@@ -509,9 +509,9 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)">Original
+    <button *ngIf="role.refAuthorize.showOriginalCV" class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)">Original
       CV</button>
-    <button *ngIf="items.applicationForm" class="txt-left" size="small" nbButton status="info"
+    <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small" nbButton status="info"
       (click)="openApplication(items._id)">App Form</button>
     <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button>
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>

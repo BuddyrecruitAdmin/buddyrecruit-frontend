@@ -42,7 +42,7 @@
         </div>
         <div class="col-md-3">
           <div class="form-control-group">
-            <label>Job Position</label>
+            <label>Job Description</label>
             <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let job of filter.data.jobPosition" [value]="job.value">
@@ -133,7 +133,7 @@
           <thead>
             <tr>
               <th *ngIf="!checked" scope="col" style="font-size: 14px;">Candidate Name</th>
-              <th *ngIf="!checked" scope="col" style="width: 170px;font-size: 14px;">Job Position</th>
+              <th *ngIf="!checked" scope="col" style="width: 170px;font-size: 14px;">Job Description</th>
               <th *ngIf="checked" scope="col" style="width: 170px;font-size: 14px;">Candidate ID</th>
               <th scope="col" style="width: 100px;font-size: 14px;">Field Type</th>
               <th scope="col" style="width: 150px;font-size: 14px;">Field Name</th>
