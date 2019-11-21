@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getIsGridLayout, setIsGridLayout } from '../../../shared/services/auth.service';
+import { getRole, getIsGridLayout, setIsGridLayout, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -12,6 +12,7 @@ import { PopupMessageComponent } from '../../../component/popup-message/popup-me
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
+import { AuthorizeService } from '../../../pages/setting/authorize/authorize.service';
 
 @Component({
   selector: 'ngx-jr-list',
@@ -43,7 +44,19 @@ export class JrListComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
+    private authorizeService: AuthorizeService,
   ) {
+    this.role = getRole();
+    if (this.role && this.role.refAuthorize) {
+      this.authorizeService.getDetail(this.role.refAuthorize._id).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.role.refAuthorize = response.data;
+          let token = getAuthentication();
+          token.role = this.role;
+          setAuthentication(token);
+        }
+      });
+    }
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();

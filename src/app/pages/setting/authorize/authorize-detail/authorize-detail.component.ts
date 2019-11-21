@@ -6,7 +6,7 @@ import { CompanyService } from '../../company/company.service';
 import { ResponseCode, State, Prefix } from '../../../../shared/app.constants';
 import { DropDownValue, DropDownGroup } from '../../../../shared/interfaces/common.interface';
 import { MESSAGE } from '../../../../shared/constants/message';
-import { getRole, setUrl } from '../../../../shared/services/auth.service';
+import { getRole, setUrl, getAuthentication, setAuthentication } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -458,10 +458,20 @@ export class AuthorizeDetailComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
+            if (this.role && this.role.refAuthorize) {
+              this.service.getDetail(this.role.refAuthorize._id).subscribe(response => {
+                if (response.code === ResponseCode.Success) {
+                  this.role.refAuthorize = response.data;
+                  let token = getAuthentication();
+                  token.role = this.role;
+                  setAuthentication(token);
+                }
+              });
+            }
             this.router.navigate(['/employer/setting/authorize']);
-            setTimeout(() => {
-              location.reload();
-            }, 1500);
+            // setTimeout(() => {
+            //   location.reload();
+            // }, 1500);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
