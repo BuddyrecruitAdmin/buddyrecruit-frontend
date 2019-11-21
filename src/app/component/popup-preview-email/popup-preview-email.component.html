@@ -1,3 +1,9 @@
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body class="dialog-body">
+  </nb-card-body>
+</nb-card>
+
 <nb-card *ngIf="previewEmail" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
@@ -25,17 +31,17 @@
         </span>
       </span>
       <span *ngIf="mailOptions.cc.length" class="description">
-          <strong>cc:</strong>
-          <span *ngFor="let cc of mailOptions.cc;let i = index"><span *ngIf="i === 0">
-              {{ cc }}
-            </span><span *ngIf="i > 0" class="mailAfter"> {{ cc }}</span> </span>
-        </span>
-        <span *ngIf="mailOptions.bcc.length" class="description">
-          <strong>bcc:</strong>
-          <span *ngFor="let bcc of mailOptions.bcc;let i = index"><span *ngIf="i === 0">
-              {{ bcc }}
-            </span><span *ngIf="i > 0" class="mailAfter"> {{ bcc }}</span> </span>
-        </span>
+        <strong>cc:</strong>
+        <span *ngFor="let cc of mailOptions.cc;let i = index"><span *ngIf="i === 0">
+            {{ cc }}
+          </span><span *ngIf="i > 0" class="mailAfter"> {{ cc }}</span> </span>
+      </span>
+      <span *ngIf="mailOptions.bcc.length" class="description">
+        <strong>bcc:</strong>
+        <span *ngFor="let bcc of mailOptions.bcc;let i = index"><span *ngIf="i === 0">
+            {{ bcc }}
+          </span><span *ngIf="i > 0" class="mailAfter"> {{ bcc }}</span> </span>
+      </span>
     </div>
   </nb-card-header>
   <nb-card-body class="dialog-body">

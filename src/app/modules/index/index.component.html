@@ -1,23 +1,49 @@
 <div class="font-family">
 
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="navbar-brand d-flex align-items-center">
       <img src="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
-      <strong class="pl-md-3 pl-2 d-none d-md-block">
+      <strong class="pl-2 d-none d-sm-block">
         <span class="text-green">B</span>uddy
         <span class="text-green">R</span>ecruit
       </strong>
     </div>
-    <ul class="navbar-nav ml-md-auto">
-      <li class="nav-item active">
-        <button nbButton outline status="success" [size]="size" class="m-r-10" [routerLink]="'/employer/login'">Employer
-          Site</button>
-        <button nbButton status="primary" [size]="size" [routerLink]="'/employer/login'">Sign In</button>
-      </li>
-    </ul>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+      aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+      <ul class="navbar-nav my-2 my-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" [routerLink]="'.'" fragment="home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'.'" fragment="features">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'.'" fragment="faq">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'.'" fragment="contact-us">Contact Us</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-md-auto">
+        <li class="nav-item ml-auto">
+          <a class="nav-link">
+            <button nbButton outline status="success" [size]="size" class="m-r-10"
+              [routerLink]="'/employer/login'">Employer
+              Site</button>
+            <button nbButton status="success" [size]="size" [routerLink]="'/employer/login'">Sign In</button>
+          </a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
-  <ngb-carousel *ngIf="images" [showNavigationArrows]="showNavigationArrows">
+  <!-- Slide Show -->
+  <ngb-carousel id="home" name="home" *ngIf="images" [showNavigationArrows]="showNavigationArrows">
     <ng-template ngbSlide *ngFor="let image of images">
       <div class="picsum-img-wrapper">
         <img class="img-fluid" [src]="image.img">
@@ -29,9 +55,238 @@
     </ng-template>
   </ngb-carousel>
 
-  <div class="contact-us">
+  <!-- Upcoming -->
+  <section id="upcoming">
+    <div class="container">
+      <div class="header">
+        <h2>Upcoming Event</h2>
+        <h3>พบกับ Buddy Recruit ได้ในงาน <b>"CEBIT ASEAN Thailand 2019"</b></h3>
+        <h3>ระหว่างวันที่ 27-29 พฤศจิกายน 2562 ณ บูท C25 อาคาร 7 อิมแพ็ค เมืองทองธานี</h3>
+        <h3>
+          <a target="_blank" href="https://cebitasean.com">ลงทะเบียนเข้าร่วมงาน</a>
+        </h3>
+      </div>
+      <a target="_blank" href="https://cebitasean.com">
+        <img class="img-fluid" src="../../../assets/images/brochure/Buddy Recruit Set1.jpg" alt="event">
+      </a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="container">
+      <div class="header">
+        <h2>Features</h2>
+        <h3>The future of recruitment experience</h3>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-3">
+          <nb-card>
+            <nb-card-body class="text-left">
+              <h1 class="card-icon">
+                <nb-icon icon="monitor-outline"></nb-icon>
+              </h1>
+              <h5 class="card-title text-cap">Simply Process</h5>
+              <p class="card-text">
+                A modern, Intelligent & friendly ATS
+              </p>
+              <div class="text-right">
+                <small class="link text-orange">Learn More
+                  <nb-icon icon="arrow-forward-outline"></nb-icon>
+                </small>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <nb-card>
+            <nb-card-body class="text-left">
+              <h1 class="card-icon">
+                <nb-icon icon="monitor-outline"></nb-icon>
+              </h1>
+              <h5 class="card-title text-cap">Smart Matching</h5>
+              <p class="card-text">
+                Get qualified candidates & Collaborate effectively
+              </p>
+              <div class="text-right">
+                <small class="link text-orange">Learn More
+                  <nb-icon icon="arrow-forward-outline"></nb-icon>
+                </small>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <nb-card>
+            <nb-card-body class="text-left">
+              <h1 class="card-icon">
+                <nb-icon icon="monitor-outline"></nb-icon>
+              </h1>
+              <h5 class="card-title text-cap">Intelligent Scoring</h5>
+              <p class="card-text">
+                Candidate screening is a BIG CHALLENGE
+              </p>
+              <div class="text-right">
+                <small class="link text-orange">Learn More
+                  <nb-icon icon="arrow-forward-outline"></nb-icon>
+                </small>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <nb-card>
+            <nb-card-body class="text-left">
+              <h1 class="card-icon">
+                <nb-icon icon="monitor-outline"></nb-icon>
+              </h1>
+              <h5 class="card-title text-cap">Data-Driven</h5>
+              <p class="card-text">
+                Be Data-Driven, more effective Recruitment
+              </p>
+              <div class="text-right">
+                <small class="link text-orange">Learn More
+                  <nb-icon icon="arrow-forward-outline"></nb-icon>
+                </small>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Concept -->
+  <aside id="concept">
+    <div class="container">
+      <h2 class="text-white">Your Buddy for Successful Recruitment</h2>
+      <h5 class="text-gray">Let <b>"BUDDY RECRUIT"</b> help you!</h5>
+    </div>
+  </aside>
+
+  <!-- News -->
+  <section id="news">
+    <div class="container">
+      <div class="header">
+        <h2>News and Promotion</h2>
+        <h3>News and promotion that we serve</h3>
+      </div>
+      <div class="row">
+        <div *ngFor="let new of news" class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-image" [style.backgroundImage]="'url('+ new.img +')'">
+              <!-- <img [src]="new.img" class="card-img-top"> -->
+            </div>
+            <div class="card-body text-left">
+              <h6 class="card-title text-dot">{{ new.title }}</h6>
+              <p class="card-text text-dot2">
+                {{ new.remark }}
+              </p>
+              <div class="text-right">
+                <a target="_blank" [href]="new.link" class="link text-orange">
+                  <small>
+                    Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
+                  </small>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="text-center m-t-10">
+        <button nbButton outline status="success">Read More</button>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="header">
+        <h2>FAQ</h2>
+        <h3>คำถามที่พบบ่อย</h3>
+      </div>
+      <nb-accordion>
+        <nb-accordion-item *ngFor="let faq of faqs">
+          <nb-accordion-item-header>About Buddy Recruit ?</nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <div class="m-b-20">About Buddy Recruit.</div>
+            <iframe width="700" height="394" src="https://www.youtube.com/embed/cWtLbSNlnGk" frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+      </nb-accordion>
+    </div>
+  </section>
+
+  <!-- Get Started -->
+  <section id="contact-us">
+    <div class="container">
+      <div class="header">
+        <h2>Ready to get <span class="text-green">started</span>?</h2>
+        <h3>Create a free account in just 2 minutes</h3>
+      </div>
+      <button nbButton status="warning" class="m-r-10">Try it free</button>
+      <button nbButton outline status="success">Get Demo</button>
+    </div>
+  </section>
+
+  <!-- Customer -->
+  <section id="customer">
+    <div class="container">
+      <div class="header">
+        <h2><small>Some of our work that our customer might have seen</small></h2>
+        <h3>You may seen our work at</h3>
+      </div>
+      <div class="text-center">
+        <img src="https://www.zygencenter.com/assets/images/header/logo.png">
+        <img src="https://humanize.co.th/image/new-logo2.png">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 m-b-20">
+          <div class="sitemap">
+            <h6>Sitemap</h6>
+            <a>Home</a>
+            <a>Features</a>
+            <a>FAQ</a>
+            <a>Contact us</a>
+          </div>
+        </div>
+        <div class="col-md-4 m-b-20">
+          <div class="footer-address">
+            <h6>ZYGEN COMPANY LIMITED</h6>
+            <p>65/60 Chamnan Phenjati Business Center Tower,</p>
+            <p>6 th Floor, Rama 9 Road, Huay Kwang, Bangkok, 10310</p>
+            <p>Tel : +662 643 8016, +662 612 2116-7</p>
+            <p>Mail : center@zygencenter.com</p>
+          </div>
+        </div>
+        <div class="col-md-4 m-b-20">
+          <div class="section-title wow fadeInDown animated" style="visibility: visible;">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.364182712334!2d100.56648731474904!3d13.756898200881906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e8b5f598f1b%3A0xa91f1d97bdb4cb81!2zWnlHZW4gQ29tcGFueSBMaW1pdGVkIHwg4Lia4Lij4Li04Lip4Lix4LiXIOC5hOC4i-C5gOC4iOC5h-C4mSDguIjguLPguIHguLHguJQ!5e0!3m2!1sen!2sth!4v1532082801978"
+              width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+          </div>
+        </div>
+      </div>
+      <div id="copyright">
+        <span class="created-by">Copyright &copy; 2018-2019
+          <a class="text-green" target="_blank" href="http://www.zygencenter.com/">ZyGen Company Limited</a>.
+          All rights reserved.
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Contact Us (fixed, bottom-right) -->
+  <div id="register">
     <nb-accordion>
-      <!-- <nb-accordion-item [style.width.px]="innerWidth"> -->
       <nb-accordion-item>
         <nb-accordion-item-header>Contact Buddy Recruit for free Demo&Trial</nb-accordion-item-header>
         <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">
@@ -133,5 +388,4 @@
       </nb-accordion-item>
     </nb-accordion>
   </div>
-
 </div>

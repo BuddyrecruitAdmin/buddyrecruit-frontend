@@ -14,7 +14,7 @@ export class PopupMessageComponent implements OnInit {
       type: string,
       title: string,
       content: string,
-      content2: string,
+      contents: string[],
       btnText: string
     }
   ) { }
@@ -23,12 +23,16 @@ export class PopupMessageComponent implements OnInit {
     switch (this.data.type) {
       case "C": { // Confirmation
         this.data.title = this.data.title || "Confirmation";
-        this.data.content = this.data.content || "Are you sure?";
         this.data.btnText = this.data.btnText || "YES";
         break;
       }
       case "I": { // Information
-        this.data.content = this.data.content || "Warning!";
+        this.data.title = this.data.title || "Information";
+        this.data.btnText = this.data.btnText || "OK";
+        break;
+      }
+      case "W": { // Warning
+        this.data.title = this.data.title || "Warning";
         this.data.btnText = this.data.btnText || "CONTINUE";
         break;
       }

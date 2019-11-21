@@ -26,15 +26,19 @@
 #comfirmation-popup .icon {
   font-size: 58px;
   float: left;
+  color: var(--color-orange);
 }
 #comfirmation-popup .title {
   margin-left: 55px;
   font-size: 24px;
   font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--color-orange);
 }
 #comfirmation-popup .message {
   margin-left: 58px;
   font-size: 14px;
+  color: var(--color-gray);
 }
 
 /* -------------------------------------------------------------------- */
@@ -48,10 +52,42 @@
   width: 48px;
   margin: auto;
   border-radius: 50%;
+  color: var(--color-white);
+  background-color: var(--color-orange);
 }
 #information-popup .icon span {
   font-size: 32px;
   margin: 8px;
+}
+#information-popup .message {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray);
+}
+
+/* -------------------------------------------------------------------- */
+/* WARNING POPUP */
+
+#warning-popup {
+  text-align: center;
+}
+#warning-popup .icon {
+  height: 48px;
+  width: 48px;
+  margin: auto;
+  border-radius: 50%;
+  color: var(--color-white);
+  background-color: var(--color-orange);
+}
+#warning-popup .icon span {
+  font-size: 32px;
+  margin: 8px;
+}
+#warning-popup .message {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray);
+  text-align: left;
 }
 
 /* -------------------------------------------------------------------- */
@@ -65,10 +101,17 @@
   width: 48px;
   margin: auto;
   border-radius: 50%;
+  color: var(--color-white);
+  background-color: var(--color-green);
 }
 #success-popup .icon span {
   font-size: 32px;
   margin: 8px;
+}
+#success-popup .message {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray);
 }
 
 /* -------------------------------------------------------------------- */

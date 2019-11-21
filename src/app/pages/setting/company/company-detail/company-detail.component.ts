@@ -44,6 +44,8 @@ export interface CompanyDetail {
   intEmailPass: string;
   extEmailUser: string;
   extEmailPass: string;
+  incomingEmailUser: string;
+  incomingEmailPass: string;
   addresses: Address[];
 }
 
@@ -68,6 +70,8 @@ export interface ErrMsg {
   address: string;
   province: string;
   postalCode: string;
+  incomingEmailUser: string;
+  incomingEmailPass: string;
 }
 
 @Component({
@@ -172,6 +176,8 @@ export class CompanyDetailComponent implements OnInit {
       intEmailPass: '',
       extEmailUser: '',
       extEmailPass: '',
+      incomingEmailUser: '',
+      incomingEmailPass: '',
       addresses: [this.initialAddress()]
     }
   }
@@ -204,6 +210,8 @@ export class CompanyDetailComponent implements OnInit {
       intEmailPass: '',
       extEmailUser: '',
       extEmailPass: '',
+      incomingEmailUser: '',
+      incomingEmailPass: '',
       address: '',
       province: '',
       postalCode: '',
@@ -429,6 +437,14 @@ export class CompanyDetailComponent implements OnInit {
       }
       if (!this.companyDetail.extEmailPass) {
         this.errMsg.extEmailPass = 'Please Input External Password';
+        isValid = false;
+      }
+      if (!this.companyDetail.incomingEmailUser) {
+        this.errMsg.incomingEmailUser = 'Please Input Incoming Email User';
+        isValid = false;
+      }
+      if (!this.companyDetail.incomingEmailPass) {
+        this.errMsg.incomingEmailPass = 'Please Input Incoming Email Password';
         isValid = false;
       }
       if (!this.companyDetail.addresses[0].address) {

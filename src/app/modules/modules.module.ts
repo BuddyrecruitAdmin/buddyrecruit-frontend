@@ -69,8 +69,13 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbModule,
+  NgbCarouselModule,
+  NgbCollapseModule,
+  NgbDropdownModule,
+  NgbButtonsModule
+} from '@ng-bootstrap/ng-bootstrap';
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
@@ -140,8 +145,12 @@ import { IndexComponent } from './index/index.component';
     TranslateModule.forRoot(),
     NbSpinnerModule,
     DigitOnlyModule,
+
     NgbModule,
-    NgbCarouselModule
+    NgbCarouselModule,
+    NgbCollapseModule,
+    NgbDropdownModule,
+    NgbButtonsModule
   ],
   declarations: [
     ModulesComponent,

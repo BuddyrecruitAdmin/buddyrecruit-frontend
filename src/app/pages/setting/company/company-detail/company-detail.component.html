@@ -316,6 +316,31 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.incomingEmailUser }">
+            <label class="label">Incoming Email User <span class="text-red">*</span></label>
+            <input type="text" [(ngModel)]="companyDetail.incomingEmailUser" nbInput fullWidth>
+            <small *ngIf="errMsg.incomingEmailUser" class="text-red">
+              {{ errMsg.incomingEmailUser }}</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.incomingEmailPass }">
+            <label class="label">Incoming Email Password <span class="text-red">*</span></label>
+            <div class="input-group">
+              <input type="{{ showPassword2 ? 'text' : 'password' }}" [(ngModel)]="companyDetail.incomingEmailPass"
+                nbInput fullWidth autocomplete="off" [ngClass]="{ 'status-danger': errMsg.incomingEmailPass }">
+              <div class="input-group-addon">
+                <nb-icon icon="{{ showPassword2 ? 'eye-off-outline' : 'eye-outline' }}"
+                  (click)="showPassword2 = !showPassword2">
+                </nb-icon>
+              </div>
+            </div>
+            <small *ngIf="errMsg.incomingEmailPass" class="text-red">{{ errMsg.incomingEmailPass }}</small>
+          </div>
+        </div>
+      </div>
       <div *ngFor="let address of companyDetail.addresses" class="row">
         <div class="col-md-12">
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.address }">

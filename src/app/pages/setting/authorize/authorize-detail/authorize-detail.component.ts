@@ -375,8 +375,7 @@ export class AuthorizeDetailComponent implements OnInit {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: {
           type: 'C',
-          content: 'If you change User role, settings will change.',
-          content2: 'Do you want to continue?',
+          contents: ['If you change User role, settings will change.', 'Do you want to continue?'],
         }
       });
       confirm.afterClosed().subscribe(result => {
