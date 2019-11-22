@@ -4,6 +4,7 @@ import { UtilitiesService } from '../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { IndexService } from './index.service';
 import { ResponseCode } from '../../shared/app.constants';
+import { Router, ActivatedRoute } from "@angular/router";
 
 export interface ContactUs {
   firstName: string;
@@ -47,9 +48,32 @@ export class IndexComponent implements OnInit {
   size: string;
   contactUs: ContactUs;
   errMsg: ErrMsg;
-
-  images: any;
   showNavigationArrows: boolean;
+  isSubmitted: boolean = false;
+
+  images = [
+    {
+      img: '../../../assets/images/sec_2_03.jpg',
+      title: 'Organize : Easy Application Tracking & effective onboarding',
+      remark: 'A modern , Intelligent & friendly applicant tracking system',
+    },
+    {
+      img: '../../../assets/images/sec_3_03.jpg',
+      title: 'Big Data : The hardest part of recruitment is screening & evaluating candidate from a large application pool',
+      remark: 'Candidate screening is a BIG CHALLENGE. Inability in using data effectively',
+    },
+    {
+      img: '../../../assets/images/sec_4_03.jpg',
+      title: 'Let "BUDDY RECRUIT" help you!',
+      remark: 'Your Buddy for Successful Recruitment',
+    },
+    {
+      img: '../../../assets/images/sec_1_03.jpg',
+      title: 'Match : Get qualified candidates & Collaborate effectively',
+      remark: 'Lack of understanding between the recruiters and hiring manager?',
+    },
+  ];
+
   roleOptions = [
     {
       label: 'HR only',
@@ -68,6 +92,7 @@ export class IndexComponent implements OnInit {
       value: 4
     }
   ];
+
   planOptions = [
     {
       label: 'As soon as possible',
@@ -89,50 +114,57 @@ export class IndexComponent implements OnInit {
       label: 'After Feb 2020',
       value: 'After Feb 2020'
     },
-  ]
-  isSubmitted = false;
+  ];
+  news = [
+    {
+      title: 'CEBIT ASEAN Thailand 2019',
+      remark: 'พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562 ณ บูท C25 อาคาร 7 อิมแพ็ค เมืองทองธานี',
+      img: '../../../assets/images/news/news1.jpg',
+      link: 'https://cebitasean.com'
+    },
+    {
+      title: 'Thailand HR TECH Conferenc',
+      remark: 'Thailand HR TECH Conference & Exposition 2019 ขึ้น ในวันที่ 28–29 พฤษภาคม 2562',
+      img: '../../../assets/images/news/news4.jpg',
+      link: 'http://hrtech.pmat.or.th/app/netattm/attendee/page/88567'
+    },
+    {
+      title: 'ZyGen ครบรอบ 20 ปี',
+      remark: 'ZyGen ครบรอบ 20 ปี จัดงาน Practical Innovations For Business Opportunities & Profits',
+      img: '../../../assets/images/news/news3.jpg',
+      link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
+    },
+  ];
+  faqs = ['', '', ''];
 
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.innerHeight = window.innerHeight * 0.8;
-    this.innerWidth = window.innerWidth * 0.8;
+    this.innerWidth = window.innerWidth * 0.4;
     this.devices = this.utilitiesService.getDevice();
     if (this.devices.isMobile || this.devices.isTablet) {
       this.showNavigationArrows = false;
-      this.size = "small";
+      this.size = 'small';
+      if (this.devices.isMobile) {
+        this.innerWidth = window.innerWidth * 0.96;
+      } else if (this.devices.isTablet) {
+        this.innerWidth = window.innerWidth * 0.65;
+      }
     } else {
       this.showNavigationArrows = true;
-      this.size = "medium";
+      this.size = 'medium';
     }
   }
 
   ngOnInit() {
-    this.images = [
-      {
-        img: '../../../assets/images/sec_2_03.jpg',
-        title: 'Organize : Easy Application Tracking & effective onboarding',
-        remark: 'A modern , Intelligent & friendly applicant tracking system',
-      },
-      {
-        img: '../../../assets/images/sec_3_03.jpg',
-        title: 'Big Data : The hardest part of recruitment is screening & evaluating candidate from a large application pool',
-        remark: 'Candidate screening is a BIG CHALLENGE. Inability in using data effectively',
-      },
-      {
-        img: '../../../assets/images/sec_4_03.jpg',
-        title: 'Let "BUDDY RECRUIT" help you!',
-        remark: 'Your Buddy for Successful Recruitment',
-      },
-      {
-        img: '../../../assets/images/sec_1_03.jpg',
-        title: 'Match : Get qualified candidates & Collaborate effectively',
-        remark: 'Lack of understanding between the recruiters and hiring manager?',
-      },
-    ];
     this.contactUs = this.initialModel();
     this.errMsg = this.initialErrMsg();
+    // this.activatedRoute.fragment.subscribe((fragment: string) => {
+    //   window.location.hash = fragment;
+    // });
   }
 
   initialModel(): ContactUs {

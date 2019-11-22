@@ -1,13 +1,12 @@
 <!-- Comfirmation -->
 <div id="comfirmation-popup" *ngIf="data.type === 'C'">
   <div mat-dialog-title>
-    <span class="icon fa fa-question text-warning"></span>
-    <div class="title text-warning">{{ data.title }}</div>
-    <div class="message text-gray content-message">{{ data.content }}</div>
-    <div *ngIf="data.content2" class="message text-gray content-message">{{ data.content2 }}</div>
+    <span class="icon fa fa-question"></span>
+    <div class="title">{{ data.title }}</div>
+    <div *ngIf="data.content" class="message content-message">{{ data.content }}</div>
+    <div *ngFor="let content of data.contents" class="message content-message">{{ content }}</div>
   </div>
   <div mat-dialog-content>
-
   </div>
   <div mat-dialog-actions align="end">
     <button nbButton status="default" tabindex="-1" [mat-dialog-close]="false">CANCEL</button>
@@ -18,34 +17,49 @@
 <!-- Success -->
 <div id="success-popup" *ngIf="data.type === 'S'">
   <div mat-dialog-title>
-    <div class="icon bg-green">
+    <div class="icon">
       <span class="fa fa-check"></span>
     </div>
   </div>
-  <div mat-dialog-content>
-    <h4 class="text-gray"><b>{{ data.content }}</b></h4>
+  <div mat-dialog-content class="m-0">
+    <div *ngIf="data.content" class="message">{{ data.content }}</div>
+    <div *ngFor="let content of data.contents" class="message">{{ content }}</div>
   </div>
-  <br>
   <div mat-dialog-actions align="center">
-    <button mat-raised-button color="success" class="full-width" tabindex="-1"
-      [mat-dialog-close]="true">{{ data.btnText.toUpperCase() }}</button>
+    <button nbButton status="success" tabindex="-1" [mat-dialog-close]="false">{{ data.btnText.toUpperCase() }}</button>
   </div>
 </div>
 
 <!-- Information -->
 <div id="information-popup" *ngIf="data.type === 'I'">
   <div mat-dialog-title>
-    <div class="icon bg-orange">
+    <div class="icon">
       <span class="fa fa-exclamation"></span>
     </div>
   </div>
-  <div mat-dialog-content>
-    <h4 class="text-gray"><b>{{ data.content }}</b></h4>
+  <div mat-dialog-content class="m-0">
+    <div *ngIf="data.content" class="message">{{ data.content }}</div>
+    <div *ngFor="let content of data.contents" class="message">{{ content }}</div>
   </div>
-  <br>
   <div mat-dialog-actions align="center">
-    <button mat-raised-button color="success" class="full-width" tabindex="-1"
-      [mat-dialog-close]="true">{{ data.btnText.toUpperCase() }}</button>
+    <button nbButton status="success" tabindex="-1" [mat-dialog-close]="false">{{ data.btnText.toUpperCase() }}</button>
+  </div>
+</div>
+
+<!-- Warning -->
+<div id="warning-popup" *ngIf="data.type === 'W'">
+  <div mat-dialog-title>
+    <div class="icon">
+      <span class="fa fa-exclamation"></span>
+    </div>
+  </div>
+  <div mat-dialog-content class="m-0">
+    <div *ngIf="data.content" class="message">{{ data.content }}</div>
+    <div *ngFor="let content of data.contents" class="message">{{ content }}</div>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button nbButton status="default" tabindex="-1" [mat-dialog-close]="false">CANCEL</button>
+    <button nbButton status="success" tabindex="-1" [mat-dialog-close]="true">{{ data.btnText.toUpperCase() }}</button>
   </div>
 </div>
 

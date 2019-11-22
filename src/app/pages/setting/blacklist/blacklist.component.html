@@ -49,7 +49,7 @@
                 {{ utilitiesService.setFullname(item.refCandidate) }}
               </label>
             </div>
-            <div class="actions">
+            <div *ngIf="role.refAuthorize.configuration.blacklist.editable" class="actions">
               <nb-icon icon="undo-outline" class="link" nbTooltip="Unblock" (click)="unblock(item)"></nb-icon>
             </div>
           </nb-card-header>
@@ -110,11 +110,12 @@
             <tr>
               <th scope="col" class="text-left">Name</th>
               <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left">Division</th>
-              <th scope="col" class="text-left">Job Position</th>
-              <th scope="col" class="text-left">Stage</th>
-              <th scope="col" class="text-left">Blocked Reason</th>
-              <th scope="col" style="width: 110px;">Actions</th>
+              <th scope="col">Division</th>
+              <th scope="col">Job Position</th>
+              <th scope="col">Stage</th>
+              <th scope="col">Blocked Reason</th>
+              <th scope="col" *ngIf="role.refAuthorize.configuration.blacklist.editable" style="width: 110px;">Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -124,10 +125,10 @@
                   {{ utilitiesService.setFullname(item.refCandidate) }}
                 </span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.refCandidateFlow?.refJR?.department?.name || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td>
                 <span>{{ item.refCandidateFlow?.refJR?.division?.name || '-' }}</span>
               </td>
               <td class="text-left">
@@ -139,7 +140,7 @@
               <td class="text-left text-red">
                 <span>{{ item.refReject?.name || '-' }}</span>
               </td>
-              <td class="actions">
+              <td *ngIf="role.refAuthorize.configuration.blacklist.editable" class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>

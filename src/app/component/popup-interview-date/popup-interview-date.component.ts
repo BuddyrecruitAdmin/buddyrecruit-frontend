@@ -6,7 +6,7 @@ import { CalendarService } from '../../pages/calendar/calendar.service';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { LocationService } from '../../pages/setting/location/location.service';
 import { ResponseCode } from '../../shared/app.constants';
-import { DropDownValue } from '../../shared/interfaces/common.interface';
+import { DropDownValue, DropDownGroup } from '../../shared/interfaces/common.interface';
 import { getCandidateId, getFlowId, getRole, getJrId, setButtonId, setCandidateId, setFlowId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import {
@@ -43,11 +43,11 @@ export class PopupInterviewDateComponent implements OnInit {
   locations: DropDownValue[];
   loading: boolean;
   canApprove: boolean;
-  dropdownDate: DropDownValue[];
-  dropdownTime: DropDownValue[];
+  dropdownDate: DropDownGroup[];
+  dropdownTime: DropDownGroup[];
   userInterviews: any;
   users: any[];
-
+  sum: any;
   constructor(
     private candidateService: CandidateService,
     private calendarService: CalendarService,
@@ -159,6 +159,9 @@ export class PopupInterviewDateComponent implements OnInit {
               active: false
             });
           });
+          this.setDropdownDate();
+          this.setDropdownTime(this.date);
+          this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
           this.setUsers(this.date, this.time);
         }
         if (response.data.candidateFlow.refStage.refMain.name === 'Pending Appointment') {
@@ -183,14 +186,16 @@ export class PopupInterviewDateComponent implements OnInit {
     this.dropdownDate = [];
     this.dropdownDate.push({
       label: '- Select Interview Date -',
-      value: undefined
+      value: undefined,
+      group: undefined
     });
     if (this.userInterviews) {
       this.userInterviews.forEach(user => {
         user.calendar.availableDates.forEach(element => {
           this.dropdownDate.push({
             label: this.utilitiesService.convertDate(element.startDate),
-            value: this.convertDateTime(element.startDate)
+            value: this.convertDateTime(element.startDate),
+            group: this.setUsers(this.convertDateTime(element.startDate), null)
           });
         });
       });
@@ -214,7 +219,8 @@ export class PopupInterviewDateComponent implements OnInit {
     this.dropdownTime = [];
     this.dropdownTime.push({
       label: '- Select Interview Time -',
-      value: undefined
+      value: undefined,
+      group: undefined
     });
     if (this.userInterviews) {
       this.userInterviews.forEach(user => {
@@ -227,7 +233,8 @@ export class PopupInterviewDateComponent implements OnInit {
               const endHour = addHours(startOfDay(startDate), hour + 1);
               this.dropdownTime.push({
                 label: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
-                value: JSON.parse(JSON.stringify(startHour))
+                value: JSON.parse(JSON.stringify(startHour)),
+                group: this.setUsers(iDate, JSON.parse(JSON.stringify(startHour)))
               });
             }
           }
@@ -247,6 +254,7 @@ export class PopupInterviewDateComponent implements OnInit {
   }
 
   setUsers(date: any, time: any) {
+    this.sum = 0;
     let usersActive = [];
     if (date || time) {
       if (this.userInterviews.length) {
@@ -261,12 +269,13 @@ export class PopupInterviewDateComponent implements OnInit {
                   return;
                 }
               }
-            } else if (date) {
-              if (isSameDay(new Date(date), startDate)) {
-                usersActive.push(user.refUser._id);
-                return;
+            } else
+              if (date) {
+                if (isSameDay(new Date(date), startDate)) {
+                  usersActive.push(user.refUser._id);
+                  return;
+                }
               }
-            }
           });
         });
       }
@@ -279,9 +288,12 @@ export class PopupInterviewDateComponent implements OnInit {
         });
         if (found) {
           user.active = true;
+          this.sum += 1;
         }
       });
+      return this.sum;
     }
+    return this.sum;
   }
 
   save() {

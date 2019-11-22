@@ -42,7 +42,9 @@
                 <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
                   (click)="openCandidateDetail(item)">
                   {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
-                </label>
+                </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
+                  [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
+                  class="fas fa-exclamation-triangle"></i>
                 <small class="status">
                   Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
                 </small>
@@ -124,6 +126,30 @@
                       </i>
                     </div>
                   </div>
+                  <!-- BlackList -->
+                  <div *ngIf="tabSelected != 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
+                    <label class="label text-light-gray">Blocked Info</label>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Blacklist Reason</label>
+                        <span class="text-red">{{ item.refCandidate.blacklist?.refReject?.name || '-' }}</span>
+                      </div>
+                      <div *ngIf="item.reject.remark" class="text-group">
+                        <label class="label">Blacklist Remark</label>
+                        <span class="text-red">{{ item.refCandidate.blacklist?.remark || '-' }}</span>
+                      </div>
+                      <i class="text-gray">
+                        <div class="text-group">
+                          <label class="label">Blocked By</label>
+                          <span>{{ utilitiesService.setFullname(item.refCandidate.blacklist?.blockBy?.refUser) || '-' }}</span>
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Blocked Date</label>
+                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.blacklist?.blockBy?.date) || '-' }}</span>
+                        </div>
+                      </i>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-md-5">
                   <div class="m-b-10">
@@ -180,6 +206,30 @@
                       item.weightScore?.certificate?.accumulativeScore,
                       item.weightScore?.certificate?.total)" status="danger" size="tiny">
                     </nb-progress-bar>
+                  </div>
+                  <!-- BlackList -->
+                  <div *ngIf="tabSelected === 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
+                    <label class="label text-light-gray">Blocked Info</label>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Blacklist Reason</label>
+                        <span class="text-red">{{ item.refCandidate.blacklist?.refReject?.name || '-' }}</span>
+                      </div>
+                      <div *ngIf="item.reject.remark" class="text-group">
+                        <label class="label">Blacklist Remark</label>
+                        <span class="text-red">{{ item.refCandidate.blacklist?.remark || '-' }}</span>
+                      </div>
+                      <i class="text-gray">
+                        <div class="text-group">
+                          <label class="label">Blocked By</label>
+                          <span>{{ utilitiesService.setFullname(item.refCandidate.blacklist?.blockBy?.refUser) || '-' }}</span>
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Blocked Date</label>
+                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.blacklist?.blockBy?.date) || '-' }}</span>
+                        </div>
+                      </i>
+                    </div>
                   </div>
                 </div>
               </div>

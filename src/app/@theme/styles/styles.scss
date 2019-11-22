@@ -66,7 +66,8 @@
 
   nb-layout .layout,
   nb-card {
-    font-family: sukhumvit !important;
+    // font-family: sukhumvit !important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   }
   
   .bg-gray {
@@ -732,6 +733,9 @@
   // --------------------------------------------------------------------
   // Spinner
 
+  nb-spinner {
+    z-index: 1030;
+  }
   nb-spinner.status-primary .spin-circle {
     border-top-color: var(--color-blue);
     border-right-color: transparent;
@@ -1115,6 +1119,16 @@
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .text-dot2 {
+    height: 2.5rem;
+    font-size: .9rem;
+    line-height: 1.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   .first-letter-cap:first-letter {
     text-transform: uppercase;
