@@ -156,8 +156,8 @@ export class DashboardComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		if (window.innerWidth <= 414) { // iphone 6/7/8 plus
-			this.legendPosition = "top";
+		if (window.innerWidth <= 530) { // iphone 6/7/8 plus
+			this.legendPosition = "bottom";
 			this.legendLabel = false;
 			this.aspectRatio = 1;
 		} else {
@@ -404,7 +404,6 @@ export class DashboardComponent implements OnInit {
 				]
 			}
 		};
-
 		this.filterStatus.departments = this.removeDups(this.filterStatus.departments);
 		this.filterStatus.positions = this.removeDups(this.filterStatus.positions);
 	}
