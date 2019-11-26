@@ -104,24 +104,7 @@ export class DashboardComponent implements OnInit {
 	// Company Reject Reason
 	public barChartLegend = false;
 	public barChartType: string = 'horizontalBar';
-	public barChartOptions: ChartOptions = {
-		responsive: true,
-		scales: { xAxes: [{}], yAxes: [{}] },
-		plugins: {
-			datalabels: {
-				anchor: 'end',
-				align: 'end',
-			}
-		}
-		// plugins: {
-		// 	datalabels: {
-		// 		formatter: (value, ctx) => {
-		// 			const label = ctx.chart.data.labels[ctx.dataIndex];
-		// 			return label;
-		// 		},
-		// 	},
-		// }
-	};
+	public barChartOptions: ChartOptions;
 	public barChartLabels: Label[] = [];
 	public barChartData: ChartDataSets[];
 	public barChartPlugins = [pluginDataLabels];
@@ -132,16 +115,7 @@ export class DashboardComponent implements OnInit {
 	// Candidate Reject Reason
 	public barChart2Legend = false;
 	public barChart2Type: string = 'horizontalBar';
-	public barChart2Options: ChartOptions = {
-		responsive: true,
-		scales: { xAxes: [{}], yAxes: [{}] },
-		plugins: {
-			datalabels: {
-				anchor: 'end',
-				align: 'end',
-			}
-		}
-	};
+	public barChart2Options: ChartOptions;
 	public barChart2Labels: Label[] = [];
 	public barChart2Data: ChartDataSets[];
 	public barChart2Plugins = [pluginDataLabels];
@@ -156,8 +130,8 @@ export class DashboardComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		if (window.innerWidth <= 414) { // iphone 6/7/8 plus
-			this.legendPosition = "top";
+		if (window.innerWidth <= 530) { // iphone 6/7/8 plus
+			this.legendPosition = "bottom";
 			this.legendLabel = false;
 			this.aspectRatio = 1;
 		} else {
@@ -404,7 +378,6 @@ export class DashboardComponent implements OnInit {
 				]
 			}
 		};
-
 		this.filterStatus.departments = this.removeDups(this.filterStatus.departments);
 		this.filterStatus.positions = this.removeDups(this.filterStatus.positions);
 	}
@@ -414,6 +387,7 @@ export class DashboardComponent implements OnInit {
 	// ------------------------------------------------------------------
 
 	setChartCompanyReject() {
+		let maxScaleX = 0;
 		const that = this;
 		const rejection = JSON.parse(JSON.stringify(this.rejectionData.rejection));
 
@@ -457,6 +431,9 @@ export class DashboardComponent implements OnInit {
 			const percent = that.calPercentageBetween2Number(arrayReason.length, rejection.company.length);
 			that.barChartLabels.push(item1);
 			arrayTest.push(percent);
+			if (maxScaleX < percent) {
+				maxScaleX = percent;
+			}
 		});
 		// const sum = parseFloat(this.barChartData.reduce((a, b) => a + b).toFixed(1));
 		// if (sum !== 100) {
@@ -472,6 +449,33 @@ export class DashboardComponent implements OnInit {
 		this.barChartColors = [
 			{ backgroundColor: colors }
 		];
+		this.barChartOptions = {
+			responsive: true,
+			scales: {
+				xAxes: [
+					{
+						ticks: {
+							min: 0,
+							max: maxScaleX + 10,
+						}
+					}
+				], yAxes: [{}]
+			},
+			plugins: {
+				datalabels: {
+					anchor: 'end',
+					align: 'end',
+				}
+			}
+			// plugins: {
+			// 	datalabels: {
+			// 		formatter: (value, ctx) => {
+			// 			const label = ctx.chart.data.labels[ctx.dataIndex];
+			// 			return label;
+			// 		},
+			// 	},
+			// }
+		};
 		// this.barChartLegend = this.legendLabel;
 		// this.barChartOptions.legend.position = this.legendPosition;
 		// this.barChartOptions.aspectRatio = this.aspectRatio;
@@ -483,6 +487,7 @@ export class DashboardComponent implements OnInit {
 
 	setChartCandidateReject() {
 		const that = this;
+		let maxScaleX = 0;
 		const rejection = JSON.parse(JSON.stringify(this.rejectionData.rejection));
 
 		// filter data by department
@@ -524,6 +529,9 @@ export class DashboardComponent implements OnInit {
 			const percent = that.calPercentageBetween2Number(arrayReason.length, rejection.candidate.length);
 			that.barChart2Labels.push(item1);
 			arrayTest2.push(percent);
+			if (maxScaleX < percent) {
+				maxScaleX = percent;
+			}
 		});
 		that.barChart2Data.push({
 			data: arrayTest2
@@ -535,13 +543,40 @@ export class DashboardComponent implements OnInit {
 		// }
 
 		const colors = [];
-		this.barChartLabels.map(function (item, index) {
+		this.barChart2Labels.map(function (item, index) {
 			const color = that.getColorByIndex(index);
 			colors.push(color);
 		});
-		this.barChartColors = [
+		this.barChart2Colors = [
 			{ backgroundColor: colors }
 		];
+		this.barChart2Options = {
+			responsive: true,
+			scales: {
+				xAxes: [
+					{
+						ticks: {
+							min: 0,
+							max: maxScaleX + 10,
+						}
+					}
+				], yAxes: [{}]
+			},
+			plugins: {
+				datalabels: {
+					anchor: 'end',
+					align: 'end',
+				}
+			}
+			// plugins: {
+			// 	datalabels: {
+			// 		formatter: (value, ctx) => {
+			// 			const label = ctx.chart.data.labels[ctx.dataIndex];
+			// 			return label;
+			// 		},
+			// 	},
+			// }
+		};
 		// this.barChart2Legend = this.legendLabel;
 		// this.barChart2Options.legend.position = this.legendPosition;
 		// this.barChart2Options.aspectRatio = this.aspectRatio;

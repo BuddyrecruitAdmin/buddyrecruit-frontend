@@ -148,6 +148,11 @@ export class IndexComponent implements OnInit {
     if (this.devices.isMobile || this.devices.isTablet) {
       this.showNavigationArrows = false;
       this.size = 'small';
+      if (this.devices.isMobile) {
+        this.innerWidth = window.innerWidth * 0.96;
+      } else if (this.devices.isTablet) {
+        this.innerWidth = window.innerWidth * 0.65;
+      }
     } else {
       this.showNavigationArrows = true;
       this.size = 'small';

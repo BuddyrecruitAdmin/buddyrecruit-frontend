@@ -148,6 +148,8 @@ export class PopupCvComponent implements OnInit {
         this.items = response.data;
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
+          var timeDiff = Math.abs(Date.now() - this.items.birth.getTime());
+          this.items.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
         } else {
           this.items.birth = "";
         }

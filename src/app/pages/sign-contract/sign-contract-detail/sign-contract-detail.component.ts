@@ -145,6 +145,11 @@ export class SignContractDetailComponent implements OnInit {
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
+          if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
+            item.refCandidate.birth = new Date((item.refCandidate.birth));
+            var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
+            item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+          }
           let sum = 0;
           let totalPass = 0;
           let totalCompare = 0;

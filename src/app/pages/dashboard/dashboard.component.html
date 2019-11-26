@@ -56,13 +56,15 @@
             </div>
           </div>
           <!-- Recruitement Status Data -->
-          <div *ngIf="bubbleChartData.length > 0">
-            <h5 class="chart-text"> Number of Candidates / Expected employee (%)</h5>
-            <canvas baseChart [datasets]="bubbleChartData" [options]="bubbleChartOptions" [colors]="bubbleChartColors"
-              [legend]="bubbleChartLegend" [chartType]="bubbleChartType">
-            </canvas>
-            <h5 class="chart-text text-center">Timeline from start date - now / End date (%)</h5>
-            <small>* Position name: (scale X, Scale Y, Capacity)</small>
+          <div class="row" *ngIf="bubbleChartData.length > 0">
+            <div class="col-md-12 col-lg-12">
+              <h5 class="chart-text"> Number of Candidates / Expected employee (%)</h5>
+              <canvas baseChart [datasets]="bubbleChartData" [options]="bubbleChartOptions" [colors]="bubbleChartColors"
+                [legend]="bubbleChartLegend" [chartType]="bubbleChartType">
+              </canvas>
+              <h5 class="chart-text text-center">Timeline from start date - now / End date (%)</h5>
+              <small>* Position name: (scale X, Scale Y, Capacity)</small>
+            </div>
           </div>
           <!-- No data -->
           <div class="row">

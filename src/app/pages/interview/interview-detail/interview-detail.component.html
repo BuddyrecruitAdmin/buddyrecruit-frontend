@@ -73,14 +73,6 @@
                     <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
                   </div>
                   <div class="text-group">
-                    <label class="label">Latest Position</label>
-                    <span>{{ item.refCandidate?.workExperience?.latestPostision || '-' }}</span>
-                  </div>
-                  <div class="text-group">
-                    <label class="label">Latest Company</label>
-                    <span>{{ item.refCandidate?.workExperience?.latestCompany || '-' }}</span>
-                  </div>
-                  <div class="text-group">
                     <label class="label">Work Experience</label>
                     <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
                   </div>
