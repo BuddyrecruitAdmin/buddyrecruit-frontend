@@ -178,8 +178,9 @@
 </div>
 <!-- popup -->
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.height.px]="innerHeight">
-    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="">
+  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage=""
+      [style.height.px]="imgHeight">
       <div *ngIf="previewPicture" style="text-align:center;">
         <span>Preview profile</span><br>
         <!-- <nb-icon class="link" icon="corner-left-down-outline" (click)="rotateLeft()"></nb-icon> -->

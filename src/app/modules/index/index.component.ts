@@ -50,6 +50,7 @@ export class IndexComponent implements OnInit {
   errMsg: ErrMsg;
   showNavigationArrows: boolean;
   isSubmitted: boolean = false;
+  expanded: boolean = false;
 
   images = [
     {
@@ -135,15 +136,14 @@ export class IndexComponent implements OnInit {
       link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
     },
   ];
-  faqs = ['', '', ''];
 
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.innerHeight = window.innerHeight * 0.8;
-    this.innerWidth = window.innerWidth * 0.4;
+    this.innerHeight = window.innerHeight * 0.75;
+    this.innerWidth = window.innerWidth * 0.8;
     this.devices = this.utilitiesService.getDevice();
     if (this.devices.isMobile || this.devices.isTablet) {
       this.showNavigationArrows = false;
@@ -155,7 +155,7 @@ export class IndexComponent implements OnInit {
       }
     } else {
       this.showNavigationArrows = true;
-      this.size = 'medium';
+      this.size = 'small';
     }
   }
 
@@ -197,6 +197,10 @@ export class IndexComponent implements OnInit {
       userRole: '',
       planToUse: ''
     };
+  }
+
+  toggleRegister() {
+    this.expanded = !this.expanded;
   }
 
   submit() {

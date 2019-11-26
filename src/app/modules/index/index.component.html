@@ -15,7 +15,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
-      <ul class="navbar-nav my-2 my-lg-0">
+      <!-- <ul class="navbar-nav my-2 my-lg-0">
         <li class="nav-item active">
           <a class="nav-link" [routerLink]="'.'" fragment="home">Home</a>
         </li>
@@ -28,7 +28,7 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="'.'" fragment="contact-us">Contact Us</a>
         </li>
-      </ul>
+      </ul> -->
       <ul class="navbar-nav ml-md-auto">
         <li class="nav-item ml-auto">
           <a class="nav-link">
@@ -43,7 +43,7 @@
   </nav>
 
   <!-- Slide Show -->
-  <ngb-carousel id="home" name="home" *ngIf="images" [showNavigationArrows]="showNavigationArrows">
+  <!-- <ngb-carousel id="home" name="home" *ngIf="images" [showNavigationArrows]="showNavigationArrows">
     <ng-template ngbSlide *ngFor="let image of images">
       <div class="picsum-img-wrapper">
         <img class="img-fluid" [src]="image.img">
@@ -53,7 +53,23 @@
         <p class="text-white">{{ image.remark }}</p>
       </div>
     </ng-template>
-  </ngb-carousel>
+  </ngb-carousel> -->
+
+  <!-- Home -->
+  <div id="home">
+    <img class="img-fluid" src="../../../assets/images/bg.jpg">
+    <div class="image-text">
+      <h3>
+        Buddy Recruit
+      </h3>
+      <h6>
+        Your Buddy for Successful Recruitment
+      </h6>
+      <!-- <h6>
+        Let <b>"BUDDY RECRUIT"</b> help you!
+      </h6> -->
+    </div>
+  </div>
 
   <!-- Upcoming -->
   <section id="upcoming">
@@ -82,7 +98,7 @@
       <div class="row">
         <div class="col-md-6 col-lg-3">
           <nb-card>
-            <nb-card-body class="text-left">
+            <nb-card-body class="text-center">
               <h1 class="card-icon">
                 <nb-icon icon="monitor-outline"></nb-icon>
               </h1>
@@ -100,9 +116,9 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <nb-card>
-            <nb-card-body class="text-left">
+            <nb-card-body class="text-center">
               <h1 class="card-icon">
-                <nb-icon icon="monitor-outline"></nb-icon>
+                <nb-icon icon="search-outline"></nb-icon>
               </h1>
               <h5 class="card-title text-cap">Smart Matching</h5>
               <p class="card-text">
@@ -118,9 +134,9 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <nb-card>
-            <nb-card-body class="text-left">
+            <nb-card-body class="text-center">
               <h1 class="card-icon">
-                <nb-icon icon="monitor-outline"></nb-icon>
+                <nb-icon icon="bar-chart-outline"></nb-icon>
               </h1>
               <h5 class="card-title text-cap">Intelligent Scoring</h5>
               <p class="card-text">
@@ -136,9 +152,9 @@
         </div>
         <div class="col-md-6 col-lg-3">
           <nb-card>
-            <nb-card-body class="text-left">
+            <nb-card-body class="text-center">
               <h1 class="card-icon">
-                <nb-icon icon="monitor-outline"></nb-icon>
+                <nb-icon icon="pie-chart-outline"></nb-icon>
               </h1>
               <h5 class="card-title text-cap">Data-Driven</h5>
               <p class="card-text">
@@ -207,12 +223,57 @@
         <h3>คำถามที่พบบ่อย</h3>
       </div>
       <nb-accordion>
-        <nb-accordion-item *ngFor="let faq of faqs">
-          <nb-accordion-item-header>About Buddy Recruit ?</nb-accordion-item-header>
+        <nb-accordion-item expanded="true">
+          <nb-accordion-item-header>Buddy Recruit คือ อะไร</nb-accordion-item-header>
           <nb-accordion-item-body>
-            <div class="m-b-20">About Buddy Recruit.</div>
+            <div class="text-left m-b-20">
+              เราคือ ระบบ ผู้ช่วยอัจฉริยะ ที่ช่วยจัดการใบสมัคร คัดกรอง ให้งาน Recruitment ของคุณ รวดเร็ว และ
+              แม่นยำมากขึ้น
+              ด้วย Feature การคัดแยกอีเมลอัตโนมัติ, อ่าน CV และ ให้คะแนนได้ตามคุณสมบัติที่เรากำหนดได้เอง
+              ช่วยให้ไม่พลาด Talent ที่คุณต้องการ ส่งอีเมลนัดหมายได้อัตโนมัติ ทำให้ Recruitment Process ไม่มีสะดุด
+            </div>
             <iframe width="700" height="394" src="https://www.youtube.com/embed/cWtLbSNlnGk" frameborder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+        <nb-accordion-item>
+          <nb-accordion-item-header>Value ที่คุณจะได้รับจากการนำ Buddy Recruit ไปใช้ใน</nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <div class="text-left">
+              <ul>
+                <li>
+                  ตัดปัญหาคัดแยกอีเมลไม่ทัน, ส่งข้อมูลผู้สมัครให้ Hiring Manager ล่าช้า
+                  เนื่องจาก Buddy Recruit จะจัดการคัดแยกอีเมลใบสมัครให้คุณโดยอัตโนมัติ
+                </li>
+                <li>
+                  ไม่ต้องอ่านและ match CV กับ JD (Job Description) ที่ซับซ้อนอีกต่อไป เนื่องจาก Buddy Recruit
+                  ช่วย ให้คะแนน CV ตาม Qualification ที่คุณกำหนดได้เอง
+                  ทำให้ประหยัดเวลาของ Hiring Manager ไม่ต้อง Screen CV ทุกใบอีกต่อไป
+                </li>
+                <li>
+                  รองรับ CV ได้หลากหลาย ทั้ง PDF, WORD, JPG
+                </li>
+                <li>
+                  ลดระยะเวลา Recruitment Process ทำให้สามารถประหยัดต้นทุน Job board ได้
+                </li>
+                <li>
+                  มีการจัดเก็บข้อมูลการทำ Recruitment ทำให้สามารถนำข้อมูลมาใช้ในการตัดสินใจได้ เช่น
+                  มีประวัติการสมัครงานของผู้สมัคร, มีประวัติ Blacklist, จัดเก็บ Leadtime ในการรับสมัครงานแต่ละตำแหน่ง,
+                  อื่นๆ
+                </li>
+              </ul>
+            </div>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+        <nb-accordion-item>
+          <nb-accordion-item-header>สมัครใช้งานยังไง</nb-accordion-item-header>
+          <nb-accordion-item-body>
+            <div class="text-left">
+              เพียงกรอกข้อมูลเบื้องต้น เพื่อสอบถามลักษณะการใช้งานและแนะนำโปรแกรมที่เหมาะสม
+              จากนั้น Setup ระบบเพียง 1 วัน รับ User ไปใช้งานได้เลย
+              ไม่ต้องมีค่าใช้จ่ายในการซื้อเครื่อง Server และดูแล ข้อมูลของของลูกค้า จะถูกจัดเก็บอยู่ในระบบ Cloud
+              Platform ที่มีความปลอดภัยและน่าเชื่อถือระดับโลก
+            </div>
           </nb-accordion-item-body>
         </nb-accordion-item>
       </nb-accordion>
@@ -226,8 +287,8 @@
         <h2>Ready to get <span class="text-green">started</span>?</h2>
         <h3>Create a free account in just 2 minutes</h3>
       </div>
-      <button nbButton status="warning" class="m-r-10">Try it free</button>
-      <button nbButton outline status="success">Get Demo</button>
+      <button nbButton status="warning" class="m-r-10" (click)="expanded = true">Try it free</button>
+      <button nbButton outline status="success" (click)="expanded = true">Get Demo</button>
     </div>
   </section>
 
@@ -287,8 +348,14 @@
   <!-- Contact Us (fixed, bottom-right) -->
   <div id="register">
     <nb-accordion>
-      <nb-accordion-item [style.width.px]="innerWidth">
-        <nb-accordion-item-header>Contact Buddy Recruit for free Demo&Trial</nb-accordion-item-header>
+      <nb-accordion-item [expanded]="expanded">
+        <nb-accordion-item-header (click)="toggleRegister()">
+          <!-- Contact Buddy Recruit for free Demo&Trial -->
+          <div class="title">
+            <div>ลงทะเบียนเพื่อรับสิทธิ์ Promotion เดียวกับงาน</div>
+            <div>CEBIT ASEAN Thailand 2019</div>
+          </div>
+        </nb-accordion-item-header>
         <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">
           <div class="label text-center text-gray m-b-20">
             <div class="m-b-5">

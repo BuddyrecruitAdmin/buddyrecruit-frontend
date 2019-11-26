@@ -53,6 +53,7 @@ export class ProfileComponent implements OnInit {
   croppedImage: any = '';
   innerHeight: any;
   previewPicture: boolean;
+  imgHeight: number;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -198,15 +199,27 @@ export class ProfileComponent implements OnInit {
   }
 
   fileChangeEvent(event: any, dialog: TemplateRef<any>, files: FileList): void {
-    this.previewPicture = false;
-    const FileSize = files.item(0).size / 1024 / 1024; // in MB
-    this.imageChangedEvent = event;
-    if (FileSize > 10) {
-      this.showToast('danger', 'Error Message', 'file size more than 10 mb');
-    } else {
-      this.loading = true;
-      this.callDialog(dialog);
-    }
+    var reader = new FileReader();
+    reader.readAsDataURL(files[0]); // read file as data url
+    reader.onload = (e) => {
+      var img = new Image;
+      const chImg = reader.result;
+      img.src = chImg.toString();
+      img.onload = (ee) => {
+        this.imgHeight = img.height;
+        console.log(this.imgHeight);
+      };
+      this.previewPicture = false;
+      const FileSize = files.item(0).size / 1024 / 1024; // in MB
+      this.imageChangedEvent = event;
+      if (FileSize > 10) {
+        this.showToast('danger', 'Error Message', 'file size more than 10 mb');
+      } else {
+        this.loading = true;
+        this.callDialog(dialog);
+      }
+    };
+
   }
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
@@ -228,7 +241,7 @@ export class ProfileComponent implements OnInit {
     this.url = this.croppedImage;
     this.dialogRef.close();
   }
-  
+
   close() {
     this.croppedImage = "";
     this.fileInput.nativeElement.value = "";
