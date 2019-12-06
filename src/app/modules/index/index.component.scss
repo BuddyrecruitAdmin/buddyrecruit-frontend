@@ -32,14 +32,20 @@
   z-index: 1030;
 
   nb-accordion-item {
-    width: 450px;
+    width: 400px;
     border-bottom-right-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
   }
   nb-accordion-item-header {
-    padding: 15px !important;
+    font-size: 0.85rem;
+    padding: 12px !important;
     border-radius: 0.25rem 0.25rem 0 0;
     background-color: var(--color-orange);
+
+    .title {
+      margin-right: 25px;
+      line-height: 1.4;
+    }
   }
   nb-accordion-item-body {
     border-radius: 0;
@@ -101,6 +107,28 @@ section .header h3 {
 .card-footer {
   text-align: right;;
 }
+
+#home {
+  position: relative;
+  margin-top: 66px;
+
+  .image-text {
+    position: absolute;
+    top: calc(20%);
+    left: calc(5%);    
+
+    h3 {
+      color: var(--color-green);
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    h5, h6 {
+      color: var(--color-gray);
+      font-weight: 400;
+    }
+  }
+}
 #upcoming {
   background-color: var(--color-white);
 
@@ -123,6 +151,9 @@ section .header h3 {
     box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.25);
   }
 }
+#features {
+  // background-color: var(--color-white);
+}
 #concept {
   background-color: var(--color-green);
   padding: 25px;
@@ -130,6 +161,17 @@ section .header h3 {
 }
 #news {
   background-color: var(--color-white);
+}
+#faq {
+  nb-accordion-item-body {
+    color: var(--color-gray);
+    line-height: 1.8;
+
+    ul>li {
+      color: var(--color-gray);
+      line-height: 1.8;
+    }
+  }
 }
 #contact-us {
   background-color: var(--color-white);
@@ -192,5 +234,21 @@ footer {
 @media (max-width: 767px) {
   .navbar-brand img {
     width: 40px;
+  }
+
+  .home {  
+    .image-text {
+      position: absolute;
+      top: calc(10%);
+      left: calc(4%);
+      width: 35%;  
+  
+      h2, h3 {
+        font-size: 1rem;
+      }
+      h5, h6 {
+        font-size: 0.5rem;
+      }
+    }
   }
 }
