@@ -19,6 +19,10 @@ export class CompanyService extends NetworkService {
   getList(criteria: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.COMPANY_LIST, { criteria });
   }
+  
+  getListAdmin(criteria: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.USER_ADMIN, { criteria });
+  }
 
   deleteItem(item: any): Observable<ApiResponse> {
     const body = {

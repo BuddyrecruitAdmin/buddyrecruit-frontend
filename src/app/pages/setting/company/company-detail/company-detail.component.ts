@@ -47,6 +47,7 @@ export interface CompanyDetail {
   incomingEmailUser: string;
   incomingEmailPass: string;
   addresses: Address[];
+  bAdmin: any;
 }
 
 export interface ErrMsg {
@@ -94,6 +95,7 @@ export class CompanyDetailComponent implements OnInit {
   loading: boolean;
   buttonLoading: boolean;
   editabled: boolean;
+  bigAdmin: DropDownValue[];
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -178,7 +180,8 @@ export class CompanyDetailComponent implements OnInit {
       extEmailPass: '',
       incomingEmailUser: '',
       incomingEmailPass: '',
-      addresses: [this.initialAddress()]
+      addresses: [this.initialAddress()],
+      bAdmin: undefined,
     }
   }
 
@@ -280,6 +283,11 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   getDetail() {
+    this.bigAdmin = [];
+    this.bigAdmin.push({
+      label: "- Select Evaluation -",
+      value: undefined
+    });
     this.loading = true;
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -308,6 +316,19 @@ export class CompanyDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+    this.service.getListAdmin().subscribe(res => {
+      if (res.code === ResponseCode.Success) {
+        res.data.forEach(element => {
+          this.bigAdmin.push({
+            label: this.utilitiesService.setFullname(element),
+            value: element._id
+          })
+          if (element.refAuthorize.isDefault) {
+            this.companyDetail.bAdmin = element._id;
+          }
+        });
+      }
+    })
   }
 
   back() {

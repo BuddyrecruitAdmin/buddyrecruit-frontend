@@ -366,6 +366,19 @@
           </div>
         </div>
       </div>
+      <div class="row" *ngIf="role.refHero.isAdmin">
+        <div class="col-md-6">
+          <div class="form-control-group" [ngClass]="{ 'has-error': touched }">
+            <label class="label" for="name">Admin Company <span class="text-red">*</span></label>
+            <nb-select [(ngModel)]="companyDetail.bAdmin" [ngModelOptions]="{ standalone: true }" fullWidth>
+              <nb-option *ngFor="let ad of bigAdmin" [value]="ad.value">
+                {{ ad.label }}
+              </nb-option>
+            </nb-select>
+            <!-- <small *ngIf="touched" class="text-red">{{ sErrorPosition }}</small> -->
+          </div>
+        </div>
+      </div>
     </div>
   </nb-card-body>
   <nb-card-footer>
