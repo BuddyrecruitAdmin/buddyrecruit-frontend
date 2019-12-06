@@ -218,48 +218,56 @@
         </div>
 
         <!-- Work Experience -->
-        <label class="label topic">Work Experience</label>
-        <div class="m-l-15">
-          <div class="text-group">
-            <label class="label">Duration</label>
-            <span>{{ 
+        <div *ngIf="item.workExperience.totalExpMonth && item.workExperience">
+          <label class="label topic">Work Experience</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Duration</label>
+              <span>{{ 
                 utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
                 utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
-            </span>
-          </div>
-          <div *ngFor="let exp of item.workExperience?.work">
-            <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+              </span>
+            </div>
+            <div *ngFor="let exp of item.workExperience?.work">
+              <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+            </div>
           </div>
         </div>
-
         <!-- Education -->
-        <label class="label topic">Education</label>
-        <div class="m-l-15">
-          <div *ngFor="let education of item.education">
-            <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
+        <div *ngIf="item.education.length">
+          <label class="label topic">Education</label>
+          <div class="m-l-15">
+            <div *ngFor="let education of item.education">
+              <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
+            </div>
+            <span *ngIf="!item.education?.length">-</span>
           </div>
-          <span *ngIf="!item.education?.length">-</span>
         </div>
 
         <!-- Hard Skills -->
-        <label class="label topic">Hard Skills</label>
-        <div class="m-l-15">
-          <span *ngIf="item.hardSkill?.length">• </span>
-          <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
+        <div *ngIf="item.hardSkill.length">
+          <label class="label topic">Hard Skills</label>
+          <div class="m-l-15">
+            <span *ngIf="item.hardSkill?.length">• </span>
+            <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
+          </div>
         </div>
-
         <!-- Soft Skills -->
-        <label class="label topic">Soft Skills</label>
-        <div class="m-l-15">
-          <span *ngIf="item.softSkill?.length">• </span>
-          <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
+        <div *ngIf="item.softSkill.length">
+          <label class="label topic">Soft Skills</label>
+          <div class="m-l-15">
+            <span *ngIf="item.softSkill?.length">• </span>
+            <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
+          </div>
         </div>
 
         <!-- Certificate -->
-        <label class="label topic">Certificate</label>
-        <div class="m-l-15">
-          <span *ngIf="item.certificate?.length">• </span>
-          <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
+        <div *ngIf="item.certificate.length">
+          <label class="label topic">Certificate</label>
+          <div class="m-l-15">
+            <span *ngIf="item.certificate?.length">• </span>
+            <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
+          </div>
         </div>
 
       </div>

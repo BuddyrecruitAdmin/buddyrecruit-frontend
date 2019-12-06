@@ -54,6 +54,11 @@ export class ProfileComponent implements OnInit {
   innerHeight: any;
   previewPicture: boolean;
   imgHeight: number;
+  testRandom: any;
+  animationTimer: any;
+  testArray = ["test01", "test02", "test03", "test04", "test05"];
+  testArrayIndex: any = '';
+  test = 1;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -67,7 +72,36 @@ export class ProfileComponent implements OnInit {
     this.innerHeight = window.innerHeight;
   }
 
+  rnd() {
+    if (this.testArray.length) {
+      var that = this
+      var started = new Date().getTime();
+      setInterval(() => {
+        this.ssss();
+        // If the value is what we want, stop animating
+        // or if the duration has been exceeded, stop animating
+        if (new Date().getTime() - started > 5000) {
+          clearInterval(this.animationTimer);
+        } else {
+         
+          // Generate a random string to use for the next animation step
+          this.testRandom = Math.floor(Math.random() * that.testArray.length);
+          console.log(this.testRandom)
+          this.testArrayIndex = that.testArray[this.testRandom];
+          console.log(this.testArrayIndex)
+          // this.testArrayIndex.toString();
+          // return this.testArrayIndex
+        }
+      }, 1000);
+    }
+  }
+
+  ssss() {
+    this.test++;
+  }
+
   ngOnInit() {
+    this.testArrayIndex = this.testArray[0];
     this.profileDetail = {
       _id: undefined,
       firstname: undefined,
