@@ -47,7 +47,6 @@ export interface CompanyDetail {
   incomingEmailUser: string;
   incomingEmailPass: string;
   addresses: Address[];
-  bAdmin: any;
 }
 
 export interface ErrMsg {
@@ -127,13 +126,14 @@ export class CompanyDetailComponent implements OnInit {
           this.getDetail();
         } else {
           this.state = State.Create;
+          this._id = undefined;
           if (this.contactId) {
             this.contactUsService.getDetail(this.contactId).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 if (response.data) {
                   this.companyDetail.name = response.data.companyName;
                   this.companyDetail.companySize = response.data.numberEmployees;
-                  this.companyDetail.adminEmail = response.data.email;
+                  // this.companyDetail.adminEmail = response.data.email;
                   this.companyDetail.hero = response.data.hero;
                   this.roleSelected = response.data.userRole.toString();
                 }
@@ -181,7 +181,6 @@ export class CompanyDetailComponent implements OnInit {
       incomingEmailUser: '',
       incomingEmailPass: '',
       addresses: [this.initialAddress()],
-      bAdmin: undefined,
     }
   }
 
@@ -285,7 +284,7 @@ export class CompanyDetailComponent implements OnInit {
   getDetail() {
     this.bigAdmin = [];
     this.bigAdmin.push({
-      label: "- Select Evaluation -",
+      label: "- Select Admin -",
       value: undefined
     });
     this.loading = true;
@@ -316,15 +315,22 @@ export class CompanyDetailComponent implements OnInit {
       }
       this.loading = false;
     });
-    this.service.getListAdmin().subscribe(res => {
+    this.service.getListAdmin(this._id).subscribe(res => {
       if (res.code === ResponseCode.Success) {
         res.data.forEach(element => {
-          this.bigAdmin.push({
-            label: this.utilitiesService.setFullname(element),
-            value: element._id
-          })
+          if (this.role.refHero.isSuperAdmin) {
+            this.bigAdmin.push({
+              label: element.username,
+              value: element._id
+            })
+          } else {
+            this.bigAdmin.push({
+              label: this.utilitiesService.setFullname(element),
+              value: element._id
+            })
+          }
           if (element.refAuthorize.isDefault) {
-            this.companyDetail.bAdmin = element._id;
+            this.companyDetail.adminEmail = element._id;
           }
         });
       }
@@ -357,7 +363,6 @@ export class CompanyDetailComponent implements OnInit {
     if (this.validation()) {
       this.buttonLoading = true;
       const request = this.setRequest();
-      debugger;
       if (this.state === State.Create) {
         this.service.create(request).subscribe(response => {
           this.buttonLoading = false;
@@ -478,6 +483,10 @@ export class CompanyDetailComponent implements OnInit {
       }
       if (!this.companyDetail.addresses[0].postalCode) {
         this.errMsg.postalCode = 'Please Input Postal Code';
+        isValid = false;
+      }
+      if (!this.companyDetail.adminEmail) {
+        this.errMsg.adminEmail = 'Please Input Admin Email';
         isValid = false;
       }
     }

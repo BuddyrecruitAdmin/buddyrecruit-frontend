@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -273,22 +273,41 @@ export class TalentPoolDetailComponent implements OnInit {
     }
   }
 
-  approve(item: any, button: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.search();
-      }
-    });
+  approve(item: any, button: any, dialog: any) {
+    if (!item.refCandidate.email) {
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setButtonId(button._id);
+      setUserEmail(item._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        if (result) {
+          this.search();
+        }
+      });
+    } else {
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setButtonId(button._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        if (result) {
+          this.search();
+        }
+      });
+    }
   }
 
   appointmentExam(item: any) {
@@ -355,7 +374,7 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlowId();
       if (result) {
         this.search();
-      }
+      } 
     });
   }
 

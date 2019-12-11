@@ -97,7 +97,7 @@ import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evalua
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 import { BlacklistComponent } from './blacklist/blacklist.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     SettingComponent,
@@ -196,6 +196,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 
     AngularEditorModule,
     TagInputModule,
+    HttpClientModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

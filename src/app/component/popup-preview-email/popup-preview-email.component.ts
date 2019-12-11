@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, getButtonId, setButtonId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, getButtonId, setButtonId, setUserEmail, getUserEmail } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -31,7 +31,7 @@ export class PopupPreviewEmailComponent implements OnInit {
   today: Date;
   loading: boolean;
   canApprove: boolean;
-
+  checkedEmail: any;
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupPreviewEmailComponent>,
@@ -43,6 +43,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     this.flowId = getFlowId();
     this.candidateId = getCandidateId();
     this.buttonId = getButtonId();
+    this.checkedEmail = getUserEmail();
     let step = this.role.refAuthorize.processFlow.exam.steps.find(element => {
       return element._id === this.buttonId;
     });
@@ -56,6 +57,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     setFlowId();
     setCandidateId();
     setButtonId();
+    setUserEmail();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
   }
@@ -67,7 +69,11 @@ export class PopupPreviewEmailComponent implements OnInit {
     this.mailType = '';
     this.actionUser = [];
     this.previewEmail = false;
-    this.sendEmail = true;
+    if (this.checkedEmail) {
+      this.sendEmail = false;
+    } else {
+      this.sendEmail = true;
+    }
     this.today = new Date();
     if (this.flowId) {
       this.getPreviewEmail();
@@ -79,7 +85,7 @@ export class PopupPreviewEmailComponent implements OnInit {
   getPreviewEmail() {
     this.candidateService.candidateFlowPreviewEmail(this.flowId, this.stageId, this.buttonId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        if (response.status === 'W') {
+        if (response.status === 'W' || this.checkedEmail) {
           this.callPopupWarning(response.data);
         } else {
           if (response.data.mailOptions) {
@@ -121,6 +127,11 @@ export class PopupPreviewEmailComponent implements OnInit {
         });
         contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
       }
+    }
+    if(this.checkedEmail){
+      type = 'W';
+      contents.push('ไม่พบอีเมลของผู้สมัคร ');
+      contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
     }
     const confirm = this.matDialog.open(PopupMessageComponent, {
       width: `${this.utilitiesService.getWidthOfPopupCard()}px`,

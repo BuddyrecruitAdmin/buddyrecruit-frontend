@@ -121,9 +121,22 @@
         </div>
         <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.adminEmail }">
           <label class="label">Admin Username / Email <span class="text-red">*</span></label>
-          <input type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth [disabled]="!editabled">
+          <nb-select *ngIf="state != 'create'" [(ngModel)]="companyDetail.adminEmail" [ngModelOptions]="{ standalone: true }" fullWidth>
+            <nb-option *ngFor="let ad of bigAdmin" [value]="ad.value">
+              {{ ad.label }}
+            </nb-option>
+          </nb-select>
+          <input *ngIf="state === 'create'" type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth [disabled]="!editabled">
           <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
         </div>
+        <!-- <div class="form-control-group" [ngClass]="{ 'has-error': touched }">
+          <label class="label" for="name">Admin Username / Email <span class="text-red">*</span></label>
+          <nb-select [(ngModel)]="companyDetail.adminEmail" [ngModelOptions]="{ standalone: true }" fullWidth>
+            <nb-option *ngFor="let ad of bigAdmin" [value]="ad.value">
+              {{ ad.label }}
+            </nb-option>
+          </nb-select>
+        </div> -->
         <div *ngIf="state === 'create'" class="form-control-group">
           <label class="label">Admin Password <small>(Initial Password)</small></label>
           <input type="text" [(ngModel)]="companyDetail.adminPassword" nbInput fullWidth>
@@ -368,14 +381,14 @@
       </div>
       <div class="row" *ngIf="role.refHero.isAdmin">
         <div class="col-md-6">
-          <div class="form-control-group" [ngClass]="{ 'has-error': touched }">
+          <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.adminEmail }">
             <label class="label" for="name">Admin Company <span class="text-red">*</span></label>
-            <nb-select [(ngModel)]="companyDetail.bAdmin" [ngModelOptions]="{ standalone: true }" fullWidth>
+            <nb-select [(ngModel)]="companyDetail.adminEmail" [ngModelOptions]="{ standalone: true }" fullWidth>
               <nb-option *ngFor="let ad of bigAdmin" [value]="ad.value">
                 {{ ad.label }}
               </nb-option>
             </nb-select>
-            <!-- <small *ngIf="touched" class="text-red">{{ sErrorPosition }}</small> -->
+            <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
           </div>
         </div>
       </div>

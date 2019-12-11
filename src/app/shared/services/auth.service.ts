@@ -18,6 +18,7 @@ import {
   FieldName,
   UserCandidate,
   ContactId,
+  UserEmail
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -204,4 +205,13 @@ export function setContactId(contactId: any = null) {
 export function getContactId() {
   const contactId = JSON.parse(localStorage.getItem(ContactId));
   return (!contactId || contactId === null) ? undefined : contactId;
+}
+
+export function setUserEmail(userEmail: string = null) {
+  localStorage.setItem(UserEmail, JSON.stringify(userEmail));
+}
+
+export function getUserEmail() {
+  const userEmail = JSON.parse(localStorage.getItem(UserEmail));
+  return (!userEmail || userEmail === null) ? undefined : userEmail;
 }
