@@ -5,7 +5,11 @@
     <span>{{ jrName }}</span>
   </div>
 </div>
-
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  <span>
+    จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ JR ของคุณ
+  </span>
+</nb-alert>
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -245,7 +249,7 @@
               </button>
               <button *ngIf="item.condition.button.nextStep" nbButton status="success"
                 [nbTooltip]="item.condition.button.step.button"
-                (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
+                (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired || showTips">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
@@ -263,7 +267,7 @@
                 <nb-icon icon="close-circle"></nb-icon>
               </button>
               <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
-                (click)="revoke(item)">
+                (click)="revoke(item)" [disabled]="showTips">
                 <nb-icon icon="undo"></nb-icon>
               </button>
             </nb-card-footer>
