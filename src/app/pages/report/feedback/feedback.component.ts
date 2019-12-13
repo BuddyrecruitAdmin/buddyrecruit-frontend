@@ -155,7 +155,7 @@ export class FeedbackComponent implements OnInit {
             value: element.refJR.refJD._id
           });
           this.filter.data.fieldName.push({
-            label: element.fieldName,
+            label: element.fieldText,
             value: element.fieldName
           });
           this.filter.data.createBy.push({

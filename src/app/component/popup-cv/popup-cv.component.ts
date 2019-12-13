@@ -368,7 +368,7 @@ export class PopupCvComponent implements OnInit {
     item.accuracy.map(ele => {
       if (ele.feedbackType === "Correct") {
         switch (ele.fieldName) {
-          case "firstname":
+          case "First Name":
             this.colorStatus.nameSuccess = true;
             if (this.colorStatus.nameBug === true) {
               this.colorStatus.nameBug = false;
@@ -451,7 +451,7 @@ export class PopupCvComponent implements OnInit {
         }
       } else {
         switch (ele.fieldName) {
-          case "firstname":
+          case "First Name":
             this.colorStatus.nameBug = true;
             if (this.colorStatus.nameSuccess === true) {
               this.colorStatus.nameSuccess = false;
