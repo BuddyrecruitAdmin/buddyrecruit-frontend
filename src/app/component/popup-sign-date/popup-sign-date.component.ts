@@ -116,7 +116,7 @@ export class PopupSignDateComponent implements OnInit {
     setFlowId(this.flowId);
     setCandidateId(this.candidateId);
     setButtonId(this.buttonId);
-    this.dialogService.open(PopupPreviewEmailComponent,
+    this.dialogService.open(PopupResendEmailComponent,
       {
         closeOnBackdropClick: false,
         hasScroll: true,

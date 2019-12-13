@@ -35,7 +35,7 @@
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedCV }">
               <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
               <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a keyword"
-                placeholder="+" [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                placeholder="+" [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
               </tag-input>
               <small *ngIf="touchedCV" class="text-red">{{ sErrorKey }}</small>
             </div>
@@ -368,7 +368,7 @@
                 </label>
                 <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
                 </tag-input>
               </div>
             </div>
@@ -401,7 +401,7 @@
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
                 </tag-input>
               </td>
               <td>
@@ -475,7 +475,7 @@
                 </label>
                 <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
                 </tag-input>
               </div>
             </div>
@@ -508,7 +508,7 @@
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
                 </tag-input>
               </td>
               <td>
@@ -582,7 +582,7 @@
                 </label>
                 <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
                 </tag-input>
               </div>
             </div>
@@ -615,7 +615,7 @@
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
                   [editable]="modeEditable || checkPreview" [disable]="!modeEditable"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
                 </tag-input>
               </td>
               <td>

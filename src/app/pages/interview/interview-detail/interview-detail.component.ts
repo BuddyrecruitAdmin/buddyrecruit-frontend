@@ -269,7 +269,6 @@ export class InterviewDetailComponent implements OnInit {
                   }
                 }
               }
-              debugger
               if (item.refJR.userInterviews.length) {
                 const found = item.refJR.userInterviews.find(element => {
                   return element.refUser === this.role._id;

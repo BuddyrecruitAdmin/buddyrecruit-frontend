@@ -49,7 +49,7 @@ export class SignContractDetailComponent implements OnInit {
   devices: Devices;
   loading: boolean;
   count: Count;
-
+  showTips: boolean;
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -108,6 +108,7 @@ export class SignContractDetailComponent implements OnInit {
     this.items = [];
     this.comments = [];
     this.keyword = '';
+    this.showTips = false;
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -142,6 +143,7 @@ export class SignContractDetailComponent implements OnInit {
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
+        this.showTips = response.isOverQuota;
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
