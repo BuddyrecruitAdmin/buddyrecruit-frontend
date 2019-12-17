@@ -248,8 +248,8 @@
     </div>
 
     <!-- InterView -->
-    <div class="border-padtop">
-      <div class="title" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+    <div class="border-padtop" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+      <div class="title">
         <label class="label">Comments<span class="link underline" nbTooltip="See more result"
             (click)="infoResult(items.candidateFlow)">
             <nb-icon icon="info-outline"></nb-icon>
@@ -509,10 +509,11 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button *ngIf="role.refAuthorize.showOriginalCV" class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)">Original
+    <button *ngIf="role.refAuthorize.showOriginalCV" class="txt-left" size="small" nbButton status="success"
+      (click)="checkCV(items._id)">Original
       CV</button>
-    <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small" nbButton status="info"
-      (click)="openApplication(items._id)">App Form</button>
+    <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small"
+      nbButton status="info" (click)="openApplication(items._id)">App Form</button>
     <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button>
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
     <button nbButton status="default" size="small" (click)="ref.close(true)">CLOSE</button>

@@ -127,7 +127,7 @@
             <div>
               <mat-checkbox class="label" [(ngModel)]="emailCheck" disabled>Email</mat-checkbox>
             </div>
-            <div>
+            <div *ngIf="role.refCompany.activeJobsDB">
               <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="!editExam || checkPreview">JobsDB
               </mat-checkbox>
             </div>
