@@ -24,4 +24,14 @@ export class DashboardService extends NetworkService {
     return this.post(API_ENDPOINT.DASHBOARD.DASHBOARD, body);
   }
 
+  getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
+    const body = {
+      userData: {
+        refCompany: refCompany && refCompany._id
+      },
+      criteria: criteria
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_LIST, body);
+  }
+
 }

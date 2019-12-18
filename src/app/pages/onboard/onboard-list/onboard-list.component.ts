@@ -46,6 +46,7 @@ export class OnboardListComponent implements OnInit {
       divisions: any,
     }
   };
+  refStageId: any;
   showStepper: boolean;
 
   constructor(
@@ -66,6 +67,7 @@ export class OnboardListComponent implements OnInit {
       this.isGridLayout = this.isGridLayout ? this.isGridLayout : false;
       this.showStepper = true;
     }
+    this.refStageId = this.role.refCompany.menu.onboard.refStage._id;
   }
 
   ngOnInit() {
@@ -123,6 +125,9 @@ export class OnboardListComponent implements OnInit {
         this.items.map(item => {
           item.daysBeforeExpire = this.utilitiesService.calculateDuration2Date(new Date(), item.duration.endDate);
           item.canClose = this.utilitiesService.isDateLowerThanToday(item.onboardDate);
+          // this.service.getDetail(this.refStageId, item._id, "PENDING").subscribe(res => {
+          //   item.isOverQuota = res.isOverQuota;
+          // })
         });
         this.paging.length = response.totalDataSize;
         if (!this.filter.data.departments.length) {

@@ -30,6 +30,84 @@
   <nb-card-body>
 
     <div class="row">
+      <div class="col-md-6">
+
+        <!-- Personal Details -->
+        <label class="label topic" style="margin-top: 0;">Personal Details</label>
+        <div class="m-l-15">
+          <div class="text-group">
+            <label class="label">Name</label>
+            <span class="text-cap">{{ utilitiesService.setFullname(item) || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Birthday</label>
+            <span>{{ utilitiesService.convertDate(item.birth) || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Age</label>
+            <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Phone</label>
+            <span>{{ item.phone || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Email</label>
+            <span>{{ item.email || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Address</label>
+            <span>{{ item.address || '-' }}</span>
+          </div>
+        </div>
+
+        <!-- Work Experience -->
+        <label class="label topic">Work Experience</label>
+        <div class="m-l-15">
+          <div class="text-group">
+            <label class="label">Duration</label>
+            <span>{{ 
+                utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
+                utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
+            </span>
+          </div>
+          <div *ngFor="let exp of item.workExperience?.work">
+            <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <label class="label topic">Education</label>
+        <div class="m-l-15">
+          <div *ngFor="let education of item.education">
+            <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
+          </div>
+          <span *ngIf="!item.education?.length">-</span>
+        </div>
+
+        <!-- Hard Skills -->
+        <label class="label topic">Hard Skills</label>
+        <div class="m-l-15">
+          <span *ngIf="item.hardSkill?.length">• </span>
+          <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
+        </div>
+
+        <!-- Soft Skills -->
+        <label class="label topic">Soft Skills</label>
+        <div class="m-l-15">
+          <span *ngIf="item.softSkill?.length">• </span>
+          <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
+        </div>
+
+        <!-- Certificate -->
+        <label class="label topic">Certificate</label>
+        <div class="m-l-15">
+          <span *ngIf="item.certificate?.length">• </span>
+          <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
+        </div>
+
+      </div>
+
       <div class="col-md-6 m-b-20">
 
         <!-- Process Flow -->
@@ -185,84 +263,6 @@
         </div>
 
       </div>
-
-      <div class="col-md-6">
-
-        <!-- Personal Details -->
-        <label class="label topic" style="margin-top: 0;">Personal Details</label>
-        <div class="m-l-15">
-          <div class="text-group">
-            <label class="label">Name</label>
-            <span class="text-cap">{{ utilitiesService.setFullname(item) || '-' }}</span>
-          </div>
-          <div class="text-group">
-            <label class="label">Birthday</label>
-            <span>{{ utilitiesService.convertDate(item.birth) || '-' }}</span>
-          </div>
-          <div class="text-group">
-            <label class="label">Age</label>
-            <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) || '-' }}</span>
-          </div>
-          <div class="text-group">
-            <label class="label">Phone</label>
-            <span>{{ item.phone || '-' }}</span>
-          </div>
-          <div class="text-group">
-            <label class="label">Email</label>
-            <span>{{ item.email || '-' }}</span>
-          </div>
-          <div class="text-group">
-            <label class="label">Address</label>
-            <span>{{ item.address || '-' }}</span>
-          </div>
-        </div>
-
-        <!-- Work Experience -->
-        <label class="label topic">Work Experience</label>
-        <div class="m-l-15">
-          <div class="text-group">
-            <label class="label">Duration</label>
-            <span>{{ 
-                utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
-                utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
-            </span>
-          </div>
-          <div *ngFor="let exp of item.workExperience?.work">
-            <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
-          </div>
-        </div>
-
-        <!-- Education -->
-        <label class="label topic">Education</label>
-        <div class="m-l-15">
-          <div *ngFor="let education of item.education">
-            <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
-          </div>
-          <span *ngIf="!item.education?.length">-</span>
-        </div>
-
-        <!-- Hard Skills -->
-        <label class="label topic">Hard Skills</label>
-        <div class="m-l-15">
-          <span *ngIf="item.hardSkill?.length">• </span>
-          <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
-        </div>
-
-        <!-- Soft Skills -->
-        <label class="label topic">Soft Skills</label>
-        <div class="m-l-15">
-          <span *ngIf="item.softSkill?.length">• </span>
-          <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
-        </div>
-
-        <!-- Certificate -->
-        <label class="label topic">Certificate</label>
-        <div class="m-l-15">
-          <span *ngIf="item.certificate?.length">• </span>
-          <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
-        </div>
-
-      </div>
     </div>
     <div *ngIf="condition.button.errMsg" class="pull-right">
       <label class="label text-red m-0">
@@ -271,8 +271,15 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button *ngIf="role.refAuthorize?.showOriginalCV" style="float: left;" nbButton status="success"
-      (click)="checkCV(item._id)">Original CV</button>
+    <div class="float-left">
+      <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton status="default" (click)="checkCV(item._id)"
+        nbTooltip="Original CV">
+        <nb-icon icon="file-text-outline"></nb-icon>
+      </button>
+      <button nbButton status="default" (click)="openPrintCandidate(item)" nbTooltip="Print">
+        <nb-icon icon="printer-outline"></nb-icon>
+      </button>
+    </div>
     <button *ngIf="condition.button.comment" nbButton status="info" nbTooltip="Comment"
       (click)="openPopupComment(item)">
       <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>

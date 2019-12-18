@@ -2,6 +2,41 @@
   Your working days is not configured to calendar!
 </nb-alert> -->
 
+<!-- <div class="row">
+  <div class="col-md-6">
+    <nb-card>
+      <nb-card-body style="min-height: auto;">
+        <span class="fab fa-microsoft icon-microsoft"></span>
+        Sign in with Outlook Calendar
+        <button *ngIf="button.outlook" nbButton status="success" size="small" class="float-right"
+          (click)="signInOutlook()">
+          Sign in
+        </button>
+        <button *ngIf="!button.outlook" nbButton status="success" size="small" class="float-right" disabled>
+          <nb-icon icon="checkmark-outline" style="font-size: 1rem;"></nb-icon>
+          Sign in
+        </button>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-6">
+    <nb-card>
+      <nb-card-body style="min-height: auto;">
+        <span class="fab fa-google icon-google"></span>
+        Sign in with Google Calendar
+        <button *ngIf="button.gmail" nbButton status="success" size="small" class="float-right"
+          (click)="signInGoogle()">
+          Sign in
+        </button>
+        <button *ngIf="!button.gmail" nbButton status="success" size="small" class="float-right" disabled>
+          <nb-icon icon="checkmark-outline" style="font-size: 1rem;"></nb-icon>
+          Sign in
+        </button>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div> -->
+
 <nb-card>
   <nb-card-header>
     CALENDAR

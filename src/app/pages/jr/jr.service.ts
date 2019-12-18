@@ -69,4 +69,8 @@ export class JrService extends NetworkService {
     return this.post(API_ENDPOINT.JOBREQUEST.USERS, { departmentId, divisionId });
   }
 
+  toggleStatus(jrId: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.JOBREQUEST.TOGGLE, { jrId });
+  }
+
 }

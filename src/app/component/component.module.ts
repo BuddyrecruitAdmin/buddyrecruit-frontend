@@ -99,6 +99,7 @@ import { PopupAvailableDateComponent } from './popup-available-date/popup-availa
 import { PopupSignDateComponent } from './popup-sign-date/popup-sign-date.component';
 import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.component';
 import { PopupInterviewResultComponent } from './popup-interview-result/popup-interview-result.component';
+import { PrintCandidateComponent } from './print-candidate/print-candidate.component';
 
 @NgModule({
   imports: [
@@ -199,6 +200,7 @@ import { PopupInterviewResultComponent } from './popup-interview-result/popup-in
     PopupSignDateComponent,
     PopupFeedbackComponent,
     PopupInterviewResultComponent,
+    PrintCandidateComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -218,6 +220,7 @@ import { PopupInterviewResultComponent } from './popup-interview-result/popup-in
     PopupSignDateComponent,
     PopupFeedbackComponent,
     PopupInterviewResultComponent,
+    PrintCandidateComponent,
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -237,6 +240,7 @@ import { PopupInterviewResultComponent } from './popup-interview-result/popup-in
     PopupSignDateComponent,
     PopupFeedbackComponent,
     PopupInterviewResultComponent,
+    PrintCandidateComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

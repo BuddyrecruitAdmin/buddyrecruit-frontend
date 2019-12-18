@@ -2,7 +2,8 @@
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="candidateName">{{ evaluation.name  || '-' }} <small *ngIf="state"> ({{ state }})</small></label>
+      <label [nbTooltip]="candidateName">{{ evaluation.name  || '-' }} <small *ngIf="state">
+          ({{ state }})</small></label>
       <!-- <small class="status text-gray m-0">
         {{ jrName || '-' }}
       </small> -->
@@ -42,8 +43,8 @@
           <span style="vertical-align: top;">{{ category.subject }} <span class="text-red">*</span></span>
         </label>
         <div class="m-l-20">
-          <nb-radio-group [(ngModel)]="category.selected" [name]="category.subject" class="inline"
-            (valueChange)="sumScore($event,i)" status="primary" [disabled]="!editable">
+          <nb-radio-group [(ngModel)]="category.selected" [name]="category.subject" (valueChange)="sumScore($event,i)"
+            status="primary" [disabled]="!editable">
             <nb-radio *ngFor=" let scoring of scoring" [name]="category.subject" [value]="scoring.value">
               {{ scoring.label }}
             </nb-radio>

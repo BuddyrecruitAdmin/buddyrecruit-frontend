@@ -19,30 +19,65 @@
         </nb-option>
       </nb-select>
     </div>
-    <div class="form-control-group">
-      <label class="label">Interview Date <span class="text-red">*</span></label>
-      <nb-select fullWidth placeholder="Select Date" [(ngModel)]="date" (selectedChange)="onSelectDate($event)">
-        <nb-option *ngFor="let option of dropdownDate" [value]="option.value"
-          [nbTooltip]="'staff available '+option.group">
-          {{ option.label }} <span class="text-red" *ngIf="option.group">&nbsp;&nbsp;({{ option.group }})</span>
-        </nb-option>
-      </nb-select>
+    <div class="form-control-group m-b-10">
+      <label class="label m-b-5">Select Date From</label>
+      <nb-radio-group [(ngModel)]="selectDateFrom" class="inline" (valueChange)="onChangeselectDateFrom()">
+        <nb-radio value="CALENDAR">Calendar</nb-radio>
+        <nb-radio value="CUSTOMIZE">Customize</nb-radio>
+      </nb-radio-group>
     </div>
-    <div class="form-control-group">
-      <label class="label">Interview Time <span class="text-red">*</span></label>
-      <nb-select fullWidth placeholder="Select Time" [(ngModel)]="time" (selectedChange)="onSelectTime($event)"
-        [disabled]="!date">
-        <nb-option *ngFor="let option of dropdownTime" [value]="option.value">{{ option.label }}<span class="text-red"
-            *ngIf="option.group" [nbTooltip]="'staff available '+option.group">&nbsp;&nbsp;({{ option.group }})</span>
-        </nb-option>
-      </nb-select>
+    <div *ngIf="selectDateFrom === 'CALENDAR'" class="card card-body">
+      <div class="form-control-group">
+        <label class="label">Interview Date <span class="text-red">*</span></label>
+        <nb-select fullWidth placeholder="Select Date" [(ngModel)]="date" (selectedChange)="onSelectDate($event)">
+          <nb-option *ngFor="let option of dropdownDate" [value]="option.value"
+            [nbTooltip]="'staff available '+option.group">
+            {{ option.label }} <span class="text-red" *ngIf="option.group">&nbsp;&nbsp;({{ option.group }})</span>
+          </nb-option>
+        </nb-select>
+      </div>
+      <div class="form-control-group">
+        <label class="label">Interview Time <span class="text-red">*</span></label>
+        <nb-select fullWidth placeholder="Select Time" [(ngModel)]="time" (selectedChange)="onSelectTime($event)"
+          [disabled]="!date">
+          <nb-option *ngFor="let option of dropdownTime" [value]="option.value">{{ option.label }}<span class="text-red"
+              *ngIf="option.group" [nbTooltip]="'staff available '+option.group">&nbsp;&nbsp;({{ option.group }})</span>
+          </nb-option>
+        </nb-select>
+      </div>
+      <div class="form-control-group m-0">
+        <label class="label">Interview Users</label>
+        <div *ngFor="let user of users" [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
+          <nb-icon icon="person-outline"></nb-icon>
+          <span class="m-l-5">{{ user.name }}</span>
+          <nb-icon *ngIf="user.active" icon="checkmark-outline" class="text-green"></nb-icon>
+        </div>
+      </div>
     </div>
-    <div class="form-control-group">
-      <label class="label">Interview Users</label>
-      <div *ngFor="let user of users" [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
-        <nb-icon icon="person-outline"></nb-icon>
-        <span class="m-l-5">{{ user.name }}</span>
-        <nb-icon *ngIf="user.active" icon="checkmark-outline" class="text-green"></nb-icon>
+    <div *ngIf="selectDateFrom === 'CUSTOMIZE'" class="card card-body">
+      <div class="form-control-group">
+        <label class="label">Interview Date <span class="text-red">*</span></label>
+        <nb-datepicker #datepicker format="dd/MM/yyyy"></nb-datepicker>
+        <div class="input-group">
+          <input [nbDatepicker]="datepicker" [(ngModel)]="date2" nbInput fullWidth style="cursor: pointer;">
+          <div class="input-group-addon" style="pointer-events: none;">
+            <nb-icon icon="calendar-outline"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="form-control-group m-0">
+        <label class="label">Interview Time <span class="text-red">*</span></label>
+        <ngb-timepicker [(ngModel)]="startTime" [minuteStep]="minuteStep" [spinners]="false" class="inline">
+        </ngb-timepicker>
+        <span class="label m-l-10 m-r-10">To</span>
+        <ngb-timepicker [(ngModel)]="endTime" [minuteStep]="minuteStep" [spinners]="false" class="inline">
+        </ngb-timepicker>
+        <div class="text-gray">
+          <small>
+            <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+            Press enter on input Interview time
+          </small>
+        </div>
       </div>
     </div>
   </nb-card-body>
@@ -50,10 +85,15 @@
     <div class="footer-collapse">
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()" [disabled]="!canApprove && (!date || !time)">SAVE</button>
-    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND
-      EMAIL</button>
-    <button *ngIf="canApprove" nbButton status="success" (click)="passToInterview()" [disabled]="!date || !time">PASS
+    <button nbButton status="primary" (click)="save()" [disabled]="!canApprove && ( 
+      (selectDateFrom === 'CALENDAR' && (!date || !time)) || 
+      (selectDateFrom === 'CUSTOMIZE' && (!date2 || !startTime || !endTime)))">SAVE</button>
+    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()" [disabled]="( 
+      (selectDateFrom === 'CALENDAR' && (!date || !time)) || 
+      (selectDateFrom === 'CUSTOMIZE' && (!date2 || !startTime || !endTime)))">SEND EMAIL</button>
+    <button *ngIf="canApprove" nbButton status="success" (click)="passToInterview()" [disabled]="( 
+      (selectDateFrom === 'CALENDAR' && (!date || !time)) || 
+      (selectDateFrom === 'CUSTOMIZE' && (!date2 || !startTime || !endTime)))">PASS
       TO INTERVIEW</button>
   </nb-card-footer>
 </nb-card>

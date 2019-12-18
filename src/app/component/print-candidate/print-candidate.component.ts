@@ -1,78 +1,52 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { Location } from '@angular/common';
-import { CandidateService } from '../candidate.service';
-import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, getCandidateId, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId } from '../../../shared/services/auth.service';
-import { UtilitiesService } from '../../../shared/services/utilities.service';
-import * as _ from 'lodash';
-import { MatDialog } from '@angular/material';
-import 'style-loader!angular2-toaster/toaster.css';
+import { NbDialogRef } from '@nebular/theme';
+import { getRole, getFlowId, getCandidateId } from '../../shared/services/auth.service';
+import { CandidateService } from '../../pages/candidate/candidate.service';
+import { ResponseCode } from '../../shared/app.constants';
+import { UtilitiesService } from '../../shared/services/utilities.service';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { NbDialogService } from '@nebular/theme';
-import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
-import { PopupCommentComponent } from '../../../component/popup-comment/popup-comment.component';
-import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
-import { MESSAGE } from "../../../shared/constants/message";
-import { MENU_PROCESS_FLOW } from "../../pages-menu";
-import { JdService } from '../../../pages/jd/jd.service';
-import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
-import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup-exam-date.component';
-import { PopupExamInfoComponent } from '../../../component/popup-exam-info/popup-exam-info.component';
-import { PopupExamScoreComponent } from '../../../component/popup-exam-score/popup-exam-score.component';
-import { PopupInterviewDateComponent } from '../../../component/popup-interview-date/popup-interview-date.component';
-import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
-import { PopupSignDateComponent } from '../../../component/popup-sign-date/popup-sign-date.component';
-import { PrintCandidateComponent } from '../../../component/print-candidate/print-candidate.component';
 
 @Component({
-  selector: 'ngx-candidate-detail',
-  templateUrl: './candidate-detail.component.html',
-  styleUrls: ['./candidate-detail.component.scss']
+  selector: 'ngx-print-candidate',
+  templateUrl: './print-candidate.component.html',
+  styleUrls: ['./print-candidate.component.scss']
 })
-export class CandidateDetailComponent implements OnInit {
+export class PrintCandidateComponent implements OnInit {
   role: any;
-  steps: any;
   flowId: any;
   candidateId: any;
   item: any = {};
-  loading: boolean;
+  loading: boolean = true;
   interviewScores: any;
   condition: any;
+  innerWidth: any;
+  innerHeight: any;
 
   constructor(
-    private router: Router,
-    private location: Location,
-    private service: CandidateService,
+    private ref: NbDialogRef<PrintCandidateComponent>,
+    private candidateService: CandidateService,
     private utilitiesService: UtilitiesService,
-    public matDialog: MatDialog,
     private toastrService: NbToastrService,
-    private dialogService: NbDialogService,
-    private jdService: JdService,
   ) {
     this.role = getRole();
-    this.flowId = getFlowId() || '';
-    this.candidateId = getCandidateId() || '';
-    // setCandidateId();
-    this.steps = this.role.refAuthorize.processFlow.exam.steps;
+    this.flowId = getFlowId();
+    this.candidateId = getCandidateId();
+    this.innerWidth = window.innerWidth * 0.8;
+    this.innerHeight = window.innerHeight * 0.9;
   }
 
   ngOnInit() {
-    this.condition = this.initialModel();
-    this.interviewScores = [];
-    this.getDetail();
+    if (this.flowId) {
+      this.condition = this.initialModel();
+      this.interviewScores = [];
+      this.getDetail();
+    } else {
+      this.ref.close();
+    }
   }
 
   initialModel(): any {
     return {
-      // step: {
-      //   talentPool: false,
-      //   pendingExam: false,
-      //   pendingAppointment: false,
-      //   pendingInterview: false,
-      //   pendingSignContract: false,
-      //   onboard: false,
-      // },
       block: {
         examDate: false,
         examInfo: false,
@@ -103,15 +77,8 @@ export class CandidateDetailComponent implements OnInit {
     };
   }
 
-  back() {
-    this.location.back();
-  }
-
   getDetail() {
-    this.loading = true;
-    this.condition = this.initialModel();
-    this.interviewScores = [];
-    this.service.getDetail(this.candidateId).subscribe(response => {
+    this.candidateService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
         if (this.item.candidateFlow.pendingInterviewScoreInfo.flag) {
@@ -135,11 +102,12 @@ export class CandidateDetailComponent implements OnInit {
         this.setCondition(this.item);
       } else {
         this.showToast('danger', 'Error Message', response.message);
-        this.location.back();
       }
       this.loading = false;
     });
   }
+
+
 
   setCondition(item: any) {
     let step: any;
@@ -339,231 +307,68 @@ export class CandidateDetailComponent implements OnInit {
     }
   }
 
-  gotoStage() {
-    const menu = MENU_PROCESS_FLOW.find(element => {
-      return element.title === this.item.candidateFlow.refStage.refMain.name;
-    });
-    menu.link = menu.link.replace('detail', 'list');
-    if (menu) {
-      this.router.navigate([menu.link]);
-    } else {
-      this.router.navigate(['/employer/home']);
-    }
+  print() {
+    // this.ref.close();
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section').innerHTML;
+    popupWin = window.open('', '_blank', '');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title>Buddy Recruit</title>
+          <style>
+            body {
+              font-family: Open Sans, sans-serif;
+              line-height: 1.5rem;
+            }
+            .row {
+              display: -webkit-box;
+              display: flex;
+              flex-wrap: wrap;
+            }
+            .col-md-6 {
+              -webkit-box-flex: 0;
+              flex: 0 0 50%;
+              max-width: 50%;
+            }
+            .topic {
+              color: #d2d6d9;
+              line-height: 2rem;
+            }
+            .m-l-15 {
+              margin-left: 15px;
+            }
+            .text-group {
+              line-height: 1.5rem;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .text-group label {
+              color: #8f9bb3;
+              font-family: Open Sans, sans-serif;
+              font-size: 0.8rem;
+              font-weight: 700;
+              line-height: 1rem;
+            }
+            .text-group label::after {
+              content: ' :';
+              margin-right: 0.25rem;
+            }
+
+          </style>
+        </head>
+        <body onload="window.print(); window.close()">
+          ${printContents}
+        </body>
+      </html>`
+    );
+    popupWin.document.close();
   }
 
-  gotoJR() {
-    let menu = MENU_PROCESS_FLOW.find(element => {
-      return element.title === this.item.candidateFlow.refStage.refMain.name;
-    });
-    menu.link = menu.link.replace('list', 'detail');
-    if (menu) {
-      setJdId(this.item.candidateFlow.refJR.refJD._id);
-      setJdName(this.item.candidateFlow.refJR.refJD.position);
-      setJrId(this.item.candidateFlow.refJR._id);
-      this.router.navigate([menu.link]);
-    } else {
-      this.router.navigate(['/employer/home']);
-    }
-  }
-
-  approve(item: any, button: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      setButtonId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  reject(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PopupRejectComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  revoke(item: any) {
-    const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-      data: { type: 'C', content: MESSAGE[44] }
-    });
-    confirm.afterClosed().subscribe(result => {
-      if (result) {
-        this.service.candidateFlowRevoke(item.candidateFlow._id, item.candidateFlow.refStage._id).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.getDetail();
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
-      }
-    });
-  }
-
-  openPopupComment(item: any) {
-    setFlowId(item.candidateFlow._id);
-    this.dialogService.open(PopupCommentComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPopupExamDate(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PopupExamDateComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPopupExamInfo(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PopupExamInfoComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPopupExamScore(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PopupExamScoreComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPopupInterviewDate(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    setJrId(item.candidateFlow.refJR._id);
-    this.dialogService.open(PopupInterviewDateComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      setJrId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPopupInterviewScore(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PopupEvaluationComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPopupSignContractDate(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PopupSignDateComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.getDetail();
-      }
-    });
-  }
-
-  openPrintCandidate(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
-    this.dialogService.open(PrintCandidateComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-    });
-  }
-
-  checkCV(id) {
-    this.jdService.originalCV(id, this.role._id)
-      .subscribe(data => this.downloadFile(data), function (error) {
-        //that.setAlertMessage("E", error.statusText);
-      });
-  }
-
-  downloadFile(data: any) {
-    const blob = new Blob([data], { type: "text/pdf" });
-    const url = window.URL.createObjectURL(data);
-    window.open(url);
+  cancel() {
+    this.ref.close();
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
@@ -577,4 +382,5 @@ export class CandidateDetailComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
+
 }

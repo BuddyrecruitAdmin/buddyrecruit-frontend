@@ -7,8 +7,13 @@
   nbSpinnerMessage="Loading...">
   <nb-card-body></nb-card-body>
 </nb-card>
-<div>
-  <div class="form-group">
+
+<div *ngIf="!loading">
+
+  <div *ngIf="noData" class="text-no-data">No Data Found</div>
+
+  <!-- Recruitement Status -->
+  <div *ngIf="enabledRecruitStatus" class="form-group">
     <nb-accordion>
       <nb-accordion-item [expanded]="true">
         <nb-accordion-item-header class="text-green">
@@ -16,68 +21,68 @@
               (Reporting Date: {{ reportDate }})</small> </span>
         </nb-accordion-item-header>
         <nb-accordion-item-body>
-          <div class="row">
-            <!-- Filter Recruitement Status -->
-            <div class="col-md-4">
-              <div class="form-control-group">
-                <label class="label">Department</label>
-                <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.department"
-                  (change)="onChangeFilterRecruiteDepartment($event.target.value)">
-                  <option value="ALL">All</option>
-                  <option *ngFor="let department of filterStatus.departments; let i = index" value="{{ department }}">
-                    {{ department }}
-                  </option>
-                </select>
+          <div *ngIf="bubbleChartData.length > 0">
+            <div class="row">
+              <!-- Filter Recruitement Status -->
+              <div class="col-md-4">
+                <div class="form-control-group">
+                  <label class="label">Department</label>
+                  <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.department"
+                    (change)="onChangeFilterRecruiteDepartment($event.target.value)">
+                    <option value="ALL">All</option>
+                    <option *ngFor="let department of filterStatus.departments; let i = index" value="{{ department }}">
+                      {{ department }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-control-group">
+                  <label class="label">Position</label>
+                  <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.position"
+                    (change)="onChangeFilterRecruitePosition($event.target.value)">
+                    <option value="ALL">All</option>
+                    <option *ngFor="let position of filterStatus.positions; let i = index" value="{{ position }}">
+                      {{ position }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-control-group">
+                  <label class="label">Stage</label>
+                  <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.stage"
+                    (change)="onChangeFilterRecruiteStage($event.target.value)">
+                    <!-- <option value="ALL">All</option> -->
+                    <option *ngFor="let stage of filterStatus.stages; let i = index" value="{{ stage.key }}">
+                      {{ stage.value }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="form-control-group">
-                <label class="label">Position</label>
-                <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.position"
-                  (change)="onChangeFilterRecruitePosition($event.target.value)">
-                  <option value="ALL">All</option>
-                  <option *ngFor="let position of filterStatus.positions; let i = index" value="{{ position }}">
-                    {{ position }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-control-group">
-                <label class="label">Stage</label>
-                <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.stage"
-                  (change)="onChangeFilterRecruiteStage($event.target.value)">
-                  <!-- <option value="ALL">All</option> -->
-                  <option *ngFor="let stage of filterStatus.stages; let i = index" value="{{ stage.key }}">
-                    {{ stage.value }}
-                  </option>
-                </select>
+            <!-- Recruitement Status Data -->
+            <div class="row" *ngIf="bubbleChartData.length > 0">
+              <div class="col-md-12 col-lg-12">
+                <h5 class="chart-text"> Number of Candidates / Expected employee (%)</h5>
+                <canvas baseChart [datasets]="bubbleChartData" [options]="bubbleChartOptions"
+                  [colors]="bubbleChartColors" [legend]="bubbleChartLegend" [chartType]="bubbleChartType">
+                </canvas>
+                <h5 class="chart-text text-center">Timeline from start date - now / End date (%)</h5>
+                <small>* Position name: (scale X, Scale Y, Capacity)</small>
               </div>
             </div>
           </div>
-          <!-- Recruitement Status Data -->
-          <div class="row" *ngIf="bubbleChartData.length > 0">
-            <div class="col-md-12 col-lg-12">
-              <h5 class="chart-text"> Number of Candidates / Expected employee (%)</h5>
-              <canvas baseChart [datasets]="bubbleChartData" [options]="bubbleChartOptions" [colors]="bubbleChartColors"
-                [legend]="bubbleChartLegend" [chartType]="bubbleChartType">
-              </canvas>
-              <h5 class="chart-text text-center">Timeline from start date - now / End date (%)</h5>
-              <small>* Position name: (scale X, Scale Y, Capacity)</small>
-            </div>
-          </div>
-          <!-- No data -->
-          <div class="row">
-            <div class="col-md-12 col-lg-12">
-              <div *ngIf="bubbleChartData.length === 0" style="text-align:center;">No data</div>
-            </div>
+          <div *ngIf="bubbleChartData.length === 0" class="text-no-data">
+            No data found
           </div>
         </nb-accordion-item-body>
       </nb-accordion-item>
     </nb-accordion>
   </div>
-  <!-- rejection -->
-  <div class="form-group">
+
+  <!-- Rejection -->
+  <div *ngIf="enabledRejection" class="form-group">
     <nb-accordion>
       <nb-accordion-item [expanded]="true">
         <nb-accordion-item-header class="text-green">Rejection Analysis Report</nb-accordion-item-header>
@@ -130,10 +135,8 @@
                   </div>
                 </nb-card-header>
                 <nb-card-body>
-                  <div class="row" *ngIf="barChartData.length === 0 || !barChartData">
-                    <div class="col-md-12 col-lg-12" style="text-align:center;">
-                      No data
-                    </div>
+                  <div *ngIf="barChartData.length === 0 || !barChartData" class="text-center">
+                    No data found
                   </div>
                   <div class="chart" *ngIf="barChartData.length > 0">
                     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [chartType]="barChartType"
@@ -149,24 +152,18 @@
             <div class="col-md-6">
               <nb-card>
                 <nb-card-header class="text-green">
-                  <div>
-                    <label> Reject by Candidate</label>
-                  </div>
+                  <label>Reject by Candidate</label>
                 </nb-card-header>
                 <nb-card-body>
-                  <div class="row" *ngIf="barChart2Data.length === 0 || !barChartData">
-                    <div class="col-md-12 col-lg-12" style="text-align:center;">
-                      No data
-                    </div>
+                  <div *ngIf="barChart2Data.length === 0 || !barChartData" class="text-center">
+                    No data found
                   </div>
-                  <div class="row">
-                    <div class="chart" *ngIf="barChart2Data.length > 0">
-                      <canvas baseChart [datasets]="barChart2Data" [labels]="barChart2Labels"
-                        [chartType]="barChart2Type" [options]="barChart2Options" [plugins]="barChart2Plugins"
-                        [colors]="barChart2Colors" [legend]="barChart2Legend">
-                      </canvas>
-                      <small>*Unit: (%)</small>
-                    </div>
+                  <div class="chart" *ngIf="barChart2Data.length > 0">
+                    <canvas baseChart [datasets]="barChart2Data" [labels]="barChart2Labels" [chartType]="barChart2Type"
+                      [options]="barChart2Options" [plugins]="barChart2Plugins" [colors]="barChart2Colors"
+                      [legend]="barChart2Legend">
+                    </canvas>
+                    <small>*Unit: (%)</small>
                   </div>
                 </nb-card-body>
               </nb-card>

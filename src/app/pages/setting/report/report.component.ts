@@ -14,6 +14,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 
 export interface Item {
   _id?: any;
+  code: string;
   name: string;
   active: boolean;
   isFree: boolean;
@@ -117,6 +118,7 @@ export class ReportComponent implements OnInit {
           response.data.forEach(element => {
             this.masterList.push({
               _id: element._id,
+              code: element.code,
               name: element.name,
               active: false,
               isFree: element.isFree,
@@ -165,6 +167,7 @@ export class ReportComponent implements OnInit {
   initialModel(): any {
     const itemDialog = {
       _id: undefined,
+      code: '',
       name: '',
       active: true,
       price: 0,
@@ -181,6 +184,7 @@ export class ReportComponent implements OnInit {
   toggleStatus(item: any) {
     const request = {
       _id: item._id,
+      code: item.code,
       name: item.name,
       active: item.active,
       price: item.price,
@@ -196,6 +200,7 @@ export class ReportComponent implements OnInit {
   }
 
   save() {
+    debugger;
     const request = this.setRequest();
     if (request._id) {
       this.service.edit(request).subscribe(response => {

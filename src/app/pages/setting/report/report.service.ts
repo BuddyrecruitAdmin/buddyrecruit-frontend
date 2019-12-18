@@ -36,21 +36,15 @@ export class ReportService extends NetworkService {
   create(item: any): Observable<ApiResponse> {
     const body = {
       name: item.name,
+      code: item.code,
       isFree: item.isFree,
       price: item.price,
     }
     return this.post(API_ENDPOINT.CONFIGURATION.REPORT_CREATE, body);
   }
 
-  edit(item: any): Observable<ApiResponse> {
-    const body = {
-      _id: item._id,
-      name: item.name,
-      active: item.active,
-      isFree: item.isFree,
-      price: item.price,
-    }
-    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_EDIT, body);
+  edit(request: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.REPORT_EDIT, request);
   }
 
   deleteItem(item: any): Observable<ApiResponse> {

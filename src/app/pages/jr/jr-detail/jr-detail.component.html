@@ -84,9 +84,11 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': sErrorUser }">
-              <label class="label">Users Interview <span class="text-red">*</span></label>
+              <label class="label">Users Interview <span class="text-red">*</span>
+                <small> (Please select Job Position first)</small>
+              </label>
               <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
-                [disabled]="checkPreview">
+                [disabled]="checkPreview || !jr.refJD._id">
                 <nb-option [hidden]="user.group === 'disabled'" *ngFor="let user of Users" [value]="user.value"
                   [disabled]="checkPreview">
                   {{ user.label }}
@@ -116,7 +118,7 @@
           <div class="col-md-12">
             <div class="form-control-group">
               <label class="label">Remark</label>
-              <textarea type="" nbInput fullWidth placeholder="Remark" [(ngModel)]="jr.remark"
+              <textarea nbInput fullWidth placeholder="Remark" [(ngModel)]="jr.remark" rows="3"
                 [disabled]="checkPreview"></textarea>
             </div>
           </div>
@@ -127,13 +129,13 @@
             <div>
               <mat-checkbox class="label" [(ngModel)]="emailCheck" disabled>Email</mat-checkbox>
             </div>
-            <div>
+            <div *ngIf="role?.refCompany?.activeJobsDB">
               <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="!editExam || checkPreview">JobsDB
               </mat-checkbox>
             </div>
           </div>
           <div class="col-sm-2 col-md-2">
-            <label class="label">Exam</label>
+            <label class="label">Have Exam</label>
             <div>
               <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview || !editExam">Yes
               </mat-checkbox>

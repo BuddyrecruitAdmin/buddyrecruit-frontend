@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -133,6 +133,10 @@ export class OnboardDetailComponent implements OnInit {
       filter: [
         'refCandidate.firstname',
         'refCandidate.lastname',
+        'refCandidate.age',
+        'refCandidate.phone',
+        'refCandidate.email',
+        'refStage.name',
       ]
     };
     this.items = [];
@@ -158,7 +162,8 @@ export class OnboardDetailComponent implements OnInit {
   setCondition(item: any): any {
     let condition = {
       icon: {
-        signContract: false
+        signContract: false,
+        onBoard: true
       },
       button: {
         step: {},
@@ -305,10 +310,11 @@ export class OnboardDetailComponent implements OnInit {
     this.router.navigate(["/employer/candidate/detail"]);
   }
 
-  openPopupSignContractDate(item: any, button: any) {
+  openPopupSignContractDate(item: any, button: any, icon: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     setButtonId(button);
+    setIconId(icon);
     this.dialogService.open(PopupSignDateComponent,
       {
         closeOnBackdropClick: false,

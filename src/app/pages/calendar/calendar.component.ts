@@ -30,6 +30,7 @@ import { CalendarService } from './calendar.service';
 import { ResponseCode, Paging } from '../../shared/app.constants';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupAvailableDateComponent } from '../../component/popup-available-date/popup-available-date.component'
+import { Router, ActivatedRoute } from "@angular/router";
 
 const colors: any = {
   green: {
@@ -93,16 +94,26 @@ export class CalendarComponent implements OnInit {
   candidateFlow: any;
   event: any = {};
   users: any[];
+  button: {
+    outlook: boolean,
+    gmail: boolean,
+  }
 
   constructor(
     private service: CalendarService,
     private dialogService: NbDialogService,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
     this.innerHeight = window.innerHeight * 0.8;
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.button = {
+      outlook: false,
+      gmail: false
+    };
   }
 
   ngOnInit() {
@@ -110,7 +121,19 @@ export class CalendarComponent implements OnInit {
     this.events = [];
     this.excludeDays = [];
     this.dialogDate = new Date();
-    this.getCalendarData();
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params.code) {
+        this.service.getTokenOutlookCalendar(params.code).subscribe(response => {
+          if (response.data.token) {
+            this.getOutlookCalendarList(response.data.token);
+          }
+        });
+      } else {
+        // this.checkTokenOutlookCalendar();
+        this.getCalendarData();
+      }
+    });
   }
 
   getCalendarData() {
@@ -446,6 +469,34 @@ export class CalendarComponent implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+  signInOutlook() {
+    this.service.signInOutlookCalendar().subscribe(response => {
+      if (response.data.loginUrl) {
+        window.open(response.data.loginUrl, '_blank', '');
+      }
+    });
+  }
+
+  checkTokenOutlookCalendar() {
+    this.service.checkTokenOutlookCalendar(this.role.username).subscribe(response => {
+      if (response.data.token) {
+        this.getOutlookCalendarList(response.data.token);
+      } else {
+        this.button.outlook = true;
+      }
+    });
+  }
+
+  getOutlookCalendarList(token: any) {
+    this.service.getOutlookCalendars(token).subscribe(response => {
+      console.log('getOutlookCalendars', response);
+    });
+  }
+
+  signInGoogle() {
+
   }
 
   buildTitle(item: any) {

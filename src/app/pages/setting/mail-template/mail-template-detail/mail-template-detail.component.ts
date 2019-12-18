@@ -15,6 +15,7 @@ import { PopupMessageComponent } from '../../../../component/popup-message/popup
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
   selector: 'ngx-mail-template-detail',
   templateUrl: './mail-template-detail.component.html',
@@ -40,6 +41,23 @@ export class MailTemplateDetailComponent implements OnInit {
   sErrorcc: string;
   str: any;
   n: any;
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'no',
+    sanitize: false,
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Enter text here...',
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+  }
   constructor(
     private service: MailTemplateService,
     private dialogService: NbDialogService,
@@ -76,32 +94,9 @@ export class MailTemplateDetailComponent implements OnInit {
         this._id = params.id;
         this.getId = false;
         this.getDetail();
-        // this.initialDropdown().then((response) => {
-
-        // });
       }
     });
   }
-
-  // async initialDropdown() {
-  //   this.typeOptions = [];
-  //   this.typeOptions.push({
-  //     label: "- Select email Type -",
-  //     value: undefined
-  //   });
-  //   this.service.getList().subscribe(response => {
-  //     if (response.code === ResponseCode.Success) {
-  //       if (response.data) {
-  //         response.data.forEach(element => {
-  //           this.typeOptions.push({
-  //             label: element.name,
-  //             value: element._id
-  //           });
-  //         });
-  //       }
-  //     }
-  //   });
-  // }
 
   getDetail() {
     this.service.getDetail(this._id).subscribe(response => {
@@ -152,63 +147,24 @@ export class MailTemplateDetailComponent implements OnInit {
     this.sErrorcc = "";
     this.sErrorBcc = "";
     if (this.itemDialog.cc.length > 0) {
-      // this.itemDialog.cc.map(cc => {
-      //   if (cc.value) {
-      //     this.n = cc.value.search("@");
-      //     if (this.n > 0) {
-      //       this.str = cc.value.slice(this.n + 1);
-      //       this.n = this.str.search("@");
-      //       if (this.n != -1) {
-      //         this.sErrorcc = MESSAGE[9];
-      //         isValid = false
-      //       } else {
-      //         let checkFinal;
-      //         checkFinal = this.str.search(/\./);
-      //         if (checkFinal < 1) {
-      //           this.sErrorcc = MESSAGE[9];
-      //           isValid = false;
-      //         }
-      //       }
-      //     } else {
-      //       this.sErrorcc = MESSAGE[9];
-      //       isValid = false;
-      //     }
-      //   }
-      // })
       this.itemDialog.cc.map(cc => {
         if (cc.value) {
           if (!this.utilitiesService.isValidEmail(cc.value)) {
             this.sErrorcc = MESSAGE[9];
             isValid = false
-          }else{
+          } else {
             this.sErrorcc = "";
           }
         }
       })
     }
     if (this.itemDialog.bcc.length > 0) {
-      // this.itemDialog.bcc.map(bcc => {
-      //   if (bcc.value) {
-      //     this.n = bcc.value.search("@");
-      //     if (this.n > 0) {
-      //       this.str = bcc.value.slice(this.n + 1);
-      //       this.n = this.str.search("@");
-      //       if (this.n != -1) {
-      //         this.sErrorBcc = MESSAGE[9];
-      //         isValid = false
-      //       }
-      //     } else {
-      //       this.sErrorBcc = MESSAGE[9];
-      //       isValid = false;
-      //     }
-      //   }
-      // })
       this.itemDialog.bcc.map(bcc => {
         if (bcc.value) {
           if (!this.utilitiesService.isValidEmail(bcc.value)) {
             this.sErrorBcc = MESSAGE[9];
             isValid = false
-          }else{
+          } else {
             this.sErrorBcc = "";
           }
         }

@@ -1,0 +1,298 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
+  [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+  <nb-card-body>
+    <div id="print-section">
+      <div style="text-align: center; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">
+        {{ utilitiesService.setFullname(item) }}
+      </div>
+      <div style="text-align: center; font-size: 1rem; margin-bottom: 1.5rem;">
+        ( {{ item.candidateFlow?.refJR?.refJD?.position || '-' }} )
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-6">
+
+          <!-- Personal Details -->
+          <label class="label topic" style="margin-top: 0;">Personal Details</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Name</label>
+              <span class="text-cap">{{ utilitiesService.setFullname(item) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Birthday</label>
+              <span>{{ utilitiesService.convertDate(item.birth) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Age</label>
+              <span>{{ utilitiesService.calculateAgeFromBirthdate(item.birth) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Phone</label>
+              <span>{{ item.phone || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Email</label>
+              <span>{{ item.email || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Address</label>
+              <span>{{ item.address || '-' }}</span>
+            </div>
+          </div>
+
+          <!-- Work Experience -->
+          <label class="label topic">Work Experience</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Duration</label>
+              <span>{{ 
+                utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || 
+                utilitiesService.convertMonthToYearText(item.workExperience?.totalExMonth) || '-' }}
+              </span>
+            </div>
+            <div *ngFor="let exp of item.workExperience?.work">
+              <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <label class="label topic">Education</label>
+          <div class="m-l-15">
+            <div *ngFor="let education of item.education">
+              <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
+            </div>
+            <span *ngIf="!item.education?.length">-</span>
+          </div>
+
+          <!-- Hard Skills -->
+          <label class="label topic">Hard Skills</label>
+          <div class="m-l-15">
+            <span *ngIf="item.hardSkill?.length">• </span>
+            <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
+          </div>
+
+          <!-- Soft Skills -->
+          <label class="label topic">Soft Skills</label>
+          <div class="m-l-15">
+            <span *ngIf="item.softSkill?.length">• </span>
+            <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
+          </div>
+
+          <!-- Certificate -->
+          <label class="label topic">Certificate</label>
+          <div class="m-l-15">
+            <span *ngIf="item.certificate?.length">• </span>
+            <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
+          </div>
+
+        </div>
+        <div class="col-md-6 m-b-20">
+
+          <label class="label topic" style="margin-top: 0;">CV Score</label>
+          <div class="m-l-15">
+            <div class="m-b-10">
+              <div class="label">Work Experience
+                <span class="pull-right">
+                  {{ item.candidateFlow?.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.workExperience?.total || 0 }}
+                </span>
+              </div>
+              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.candidateFlow?.weightScore?.workExperience?.accumulativeScore,
+                        item.candidateFlow?.weightScore?.workExperience?.total)" status="primary" size="tiny">
+              </nb-progress-bar>
+            </div>
+            <div class="m-b-10">
+              <div class="label">Education
+                <span class="pull-right">
+                  {{ item.candidateFlow?.weightScore?.education?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.education?.total || 0 }}
+                </span>
+              </div>
+              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.candidateFlow?.weightScore?.education?.accumulativeScore,
+                        item.candidateFlow?.weightScore?.education?.total)" status="info" size="tiny">
+              </nb-progress-bar>
+            </div>
+            <div class="m-b-10">
+              <div class="label">Hard Skill
+                <span class="pull-right">
+                  {{ item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.hardSkill?.total || 0 }}
+                </span>
+              </div>
+              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore,
+                        item.candidateFlow?.weightScore?.hardSkill?.total)" status="success" size="tiny">
+              </nb-progress-bar>
+            </div>
+            <div class="m-b-10">
+              <div class="label">Soft Skill
+                <span class="pull-right">
+                  {{ item.candidateFlow?.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.softSkill?.total || 0 }}
+                </span>
+              </div>
+              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.candidateFlow?.weightScore?.softSkill?.accumulativeScore,
+                        item.candidateFlow?.weightScore?.softSkill?.total)" status="warning" size="tiny">
+              </nb-progress-bar>
+            </div>
+            <div>
+              <div class="label">Certificate
+                <span class="pull-right">
+                  {{ item.candidateFlow?.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.certificate?.total || 0 }}
+                </span>
+              </div>
+              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.candidateFlow?.weightScore?.certificate?.accumulativeScore,
+                        item.candidateFlow?.weightScore?.certificate?.total)" status="danger" size="tiny">
+              </nb-progress-bar>
+            </div>
+          </div>
+
+          <!-- Process Flow -->
+          <label class="label topic">Process Flow</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Department</label>
+              <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Division</label>
+              <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Job Position</label>
+              <span>{{ item.candidateFlow?.refJR?.refJD?.position || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Stage</label>
+              <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="item.candidateFlow?.refJR?.requiredExam">
+            <!-- Exam Date -->
+            <div *ngIf="condition?.block?.examDate">
+              <label class="label topic">Exam Date</label>
+              <div class="m-l-15">
+                <div class="text-group">
+                  <label class="label">Exam Date</label>
+                  <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.examInfo?.date) || '-' }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Exam Info -->
+            <div *ngIf="condition?.block?.examInfo">
+              <label class="label topic">Exam Info</label>
+              <div class="m-l-15">
+                <div class="text-group">
+                  <label class="label">Available Date</label>
+                  <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingExamInfo?.availableDate) || '-' }}</span>
+                </div>
+                <div class="text-group">
+                  <label class="label">After Sign Contract</label>
+                  <span>{{ item.candidateFlow?.pendingExamInfo?.afterSignContract || '-' }}</span>
+                </div>
+                <div class="text-group">
+                  <label class="label">Remark</label>
+                  <span>{{ item.candidateFlow?.pendingExamInfo?.remark || '-' }}</span>
+                </div>
+              </div>
+            </div>
+            <!-- Exam Score -->
+            <div *ngIf="condition?.block?.examScore">
+              <label class="label topic">Exam Score</label>
+              <div class="m-l-15">
+                <div class="text-group">
+                  <label class="label">Exam Score</label>
+                  <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examScore || '0' }}</span>
+                </div>
+                <div class="text-group">
+                  <label class="label">Exam Remark</label>
+                  <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
+                </div>
+                <div class="text-group">
+                  <label class="label">Attitude Score</label>
+                  <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
+                </div>
+                <div class="text-group">
+                  <label class="label">Attitude Remark</label>
+                  <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interview Info -->
+          <div *ngIf="condition?.block?.interviewDate">
+            <label class="label topic">Interview Info</label>
+            <div class="m-l-15">
+              <div class="text-group">
+                <label class="label">Interview Location</label>
+                <span>{{ item.candidateFlow?.pendingInterviewInfo?.refLocation?.name || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Interview Date</label>
+                <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingInterviewInfo?.startDate) || '-' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interview Score -->
+          <div *ngIf="condition?.block?.interviewScore">
+            <label class="label topic">Interview Result</label>
+            <div *ngFor="let interviewScore of interviewScores" class="m-l-15">
+              <div class="text-group">
+                <label class="label">{{ interviewScore.name }}</label>
+                <span>{{ interviewScore.result || '-' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sign Contract Info -->
+          <div *ngIf="condition?.block?.signContract">
+            <label class="label topic">Sign Contract Info</label>
+            <div class="m-l-15">
+              <div class="text-group">
+                <label class="label">Sign Contract Date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Agree Start Date</label>
+                <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Email Sent Date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.mail?.date) || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Note</label>
+                <span>{{ item.candidateFlow?.pendingSignContractInfo?.note || '-' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Onboard Info -->
+          <div *ngIf="condition?.block?.onboard">
+            <label class="label topic">Onboard Info</label>
+            <div class="m-l-15">
+              <div class="text-group">
+                <label class="label">Onboard Date</label>
+                <span>{{ utilitiesService.convertDate(item.candidateFlow?.onboard?.date) || '-' }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="default" (click)="cancel()">
+      Cancel
+    </button>
+    <button nbButton status="success" (click)="print()">
+      <nb-icon icon="printer-outline"></nb-icon> Print
+    </button>
+  </nb-card-footer>
+</nb-card>

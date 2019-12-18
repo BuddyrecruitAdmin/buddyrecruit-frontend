@@ -12,6 +12,9 @@ import { PopupMessageComponent } from '../../../component/popup-message/popup-me
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { AuthorizeService } from '../../../pages/setting/authorize/authorize.service';
+import { JobPositionService } from '../../../pages/setting/job-position/job-position.service';
+import { DepartmentService } from '../../../pages/setting/department/department.service';
+
 @Component({
   selector: 'ngx-jd-list',
   templateUrl: './jd-list.component.html',
@@ -28,6 +31,10 @@ export class JdListComponent implements OnInit {
   devices: Devices;
   loading: boolean;
   isGridLayout: boolean;
+  showTips: {
+    jobPosition: boolean,
+    department: boolean,
+  }
 
   constructor(
     private router: Router,
@@ -36,6 +43,8 @@ export class JdListComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private authorizeService: AuthorizeService,
+    private jobPositionService: JobPositionService,
+    private departmentService: DepartmentService,
   ) {
     this.role = getRole();
     if (this.role && this.role.refAuthorize) {
@@ -58,6 +67,26 @@ export class JdListComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
+    if (this.role.refAuthorize.jd.editable) {
+      this.showTips = {
+        jobPosition: false,
+        department: false
+      };
+      this.jobPositionService.getList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (!response.data || !response.data.length) {
+            this.showTips.jobPosition = true;
+          }
+        }
+      });
+      this.service.getList(undefined, this.role.refCompany).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (!response.data || !response.data.length) {
+            this.showTips.department = true;
+          }
+        }
+      });
+    }
   }
 
   ngOnInit() {
@@ -68,7 +97,8 @@ export class JdListComponent implements OnInit {
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
-    }
+    };
+
     this.search();
   }
 

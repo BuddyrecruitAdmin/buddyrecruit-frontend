@@ -1,18 +1,32 @@
 <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
-    <div>
+    <div class="title">
+      <label class="text-cap" [nbTooltip]="utilitiesService.setFullname(items)">
+        {{ utilitiesService.setFullname(items) }}
+      </label>
+      <small class="status m-0">
+        {{ items.candidateFlow?.refJR?.refJD?.position }}
+      </small>
+    </div>
+    <div *ngIf="role.refAuthorize.editCandidateInfo" class="pull-right">
+      <button size="small" nbButton status="success" (click)="changeMode()">
+        <nb-icon *ngIf="editable" icon="eye-outline"></nb-icon>
+        <nb-icon *ngIf="!editable" icon="edit-2-outline"></nb-icon>
+        {{ buttonText.toUpperCase() }}
+      </button>
+    </div>
+    <!-- <div>
       <span class="label-grey"
         [nbTooltip]="items.candidateFlow?.refJR?.refJD?.position">{{items.candidateFlow?.refJR?.refJD?.position}}</span>
       <div *ngIf="role.refAuthorize.editCandidateInfo" class="pull-right">
         <button size="small" nbButton status="success" (click)="changeMode()">
           <nb-icon *ngIf="editable" icon="eye-outline"></nb-icon>
           <nb-icon *ngIf="!editable" icon="edit-2-outline"></nb-icon>
-          <!-- <span class="fa" [ngClass]="{ 'fa-eye': editable, 'fa-pencil-alt': !editable }"></span> -->
-          <span>{{ buttonText.toUpperCase() }}</span>
+          {{ buttonText.toUpperCase() }}
         </button>
       </div>
-    </div>
+    </div> -->
   </nb-card-header>
   <nb-card-body *ngIf="!loading" class="dialog-body">
     <div class="title">
@@ -248,8 +262,8 @@
     </div>
 
     <!-- InterView -->
-    <div class="border-padtop">
-      <div class="title" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+    <div class="border-padtop" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+      <div class="title">
         <label class="label">Comments<span class="link underline" nbTooltip="See more result"
             (click)="infoResult(items.candidateFlow)">
             <nb-icon icon="info-outline"></nb-icon>
@@ -509,11 +523,28 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button *ngIf="role.refAuthorize.showOriginalCV" class="txt-left" size="small" nbButton status="success" (click)="checkCV(items._id)">Original
-      CV</button>
-    <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small" nbButton status="info"
-      (click)="openApplication(items._id)">App Form</button>
-    <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button>
+    <div class="float-left">
+      <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton status="default" size="small"
+        (click)="checkCV(items._id)" nbTooltip="Original CV">
+        <nb-icon icon="file-text-outline"></nb-icon>
+      </button>
+      <button nbButton status="default" size="small" (click)="openPrintCandidate(items)" nbTooltip="Print">
+        <nb-icon icon="printer-outline"></nb-icon>
+      </button>
+      <button nbButton status="default" size="small" (click)="bugReport('All','all')" nbTooltip="Feedback">
+        <nb-icon icon="alert-triangle-outline"></nb-icon>
+      </button>
+      <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" nbButton status="info" size="small"
+        (click)="openApplication(items._id)" nbTooltip="Application Form">
+        <nb-icon icon="file-text-outline"></nb-icon>
+      </button>
+    </div>
+    <!-- <button *ngIf="role.refAuthorize.showOriginalCV" class="txt-left" size="small" nbButton status="success"
+      (click)="checkCV(items._id)">Original
+      CV</button> -->
+    <!-- <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small"
+      nbButton status="info" (click)="openApplication(items._id)">App Form</button> -->
+    <!-- <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button> -->
     <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
     <button nbButton status="default" size="small" (click)="ref.close(true)">CLOSE</button>
   </nb-card-footer>

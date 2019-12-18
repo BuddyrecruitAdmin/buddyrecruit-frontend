@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
 import * as MENU from './pages-menu';
 import { getRole } from '../shared/services/auth.service';
+import { ReportService } from '../pages/setting/report/report.service';
+import { ResponseCode } from '../shared/app.constants';
 
 @Component({
   selector: 'ngx-pages',
@@ -14,13 +16,14 @@ import { getRole } from '../shared/services/auth.service';
   `,
 })
 export class PagesComponent {
-  // menu = MENU_ITEMS;
+
   menu: NbMenuItem[];
 
-  constructor() {
+  constructor(
+    private reportService: ReportService,
+  ) {
     this.menu = [];
     const role = getRole();
-    console.log(role);
     // Home
     MENU.MENU_HOME.forEach(element => {
       this.menu.push(element);
@@ -29,7 +32,7 @@ export class PagesComponent {
       const menu = role.refCompany.menu;
       if (menu) {
         // Dashboard
-        if (menu.dashboard && menu.dashboard.active && role.refAuthorize.showDashboard ) {
+        if (menu.dashboard && menu.dashboard.active && role.refAuthorize.showDashboard) {
           MENU.MENU_DASHBOARD.forEach(element => {
             this.menu.push(element);
           });
@@ -74,19 +77,36 @@ export class PagesComponent {
         }
         // Reporting
         if (menu.report && menu.report.active && menu.report.reports && role.refAuthorize.showReport) {
-          let menuReport: NbMenuItem[];
-          menuReport = [];
-          // group
-          MENU.MENU_REPORT.forEach(element => {
-            menuReport.push(element);
-          });
-          // children
-          menuReport[1].children = [];
-          MENU.MENU_REPORT_CHILD.forEach(element => {
-            menuReport[1].children.push(element);
-          });
-          menuReport.forEach(element => {
-            this.menu.push(element);
+          this.reportService.getList(undefined, role.refCompany).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              if (response.data && response.data.length) {
+                if (response.data.find(element => {
+                  return element.active;
+                })) {
+                  let menuReport: NbMenuItem[];
+                  menuReport = [];
+                  // group
+                  MENU.MENU_REPORT.forEach(element => {
+                    menuReport.push(element);
+                  });
+                  // children
+                  menuReport[1].children = [];
+                  if (response.data.find(element => {
+                    return element.active && element.refReport.code === 'REPORT_01';
+                  })) {
+                    menuReport[1].children.push(MENU.MENU_REPORT_CHILD[0]);
+                  }
+                  if (response.data.find(element => {
+                    return element.active && element.refReport.code === 'REPORT_02';
+                  })) {
+                    menuReport[1].children.push(MENU.MENU_REPORT_CHILD[1]);
+                  }
+                  menuReport.forEach(element => {
+                    this.menu.push(element);
+                  });
+                }
+              }
+            }
           });
         }
       }
