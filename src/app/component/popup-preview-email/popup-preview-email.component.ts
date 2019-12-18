@@ -98,6 +98,10 @@ export class PopupPreviewEmailComponent implements OnInit {
             this.previewEmail = false;
             this.nextStep();
           }
+          if (response.data.mailOptions.to[0] === "" || response.data.mailOptions.to.length < 1) {
+            this.checkedEmail = true;
+            this.sendEmail = false;
+          }
         }
       } else {
         this.actionUser = response.data.actionUser;
@@ -128,7 +132,7 @@ export class PopupPreviewEmailComponent implements OnInit {
         contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
       }
     }
-    if(this.checkedEmail){
+    if (this.checkedEmail) {
       type = 'W';
       contents.push('ไม่พบอีเมลของผู้สมัคร ');
       contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
