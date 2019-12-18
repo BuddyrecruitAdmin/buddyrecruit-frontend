@@ -262,8 +262,8 @@
     </div>
 
     <!-- InterView -->
-    <div class="border-padtop">
-      <div class="title" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+    <div class="border-padtop" *ngIf="items.candidateFlow?.pendingInterviewScoreInfo.evaluation.length">
+      <div class="title">
         <label class="label">Comments<span class="link underline" nbTooltip="See more result"
             (click)="infoResult(items.candidateFlow)">
             <nb-icon icon="info-outline"></nb-icon>

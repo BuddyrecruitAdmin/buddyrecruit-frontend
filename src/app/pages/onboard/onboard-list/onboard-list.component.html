@@ -125,7 +125,7 @@
               </span>
             </div>
           </nb-card-body>
-          <nb-card-footer *ngIf="item.canClose && role.refAuthorize?.closeJR?.visible">
+          <nb-card-footer *ngIf="(item.canClose || item.isOverCandidate )&& role.refAuthorize?.closeJR ">
             <button nbButton status="default" size="small" nbTooltip="Close JR" (click)="close(item)">CLOSE</button>
           </nb-card-footer>
         </nb-card>
@@ -195,8 +195,8 @@
                 <button nbButton status="primary" size="tiny" nbTooltip="Preview" (click)="edit(item)">
                   <nb-icon icon="arrowhead-right-outline"></nb-icon>
                 </button>
-                <button *ngIf="item.canClose && role.refAuthorize?.closeJR?.visible" nbButton status="danger"
-                  size="tiny" nbTooltip="Close" (click)="close(item)">
+                <button *ngIf="(item.canClose || item.isOverCandidate) && role.refAuthorize?.closeJR " nbButton
+                  status="danger" size="tiny" nbTooltip="Close" (click)="close(item)">
                   <nb-icon icon="close-circle-outline"></nb-icon>
                 </button>
               </td>

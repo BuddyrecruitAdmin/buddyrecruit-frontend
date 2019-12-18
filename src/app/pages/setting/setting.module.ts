@@ -26,6 +26,7 @@ import {
   NbAccordionModule,
   NbAlertModule,
   NbPopoverModule,
+  NbBadgeModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -97,7 +98,7 @@ import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evalua
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 import { BlacklistComponent } from './blacklist/blacklist.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     SettingComponent,
@@ -151,6 +152,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
     NbAccordionModule,
     NbAlertModule,
     NbPopoverModule,
+    NbBadgeModule,
 
     A11yModule,
     CdkStepperModule,
@@ -196,6 +198,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 
     AngularEditorModule,
     TagInputModule,
+    HttpClientModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

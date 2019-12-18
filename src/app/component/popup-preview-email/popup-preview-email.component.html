@@ -10,7 +10,7 @@
     <div class="box-header">
       <h5 class="box-title">{{ mailOptions.subject }}
         <small class="pull-right">
-          <mat-checkbox [(ngModel)]="sendEmail">Send Email</mat-checkbox>
+          <mat-checkbox [(ngModel)]="sendEmail" [disabled]="checkedEmail">Send Email</mat-checkbox>
         </small>
       </h5>
     </div>

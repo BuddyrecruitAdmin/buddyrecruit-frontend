@@ -42,6 +42,7 @@ export const API_ENDPOINT = {
     ACTION: "jr/action",
     USERS: "jr/users",
     CLOSE: "jr/close",
+    TOGGLE: "jr/active"
   },
   TALENT_POOL: {
     LIST: "talentPool/list",
@@ -106,6 +107,7 @@ export const API_ENDPOINT = {
     COMPANY_EDIT: "company/edit",
     COMPANY_DELETE: "company/delete",
     COMPANY_DETAIL: "company/detail",
+  
 
     DEPARTMENT_LIST: "department/list",
     DEPARTMENT_CREATE: "department/create",
@@ -139,6 +141,7 @@ export const API_ENDPOINT = {
     USER_PROFILE: "user/profile",
     USER_PROFILE_EDIT: "user/profile/edit",
     USER_PROFILE_UPLOAD: "user/profile/upload",
+    USER_ADMIN: "user/admin/list",
 
     REASONS_REJECT_LIST: "rejection/list",
     REASONS_REJECT_CREATE: "rejection/create",

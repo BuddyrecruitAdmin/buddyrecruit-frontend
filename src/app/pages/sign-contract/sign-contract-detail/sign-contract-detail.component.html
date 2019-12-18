@@ -5,7 +5,11 @@
     <span>{{ jrName }}</span>
   </div>
 </div>
-
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  <span>
+    จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
+  </span>
+</nb-alert>
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -109,7 +113,8 @@
                   <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
                     <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Sign Contract Info" (click)="openPopupSignContractDate(item)"></nb-icon>
+                      nbTooltip="Edit Sign Contract Info"
+                      (click)="openPopupSignContractDate(item, item.condition.icon.onBoard)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Sign Contract Date</label>
@@ -174,8 +179,10 @@
                   position="top right"></nb-badge>
               </button>
 
-              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
-                [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date) || item.condition.isExpired"
+              <button
+                *ngIf="item.condition.button.nextStep && utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date)"
+                nbButton status="success"
+                [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date) || item.condition.isExpired || showTips"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
@@ -183,9 +190,11 @@
                 </span>
               </button>
 
-              <button *ngIf="item.condition.button.signInfo" nbButton status="success"
-                nbTooltip="Edit Sign Contract Date" (click)="openPopupSignContractDate(item)"
-                [disabled]="item.condition.isExpired">
+              <button
+                *ngIf="item.condition.button.signInfo && !utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date)"
+                nbButton status="success" nbTooltip="Edit Sign Contract Date"
+                (click)="openPopupSignContractDate(item, item.condition.icon.onBoard)"
+                [disabled]="item.condition.isExpired || showTips">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}

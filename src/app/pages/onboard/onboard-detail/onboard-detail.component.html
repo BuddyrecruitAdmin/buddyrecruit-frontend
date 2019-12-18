@@ -85,7 +85,9 @@
                   <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
                     <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Sign Contract Info" (click)="openPopupSignContractDate(item ,item.condition.icon.signContract)"></nb-icon>
+                      nbTooltip="Edit Sign Contract Info"
+                      (click)="openPopupSignContractDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)">
+                    </nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Sign Contract Date</label>
@@ -150,9 +152,25 @@
                   position="top right"></nb-badge>
               </button>
 
-              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
-                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
+              <button
+                *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
+                nbButton status="success" nbTooltip="Edit Agree Strart Date"
+                (click)="openPopupSignContractDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)"
+                [disabled]="item.condition.isExpired">
+                <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
+                </span>
+              </button>
+
+              <button
+                *ngIf="item.condition.button.nextStep && utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
+                nbButton status="success" [nbTooltip]="item.condition.button.step.button"
+                (click)="approve(item, item.condition.button.step)"
                 [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)">
+                <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)"
+                  nbTooltip="Agree start date is not arrived yet" text=" ! " status="warning" position="top right">
+                </nb-badge>
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}

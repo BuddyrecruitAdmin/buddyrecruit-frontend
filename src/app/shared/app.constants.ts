@@ -55,6 +55,7 @@ export const Keyword = 'Keyword';
 export const TabName = 'TabName';
 export const Collapse = 'Collapse';
 export const ButtonId = 'ButtonId';
+export const IconId = 'IconId';
 export const DateTime = 'DateTime';
 export const IsGridLayout = 'IsGridLayout';
 export const BugId = 'BugId';
@@ -63,6 +64,7 @@ export const FieldLabel = 'FieldLabel';
 export const FieldName = 'FieldName';
 export const UserCandidate = 'UserCandidate';
 export const ContactId = 'ContactId';
+export const UserEmail = 'UserEmail';
 
 export enum DayOfWeek {
   Sunday = 0,

@@ -228,6 +228,17 @@ export class JrListComponent implements OnInit {
     this.callDialog(dialog);
   }
 
+  switchActive(item: any) {
+    this.service.toggleStatus(item._id).subscribe(res => {
+      if (res.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', res.message);
+        this.search();
+      } else {
+        this.showToast('danger', 'Error Message', res.message);
+      }
+    })
+  }
+
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
