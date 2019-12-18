@@ -113,7 +113,8 @@
                   <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
                     <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Sign Contract Info" (click)="openPopupSignContractDate(item)"></nb-icon>
+                      nbTooltip="Edit Sign Contract Info"
+                      (click)="openPopupSignContractDate(item, item.condition.icon.onBoard)"></nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Sign Contract Date</label>
@@ -191,7 +192,8 @@
 
               <button
                 *ngIf="item.condition.button.signInfo && !utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date)"
-                nbButton status="success" nbTooltip="Edit Sign Contract Date" (click)="openPopupSignContractDate(item)"
+                nbButton status="success" nbTooltip="Edit Sign Contract Date"
+                (click)="openPopupSignContractDate(item, item.condition.icon.onBoard)"
                 [disabled]="item.condition.isExpired || showTips">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
                 <span *ngIf="item.condition.isExpired">

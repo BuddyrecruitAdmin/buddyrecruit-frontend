@@ -55,6 +55,7 @@ export const Keyword = 'Keyword';
 export const TabName = 'TabName';
 export const Collapse = 'Collapse';
 export const ButtonId = 'ButtonId';
+export const IconId = 'IconId';
 export const DateTime = 'DateTime';
 export const IsGridLayout = 'IsGridLayout';
 export const BugId = 'BugId';

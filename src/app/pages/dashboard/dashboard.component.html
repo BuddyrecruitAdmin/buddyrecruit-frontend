@@ -159,14 +159,12 @@
                       No data
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="chart" *ngIf="barChart2Data.length > 0">
-                      <canvas baseChart [datasets]="barChart2Data" [labels]="barChart2Labels"
-                        [chartType]="barChart2Type" [options]="barChart2Options" [plugins]="barChart2Plugins"
-                        [colors]="barChart2Colors" [legend]="barChart2Legend">
-                      </canvas>
-                      <small>*Unit: (%)</small>
-                    </div>
+                  <div class="chart" *ngIf="barChart2Data.length > 0">
+                    <canvas baseChart [datasets]="barChart2Data" [labels]="barChart2Labels" [chartType]="barChart2Type"
+                      [options]="barChart2Options" [plugins]="barChart2Plugins" [colors]="barChart2Colors"
+                      [legend]="barChart2Legend">
+                    </canvas>
+                    <small>*Unit: (%)</small>
                   </div>
                 </nb-card-body>
               </nb-card>

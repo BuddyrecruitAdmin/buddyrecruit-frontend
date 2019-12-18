@@ -175,9 +175,9 @@
                   status="warning" size="tiny" nbTooltip="Edit" (click)="switchActive(item)"
                   nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
                   [disabled]="item.refStatus.name === 'Inactive' && isOverQuota">
-                     <!-- <nb-badge *ngIf="item.refStatus.name === 'Inactive' && isOverQuota"
-                    nbTooltip="Agree start date is not arrived yet" text="!" status="warning" position="top right">
-                  </nb-badge> -->
+                  <nb-badge *ngIf="item.refStatus.name === 'Inactive'" nbTooltip="Agree start date is not arrived yet"
+                    text="!" status="warning" position="top right">
+                  </nb-badge>
                   <nb-icon
                     icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}">
                   </nb-icon>

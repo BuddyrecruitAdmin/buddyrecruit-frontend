@@ -18,7 +18,8 @@ import {
   FieldName,
   UserCandidate,
   ContactId,
-  UserEmail
+  UserEmail,
+  IconId
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -124,6 +125,14 @@ export function setButtonId(buttonId: string = null) {
 export function getButtonId() {
   const buttonId = JSON.parse(localStorage.getItem(ButtonId));
   return (!buttonId || buttonId === null) ? undefined : buttonId;
+} 
+export function setIconId(iconId: string = null) {
+  localStorage.setItem(IconId, JSON.stringify(iconId));
+}
+
+export function getIconId() {
+  const iconId = JSON.parse(localStorage.getItem(IconId));
+  return (!iconId || iconId === null) ? undefined : iconId;
 }
 
 export function setCollapse(collapse: boolean = true) {

@@ -280,7 +280,7 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlowId(item._id);
       setCandidateId(item.refCandidate._id);
       setButtonId(button._id);
-      setUserEmail(item._id);
+      setUserEmail(item.refCandidate.email);
       this.dialogService.open(PopupPreviewEmailComponent,
         {
           closeOnBackdropClick: true,
