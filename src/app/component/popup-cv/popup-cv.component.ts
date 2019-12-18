@@ -14,6 +14,8 @@ import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-fee
 import { PopupInterviewResultComponent } from '../../component/popup-interview-result/popup-interview-result.component';
 import { request } from 'https';
 import * as _ from 'lodash';
+import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
+
 @Component({
   selector: 'ngx-popup-cv',
   templateUrl: './popup-cv.component.html',
@@ -544,6 +546,20 @@ export class PopupCvComponent implements OnInit {
         this.getList();
       }
     })
+  }  
+
+  openPrintCandidate(item: any) {
+    setFlowId(item.candidateFlow._id);
+    setCandidateId(this.candidateId);
+    this.dialogService.open(PrintCandidateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+    });
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

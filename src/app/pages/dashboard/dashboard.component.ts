@@ -8,6 +8,8 @@ import { Label, Color } from 'ng2-charts';
 import * as Chart from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { DashboardService } from './dashboard.service';
+import { getRole } from '../../shared/services/auth.service';
+import { ResponseCode } from '../../shared/app.constants';
 
 @Component({
 	templateUrl: './dashboard.component.html',
@@ -60,8 +62,10 @@ export class DashboardComponent implements OnInit {
 		year: this.thisYear
 	};
 
+	role: any;
 	enabledRecruitStatus: boolean;
 	enabledRejection: boolean;
+	noData: boolean;
 
 	recruiteData: any;
 	rejectionData: any;
@@ -127,6 +131,9 @@ export class DashboardComponent implements OnInit {
 		private service: DashboardService,
 		public sanitizer: DomSanitizer
 	) {
+		this.role = getRole();
+		this.enabledRecruitStatus = false;
+		this.enabledRejection = false;
 	}
 
 	ngOnInit() {
@@ -150,22 +157,45 @@ export class DashboardComponent implements OnInit {
 	// ------------------------------------------------------------------
 
 	getDashboard() {
-		this.enabledRecruitStatus = true;
-		this.enabledRejection = true;
+		this.loading = true;
+		this.noData = true;
 
-		this.rejection = {
-			enabled: this.enabledRejection,
-			year: this.thisYear
-		};
+		this.service.getList(undefined, this.role.refCompany).subscribe(response => {
+			if (response.code === ResponseCode.Success) {
+				if (response.data && response.data.length) {
+					// Recruitment Status Report
+					if (response.data.find(element => {
+						return element.active && element.refDashboard.code === 'DASHBOARD_01';
+					})) {
+						this.enabledRecruitStatus = true;
+					}
+					// Rejection Analysis Report
+					if (response.data.find(element => {
+						return element.active && element.refDashboard.code === 'DASHBOARD_02';
+					})) {
+						this.enabledRejection = true;
+					}
+				}
 
-		this.service.getDashboard(this.enabledRecruitStatus, this.rejection)
-			.subscribe(response => {
-				// res => this.getDashboardSuccess(res),
-				// err => this.getDashboardFailed(err)
+				if (this.enabledRecruitStatus || this.enabledRejection) {
+					this.rejection = {
+						enabled: this.enabledRejection,
+						year: this.thisYear
+					};
+					this.service.getDashboard(this.enabledRecruitStatus, this.rejection).subscribe(response => {
+						this.loading = false;
+						this.noData = false;
+						this.getDashboardSuccess(response);
+					});
+				} else {
+					this.loading = false;
+				}
+			} else {
 				this.loading = false;
-				this.getDashboardSuccess(response);
-			});
+			}
+		});
 	}
+
 	getDashboardSuccess(res: any) {
 		const that = this;
 		let thisYear = this.thisYear;
@@ -665,10 +695,15 @@ export class DashboardComponent implements OnInit {
 	}
 	getColorByIndex(index: number): string {
 		const leng = this.backgroundColor.length;
-		while (index >= leng) {
-			index -= leng;
+		if (index >= leng) {
+			return this.getRandomColor();
+		} else {
+			return this.backgroundColor[index];
 		}
-		return this.backgroundColor[index];
+		// while (index >= leng) {
+		// 	index -= leng;
+		// }
+		// return this.backgroundColor[index];
 	}
 	convertDateReport(date: Date): string {
 		const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -691,6 +726,14 @@ export class DashboardComponent implements OnInit {
 	}
 	getLargestNumInArrayIndex(array) {
 		return array.indexOf(Math.max.apply(Math, array));
+	}
+	getRandomColor() {
+		var letters = '0123456789ABCDEF';
+		var color = '#';
+		for (var i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
 	}
 
 }

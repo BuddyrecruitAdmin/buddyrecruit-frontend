@@ -36,4 +36,11 @@ export class TalentPoolService extends NetworkService {
     return this.post(API_ENDPOINT.TALENT_POOL.DETAIL, body);
   }
 
+  buyCV(_id: any): Observable<ApiResponse> {
+    const body = {
+      _id: _id
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.FLOW.BUY_CV, body);
+  }
+
 }

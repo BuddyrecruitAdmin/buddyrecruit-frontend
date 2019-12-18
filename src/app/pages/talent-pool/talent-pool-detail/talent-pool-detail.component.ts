@@ -138,12 +138,16 @@ export class TalentPoolDetailComponent implements OnInit {
   search() {
     this.loading = true;
     this.criteria = {
-      keyword: this.keyword,
+      keyword: this.keyword.trim(),
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
         'refCandidate.firstname',
         'refCandidate.lastname',
+        'refCandidate.age',
+        'refCandidate.phone',
+        'refCandidate.email',
+        'refStage.name',
       ]
     };
     this.items = [];
@@ -153,10 +157,12 @@ export class TalentPoolDetailComponent implements OnInit {
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
-          if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
-            item.refCandidate.birth = new Date((item.refCandidate.birth));
-            var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
-            item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+          if (item.refCandidate && item.refCandidate.birth) {
+            if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
+              item.refCandidate.birth = new Date((item.refCandidate.birth));
+              var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
+              item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+            }
           }
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
@@ -171,65 +177,99 @@ export class TalentPoolDetailComponent implements OnInit {
       icon: {
         examDate: false
       },
+      status: {
+        class: ''
+      },
       button: {
         step: {},
         nextStep: false,
         examDate: false,
+        buyCV: false,
         reject: false,
         revoke: false,
         comment: false
       },
       isExpired: false
     };
-    let thisStage: any;
-    let nextStage: any;
-    if (item.refJR.requiredExam) {
-      thisStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
-        return step.refStage._id === item.refStage._id;
-      });
-      nextStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
-        return step.refStage._id === thisStage.refNextStage;
-      });
-    } else {
-      thisStage = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
-        return step.refStage._id === item.refStage._id;
-      });
-      nextStage = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
-        return step.refStage._id === thisStage.refNextStage;
-      });
-    }
-    if (thisStage) {
-      condition.button.step = thisStage;
+
+    if (this.tabSelected === 'NOT BUY') {
       condition.button.comment = true;
-      switch (this.tabSelected) {
-        case 'NOT BUY':
+      condition.button.reject = true;
+      condition.status.class = 'label-gray';
+      switch (item.refCVStatus.status) {
+        case 'CVS001': // Not Buy
+          condition.button.buyCV = true;
+          condition.status.class = 'label-gray';
           break;
-        case 'PENDING':
-          if (thisStage.editable) {
-            condition.button.nextStep = true;
-            condition.button.reject = true;
-            if (thisStage.refStage.refMain._id !== nextStage.refStage.refMain._id) {
-              if (item.refJR.requiredExam) {
-                condition.icon.examDate = true;
-                if (!this.utilitiesService.dateIsValid(item.examInfo.date)) {
-                  condition.button.nextStep = false;
-                  condition.button.examDate = true;
-                }
-              }
-            }
-          }
+        case 'CVS002': // Waiting Buy..
+          condition.status.class = 'label-warning';
+          condition.button.reject = false;
           break;
-        case 'SELECTED':
+        case 'CVS003': // Can't Buy
+          condition.status.class = 'label-danger';
           break;
-        case 'REJECTED':
-          if (thisStage.editable) {
-            condition.button.revoke = true;
-          }
+        case 'CVS004': // Buy Success
+          condition.status.class = 'label-success';
+          condition.button.reject = false;
+          break;
+        case 'CVS005': // Send job Ad
+          condition.status.class = 'label-info';
           break;
       }
       if (item.refJR.refStatus.status !== 'JRS002') {
         condition.isExpired = true;
-        condition.icon.examDate = false;
+      }
+    } else {
+      let thisStage: any;
+      let nextStage: any;
+      if (item.refJR.requiredExam) {
+        thisStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+          return step.refStage._id === item.refStage._id;
+        });
+        nextStage = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+          return step.refStage._id === thisStage.refNextStage;
+        });
+      } else {
+        thisStage = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
+          return step.refStage._id === item.refStage._id;
+        });
+        nextStage = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
+          return step.refStage._id === thisStage.refNextStage;
+        });
+      }
+      if (thisStage) {
+        condition.button.step = thisStage;
+        condition.button.comment = true;
+        switch (this.tabSelected) {
+          case 'NOT BUY':
+            break;
+          case 'PENDING':
+            if (thisStage.editable) {
+              condition.button.nextStep = true;
+              condition.button.reject = true;
+              if (thisStage.refStage.refMain._id !== nextStage.refStage.refMain._id) {
+                if (item.refJR.requiredExam) {
+                  condition.icon.examDate = true;
+                  if (!this.utilitiesService.dateIsValid(item.examInfo.date)) {
+                    condition.button.nextStep = false;
+                    condition.button.examDate = true;
+                  }
+                }
+              }
+            }
+            break;
+          case 'SELECTED':
+            break;
+          case 'REJECTED':
+            if (thisStage.editable) {
+              condition.button.revoke = true;
+            }
+            break;
+        }
+        if (item.refJR.refStatus.status !== 'JRS002') {
+          condition.isExpired = true;
+          condition.icon.examDate = false;
+        }
       }
     }
     return condition;
@@ -377,6 +417,25 @@ export class TalentPoolDetailComponent implements OnInit {
       if (result) {
         setFlowId();
         this.search();
+      }
+    });
+  }
+
+  buyCV(item: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C', content: MESSAGE[39] }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.buyCV(item._id).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
       }
     });
   }

@@ -316,11 +316,11 @@ export class UtilitiesService {
     return width;
   }
 
-  convertDateToTimePicker(date: Date): any {
+  convertDateToTimePicker(date?: Date): any {
     let time = {
-      hour: 0,
-      minute: 0,
-      second: 0,
+      hour: null,
+      minute: null,
+      second: null,
     };
     if (this.dateIsValid(date)) {
       date = new Date(date);

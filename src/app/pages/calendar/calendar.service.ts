@@ -32,4 +32,35 @@ export class CalendarService extends NetworkService {
   edit(data: any): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.USERS.CALENDAR.EDIT, data);
   }
+
+  signInOutlookCalendar(): Observable<ApiResponse> {
+    const body = {
+      redirect_uri: 'http://localhost:4200/employer/calendar'
+    }
+    return this.signInOutlook(body);
+  }
+
+  checkTokenOutlookCalendar(username: any): Observable<ApiResponse> {
+    const url = '';
+    const body = {
+      // username: username
+      username: 'alex_cs_kku@hotmail.com'
+    };
+    return this.checkTokenOutlook(url, body);
+  }
+
+  getTokenOutlookCalendar(code): Observable<ApiResponse> {
+    const body = {
+      code: code,
+      redirect_uri: 'http://localhost:4200/employer/calendar'
+    };
+    return this.getTokenOutlook(body);
+  }
+
+  getOutlookCalendars(token): Observable<ApiResponse> {
+    const body = {
+      token: token,
+    };
+    return this.getOutlookCalendar(body);
+  }
 }

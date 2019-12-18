@@ -43,6 +43,10 @@ const routes: Routes = [
         path: 'calendar',
         component: CalendarComponent,
       },
+      {
+        path: 'calendar?code=:code',
+        component: CalendarComponent,
+      },
       // Candidate
       {
         path: 'candidate/list',

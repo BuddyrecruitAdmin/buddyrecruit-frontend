@@ -5,11 +5,33 @@
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jd.editable" nbButton fullWidth status="success" nbTooltip="Create"
-        [routerLink]="'/employer/jd/detail/create'">
+        [routerLink]="'/employer/jd/detail/create'" [disabled]="showTips.jobPosition || showTips.department">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
   </div>
+</div>
+
+<div *ngIf="role.refAuthorize.jd.editable">
+  <nb-alert *ngIf="showTips.jobPosition" status="warning">
+    <span>
+      ไม่สามารถสร้าง JD ได้ เนื่องจากไม่มีการกำหนดค่าของ <b>Job Position</b> ไว้ก่อน,
+      <a *ngIf="role?.refAuthorize?.configuration?.jobPosition?.editable" class="link underline m-l-5">
+        <b [routerLink]="'/employer/setting/job-position'">สร้างเลย ตอนนี้</b>
+      </a>
+      <span *ngIf="!role?.refAuthorize?.configuration?.jobPosition?.editable">กรุณาติดต่อ Admin</span>
+    </span>
+  </nb-alert>
+
+  <nb-alert *ngIf="showTips.department" status="warning">
+    <span>
+      ไม่สามารถสร้าง JD ได้ เนื่องจากไม่มีการกำหนดค่าของ <b>Department</b> ไว้ก่อน,
+      <a *ngIf="role?.refAuthorize?.configuration?.department?.editable" class="link underline m-l-5">
+        <b [routerLink]="'/employer/setting/department'">สร้างเลย ตอนนี้</b>
+      </a>
+      <span *ngIf="!role?.refAuthorize?.configuration?.department?.editable">กรุณาติดต่อ Admin</span>
+    </span>
+  </nb-alert>
 </div>
 
 <nb-card>

@@ -48,6 +48,11 @@ export class PopupInterviewDateComponent implements OnInit {
   userInterviews: any;
   users: any[];
   sum: any;
+  selectDateFrom: string;
+  date2: Date;
+  startTime: any;
+  endTime: any;
+
   constructor(
     private candidateService: CandidateService,
     private calendarService: CalendarService,
@@ -65,6 +70,10 @@ export class PopupInterviewDateComponent implements OnInit {
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+
+    this.date2 = new Date();
+    this.startTime = null;
+    this.endTime = null;
   }
 
   ngOnInit() {
@@ -77,6 +86,7 @@ export class PopupInterviewDateComponent implements OnInit {
     this.location = null;
     this.buttonId = null;
     this.users = [];
+    this.selectDateFrom = 'CALENDAR';
     if (this.flowId) {
       this.initialDropdown().then((response) => {
         this.getDetail();
@@ -144,12 +154,19 @@ export class PopupInterviewDateComponent implements OnInit {
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
 
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
+        this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'CALENDAR';
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingInterviewInfo.startDate)) {
-          this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
-          this.date = this.replaceAt(this.date, 11, '0');
-          this.date = this.replaceAt(this.date, 12, '0');
-          this.setDropdownTime(this.date);
-          this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
+          if (this.selectDateFrom === 'CALENDAR') {
+            this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
+            this.date = this.replaceAt(this.date, 11, '0');
+            this.date = this.replaceAt(this.date, 12, '0');
+            this.setDropdownTime(this.date);
+            this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
+          } else {
+            this.date2 = new Date(response.data.candidateFlow.pendingInterviewInfo.startDate);
+            this.startTime = this.utilitiesService.convertDateToTimePicker(response.data.candidateFlow.pendingInterviewInfo.startDate);
+            this.endTime = this.utilitiesService.convertDateToTimePicker(response.data.candidateFlow.pendingInterviewInfo.endDate);
+          }
         }
         if (response.data.candidateFlow.refJR.userInterviews.length) {
           response.data.candidateFlow.refJR.userInterviews.forEach(element => {
@@ -360,14 +377,22 @@ export class PopupInterviewDateComponent implements OnInit {
   }
 
   setRequest(): any {
-    const time = new Date(this.time);
-    let startDate = addHours(startOfDay(time), time.getHours());
-    let endDate = addHours(startOfDay(time), time.getHours() + 1);
+    let startDate: any;
+    let endDate: any;
+    if (this.selectDateFrom === 'CALENDAR') {
+      const time = new Date(this.time);
+      startDate = addHours(startOfDay(time), time.getHours());
+      endDate = addHours(startOfDay(time), time.getHours() + 1);
+    } else {
+      startDate = this.utilitiesService.convertTimePickerToDate(this.startTime, this.date2);
+      endDate = this.utilitiesService.convertTimePickerToDate(this.endTime, this.date2);
+    }
     const data = {
       pendingInterviewInfo: {
         startDate: startDate,
         endDate: endDate,
         refLocation: this.location,
+        selectDateFrom: this.selectDateFrom,
         flag: true,
       }
     };
@@ -390,6 +415,10 @@ export class PopupInterviewDateComponent implements OnInit {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
+  }
+
+  onChangeselectDateFrom() {
+
   }
 
 }

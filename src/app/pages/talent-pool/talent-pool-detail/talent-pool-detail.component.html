@@ -36,238 +36,380 @@
         [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
         <div *ngIf="!items.length && !loading" class="text-center text-gray">No data found !</div>
         <div *ngIf="items.length">
-          <nb-card *ngFor="let item of items" accent="success">
-            <nb-card-header>
-              <div class="title">
-                <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
-                  (click)="openCandidateDetail(item)">
-                  {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
-                </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
-                  [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
-                  class="fas fa-exclamation-triangle"></i>
-                <small class="status">
-                  Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
-                </small>
-              </div>
-              <div class="actions">
-                <span class="fa fa-star text-orange">&nbsp;</span>
-                <span>{{ item.weightScore?.accumulativeScore || 0 }}</span>
-                <small>/{{ item.weightScore?.total || 0 }}</small>
-              </div>
-            </nb-card-header>
-            <nb-card-body *ngIf="!item.collapse">
-              <div class="row">
-                <div class="col-md-7 m-b-15">
-                  <div class="text-group">
-                    <label class="label">Age</label>
-                    <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
-                  </div>
-                  <div class="text-group">
-                    <label class="label">Work Experience</label>
-                    <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
-                  </div>
-                  <div class="text-group">
-                    <label class="label">Phone</label>
-                    <span>{{ item.refCandidate?.phone || '-' }}</span>
-                  </div>
-                  <div class="text-group">
-                    <label class="label">Email</label>
-                    <span>{{ item.refCandidate?.email || '-' }}</span>
-                  </div>
-                  <div *ngIf="item.condition.icon.examDate">
-                    <label class="label text-light-gray m-r-5">Exam Date</label>
-                    <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Exam Date"
-                      (click)="appointmentExam(item)">
-                    </nb-icon>
-                    <div class="m-l-15">
-                      <div class="text-group">
-                        <label class="label">Exam Location</label>
-                        <span>{{ item.examInfo?.refLocation?.name || '-' }}</span>
+
+          <!-- NOT BUY -->
+          <div *ngIf="tabSelected === 'NOT BUY'">
+            <nb-card *ngFor="let item of items" accent="success">
+              <nb-card-header>
+                <div class="title">
+                  {{ item._id || '-' }}
+                  <small class="status">
+                    Status: <label class="label" [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
+                  </small>
+                </div>
+                <div class="actions">
+                  <span class="fa fa-star text-orange">&nbsp;</span>
+                  <span>{{ item.weightScore?.accumulativeScore || 0 }}</span>
+                  <small>/{{ item.weightScore?.total || 0 }}</small>
+                </div>
+              </nb-card-header>
+              <nb-card-body *ngIf="!item.collapse">
+                <div class="row">
+                  <div class="col-md-7 m-b-15">
+                    <div class="text-group">
+                      <label class="label">Age</label>
+                      <span>{{ item.age > 0 ? item.age : '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Gender</label>
+                      <span class="text-cap">{{ item.gender || '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Work Experience</label>
+                      <span>{{ utilitiesService.convertMonthToYearText(item.workExperience?.totalExpMonth) || '-' }}</span>
+                      <div class="m-l-15">
+                        <div *ngFor="let exp of item.workExperience?.work">
+                          <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+                        </div>
                       </div>
-                      <div class="text-group">
-                        <label class="label">Exam Date</label>
-                        <span>{{ utilitiesService.convertDateTime(item.examInfo?.date) || '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Education</label>
+                      <div class="m-l-15">
+                        <div *ngFor="let education of item.education">
+                          <span>• {{ utilitiesService.convertEducationToText(education) }} </span>
+                        </div>
+                        <span *ngIf="!item.education?.length">-</span>
                       </div>
                     </div>
                   </div>
-                  <div class="text-group">
-                    <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
-                      <nb-icon icon="info-outline"></nb-icon> See more detail
-                    </span>
-                  </div>
-                  <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
-                    <label class="label text-light-gray">Reject Info</label>
-                    <div class="m-l-15">
-                      <div class="text-group">
-                        <label class="label">Reject Reason</label>
-                        <span class="text-red">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                  <div class="col-md-5">
+                    <div class="m-b-10">
+                      <div class="label">Work Experience
+                        <span class="pull-right">
+                          {{ item.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.weightScore?.workExperience?.total || 0 }}
+                        </span>
                       </div>
-                      <div *ngIf="item.reject.remark" class="text-group">
-                        <label class="label">Reject Remark</label>
-                        <span class="text-red">{{ item.reject.remark || '-' }}</span>
-                      </div>
-                      <i class="text-gray">
-                        <div class="text-group">
-                          <label class="label">Reject By</label>
-                          <span>{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
-                        </div>
-                        <div class="text-group">
-                          <label class="label">Reject Date</label>
-                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-' }}</span>
-                        </div>
-                      </i>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.weightScore?.workExperience?.accumulativeScore,
+                        item.weightScore?.workExperience?.total)" status="primary" size="tiny">
+                      </nb-progress-bar>
                     </div>
-                  </div>
-                  <!-- BlackList -->
-                  <div *ngIf="tabSelected != 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
-                    <label class="label text-light-gray">Blocked Info</label>
-                    <div class="m-l-15">
-                      <div class="text-group">
-                        <label class="label">Blacklist Reason</label>
-                        <span class="text-red">{{ item.refCandidate.blacklist?.refReject?.name || '-' }}</span>
+                    <div class="m-b-10">
+                      <div class="label">Education
+                        <span class="pull-right">
+                          {{ item.weightScore?.education?.accumulativeScore || 0 }}/{{ item.weightScore?.education?.total || 0 }}
+                        </span>
                       </div>
-                      <div *ngIf="item.reject.remark" class="text-group">
-                        <label class="label">Blacklist Remark</label>
-                        <span class="text-red">{{ item.refCandidate.blacklist?.remark || '-' }}</span>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.weightScore?.education?.accumulativeScore,
+                        item.weightScore?.education?.total)" status="info" size="tiny">
+                      </nb-progress-bar>
+                    </div>
+                    <div class="m-b-10">
+                      <div class="label">Hard Skill
+                        <span class="pull-right">
+                          {{ item.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.weightScore?.hardSkill?.total || 0 }}
+                        </span>
                       </div>
-                      <i class="text-gray">
-                        <div class="text-group">
-                          <label class="label">Blocked By</label>
-                          <span>{{ utilitiesService.setFullname(item.refCandidate.blacklist?.blockBy?.refUser) || '-' }}</span>
-                        </div>
-                        <div class="text-group">
-                          <label class="label">Blocked Date</label>
-                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.blacklist?.blockBy?.date) || '-' }}</span>
-                        </div>
-                      </i>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.weightScore?.hardSkill?.accumulativeScore,
+                        item.weightScore?.hardSkill?.total)" status="success" size="tiny">
+                      </nb-progress-bar>
+                    </div>
+                    <div class="m-b-10">
+                      <div class="label">Soft Skill
+                        <span class="pull-right">
+                          {{ item.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.weightScore?.softSkill?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.weightScore?.softSkill?.accumulativeScore,
+                        item.weightScore?.softSkill?.total)" status="warning" size="tiny">
+                      </nb-progress-bar>
+                    </div>
+                    <div class="m-b-10">
+                      <div class="label">Certificate
+                        <span class="pull-right">
+                          {{ item.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.weightScore?.certificate?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                        item.weightScore?.certificate?.accumulativeScore,
+                        item.weightScore?.certificate?.total)" status="danger" size="tiny">
+                      </nb-progress-bar>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-5">
-                  <div class="m-b-10">
-                    <div class="label">Work Experience
-                      <span class="pull-right">
-                        {{ item.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.weightScore?.workExperience?.total || 0 }}
+              </nb-card-body>
+              <nb-card-footer>
+                <div class="footer-collapse">
+                  <button *ngIf="item.collapse" nbButton outline shape="round" size="small" status="default"
+                    (click)="item.collapse = !item.collapse" nbTooltip="Expand">
+                    <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+                  </button>
+                  <button *ngIf="!item.collapse" nbButton outline shape="round" size="small" status="default"
+                    (click)="item.collapse = !item.collapse" nbTooltip="Collapse">
+                    <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
+                  </button>
+                </div>
+                <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
+                  (click)="openPopupComment(item)">
+                  <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+                  <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                    position="top right"></nb-badge>
+                </button>
+                <button *ngIf="item.condition.button.buyCV" nbButton status="success" nbTooltip="Buy CV" (click)="buyCV(item)"
+                  [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="credit-card-outline"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
+                </button>
+                <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
+                  (click)="reject(item)">
+                  <nb-icon icon="close-circle"></nb-icon>
+                </button>
+              </nb-card-footer>
+            </nb-card>
+          </div>
+
+          <!-- PENDING, SELECTED, REJECT -->
+          <div *ngIf="tabSelected !== 'NOT BUY'">
+            <nb-card *ngFor="let item of items" accent="success">
+              <nb-card-header>
+                <div class="title">
+                  <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
+                    (click)="openCandidateDetail(item)">
+                    {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
+                  </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
+                    [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
+                    class="fas fa-exclamation-triangle"></i>
+                  <small class="status">
+                    Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                  </small>
+                </div>
+                <div class="actions">
+                  <span class="fa fa-star text-orange">&nbsp;</span>
+                  <span>{{ item.weightScore?.accumulativeScore || 0 }}</span>
+                  <small>/{{ item.weightScore?.total || 0 }}</small>
+                </div>
+              </nb-card-header>
+              <nb-card-body *ngIf="!item.collapse">
+                <div class="row">
+                  <div class="col-md-7 m-b-15">
+                    <div class="text-group">
+                      <label class="label">Age</label>
+                      <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Work Experience</label>
+                      <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Phone</label>
+                      <span>{{ item.refCandidate?.phone || '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Email</label>
+                      <span>{{ item.refCandidate?.email || '-' }}</span>
+                    </div>
+                    <div *ngIf="item.condition.icon.examDate">
+                      <label class="label text-light-gray m-r-5">Exam Date</label>
+                      <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Exam Date"
+                        (click)="appointmentExam(item)">
+                      </nb-icon>
+                      <div class="m-l-15">
+                        <div class="text-group">
+                          <label class="label">Exam Location</label>
+                          <span>{{ item.examInfo?.refLocation?.name || '-' }}</span>
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Exam Date</label>
+                          <span>{{ utilitiesService.convertDateTime(item.examInfo?.date) || '-' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-group">
+                      <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
+                        <nb-icon icon="info-outline"></nb-icon> See more detail
                       </span>
                     </div>
-                    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                    <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
+                      <label class="label text-light-gray">Reject Info</label>
+                      <div class="m-l-15">
+                        <div class="text-group">
+                          <label class="label">Reject Reason</label>
+                          <span class="text-red">{{ item.reject.rejectBy.refReject.name || '-' }}</span>
+                        </div>
+                        <div *ngIf="item.reject.remark" class="text-group">
+                          <label class="label">Reject Remark</label>
+                          <span class="text-red">{{ item.reject.remark || '-' }}</span>
+                        </div>
+                        <i class="text-gray">
+                          <div class="text-group">
+                            <label class="label">Reject By</label>
+                            <span>{{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}</span>
+                          </div>
+                          <div class="text-group">
+                            <label class="label">Reject Date</label>
+                            <span>{{ utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-' }}</span>
+                          </div>
+                        </i>
+                      </div>
+                    </div>
+                    <!-- BlackList -->
+                    <div *ngIf="tabSelected !== 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
+                      <label class="label text-light-gray">Blocked Info</label>
+                      <div class="m-l-15">
+                        <div class="text-group">
+                          <label class="label">Blacklist Reason</label>
+                          <span class="text-red">{{ item.refCandidate.blacklist?.refReject?.name || '-' }}</span>
+                        </div>
+                        <div *ngIf="item.reject.remark" class="text-group">
+                          <label class="label">Blacklist Remark</label>
+                          <span class="text-red">{{ item.refCandidate.blacklist?.remark || '-' }}</span>
+                        </div>
+                        <i class="text-gray">
+                          <div class="text-group">
+                            <label class="label">Blocked By</label>
+                            <span>{{ utilitiesService.setFullname(item.refCandidate.blacklist?.blockBy?.refUser) || '-' }}</span>
+                          </div>
+                          <div class="text-group">
+                            <label class="label">Blocked Date</label>
+                            <span>{{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.blacklist?.blockBy?.date) || '-' }}</span>
+                          </div>
+                        </i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="m-b-10">
+                      <div class="label">Work Experience
+                        <span class="pull-right">
+                          {{ item.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.weightScore?.workExperience?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                       item.weightScore?.workExperience?.accumulativeScore,
                       item.weightScore?.workExperience?.total)" status="primary" size="tiny">
-                    </nb-progress-bar>
-                  </div>
-                  <div class="m-b-10">
-                    <div class="label">Education
-                      <span class="pull-right">
-                        {{ item.weightScore?.education?.accumulativeScore || 0 }}/{{ item.weightScore?.education?.total || 0 }}
-                      </span>
+                      </nb-progress-bar>
                     </div>
-                    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                    <div class="m-b-10">
+                      <div class="label">Education
+                        <span class="pull-right">
+                          {{ item.weightScore?.education?.accumulativeScore || 0 }}/{{ item.weightScore?.education?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                       item.weightScore?.education?.accumulativeScore,
                       item.weightScore?.education?.total)" status="info" size="tiny">
-                    </nb-progress-bar>
-                  </div>
-                  <div class="m-b-10">
-                    <div class="label">Hard Skill
-                      <span class="pull-right">
-                        {{ item.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.weightScore?.hardSkill?.total || 0 }}
-                      </span>
+                      </nb-progress-bar>
                     </div>
-                    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                    <div class="m-b-10">
+                      <div class="label">Hard Skill
+                        <span class="pull-right">
+                          {{ item.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.weightScore?.hardSkill?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                       item.weightScore?.hardSkill?.accumulativeScore,
                       item.weightScore?.hardSkill?.total)" status="success" size="tiny">
-                    </nb-progress-bar>
-                  </div>
-                  <div class="m-b-10">
-                    <div class="label">Soft Skill
-                      <span class="pull-right">
-                        {{ item.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.weightScore?.softSkill?.total || 0 }}
-                      </span>
+                      </nb-progress-bar>
                     </div>
-                    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                    <div class="m-b-10">
+                      <div class="label">Soft Skill
+                        <span class="pull-right">
+                          {{ item.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.weightScore?.softSkill?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                       item.weightScore?.softSkill?.accumulativeScore,
                       item.weightScore?.softSkill?.total)" status="warning" size="tiny">
-                    </nb-progress-bar>
-                  </div>
-                  <div class="m-b-10">
-                    <div class="label">Certificate
-                      <span class="pull-right">
-                        {{ item.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.weightScore?.certificate?.total || 0 }}
-                      </span>
+                      </nb-progress-bar>
                     </div>
-                    <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+                    <div class="m-b-10">
+                      <div class="label">Certificate
+                        <span class="pull-right">
+                          {{ item.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.weightScore?.certificate?.total || 0 }}
+                        </span>
+                      </div>
+                      <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                       item.weightScore?.certificate?.accumulativeScore,
                       item.weightScore?.certificate?.total)" status="danger" size="tiny">
-                    </nb-progress-bar>
-                  </div>
-                  <!-- BlackList -->
-                  <div *ngIf="tabSelected === 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
-                    <label class="label text-light-gray">Blocked Info</label>
-                    <div class="m-l-15">
-                      <div class="text-group">
-                        <label class="label">Blacklist Reason</label>
-                        <span class="text-red">{{ item.refCandidate.blacklist?.refReject?.name || '-' }}</span>
-                      </div>
-                      <div *ngIf="item.reject.remark" class="text-group">
-                        <label class="label">Blacklist Remark</label>
-                        <span class="text-red">{{ item.refCandidate.blacklist?.remark || '-' }}</span>
-                      </div>
-                      <i class="text-gray">
+                      </nb-progress-bar>
+                    </div>
+                    <!-- BlackList -->
+                    <div *ngIf="tabSelected === 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
+                      <label class="label text-light-gray">Blocked Info</label>
+                      <div class="m-l-15">
                         <div class="text-group">
-                          <label class="label">Blocked By</label>
-                          <span>{{ utilitiesService.setFullname(item.refCandidate.blacklist?.blockBy?.refUser) || '-' }}</span>
+                          <label class="label">Blacklist Reason</label>
+                          <span class="text-red">{{ item.refCandidate.blacklist?.refReject?.name || '-' }}</span>
                         </div>
-                        <div class="text-group">
-                          <label class="label">Blocked Date</label>
-                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.blacklist?.blockBy?.date) || '-' }}</span>
+                        <div *ngIf="item.reject.remark" class="text-group">
+                          <label class="label">Blacklist Remark</label>
+                          <span class="text-red">{{ item.refCandidate.blacklist?.remark || '-' }}</span>
                         </div>
-                      </i>
+                        <i class="text-gray">
+                          <div class="text-group">
+                            <label class="label">Blocked By</label>
+                            <span>{{ utilitiesService.setFullname(item.refCandidate.blacklist?.blockBy?.refUser) || '-' }}</span>
+                          </div>
+                          <div class="text-group">
+                            <label class="label">Blocked Date</label>
+                            <span>{{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.blacklist?.blockBy?.date) || '-' }}</span>
+                          </div>
+                        </i>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </nb-card-body>
-            <nb-card-footer>
-              <div class="footer-collapse">
-                <button *ngIf="item.collapse" nbButton outline shape="round" size="small" status="default"
-                  (click)="item.collapse = !item.collapse" nbTooltip="Expand">
-                  <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+              </nb-card-body>
+              <nb-card-footer>
+                <div class="footer-collapse">
+                  <button *ngIf="item.collapse" nbButton outline shape="round" size="small" status="default"
+                    (click)="item.collapse = !item.collapse" nbTooltip="Expand">
+                    <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+                  </button>
+                  <button *ngIf="!item.collapse" nbButton outline shape="round" size="small" status="default"
+                    (click)="item.collapse = !item.collapse" nbTooltip="Collapse">
+                    <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
+                  </button>
+                </div>
+                <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
+                  (click)="openPopupComment(item)">
+                  <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+                  <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                    position="top right"></nb-badge>
                 </button>
-                <button *ngIf="!item.collapse" nbButton outline shape="round" size="small" status="default"
-                  (click)="item.collapse = !item.collapse" nbTooltip="Collapse">
-                  <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
+                <button *ngIf="item.condition.button.nextStep" nbButton status="success"
+                  [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
+                  [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
                 </button>
-              </div>
-              <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
-                (click)="openPopupComment(item)">
-                <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
-                  position="top right"></nb-badge>
-              </button>
-              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
-                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
-                [disabled]="item.condition.isExpired">
-                <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
-                <span *ngIf="item.condition.isExpired">
-                  {{ item.refJR?.refStatus?.name }}
-                </span>
-              </button>
-              <button *ngIf="item.condition.button.examDate" nbButton status="success" [nbTooltip]="item.refStage?.name"
-                (click)="appointmentExam(item)" [disabled]="item.condition.isExpired">
-                <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
-                <span *ngIf="item.condition.isExpired">
-                  {{ item.refJR?.refStatus?.name }}
-                </span>
-              </button>
-              <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
-                (click)="reject(item)">
-                <nb-icon icon="close-circle"></nb-icon>
-              </button>
-              <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
-                (click)="revoke(item)">
-                <nb-icon icon="undo"></nb-icon>
-              </button>
-            </nb-card-footer>
-          </nb-card>
+                <button *ngIf="item.condition.button.examDate" nbButton status="success"
+                  [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)"
+                  [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
+                </button>
+                <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
+                  (click)="reject(item)">
+                  <nb-icon icon="close-circle"></nb-icon>
+                </button>
+                <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
+                  (click)="revoke(item)">
+                  <nb-icon icon="undo"></nb-icon>
+                </button>
+              </nb-card-footer>
+            </nb-card>
+          </div>
           <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
             [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
             (page)="pageEvent = changePaging($event)">

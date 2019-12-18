@@ -82,6 +82,7 @@ export const API_ENDPOINT = {
       PREVIEW_EMAIL: "candidate/flow/previewEmail",
       RESEND_EMAIL: "candidate/flow/resendEmail",
       SEND_EMAIL: "candidate/flow/sendEmail",
+      BUY_CV: "candidate/flow/buycv",
     },
     EVALUATION: {
       EDIT: "candidateEva/edit",

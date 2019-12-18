@@ -120,7 +120,7 @@ export class JdDetailComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
-    this.innerWidth = `${this.utilitiesService.getWidthOfPopupCard()}px`;
+    this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.8;
   }
 
@@ -586,7 +586,7 @@ export class JdDetailComponent implements OnInit {
 
   save(option) {
     this.touched = true;
-    this.touchedOut =true;
+    this.touchedOut = true;
     switch (option) {
       case "EDUCATION": {
         let eTotal = 0;
@@ -1001,32 +1001,34 @@ export class JdDetailComponent implements OnInit {
       this.touchedJobPo = true;
       isValid = false;
       this.sErrorPosition = MESSAGE[141];
-      this.SErrorAll = MESSAGE[141];
+      this.SErrorAll = this.SErrorAll || MESSAGE[141];
     }
     if (!this.jd.refPosition) {
       this.touchedJobMail = true;
       isValid = false;
       this.sErrorrefCheck = MESSAGE[139];
-      this.SErrorAll = MESSAGE[139];
+      this.SErrorAll = this.SErrorAll || MESSAGE[139];
     }
-    if (this.jd.keywordSearch.length === 0) {
-      this.touchedCV = true;
-      isValid = false;
-      this.sErrorKey = MESSAGE[138];
-      this.SErrorAll = "Please press enter keyword to search in CV";
+    if (this.role.refCompany.activeJobsDB) {
+      if (this.jd.keywordSearch.length === 0) {
+        this.touchedCV = true;
+        isValid = false;
+        this.sErrorKey = MESSAGE[138];
+        this.SErrorAll = this.SErrorAll || "Please press enter keyword to search in CV";
+      }
     }
     if (!this.jd.departmentId) {
       this.touchedDep = true;
       isValid = false;
       this.sErrorDe = MESSAGE[140];
-      this.SErrorAll = MESSAGE[140];
+      this.SErrorAll = this.SErrorAll || MESSAGE[140];
     }
     if (this.countDivision > 0) {
       if (!this.jd.divisionId) {
         this.touchedDi = true;
         isValid = false;
         this.sErrorDivision = MESSAGE[158];
-        this.SErrorAll = MESSAGE[158];
+        this.SErrorAll = this.SErrorAll || MESSAGE[158];
       }
     }
     if (this.state === State.Edit || this.state === "duplicate") {
@@ -1067,28 +1069,28 @@ export class JdDetailComponent implements OnInit {
     }
     if (this.hardTotal != this.jd.weightScore.hardSkill.total) {
       isValid = false;
-      this.SErrorAll = MESSAGE[69];
+      this.SErrorAll = this.SErrorAll || MESSAGE[69];
     }
     if (this.softTotal != this.jd.weightScore.softSkill.total) {
       isValid = false;
-      this.SErrorAll = MESSAGE[74];
+      this.SErrorAll = this.SErrorAll || MESSAGE[74];
     }
     if (this.certificateTotal != this.jd.weightScore.certificate.total) {
       isValid = false;
-      this.SErrorAll = MESSAGE[78];
+      this.SErrorAll = this.SErrorAll || MESSAGE[78];
     }
     if (this.eduTotal != this.jd.weightScore.education.total) {
       isValid = false;
-      this.SErrorAll = "% of max education is not equal to total education score";
+      this.SErrorAll = this.SErrorAll || "% of max education is not equal to total education score";
 
     }
     if (this.wCheck != this.jd.weightScore.workExperience.total) {
       isValid = false;
-      this.SErrorAll = "% of max work experience is not equal to total work experience score";
+      this.SErrorAll = this.SErrorAll || "% of max work experience is not equal to total work experience score";
     }
     if (this.sTotal != 100) {
       isValid = false;
-      this.SErrorAll = MESSAGE[56];
+      this.SErrorAll = this.SErrorAll || MESSAGE[56];
     }
     return isValid
   }

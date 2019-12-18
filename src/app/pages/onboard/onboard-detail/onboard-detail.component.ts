@@ -133,6 +133,10 @@ export class OnboardDetailComponent implements OnInit {
       filter: [
         'refCandidate.firstname',
         'refCandidate.lastname',
+        'refCandidate.age',
+        'refCandidate.phone',
+        'refCandidate.email',
+        'refStage.name',
       ]
     };
     this.items = [];
