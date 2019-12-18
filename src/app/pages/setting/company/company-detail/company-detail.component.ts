@@ -412,6 +412,7 @@ export class CompanyDetailComponent implements OnInit {
         this.errMsg.expiryDate = 'Please select expiry date';
         isValid = false;
       }
+      debugger
       if (!this.companyDetail.adminEmail) {
         this.errMsg.adminEmail = 'Please Input Admin Email';
         isValid = false;

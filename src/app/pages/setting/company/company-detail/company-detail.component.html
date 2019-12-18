@@ -342,11 +342,11 @@
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.incomingEmailPass }">
             <label class="label">Incoming Email Password <span class="text-red">*</span></label>
             <div class="input-group">
-              <input type="{{ showPassword2 ? 'text' : 'password' }}" [(ngModel)]="companyDetail.incomingEmailPass"
+              <input type="{{ showPassword3 ? 'text' : 'password' }}" [(ngModel)]="companyDetail.incomingEmailPass"
                 nbInput fullWidth autocomplete="off" [ngClass]="{ 'status-danger': errMsg.incomingEmailPass }">
               <div class="input-group-addon">
-                <nb-icon icon="{{ showPassword2 ? 'eye-off-outline' : 'eye-outline' }}"
-                  (click)="showPassword2 = !showPassword2">
+                <nb-icon icon="{{ showPassword3 ? 'eye-off-outline' : 'eye-outline' }}"
+                  (click)="showPassword3 = !showPassword3">
                 </nb-icon>
               </div>
             </div>

@@ -143,7 +143,7 @@ export class SignContractDetailComponent implements OnInit {
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
-        this.showTips = response.isOverQuota;
+        this.showTips = response.isOverCandidate;
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);

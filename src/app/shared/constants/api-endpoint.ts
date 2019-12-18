@@ -42,6 +42,7 @@ export const API_ENDPOINT = {
     ACTION: "jr/action",
     USERS: "jr/users",
     CLOSE: "jr/close",
+    TOGGLE: "jr/active"
   },
   TALENT_POOL: {
     LIST: "talentPool/list",

@@ -7,6 +7,7 @@ export interface ApiResponse {
   totalDataSize?: number;
   count?: Count;
   isOverQuota?: boolean;
+  isOverCandidate?: boolean;
 }
 
 export interface Count {

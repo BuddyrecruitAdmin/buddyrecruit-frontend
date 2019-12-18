@@ -5,6 +5,11 @@
     <span>{{ jrName }}</span>
   </div>
 </div>
+<nb-alert *ngIf="showTips" status="warning" closable (close)="showTips = !showTips">
+  <span>
+    จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
+  </span>
+</nb-alert>
 <nb-card>
   <nb-card-body>
     <div class="row">

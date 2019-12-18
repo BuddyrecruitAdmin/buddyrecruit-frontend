@@ -66,6 +66,11 @@
               </label>
             </div>
             <div *ngIf="role.refAuthorize.jr.editable" class="actions">
+              <nb-icon *ngIf="item.refStatus.name === 'Active' || (item.refStatus.name === 'Inactive' && !isOverQuota)"
+                class="link" nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
+                icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}"
+                (click)="switchActive(item)">
+              </nb-icon>
               <nb-icon *ngIf="item.canEdit" icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/jr/detail/edit/'+item._id">
               </nb-icon>
@@ -166,6 +171,17 @@
                   [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name}}</span>
               </td>
               <td *ngIf="role.refAuthorize.jr.editable" class="actions">
+                <button *ngIf="item.refStatus.name === 'Active' || item.refStatus.name === 'Inactive'" nbButton
+                  status="warning" size="tiny" nbTooltip="Edit" (click)="switchActive(item)"
+                  nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
+                  [disabled]="item.refStatus.name === 'Inactive' && isOverQuota">
+                     <!-- <nb-badge *ngIf="item.refStatus.name === 'Inactive' && isOverQuota"
+                    nbTooltip="Agree start date is not arrived yet" text="!" status="warning" position="top right">
+                  </nb-badge> -->
+                  <nb-icon
+                    icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}">
+                  </nb-icon>
+                </button>
                 <button *ngIf="item.canEdit" nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/jr/detail/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>

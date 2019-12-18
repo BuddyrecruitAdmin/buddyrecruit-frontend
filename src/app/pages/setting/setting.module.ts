@@ -26,6 +26,7 @@ import {
   NbAccordionModule,
   NbAlertModule,
   NbPopoverModule,
+  NbBadgeModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -151,6 +152,7 @@ import { HttpClientModule } from '@angular/common/http';
     NbAccordionModule,
     NbAlertModule,
     NbPopoverModule,
+    NbBadgeModule,
 
     A11yModule,
     CdkStepperModule,
