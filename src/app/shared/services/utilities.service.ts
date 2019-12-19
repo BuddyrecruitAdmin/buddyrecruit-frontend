@@ -387,7 +387,7 @@ export class UtilitiesService {
         statusClass = 'label-success';
         break;
       case 'JRS003': // Inactive
-        statusClass = 'label-success';
+        statusClass = 'label-gray';
         break;
       case 'JRS004': // Expired
         statusClass = 'label-primary';
