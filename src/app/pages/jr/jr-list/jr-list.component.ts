@@ -120,15 +120,19 @@ export class JrListComponent implements OnInit {
               item.refStatus.class = 'label-success';
               item.canDelete = false;
               break;
-            case 'JRS003': // Expired
+            case 'JRS003': // Inactive
+              item.refStatus.class = 'label-gray';
+              item.canDelete = false;
+              break;
+            case 'JRS004': // Expired
               item.refStatus.class = 'label-primary';
               item.canDelete = false;
               break;
-            case 'JRS004': // Rejected
+            case 'JRS005': // Rejected
               item.refStatus.class = 'label-danger';
               item.canEdit = false;
               break;
-            case 'JRS005': // Closed
+            case 'JRS006': // Closed
               item.refStatus.class = 'label-gray';
               item.canEdit = false;
               break;

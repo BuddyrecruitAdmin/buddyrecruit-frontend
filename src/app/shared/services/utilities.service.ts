@@ -386,13 +386,16 @@ export class UtilitiesService {
       case 'JRS002': // Active
         statusClass = 'label-success';
         break;
-      case 'JRS003': // Expired
+      case 'JRS003': // Inactive
+        statusClass = 'label-success';
+        break;
+      case 'JRS004': // Expired
         statusClass = 'label-primary';
         break;
-      case 'JRS004': // Rejected
+      case 'JRS005': // Rejected
         statusClass = 'label-danger';
         break;
-      case 'JRS005': // Closed
+      case 'JRS006': // Closed
         statusClass = 'label-gray';
         break;
     }
@@ -409,7 +412,7 @@ export class UtilitiesService {
       return true;
     } else {
       return false;
-    } 
+    }
   }
 
   isValidPhoneNumber(phone: string): boolean {
