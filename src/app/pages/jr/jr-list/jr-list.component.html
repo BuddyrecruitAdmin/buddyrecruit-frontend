@@ -141,7 +141,7 @@
               <th scope="col">End Date</th>
               <th scope="col">Exam</th>
               <th scope="col">Status</th>
-              <th *ngIf="role.refAuthorize.jr.editable" scope="col">Actions</th>
+              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="min-width: 110px;">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -178,7 +178,7 @@
                   <nb-badge *ngIf="item.refStatus.name === 'Inactive'" nbTooltip="Agree start date is not arrived yet"
                     text="!" status="warning" position="top right">
                   </nb-badge>
-                  <nb-icon
+                  <nb-icon class="m-0"
                     icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}">
                   </nb-icon>
                 </button>
