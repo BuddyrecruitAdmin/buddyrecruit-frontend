@@ -48,7 +48,8 @@
                 <div class="title">
                   {{ item._id || '-' }}
                   <small class="status">
-                    Status: <label class="label" [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
+                    Status: <label class="label"
+                      [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
                   </small>
                 </div>
                 <div class="actions">
@@ -163,8 +164,8 @@
                   <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
                     position="top right"></nb-badge>
                 </button>
-                <button *ngIf="item.condition.button.buyCV" nbButton status="success" nbTooltip="Buy CV" (click)="buyCV(item)"
-                  [disabled]="item.condition.isExpired">
+                <button *ngIf="item.condition.button.buyCV" nbButton status="success" nbTooltip="Buy CV"
+                  (click)="buyCV(item)" [disabled]="item.condition.isExpired">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="credit-card-outline"></nb-icon>
                   <span *ngIf="item.condition.isExpired">
                     {{ item.refJR?.refStatus?.name }}
@@ -395,43 +396,43 @@
                     {{ item.refJR?.refStatus?.name }}
                   </span>
                 </button>
-              </div>
-              <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
-                (click)="openPopupComment(item)">
-                <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
-                  position="top right"></nb-badge>
-              </button>
-              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
-                [nbTooltip]="item.condition.button.step.button"
-                (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
-                <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
-                <span *ngIf="item.condition.isExpired">
-                  {{ item.refJR?.refStatus?.name }}
-                </span>
-              </button>
-              <button *ngIf="item.condition.button.examDate" nbButton status="success" [nbTooltip]="item.refStage?.name"
-                (click)="appointmentExam(item)" [disabled]="item.condition.isExpired">
-                <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
-                <span *ngIf="item.condition.isExpired">
-                  {{ item.refJR?.refStatus?.name }}
-                </span>
-              </button>
-              <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
-                (click)="reject(item)">
-                <nb-icon icon="close-circle"></nb-icon>
-              </button>
-              <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
-                (click)="revoke(item)" [disabled]="showTips">
-                <nb-icon icon="undo"></nb-icon>
-              </button>
-            </nb-card-footer>
-          </nb-card>
-          <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
-            [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
-            (page)="pageEvent = changePaging($event)">
-          </mat-paginator>
-        </div>
+                <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
+                  (click)="openPopupComment(item)">
+                  <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+                  <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                    position="top right"></nb-badge>
+                </button>
+                <button *ngIf="item.condition.button.nextStep" nbButton status="success"
+                  [nbTooltip]="item.condition.button.step.button"
+                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
+                </button>
+                <button *ngIf="item.condition.button.examDate" nbButton status="success"
+                  [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)"
+                  [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
+                </button>
+                <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
+                  (click)="reject(item)">
+                  <nb-icon icon="close-circle"></nb-icon>
+                </button>
+                <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
+                  (click)="revoke(item)" [disabled]="showTips">
+                  <nb-icon icon="undo"></nb-icon>
+                </button>
+              </nb-card-footer>
+            </nb-card>
+            <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+              [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+              (page)="pageEvent = changePaging($event)">
+            </mat-paginator>
+          </div>
       </nb-tab>
     </nb-tabset>
   </nb-card-body>
