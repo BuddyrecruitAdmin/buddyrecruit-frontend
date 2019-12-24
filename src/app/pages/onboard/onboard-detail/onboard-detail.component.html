@@ -102,7 +102,7 @@
                         <span>{{ utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo?.mail?.date) || '-' }}</span>
                       </div>
                       <div class="text-group">
-                        <label class="label">Note</label>
+                        <label class="label">Remark</label>
                         <span>{{ item.pendingSignContractInfo?.note || '-' }}</span>
                       </div>
                     </div>
@@ -154,7 +154,7 @@
 
               <button
                 *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
-                nbButton status="success" nbTooltip="Edit Agree Strart Date"
+                nbButton status="success" nbTooltip="Edit Agree Start Date"
                 (click)="openPopupSignContractDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)"
                 [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>

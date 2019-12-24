@@ -418,7 +418,6 @@ export class PopupInterviewDateComponent implements OnInit {
   }
 
   onChangeselectDateFrom() {
-
   }
 
 }

@@ -79,7 +79,7 @@ export class JdListComponent implements OnInit {
           }
         }
       });
-      this.service.getList(undefined, this.role.refCompany).subscribe(response => {
+      this.departmentService.getList(undefined, this.role.refCompany).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (!response.data || !response.data.length) {
             this.showTips.department = true;

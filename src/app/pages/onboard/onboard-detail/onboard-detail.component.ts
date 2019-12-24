@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -174,9 +174,16 @@ export class OnboardDetailComponent implements OnInit {
       },
       isExpired: false
     };
-    const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
-      return step.refStage._id === item.refStage._id;
-    });
+    let step;
+    if (item.refJR.requiredExam) {
+      step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+        return step.refStage._id === item.refStage._id;
+      });
+    } else {
+      step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
+        return step.refStage._id === item.refStage._id;
+      });
+    }
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -232,6 +239,9 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
+    if (item.refCandidate.email) {
+      setUserEmail(item.refCandidate.email);
+    }
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     setButtonId(button._id);
