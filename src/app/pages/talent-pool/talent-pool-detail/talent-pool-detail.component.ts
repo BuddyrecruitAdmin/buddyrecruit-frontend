@@ -316,40 +316,24 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any, dialog: any) {
-    if (!item.refCandidate.email) {
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
+    if (item.refCandidate.email) {
       setUserEmail(item.refCandidate.email);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        if (result) {
-          this.search();
-        }
-      });
-    } else {
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        if (result) {
-          this.search();
-        }
-      });
     }
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    setButtonId(button._id);
+    this.dialogService.open(PopupPreviewEmailComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   appointmentExam(item: any) {
