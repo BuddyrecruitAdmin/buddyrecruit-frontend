@@ -79,7 +79,6 @@ import {
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
-import { VerifyOutlookComponent } from './verify/verify-outlook/verify-outlook.component';
 
 @NgModule({
   imports: [
@@ -157,7 +156,6 @@ import { VerifyOutlookComponent } from './verify/verify-outlook/verify-outlook.c
     ModulesComponent,
     TranslatePipe,
     IndexComponent,
-    VerifyOutlookComponent
   ],
   providers: [
     TranslateService,
