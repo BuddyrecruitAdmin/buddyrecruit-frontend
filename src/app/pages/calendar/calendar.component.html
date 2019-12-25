@@ -8,11 +8,12 @@
       <nb-card-body style="min-height: auto;">
         <span class="fab fa-microsoft icon-microsoft"></span>
         Sign in with Outlook Calendar
-        <button *ngIf="button.outlook" nbButton status="success" size="small" class="float-right"
-          (click)="signInOutlook()">
+        <button *ngIf="!outlook.signIn" nbButton status="success" size="small" class="float-right"
+          (click)="signInOutlook()" [nbSpinner]="outlook.loading" nbSpinnerSize="tiny">
           Sign in
         </button>
-        <button *ngIf="!button.outlook" nbButton status="success" size="small" class="float-right" disabled>
+        <button *ngIf="outlook.signIn" nbButton status="success" size="small" class="float-right"
+          [nbSpinner]="outlook.loading" nbSpinnerSize="tiny" disabled>
           <nb-icon icon="checkmark-outline" style="font-size: 1rem;"></nb-icon>
           Sign in
         </button>
@@ -24,11 +25,12 @@
       <nb-card-body style="min-height: auto;">
         <span class="fab fa-google icon-google"></span>
         Sign in with Google Calendar
-        <button *ngIf="button.gmail" nbButton status="success" size="small" class="float-right"
-          (click)="signInGoogle()">
+        <button *ngIf="!gmail.signIn" nbButton status="success" size="small" class="float-right"
+          (click)="signInGoogle()" [nbSpinner]="gmail.loading" nbSpinnerSize="tiny">
           Sign in
         </button>
-        <button *ngIf="!button.gmail" nbButton status="success" size="small" class="float-right" disabled>
+        <button *ngIf="gmail.signIn" nbButton status="success" size="small" class="float-right"
+          [nbSpinner]="gmail.loading" nbSpinnerSize="tiny" disabled>
           <nb-icon icon="checkmark-outline" style="font-size: 1rem;"></nb-icon>
           Sign in
         </button>
@@ -104,11 +106,11 @@
     </div>
     <div class="text-gray m-t-10">
       <span class="circle circle-success"></span>
-      <small>Available</small>
+      <small>Available Date</small>
       <span class="circle circle-danger m-l-10"></span>
-      <small>Unavailable</small>
-      <!-- <span class="circle circle-primary m-l-10"></span>
-      <small>Total</small> -->
+      <small>Interview Meetings</small>
+      <span class="circle circle-warning m-l-10"></span>
+      <small>Other Meetings</small>
     </div>
   </nb-card-body>
 </nb-card>

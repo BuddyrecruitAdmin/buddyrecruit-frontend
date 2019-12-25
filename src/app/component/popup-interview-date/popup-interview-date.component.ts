@@ -17,7 +17,8 @@ import {
   endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours
+  addHours,
+  format
 } from 'date-fns';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 
@@ -52,6 +53,17 @@ export class PopupInterviewDateComponent implements OnInit {
   date2: Date;
   startTime: any;
   endTime: any;
+  minutesRange = 30;
+  errMsg = {
+    available: {
+      date: '',
+      time: ''
+    },
+    customize: {
+      date: '',
+      time: ''
+    }
+  };
 
   constructor(
     private candidateService: CandidateService,
@@ -70,10 +82,6 @@ export class PopupInterviewDateComponent implements OnInit {
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
-
-    this.date2 = new Date();
-    this.startTime = null;
-    this.endTime = null;
   }
 
   ngOnInit() {
@@ -86,7 +94,10 @@ export class PopupInterviewDateComponent implements OnInit {
     this.location = null;
     this.buttonId = null;
     this.users = [];
-    this.selectDateFrom = 'CALENDAR';
+    this.date2 = null;
+    this.startTime = null;
+    this.endTime = null;
+    this.selectDateFrom = 'AVAILABLE';
     if (this.flowId) {
       this.initialDropdown().then((response) => {
         this.getDetail();
@@ -154,18 +165,18 @@ export class PopupInterviewDateComponent implements OnInit {
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
 
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
-        this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'CALENDAR';
+        this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'AVAILABLE';
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingInterviewInfo.startDate)) {
-          if (this.selectDateFrom === 'CALENDAR') {
-            this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
-            this.date = this.replaceAt(this.date, 11, '0');
-            this.date = this.replaceAt(this.date, 12, '0');
-            this.setDropdownTime(this.date);
-            this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
-          } else {
+          if (this.selectDateFrom === 'CUSTOMIZE') {
             this.date2 = new Date(response.data.candidateFlow.pendingInterviewInfo.startDate);
             this.startTime = this.utilitiesService.convertDateToTimePicker(response.data.candidateFlow.pendingInterviewInfo.startDate);
             this.endTime = this.utilitiesService.convertDateToTimePicker(response.data.candidateFlow.pendingInterviewInfo.endDate);
+          } else {
+            this.selectDateFrom = 'AVAILABLE';
+            this.date = response.data.candidateFlow.pendingInterviewInfo.startDate;
+            this.date = this.convertDateTime(this.date);
+            this.setDropdownTime(this.date);
+            this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
           }
         }
         if (response.data.candidateFlow.refJR.userInterviews.length) {
@@ -196,6 +207,8 @@ export class PopupInterviewDateComponent implements OnInit {
   convertDateTime(text: string) {
     text = this.replaceAt(text, 11, '0');
     text = this.replaceAt(text, 12, '0');
+    text = this.replaceAt(text, 14, '0');
+    text = this.replaceAt(text, 15, '0');
     return text
   }
 
@@ -217,7 +230,7 @@ export class PopupInterviewDateComponent implements OnInit {
         });
       });
     }
-    this.dropdownDate = this.removeDuplicates(this.dropdownDate, "label");
+    this.dropdownDate = this.removeDuplicates(this.dropdownDate, 'label');
     this.dropdownDate.sort(function (a, b) {
       const aa = a.label.split('/').reverse().join(),
         bb = b.label.split('/').reverse().join();
@@ -242,23 +255,39 @@ export class PopupInterviewDateComponent implements OnInit {
     if (this.userInterviews) {
       this.userInterviews.forEach(user => {
         user.calendar.availableDates.forEach(element => {
-          const startDate = new Date(element.startDate);
+          let startDate = new Date(element.startDate);
           const endDate = new Date(element.endDate);
           if (!iDate || (iDate && isSameDay(iDate, startDate))) {
-            for (let hour = startDate.getHours(); hour < endDate.getHours(); hour++) {
-              const startHour = addHours(startOfDay(startDate), hour);
-              const endHour = addHours(startOfDay(startDate), hour + 1);
-              this.dropdownTime.push({
-                label: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
-                value: JSON.parse(JSON.stringify(startHour)),
-                group: this.setUsers(iDate, JSON.parse(JSON.stringify(startHour)))
-              });
+
+            while (!isSameDay(startDate, endDate) || startDate.getTime() < endDate.getTime()) {
+              const startHour = new Date(startDate);
+              let endHour = new Date(startDate);
+              endHour.setMinutes(endHour.getMinutes() + this.minutesRange);
+              if (endHour.getTime() <= endDate.getTime()) {
+                this.dropdownTime.push({
+                  label: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
+                  value: JSON.parse(JSON.stringify(startHour)),
+                  group: this.setUsers(iDate, JSON.parse(JSON.stringify(startHour)))
+                });
+              }
+              startDate = new Date(endHour);
             }
+
+            // for (let hour = startDate.getHours(); hour < endDate.getHours(); hour++) {
+            //   const startHour = addHours(startOfDay(startDate), hour);
+            //   const endHour = addHours(startOfDay(startDate), hour + 1);
+            //   this.dropdownTime.push({
+            //     label: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
+            //     value: JSON.parse(JSON.stringify(startHour)),
+            //     group: this.setUsers(iDate, JSON.parse(JSON.stringify(startHour)))
+            //   });
+            // }
+
           }
         });
       });
     }
-    this.dropdownTime = this.removeDuplicates(this.dropdownTime, "label");
+    this.dropdownTime = this.removeDuplicates(this.dropdownTime, 'label');
     this.dropdownTime.sort(function (a, b) {
       const aa = a.label.split('/').reverse().join(),
         bb = b.label.split('/').reverse().join();
@@ -314,30 +343,74 @@ export class PopupInterviewDateComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.ref.close(true);
+      });
+    }
+  }
+
+  validation() {
+    this.errMsg = this.initialErrMsg();
+    let isValid = true;
+    switch (this.selectDateFrom) {
+      case 'AVAILABLE':
+        if (!this.date) {
+          isValid = false;
+          this.errMsg.available.date = 'Please select Date';
+        }
+        if (!this.time) {
+          isValid = false;
+          this.errMsg.available.time = 'Please select Time';
+        }
+        break;
+      case 'CUSTOMIZE':
+        if (!this.utilitiesService.dateIsValid(this.date2)) {
+          isValid = false;
+          this.errMsg.customize.date = 'Please select Date';
+        }
+        if (!this.startTime || !this.endTime) {
+          isValid = false;
+          this.errMsg.customize.time = 'Please input Time';
+        } else if (this.startTime.hour === this.endTime.hour) {
+          if (this.startTime.minute >= this.endTime.minute) {
+            isValid = false;
+            this.errMsg.customize.time = 'Start time must be earlier than end time';
+          }
+        } else if (this.startTime.hour > this.endTime.hour) {
+          isValid = false;
+          this.errMsg.customize.time = 'Start time must be earlier than end time';
+        } else if ((this.startTime.minute !== 0 && this.startTime.minute !== 30)
+          || (this.endTime.minute !== 0 && this.endTime.minute !== 30)) {
+          isValid = false;
+          this.errMsg.customize.time = 'Minute must be equal 0 or 30';
+        }
+        break;
+    }
+    return isValid;
   }
 
   passToInterview() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.previewEmail();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-        this.ref.close();
-      }
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.previewEmail();
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+          this.ref.close();
+        }
+      });
+    }
   }
 
   previewEmail() {
@@ -361,28 +434,30 @@ export class PopupInterviewDateComponent implements OnInit {
   }
 
   sendEmail() {
-    setFlowId(this.flowId);
-    setCandidateId(this.candidateId);
-    this.save();
-    this.dialogService.open(PopupResendEmailComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      setFlowId(this.flowId);
+      setCandidateId(this.candidateId);
+      this.save();
+      this.dialogService.open(PopupResendEmailComponent,
+        {
+          closeOnBackdropClick: false,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        this.ref.close(true);
+      });
+    }
   }
 
   setRequest(): any {
     let startDate: any;
     let endDate: any;
-    if (this.selectDateFrom === 'CALENDAR') {
-      const time = new Date(this.time);
-      startDate = addHours(startOfDay(time), time.getHours());
-      endDate = addHours(startOfDay(time), time.getHours() + 1);
+    if (this.selectDateFrom === 'AVAILABLE') {
+      startDate = new Date(this.time);
+      endDate = new Date(this.time);
+      endDate = endDate.setMinutes(endDate.getMinutes() + this.minutesRange);
     } else {
       startDate = this.utilitiesService.convertTimePickerToDate(this.startTime, this.date2);
       endDate = this.utilitiesService.convertTimePickerToDate(this.endTime, this.date2);
@@ -417,8 +492,21 @@ export class PopupInterviewDateComponent implements OnInit {
     });
   }
 
-  onChangeselectDateFrom() {
+  onChangeSelectDateFrom() {
+    this.errMsg = this.initialErrMsg();
+  }
 
+  initialErrMsg(): any {
+    return {
+      available: {
+        date: '',
+        time: ''
+      },
+      customize: {
+        date: '',
+        time: ''
+      }
+    };
   }
 
 }

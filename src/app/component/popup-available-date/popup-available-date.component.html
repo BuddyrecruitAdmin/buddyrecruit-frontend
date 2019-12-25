@@ -50,6 +50,6 @@
   </nb-card-body>
   <nb-card-footer>
     <button nbButton status="default" (click)="ref.close(result)">Cancel</button>
-    <button *ngIf="!disabled" nbButton status="success" (click)="save()" [disabled]="!isVisibleSave()">Save</button>
+    <button *ngIf="!disabled" nbButton status="success" (click)="save()">Save</button>
   </nb-card-footer>
 </nb-card>
