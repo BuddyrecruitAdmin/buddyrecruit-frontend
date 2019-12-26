@@ -13,7 +13,8 @@ import {
   endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours
+  addHours,
+  addMinutes
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import {
@@ -94,10 +95,17 @@ export class CalendarComponent implements OnInit {
   candidateFlow: any;
   event: any = {};
   users: any[];
-  button: {
-    outlook: boolean,
-    gmail: boolean,
-  }
+  outlook: {
+    token: any,
+    loading: boolean,
+    signIn: boolean,
+    calendars: any
+  };
+  gmail: {
+    loading: boolean,
+    signIn: boolean
+  };
+  minutesRange = 30;
 
   constructor(
     private service: CalendarService,
@@ -110,9 +118,15 @@ export class CalendarComponent implements OnInit {
     this.role = getRole();
     this.innerHeight = window.innerHeight * 0.8;
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
-    this.button = {
-      outlook: false,
-      gmail: false
+    this.outlook = {
+      token: '',
+      loading: true,
+      signIn: false,
+      calendars: []
+    };
+    this.gmail = {
+      loading: true,
+      signIn: false
     };
   }
 
@@ -126,30 +140,39 @@ export class CalendarComponent implements OnInit {
       if (params.code) {
         this.service.getTokenOutlookCalendar(params.code).subscribe(response => {
           if (response.data.token) {
-            this.getOutlookCalendarList(response.data.token);
+            this.getCalendar();
           }
+          this.outlook.loading = false;
         });
       } else {
-        // this.checkTokenOutlookCalendar();
-        this.getCalendarData();
+        this.getCalendar();
       }
     });
   }
 
-  getCalendarData() {
-    this.service.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.calendarData = response.data.calendar;
-        this.setWorkingDays();
-        this.changeCalendarType(this.byWorkingDays);
-      } else {
-        this.showToast('danger', 'Error Message', response.message || 'No data found');
-      }
+  async getCalendar() {
+    // await this.checkTokenOutlookCalendar();
+    // await this.getOutlookCalendarList(this.outlook.token);
+    await this.getDetail();
+  }
+
+  getDetail() {
+    return new Promise((resolve) => {
+      this.service.getList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.calendarData = response.data.calendar;
+          this.setWorkingDays();
+          this.changeCalendarType(this.byWorkingDays);
+        } else {
+          this.showToast('danger', 'Error Message', response.message || 'No data found');
+        }
+        resolve();
+      });
     });
   }
 
   changeCalendarType(byWorkingDays: boolean) {
-    this.events = [];
+    // this.events = [];
     this.excludeDays = [];
     this.dialogDate = new Date();
 
@@ -182,29 +205,54 @@ export class CalendarComponent implements OnInit {
       this.calendarData.availableDates.forEach(element => {
         const days = this.utilitiesService.calculateDuration2Date(element.startDate, element.endDate);
         for (let index = 0; index < days; index++) {
-          const start = new Date(element.startDate);
-          const end = new Date(element.endDate);
-          for (let hour = start.getHours(); hour < end.getHours(); hour++) {
-            const startHour = addHours(addDays(startOfDay(start), index), hour);
-            const endHour = addHours(addDays(startOfDay(start), index), hour + 1);
-            const found = this.events.find(event => {
-              return event.start.getTime() === startHour.getTime()
-                && event.end.getTime() === endHour.getTime()
-                && event.color === colors.red;
-            });
-            if (found) {
-              continue;
-            }
-            this.events.push({
-              start: startHour,
-              end: endHour,
-              title: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
-              color: colors.green,
-              meta: {
-                type: 'success'
+          let start = new Date(element.startDate);
+          let end = new Date(element.endDate);
+          while (!isSameDay(start, end) || start.getTime() < end.getTime()) {
+            const startHour = new Date(start);
+            let endHour = new Date(start);
+            endHour.setMinutes(endHour.getMinutes() + this.minutesRange);
+            if (endHour.getTime() <= end.getTime()) {
+              const found = this.events.find(event => {
+                return (event.start.getTime() <= startHour.getTime()
+                  && event.end.getTime() >= endHour.getTime())
+                  && (event.color === colors.red || event.color === colors.yellow);
+              });
+              if (!found) {
+                this.events.push({
+                  start: startHour,
+                  end: endHour,
+                  title: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
+                  color: colors.green,
+                  meta: {
+                    type: 'success'
+                  }
+                });
               }
-            });
+            }
+            start = new Date(endHour);
           }
+
+          // for (let hour = start.getHours(); hour < end.getHours(); hour++) {
+          //   const startHour = addHours(addDays(startOfDay(start), index), hour);
+          //   const endHour = addHours(addDays(startOfDay(start), index), hour + 1);
+          //   const found = this.events.find(event => {
+          //     return event.start.getTime() === startHour.getTime()
+          //       && event.end.getTime() === endHour.getTime()
+          //       && event.color === colors.red;
+          //   });
+          //   if (found) {
+          //     continue;
+          //   }
+          //   this.events.push({
+          //     start: startHour,
+          //     end: endHour,
+          //     title: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
+          //     color: colors.green,
+          //     meta: {
+          //       type: 'success'
+          //     }
+          //   });
+          // }
         }
       });
     }
@@ -343,7 +391,7 @@ export class CalendarComponent implements OnInit {
     this.service.edit(request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
-        this.getCalendarData();
+        this.getCalendar();
       } else {
         this.showToast('danger', 'Error Message', response.message || 'Save error!');
       }
@@ -359,7 +407,7 @@ export class CalendarComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       if (result) {
-        this.getCalendarData();
+        this.getCalendar();
       }
     });
   }
@@ -456,10 +504,19 @@ export class CalendarComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.event = event;
-    if (event.color === colors.red) {
-      this.openPopupInterviewInfo(event.id);
-    } else {
-      this.callPopupAvailableDate();
+    switch (event.color) {
+      case colors.green:
+        this.callPopupAvailableDate();
+        break;
+      case colors.red:
+        this.openPopupInterviewInfo(event.id);
+        break;
+      case colors.yellow:
+        // on click other meeting
+        break;
+      default:
+        this.callPopupAvailableDate();
+        break;
     }
   }
 
@@ -480,18 +537,41 @@ export class CalendarComponent implements OnInit {
   }
 
   checkTokenOutlookCalendar() {
-    this.service.checkTokenOutlookCalendar(this.role.username).subscribe(response => {
-      if (response.data.token) {
-        this.getOutlookCalendarList(response.data.token);
-      } else {
-        this.button.outlook = true;
-      }
+    return new Promise((resolve) => {
+      this.service.checkTokenOutlookCalendar(this.role.username).subscribe(response => {
+        if (response.data.token) {
+          this.outlook.token = response.data.token;
+          this.outlook.signIn = true;
+        } else {
+          this.outlook.signIn = false;
+        }
+        this.outlook.loading = false;
+        resolve();
+      });
     });
   }
 
-  getOutlookCalendarList(token: any) {
-    this.service.getOutlookCalendars(token).subscribe(response => {
-      console.log('getOutlookCalendars', response);
+  getOutlookCalendarList(token: any = '') {
+    return new Promise((resolve) => {
+      const start = new Date(2019, 11, 1);
+      const end = new Date(2020, 0, 31);
+      this.service.getOutlookCalendars(token, start, end).subscribe(response => {
+        if (response.data) {
+          response.data.forEach(element => {
+            this.events.push({
+              id: element.Id,
+              start: new Date(element.Start.DateTime),
+              end: new Date(element.End.DateTime),
+              title: `${this.utilitiesService.convertTime(element.Start.DateTime)} - ${this.utilitiesService.convertTime(element.End.DateTime)} ${element.Subject}`,
+              color: colors.yellow,
+              meta: {
+                type: 'warning'
+              }
+            });
+          });
+        }
+        resolve();
+      });
     });
   }
 

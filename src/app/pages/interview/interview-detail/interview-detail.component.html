@@ -101,7 +101,17 @@
                     </div>
                     <div class="text-group">
                       <label class="label">Interview Date</label>
-                      <span>{{ utilitiesService.convertDateTime(item.pendingInterviewInfo?.startDate) || '-' }}</span>
+                      <span>{{ utilitiesService.convertDate(item.pendingInterviewInfo?.startDate) }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Interview Time</label>
+                      <span
+                        *ngIf="item.pendingInterviewInfo?.startDate && item.pendingInterviewInfo?.endDate">{{ utilitiesService.convertTime(item.pendingInterviewInfo?.startDate) }}
+                        -
+                        {{ utilitiesService.convertTime(item.pendingInterviewInfo?.endDate) }}
+                      </span>
+                      <span
+                        *ngIf="!item.pendingInterviewInfo?.startDate || !item.pendingInterviewInfo?.endDate">-</span>
                     </div>
                   </div>
                   <div *ngIf="item.refStage.order === 402" class="m-t-5">

@@ -20,6 +20,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
+              "src/.well-known",
               "src/favicon.ico",
               "src/favicon.png",
               {

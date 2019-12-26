@@ -12,6 +12,7 @@ import { MESSAGE } from "../../shared/constants/message";
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'ngx-popup-reject',
@@ -118,6 +119,21 @@ export class PopupRejectComponent implements OnInit {
                 });
                 break;
             }
+            if (this.rejection && this.rejection.length) {
+              this.service.getListAll().subscribe(response => {
+                if (response.code === ResponseCode.Success) {
+                  let rejection = [];
+                  this.rejection.forEach(element => {
+                    if (response.data.find(item => {
+                      return item._id === element._id && item.active;
+                    })) {
+                      rejection.push(element);
+                    }
+                  });
+                  this.rejection = _.cloneDeep(rejection);
+                }
+              });
+            }
             this.loading = false;
           }
         });
@@ -154,7 +170,7 @@ export class PopupRejectComponent implements OnInit {
     confirm.afterClosed().subscribe(result => {
       if (result) {
         this.loading = true;
-        this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark,this.rejectId).subscribe(response => {
+        this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark, this.rejectId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.ref.close(true);

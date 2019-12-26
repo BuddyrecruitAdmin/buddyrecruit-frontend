@@ -44,7 +44,8 @@ export class CalendarService extends NetworkService {
     const url = '';
     const body = {
       // username: username
-      username: 'alex_cs_kku@hotmail.com'
+      // username: 'alex_cs_kku@hotmail.com'
+      username: 'vsengi@outlook.com'
     };
     return this.checkTokenOutlook(url, body);
   }
@@ -57,9 +58,11 @@ export class CalendarService extends NetworkService {
     return this.getTokenOutlook(body);
   }
 
-  getOutlookCalendars(token): Observable<ApiResponse> {
+  getOutlookCalendars(token, start, end): Observable<ApiResponse> {
     const body = {
       token: token,
+      start: start,
+      end: end,
     };
     return this.getOutlookCalendar(body);
   }

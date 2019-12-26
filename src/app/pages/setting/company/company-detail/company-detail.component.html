@@ -68,6 +68,8 @@
         </div>
       </div>
     </mat-radio-group>
+    <mat-checkbox *ngIf="roleSelected === '2'" [(ngModel)]="companyDetail.startByHR">Start flow from HR
+    </mat-checkbox>
   </nb-card-body>
 </nb-card>
 
@@ -121,12 +123,14 @@
         </div>
         <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.adminEmail }">
           <label class="label">Admin Username / Email <span class="text-red">*</span></label>
-          <nb-select *ngIf="state != 'create'" [(ngModel)]="companyDetail.adminEmail" [ngModelOptions]="{ standalone: true }" fullWidth>
+          <nb-select *ngIf="state != 'create'" [(ngModel)]="companyDetail.adminEmail"
+            [ngModelOptions]="{ standalone: true }" fullWidth>
             <nb-option *ngFor="let ad of bigAdmin" [value]="ad.value">
               {{ ad.label }}
             </nb-option>
           </nb-select>
-          <input *ngIf="state === 'create'" type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth [disabled]="!editabled">
+          <input *ngIf="state === 'create'" type="text" [(ngModel)]="companyDetail.adminEmail" nbInput fullWidth
+            [disabled]="!editabled">
           <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
         </div>
         <!-- <div class="form-control-group" [ngClass]="{ 'has-error': touched }">

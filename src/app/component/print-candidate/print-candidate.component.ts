@@ -85,17 +85,21 @@ export class PrintCandidateComponent implements OnInit {
           this.interviewScores = [];
           if (this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
             this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.forEach(element => {
-              const refUser = this.item.candidateFlow.refJR.userInterviews.find(user => {
-                return user.refUser._id === element.createdInfo.refUser._id;
-              });
-              const result = element.rank.options.find(rank => {
-                return rank.value === element.rank.selected;
-              });
-              this.interviewScores.push({
-                name: this.utilitiesService.setFullname(refUser.refUser),
-                result: (result && result.subject) || '',
-                remark: ''
-              });
+              if (this.item.candidateFlow.refJR.userInterviews || this.item.candidateFlow.refJR.userInterviews.length) {
+                const refUser = this.item.candidateFlow.refJR.userInterviews.find(user => {
+                  return user.refUser._id === element.createdInfo.refUser._id;
+                });
+                if (refUser) {
+                  const result = element.rank.options.find(rank => {
+                    return rank.value === element.rank.selected;
+                  });
+                  this.interviewScores.push({
+                    name: this.utilitiesService.setFullname(refUser.refUser),
+                    result: (result && result.subject) || '',
+                    remark: ''
+                  });
+                }
+              }
             });
           }
         }
