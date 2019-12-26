@@ -343,7 +343,8 @@ export class PopupCvComponent implements OnInit {
         refUser: {
           firstname: this.role.firstname,
           lastname: this.role.lastname,
-          _id: this.role._id
+          _id: this.role._id,
+          imageData: this.role.imagePath
         }
       },
       message: this.remark,
@@ -351,6 +352,7 @@ export class PopupCvComponent implements OnInit {
       _id: undefined
     }
     this.allComments.push(commen)
+    this.remark = '';
   }
 
   checkCV(id) {

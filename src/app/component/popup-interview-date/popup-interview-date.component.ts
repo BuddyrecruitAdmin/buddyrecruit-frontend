@@ -55,6 +55,7 @@ export class PopupInterviewDateComponent implements OnInit {
   endTime: any;
   minutesRange = 30;
   errMsg = {
+    location: '',
     available: {
       date: '',
       time: ''
@@ -178,6 +179,8 @@ export class PopupInterviewDateComponent implements OnInit {
             this.setDropdownTime(this.date);
             this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
           }
+        } else {
+          this.selectDateFrom = 'AVAILABLE';
         }
         if (response.data.candidateFlow.refJR.userInterviews.length) {
           response.data.candidateFlow.refJR.userInterviews.forEach(element => {
@@ -361,6 +364,10 @@ export class PopupInterviewDateComponent implements OnInit {
   validation() {
     this.errMsg = this.initialErrMsg();
     let isValid = true;
+    if (!this.location) {
+      isValid = false;
+      this.errMsg.location = 'Please select Location';
+    }
     switch (this.selectDateFrom) {
       case 'AVAILABLE':
         if (!this.date) {
@@ -498,6 +505,7 @@ export class PopupInterviewDateComponent implements OnInit {
 
   initialErrMsg(): any {
     return {
+      location: '',
       available: {
         date: '',
         time: ''

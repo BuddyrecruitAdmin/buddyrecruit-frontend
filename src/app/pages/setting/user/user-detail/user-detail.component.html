@@ -82,7 +82,7 @@
         <div class="form-control-group">
           <label class="label">Username <span class="text-red">*</span></label>
           <input type="text" [(ngModel)]="userDetail.username" nbInput fullWidth placeholder="Username"
-            autocomplete="off" [ngClass]="{ 'status-danger': errMsg.username }">
+            autocomplete="off" [ngClass]="{ 'status-danger': errMsg.username }" [disabled]="!editable">
           <small *ngIf="errMsg.username" class="text-red">{{ errMsg.username }}</small>
         </div>
         <div *ngIf="editable" class="form-control-group">

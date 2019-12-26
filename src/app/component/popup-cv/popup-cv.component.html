@@ -37,19 +37,17 @@
         </span>
       </div>
       <div *ngIf="showHistory" class="border-padbottom border-all-reject box-pad box-header with-border">
-        <div class="col-md-12 col-lg-6">
-          <div *ngFor="let item of history" class="text-gray m-t-10">
-            <div *ngIf="item.refReject?.name || item.remark">
-              <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-              <span>{{ item.refReject?.name }}</span>
-              <span *ngIf="item.remark">: {{ item.remark }}</span>
-            </div>
-            <div *ngIf="item.refUser || item.date" class="m-l-20">
-              <small>
-                ( {{ utilitiesService.setFullname(item.refUser) }},
-                {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
-              </small>
-            </div>
+        <div *ngFor="let item of history" class="text-gray m-t-10">
+          <div *ngIf="item.refReject?.name || item.remark">
+            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+            <span>{{ item.refReject?.name }}</span>
+            <span *ngIf="item.remark">: {{ item.remark }}</span>
+          </div>
+          <div *ngIf="item.refUser || item.date" class="m-l-20">
+            <small>
+              ( {{ utilitiesService.setFullname(item.refUser) }},
+              {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
+            </small>
           </div>
         </div>
       </div>
