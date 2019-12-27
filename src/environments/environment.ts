@@ -8,7 +8,7 @@ export const environment = {
   // API_URI: "http://localhost:4201", // LOCAL
   // API_URI: 'http://192.168.25.59:9001', // DEV P KG LAN
   //API_URI: 'http://192.168.25.59:9101', // DEV P KG 2
-  API_URI: 'http://10.25.0.151:9001', // DEV N gos
+  API_URI: 'http://10.35.0.69:9001', // DEV N gos
   // API_URI: 'http://192.168.35.87:9001', // DEV P'Mo
   WriteLog: true
 };

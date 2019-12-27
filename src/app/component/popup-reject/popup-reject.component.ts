@@ -165,7 +165,7 @@ export class PopupRejectComponent implements OnInit {
   block() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
       width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-      data: { type: 'C', content: MESSAGE[43] }
+      data: { type: 'C', content: MESSAGE[159] }
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {

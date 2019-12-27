@@ -74,6 +74,10 @@
               <label class="label">Blocked Reason</label>
               <span class="text-red">{{ item.refReject?.name || '-' }}</span>
             </div>
+            <div *ngIf="item.remark" class="text-group">
+              <label class="label">Blocked Remark</label>
+              <span class="text-red">{{ item.remark || '-' }}</span>
+            </div>
             <i class="text-gray">
               <div class="text-group">
                 <label class="label">Blocked By</label>
@@ -114,6 +118,7 @@
               <th scope="col">Job Position</th>
               <th scope="col">Stage</th>
               <th scope="col">Blocked Reason</th>
+              <th scope="col">Blocked Remark</th>
               <th scope="col" *ngIf="role.refAuthorize.configuration.blacklist.editable" style="width: 110px;">Actions
               </th>
             </tr>
@@ -139,6 +144,9 @@
               </td>
               <td class="text-left text-red">
                 <span>{{ item.refReject?.name || '-' }}</span>
+              </td>
+              <td>
+                <span>{{ item.remark || '-' }}</span>
               </td>
               <td *ngIf="role.refAuthorize.configuration.blacklist.editable" class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">

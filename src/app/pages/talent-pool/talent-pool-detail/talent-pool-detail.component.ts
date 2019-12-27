@@ -419,9 +419,9 @@ export class TalentPoolDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      this.search();
       if (result) {
         setFlowId();
-        this.search();
       }
     });
   }

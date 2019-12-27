@@ -347,9 +347,9 @@ export class OnboardDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      this.search();
       if (result) {
         setFlowId();
-        this.search();
       }
     });
   }

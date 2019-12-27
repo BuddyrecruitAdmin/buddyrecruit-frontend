@@ -375,14 +375,14 @@ export class SignContractDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      this.search();
       if (result) {
         setFlowId();
-        this.search();
       }
     });
   }
 
-  openPopupSignContractDate(item: any,icon: any) {
+  openPopupSignContractDate(item: any, icon: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     setIconId(icon);
