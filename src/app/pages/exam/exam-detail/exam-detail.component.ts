@@ -366,6 +366,7 @@ export class ExamDetailComponent implements OnInit {
   openPopupExamDate(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamDateComponent,
       {
         closeOnBackdropClick: false,
@@ -382,6 +383,7 @@ export class ExamDetailComponent implements OnInit {
   openPopupExamInfo(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamInfoComponent,
       {
         closeOnBackdropClick: false,
@@ -398,6 +400,7 @@ export class ExamDetailComponent implements OnInit {
   openPopupExamScore(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamScoreComponent,
       {
         closeOnBackdropClick: false,

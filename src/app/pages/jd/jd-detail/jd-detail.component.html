@@ -240,14 +240,14 @@
           </nb-card-header>
           <nb-card-body>
             <div class="row">
-              <div class="col-4 col-sm-4 col-md-4 form-group">
+              <div class="col-sm-4 col-md-4 form-group">
                 <label class="control-label">Exp. From
                 </label><br>
                 <input type="number" min="0" max="100" name="low" value="workEXPline.low" [(ngModel)]="workEXPline.low"
                   [disabled]="checkPreview || i != 0" onKeyPress="if(this.value.length==3) return false;" nbInput
                   fullWidth appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
               </div>
-              <div class="col-4 col-sm-4 col-md-4 form-group">
+              <div class="col-sm-4 col-md-4 form-group">
                 <label class="control-label">Exp. To
                 </label><br>
                 <input (input)="onChanheWork(i)" type="number" min="0" max="100" name="high" value="workEXPline.high"
@@ -255,7 +255,7 @@
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   pattern="[0-9]*" inputmode="numeric" digitOnly />
               </div>
-              <div class="col-4 col-sm-4 col-md-4 form-group">
+              <div class="col-sm-4 col-md-4 form-group">
                 <label class="control-label">%
                 </label>
                 <input type="number" min="0" max="100" value="workEXPline.percent" [(ngModel)]="workEXPline.percent"

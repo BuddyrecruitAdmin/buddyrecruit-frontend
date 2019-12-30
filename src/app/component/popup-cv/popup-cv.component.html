@@ -52,6 +52,7 @@
         </div>
       </div>
     </div>
+    <br>
     <!-- Dup JR -->
     <div *ngIf="multiJr.length" class="title">
       <span style="color: orange" class="link underline" (click)="showMulti= !showMulti">
@@ -592,7 +593,7 @@
           <textarea nbInput fullWidth [(ngModel)]="remark" [disabled]="!editable">
           </textarea>
           <br>
-          <button nbButton type="button" status="success" size="small" (click)="addComment()">
+          <button nbButton type="button" status="success" size="small" (click)="addComment()" [disabled]="!remark">
             Add Comment
           </button>
         </div>

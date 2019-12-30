@@ -339,6 +339,7 @@ export class TalentPoolDetailComponent implements OnInit {
   appointmentExam(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamDateComponent,
       {
         closeOnBackdropClick: false,
