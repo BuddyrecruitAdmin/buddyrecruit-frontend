@@ -368,6 +368,7 @@ export class AppointmentDetailComponent implements OnInit {
     setFlowId(item._id);
     setJrId(item.refJR);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupInterviewDateComponent,
       {
         closeOnBackdropClick: false,
