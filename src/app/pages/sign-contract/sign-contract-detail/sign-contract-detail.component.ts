@@ -285,7 +285,6 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    debugger
     if (item.refCandidate.email) {
       setUserEmail(item.refCandidate.email);
     }

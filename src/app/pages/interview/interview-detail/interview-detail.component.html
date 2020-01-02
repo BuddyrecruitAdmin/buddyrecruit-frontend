@@ -132,7 +132,7 @@
                             (click)="infoResult(item)">
                             <nb-icon icon="info-outline"></nb-icon>
                           </span></label>
-                        <span>{{ item.result || '-'}}</span>
+                        <span [nbTooltip]="item.result">{{ item.result || '-'}}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Remark</label>

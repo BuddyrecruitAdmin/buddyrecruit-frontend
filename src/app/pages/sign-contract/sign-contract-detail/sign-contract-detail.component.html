@@ -184,6 +184,9 @@
                 nbButton status="success"
                 [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date) || item.condition.isExpired || showTips"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)">
+                <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date)"
+                  nbTooltip="Sign Contract date is not arrived yet" text=" ! " status="warning" position="top right">
+                </nb-badge>
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
