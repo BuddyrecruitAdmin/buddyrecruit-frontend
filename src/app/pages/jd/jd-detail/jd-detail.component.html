@@ -36,7 +36,7 @@
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedCV }">
               <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
               <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a keyword"
-                placeholder="+" [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                placeholder="+" [ngModelOptions]="{ standalone: true }">
               </tag-input>
               <small *ngIf="touchedCV" class="text-red">{{ sErrorKey }}</small>
             </div>
@@ -240,14 +240,14 @@
           </nb-card-header>
           <nb-card-body>
             <div class="row">
-              <div class="col-4 col-sm-4 col-md-4 form-group">
+              <div class="col-sm-4 col-md-4 form-group">
                 <label class="control-label">Exp. From
                 </label><br>
                 <input type="number" min="0" max="100" name="low" value="workEXPline.low" [(ngModel)]="workEXPline.low"
                   [disabled]="checkPreview || i != 0" onKeyPress="if(this.value.length==3) return false;" nbInput
                   fullWidth appNumberDirective pattern="[0-9]*" inputmode="numeric" digitOnly />
               </div>
-              <div class="col-4 col-sm-4 col-md-4 form-group">
+              <div class="col-sm-4 col-md-4 form-group">
                 <label class="control-label">Exp. To
                 </label><br>
                 <input (input)="onChanheWork(i)" type="number" min="0" max="100" name="high" value="workEXPline.high"
@@ -255,7 +255,7 @@
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   pattern="[0-9]*" inputmode="numeric" digitOnly />
               </div>
-              <div class="col-4 col-sm-4 col-md-4 form-group">
+              <div class="col-sm-4 col-md-4 form-group">
                 <label class="control-label">%
                 </label>
                 <input type="number" min="0" max="100" value="workEXPline.percent" [(ngModel)]="workEXPline.percent"
@@ -278,7 +278,7 @@
               <th>Exp. From <span style="color:red">*</span></th>
               <th>Exp. To <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
-              <th></th>
+              <th *ngIf="!checkPreview"></th>
             </tr>
             <tr *ngFor="let workEXPline of jd.weightScore.workExperience.weight; let i = index">
               <td>{{ i + 1 }}.</td>
@@ -308,7 +308,7 @@
                     pattern="[0-9]*" inputmode="numeric" digitOnly />
                 </div>
               </td>
-              <td>
+              <td *ngIf="!checkPreview">
                 <button *ngIf="modeEditable" [disabled]="checkPreview" class="btn btn-danger"
                   (click)="deleteOption(i, 'WORKEXP')">
                   <span class="fa fa-trash"></span>
@@ -378,7 +378,7 @@
                 </label>
                 <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                  [ngModelOptions]="{ standalone: true }">
                 </tag-input>
               </div>
             </div>
@@ -394,7 +394,7 @@
               <th>Skill <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
               <th>Keyword <span style="color:red">*</span></th>
-              <th></th>
+              <th *ngIf="!checkPreview"></th>
             </tr>
             <tr *ngFor="let ss of jd.weightScore.softSkill.weight; let i = index">
               <td>{{ i + 1 }}.</td>
@@ -411,10 +411,10 @@
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="ss.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                  [ngModelOptions]="{ standalone: true }">
                 </tag-input>
               </td>
-              <td>
+              <td *ngIf="!checkPreview">
                 <button *ngIf="modeEditable" [disabled]="checkPreview" class="btn btn-danger"
                   (click)="deleteOption(i, 'SOFTSKILL')">
                   <span class="fa fa-trash"></span>
@@ -486,7 +486,7 @@
                 </label>
                 <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                  [ngModelOptions]="{ standalone: true }">
                 </tag-input>
               </div>
             </div>
@@ -502,7 +502,7 @@
               <th>Skill <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
               <th>Keyword <span style="color:red">*</span></th>
-              <th></th>
+              <th *ngIf="!checkPreview"></th>
             </tr>
             <tr *ngFor="let hs of jd.weightScore.hardSkill.weight; let i = index">
               <td>{{ i + 1 }}.</td>
@@ -519,10 +519,10 @@
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="hs.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                  [ngModelOptions]="{ standalone: true }">
                 </tag-input>
               </td>
-              <td>
+              <td *ngIf="!checkPreview">
                 <button *ngIf="modeEditable" class="btn btn-danger" (click)="deleteOption(i, 'HARDSKILL')"
                   [disabled]="checkPreview">
                   <span class="fa fa-trash"></span>
@@ -594,7 +594,7 @@
                 </label>
                 <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
                   [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                  [ngModelOptions]="{ standalone: true }">
                 </tag-input>
               </div>
             </div>
@@ -610,7 +610,7 @@
               <th>Name <span style="color:red">*</span></th>
               <th>% <span style="color:red">*</span></th>
               <th>Keyword <span style="color:red">*</span></th>
-              <th></th>
+              <th *ngIf="!checkPreview"></th>
             </tr>
             <tr *ngFor="let cert of jd.weightScore.certificate.weight; let i = index">
               <td>{{ i + 1 }}.</td>
@@ -626,11 +626,11 @@
               </td>
               <td>
                 <tag-input placeholder="Keyword" [(ngModel)]="cert.keyword" [removable]="modeEditable"
-                  [editable]="modeEditable || checkPreview" [disable]="!modeEditable"
-                  [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32]">
+                  [editable]="modeEditable" [disable]="!modeEditable || checkPreview"
+                  [ngModelOptions]="{ standalone: true }">
                 </tag-input>
               </td>
-              <td>
+              <td *ngIf="!checkPreview">
                 <button *ngIf="modeEditable" class="btn btn-danger" (click)="deleteOption(i, 'CERTIFICATE')"
                   [disabled]="checkPreview">
                   <span class="fa fa-trash"></span>

@@ -23,7 +23,7 @@ export class PopupCVService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.LIST, body);
   }
 
-  getDetail(flowId: any) {
+  getDetail(flowId: any): Observable<ApiResponse> {
     const body = {
       _id: flowId
     }

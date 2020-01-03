@@ -8,6 +8,7 @@ export interface ApiResponse {
   count?: Count;
   isOverQuota?: boolean;
   isOverCandidate?: boolean;
+  otherJR?;
 }
 
 export interface Count {

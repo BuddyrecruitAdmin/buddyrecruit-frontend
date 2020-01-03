@@ -36,9 +36,11 @@
               <label class="label">Email</label>
               <span>{{ item.email || '-' }}</span>
             </div>
-            <div class="text-group">
+            <div>
               <label class="label">Address</label>
-              <span>{{ item.address || '-' }}</span>
+              <div class="m-l-15">
+                <span>{{ item.address || '-' }}</span>
+              </div>
             </div>
           </div>
 
@@ -266,7 +268,7 @@
                 <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.mail?.date) || '-' }}</span>
               </div>
               <div class="text-group">
-                <label class="label">Note</label>
+                <label class="label">Remark</label>
                 <span>{{ item.candidateFlow?.pendingSignContractInfo?.note || '-' }}</span>
               </div>
             </div>

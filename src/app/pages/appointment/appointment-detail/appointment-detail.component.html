@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="col-md-6" style="margin-top: 3px;">
-        <nb-radio-group [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
+        <nb-radio-group name="rrr2" [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
           <nb-radio [value]="true">Collapse All</nb-radio>
           <nb-radio [value]="false">Expand All</nb-radio>
         </nb-radio-group>
@@ -74,7 +74,7 @@
                   </div>
                   <div class="text-group">
                     <label class="label">Work Experience</label>
-                    <span>{{ item.refCandidate?.workExperience?.totalExpMonth || '-' }}</span>
+                    <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
                   </div>
                   <div class="text-group">
                     <label class="label">Phone</label>

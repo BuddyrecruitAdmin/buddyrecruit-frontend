@@ -34,14 +34,14 @@
         <div class="form-control-group" [ngClass]="{ 'has-error': sErrorcc }">
           <label class="label">CC<small>(After input email please press enter)</small></label>
           <tag-input [(ngModel)]="itemDialog.cc" secondaryPlaceholder="Enter a email" placeholder="+"
-            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+            [ngModelOptions]="{ standalone: true }">
           </tag-input>
           <small *ngIf="touched" class="text-red">{{ sErrorcc }}</small>
         </div>
         <div class="form-control-group" [ngClass]="{ 'has-error': sErrorBcc }">
           <label class="label">BCC<small>(After input email please press enter)</small></label>
           <tag-input [(ngModel)]="itemDialog.bcc" secondaryPlaceholder="Enter a email" placeholder="+"
-            [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+            [ngModelOptions]="{ standalone: true }">
           </tag-input>
           <small *ngIf="touched" class="text-red">{{ sErrorBcc }}</small>
         </div>
@@ -50,7 +50,8 @@
     <div class="row">
       <div class="col-md-12">
         <div mat-dialog-content class="mat-typography">
-          <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html" [config]="editorConfig"></angular-editor>
+          <angular-editor placeholder="'Enter text here...'" [(ngModel)]="itemDialog.html" [config]="editorConfig">
+          </angular-editor>
         </div>
       </div>
     </div>

@@ -55,9 +55,11 @@
             <label class="label">Email</label>
             <span>{{ item.email || '-' }}</span>
           </div>
-          <div class="text-group">
+          <div>
             <label class="label">Address</label>
-            <span>{{ item.address || '-' }}</span>
+            <div class="m-l-15">
+              <span>{{ item.address || '-' }}</span>
+            </div>
           </div>
         </div>
 
@@ -72,7 +74,8 @@
             </span>
           </div>
           <div *ngFor="let exp of item.workExperience?.work">
-            <span>• {{ utilitiesService.convertWorkExpToText(exp) }} </span>
+            <span><span *ngIf="utilitiesService.convertWorkExpToText(exp)">•
+              </span>{{ utilitiesService.convertWorkExpToText(exp) }} </span>
           </div>
         </div>
 
@@ -212,7 +215,7 @@
         </div>
 
         <!-- Interview Score -->
-        <div *ngIf="condition.block.interviewScore">
+        <div *ngIf="condition.block.interviewScore && interviewScores.length > 0">
           <label class="label topic">Interview Result <span *ngIf="condition.icon.interviewScore"
               class="text-red">*</span></label>
           <nb-icon *ngIf="condition.icon.interviewScore" icon="edit-2-outline" class="link"
@@ -245,7 +248,7 @@
               <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.mail?.date) || '-' }}</span>
             </div>
             <div class="text-group">
-              <label class="label">Note</label>
+              <label class="label">Remark</label>
               <span>{{ item.candidateFlow?.pendingSignContractInfo?.note || '-' }}</span>
             </div>
           </div>

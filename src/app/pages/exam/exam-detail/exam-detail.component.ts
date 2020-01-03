@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -123,7 +123,7 @@ export class ExamDetailComponent implements OnInit {
       setTabName();
     } else {
       this.tabSelected = event.tabTitle;
-    }    
+    }
     this.paging.pageIndex = 0;
     this.search();
   }
@@ -218,6 +218,9 @@ export class ExamDetailComponent implements OnInit {
                 }
               }
             }
+            else {
+              condition.button.revoke = true;
+            }
             break;
         }
       }
@@ -266,6 +269,9 @@ export class ExamDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
+    if (item.refCandidate.email) {
+      setUserEmail(item.refCandidate.email);
+    }
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     setButtonId(button._id);
@@ -350,9 +356,9 @@ export class ExamDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      this.search();
       if (result) {
         setFlowId();
-        this.search();
       }
     });
   }
@@ -360,6 +366,7 @@ export class ExamDetailComponent implements OnInit {
   openPopupExamDate(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamDateComponent,
       {
         closeOnBackdropClick: false,
@@ -376,6 +383,7 @@ export class ExamDetailComponent implements OnInit {
   openPopupExamInfo(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamInfoComponent,
       {
         closeOnBackdropClick: false,
@@ -392,6 +400,7 @@ export class ExamDetailComponent implements OnInit {
   openPopupExamScore(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
+    setUserEmail(item.refCandidate.email);
     this.dialogService.open(PopupExamScoreComponent,
       {
         closeOnBackdropClick: false,

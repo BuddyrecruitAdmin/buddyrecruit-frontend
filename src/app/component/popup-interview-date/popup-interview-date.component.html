@@ -18,6 +18,10 @@
         <nb-option *ngFor="let location of locations" [value]="location.value">{{ location.label }}
         </nb-option>
       </nb-select>
+      <small *ngIf="errMsg.location" class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        {{ errMsg.location }}
+      </small>
     </div>
     <div class="form-control-group m-b-10">
       <label class="label m-b-5">Select Date From</label>

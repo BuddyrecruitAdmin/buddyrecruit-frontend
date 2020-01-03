@@ -9,7 +9,7 @@
         {{ items.candidateFlow?.refJR?.refJD?.position }}
       </small>
     </div>
-    <div *ngIf="role.refAuthorize.editCandidateInfo" class="pull-right">
+    <div *ngIf="role.refAuthorize.editCandidateInfo" class="actions">
       <button size="small" nbButton status="success" (click)="changeMode()">
         <nb-icon *ngIf="editable" icon="eye-outline"></nb-icon>
         <nb-icon *ngIf="!editable" icon="edit-2-outline"></nb-icon>
@@ -29,6 +29,45 @@
     </div> -->
   </nb-card-header>
   <nb-card-body *ngIf="!loading" class="dialog-body">
+    <!-- Reject -->
+    <div *ngIf="history.length">
+      <div class="title">
+        <span style="color: red" class="link underline" (click)="showHistory = !showHistory">
+          <nb-icon icon="info-outline"></nb-icon> Reject History
+        </span>
+      </div>
+      <div *ngIf="showHistory" class="border-padbottom border-all-reject box-pad box-header with-border">
+        <div *ngFor="let item of history" class="text-gray m-t-10">
+          <div *ngIf="item.refReject?.name || item.remark">
+            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+            <span>{{ item.refReject?.name }}</span>
+            <span *ngIf="item.remark">: {{ item.remark }}</span>
+          </div>
+          <div *ngIf="item.refUser || item.date" class="m-l-20">
+            <small>
+              ( {{ utilitiesService.setFullname(item.refUser) }},
+              {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <!-- Dup JR -->
+    <div *ngIf="multiJr.length" class="title">
+      <span style="color: orange" class="link underline" (click)="showMulti= !showMulti">
+        <nb-icon icon="info-outline"></nb-icon>Multi JR
+      </span>
+    </div>
+    <div *ngIf="showMulti" class="border-padbottom border-all-reject box-pad box-header with-border">
+      <div *ngFor="let mul of multiJr;let i = index;" class="text-gray m-t-10">
+        <span>{{ i+1 }}. JR: {{ mul.refJR.refJD.position }} - Department: {{ mul.refJR.departmentName }} </span>
+        <div>
+          <small class="m-l-20">(stage: {{ mul.refStage.name }})</small>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!showHistory || !showMulti" style="padding-bottom: 25px;"></div>
     <div class="title">
       <label class="label" nbTooltip="Personal Details">Personal Details</label>
     </div>
@@ -420,8 +459,7 @@
         <div class="row">
           <div class="col-lg-6">
             <tag-input [(ngModel)]="items.hardSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
-              [maxItems]="35" secondaryPlaceholder="Hard Skill" placeholder="+" [ngModelOptions]="{ standalone: true }"
-              [separatorKeyCodes]="[09, 32, 188]">
+              [maxItems]="35" secondaryPlaceholder="Hard Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
           <div class="col-lg-6">
@@ -460,8 +498,7 @@
         <div class="row">
           <div class="col-lg-6">
             <tag-input [(ngModel)]="items.softSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
-              [maxItems]="35" secondaryPlaceholder="Soft Skill" placeholder="+" [ngModelOptions]="{ standalone: true }"
-              [separatorKeyCodes]="[09, 32, 188]">
+              [maxItems]="35" secondaryPlaceholder="Soft Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
           <div class="col-lg-6">
@@ -503,7 +540,7 @@
           <div class="col-lg-6">
             <tag-input [(ngModel)]="items.certificate" [removable]="editable" [editable]="editable"
               [disable]="!editable" [maxItems]="35" secondaryPlaceholder="Certificate" placeholder="+"
-              [ngModelOptions]="{ standalone: true }" [separatorKeyCodes]="[09, 32, 188]">
+              [ngModelOptions]="{ standalone: true }">
             </tag-input>
           </div>
           <div class="col-lg-6">
@@ -518,6 +555,47 @@
               </nb-progress-bar>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <!-- Remark -->
+    <div class="border-padtop">
+      <div class="title">
+        <label class="label">Remark</label>
+      </div>
+      <div class="border-all box-pad box-header with-border">
+        <h6 *ngIf="items.comments.length < 1" class="text-gray text-center">No Comment</h6>
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <nb-card *ngFor="let item of allComments;let i = index;" [accent]="item.accent">
+              <nb-card-header>
+                <div class="title">
+                  <nb-user size="medium" [name]="utilitiesService.setFullname(item.lastChangedInfo.refUser)"
+                    [title]="item.lastChangedInfo.date"
+                    [picture]="item.lastChangedInfo.refUser.imageData"></nb-user>
+                </div>
+                <div class="actions">
+                  <nb-icon *ngIf="item.lastChangedInfo.refUser._id === role._id && editable" icon="trash-2-outline"
+                    class="link text-red" nbTooltip="Delete" (click)="delRemark(i)"></nb-icon>
+                </div>
+              </nb-card-header>
+              <nb-card-body style="min-height: auto">
+                {{ item.message }}
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+
+        <!-- <div class="title">
+          <label class="label">Comment</label>
+        </div> -->
+        <div *ngIf="editable" class="box-body text-center">
+          <textarea nbInput fullWidth [(ngModel)]="remark" [disabled]="!editable">
+          </textarea>
+          <br>
+          <button nbButton type="button" status="success" size="small" (click)="addComment()" [disabled]="!remark">
+            Add Comment
+          </button>
         </div>
       </div>
     </div>
@@ -545,7 +623,11 @@
     <!-- <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small"
       nbButton status="info" (click)="openApplication(items._id)">App Form</button> -->
     <!-- <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button> -->
-    <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()">SAVE</button>
-    <button nbButton status="default" size="small" (click)="ref.close(true)">CLOSE</button>
+    <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()" nbTooltip="Save">
+      <nb-icon icon="save-outline"></nb-icon>
+    </button>
+    <button nbButton status="default" size="small" (click)="ref.close(true)" nbTooltip="Close">
+      <nb-icon icon="close-outline"></nb-icon>
+    </button>
   </nb-card-footer>
 </nb-card>
