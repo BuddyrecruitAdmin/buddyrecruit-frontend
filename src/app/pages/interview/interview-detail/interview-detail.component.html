@@ -187,8 +187,10 @@
 
               <button *ngIf="item.condition.button.nextStep" nbButton status="success"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
-                [disabled]="item.condition.isExpired">
+                [disabled]="item.condition.isExpired || item.condition.button.disabled">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                <nb-badge *ngIf="item.condition.button.disabled" text="!" nbTooltip="Interview date is not arrived yet"
+                  status="warning" position="top right"></nb-badge>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
                 </span>

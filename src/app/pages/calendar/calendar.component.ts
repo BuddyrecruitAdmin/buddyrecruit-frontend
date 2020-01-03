@@ -14,7 +14,7 @@ import {
   isSameDay,
   isSameMonth,
   addHours,
-  addMinutes
+  addMinutes,
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import {
@@ -32,6 +32,8 @@ import { ResponseCode, Paging } from '../../shared/app.constants';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupAvailableDateComponent } from '../../component/popup-available-date/popup-available-date.component'
 import { Router, ActivatedRoute } from "@angular/router";
+import * as _ from 'lodash';
+import { Location } from '@angular/common';
 
 const colors: any = {
   green: {
@@ -49,6 +51,10 @@ const colors: any = {
   yellow: {
     primary: '#ffc816',
     secondary: '#ffc816'
+  },
+  gray: {
+    primary: '#d2d6d9',
+    secondary: '#d2d6d9'
   }
 };
 
@@ -96,14 +102,14 @@ export class CalendarComponent implements OnInit {
   event: any = {};
   users: any[];
   outlook: {
-    token: any,
     loading: boolean,
     signIn: boolean,
-    calendars: any
+    lastUpdated: Date
   };
   gmail: {
     loading: boolean,
-    signIn: boolean
+    signIn: boolean,
+    lastUpdated: Date
   };
   minutesRange = 30;
 
@@ -114,19 +120,20 @@ export class CalendarComponent implements OnInit {
     private toastrService: NbToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private location: Location,
   ) {
     this.role = getRole();
     this.innerHeight = window.innerHeight * 0.8;
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.outlook = {
-      token: '',
-      loading: true,
+      loading: false,
       signIn: false,
-      calendars: []
+      lastUpdated: null
     };
     this.gmail = {
-      loading: true,
-      signIn: false
+      loading: false,
+      signIn: false,
+      lastUpdated: null
     };
   }
 
@@ -138,11 +145,10 @@ export class CalendarComponent implements OnInit {
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.code) {
-        this.service.getTokenOutlookCalendar(params.code).subscribe(response => {
-          if (response.data.token) {
-            this.getCalendar();
+        this.service.outlookDecode(params.code).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.router.navigate(['/employer/calendar']);
           }
-          this.outlook.loading = false;
         });
       } else {
         this.getCalendar();
@@ -151,16 +157,19 @@ export class CalendarComponent implements OnInit {
   }
 
   async getCalendar() {
-    // await this.checkTokenOutlookCalendar();
-    // await this.getOutlookCalendarList(this.outlook.token);
+    this.events = [];
+    // await this.outlookGetToken();
+    await this.outlookGetCalendar();
     await this.getDetail();
   }
 
   getDetail() {
     return new Promise((resolve) => {
-      this.service.getList().subscribe(response => {
+      const start = this.getStartDateOfMonth();
+      const end = this.getEndDateOfMonth();
+      this.service.getList(start, end).subscribe(response => {
         if (response.code === ResponseCode.Success) {
-          this.calendarData = response.data.calendar;
+          this.calendarData = response.data;
           this.setWorkingDays();
           this.changeCalendarType(this.byWorkingDays);
         } else {
@@ -172,26 +181,82 @@ export class CalendarComponent implements OnInit {
   }
 
   changeCalendarType(byWorkingDays: boolean) {
-    // this.events = [];
+    this.events = [];
     this.excludeDays = [];
     this.dialogDate = new Date();
 
+    // Outlook
+    if (this.calendarData.outlook && this.calendarData.outlook.period) {
+      this.calendarData.outlook.period.forEach(period => {
+        this.outlook.lastUpdated = new Date(period.lastUpdated);
+        if (period.events) {
+          period.events.forEach(event => {
+            let start = new Date(event.start);
+            let end = new Date(event.end);
+            let title = `${this.utilitiesService.convertTime(event.start)} - ${this.utilitiesService.convertTime(event.end)} (Outlook Calendar)`;
+            if (event.isAllDay) {
+              end = start;
+              title = 'All day (Outlook Calendar)';
+            }
+            this.events.push({
+              id: event.iCalUId || event.Id || event._id,
+              start: start,
+              end: end,
+              title: title,
+              color: colors.yellow,
+              meta: {
+                type: 'warning'
+              },
+              allDay: event.isAllDay,
+              cssClass: 'other'
+            });
+          });
+        }
+      });
+    }
+
+    // Interview Date
     if (this.calendarData.interviewDates) {
       this.calendarData.interviewDates.forEach(element => {
-        const startDate = element.refCandidateFlow.pendingInterviewInfo.startDate;
-        const endDate = element.refCandidateFlow.pendingInterviewInfo.endDate;
+        const startDate = new Date(element.refCandidateFlow.pendingInterviewInfo.startDate);
+        const endDate = new Date(element.refCandidateFlow.pendingInterviewInfo.endDate);
         if (this.utilitiesService.dateIsValid(startDate)
           && this.utilitiesService.dateIsValid(endDate)) {
-          this.events.push({
-            id: element.refCandidateFlow._id,
-            start: new Date(startDate),
-            end: new Date(endDate),
-            title: this.buildTitle(element),
-            color: colors.red,
-            meta: {
-              type: 'danger'
+          let event: CalendarEvent;
+          if (element.refCandidateFlow.reject.flag) {
+            event = {
+              id: element.refCandidateFlow._id,
+              start: new Date(startDate),
+              end: new Date(endDate),
+              title: this.buildTitle(element),
+              color: colors.gray,
+              meta: {
+                type: 'default'
+              },
+              cssClass: 'cancelled'
             }
-          });
+          } else {
+            event = {
+              id: element.refCandidateFlow._id,
+              start: new Date(startDate),
+              end: new Date(endDate),
+              title: this.buildTitle(element),
+              color: colors.red,
+              meta: {
+                type: 'danger'
+              },
+            }
+          }
+          if (element.refCandidateFlow.pendingInterviewInfo.outlook && element.refCandidateFlow.pendingInterviewInfo.outlook.iCalUId) {
+            const index = this.events.findIndex(event => event.id === element.refCandidateFlow.pendingInterviewInfo.outlook.iCalUId);
+            if (index >= 0) {
+              this.events[index] = event;
+            } else {
+              this.events.push(event);
+            }
+          } else {
+            this.events.push(event);
+          }
         }
       });
     }
@@ -432,18 +497,22 @@ export class CalendarComponent implements OnInit {
       if (response.data && response.data.userInterviews.length) {
         response.data.userInterviews.forEach(user => {
           let active = false;
-          user.calendar.availableDates.forEach(element => {
-            const startDate = new Date(element.startDate);
-            const endDate = new Date(element.endDate);
-            if (this.candidateFlow.pendingInterviewInfo) {
-              if (new Date(startDate) <= new Date(this.candidateFlow.pendingInterviewInfo.startDate)) {
-                if (new Date(this.candidateFlow.pendingInterviewInfo.startDate) <= new Date(endDate)) {
-                  active = true;
-                  return;
+          if (this.candidateFlow.pendingInterviewInfo) {
+            if (this.candidateFlow.pendingInterviewInfo.selectDateFrom === 'CUSTOMIZE') {
+              active = true;
+            } else {
+              user.calendar.availableDates.forEach(element => {
+                const startDate = new Date(element.startDate);
+                const endDate = new Date(element.endDate);
+                if (new Date(startDate) <= new Date(this.candidateFlow.pendingInterviewInfo.startDate)) {
+                  if (new Date(this.candidateFlow.pendingInterviewInfo.startDate) <= new Date(endDate)) {
+                    active = true;
+                    return;
+                  }
                 }
-              }
+              });
             }
-          });
+          }
           this.users.push({
             refUser: user.refUser._id,
             name: this.utilitiesService.setFullname(user.refUser),
@@ -514,6 +583,9 @@ export class CalendarComponent implements OnInit {
       case colors.yellow:
         // on click other meeting
         break;
+      case colors.gray:
+        this.openPopupInterviewInfo(event.id);
+        break;
       default:
         this.callPopupAvailableDate();
         break;
@@ -526,50 +598,60 @@ export class CalendarComponent implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+    this.getCalendar();
   }
 
-  signInOutlook() {
-    this.service.signInOutlookCalendar().subscribe(response => {
+  // OUTLOOK
+
+  outlookLogin() {
+    this.service.outlookLogin().subscribe(response => {
       if (response.data.loginUrl) {
-        window.open(response.data.loginUrl, '_blank', '');
+        window.open(response.data.loginUrl, '_self', '', true);
       }
     });
   }
 
-  checkTokenOutlookCalendar() {
+  // outlookGetToken() {
+  //   return new Promise((resolve) => {
+  //     const username = 'vsengi@outlook.com'; // test
+  //     this.outlook.loading = true;
+  //     this.service.outlookGetToken(username).subscribe(response => {
+  //       if (response.data.token) {
+  //         this.outlook.token = response.data.token;
+  //         this.outlook.signIn = true;
+  //       } else {
+  //         this.outlook.signIn = false;
+  //       }
+  //       this.outlook.loading = false;
+  //       resolve();
+  //     });
+  //   });
+  // }
+
+  outlookGetCalendar() {
     return new Promise((resolve) => {
-      this.service.checkTokenOutlookCalendar(this.role.username).subscribe(response => {
-        if (response.data.token) {
-          this.outlook.token = response.data.token;
+      this.outlook.loading = true;
+      const start = this.getStartDateOfMonth();
+      const end = this.getEndDateOfMonth();
+      this.service.outlookGetCalendar(start, end).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
           this.outlook.signIn = true;
+          // response.data.forEach(element => {
+          //   this.events.push({
+          //     id: element.Id,
+          //     start: new Date(element.Start.DateTime),
+          //     end: new Date(element.End.DateTime),
+          //     title: `${this.utilitiesService.convertTime(element.Start.DateTime)} - ${this.utilitiesService.convertTime(element.End.DateTime)} ${element.Subject}`,
+          //     color: colors.yellow,
+          //     meta: {
+          //       type: 'warning'
+          //     }
+          //   });
+          // });
         } else {
           this.outlook.signIn = false;
         }
         this.outlook.loading = false;
-        resolve();
-      });
-    });
-  }
-
-  getOutlookCalendarList(token: any = '') {
-    return new Promise((resolve) => {
-      const start = new Date(2019, 11, 1);
-      const end = new Date(2020, 0, 31);
-      this.service.getOutlookCalendars(token, start, end).subscribe(response => {
-        if (response.data) {
-          response.data.forEach(element => {
-            this.events.push({
-              id: element.Id,
-              start: new Date(element.Start.DateTime),
-              end: new Date(element.End.DateTime),
-              title: `${this.utilitiesService.convertTime(element.Start.DateTime)} - ${this.utilitiesService.convertTime(element.End.DateTime)} ${element.Subject}`,
-              color: colors.yellow,
-              meta: {
-                type: 'warning'
-              }
-            });
-          });
-        }
         resolve();
       });
     });
@@ -595,6 +677,16 @@ export class CalendarComponent implements OnInit {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
+  }
+
+  getStartDateOfMonth() {
+    let date = this.viewDate || new Date();
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+
+  getEndDateOfMonth() {
+    let date = this.viewDate || new Date();
+    return endOfMonth(date);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

@@ -1,7 +1,7 @@
 <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
-    <div class="title">
+    <div class="pull-left">
       <label class="text-cap" [nbTooltip]="utilitiesService.setFullname(items)">
         {{ utilitiesService.setFullname(items) }}
       </label>

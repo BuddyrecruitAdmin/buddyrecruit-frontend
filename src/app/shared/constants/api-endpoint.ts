@@ -10,6 +10,12 @@ export const API_ENDPOINT = {
       LIST: "user/calendar/list",
       BY_JR: "user/calendar/jr",
       EDIT: "user/calendar/edit",
+      OUTLOOK: {
+        LOGIN: "user/calendar/outlook/login",
+        DECODE: "user/calendar/outlook/decode",
+        GET_TOKEN: "user/calendar/outlook/getToken",
+        CALENDAR: "user/calendar/outlook/calendar",
+      }
     },
     WORKING_DAYS: {
       LIST: "user/workingDays/list",

@@ -6,9 +6,9 @@
 export const environment = {
   production: false,
   // API_URI: "http://localhost:4201", // LOCAL
-  // API_URI: 'http://192.168.25.59:9001', // DEV P KG LAN
-  //API_URI: 'http://192.168.25.59:9101', // DEV P KG 2
-  API_URI: 'http://10.35.0.69:9001', // DEV N gos
+  API_URI: 'http://10.99.0.50:9001', // DEV P KG
+  // API_URI: 'http://10.35.0.69:9001', // DEV N gos 15
+  // API_URI: 'http://10.25.0.151:9001', // DEV N gos 6 
   // API_URI: 'http://192.168.35.87:9001', // DEV P'Mo
   WriteLog: true
 };

@@ -141,7 +141,7 @@ export function setCollapse(collapse: boolean = true) {
 
 export function getCollapse() {
   const collapse = JSON.parse(localStorage.getItem(Collapse));
-  return (collapse === undefined || collapse === null) ? true : collapse;
+  return (collapse !== true && collapse !== false) ? true : collapse;
 }
 
 export function setDate(date: Date = null) {

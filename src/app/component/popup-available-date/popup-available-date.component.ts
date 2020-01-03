@@ -51,7 +51,7 @@ export class PopupAvailableDateComponent implements OnInit {
     this.loading = true;
     this.calendarService.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.calendarData = response.data.calendar;
+        this.calendarData = response.data;
         this.changeDate(this.date);
       } else {
         this.showToast('danger', 'Error Message', response.message);

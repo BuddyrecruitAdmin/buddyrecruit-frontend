@@ -138,7 +138,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.getNotification();
     if (this.role) {
       setInterval(() => {
-        if (this.utilitiesService.getRole()) {
+        if (this.utilitiesService.getRole() && this.utilitiesService.getToken()) {
           this.checkNewNotification();
         }
       }, 30000);

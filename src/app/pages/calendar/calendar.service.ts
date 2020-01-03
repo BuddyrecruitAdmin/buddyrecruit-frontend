@@ -16,8 +16,10 @@ export class CalendarService extends NetworkService {
     super('CalendarService', httpClient, errorHandler);
   }
 
-  getList(): Observable<ApiResponse> {
+  getList(start = null, end = null): Observable<ApiResponse> {
     const body = {
+      start: start,
+      end: end
     };
     return this.post(API_ENDPOINT.USERS.CALENDAR.LIST, body);
   }
@@ -29,41 +31,39 @@ export class CalendarService extends NetworkService {
     return this.post(API_ENDPOINT.USERS.CALENDAR.BY_JR, body);
   }
 
-  edit(data: any): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.USERS.CALENDAR.EDIT, data);
+  edit(body: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.USERS.CALENDAR.EDIT, body);
   }
 
-  signInOutlookCalendar(): Observable<ApiResponse> {
+  outlookLogin(): Observable<ApiResponse> {
     const body = {
-      redirect_uri: 'http://localhost:4200/employer/calendar'
+      redirect_uri: window.location.href,
+      username: ''
     }
-    return this.signInOutlook(body);
+    return this.post(API_ENDPOINT.USERS.CALENDAR.OUTLOOK.LOGIN, body);
   }
 
-  checkTokenOutlookCalendar(username: any): Observable<ApiResponse> {
-    const url = '';
-    const body = {
-      // username: username
-      // username: 'alex_cs_kku@hotmail.com'
-      username: 'vsengi@outlook.com'
-    };
-    return this.checkTokenOutlook(url, body);
-  }
-
-  getTokenOutlookCalendar(code): Observable<ApiResponse> {
+  outlookDecode(code: any): Observable<ApiResponse> {
     const body = {
       code: code,
-      redirect_uri: 'http://localhost:4200/employer/calendar'
+      redirect_uri: window.location.href
     };
-    return this.getTokenOutlook(body);
+    return this.post(API_ENDPOINT.USERS.CALENDAR.OUTLOOK.DECODE, body);
   }
 
-  getOutlookCalendars(token, start, end): Observable<ApiResponse> {
+  outlookGetToken(username: any): Observable<ApiResponse> {
     const body = {
-      token: token,
+      username: username
+    }
+    return this.post(API_ENDPOINT.USERS.CALENDAR.OUTLOOK.GET_TOKEN, body);
+  }
+
+  outlookGetCalendar(start, end): Observable<ApiResponse> {
+    const body = {
       start: start,
       end: end,
     };
-    return this.getOutlookCalendar(body);
+    return this.post(API_ENDPOINT.USERS.CALENDAR.OUTLOOK.CALENDAR, body);
   }
+
 }

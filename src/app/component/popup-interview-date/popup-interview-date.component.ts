@@ -64,6 +64,7 @@ export class PopupInterviewDateComponent implements OnInit {
       time: ''
     }
   };
+  pendingInterviewInfo: any;
 
   constructor(
     private candidateService: CandidateService,
@@ -164,6 +165,7 @@ export class PopupInterviewDateComponent implements OnInit {
         this.stageId = response.data.candidateFlow.refStage._id;
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
 
+        this.pendingInterviewInfo = response.data.candidateFlow.pendingInterviewInfo;
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
         this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'AVAILABLE';
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingInterviewInfo.startDate)) {
@@ -178,6 +180,8 @@ export class PopupInterviewDateComponent implements OnInit {
             this.setDropdownTime(this.date);
             this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
           }
+        } else {
+          this.selectDateFrom = 'AVAILABLE';
         }
         if (response.data.candidateFlow.refJR.userInterviews.length) {
           response.data.candidateFlow.refJR.userInterviews.forEach(element => {
@@ -187,10 +191,14 @@ export class PopupInterviewDateComponent implements OnInit {
               active: false
             });
           });
+        }
+        if (this.selectDateFrom === 'AVAILABLE') {
           this.setDropdownDate();
           this.setDropdownTime(this.date);
           this.time = response.data.candidateFlow.pendingInterviewInfo.startDate;
           this.setUsers(this.date, this.time);
+        } else {
+          this.customizeUser();
         }
         if (response.data.candidateFlow.refStage.refMain.name === 'Pending Appointment') {
           this.canApprove = true;
@@ -342,6 +350,25 @@ export class PopupInterviewDateComponent implements OnInit {
     return this.sum;
   }
 
+  customizeUser() {
+    if (this.users && this.users.length) {
+      if (this.pendingInterviewInfo.userInterviews) {
+        this.users.map(user => {
+          const found = this.pendingInterviewInfo.userInterviews.find(element => {
+            return element.refUser === user.refUser;
+          });
+          if (found) {
+            user.active = true;
+          }
+        });
+      } else {
+        this.users.map(user => {
+          user.active = true;
+        });
+      }
+    }
+  }
+
   save() {
     if (this.validation()) {
       this.loading = true;
@@ -454,6 +481,7 @@ export class PopupInterviewDateComponent implements OnInit {
   setRequest(): any {
     let startDate: any;
     let endDate: any;
+    let users = [];
     if (this.selectDateFrom === 'AVAILABLE') {
       startDate = new Date(this.time);
       endDate = new Date(this.time);
@@ -462,14 +490,22 @@ export class PopupInterviewDateComponent implements OnInit {
       startDate = this.utilitiesService.convertTimePickerToDate(this.startTime, this.date2);
       endDate = this.utilitiesService.convertTimePickerToDate(this.endTime, this.date2);
     }
-    const data = {
-      pendingInterviewInfo: {
-        startDate: startDate,
-        endDate: endDate,
-        refLocation: this.location,
-        selectDateFrom: this.selectDateFrom,
-        flag: true,
+    this.users.forEach(element => {
+      if (element.active) {
+        users.push({
+          refUser: element.refUser
+        });
       }
+    });
+    let pendingInterviewInfo = this.pendingInterviewInfo;
+    pendingInterviewInfo.startDate = startDate;
+    pendingInterviewInfo.endDate = endDate;
+    pendingInterviewInfo.refLocation = this.location;
+    pendingInterviewInfo.selectDateFrom = this.selectDateFrom;
+    pendingInterviewInfo.userInterviews = users;
+    pendingInterviewInfo.flag = true
+    const data = {
+      pendingInterviewInfo: pendingInterviewInfo,
     };
     return data;
   }
@@ -492,8 +528,13 @@ export class PopupInterviewDateComponent implements OnInit {
     });
   }
 
-  onChangeSelectDateFrom() {
+  onChangeSelectDateFrom(value) {
     this.errMsg = this.initialErrMsg();
+    if (value === 'AVAILABLE') {
+      this.setUsers(this.date, this.time);
+    } else {
+      this.customizeUser();
+    }
   }
 
   initialErrMsg(): any {

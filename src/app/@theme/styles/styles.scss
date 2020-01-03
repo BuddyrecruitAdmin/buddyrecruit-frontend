@@ -783,7 +783,7 @@
   // --------------------------------------------------------------------
   // Badge
 
-  nb-badge, .badge {
+  nb-badge, .badge, .badge-default {
     background: var(--color-light-gray);
     color: var(--color-black);
   }
@@ -985,6 +985,13 @@
   .cal-event-title {    
     color: var(--color-white);
   }
+  .cal-event-title:hover {
+    text-decoration: none;
+    opacity: 0.8;
+  }
+  .cancelled .cal-event-title {
+    text-decoration: line-through;
+  }
   .cal-event-action {
     color: var(--color-light-gray);
   }
@@ -996,6 +1003,15 @@
   }
   .cal-event-action .fa-times {
     color: var(--color-red);
+  }
+  .cancelled .cal-event-title {
+    text-decoration: line-through;
+  }
+  .other .cal-event-title,
+  .other .cal-event-title:hover {
+    text-decoration: none;
+    opacity: 1;
+    cursor: default;
   }
 
   // --------------------------------------------------------------------

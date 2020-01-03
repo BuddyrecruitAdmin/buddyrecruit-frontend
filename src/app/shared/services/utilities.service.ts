@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Devices } from '../interfaces/common.interface';
 import { InnerWidth } from '../../shared/app.constants';
-import { getRole } from '../../shared/services/auth.service';
+import { getRole, getToken } from '../../shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -404,6 +404,10 @@ export class UtilitiesService {
 
   getRole(): any {
     return getRole();
+  }
+
+  getToken(): any {
+    return getToken();
   }
 
   isValidEmail(email: string): boolean {

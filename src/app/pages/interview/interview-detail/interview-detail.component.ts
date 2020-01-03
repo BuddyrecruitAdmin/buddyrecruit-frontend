@@ -234,8 +234,9 @@ export class InterviewDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         comment: false,
+        disabled: false
       },
-      isExpired: false
+      isExpired: false,
     };
     const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
       return step.refStage._id === item.refStage._id;
@@ -249,8 +250,13 @@ export class InterviewDetailComponent implements OnInit {
             if (this.tabSelected === 'PENDING') {
               condition.icon.interviewDate = true;
               condition.button.reject = true;
-              if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
+              if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate)
+                && item.pendingInterviewInfo.refLocation
+              ) {
                 condition.button.nextStep = true;
+                if (this.utilitiesService.isDateGreaterThanToday(item.pendingInterviewInfo.startDate)) {
+                  condition.button.disabled = true;
+                }
               } else {
                 condition.button.interviewDate = true;
               }
