@@ -89,7 +89,7 @@ export class PopupCvComponent implements OnInit {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
-    this.innerWidthCard = this.innerWidth *0.9;
+    this.innerWidthCard = this.innerWidth * 0.9;
   }
 
   ngOnInit() {
@@ -156,15 +156,31 @@ export class PopupCvComponent implements OnInit {
         this.items = response.data;
         this.history = this.items.reject;
         this.multiJr = response.data.otherJR;
+        this.allComments = [];
         this.items.comments.map(ele => {
+          this.allComments.push({
+            accent: (ele.lastChangedInfo.refUser._id === this.role._id) ? 'success' : 'default',
+            lastChangedInfo: {
+              refUser: ele.lastChangedInfo.refUser,
+              date: this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
+            },
+            message: ele.message
+          })
+          console.log(this.allComments)
+          console.log(this.items.comments)
           // ele.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
-          if (ele.lastChangedInfo.refUser._id === this.role._id) {
-            ele.accent = 'success'
-          } else {
-            ele.accent = 'default'
-          }
+          // if (ele.lastChangedInfo.refUser._id === this.role._id) {
+          //   ele.accent = 'success'
+          // } else {
+          //   ele.accent = 'default'
+          // }
         })
-        this.allComments = this.items.comments;
+        // this.allComments = this.items.comments;
+        // this.allComments.map(res => {
+        //   res.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(res.lastChangedInfo.date);
+        // });
+        // console.log(this.items.comments)
+        // console.log(this.allComments)
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
           var timeDiff = Math.abs(Date.now() - this.items.birth.getTime());
@@ -332,14 +348,17 @@ export class PopupCvComponent implements OnInit {
   }
 
   delRemark(index: any) {
+    this.allComments.splice(index, 1);
     this.items.comments.splice(index, 1);
   }
 
   addComment() {
     let commen;
+    let dateAdd;
+    dateAdd = new Date();
     commen = {
       lastChangedInfo: {
-        date: this.utilitiesService.convertDateTime(new Date()),
+        date: dateAdd,
         refUser: {
           firstname: this.role.firstname,
           lastname: this.role.lastname,
@@ -351,7 +370,23 @@ export class PopupCvComponent implements OnInit {
       accent: 'success',
       _id: undefined
     }
-    this.allComments.push(commen)
+    this.items.comments.push(commen)
+    let showCom;
+    showCom = {
+      lastChangedInfo: {
+        date: this.utilitiesService.convertDateTime(dateAdd),
+        refUser: {
+          firstname: this.role.firstname,
+          lastname: this.role.lastname,
+          _id: this.role._id,
+          imageData: this.role.imagePath
+        }
+      },
+      message: this.remark,
+      accent: 'success',
+      _id: undefined
+    }
+    this.allComments.push(showCom)
     this.remark = '';
   }
 
