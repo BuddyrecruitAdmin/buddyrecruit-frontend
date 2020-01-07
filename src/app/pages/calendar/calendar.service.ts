@@ -44,9 +44,10 @@ export class CalendarService extends NetworkService {
   }
 
   outlookDecode(code: any): Observable<ApiResponse> {
+    const href = window.location.href.split('?code')[0];
     const body = {
       code: code,
-      redirect_uri: window.location.href
+      redirect_uri: href
     };
     return this.post(API_ENDPOINT.USERS.CALENDAR.OUTLOOK.DECODE, body);
   }
