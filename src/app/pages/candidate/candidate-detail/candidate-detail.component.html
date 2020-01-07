@@ -144,6 +144,10 @@
               (click)="openPopupExamDate(item)"></nb-icon>
             <div class="m-l-15">
               <div class="text-group">
+                <label class="label">Exam Location</label>
+                <span>{{ item.candidateFlow?.examInfo?.refLocation?.name || '-' }}</span>
+              </div>
+              <div class="text-group">
                 <label class="label">Exam Date</label>
                 <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.examInfo?.date) || '-' }}</span>
               </div>

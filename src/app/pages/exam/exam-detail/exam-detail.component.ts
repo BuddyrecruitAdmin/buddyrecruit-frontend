@@ -218,9 +218,6 @@ export class ExamDetailComponent implements OnInit {
                 }
               }
             }
-            else {
-              condition.button.revoke = true;
-            }
             break;
         }
       }

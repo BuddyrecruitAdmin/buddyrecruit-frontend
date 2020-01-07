@@ -166,21 +166,7 @@ export class PopupCvComponent implements OnInit {
             },
             message: ele.message
           })
-          console.log(this.allComments)
-          console.log(this.items.comments)
-          // ele.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
-          // if (ele.lastChangedInfo.refUser._id === this.role._id) {
-          //   ele.accent = 'success'
-          // } else {
-          //   ele.accent = 'default'
-          // }
         })
-        // this.allComments = this.items.comments;
-        // this.allComments.map(res => {
-        //   res.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(res.lastChangedInfo.date);
-        // });
-        // console.log(this.items.comments)
-        // console.log(this.allComments)
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
           var timeDiff = Math.abs(Date.now() - this.items.birth.getTime());

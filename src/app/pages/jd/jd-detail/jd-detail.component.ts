@@ -30,10 +30,8 @@ import { UserService } from '../../setting/user/user.service';
 })
 export class JdDetailComponent implements OnInit {
   jd: any;
-  getEduList: any;
   role: any;
   countDivision: any;
-  checkG: boolean;
   touched: boolean;
   touchedJobPo: boolean;
   touchedJobMail: boolean;
@@ -48,7 +46,6 @@ export class JdDetailComponent implements OnInit {
   isAddWork: boolean;
   checkCondition: boolean;
   checkMax: boolean;
-  detailForm: FormGroup;
   sTotal: any;
   hardTotal: any;
   softTotal: any;
@@ -63,7 +60,6 @@ export class JdDetailComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   positionMaster: DropDownValue[];
   departMentAdmin: DropDownValue[];
-  divisionAdmin: DropDownValue[];
   divisionOptions: DropDownGroup[];
   divisionAll: DropDownGroup[];
   alertType: string;
@@ -71,10 +67,8 @@ export class JdDetailComponent implements OnInit {
   private _alertMessage = new Subject<string>();
   public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'jd' });
   bHasFile: boolean;
-  staticAlertClosed = false;
   state: string;
   _id: string;
-  positionCheck: AbstractControl;
   sErrorPosition: string;
   sErrorrefCheck: string;
   SErrorAll: string;
@@ -102,8 +96,6 @@ export class JdDetailComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   checkDivision: boolean;
-  activeOnly: boolean;
-  workMax: boolean;
   sErrorDivision: string;
   devices: Devices;
   constructor(
@@ -113,9 +105,7 @@ export class JdDetailComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,
-    private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private userService: UserService,
     private dropdownService: DropdownService,
   ) {
     this.role = getRole();
@@ -125,10 +115,7 @@ export class JdDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activeOnly = true;
     this.initialModel();
-    // this.initialDropdown();
-
     this.checkDivision = false;
     this.bHasFile = false;
     this.modeEditable = true;
@@ -149,17 +136,13 @@ export class JdDetailComponent implements OnInit {
           this._id = params.id;
           if (params.action === "edit") {
             this.state = State.Edit;
-            this._id = params.id;
-            this.getDetail();
           } else if (params.action === "duplicate") {
-            this.state = "duplicate";
-            this._id = params.id;
-            this.getDetail();
+            this.state = State.Duplicate;
           } else {
             this.state = "View";
             this.checkPreview = true;
-            this.getDetail();
           }
+          this.getDetail();
         } else {
           this.state = State.Create;
           this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
@@ -214,18 +197,6 @@ export class JdDetailComponent implements OnInit {
   async initialDropdown() {
     await this.getPosition();
     await this.getDepartment();
-    // else {
-    //   this.userService.getDetail(this.role._id).subscribe(response => {
-    //     if (response.code === ResponseCode.Success) {
-    //       if (response.data.departmentId) {
-    //         this.jd.departmentId = response.data.departmentId;
-    //       }
-    //       if (response.data.divisionId) {
-    //         this.jd.divisionId = response.data.divisionId;
-    //       }
-    //     }
-    //   });
-    // }
     await this.getEducation();
   }
 
@@ -589,7 +560,6 @@ export class JdDetailComponent implements OnInit {
     this.touchedOut = true;
     switch (option) {
       case "EDUCATION": {
-        let eTotal = 0;
         let checkMax = false;
         let checkEqual = false;
         if (this.jd.weightScore.education.total != 0) {
@@ -616,15 +586,6 @@ export class JdDetailComponent implements OnInit {
             this.touched = false;
             this.dialogRef.close();
           }
-          // this.eduTotal = eTotal;
-          // if (eScore != eTotal) {
-          //   this.sErrorBox = MESSAGE[156];
-          //   this.eduTotal = 0;
-          // } else {
-          //   this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
-          //   this.touched = false;
-          //   this.dialogRef.close();
-          // }
         } else {
           this.jd.weightScore.education.weightScore = _.cloneDeep(this.TempEdu)
           this.touched = false;
@@ -940,7 +901,7 @@ export class JdDetailComponent implements OnInit {
                 }
               });
             }
-            if (this.state === "duplicate") {
+            if (this.state === State.Duplicate) {
               this.service.create(request).subscribe(response => {
                 if (response.code === ResponseCode.Success) {
                   this.showToast('success', 'Success Message', response.message);
@@ -956,7 +917,6 @@ export class JdDetailComponent implements OnInit {
   }
 
   onChanheWork(i: any) {
-    console.log(i)// i start 0 
     if (this.jd.weightScore.workExperience.weight.length > 1) {
       if (i + 1 != this.jd.weightScore.workExperience.weight.length) {
         this.jd.weightScore.workExperience.weight[i + 1].low = this.jd.weightScore.workExperience.weight[i].high;
@@ -966,7 +926,6 @@ export class JdDetailComponent implements OnInit {
 
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     let data = JSON.parse(response); //success server response
-    console.log(data.uploadname)
     this.jd.attachment.uploadName = data.uploadname;
     this.bHasFile = false;
     this.saveAll();
@@ -1097,74 +1056,46 @@ export class JdDetailComponent implements OnInit {
 
   setRequest(): any {
     if (this.jd.weightScore.certificate.weight.length > 0) {
-      // this.convertArray(this.jd.weightScore.certificate.weight);
       this.jd.weightScore.certificate.weight.map(weight => {
         if (weight.keyword.length) {
-          weight.keyword = weight.keyword.map(element => {
-            if (element.value) {
-              return element.value;
-            } else if (element) {
-              return element;
-            }
-          });
+          weight.keyword = this.convertArray(weight.keyword);
         }
       });
     }
     if (this.jd.weightScore.softSkill.weight.length > 0) {
-      // this.convertArray(this.jd.weightScore.softSkill.weight);
       this.jd.weightScore.softSkill.weight.map(weight => {
         if (weight.keyword.length) {
-          weight.keyword = weight.keyword.map(element => {
-            if (element.value) {
-              return element.value;
-            } else if (element) {
-              return element;
-            }
-          });
+          weight.keyword = this.convertArray(weight.keyword);
         }
       });
     }
     if (this.jd.weightScore.hardSkill.weight.length > 0) {
-      // this.convertArray(this.jd.weightScore.hardSkill.weight);
       this.jd.weightScore.hardSkill.weight.map(weight => {
         if (weight.keyword.length) {
-          weight.keyword = weight.keyword.map(element => {
-            if (element.value) {
-              return element.value;
-            } else if (element) {
-              return element;
-            }
-          });
+          weight.keyword = this.convertArray(weight.keyword);
         }
       });
     }
     if (this.jd.keywordSearch.length > 0) {
-      this.jd.keywordSearch = this.jd.keywordSearch.map(element => {
-        if (element.value) {
-          return element.value;
-        } else if (element) {
-          return element;
-        }
-      });
+      this.jd.keywordSearch = this.convertArray(this.jd.keywordSearch);
     }
-    if (this.state === "duplicate") {
+    if (this.state === State.Duplicate) {
       this.jd._id = undefined;
     }
     const request = _.cloneDeep(this.jd);
     return request;
   }
 
-  // convertArray(conA) {
-  //   conA.map(gobj => {  //array.object to array
-  //     gobj = gobj.keyword.map(mobj => {
-  //       if (mobj.value) {
-  //         mobj = mobj.value;
-  //         return mobj;
-  //       }
-  //       return mobj;
-  //     })
-  //   })
-  // }
+  convertArray(conA) {
+    conA = conA.map(gobj => {  //array.object to array\
+      if (gobj.value) {
+        return gobj = gobj.value;
+      } else if (gobj) {
+        return gobj;
+      }
+    })
+    return conA;
+  }
 
   calculateTotal() {
     this.checkValue();

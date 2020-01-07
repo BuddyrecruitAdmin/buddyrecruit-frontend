@@ -384,7 +384,9 @@ export class SignContractDetailComponent implements OnInit {
   openPopupSignContractDate(item: any, icon: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
-    setIconId(icon);
+    if (this.utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo.sign.date)) {
+      setIconId("True");
+    }
     this.dialogService.open(PopupSignDateComponent,
       {
         closeOnBackdropClick: false,

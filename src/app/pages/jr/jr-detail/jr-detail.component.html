@@ -13,10 +13,10 @@
             <div class="form-control-group" [ngClass]="{ 'has-error': touched }">
               <label class="label" for="name">Job Position <span class="text-red">*</span></label>
               <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
-                [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'"
+                [disabled]="editCheck || duplicateCheck || checkPreview"
                 (selectedChange)="onChangeJobposition($event)" fullWidth>
                 <nb-option *ngFor="let job of JobPosition" [value]="job.value"
-                  [disabled]="editCheck || duplicateCheck || checkPreview || state === 'edit'">
+                  [disabled]="editCheck || duplicateCheck || checkPreview">
                   {{ job.label }}
                 </nb-option>
               </nb-select>
