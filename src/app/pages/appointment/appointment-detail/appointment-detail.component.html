@@ -91,23 +91,25 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <label class="label text-light-gray">Exam Score</label>
-                  <div class="m-l-15">
-                    <div class="text-group">
-                      <label class="label">Exam Score</label>
-                      <span>{{ item.pendingExamScoreInfo?.examScore || '0' }}</span>
-                    </div>
-                    <div class="text-group">
-                      <label class="label">Exam Remark</label>
-                      <span>{{ item.pendingExamScoreInfo?.examRemark || '-' }}</span>
-                    </div>
-                    <div class="text-group">
-                      <label class="label">Attitude Score</label>
-                      <span>{{ item.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
-                    </div>
-                    <div class="text-group">
-                      <label class="label">Attitude Remark</label>
-                      <span>{{ item.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+                  <div *ngIf="item.examInfo.flag">
+                    <label class="label text-light-gray">Exam Score</label>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Exam Score</label>
+                        <span>{{ item.pendingExamScoreInfo?.examScore || '0' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Exam Remark</label>
+                        <span>{{ item.pendingExamScoreInfo?.examRemark || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Attitude Score</label>
+                        <span>{{ item.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Attitude Remark</label>
+                        <span>{{ item.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+                      </div>
                     </div>
                   </div>
                   <div class="m-t-5">

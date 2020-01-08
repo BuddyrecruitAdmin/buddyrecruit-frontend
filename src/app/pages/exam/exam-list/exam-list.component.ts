@@ -118,7 +118,11 @@ export class ExamListComponent implements OnInit {
     this.items = [];
     this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.items = response.data;
+        response.data.map(element => {
+          if (element.requiredExam) {
+            this.items.push(element)
+          }
+        });
         this.items.map(item => {
           item.daysBeforeExpire = this.utilitiesService.calculateDuration2Date(new Date(), item.duration.endDate);
         });

@@ -558,9 +558,11 @@
   .text-group {
 
     line-height: 1.5rem;
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: initial; 
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    word-wrap: break-word;
+
     label {
       font-size: 0.8rem;
     }
