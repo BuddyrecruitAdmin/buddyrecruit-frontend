@@ -537,8 +537,17 @@ export class PopupInterviewDateComponent implements OnInit {
     this.errMsg = this.initialErrMsg();
     if (value === 'AVAILABLE') {
       this.setUsers(this.date, this.time);
+      //ใช้ให้โหลด date ทัน
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 100);
     } else {
       this.customizeUser();
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 100);
     }
   }
 
