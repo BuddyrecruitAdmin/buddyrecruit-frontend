@@ -6,7 +6,6 @@ import { NbDialogRef } from '@nebular/theme';
 import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
-import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import * as _ from 'lodash';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -20,11 +19,8 @@ export class PopupEvaluationComponent implements OnInit {
   role: any;
   flowId: any;
   candidateId: any;
-  stageId: any;
   innerWidth: any;
   innerHeight: any;
-  candidateName: string;
-  jrName: string;
   loading: boolean;
   result: boolean = false;
   evaluation: any;
@@ -72,9 +68,7 @@ export class PopupEvaluationComponent implements OnInit {
       },
     ];
     this.loading = true;
-    this.candidateName = '';
     this.editable = false;
-    this.jrName = '';
     this.state = "";
     this.evaluation = {};
     if (this.flowId) {
@@ -142,14 +136,6 @@ export class PopupEvaluationComponent implements OnInit {
   validation(): boolean {
     let isValid = true;
     let invalid: any;
-    // invalid = this.evaluation.basicApplications.find(element => {
-    //   if (!element.selected) {
-    //     return element;
-    //   }
-    // });
-    // if (invalid) {
-    //   return false;
-    // }
     invalid = this.evaluation.evaCategories.find(element => {
       if (!element.selected) {
         return element;
@@ -166,29 +152,8 @@ export class PopupEvaluationComponent implements OnInit {
 
   save() {
     this.loading = true;
-    console.log(this.evaluation)
     const request = this.setRequest();
     if (this.validation()) {
-      // if (this.flowId) {
-      //   this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      //     if (response.code === ResponseCode.Success) {
-      //       this.showToast('success', 'Success Message', response.message);
-      //     } else {
-      //       this.showToast('danger', 'Error Message', response.message);
-      //     }
-      //     this.loading = false;
-      //     this.ref.close(true);
-      //   });
-      // } else {
-      //   this.candidateService.Edit(this.candidateId, request).subscribe(response => {
-      //     if (response.code === ResponseCode.Success) {
-      //       this.showToast('success', 'Success Message', response.message);
-      //     } else {
-      //       this.showToast('danger', 'Error Message', response.message);
-      //     }
-      //     this.ref.close(true);
-      //   });
-      // }
       this.candidateService.evaluationEdit(this.candidateId, request).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.showToast('success', 'Success Message', response.message);

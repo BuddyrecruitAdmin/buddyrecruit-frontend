@@ -26,7 +26,6 @@ export class RejectionComponent implements OnInit {
     { value: false, label: 'Inactive' }
   ];
   dialogRef: NbDialogRef<any>;
-  candidateText: string;
   keyword: string;
   paging: IPaging;
   pageEvent: PageEvent;

@@ -1,14 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { EvaluationService } from '../evaluation.service';
-import { ResponseCode, Paging } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId } from '../../../../shared/services/auth.service';
-import { UtilitiesService } from '../../../../shared/services/utilities.service';
+import { ResponseCode } from '../../../../shared/app.constants';
+import { getRole } from '../../../../shared/services/auth.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
-import { PageEvent } from '@angular/material/paginator';
-import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { MESSAGE } from '../../../../shared/constants/message';
@@ -39,7 +35,6 @@ export class EvaluationDetailComponent implements OnInit {
   constructor(
     private service: EvaluationService,
     private dialogService: NbDialogService,
-    private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private activatedRoute: ActivatedRoute,
@@ -210,12 +205,10 @@ export class EvaluationDetailComponent implements OnInit {
   }
 
   getDetail() {
-    console.log(this._id)
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.evaluation = response.data;
         this.beforeName = response.data.name;
-        console.log(response.data);
       }
     })
   }
@@ -243,7 +236,6 @@ export class EvaluationDetailComponent implements OnInit {
   }
 
   save() {
-    console.log(this.evaluation)
     if (this.validation()) {
       if (this.state === "create" || this.state === "duplicate") {
         this.service.create(this.evaluation).subscribe(response => {

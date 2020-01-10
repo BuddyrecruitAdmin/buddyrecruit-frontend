@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MailTemplateService } from '../mail-template.service';
 import { ResponseCode, Paging } from '../../../../shared/app.constants';
 import { Criteria, Paging as IPaging,Devices } from '../../../../shared/interfaces/common.interface';
@@ -11,7 +11,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { color } from 'd3-color';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
   selector: 'ngx-mail-template-list',

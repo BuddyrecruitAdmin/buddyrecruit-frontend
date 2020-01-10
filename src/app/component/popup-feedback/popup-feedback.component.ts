@@ -1,13 +1,10 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PopupFeedbackService } from './popup-feedback.service';
 import { ResponseCode } from '../../shared/app.constants';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, getBugId, getFieldLabel, getFieldName,getBugCandidateId } from '../../shared/services/auth.service';
+import { getRole, getBugId, getFieldLabel, getFieldName, getBugCandidateId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
-import { Router, ActivatedRoute } from "@angular/router";
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-popup-feedback',
@@ -19,7 +16,6 @@ export class PopupFeedbackComponent implements OnInit {
   userKey: any;
   innerWidth: any;
   innerHeight: any;
-  textareaHeight: any;
   TogglePage: string;
   feedbackType: string;
   bugComment: string;
@@ -31,7 +27,6 @@ export class PopupFeedbackComponent implements OnInit {
   loading: boolean;
   constructor(
     private service: PopupFeedbackService,
-    private ref: NbDialogRef<PopupFeedbackComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
   ) {
@@ -41,7 +36,6 @@ export class PopupFeedbackComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.textareaHeight = "34";
     this.bugId = getBugId();
     this.bugLabel = getFieldLabel();
     this.bugName = getFieldName();
@@ -59,10 +53,10 @@ export class PopupFeedbackComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.bugLists = response.data;
         this.bugLists.map(element => {
-          if(element.feedbackType === "missing"){
-           element.feedbackType = "Missing data";
+          if (element.feedbackType === "missing") {
+            element.feedbackType = "Missing data";
           }
-          if(element.feedbackType === "wrong"){
+          if (element.feedbackType === "wrong") {
             element.feedbackType = "Wrong data";
           }
         })
@@ -71,7 +65,7 @@ export class PopupFeedbackComponent implements OnInit {
   }
 
   postBug() {
-    this.service.create(this.bugId,this.bugCandidateId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
+    this.service.create(this.bugId, this.bugCandidateId, this.bugName, this.bugLabel, this.feedbackType, this.bugComment).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.getList();
         this.TogglePage = 'history';
@@ -92,7 +86,7 @@ export class PopupFeedbackComponent implements OnInit {
       if (result) {
         this.service.deleteItem(item._id)
           .subscribe(res => {
-            if(res.code === ResponseCode.Success){
+            if (res.code === ResponseCode.Success) {
               this.getList();
             }
           })
