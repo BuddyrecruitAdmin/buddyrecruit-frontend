@@ -136,7 +136,6 @@ export class JobPositionComponent implements OnInit {
       } else {
         this.service.create(this.itemDialog).subscribe(response => {
           if (response.code === ResponseCode.Success) {
-            console.log(this.itemDialog)
             const pageIndex = Math.ceil((this.paging.length + 1) / this.paging.pageSize);
             this.paging.pageIndex = pageIndex - 1;
             this.dialogRef.close();

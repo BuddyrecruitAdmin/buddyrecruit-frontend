@@ -164,7 +164,7 @@ export class PopupInterviewDateComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
 
         this.pendingInterviewInfo = response.data.candidateFlow.pendingInterviewInfo;
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;

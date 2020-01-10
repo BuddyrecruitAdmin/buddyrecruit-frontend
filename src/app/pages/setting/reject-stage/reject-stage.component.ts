@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RejectStageService } from './reject-stage.service';
 import { ResponseCode } from '../../../shared/app.constants';
 import { getRole } from '../../../shared/services/auth.service';
-import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
-import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 
@@ -16,10 +14,8 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 })
 export class RejectStageComponent implements OnInit {
   role: any;
-
   rejectionList: any;
   rejectStageList: any;
-
   talentPoolList: any;
   examList: any;
   appointmentList: any;
@@ -30,7 +26,6 @@ export class RejectStageComponent implements OnInit {
 
   constructor(
     private service: RejectStageService,
-    private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService
   ) {

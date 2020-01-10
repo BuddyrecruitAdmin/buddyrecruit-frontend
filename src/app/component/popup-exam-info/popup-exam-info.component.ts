@@ -66,7 +66,7 @@ export class PopupExamInfoComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
 
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingExamInfo.availableDate)) {
           this.availableDate = new Date(response.data.candidateFlow.pendingExamInfo.availableDate);

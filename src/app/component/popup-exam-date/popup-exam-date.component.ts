@@ -102,7 +102,7 @@ export class PopupExamDateComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
 
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.examInfo.date)) {
           this.location = response.data.candidateFlow.examInfo.refLocation._id || this.location;

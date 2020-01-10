@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MESSAGE } from "../../shared/constants/message";
-import { DomSanitizer, SafeResourceUrl, } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
-import * as Chart from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { DashboardService } from './dashboard.service';
 import { getRole } from '../../shared/services/auth.service';
@@ -127,7 +124,6 @@ export class DashboardComponent implements OnInit {
 		{ backgroundColor: this.backgroundColor }
 	];
 	constructor(
-		private router: Router,
 		private service: DashboardService,
 		public sanitizer: DomSanitizer
 	) {
