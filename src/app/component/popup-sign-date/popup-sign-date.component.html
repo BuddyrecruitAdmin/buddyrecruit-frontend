@@ -37,6 +37,10 @@
           <nb-icon icon="calendar-outline" class="text-green"></nb-icon>
         </div>
       </div>
+      <small *ngIf="errMsg.date" class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        {{ errMsg.date }}
+      </small>
     </div>
     <div class="form-control-group m-0">
       <label class="label">Remark</label>

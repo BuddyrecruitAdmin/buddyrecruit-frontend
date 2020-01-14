@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     setKeyword();
     this.searchService.onSearchSubmit().subscribe((data: any) => {
       setKeyword(data.term);
-      this.router.navigate(['/employer/candidate/list']);
+      this.router.navigate(['/employer/candidate/list/' + data.term]);
     });
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;

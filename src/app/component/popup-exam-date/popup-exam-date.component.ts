@@ -32,7 +32,11 @@ export class PopupExamDateComponent implements OnInit {
   locations: DropDownValue[];
   loading: boolean;
   canApprove: boolean;
-
+  errMsg = {
+    location: '',
+    date: '',
+    time: ''
+  }
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupExamDateComponent>,
@@ -117,17 +121,45 @@ export class PopupExamDateComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.ref.close(true);
+      });
+    }
+  }
+
+  validation() {
+    this.errMsg = this.initialErrMsg();
+    let isValid = true;
+    if (!this.location) {
+      isValid = false;
+      this.errMsg.location = 'Please select Location';
+    }
+    if (!this.date) {
+      isValid = false;
+      this.errMsg.date = 'Please select Date';
+    }
+    if (!this.time) {
+      isValid = false;
+      this.errMsg.time = 'Please input Time';
+    }
+    return isValid;
+  }
+
+  initialErrMsg(): any {
+    return {
+      time: '',
+      date: '',
+      location: ''
+    }
   }
 
   passToExam() {

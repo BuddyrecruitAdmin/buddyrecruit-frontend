@@ -20,6 +20,6 @@ export class HomeComponent implements OnInit {
 
   search() {
     setKeyword(this.keyword);
-    this.router.navigate(["/employer/candidate/list"]);
+    this.router.navigate(["/employer/candidate/list/" + this.keyword]);
   }
 }
