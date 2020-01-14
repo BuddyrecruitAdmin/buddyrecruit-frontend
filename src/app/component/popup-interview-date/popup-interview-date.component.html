@@ -25,7 +25,8 @@
     </div>
     <div class="form-control-group m-b-10">
       <label class="label m-b-5">Select Date From</label>
-      <nb-radio-group [(ngModel)]="selectDateFrom" class="inline" (valueChange)="onChangeSelectDateFrom($event)">
+      <nb-radio-group name="my-radio-group" [(ngModel)]="selectDateFrom" class="inline"
+        (valueChange)="onChangeSelectDateFrom($event)">
         <nb-radio value="AVAILABLE">Available Date</nb-radio>
         <nb-radio value="CUSTOMIZE">Customize</nb-radio>
       </nb-radio-group>
@@ -106,7 +107,7 @@
   </nb-card-body>
   <nb-card-footer>
     <div class="footer-collapse">
-      <button nbButton status=  "default" (click)="ref.close(result)">CANCEL</button>
+      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()">SAVE</button>
     <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND EMAIL</button>

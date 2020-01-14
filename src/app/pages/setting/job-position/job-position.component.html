@@ -119,7 +119,8 @@
               </td>
               <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint" nbPopoverPlacement="top"
                 class="text-dot text-left" style="width: 300px;">
-                <div class="text-dot" style="width: 300px;">{{ item.remark || '-' }}</div>
+                <div class="text-dot" style="width: 300px;" [ngClass]="{'text-center': !item.remark }">{{ item.remark || '-' }}
+                </div>
               </td>
               <td>
                 <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">

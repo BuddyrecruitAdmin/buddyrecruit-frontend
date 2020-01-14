@@ -23,8 +23,6 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogR
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
-import { elementAt } from 'rxjs/operators';
-import { debug } from 'util';
 import { CalendarService } from '../../calendar/calendar.service';
 
 @Component({
@@ -277,8 +275,8 @@ export class InterviewDetailComponent implements OnInit {
               if (item.pendingInterviewScoreInfo.evaluation.length) {
                 condition.button.nextStep = true;
               } else {
-                if (item.refJR.userInterviews.length) {
-                  const found = item.refJR.userInterviews.find(element => {
+                if (item.pendingInterviewInfo.userInterviews.length) {
+                  const found = item.pendingInterviewInfo.userInterviews.find(element => {
                     return element.refUser === this.role._id;
                   });
                   if (found) {
@@ -286,8 +284,8 @@ export class InterviewDetailComponent implements OnInit {
                   }
                 }
               }
-              if (item.refJR.userInterviews.length) {
-                const found = item.refJR.userInterviews.find(element => {
+              if (item.pendingInterviewInfo.userInterviews.length) {
+                const found = item.pendingInterviewInfo.userInterviews.find(element => {
                   return element.refUser === this.role._id;
                 });
                 if (found) {
@@ -443,7 +441,7 @@ export class InterviewDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
-              this.search();
+      this.search();
       if (result) {
         setFlowId();
       }

@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <br>
+    <div *ngIf="(!showHistory && history.length > 0 )" style="padding-bottom: 25px;"></div>
     <!-- Dup JR -->
     <div *ngIf="multiJr.length" class="title">
       <span style="color: orange" class="link underline" (click)="showMulti= !showMulti">
@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="!showHistory || !showMulti" style="padding-bottom: 25px;"></div>
+    <div *ngIf="( !showMulti && multiJr.length > 0 )" style="padding-bottom: 25px;"></div>
     <div class="title">
       <label class="label" nbTooltip="Personal Details">Personal Details</label>
     </div>
@@ -571,8 +571,7 @@
               <nb-card-header>
                 <div class="title">
                   <nb-user size="medium" [name]="utilitiesService.setFullname(item.lastChangedInfo.refUser)"
-                    [title]="item.lastChangedInfo.date"
-                    [picture]="item.lastChangedInfo.refUser.imageData"></nb-user>
+                    [title]="item.lastChangedInfo.date" [picture]="item.lastChangedInfo.refUser.imageData"></nb-user>
                 </div>
                 <div class="actions">
                   <nb-icon *ngIf="item.lastChangedInfo.refUser._id === role._id && editable" icon="trash-2-outline"

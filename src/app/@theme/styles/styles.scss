@@ -601,7 +601,6 @@
     }
     .title {
       float: left;
-      width: calc(100% - 108px);      
       label {
         max-width: 100%;
         margin: 0;
@@ -646,6 +645,13 @@
       margin-bottom: 0.5rem;
       margin-top: 1rem;
       margin-right: 5px;
+    }
+    .span-ov{
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100px;
+      margin-top: 10px;
     }
   }
 
@@ -817,6 +823,17 @@
     min-width: 300px;
     max-width: 400px;
     padding: 1rem;
+    word-wrap:break-word;
+    span{
+      overflow: hidden;
+    }
+  }
+  // --------------------------------------------------------------------
+  nb-tooltip {
+    word-wrap:break-word;
+    span{
+      overflow: hidden;
+    }
   }
 
   // --------------------------------------------------------------------

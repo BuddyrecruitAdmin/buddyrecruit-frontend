@@ -31,7 +31,10 @@ export class PopupSignDateComponent implements OnInit {
   note: string;
   loading: boolean;
   editable: boolean;
-  iconStar:  any;
+  iconStar: any;
+  errMsg = {
+    date: ''
+  }
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupSignDateComponent>,
@@ -89,17 +92,29 @@ export class PopupSignDateComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.ref.close(true);
+      });
+    }
+  }
+
+  validation(): any {
+    this.errMsg.date = '';
+    let valid = true;
+    if (this.iconStar && !this.agreeDate) {
+      valid = false;
+      this.errMsg.date = "Please input date";
+    }
+    return valid;
   }
 
   sendEmail() {
