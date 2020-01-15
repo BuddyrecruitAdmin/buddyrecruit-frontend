@@ -579,15 +579,11 @@
                 </div>
               </nb-card-header>
               <nb-card-body style="min-height: auto">
-                {{ item.message }}
+                <label style="word-break: break-word;"> {{ item.message }} </label>
               </nb-card-body>
             </nb-card>
           </div>
         </div>
-
-        <!-- <div class="title">
-          <label class="label">Comment</label>
-        </div> -->
         <div *ngIf="editable" class="box-body text-center">
           <textarea nbInput fullWidth [(ngModel)]="remark" [disabled]="!editable">
           </textarea>
