@@ -259,7 +259,7 @@ export class PopupCvComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.ref.close();
+            this.ref.close(true);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }

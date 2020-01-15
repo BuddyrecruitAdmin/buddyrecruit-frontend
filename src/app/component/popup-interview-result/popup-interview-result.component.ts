@@ -18,6 +18,9 @@ export class PopupInterviewResultComponent implements OnInit {
   pass: any;
   notPass: any;
   compare: any;
+  passCount: any;
+  comCount: any;
+  notCount: any;
   constructor(
     private ref: NbDialogRef<PopupInterviewResultComponent>,
     private utilitiesService: UtilitiesService,
@@ -37,26 +40,35 @@ export class PopupInterviewResultComponent implements OnInit {
     this.pass = [];
     this.notPass = [];
     this.compare = [];
+    this.passCount = 0;
+    this.comCount = 0;
+    this.notCount = 0;
     this.item.pendingInterviewScoreInfo.evaluation.map(element => {
       if (element.rank.selected === 1) {
+        this.passCount += 1;
         this.pass.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
+          time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
+          picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
-          picture: element.createdInfo.refUser.imageData
         })
       }
       if (element.rank.selected === 2) {
+        this.comCount += 1;
         this.compare.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
+          time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
+          picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
-          picture: element.createdInfo.refUser.imageData
         })
       }
       if (element.rank.selected === 3) {
+        this.notCount += 1;
         this.notPass.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
+          time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
+          picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
-          picture: element.createdInfo.refUser.imageData
         })
       }
     });
