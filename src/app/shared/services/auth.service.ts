@@ -19,7 +19,9 @@ import {
   UserCandidate,
   ContactId,
   UserEmail,
-  IconId
+  IconId,
+  OutlookToken,
+  GoogleToken,
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -125,7 +127,7 @@ export function setButtonId(buttonId: string = null) {
 export function getButtonId() {
   const buttonId = JSON.parse(localStorage.getItem(ButtonId));
   return (!buttonId || buttonId === null) ? undefined : buttonId;
-} 
+}
 export function setIconId(iconId: string = null) {
   localStorage.setItem(IconId, JSON.stringify(iconId));
 }
@@ -223,4 +225,22 @@ export function setUserEmail(userEmail: string = null) {
 export function getUserEmail() {
   const userEmail = JSON.parse(localStorage.getItem(UserEmail));
   return (!userEmail || userEmail === null) ? undefined : userEmail;
+}
+
+export function setOutlookToken(outlookToken: string = null) {
+  localStorage.setItem(OutlookToken, JSON.stringify(outlookToken));
+}
+
+export function getOutlookToken() {
+  const outlookToken = JSON.parse(localStorage.getItem(OutlookToken));
+  return (!outlookToken || outlookToken === null) ? undefined : outlookToken;
+}
+
+export function setGoogleToken(googleToken: string = null) {
+  localStorage.setItem(GoogleToken, JSON.stringify(googleToken));
+}
+
+export function getGoogleToken() {
+  const googleToken = JSON.parse(localStorage.getItem(GoogleToken));
+  return (!googleToken || googleToken === null) ? undefined : googleToken;
 }

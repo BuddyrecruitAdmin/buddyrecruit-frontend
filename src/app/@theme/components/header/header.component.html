@@ -29,8 +29,8 @@
         nbSpinnerSize="large" nbSpinnerMessage="Loading...">
         <nb-card-header>
           <label class="label">Notification</label>
-          <div class="pull-right">
-            <small class="link" (click)="markAllAsRead()">Mark all as read</small>
+          <div *ngIf="countUnread > 0" class="pull-right">
+            <small class="link" (click)="markAllAsRead()">({{ countUnread }}) Mark all as read</small>
             <!-- <span class="m-l-5 m-r-5">·</span> -->
             <!-- <small class="link" (click)="gotoProfile()">Notification Setting</small> -->
           </div>

@@ -180,7 +180,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     this.service.getNotification(criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.countUnread = response.count.unread || 0;
+        this.countUnread = response.count.unread || response.count.unRead || 0;
         if (this.notifications.length >= response.count.data) {
           this.showSeeMore = false;
         }

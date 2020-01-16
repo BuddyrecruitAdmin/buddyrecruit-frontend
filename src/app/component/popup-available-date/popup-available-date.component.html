@@ -23,7 +23,7 @@
       </div>
     </div>
     <label class="label">Time</label>
-    <div *ngFor="let period of periods; let i = index" class="form-control-group">
+    <div *ngFor="let period of periods; let i = index" class="form-control-group text-center">
       <ngb-timepicker [(ngModel)]="period.startTime" [minuteStep]="minuteStep" [spinners]="false" class="inline"
         [disabled]="disabled">
       </ngb-timepicker>
@@ -40,10 +40,7 @@
       </button>
     </div>
     <div class="m-t-20">
-      <small *ngIf="disabled" class="text-red">
-        * This day have a Interview Appointment, Can't edit.
-      </small>
-      <small *ngIf="!disabled && errMsg" class="text-red">
+      <small *ngIf="errMsg" class="text-red">
         * {{ errMsg }}
       </small>
     </div>

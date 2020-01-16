@@ -7,19 +7,9 @@ import { CandidateService } from '../../pages/candidate/candidate.service';
 import { LocationService } from '../../pages/setting/location/location.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { DropDownValue, DropDownGroup } from '../../shared/interfaces/common.interface';
-import { getCandidateId, getFlowId, getRole, getJrId, setButtonId, setCandidateId, setFlowId } from '../../shared/services/auth.service';
+import { getCandidateId, getFlowId, getRole, getJrId, setButtonId, setCandidateId, setFlowId, getOutlookToken, getGoogleToken } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours,
-  format
-} from 'date-fns';
+import { isSameDay } from 'date-fns';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
@@ -50,6 +40,9 @@ export class PopupInterviewDateComponent implements OnInit {
   users: any[];
   sum: any;
   selectDateFrom: string;
+  inviteFrom: string;
+  outlookUsername: string;
+  googleUsername: string;
   date2: Date;
   startTime: any;
   endTime: any;
@@ -100,6 +93,9 @@ export class PopupInterviewDateComponent implements OnInit {
     this.startTime = null;
     this.endTime = null;
     this.selectDateFrom = 'AVAILABLE';
+    this.inviteFrom = '';
+    this.outlookUsername = '';
+    this.googleUsername = '';
     if (this.flowId) {
       this.initialDropdown().then((response) => {
         this.getDetail();
@@ -112,6 +108,7 @@ export class PopupInterviewDateComponent implements OnInit {
   async initialDropdown() {
     this.getAvailableDate();
     this.getLocation();
+    this.checkUsingCalendar();
   }
 
   getAvailableDate() {
@@ -158,6 +155,24 @@ export class PopupInterviewDateComponent implements OnInit {
     });
   }
 
+  checkUsingCalendar() {
+    return new Promise((resolve) => {
+      this.calendarService.checkUsing().subscribe(response => {
+        if (response.data) {
+          if (response.data.outlook && getOutlookToken()) {
+            this.outlookUsername = response.data.outlook.username;
+            this.inviteFrom = 'OUTLOOK';
+          }
+          if (response.data.google && getGoogleToken()) {
+            this.googleUsername = response.data.google.username;
+            this.inviteFrom = this.inviteFrom ? this.inviteFrom : 'GOOGLE';
+          }
+        }
+        resolve();
+      });
+    });
+  }
+
   getDetail() {
     this.candidateService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -169,6 +184,7 @@ export class PopupInterviewDateComponent implements OnInit {
         this.pendingInterviewInfo = response.data.candidateFlow.pendingInterviewInfo;
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
         this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'AVAILABLE';
+        this.inviteFrom = response.data.candidateFlow.pendingInterviewInfo.inviteFrom || this.inviteFrom;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingInterviewInfo.startDate)) {
           if (this.selectDateFrom === 'CUSTOMIZE') {
             this.date2 = new Date(response.data.candidateFlow.pendingInterviewInfo.startDate);
@@ -507,6 +523,7 @@ export class PopupInterviewDateComponent implements OnInit {
     pendingInterviewInfo.endDate = endDate;
     pendingInterviewInfo.refLocation = this.location;
     pendingInterviewInfo.selectDateFrom = this.selectDateFrom;
+    pendingInterviewInfo.inviteFrom = this.inviteFrom;
     pendingInterviewInfo.userInterviews = users;
     pendingInterviewInfo.flag = true
     const data = {

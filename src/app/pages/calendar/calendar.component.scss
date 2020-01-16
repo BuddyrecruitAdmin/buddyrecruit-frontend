@@ -60,3 +60,11 @@ table {
 .icon-google {
   color: #ea4335;
 }
+.user-block {
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+.user-block:hover {
+  color: var(--color-green);
+    background-color: rgba(53, 196, 178, 0.1);
+}

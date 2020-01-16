@@ -65,6 +65,8 @@ export const FieldName = 'FieldName';
 export const UserCandidate = 'UserCandidate';
 export const ContactId = 'ContactId';
 export const UserEmail = 'UserEmail';
+export const OutlookToken = 'OutlookToken';
+export const GoogleToken = 'GoogleToken';
 
 export enum DayOfWeek {
   Sunday = 0,
