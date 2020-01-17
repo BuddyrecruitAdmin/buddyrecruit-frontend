@@ -7,7 +7,6 @@ import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { isSameDay } from 'date-fns';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'ngx-popup-available-date',

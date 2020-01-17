@@ -388,10 +388,10 @@
       </div>
       <div class="border-all box-pad box-header with-border">
         <nb-card *ngFor="let education of items.education;let i = index">
-          <nb-card-header>
+          <nb-card-header *ngIf="editable">
             <div class="actions">
-              <nb-icon *ngIf="editable" class="fa fa-times-circle ng-star-inserted link" status="danger"
-                nbTooltip="Delete" (click)="removeEducation(i)">
+              <nb-icon class="fa fa-times-circle ng-star-inserted link" status="danger" nbTooltip="Delete"
+                (click)="removeEducation(i)">
               </nb-icon>
             </div>
           </nb-card-header>

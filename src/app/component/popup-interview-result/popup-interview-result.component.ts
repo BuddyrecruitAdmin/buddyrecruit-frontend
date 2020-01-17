@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { setUserCandidate, getUserCandidate } from '../../shared/services/auth.service';
+import { setUserCandidate, getUserCandidate, getRole } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
@@ -30,6 +30,7 @@ export class PopupInterviewResultComponent implements OnInit {
     setUserCandidate();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+    this.role = getRole();
   }
 
   ngOnInit() {
@@ -51,6 +52,7 @@ export class PopupInterviewResultComponent implements OnInit {
           time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
           picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
+          accent: (element.createdInfo.refUser._id === this.role._id) ? 'success' : 'default',
         })
       }
       if (element.rank.selected === 2) {
@@ -60,6 +62,7 @@ export class PopupInterviewResultComponent implements OnInit {
           time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
           picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
+          accent: (element.createdInfo.refUser._id === this.role._id) ? 'success' : 'default',
         })
       }
       if (element.rank.selected === 3) {
@@ -69,6 +72,7 @@ export class PopupInterviewResultComponent implements OnInit {
           time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
           picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
+          accent: (element.createdInfo.refUser._id === this.role._id) ? 'success' : 'default',
         })
       }
     });
