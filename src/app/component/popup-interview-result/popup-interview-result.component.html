@@ -22,7 +22,7 @@
           </div>
         </nb-card-header>
         <nb-card-body>
-          <nb-card *ngFor="let pas of pass">
+          <nb-card *ngFor="let pas of pass" [accent]="pas.accent">
             <nb-card-header>
               <nb-user size="medium" [name]="pas.name" [title]="pas.time" [picture]="pas.picture"></nb-user>
             </nb-card-header>
@@ -40,7 +40,7 @@
           </div>
         </nb-card-header>
         <nb-card-body>
-          <nb-card *ngFor="let com of compare">
+          <nb-card *ngFor="let com of compare" [accent]="com.accent">
             <nb-card-header>
               <nb-user size="medium" [name]="com.name" [title]="com.time" [picture]="com.picture"></nb-user>
             </nb-card-header>
@@ -58,7 +58,7 @@
           </div>
         </nb-card-header>
         <nb-card-body>
-          <nb-card *ngFor="let not of notPass">
+          <nb-card *ngFor="let not of notPass" [accent]="not.accent">
             <nb-card-header>
               <nb-user size="medium" [name]="not.name" [title]="not.time" [picture]="not.picture"></nb-user>
             </nb-card-header>
