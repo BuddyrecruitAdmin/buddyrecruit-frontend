@@ -41,6 +41,7 @@ export class FeedbackComponent implements OnInit {
       candidateId: any
     }
   };
+  devices: Devices;
   constructor(
     private service: ReportService,
     private utilitiesService: UtilitiesService,
@@ -48,6 +49,7 @@ export class FeedbackComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

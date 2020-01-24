@@ -1,8 +1,9 @@
 <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
-    <div class="title">
+    <div class="pull-left">
       <label>Send us your feedback!</label>
+      <small class="status m-0">Field: <span class="label text-green">{{ bugLabel || bugName }}</span></small>
     </div>
     <div class="actions">
       <mat-button-toggle-group #group="matButtonToggleGroup" [(ngModel)]="TogglePage">
@@ -14,8 +15,6 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-    <span class="label">Field:</span>
-    <span class="label text-green">{{ bugLabel || bugName }}</span>
   </nb-card-header>
   <nb-card-body class="dialog-body" *ngIf="TogglePage === 'comment'">
     <nb-radio-group [(ngModel)]="feedbackType">

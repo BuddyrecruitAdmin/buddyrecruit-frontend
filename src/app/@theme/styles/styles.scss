@@ -1591,8 +1591,13 @@ and (max-width : 575px) {
     }
     nb-user .user-title {
       color: var(--color-gray);
-      margin-top: 5px;
+      margin-top: 7px;
     }
   }
-  
+  .mat-checkbox-layout{
+    margin-top: 7px;
+  }
+  .mat-checkbox-layout::after{
+    content: ' ' !important;
+  }
 }
