@@ -182,13 +182,11 @@ export class FeedbackComponent implements OnInit {
   }
 
   checkList(item, checked) {
-    console.log(checked)
     this.service.edit(item._id, checked.checked).subscribe(response => {
     })
   }
 
   info(item: any) {
-    console.log(item)
     setFlowId(item.refCandidateFlow);
     setCandidateId(item.refCandidate._id);
     this.dialogService.open(PopupCvComponent,

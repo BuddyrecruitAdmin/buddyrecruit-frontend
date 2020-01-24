@@ -24,6 +24,7 @@ import { PopupInterviewDateComponent } from '../../../component/popup-interview-
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
 import { PopupSignDateComponent } from '../../../component/popup-sign-date/popup-sign-date.component';
 import { PrintCandidateComponent } from '../../../component/print-candidate/print-candidate.component';
+import { Devices } from '../../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-candidate-detail',
@@ -38,7 +39,7 @@ export class CandidateDetailComponent implements OnInit {
   loading: boolean;
   interviewScores: any;
   condition: any;
-
+  devices: Devices;
   constructor(
     private router: Router,
     private location: Location,

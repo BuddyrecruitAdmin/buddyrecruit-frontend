@@ -36,11 +36,9 @@
               <label class="label">Email</label>
               <span>{{ item.email || '-' }}</span>
             </div>
-            <div>
+            <div class="text-group">
               <label class="label">Address</label>
-              <div class="m-l-15">
-                <span>{{ item.address || '-' }}</span>
-              </div>
+              <span style="word-wrap: break-word">{{ item.address || '-' }}</span>
             </div>
           </div>
 
@@ -177,6 +175,10 @@
             <div *ngIf="condition?.block?.examDate">
               <label class="label topic">Exam Date</label>
               <div class="m-l-15">
+                <div class="text-group">
+                  <label class="label">Exam Location</label>
+                  <span>{{ item.candidateFlow?.examInfo?.refLocation?.name || '-' }}</span>
+                </div>
                 <div class="text-group">
                   <label class="label">Exam Date</label>
                   <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.examInfo?.date) || '-' }}</span>

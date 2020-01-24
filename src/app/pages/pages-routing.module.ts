@@ -53,6 +53,10 @@ const routes: Routes = [
         component: CandidateListComponent,
       },
       {
+        path: 'candidate/list/:id',
+        component: CandidateListComponent,
+      },
+      {
         path: 'candidate/detail',
         component: CandidateDetailComponent,
       },

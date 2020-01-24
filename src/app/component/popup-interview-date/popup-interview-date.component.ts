@@ -7,7 +7,7 @@ import { CandidateService } from '../../pages/candidate/candidate.service';
 import { LocationService } from '../../pages/setting/location/location.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { DropDownValue, DropDownGroup } from '../../shared/interfaces/common.interface';
-import { getCandidateId, getFlowId, getRole, getJrId, setButtonId, setCandidateId, setFlowId, getOutlookToken, getGoogleToken } from '../../shared/services/auth.service';
+import { getCandidateId, getFlowId, getRole, getJrId, setButtonId, setCandidateId, setFlowId, getOutlookToken, getGoogleToken, setUserEmail } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { isSameDay } from 'date-fns';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
@@ -47,6 +47,7 @@ export class PopupInterviewDateComponent implements OnInit {
   startTime: any;
   endTime: any;
   minutesRange = 30;
+  emailUser: any;
   errMsg = {
     location: '',
     available: {
@@ -179,8 +180,10 @@ export class PopupInterviewDateComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
-
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
+        if (response.data.email) {
+          this.emailUser = response.data.email;
+        }
         this.pendingInterviewInfo = response.data.candidateFlow.pendingInterviewInfo;
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
         this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'AVAILABLE';
@@ -465,6 +468,7 @@ export class PopupInterviewDateComponent implements OnInit {
     setFlowId(this.flowId);
     setCandidateId(this.candidateId);
     setButtonId(this.buttonId);
+    setUserEmail(this.emailUser);
     this.dialogService.open(PopupPreviewEmailComponent,
       {
         closeOnBackdropClick: false,
@@ -474,6 +478,7 @@ export class PopupInterviewDateComponent implements OnInit {
       setFlowId();
       setCandidateId();
       setButtonId();
+      setUserEmail();
       if (result) {
         this.ref.close(true);
       }
@@ -554,8 +559,17 @@ export class PopupInterviewDateComponent implements OnInit {
     this.errMsg = this.initialErrMsg();
     if (value === 'AVAILABLE') {
       this.setUsers(this.date, this.time);
+      //ใช้ให้โหลด date ทัน
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 100);
     } else {
       this.customizeUser();
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 100);
     }
   }
 

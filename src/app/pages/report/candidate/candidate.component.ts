@@ -1,11 +1,11 @@
-import { Component, OnInit, TemplateRef, Input, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, DropDownValue } from '../../../shared/interfaces/common.interface';
+import { getRole, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';

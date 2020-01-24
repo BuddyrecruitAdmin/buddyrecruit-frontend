@@ -88,7 +88,7 @@
         <nb-card style="margin-bottom: 1rem;">
           <nb-card-header class="link" (click)="edit(item)">
             <div class="title">
-              <label class="link" [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</label>
+              <span class="link" [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</span>
             </div>
             <div class="actions">
               <span class="label" [ngClass]="{ 'label-danger' : item.pending, 'label-gray' : !item.pending }">
@@ -121,7 +121,7 @@
             </div>
             <div class="text-right ">
               <span class="link" nbTooltip="See more detail" (click)="info(item)">
-                <nb-icon icon="info-outline"></nb-icon> See    detail
+                <nb-icon icon="info-outline"></nb-icon> See detail
               </span>
             </div>
           </nb-card-body>
@@ -152,7 +152,7 @@
               <th scope="col" style="width: 90px;">Status</th>
               <th scope="col" style="width: 110px;">Days before expire</th>
               <th scope="col" style="width: 70px;">Pending</th>
-              <th scope="col" style="width: 150px;">Actions</th>
+              <th scope="col" style="width: 180px;">Actions</th>
             </tr>
           </thead>
           <tbody>

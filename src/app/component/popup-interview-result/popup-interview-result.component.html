@@ -1,7 +1,7 @@
 <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="candidateName">Result</label>
+      <label>Result</label>
       <small class="status text-gray m-0">
         {{utilitiesService.setFullname(item.refCandidate)}}
       </small>
@@ -14,34 +14,58 @@
     <h6 *ngIf="!item.pendingInterviewScoreInfo?.evaluation?.length" class="text-gray text-center">No Comment
     </h6>
     <div>
-      <nb-card *ngIf="pass.length > 0" accent="success">
-        <nb-card-header>
+      <!-- Passed -->
+      <nb-card *ngIf="pass.length > 0">
+        <nb-card-header style="background-color: var(--color-green);">
           <div class="title">
-            <span class="fas fa-check" style="color: var(--color-green);"> ผ่าน</span>
+            <span class="fas fa-check" style="color: var(--color-white);"> ผ่าน : {{ passCount }}</span>
           </div>
         </nb-card-header>
-        <nb-card-body *ngFor="let pas of pass">
-          <nb-user size="medium" [name]="pas.name" [title]="pas.comment" [picture]="pas.picture"></nb-user>
+        <nb-card-body>
+          <nb-card *ngFor="let pas of pass" [accent]="pas.accent">
+            <nb-card-header>
+              <nb-user size="medium" [name]="pas.name" [title]="pas.time" [picture]="pas.picture"></nb-user>
+            </nb-card-header>
+            <nb-card-body *ngIf="pas.comment">
+              <label style="word-break: break-word;"> {{ pas.comment }} </label>
+            </nb-card-body>
+          </nb-card>
         </nb-card-body>
       </nb-card>
-      <nb-card *ngIf="compare.length > 0" accent="warning">
-        <nb-card-header>
+      <!-- Waiting -->
+      <nb-card *ngIf="compare.length > 0">
+        <nb-card-header style="background-color: var(--color-orange);">
           <div class="title">
-            <span class="fas fa-exclamation" style="color: var(--color-orange);"> รอพิจารณา</span>
+            <span class="fas fa-exclamation" style="color: var(--color-white);"> รอพิจารณา : {{ comCount }}</span>
           </div>
         </nb-card-header>
-        <nb-card-body *ngFor="let com of compare">
-          <nb-user size="medium" [name]="com.name" [title]="com.comment" [picture]="com.picture"></nb-user>
+        <nb-card-body>
+          <nb-card *ngFor="let com of compare" [accent]="com.accent">
+            <nb-card-header>
+              <nb-user size="medium" [name]="com.name" [title]="com.time" [picture]="com.picture"></nb-user>
+            </nb-card-header>
+            <nb-card-body *ngIf="com.comment">
+              <label style="word-break: break-word;"> {{ com.comment }} </label>
+            </nb-card-body>
+          </nb-card>
         </nb-card-body>
       </nb-card>
-      <nb-card *ngIf="notPass.length > 0" accent="danger">
-        <nb-card-header>
+      <!-- Not Passed -->
+      <nb-card *ngIf="notPass.length > 0">
+        <nb-card-header style="background-color: var(--color-red);">
           <div class="title">
-            <span class="fas fa-times" style="color: var(--color-red);"> ไม่ผ่าน</span>
+            <span class="fas fa-times" style="color: var(--color-white);"> ไม่ผ่าน : {{ notCount }}</span>
           </div>
         </nb-card-header>
-        <nb-card-body *ngFor="let not of notPass">
-          <nb-user size="medium" [name]="not.name" [title]="not.comment" [picture]="not.picture"></nb-user>
+        <nb-card-body>
+          <nb-card *ngFor="let not of notPass" [accent]="not.accent">
+            <nb-card-header>
+              <nb-user size="medium" [name]="not.name" [title]="not.time" [picture]="not.picture"></nb-user>
+            </nb-card-header>
+            <nb-card-body *ngIf="not.comment">
+              <label style="word-break: break-word;"> {{ not.comment }} </label>
+            </nb-card-body>
+          </nb-card>
         </nb-card-body>
       </nb-card>
     </div>

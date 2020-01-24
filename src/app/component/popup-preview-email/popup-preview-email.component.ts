@@ -30,11 +30,9 @@ export class PopupPreviewEmailComponent implements OnInit {
   sendEmail: boolean;
   today: Date;
   loading: boolean;
-  canApprove: boolean;
-
   checkedEmail: any;
-
   haveEmail: any;
+
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupPreviewEmailComponent>,
@@ -67,15 +65,11 @@ export class PopupPreviewEmailComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.canApprove = false;
     this.mailOptions = {};
     this.mailType = '';
     this.actionUser = [];
     this.previewEmail = false;
     this.sendEmail = true;
-    // if (!this.haveEmail) {
-    //   this.sendEmail = false;
-    // }
     this.today = new Date();
     if (this.flowId) {
       this.getPreviewEmail();
@@ -106,10 +100,6 @@ export class PopupPreviewEmailComponent implements OnInit {
             this.previewEmail = false;
             this.nextStep();
           }
-          // if (response.data.mailOptions.to[0] === "" || response.data.mailOptions.to.length < 1) {
-          //   // this.checkedEmail = true;
-          //   this.sendEmail = false;
-          // }
         }
       } else {
         this.actionUser = response.data.actionUser;

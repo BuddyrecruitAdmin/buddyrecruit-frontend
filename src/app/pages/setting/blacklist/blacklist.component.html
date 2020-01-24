@@ -146,7 +146,8 @@
                 <span>{{ item.refReject?.name || '-' }}</span>
               </td>
               <td>
-                <span>{{ item.remark || '-' }}</span>
+                <label [ngClass]="{'text-center' : !item.remark }" class="span-ov"
+                  [nbTooltip]="item.remark">{{ item.remark || '-' }}</label>
               </td>
               <td *ngIf="role.refAuthorize.configuration.blacklist.editable" class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">

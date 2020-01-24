@@ -355,13 +355,21 @@ export class UtilitiesService {
     return date;
   }
 
-  findButtonIdByStage(stageId: any): string {
+  findButtonIdByStage(stageId: any, hasExam: any): string {
     let buttonId;
     if (stageId) {
       const role = getRole();
       if (role && role.refAuthorize && role.refAuthorize.processFlow
-        && role.refAuthorize.processFlow.exam && role.refAuthorize.processFlow.exam.steps.length) {
+        && role.refAuthorize.processFlow.exam && role.refAuthorize.processFlow.exam.steps.length
+        && hasExam) {
         const step = role.refAuthorize.processFlow.exam.steps.find(element => {
+          return element.refStage._id === stageId;
+        });
+        if (step) {
+          buttonId = step._id;
+        }
+      } else {
+        const step = role.refAuthorize.processFlow.noExam.steps.find(element => {
           return element.refStage._id === stageId;
         });
         if (step) {

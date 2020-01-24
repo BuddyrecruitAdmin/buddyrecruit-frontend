@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { setUserCandidate, getUserCandidate } from '../../shared/services/auth.service';
+import { setUserCandidate, getUserCandidate, getRole } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
@@ -18,6 +18,9 @@ export class PopupInterviewResultComponent implements OnInit {
   pass: any;
   notPass: any;
   compare: any;
+  passCount: any;
+  comCount: any;
+  notCount: any;
   constructor(
     private ref: NbDialogRef<PopupInterviewResultComponent>,
     private utilitiesService: UtilitiesService,
@@ -27,6 +30,7 @@ export class PopupInterviewResultComponent implements OnInit {
     setUserCandidate();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+    this.role = getRole();
   }
 
   ngOnInit() {
@@ -37,26 +41,38 @@ export class PopupInterviewResultComponent implements OnInit {
     this.pass = [];
     this.notPass = [];
     this.compare = [];
+    this.passCount = 0;
+    this.comCount = 0;
+    this.notCount = 0;
     this.item.pendingInterviewScoreInfo.evaluation.map(element => {
       if (element.rank.selected === 1) {
+        this.passCount += 1;
         this.pass.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
+          time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
+          picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
-          picture: element.createdInfo.refUser.imageData
+          accent: (element.createdInfo.refUser._id === this.role._id) ? 'success' : 'default',
         })
       }
       if (element.rank.selected === 2) {
+        this.comCount += 1;
         this.compare.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
+          time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
+          picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
-          picture: element.createdInfo.refUser.imageData
+          accent: (element.createdInfo.refUser._id === this.role._id) ? 'success' : 'default',
         })
       }
       if (element.rank.selected === 3) {
+        this.notCount += 1;
         this.notPass.push({
           name: this.utilitiesService.setFullname(element.createdInfo.refUser),
+          time: this.utilitiesService.convertDateTimeFromSystem(element.createdInfo.date),
+          picture: element.createdInfo.refUser.imageData,
           comment: element.additionalComment,
-          picture: element.createdInfo.refUser.imageData
+          accent: (element.createdInfo.refUser._id === this.role._id) ? 'success' : 'default',
         })
       }
     });

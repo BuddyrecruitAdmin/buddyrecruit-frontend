@@ -11,12 +11,8 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { MESSAGE } from '../../shared/constants/message';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
-import { API_ENDPOINT } from '../../shared/constants';
-import { environment } from '../../../environments/environment';
 import { Location } from '@angular/common';
-import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-const URL = environment.API_URI + '/' + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'ngx-profile',
@@ -26,7 +22,6 @@ const URL = environment.API_URI + '/' + API_ENDPOINT.CONFIGURATION.USER_PROFILE_
 
 export class ProfileComponent implements OnInit {
   @ViewChild('fileInput', { static: true }) fileInput: ElementRef;
-  // @ViewChild(ImageCropperComponent, { static: true }) imageCropper: ImageCropperComponent;
   role: any;
   loading: boolean;
   url: any;
@@ -212,7 +207,6 @@ export class ProfileComponent implements OnInit {
       img.src = chImg.toString();
       img.onload = (ee) => {
         this.imgHeight = img.height;
-        console.log(this.imgHeight);
       };
       this.previewPicture = false;
       const FileSize = files.item(0).size / 1024 / 1024; // in MB

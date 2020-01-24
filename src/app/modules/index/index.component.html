@@ -58,7 +58,7 @@
   <!-- Home -->
   <div id="home">
     <img class="img-fluid" src="../../../assets/images/bg.jpg">
-    <div class="image-text">
+    <div class="image-text" *ngIf="devices.isPC || devices.isNotebook || devices.other">
       <h3>
         Buddy Recruit
       </h3>
@@ -70,7 +70,16 @@
       </h6> -->
     </div>
   </div>
-
+  <div *ngIf="devices.isMobile || devices.isTablet" class="header-border">
+    <div class="container" style="text-align: center;">
+      <h2>
+        Buddy Recruit
+      </h2>
+      <span>
+        Your Buddy for Successful Recruitment
+      </span>
+    </div>
+  </div>
   <!-- Upcoming -->
   <!-- <section id="upcoming">
     <div class="container">
@@ -332,14 +341,15 @@
 
   <!-- Contact Us (fixed, bottom-right) -->
   <div id="register">
-    <nb-accordion>
+    <nb-accordion [style.width.px]="innerWidth">
       <nb-accordion-item [expanded]="expanded">
         <nb-accordion-item-header (click)="toggleRegister()">
           <!-- Contact Buddy Recruit for free Demo&Trial -->
           <div class="title">
             <!-- <div>ลงทะเบียนเพื่อรับสิทธิ์ Promotion เดียวกับงาน</div>
             <div>CEBIT ASEAN Thailand 2019</div> -->
-            <div>ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งาน(จำนวนจำกัด)</div>
+            <div *ngIf="!devices.isMobile">ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
+            <div *ngIf="devices.isMobile">รับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
           </div>
         </nb-accordion-item-header>
         <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">

@@ -1,20 +1,15 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MailTemplateService } from '../mail-template.service';
-import { ResponseCode, Paging, State } from '../../../../shared/app.constants';
-import { Criteria, Paging as IPaging } from '../../../../shared/interfaces/common.interface';
-import { getRole } from '../../../../shared/services/auth.service';
+import { ResponseCode, State } from '../../../../shared/app.constants';
 import { Router, ActivatedRoute } from "@angular/router";
-import { DropDownValue } from '../../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MESSAGE } from '../../../../shared/constants/message';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
-import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
   selector: 'ngx-mail-template-detail',
@@ -22,25 +17,21 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   styleUrls: ['./mail-template-detail.component.scss']
 })
 export class MailTemplateDetailComponent implements OnInit {
-  items: any;
+  name: AbstractControl;
+  _id: string;
+  state: string;
+  getId: boolean;
+  bcc: AbstractControl;
+  cc: AbstractControl;
   itemDialog: any;
-  typeOptions: DropDownValue[];
   sErrorHeader: string;
   sErrorSubject: string;
   sErrorEmailType: string;
-  name: AbstractControl;
-  touched: boolean;
-  checkEdit: boolean;
-  state: string;
-  _id: string;
-  getId: boolean;
-  loginForm: FormGroup;
-  bcc: AbstractControl;
-  cc: AbstractControl;
   sErrorBcc: string;
   sErrorcc: string;
+  touched: boolean;
+  checkEdit: boolean;
   str: any;
-  n: any;
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -60,13 +51,11 @@ export class MailTemplateDetailComponent implements OnInit {
   }
   constructor(
     private service: MailTemplateService,
-    private dialogService: NbDialogService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
   ) {
 
   }
@@ -141,7 +130,6 @@ export class MailTemplateDetailComponent implements OnInit {
   }
 
   validation(): boolean {
-    const that = this;
     this.touched = true;
     let isValid = true;
     this.sErrorcc = "";

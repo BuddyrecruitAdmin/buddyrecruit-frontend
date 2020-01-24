@@ -22,6 +22,8 @@ import {
   IconId,
   OutlookToken,
   GoogleToken,
+  Notification,
+  NotifIndex
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -243,4 +245,22 @@ export function setGoogleToken(googleToken: string = null) {
 export function getGoogleToken() {
   const googleToken = JSON.parse(localStorage.getItem(GoogleToken));
   return (!googleToken || googleToken === null) ? undefined : googleToken;
+}
+
+export function setNotification(notification: string = null) {
+  localStorage.setItem(Notification, JSON.stringify(notification));
+}
+
+export function getNotification() {
+  const notification = JSON.parse(localStorage.getItem(Notification));
+  return (!notification || notification === null) ? undefined : notification;
+}
+
+export function setNotificationIndex(notifIndex: any = null) {
+  localStorage.setItem(NotifIndex, JSON.stringify(notifIndex));
+}
+
+export function getNotificationIndex() {
+  const notifIndex = JSON.parse(localStorage.getItem(NotifIndex));
+  return (!notifIndex || notifIndex === null) ? undefined : notifIndex;
 }

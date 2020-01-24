@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { CandidateService } from '../candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
@@ -105,9 +105,11 @@ export class CandidateListComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private dialogService: NbDialogService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
-    this.keyword = getKeyword() || '';
+    // this.keyword = getKeyword() || '';
+    // console.log(this.keyword)
     this.devices = this.utilitiesService.getDevice();
     setKeyword();
     this.isFilter = false;
@@ -121,12 +123,20 @@ export class CandidateListComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.activatedRoute.params.subscribe(params => {
+      if (params.id) {
+        this.keyword = params.id;
+        this.search();
+      } else {
+        this.keyword = '';
+        this.search();
+      }
+    })
     if (this.devices.isMobile || this.devices.isTablet) {
       this.isGridLayout = true;
     } else {
       this.isGridLayout = false;
     }
-    this.search();
   }
 
   search() {

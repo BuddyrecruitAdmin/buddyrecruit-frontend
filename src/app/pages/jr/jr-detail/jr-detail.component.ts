@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownGroup } from '../../../shared/interfaces/common.interface';
@@ -15,9 +15,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { request } from 'https';
-import { elementAt } from 'rxjs/operators';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
 @Component({
   selector: 'ngx-jr-detail',
@@ -29,35 +26,33 @@ export class JrDetailComponent implements OnInit {
   _id: any;
   state: string;
   jobDB: boolean;
-  touched: boolean;
-  touchedEva: boolean;
+  jobStatus: any;
+  editExam: boolean;
   duplicateCheck: boolean;
-  editCheck: boolean;
-  touchedStart: boolean;
-  touchedEnd: boolean;
-  touchedCheck: boolean;
-  touchedCap: boolean;
-  touchedOn: boolean;
-  emailCheck: boolean;
   role: any;
-  action: any;
+  editCheck: boolean;
+  emailCheck: boolean;
+  touchedEva: boolean;
+  sErrorEvaluation: string;
+  touched: boolean;
+  sErrorPosition: string;
+  touchedStart: boolean;
+  sErrorStart: string;
+  touchedEnd: boolean;
+  sErrorEnd: string;
+  touchedCheck: boolean;
+  sErrorCheck: string;
+  touchedCap: boolean;
+  sErrorCap: string;
+  touchedOn: boolean;
+  sErrorOn: string;
   JobPosition: DropDownValue[];
   Evaluation: DropDownValue[];
   Users: DropDownGroup[];
-  sErrorPosition: string;
-  sErrorStart: string;
-  sErrorEnd: string;
-  sErrorOn: string;
-  sErrorCheck: string;
-  sErrorCap: string;
   sErrorUser: string;
-  sErrorEvaluation: string;
   checkPreview: boolean;
   jobId: any;
-  jobStatus: any;
-  tempJob: any;
   loading: any;
-  editExam: boolean;
 
   constructor(
     private service: JrService,
@@ -67,7 +62,6 @@ export class JrDetailComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,
-    private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
@@ -77,13 +71,13 @@ export class JrDetailComponent implements OnInit {
     this.loading = true;
     this.initialModel();
     this.activatedRoute.params.subscribe(params => {
+      this.emailCheck = true;
+      this.jobDB = false;
+      this.checkPreview = false;
       if (params.id) {
         this._id = params.id;
         this.duplicateCheck = false;
         this.editCheck = false;
-        this.emailCheck = true;
-        this.jobDB = false;
-        this.jobStatus = undefined;
         if (params.action === State.Edit) {
           this.state = State.Edit;
         } else if (params.action === 'duplicate') {
@@ -98,13 +92,10 @@ export class JrDetailComponent implements OnInit {
       } else {
         this.state = State.Create;
         this.jr.requiredExam = false;
-        this.emailCheck = true;
-        this.jobDB = false;
         this.jr.capacity = 0;
         this.jobStatus = 'notUsed';
         this.loading = false;
         this.editExam = true;
-        this.checkPreview = false;
         this.initialDropDown();
       }
     });

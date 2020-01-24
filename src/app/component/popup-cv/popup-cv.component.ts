@@ -1,18 +1,17 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ResponseCode } from '../../shared/app.constants';
 import { JdService } from '../../pages/jd/jd.service';
 import { PopupCVService } from './popup-cv.service';
-import { NbDialogService, NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { getRole, getFlowId, setFlowId, getCandidateId, setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName, setUserCandidate } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-feedback.component';
 import { PopupInterviewResultComponent } from '../../component/popup-interview-result/popup-interview-result.component';
-import { request } from 'https';
 import * as _ from 'lodash';
 import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
 
@@ -30,14 +29,10 @@ export class PopupCvComponent implements OnInit {
   totalReject: any;
   totalMonth: any;
   innerWidth: any;
-  innerWidthCard: any;
   innerHeight: any;
   flowId: any;
   candidateId: any;
   items: any;
-  accuracy: any;
-  candidateName: string;
-  jrName: string;
   message: string;
   loading: boolean;
   buttonText: string;
@@ -89,7 +84,6 @@ export class PopupCvComponent implements OnInit {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
-    this.innerWidthCard = this.innerWidth * 0.9;
   }
 
   ngOnInit() {
@@ -101,8 +95,6 @@ export class PopupCvComponent implements OnInit {
     this.buttonText = 'edit';
     this.loading = true;
     this.items = [];
-    this.candidateName = '';
-    this.jrName = '';
     this.totalMonth = 0;
     this.totalYear = 0;
     if (this.flowId) {
@@ -166,21 +158,7 @@ export class PopupCvComponent implements OnInit {
             },
             message: ele.message
           })
-          console.log(this.allComments)
-          console.log(this.items.comments)
-          // ele.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
-          // if (ele.lastChangedInfo.refUser._id === this.role._id) {
-          //   ele.accent = 'success'
-          // } else {
-          //   ele.accent = 'default'
-          // }
         })
-        // this.allComments = this.items.comments;
-        // this.allComments.map(res => {
-        //   res.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(res.lastChangedInfo.date);
-        // });
-        // console.log(this.items.comments)
-        // console.log(this.allComments)
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
           var timeDiff = Math.abs(Date.now() - this.items.birth.getTime());
@@ -207,7 +185,6 @@ export class PopupCvComponent implements OnInit {
           this.items.education.map(ele => {
             if (!ele.refDegree) {
               ele.refDegree = { _id: undefined };
-              // return ele.refDegree
             }
           })
         }
@@ -282,7 +259,7 @@ export class PopupCvComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.ref.close();
+            this.ref.close(true);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -391,7 +368,6 @@ export class PopupCvComponent implements OnInit {
   }
 
   checkCV(id) {
-    const that = this;
     this.jdService.originalCV(id, this.role._id)
       .subscribe(data =>
         this.downloadFile(data), error =>

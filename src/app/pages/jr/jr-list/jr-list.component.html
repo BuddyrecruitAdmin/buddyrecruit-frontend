@@ -67,14 +67,15 @@
             </div>
             <div *ngIf="role.refAuthorize.jr.editable" class="actions">
               <nb-icon *ngIf="item.refStatus.name === 'Active' || (item.refStatus.name === 'Inactive' && !isOverQuota)"
-                class="link" nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
+                [ngClass]="{ 'icon-warning': item.refStatus.name === 'Active', 'icon-green' :  item.refStatus.name != 'Active' }"
+                nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
                 icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}"
                 (click)="switchActive(item)">
               </nb-icon>
               <nb-icon *ngIf="item.canEdit" icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/jr/detail/edit/'+item._id">
               </nb-icon>
-              <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="link" nbTooltip="Delete"
+              <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="icon-red" nbTooltip="Delete"
                 (click)="delete(item)"></nb-icon>
             </div>
           </nb-card-header>
@@ -134,7 +135,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" class="text-left">Job Request</th>
+              <th scope="col">Job Request</th>
               <th scope="col">Department</th>
               <th scope="col">Division</th>
               <th scope="col">Capacity</th>
