@@ -15,7 +15,7 @@ export class PopupJrInfoComponent implements OnInit {
   innerWidth: any;
   jrId: any;
   loading: boolean;
-  jrDetail: any;
+  jrDetail: any = '';
 
   constructor(
     private ref: NbDialogRef<PopupJrInfoComponent>,
@@ -33,8 +33,8 @@ export class PopupJrInfoComponent implements OnInit {
     this.jrService.getDetail(this.jrId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.jrDetail = response.data;
+        this.loading = false;
       }
-      this.loading = false;
     });
   }
 }

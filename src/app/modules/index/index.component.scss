@@ -32,7 +32,7 @@
   z-index: 1030;
 
   nb-accordion-item {
-    width: 400px;
+    // width: 400px;
     border-bottom-right-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
   }
@@ -106,6 +106,20 @@ section .header h3 {
 }
 .card-footer {
   text-align: right;;
+}
+.header-border {
+  background-color: var(--color-white);
+  padding-bottom: 25px;
+  h2 {
+    color: var(--color-green);
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  h5, h6, span {
+    color: var(--color-gray);
+    font-weight: 400;
+  }
 }
 
 #home {

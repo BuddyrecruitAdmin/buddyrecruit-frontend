@@ -145,8 +145,8 @@
                 </button>
               </div>
 
-              <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
-                (click)="openPopupComment(item)">
+              <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
                 <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
                   position="top right"></nb-badge>
@@ -154,7 +154,8 @@
 
               <button
                 *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
-                nbButton status="success" nbTooltip="Edit Agree Start Date"
+                nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                nbTooltip="Edit Agree Start Date"
                 (click)="openPopupSignContractDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)"
                 [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
@@ -165,8 +166,8 @@
 
               <button
                 *ngIf="item.condition.button.nextStep && utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
-                nbButton status="success" [nbTooltip]="item.condition.button.step.button"
-                (click)="approve(item, item.condition.button.step)"
+                nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
                 [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)">
                 <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)"
                   nbTooltip="Agree start date is not arrived yet" text=" ! " status="warning" position="top right">
@@ -177,13 +178,13 @@
                 </span>
               </button>
 
-              <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
-                (click)="reject(item)">
+              <button *ngIf="item.condition.button.reject" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="danger" nbTooltip="Reject" (click)="reject(item)">
                 <nb-icon icon="close-circle"></nb-icon>
               </button>
 
-              <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
-                (click)="revoke(item)">
+              <button *ngIf="item.condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="primary" nbTooltip="Revoke" (click)="revoke(item)">
                 <nb-icon icon="undo"></nb-icon>
               </button>
 

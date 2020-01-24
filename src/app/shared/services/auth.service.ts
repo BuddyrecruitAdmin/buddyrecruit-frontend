@@ -19,7 +19,9 @@ import {
   UserCandidate,
   ContactId,
   UserEmail,
-  IconId
+  IconId,
+  Notification,
+  NotifIndex
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -223,4 +225,20 @@ export function setUserEmail(userEmail: string = null) {
 export function getUserEmail() {
   const userEmail = JSON.parse(localStorage.getItem(UserEmail));
   return (!userEmail || userEmail === null) ? undefined : userEmail;
+}
+export function setNotification(notification: string = null) {
+  localStorage.setItem(Notification, JSON.stringify(notification));
+}
+
+export function getNotification() {
+  const notification = JSON.parse(localStorage.getItem(Notification));
+  return (!notification || notification === null) ? undefined : notification;
+}
+export function setNotificationIndex(notifIndex: any = null) {
+  localStorage.setItem(NotifIndex, JSON.stringify(notifIndex));
+}
+
+export function getNotificationIndex() {
+  const notifIndex = JSON.parse(localStorage.getItem(NotifIndex));
+  return (!notifIndex || notifIndex === null) ? undefined : notifIndex;
 }

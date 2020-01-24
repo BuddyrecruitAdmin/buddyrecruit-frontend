@@ -1536,3 +1536,63 @@
   }
 }
 
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 575px) {
+  nb-popover{
+   display: none !important;
+  }
+  nb-tooltip{
+   display: none !important;
+  }
+  nb-dialog-container {
+    nb-card {
+      min-width: 1rem !important;
+    }
+  }
+  .notification-card {
+    position: fixed !important;
+    width: auto !important;
+    top: 40px;
+    right: 0;
+    z-index: 1001;
+    // border: 1px solid #dddfe2;
+  
+    nb-card-header {
+      border-bottom: 1px solid #dddfe2;
+      padding: 10px;
+    }
+    nb-card-body {
+      overflow-y: scroll;
+      padding: 0;
+    }
+    nb-card-body .notification-body {
+      padding: 1rem;
+    }
+    nb-card-body .notification-body:not(:last-child) {
+      border-bottom: 1px solid #dddfe2;
+    }
+    nb-card-body .notification-body.unread {
+      background-color: #edf2fa;
+    }
+    nb-card-body .notification-body:hover {
+      background-color: #f3f3f3;
+    }
+    nb-card-footer {
+      border-top: 1px solid #dddfe2;
+    }
+    nb-user .user-picture {
+      border: 1px solid var(--color-green);
+    }
+    nb-user .user-name {
+      color: var(--color-black);
+      font-size: 0.85rem;
+      line-height: 1rem;
+    }
+    nb-user .user-title {
+      color: var(--color-gray);
+      margin-top: 5px;
+    }
+  }
+  
+}

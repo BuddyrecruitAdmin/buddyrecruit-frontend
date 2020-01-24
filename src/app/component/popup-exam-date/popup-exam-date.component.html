@@ -48,13 +48,16 @@
   </nb-card-body>
   <nb-card-footer>
     <div class="footer-collapse">
-      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      <button nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="default"
+        (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()"
+    <button nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="primary" (click)="save()"
       [disabled]="!canApprove && (!location || !date || !time)">SAVE</button>
-    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND
+    <button *ngIf="!canApprove" nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="success"
+      (click)="sendEmail()">SEND
       EMAIL</button>
-    <button *ngIf="canApprove" nbButton status="success" (click)="passToExam()" [disabled]="!date || !time">PASS
+    <button *ngIf="canApprove" nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="success"
+      (click)="passToExam()" [disabled]="!date || !time">PASS
       TO EXAM</button>
   </nb-card-footer>
 </nb-card>
