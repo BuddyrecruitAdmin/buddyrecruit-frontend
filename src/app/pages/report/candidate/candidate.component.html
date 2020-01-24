@@ -20,6 +20,11 @@
           <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
             (click)="filterToggle()">
           </nb-action>
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
         </nb-actions>
       </div>
     </div>
@@ -110,7 +115,70 @@
 </nb-card>
 
 <div *ngIf="!loading && items.length">
-  <nb-card>
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-lg-6" *ngFor="let item of items;">
+        <nb-card style="margin-bottom: 1rem;">
+          <nb-card-header class="link" (click)="info(item)">
+            <div class="title">
+              <span class="link"
+                [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">{{ utilitiesService.setFullname(item.refCandidate) }}</span>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="text-group">
+              <label class="label">Job Description</label>
+              <span>{{ item?.refJR?.refJD?.position || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Job Status</label>
+              <span>{{ item?.refJR?.refStatus?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Stage</label>
+              <span>
+                {{ item?.refStage?.name || '-' }}
+              </span>
+            </div>
+            <div class="text-group">
+              <label class="label">Sub Stage</label>
+              <span>
+                {{ item?.refSubStage?.name || '-' }}
+              </span>
+            </div>
+            <div class="text-group">
+              <label class="label">Last changed update</label>
+              <span>
+                {{ utilitiesService.convertDateTimeFromSystem(item?.actionDate) || '-' }}
+              </span>
+            </div>
+            <div class="text-group" *ngIf="checked">
+              <label class="label">Reject Reason</label>
+              <span>
+                {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
+              </span>
+            </div>
+            <div class="text-group" *ngIf="checked">
+              <label class="label">Reject By</label>
+              <span>
+                {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
+              </span>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-12">
+        <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+          [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+          (page)="pageEvent = changePaging($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table layout -->
+  <nb-card *ngIf="!isGridLayout">
     <nb-card-body>
       <div class="table-responsive">
         <table class="table table-bordered table-striped">

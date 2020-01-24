@@ -31,7 +31,8 @@
     {
       "name": "api-performance",
       "urls": [
-        "https://p3qas.buddyrecruit.ai/**"
+        "https://p3qas.buddyrecruit.ai/**",
+        "https://i.ytimg.com/vi/cWtLbSNlnGk/sddefault.jpg"
       ],
       "cacheConfig": {
         "maxSize": 200,
