@@ -13,15 +13,17 @@
             <small *ngIf="!outlook.signIn && utilitiesService.dateIsValid(outlook?.lastUpdated)" class="text-gray">
               Last updated on {{ utilitiesService.convertDateTime(outlook?.lastUpdated) }}
             </small>
+            <small *ngIf="outlook.signIn && outlook?.name" class="text-gray">
+              {{ outlook?.name }} ({{ outlook?.username }})
+            </small>
           </div>
-          <button *ngIf="!outlook.signIn" nbButton status="success" size="small" (click)="outlookLogin()"
+          <button *ngIf="!outlook.signIn" nbButton status="success" size="small" (click)="signInWithOutlook()"
             [nbSpinner]="outlook.loading" nbSpinnerSize="tiny">
             Sign in
           </button>
-          <button *ngIf="outlook.signIn" nbButton status="success" size="small" [nbSpinner]="outlook.loading"
-            nbSpinnerSize="tiny" disabled>
-            <nb-icon icon="checkmark-outline" style="font-size: 1rem;"></nb-icon>
-            Sign in
+          <button *ngIf="outlook.signIn" nbButton status="default" size="small" [nbSpinner]="outlook.loading"
+            nbSpinnerSize="tiny" (click)="outlookLogout()">
+            Sign out
           </button>
         </div>
       </nb-card-body>
@@ -34,21 +36,20 @@
           <span class="sync-icon fab fa-google icon-google"></span>
           <div class="sync-content">
             Sign in with Google Calendar
-            <small *ngIf="!gmail.signIn && utilitiesService.dateIsValid(gmail?.lastUpdated)" class="text-gray">
-              Last updated on {{ utilitiesService.convertDateTime(gmail?.lastUpdated) }}
+            <small *ngIf="!google.signIn && utilitiesService.dateIsValid(google?.lastUpdated)" class="text-gray">
+              Last updated on {{ utilitiesService.convertDateTime(google?.lastUpdated) }}
+            </small>
+            <small *ngIf="google.signIn && google?.name" class="text-gray">
+              {{ google?.name }} ({{ google?.username }})
             </small>
           </div>
-          <!-- <button *ngIf="!gmail.signIn" nbButton status="success" size="small" class="float-right"
-            (click)="signInGoogle()" [nbSpinner]="gmail.loading" nbSpinnerSize="tiny">
+          <button *ngIf="!google.signIn" nbButton status="success" size="small" class="float-right"
+            (click)="signInWithGoogle()" [nbSpinner]="google.loading" nbSpinnerSize="tiny">
             Sign in
           </button>
-          <button *ngIf="gmail.signIn" nbButton status="success" size="small" class="float-right"
-            [nbSpinner]="gmail.loading" nbSpinnerSize="tiny" disabled>
-            <nb-icon icon="checkmark-outline" style="font-size: 1rem;"></nb-icon>
-            Sign in
-          </button> -->
-          <button nbButton status="success" size="small" class="float-right" disabled>
-            Coming Soon
+          <button *ngIf="google.signIn" nbButton status="default" size="small" [nbSpinner]="google.loading"
+            nbSpinnerSize="tiny" (click)="googleLogout()">
+            Sign out
           </button>
         </div>
       </nb-card-body>
@@ -252,6 +253,7 @@
   </nb-tab>
 </nb-tabset> -->
 
+<!-- [POPUP] Add Available Date  -->
 <ng-template #customCellTemplate let-day="day" let-locale="locale">
   <div class="cal-cell-top">
     <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
@@ -264,6 +266,7 @@
   </div>
 </ng-template>
 
+<!-- [POPUP] Interview Info -->
 <ng-template #dialogInfo let-data let-ref="dialogRef">
   <nb-card [style.max-height.px]="innerHeight" [style.width.px]="innerWidth">
     <nb-card-header>
@@ -337,6 +340,42 @@
           </td>
         </tr>
       </table>
+      <div class="text-right">
+        <span class="link text-light-gray" (click)="openCandidateDetail(candidateFlow)">See more detail
+          <nb-icon icon="arrow-forward-outline" class="font-inherit"></nb-icon>
+        </span>
+      </div>
     </nb-card-body>
+  </nb-card>
+</ng-template>
+
+<!-- [POPUP] User on Outlook  -->
+<ng-template #userOutlook let-data let-ref="dialogRef">
+  <nb-card [style.max-height.px]="innerHeight" [style.width.px]="innerWidth">
+    <nb-card-header>
+      <div class="title">
+        Sign in with Outlook calendar
+      </div>
+      <div class="actions">
+        <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="text-center m-b-20">
+        <h6 class="m-b-5">Choose an account</h6>
+        <div>to continue to Buddy Recruit</div>
+      </div>
+      <nb-card *ngFor="let user of outlook.users" class="user-block" (click)="outlookLogin(user.username)">
+        <nb-card-body>
+          <nb-user size="medium" [name]="user.name" [title]="user.username" [picture]="user.picture"></nb-user>
+        </nb-card-body>
+      </nb-card>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="link text-gray text-left m-b-5" (click)="outlookLogin()">
+        <nb-icon icon="person-outline"></nb-icon>
+        Use another account
+      </div>
+    </nb-card-footer>
   </nb-card>
 </ng-template>

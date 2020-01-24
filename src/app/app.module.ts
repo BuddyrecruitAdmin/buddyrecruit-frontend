@@ -32,6 +32,7 @@ import {
   NbButtonModule,
   NbTooltipModule,
 } from '@nebular/theme';
+import { PusherService } from './shared/services/pusher.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
@@ -79,7 +80,8 @@ import { environment } from '../environments/environment';
         TranslateService
       ],
       multi: true
-    }
+    },
+    PusherService
   ]
 })
 export class AppModule {

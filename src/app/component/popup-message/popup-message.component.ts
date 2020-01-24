@@ -23,6 +23,7 @@ export class PopupMessageComponent implements OnInit {
     switch (this.data.type) {
       case "C": { // Confirmation
         this.data.title = this.data.title || "Confirmation";
+        this.data.content = this.data.content || "Do you want to continue?";
         this.data.btnText = this.data.btnText || "YES";
         break;
       }

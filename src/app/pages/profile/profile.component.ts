@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { MESSAGE } from "../../shared/constants/message";
+import { MESSAGE } from '../../shared/constants/message';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
@@ -49,6 +49,8 @@ export class ProfileComponent implements OnInit {
   innerHeight: any;
   previewPicture: boolean;
   imgHeight: number;
+  lineQR: string;
+
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -100,26 +102,29 @@ export class ProfileComponent implements OnInit {
       email: [null, [Validators.required, Validators.email]],
       image: [null, Validators.required],
     });
-    this.firstName = this.loginForm.controls["firstname"];
-    this.lastName = this.loginForm.controls["lastname"];
-    this.passwordCur = this.loginForm.controls["passwordcur"];
-    this.passwordNew = this.loginForm.controls["passwordnew"];
-    this.passwordCon = this.loginForm.controls["passwordcon"];
-    this.email = this.loginForm.controls["email"];
+    this.firstName = this.loginForm.controls['firstname'];
+    this.lastName = this.loginForm.controls['lastname'];
+    this.passwordCur = this.loginForm.controls['passwordcur'];
+    this.passwordNew = this.loginForm.controls['passwordnew'];
+    this.passwordCon = this.loginForm.controls['passwordcon'];
+    this.email = this.loginForm.controls['email'];
     this.sErrorPassword = MESSAGE[50];
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
+
+    this.lineQR = '../../../assets/images/QR-Line.png';
   }
+
   validation(): boolean {
     this.touched = true;
     let isValid = true;
-    if (this.firstName.status === "INVALID") {
+    if (this.firstName.status === 'INVALID') {
       isValid = false;
     }
-    if (this.lastName.status === "INVALID") {
+    if (this.lastName.status === 'INVALID') {
       isValid = false;
     }
-    if (this.email.value === null || this.email.value === "") {
+    if (this.email.value === null || this.email.value === '') {
       this.sErrorEmail = MESSAGE[8];
       isValid = false;
     }
@@ -227,7 +232,7 @@ export class ProfileComponent implements OnInit {
     // cropper ready
   }
   loadImageFailed() {
-    this.showToast('danger', 'Error Message', "can't load image");
+    this.showToast('danger', 'Error Message', 'can\'t load image');
     // show message
   }
 
@@ -237,15 +242,15 @@ export class ProfileComponent implements OnInit {
   }
 
   close() {
-    this.croppedImage = "";
-    this.fileInput.nativeElement.value = "";
+    this.croppedImage = '';
+    this.fileInput.nativeElement.value = '';
     this.dialogRef.close()
   }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
     this.dialogRef.onClose.subscribe(reuslt =>
-      this.fileInput.nativeElement.value = ""
+      this.fileInput.nativeElement.value = ''
     )
   }
 

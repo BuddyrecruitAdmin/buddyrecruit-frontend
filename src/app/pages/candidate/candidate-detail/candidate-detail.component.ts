@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
@@ -35,7 +35,6 @@ export class CandidateDetailComponent implements OnInit {
   role: any;
   steps: any;
   flowId: any;
-  candidateId: any;
   item: any = {};
   loading: boolean;
   interviewScores: any;
@@ -50,19 +49,24 @@ export class CandidateDetailComponent implements OnInit {
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     private jdService: JdService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
     this.flowId = getFlowId() || '';
-    this.candidateId = getCandidateId() || '';
-    // setCandidateId();
-    this.devices = this.utilitiesService.getDevice();
     this.steps = this.role.refAuthorize.processFlow.exam.steps;
   }
 
   ngOnInit() {
     this.condition = this.initialModel();
     this.interviewScores = [];
-    this.getDetail();
+    this.activatedRoute.params.subscribe(params => {
+      if (params.id) {
+        setFlowId(params.id);
+        this.router.navigate(['/employer/candidate/detail']);
+      } else {
+        this.getDetail();
+      }
+    });
   }
 
   initialModel(): any {
@@ -106,6 +110,8 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   back() {
+    setFlowId();
+    setCandidateId();
     this.location.back();
   }
 
@@ -113,7 +119,7 @@ export class CandidateDetailComponent implements OnInit {
     this.loading = true;
     this.condition = this.initialModel();
     this.interviewScores = [];
-    this.service.getDetail(this.candidateId).subscribe(response => {
+    this.service.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
         if (this.item.candidateFlow.pendingInterviewScoreInfo.flag) {
@@ -140,8 +146,13 @@ export class CandidateDetailComponent implements OnInit {
         }
         this.setCondition(this.item);
       } else {
-        this.showToast('danger', 'Error Message', response.message);
-        this.location.back();
+        const confirm = this.matDialog.open(PopupMessageComponent, {
+          width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+          data: { type: 'I', content: 'No data found!' }
+        });
+        confirm.afterClosed().subscribe(result => {
+          this.router.navigate(['/employer/candidate/list']);
+        });
       }
       this.loading = false;
     });
@@ -283,10 +294,10 @@ export class CandidateDetailComponent implements OnInit {
               }
               break;
             case 402:
-              this.condition.icon.interviewDate = true;
+              // this.condition.icon.interviewDate = true;
               if (item.candidateFlow.refJR.userInterviews.length) {
                 const found = item.candidateFlow.refJR.userInterviews.find(element => {
-                  return element.refUser === this.role._id;
+                  return element.refUser._id === this.role._id;
                 });
                 if (found) {
                   this.condition.icon.interviewScore = true;
@@ -374,7 +385,7 @@ export class CandidateDetailComponent implements OnInit {
 
   approve(item: any, button: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     setButtonId(button._id);
     this.dialogService.open(PopupPreviewEmailComponent,
       {
@@ -393,7 +404,7 @@ export class CandidateDetailComponent implements OnInit {
 
   reject(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PopupRejectComponent,
       {
         closeOnBackdropClick: false,
@@ -444,7 +455,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPopupExamDate(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PopupExamDateComponent,
       {
         closeOnBackdropClick: false,
@@ -452,6 +463,7 @@ export class CandidateDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
+      setCandidateId();
       if (result) {
         this.getDetail();
       }
@@ -460,7 +472,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPopupExamInfo(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PopupExamInfoComponent,
       {
         closeOnBackdropClick: false,
@@ -477,7 +489,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPopupExamScore(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PopupExamScoreComponent,
       {
         closeOnBackdropClick: false,
@@ -494,7 +506,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPopupInterviewDate(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     setJrId(item.candidateFlow.refJR._id);
     this.dialogService.open(PopupInterviewDateComponent,
       {
@@ -513,7 +525,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPopupInterviewScore(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PopupEvaluationComponent,
       {
         closeOnBackdropClick: false,
@@ -530,7 +542,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPopupSignContractDate(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PopupSignDateComponent,
       {
         closeOnBackdropClick: false,
@@ -547,7 +559,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openPrintCandidate(item: any) {
     setFlowId(item.candidateFlow._id);
-    setCandidateId(this.candidateId);
+    setCandidateId(item._id);
     this.dialogService.open(PrintCandidateComponent,
       {
         closeOnBackdropClick: false,

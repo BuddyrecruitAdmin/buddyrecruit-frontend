@@ -1009,11 +1009,8 @@
     color: var(--color-white);
   }
   .cal-event-title:hover {
-    text-decoration: none;
+    text-decoration: underline;
     opacity: 0.8;
-  }
-  .cancelled .cal-event-title {
-    text-decoration: line-through;
   }
   .cal-event-action {
     color: var(--color-light-gray);
@@ -1035,6 +1032,9 @@
     text-decoration: none;
     opacity: 1;
     cursor: default;
+  }
+  .cal-past .cell-totals .badge {
+    opacity: 0.4;
   }
 
   // --------------------------------------------------------------------
@@ -1534,6 +1534,7 @@
     margin-top: -5px;
     float: right;
   }
+
 }
 
 /* Smartphones (portrait) ----------- */

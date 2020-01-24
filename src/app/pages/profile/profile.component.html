@@ -10,9 +10,14 @@
           <img class="img-default" (click)="fileInput.click()"
             [src]="url ? url : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
           <br>
-          <a style="cursor: pointer;" (click)="fileInput.click()"><span class="fa fa-images"></span>
-            <input #fileInput type="file" (change)="fileChangeEvent($event,dialog,$event.target.files)"
-              style="display:none;" accept="image/*" />Select Profile Picture</a>
+          <small class="text-gray">
+            <a style="cursor: pointer;" (click)="fileInput.click()">
+              <span class="fa fa-images"></span>
+              <input #fileInput type="file" (change)="fileChangeEvent($event,dialog,$event.target.files)"
+                style="display:none;" accept="image/*" />
+              <span class="m-l-5">Select Profile Picture</span>
+            </a>
+          </small>
           <h6 class="text-ellipsis text-center">
             {{ profileDetail.firstname }} {{ profileDetail.lastname }}
           </h6>
@@ -49,6 +54,16 @@
               </div>
             </div>
           </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+    <nb-card *ngIf="lineQR">
+      <nb-card-header>
+        <span class="fab fa-line" style="color: #00b900;"></span> Line official account
+      </nb-card-header>
+      <nb-card-body>
+        <div class="text-center">
+          <img class="img-fluid" [src]="lineQR" alt="">
         </div>
       </nb-card-body>
     </nb-card>

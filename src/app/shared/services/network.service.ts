@@ -123,4 +123,20 @@ export class NetworkService {
     };
   }
 
+  protected testPost = (data: any): Observable<any> => {
+    const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    const uri = `https://p3bkd-qas.buddyrecruit.ai/line`;
+
+    return this.httpClient.post<any>(uri, data, {
+      headers: headers, observe: 'response', withCredentials: true
+    }).pipe(
+      map(response => {
+        return {
+          data: response.body
+        };
+      }),
+      catchError(this._handleError('post', this.ErrorResponse()))
+    );
+  }
+
 }

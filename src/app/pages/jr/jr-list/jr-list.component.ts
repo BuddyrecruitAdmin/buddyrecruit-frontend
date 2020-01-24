@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
@@ -36,6 +36,7 @@ export class JrListComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
+  refCompany: string;
 
   constructor(
     private router: Router,
@@ -45,28 +46,25 @@ export class JrListComponent implements OnInit {
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     private authorizeService: AuthorizeService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
-    if (this.role && this.role.refAuthorize) {
-      this.authorizeService.getDetail(this.role.refAuthorize._id).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.role.refAuthorize = response.data;
-          let token = getAuthentication();
-          token.role = this.role;
-          setAuthentication(token);
-        }
-      });
-    }
-    this.role = getRole();
-    this.devices = this.utilitiesService.getDevice();
-    this.isGridLayout = getIsGridLayout();
-    if (!this.isGridLayout) {
-      if (this.devices.isMobile || this.devices.isTablet) {
-        this.isGridLayout = true;
-      } else {
-        this.isGridLayout = false;
+    if (this.role) {
+      if (this.role.refAuthorize) {
+        this.authorizeService.getDetail(this.role.refAuthorize._id).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.role.refAuthorize = response.data;
+            let token = getAuthentication();
+            token.role = this.role;
+            setAuthentication(token);
+          }
+        });
+      }
+      if (this.role.refCompany) {
+        this.refCompany = this.role.refCompany;
       }
     }
+    this.isGridLayout = this.utilitiesService.setIsGridLayout();
   }
 
   ngOnInit() {
@@ -80,7 +78,12 @@ export class JrListComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.search();
+    this.activatedRoute.params.subscribe(params => {
+      if (params.search) {
+        this.keyword = params.search;
+      }
+      this.search();
+    });
   }
 
   search() {
@@ -103,7 +106,7 @@ export class JrListComponent implements OnInit {
       ]
     };
     this.items = [];
-    this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
+    this.service.getList(this.criteria, this.refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.paging.length = response.totalDataSize;
         this.isOverQuota = response.isOverQuota;

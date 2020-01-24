@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { JdService } from '../jd.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getIsGridLayout, setIsGridLayout, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
+import { getRole, setIsGridLayout, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -28,7 +28,6 @@ export class JdListComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   minPageSize = Paging.pageSizeOptions[0];
-  devices: Devices;
   loading: boolean;
   isGridLayout: boolean;
   showTips: {
@@ -57,16 +56,7 @@ export class JdListComponent implements OnInit {
         }
       });
     }
-    this.role = getRole();
-    this.devices = this.utilitiesService.getDevice();
-    this.isGridLayout = getIsGridLayout();
-    if (!this.isGridLayout) {
-      if (this.devices.isMobile || this.devices.isTablet) {
-        this.isGridLayout = true;
-      } else {
-        this.isGridLayout = false;
-      }
-    }
+    this.isGridLayout = this.utilitiesService.setIsGridLayout();
     if (this.role.refAuthorize.jd.editable) {
       this.showTips = {
         jobPosition: false,

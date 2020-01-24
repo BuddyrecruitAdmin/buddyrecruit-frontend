@@ -10,11 +10,13 @@ export const API_ENDPOINT = {
       LIST: "user/calendar/list",
       BY_JR: "user/calendar/jr",
       EDIT: "user/calendar/edit",
+      CHECK: "user/calendar/checkUsing",
       OUTLOOK: {
         LOGIN: "user/calendar/outlook/login",
         DECODE: "user/calendar/outlook/decode",
         GET_TOKEN: "user/calendar/outlook/getToken",
         CALENDAR: "user/calendar/outlook/calendar",
+        USERS: "user/calendar/outlook/users",
       }
     },
     WORKING_DAYS: {
@@ -113,7 +115,7 @@ export const API_ENDPOINT = {
     COMPANY_EDIT: "company/edit",
     COMPANY_DELETE: "company/delete",
     COMPANY_DETAIL: "company/detail",
-  
+
 
     DEPARTMENT_LIST: "department/list",
     DEPARTMENT_CREATE: "department/create",
@@ -256,5 +258,19 @@ export const API_ENDPOINT = {
     EDIT: "contact/edit",
     DETAIL: "contact/detail",
     DELETE: "contact/delete",
+  },
+  OUTLOOK: {
+    LOGIN: "outlook/login",
+    DECODE: "outlook/decode",
+    GET_TOKEN: "outlook/getToken",
+    CALENDAR: "outlook/calendar",
+    USERS: "outlook/users",
+  },
+  GOOGLE: {
+    LOGIN: "google/login",
+    DECODE: "google/decode",
+    GET_TOKEN: "google/getToken",
+    CALENDAR: "google/calendar",
+    USERS: "google/users",
   }
 };

@@ -19,6 +19,7 @@ export interface Count {
   rejected?: number;
   started?: number;
   unread?: number;
+  unRead?: number;
   unseen?: number;
 }
 

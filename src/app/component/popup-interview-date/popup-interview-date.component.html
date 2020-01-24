@@ -25,7 +25,7 @@
     </div>
     <div class="form-control-group m-b-10">
       <label class="label m-b-5">Select Date From</label>
-      <nb-radio-group name="my-radio-group" [(ngModel)]="selectDateFrom" class="inline"
+      <nb-radio-group [(ngModel)]="selectDateFrom" name="selectDateFrom" class="inline"
         (valueChange)="onChangeSelectDateFrom($event)">
         <nb-radio value="AVAILABLE">Available Date</nb-radio>
         <nb-radio value="CUSTOMIZE">Customize</nb-radio>
@@ -58,13 +58,23 @@
           {{ errMsg.available.time }}
         </small>
       </div>
-      <div class="form-control-group m-0">
+      <div class="form-control-group">
         <label class="label">Interview Users</label>
         <div *ngFor="let user of users" [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
           <nb-icon icon="person-outline"></nb-icon>
           <span class="m-l-5">{{ user.name }}</span>
           <nb-icon *ngIf="user.active" icon="checkmark-outline" class="text-green"></nb-icon>
         </div>
+      </div>
+      <div *ngIf="outlookUsername || googleUsername" class="form-control-group m-0">
+        <label class="label">Invite Meeting From <span *ngIf="!outlookUsername && !googleUsername" class="text-red">(No
+            sync)</span></label>
+        <nb-radio-group [(ngModel)]="inviteFrom" name="inviteFrom">
+          <nb-radio value="OUTLOOK" [disabled]="!outlookUsername">Outlook Calendar <span *ngIf="outlookUsername"
+              class="text-gray">({{ outlookUsername }})</span></nb-radio>
+          <nb-radio value="GOOGLE" [disabled]="!googleUsername">Google Calendar <span *ngIf="googleUsername"
+              class="text-gray">({{ googleUsername }})</span></nb-radio>
+        </nb-radio-group>
       </div>
     </div>
     <div *ngIf="selectDateFrom === 'CUSTOMIZE'" class="card card-body">
@@ -96,12 +106,22 @@
           </small>
         </div>
       </div>
-      <div class="form-control-group m-0">
+      <div class="form-control-group">
         <label class="label">Interview Users</label>
         <div *ngFor="let user of users" class="m-l-10"
           [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
           <mat-checkbox [(ngModel)]="user.active">{{ user.name }}</mat-checkbox>
         </div>
+      </div>
+      <div *ngIf="outlookUsername || googleUsername" class="form-control-group m-0">
+        <label class="label">Invite Meeting From <span *ngIf="!outlookUsername && !googleUsername" class="text-red">(No
+            sync)</span></label>
+        <nb-radio-group [(ngModel)]="inviteFrom" name="inviteFrom">
+          <nb-radio value="OUTLOOK" [disabled]="!outlookUsername">Outlook Calendar <span *ngIf="outlookUsername"
+              class="text-gray">({{ outlookUsername }})</span></nb-radio>
+          <nb-radio value="GOOGLE" [disabled]="!googleUsername">Google Calendar <span *ngIf="googleUsername"
+              class="text-gray">({{ googleUsername }})</span></nb-radio>
+        </nb-radio-group>
       </div>
     </div>
   </nb-card-body>
