@@ -32,6 +32,7 @@ import {
   NbButtonModule,
   NbTooltipModule,
 } from '@nebular/theme';
+import { PusherService } from './shared/services/pusher.service';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import {
         TranslateService
       ],
       multi: true
-    }
+    },
+    PusherService
   ]
 })
 export class AppModule {

@@ -316,7 +316,8 @@ export class OnboardDetailComponent implements OnInit {
   openCandidateDetail(item: any) {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
-    setCandidateId(item._id);
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
     this.router.navigate(["/employer/candidate/detail"]);
   }
 

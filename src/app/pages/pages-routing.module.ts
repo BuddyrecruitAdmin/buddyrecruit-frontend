@@ -56,6 +56,10 @@ const routes: Routes = [
         path: 'candidate/detail',
         component: CandidateDetailComponent,
       },
+      {
+        path: 'candidate/detail/:id',
+        component: CandidateDetailComponent,
+      },
       // Dashboard
       {
         path: 'dashboard',
@@ -78,6 +82,10 @@ const routes: Routes = [
       // JR
       {
         path: 'jr/list',
+        component: JrListComponent,
+      },
+      {
+        path: 'jr/list/:search',
         component: JrListComponent,
       },
       {

@@ -9,14 +9,14 @@ import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { MESSAGE } from "../../shared/constants/message";
+import { MESSAGE } from '../../shared/constants/message';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 import { API_ENDPOINT } from '../../shared/constants';
 import { environment } from '../../../environments/environment';
 import { Location } from '@angular/common';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
-const URL = environment.API_URI + "/" + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
+const URL = environment.API_URI + '/' + API_ENDPOINT.CONFIGURATION.USER_PROFILE_UPLOAD;
 
 @Component({
   selector: 'ngx-profile',
@@ -54,11 +54,8 @@ export class ProfileComponent implements OnInit {
   innerHeight: any;
   previewPicture: boolean;
   imgHeight: number;
-  testRandom: any;
-  animationTimer: any;
-  testArray = ["test01", "test02", "test03", "test04", "test05"];
-  testArrayIndex: any = '';
-  test = 1;
+  lineQR: string;
+
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -72,36 +69,7 @@ export class ProfileComponent implements OnInit {
     this.innerHeight = window.innerHeight;
   }
 
-  rnd() {
-    if (this.testArray.length) {
-      var that = this
-      var started = new Date().getTime();
-      setInterval(() => {
-        this.ssss();
-        // If the value is what we want, stop animating
-        // or if the duration has been exceeded, stop animating
-        if (new Date().getTime() - started > 5000) {
-          clearInterval(this.animationTimer);
-        } else {
-         
-          // Generate a random string to use for the next animation step
-          this.testRandom = Math.floor(Math.random() * that.testArray.length);
-          console.log(this.testRandom)
-          this.testArrayIndex = that.testArray[this.testRandom];
-          console.log(this.testArrayIndex)
-          // this.testArrayIndex.toString();
-          // return this.testArrayIndex
-        }
-      }, 1000);
-    }
-  }
-
-  ssss() {
-    this.test++;
-  }
-
   ngOnInit() {
-    this.testArrayIndex = this.testArray[0];
     this.profileDetail = {
       _id: undefined,
       firstname: undefined,
@@ -139,26 +107,29 @@ export class ProfileComponent implements OnInit {
       email: [null, [Validators.required, Validators.email]],
       image: [null, Validators.required],
     });
-    this.firstName = this.loginForm.controls["firstname"];
-    this.lastName = this.loginForm.controls["lastname"];
-    this.passwordCur = this.loginForm.controls["passwordcur"];
-    this.passwordNew = this.loginForm.controls["passwordnew"];
-    this.passwordCon = this.loginForm.controls["passwordcon"];
-    this.email = this.loginForm.controls["email"];
+    this.firstName = this.loginForm.controls['firstname'];
+    this.lastName = this.loginForm.controls['lastname'];
+    this.passwordCur = this.loginForm.controls['passwordcur'];
+    this.passwordNew = this.loginForm.controls['passwordnew'];
+    this.passwordCon = this.loginForm.controls['passwordcon'];
+    this.email = this.loginForm.controls['email'];
     this.sErrorPassword = MESSAGE[50];
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
+
+    this.lineQR = '../../../assets/images/QR-Line.png';
   }
+
   validation(): boolean {
     this.touched = true;
     let isValid = true;
-    if (this.firstName.status === "INVALID") {
+    if (this.firstName.status === 'INVALID') {
       isValid = false;
     }
-    if (this.lastName.status === "INVALID") {
+    if (this.lastName.status === 'INVALID') {
       isValid = false;
     }
-    if (this.email.value === null || this.email.value === "") {
+    if (this.email.value === null || this.email.value === '') {
       this.sErrorEmail = MESSAGE[8];
       isValid = false;
     }
@@ -267,7 +238,7 @@ export class ProfileComponent implements OnInit {
     // cropper ready
   }
   loadImageFailed() {
-    this.showToast('danger', 'Error Message', "can't load image");
+    this.showToast('danger', 'Error Message', 'can\'t load image');
     // show message
   }
 
@@ -277,15 +248,15 @@ export class ProfileComponent implements OnInit {
   }
 
   close() {
-    this.croppedImage = "";
-    this.fileInput.nativeElement.value = "";
+    this.croppedImage = '';
+    this.fileInput.nativeElement.value = '';
     this.dialogRef.close()
   }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
     this.dialogRef.onClose.subscribe(reuslt =>
-      this.fileInput.nativeElement.value = ""
+      this.fileInput.nativeElement.value = ''
     )
   }
 

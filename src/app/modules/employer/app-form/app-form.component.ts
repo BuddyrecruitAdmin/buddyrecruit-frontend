@@ -145,7 +145,7 @@ export class AppFormComponent implements OnInit {
           // this.setDisabled();
         }
       }
-    })
+    });
     this.setLang(this.lang);
   }
 

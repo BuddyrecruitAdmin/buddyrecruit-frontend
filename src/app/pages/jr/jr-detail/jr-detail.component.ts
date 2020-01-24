@@ -76,7 +76,6 @@ export class JrDetailComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.initialModel();
-    this.initialEvaluation();
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this._id = params.id;
@@ -87,23 +86,15 @@ export class JrDetailComponent implements OnInit {
         this.jobStatus = undefined;
         if (params.action === State.Edit) {
           this.state = State.Edit;
-          this.initialDropDown().then((response) => {
-            this.getDetailList();
-          });
-        }
-        if (params.action === 'duplicate') {
+        } else if (params.action === 'duplicate') {
           this.state = 'duplicate';
-          this.initialDropDown().then((response) => {
-            this.getDetailList();
-          });
-        }
-        if (params.action === 'preview') {
+        } else if (params.action === 'preview') {
           this.state = 'preview';
           this.checkPreview = true;
-          this.initialDropDown().then((response) => {
-            this.getDetailList();
-          });
         }
+        this.initialDropDown().then((response) => {
+          this.getDetail();
+        });
       } else {
         this.state = State.Create;
         this.jr.requiredExam = false;
@@ -117,27 +108,6 @@ export class JrDetailComponent implements OnInit {
         this.initialDropDown();
       }
     });
-
-  }
-
-  initialEvaluation() {
-    this.Evaluation = [];
-    this.Evaluation.push({
-      label: '- Select Evaluation -',
-      value: undefined
-    });
-    this.service.getEvaluationList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.forEach(element => {
-            this.Evaluation.push({
-              label: element.name,
-              value: element._id
-            })
-          });
-        }
-      }
-    })
   }
 
   initialModel(): any {
@@ -162,11 +132,12 @@ export class JrDetailComponent implements OnInit {
   }
 
   async initialDropDown() {
-    await this.initialJobPosition();
-    await this.initialUser();
+    await this.getJobPosition();
+    await this.getUserList();
+    await this.getEvaluationList();
   }
 
-  initialJobPosition() {
+  getJobPosition() {
     return new Promise((resolve) => {
       this.JobPosition = [];
       this.JobPosition.push({
@@ -181,7 +152,7 @@ export class JrDetailComponent implements OnInit {
               this.JobPosition.push({
                 label: element.position,
                 value: element._id
-              })
+              });
             });
           }
         }
@@ -190,7 +161,7 @@ export class JrDetailComponent implements OnInit {
     });
   }
 
-  initialUser() {
+  getUserList() {
     return new Promise((resolve) => {
       this.Users = [];
       this.Users.push({
@@ -205,10 +176,33 @@ export class JrDetailComponent implements OnInit {
               label: this.utilitiesService.setFullname(item.refUser),
               value: item._id,
               group: 'disabled'
-            })
-          })
+            });
+          });
         }
-      })
+      });
+      resolve();
+    });
+  }
+
+  getEvaluationList() {
+    return new Promise((resolve) => {
+      this.Evaluation = [];
+      this.Evaluation.push({
+        label: '- Select Evaluation -',
+        value: undefined
+      });
+      this.service.getEvaluationList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            response.data.forEach(element => {
+              this.Evaluation.push({
+                label: element.name,
+                value: element._id
+              })
+            });
+          }
+        }
+      });
       resolve();
     });
   }
@@ -233,7 +227,7 @@ export class JrDetailComponent implements OnInit {
     });
   }
 
-  getDetailList() {
+  getDetail() {
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {

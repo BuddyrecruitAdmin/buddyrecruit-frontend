@@ -24,7 +24,7 @@ import {
   CalendarView,
   CalendarMonthViewDay
 } from 'angular-calendar';
-import { getRole, setDate, setOutlookToken, getOutlookToken, setGoogleToken, getGoogleToken, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, setDate, setOutlookToken, getOutlookToken, setGoogleToken, getGoogleToken, setCandidateId, setFlowId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { CalendarService } from './calendar.service';
@@ -576,7 +576,8 @@ export class CalendarComponent implements OnInit {
       if (this.dialogRef) {
         this.dialogRef.close();
       }
-      setCandidateId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setFlowId(item._id);
       this.router.navigate(["/employer/candidate/detail"]);
     }
   }

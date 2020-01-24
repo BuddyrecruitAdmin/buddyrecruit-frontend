@@ -1,0 +1,31 @@
+<div class="registration" [style.min-height.px]="innerHeight">
+  <div class="registration-content">
+    <div class="registration-logo">
+      <img src="../../../../assets//images/logo.png" alt="Buddy Recruit" width="50" height="50">
+      <span class="name">
+        <span class="text-green">B</span>UDDY <span class="text-green">R</span>ECRUIT
+      </span>
+    </div>
+    <div class="registration-header" [ngClass]="bgClass">
+      <nb-icon icon="alert-circle-outline"></nb-icon> {{ topic }}
+    </div>
+    <div class="registration-body">
+      <p>Dear you,</p>
+      <br>
+      <p>{{ message }}</p>
+      <br>
+      <br>
+      <!-- <div class="text-center">
+        <button nbButton status="default" (click)="window.close()">CLOSE THIS PAGE</button>
+      </div>
+      <br>
+      <br> -->
+      <p class="m-b-5">Sincerely,</p>
+      <p class="m-0"><b>Buddy Recruit team</b></p>
+    </div>
+    <div class="registration-footer">
+      <p>Buddy Recruit</p>
+      <p>Copyright © 1999 ZyGenCenter.com All Rights Reserved.</p>
+    </div>
+  </div>
+</div>

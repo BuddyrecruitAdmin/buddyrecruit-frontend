@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Devices } from '../interfaces/common.interface';
 import { InnerWidth } from '../../shared/app.constants';
-import { getRole, getToken } from '../../shared/services/auth.service';
+import { getRole, getToken, getIsGridLayout } from '../../shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -168,6 +168,19 @@ export class UtilitiesService {
     }
 
     return devices;
+  }
+
+  setIsGridLayout(): boolean {
+    const devices = this.getDevice();
+    let isGridLayout = getIsGridLayout();
+    if (isGridLayout === undefined) {
+      if (devices.isMobile || devices.isTablet) {
+        isGridLayout = true;
+      } else {
+        isGridLayout = false;
+      }
+    }
+    return isGridLayout;
   }
 
   calculatePercentage(value1: any, value2: any): string {
