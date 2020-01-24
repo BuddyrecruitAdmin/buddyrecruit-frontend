@@ -279,29 +279,33 @@
   </nb-card-body>
   <nb-card-footer>
     <div class="float-left">
-      <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton status="default" (click)="checkCV(item._id)"
-        nbTooltip="Original CV">
+      <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+        status="default" (click)="checkCV(item._id)" nbTooltip="Original CV">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
-      <button nbButton status="default" (click)="openPrintCandidate(item)" nbTooltip="Print">
+      <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default"
+        (click)="openPrintCandidate(item)" nbTooltip="Print">
         <nb-icon icon="printer-outline"></nb-icon>
       </button>
     </div>
-    <button *ngIf="condition.button.comment" nbButton status="info" nbTooltip="Comment"
-      (click)="openPopupComment(item)">
+    <button *ngIf="condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
+      nbTooltip="Comment" (click)="openPopupComment(item)">
       <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
       <nb-badge *ngIf="item.candidateFlow?.comments.length" [text]="item.candidateFlow?.comments.length" status="danger"
         position="top right">
       </nb-badge>
     </button>
-    <button *ngIf="condition.button.nextStep" nbButton status="success" [nbTooltip]="condition.button.step.button"
-      (click)="approve(item, condition.button.step)" [disabled]="condition.button.disabled">
+    <button *ngIf="condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+      [nbTooltip]="condition.button.step.button" (click)="approve(item, condition.button.step)"
+      [disabled]="condition.button.disabled">
       <nb-icon icon="checkmark-circle-2"></nb-icon>
     </button>
-    <button *ngIf="condition.button.reject" nbButton status="danger" nbTooltip="Reject" (click)="reject(item)">
+    <button *ngIf="condition.button.reject" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="danger"
+      nbTooltip="Reject" (click)="reject(item)">
       <nb-icon icon="close-circle"></nb-icon>
     </button>
-    <button *ngIf="condition.button.revoke" nbButton status="primary" nbTooltip="Revoke" (click)="revoke(item)">
+    <button *ngIf="condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary"
+      nbTooltip="Revoke" (click)="revoke(item)">
       <nb-icon icon="undo"></nb-icon>
     </button>
   </nb-card-footer>

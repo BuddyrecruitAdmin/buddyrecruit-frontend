@@ -30,6 +30,9 @@
   "dataGroups": [
     {
       "name": "api-performance",
+      "urls": [
+        "https://p3qas.buddyrecruit.ai/**"
+      ],
       "cacheConfig": {
         "maxSize": 200,
         "maxAge": "3d",

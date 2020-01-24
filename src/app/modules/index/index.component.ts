@@ -143,7 +143,7 @@ export class IndexComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.innerHeight = window.innerHeight * 0.75;
-    this.innerWidth = window.innerWidth * 0.8;
+    this.innerWidth = window.innerWidth * 0.325;
     this.devices = this.utilitiesService.getDevice();
     if (this.devices.isMobile || this.devices.isTablet) {
       this.showNavigationArrows = false;

@@ -37,6 +37,7 @@ export class PopupExamDateComponent implements OnInit {
     date: '',
     time: ''
   }
+  devices: any
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupExamDateComponent>,
@@ -52,6 +53,7 @@ export class PopupExamDateComponent implements OnInit {
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

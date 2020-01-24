@@ -23,7 +23,6 @@ export class PopupCommentComponent implements OnInit {
   message: string;
   loading: boolean;
   result: boolean = false;
-
   constructor(
     private service: PopupCommentService,
     private ref: NbDialogRef<PopupCommentComponent>,

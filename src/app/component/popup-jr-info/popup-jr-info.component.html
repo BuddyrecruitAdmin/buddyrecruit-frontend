@@ -2,7 +2,7 @@
   nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <label [nbTooltip]="jrDetail.refJD?.position">{{ jrDetail.refJD?.position }}</label>
+      <span [nbTooltip]="jrDetail.refJD?.position">{{ jrDetail.refJD.position || '-' }}</span>
       <small class="status">
         Status: <label class="label"
           [ngClass]="utilitiesService.getJrStatusClass(jrDetail.refStatus?.status)">{{ jrDetail.refStatus.name || '-' }}</label>
