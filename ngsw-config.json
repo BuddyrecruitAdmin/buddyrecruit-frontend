@@ -22,10 +22,10 @@
       "resources": {
         "files": [
           "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
-        ],
-        "urls": [
-          "https://p3qas.buddyrecruit.ai/**"
+          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)",
+          "https://p3qas.buddyrecruit.ai/**",
+          "https://fonts.gstatic.com/s/opensans/v17/**",
+          "https://p3qas.buddyrecruit.ai/assets/images/**"
         ]
       }
     }
@@ -37,9 +37,9 @@
         "https://p3qas.buddyrecruit.ai/**"
       ],
       "cacheConfig": {
-        "maxSize": 200,
-        "maxAge": "3d",
-        "strategy": "performance"
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "3d"
       }
     }
   ]
