@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RegistrationService } from './registration.service';
 import { ActivatedRoute } from "@angular/router";
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'ngx-registration',
@@ -17,7 +16,6 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private service: RegistrationService,
-    private location: Location,
   ) {
 
   }

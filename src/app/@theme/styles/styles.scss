@@ -188,7 +188,8 @@
   //   padding: 1.75rem 1.75rem 0.75rem;
   // }
 
-  .form-control-group {
+  .form-control-group,
+  .form-group {
     margin-bottom: 1rem;
     label {
       display: block;
@@ -613,10 +614,11 @@
     .actions {
       float: right;
       nb-icon {
+        font-size: 1.5rem;
         vertical-align: middle;
       }
       nb-icon:not(:first-child) {
-        margin-left: 1rem;
+        margin-left: 0.5rem;
       }
       .fa-star {
         font-size: 150%;

@@ -236,8 +236,8 @@
                       </div>
                     </div>
                     <div class="text-group">
-                      <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
-                        <nb-icon icon="info-outline"></nb-icon> See more detail
+                      <span class="link" (click)="info(item)">
+                        <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                       </span>
                     </div>
                     <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">

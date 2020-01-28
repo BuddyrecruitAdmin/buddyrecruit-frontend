@@ -123,10 +123,8 @@ export class NetworkService {
     };
   }
 
-  protected testPost = (data: any): Observable<any> => {
+  protected testPost = (uri: any, data: any): Observable<any> => {
     const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    const uri = `https://p3bkd-qas.buddyrecruit.ai/line`;
-
     return this.httpClient.post<any>(uri, data, {
       headers: headers, observe: 'response', withCredentials: true
     }).pipe(

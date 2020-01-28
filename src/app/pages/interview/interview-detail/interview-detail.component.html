@@ -85,8 +85,8 @@
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
                   <div class="text-group">
-                    <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
-                      <nb-icon icon="info-outline"></nb-icon> See more detail
+                    <span class="link" (click)="info(item)">
+                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                     </span>
                   </div>
                 </div>
@@ -128,11 +128,12 @@
                         <span>{{ item.avg || '-' }}</span>
                       </div>
                       <div class="text-group">
-                        <label class="label">Result <span class="link underline" nbTooltip="See more result"
-                            (click)="infoResult(item)">
+                        <label class="label">Result
+                          <span class="link text-orange" nbTooltip="More Details" (click)="infoResult(item)">
                             <nb-icon icon="info-outline"></nb-icon>
-                          </span></label>
-                        <span [nbTooltip]="item.result">{{ item.result || '-'}}</span>
+                          </span>
+                        </label>
+                        <span>{{ item.result || '-'}}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Remark</label>
@@ -190,8 +191,8 @@
                 (click)="approve(item, item.condition.button.step)"
                 [disabled]="item.condition.isExpired || item.condition.button.disabled">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
-                <nb-badge *ngIf="item.condition.button.disabled && !devices.isMobile" text="!" nbTooltip="Interview date is not arrived yet"
-                  status="warning" position="top right"></nb-badge>
+                <nb-badge *ngIf="item.condition.button.disabled && !devices.isMobile" text="!"
+                  nbTooltip="Interview date is not arrived yet" status="warning" position="top right"></nb-badge>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
                 </span>

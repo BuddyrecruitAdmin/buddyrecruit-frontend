@@ -17,12 +17,13 @@ export class RegistrationService extends NetworkService {
   }
 
   test(): Observable<ApiResponse> {
+    const uri = `https://p3bkd-qas.buddyrecruit.ai/line`;
     const body = {
       lineId: 'U165f95b715c2b3060874a4d269eb4114',
       command: 'REGIS',
       username: 'vsengi@outlook.com',
     }
-    return this.testPost(body);
+    return this.testPost(uri, body);
   }
 
 }

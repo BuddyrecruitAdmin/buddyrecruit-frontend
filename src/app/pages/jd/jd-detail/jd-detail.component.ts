@@ -115,7 +115,7 @@ export class JdDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initialModel();
+    this.jd = this.initialModel();
     this.checkDivision = false;
     this.bHasFile = false;
     this.modeEditable = true;
@@ -150,13 +150,14 @@ export class JdDetailComponent implements OnInit {
           this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
           this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
           this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
+          this.jd.departmentId = this.role.departmentId || undefined;
         }
       });
     });
   }
 
   initialModel(): any {
-    this.jd = {
+    return {
       _id: undefined,
       position: undefined,
       refPosition: undefined,
@@ -191,7 +192,6 @@ export class JdDetailComponent implements OnInit {
         uploadName: undefined,
       }
     }
-    return this.jd;
   }
 
   async initialDropdown() {
@@ -273,13 +273,16 @@ export class JdDetailComponent implements OnInit {
   }
 
   getEducation() {
-    this.service.getEducationList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          this.jd.weightScore.education.weight = response.data;
-          this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
+    return new Promise((resolve) => {
+      this.service.getEducationList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            this.jd.weightScore.education.weight = response.data;
+            this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
+          }
         }
-      }
+        resolve();
+      });
     });
   }
 
@@ -1087,7 +1090,7 @@ export class JdDetailComponent implements OnInit {
   }
 
   convertArray(conA) {
-    conA = conA.map(gobj => {  //array.object to array\
+    conA = conA.map(gobj => {  //array.object to array
       if (gobj.value) {
         return gobj = gobj.value;
       } else if (gobj) {
@@ -1152,6 +1155,20 @@ export class JdDetailComponent implements OnInit {
     this.router.navigate(['/employer/jd/list']);
   }
 
+  getProgressBarStatus() {
+    if (this.sTotal <= 25) {
+      return 'danger';
+    } else if (this.sTotal <= 75) {
+      return 'warning';
+    } else if (this.sTotal < 100) {
+      return 'info';
+    } else if (this.sTotal === 100) {
+      return 'success';
+    } else {
+      return 'danger';
+    }
+  }
+
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {
       status: type,
@@ -1163,6 +1180,5 @@ export class JdDetailComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
-
 
 }

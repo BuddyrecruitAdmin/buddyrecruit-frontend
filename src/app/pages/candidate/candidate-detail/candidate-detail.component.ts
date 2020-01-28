@@ -54,6 +54,7 @@ export class CandidateDetailComponent implements OnInit {
     this.role = getRole();
     this.flowId = getFlowId() || '';
     this.steps = this.role.refAuthorize.processFlow.exam.steps;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

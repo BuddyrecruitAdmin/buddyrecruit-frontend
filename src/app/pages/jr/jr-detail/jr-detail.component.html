@@ -1,6 +1,12 @@
 <div class="content-header with-shadow">
-  <h3>Job Request <small class="text-cap">({{ state }})</small></h3>
+  <h3>
+    <span class="link text-gray" (click)="back()">
+      <nb-icon icon="arrow-ios-back-outline" class="font-inherit"></nb-icon>
+    </span>
+    Job Request <small *ngIf="state" class="text-cap">({{ state }})</small>
+  </h3>
 </div>
+
 <div class="row" *ngIf="!loading">
   <div class="col-md-12">
     <nb-card>
@@ -13,8 +19,8 @@
             <div class="form-control-group" [ngClass]="{ 'has-error': touched }">
               <label class="label" for="name">Job Position <span class="text-red">*</span></label>
               <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
-                [disabled]="editCheck || duplicateCheck || checkPreview"
-                (selectedChange)="onChangeJobposition($event)" fullWidth>
+                [disabled]="editCheck || duplicateCheck || checkPreview" (selectedChange)="onChangeJobposition($event)"
+                fullWidth>
                 <nb-option *ngFor="let job of JobPosition" [value]="job.value"
                   [disabled]="editCheck || duplicateCheck || checkPreview">
                   {{ job.label }}
@@ -99,7 +105,9 @@
           </div>
           <div class="col-md-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedEva }">
-              <label class="label">Evaluation Template <span class="text-red">*</span></label>
+              <label class="label">Evaluation Template <span class="text-red">*</span>
+                <small> (Configuration data)</small>
+              </label>
               <nb-select [(ngModel)]="jr.refEvaluation" [ngModelOptions]="{ standalone: true }" fullWidth
                 [disabled]="checkPreview">
                 <nb-option *ngFor="let eva of Evaluation" (click)="selectedEva()" [value]="eva.value"

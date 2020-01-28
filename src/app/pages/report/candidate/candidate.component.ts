@@ -233,9 +233,7 @@ export class CandidateComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
-      if (result) {
-        this.search();
-      }
+      setCandidateId();
     });
   }
 

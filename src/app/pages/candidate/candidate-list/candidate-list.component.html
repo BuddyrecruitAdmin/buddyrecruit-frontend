@@ -90,8 +90,8 @@
               <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
             </div>
             <div class="text-right ">
-              <span class="link" nbTooltip="See more detail" (click)="info(item)">
-                <nb-icon icon="info-outline"></nb-icon> See more detail
+              <span class="link" (click)="info(item)">
+                <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
               </span>
             </div>
           </nb-card-body>
@@ -141,7 +141,7 @@
                 <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
               </td>
               <td class="actions">
-                <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
+                <button nbButton status="info" size="tiny" nbTooltip="More Details" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">

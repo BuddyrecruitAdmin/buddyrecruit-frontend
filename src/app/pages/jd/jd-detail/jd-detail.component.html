@@ -1,5 +1,10 @@
 <div class="content-header with-shadow">
-  <h3>Job Description <small class="text-cap">({{ state }})</small></h3>
+  <h3>
+    <span class="link text-gray" (click)="back()">
+      <nb-icon icon="arrow-ios-back-outline" class="font-inherit"></nb-icon>
+    </span>
+    Job Description <small *ngIf="state" class="text-cap">({{ state }})</small>
+  </h3>
 </div>
 
 <div class="row">
@@ -9,6 +14,7 @@
         Description
       </nb-card-header>
       <nb-card-body>
+
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedJobPo }">
@@ -20,7 +26,13 @@
           </div>
           <div class="col-md-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedJobMail }">
-              <label class="label">Job Position in email <span style="color:red">*</span></label>
+              <label class="label">
+                Job Position in job board <span style="color:red">*</span>
+                <small> (Configuration data)</small>
+                <!-- <span *ngIf="role.refAuthorize.configuration.jobPosition.editable && !checkPreview" class="float-right">
+                  <nb-icon icon="plus-square-outline" class="link text-green"></nb-icon>
+                </span> -->
+              </label>
               <nb-select [(ngModel)]="jd.refPosition" [ngModelOptions]="{ standalone: true }" [disabled]="checkPreview"
                 fullWidth>
                 <nb-option [disabled]="checkPreview" *ngFor="let position of positionMaster" [value]="position.value">
@@ -31,49 +43,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="role?.refCompany?.activeJobsDB" class="row">
-          <div class="col-md-12">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedCV }">
-              <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
-              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a keyword"
-                placeholder="+" [ngModelOptions]="{ standalone: true }">
-              </tag-input>
-              <small *ngIf="touchedCV" class="text-red">{{ sErrorKey }}</small>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label class="label">Job Description</label>
-              <div class="input-group">
-                <div class="custom-file">
-                  <input type="text" [(ngModel)]="jd.attachment.originalname" disabled name="originalname" nbInput
-                    fullWidth />
-                </div>
-                <div class="input-group-append">
-                  <button (click)="fileInput.click()" [disabled]="!modeEditable || checkPreview"
-                    class="btn btn-outline-upload">
-                    <input #fileInput type="file" name="jd" (change)="onHandleFileInput($event.target.files)"
-                      ng2FileSelect [uploader]="uploader" [(ngModel)]="jd.attachment.originalname" accept="image/*"
-                      style="display:none;" />
-                    Browse File
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <button nbButton status="primary" size="small" class="m-r-5"
-                [disabled]="!jd.attachment.originalname || !modeEditable || checkPreview"
-                (click)="clearAttachFile()">Clear File
-              </button>
-              <button nbButton status="primary" size="small"
-                [disabled]="!jd.attachment.originalname || !jd.attachment.uploadName"
-                (click)="downloadFilePress()">Download
-              </button>
-            </div>
-          </div>
-        </div>
+
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedDep }">
@@ -101,21 +71,88 @@
             </div>
           </div>
         </div>
-        <hr>
-        <h5>Score (%)</h5>
+
+        <div *ngIf="role?.refCompany?.activeJobsDB" class="row">
+          <div class="col-md-12">
+            <div class="form-control-group" [ngClass]="{ 'has-error': touchedCV }">
+              <label ng-disabled="true" class="label">Keyword to search in CV <span style="color:red">*</span></label>
+              <tag-input [disable]="checkPreview" [(ngModel)]="jd.keywordSearch" secondaryPlaceholder="Enter a keyword"
+                placeholder="+" [ngModelOptions]="{ standalone: true }">
+              </tag-input>
+              <small *ngIf="touchedCV" class="text-red">{{ sErrorKey }}</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-control-group">
+              <label class="label">Job Description
+                <small> (Attach file)</small>
+                <span class="float-right">
+                  <nb-icon *ngIf="jd.attachment.originalname && modeEditable && !checkPreview"
+                    icon="minus-square-outline" class="link text-red" (click)="clearAttachFile()"></nb-icon>
+                  <nb-icon *ngIf="jd.attachment.originalname && jd.attachment.uploadName" icon="download-outline"
+                    class="link text-orange m-l-5" (click)="downloadFilePress()"></nb-icon>
+                </span>
+              </label>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="text" [(ngModel)]="jd.attachment.originalname" disabled name="originalname" nbInput
+                    fullWidth />
+                </div>
+                <div class="input-group-append">
+                  <button (click)="fileInput.click()" [disabled]="!modeEditable || checkPreview"
+                    class="btn btn-outline-upload">
+                    <input #fileInput type="file" name="jd" (change)="onHandleFileInput($event.target.files)"
+                      ng2FileSelect [uploader]="uploader" [(ngModel)]="jd.attachment.originalname" accept="image/*"
+                      style="display:none;" />
+                    Browse File
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-md-12">
+            <div class="form-group">
+              <button nbButton status="primary" size="small" class="m-r-5"
+                [disabled]="!jd.attachment.originalname || !modeEditable || checkPreview"
+                (click)="clearAttachFile()">Clear File
+              </button>
+              <button nbButton status="primary" size="small"
+                [disabled]="!jd.attachment.originalname || !jd.attachment.uploadName"
+                (click)="downloadFilePress()">Download
+              </button>
+            </div>
+          </div> -->
+        </div>
+
+        <br>
+        <h5 class="m-0">Score <span style="color:red">*</span>
+          <small class="label"> (Total 100%) </small>
+          <div class="pull-right label m-t-10">
+            <span style="font-size: 1.2rem;">{{ sTotal }}</span>/100%
+          </div>
+        </h5>
+        <div class="m-b-20">
+          <nb-progress-bar [value]="sTotal" [status]="getProgressBarStatus()" size="tiny">
+            {{ sTotal }}%
+          </nb-progress-bar>
+        </div>
         <div class="row">
           <!-- Work Experience -->
           <div class="col-sm-6 col-md-4">
             <div class="form-group">
               <label class="label" for="inputEXP">
-                Work Experience <span style="color:red">*</span>
+                Work Experience *
               </label>
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="exp"
                   (input)="onChangeScore($event, 'WORKEXP')" [(ngModel)]="jd.weightScore.workExperience.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly>
-                <div class="input-group-addon" nbTooltip="Edit">
+                <div *ngIf="!checkPreview && jd.weightScore.workExperience.total > 0" class="input-group-addon"
+                  nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(ExperienceBox)"></nb-icon>
                 </div>
               </div>
@@ -125,14 +162,15 @@
           <div class="col-sm-6 col-md-4">
             <div class="form-group">
               <label class="label" for="inputEXP">
-                Education <span style="color:red">*</span>
+                Education *
               </label>
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="edu"
                   (input)="onChangeScore($event, 'EDUCATION')" [(ngModel)]="jd.weightScore.education.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Edit">
+                <div *ngIf="!checkPreview && jd.weightScore.education.total > 0" class="input-group-addon"
+                  nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(EducationBox)"></nb-icon>
                 </div>
               </div>
@@ -142,14 +180,15 @@
           <div class="col-sm-6 col-md-4">
             <div class="form-group">
               <label class="label" for="inputEXP">
-                Hard Skill<span style="color:red">*</span>
+                Hard Skill *
               </label>
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="hard"
                   (input)="onChangeScore($event, 'HARDSKILL')" [(ngModel)]="jd.weightScore.hardSkill.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Edit">
+                <div *ngIf="!checkPreview && jd.weightScore.hardSkill.total > 0" class="input-group-addon"
+                  nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(HardSkillBox)"></nb-icon>
                 </div>
               </div>
@@ -159,14 +198,15 @@
           <div class="col-sm-6 col-md-4">
             <div class="form-group">
               <label class="label" for="inputEXP">
-                Soft Skill <span style="color:red">*</span>
+                Soft Skill *
               </label>
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="soft"
                   (input)="onChangeScore($event, 'SOFTSKILL')" [(ngModel)]="jd.weightScore.softSkill.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Edit">
+                <div *ngIf="!checkPreview && jd.weightScore.softSkill.total > 0" class="input-group-addon"
+                  nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(SoftSkillBox)"></nb-icon>
                 </div>
               </div>
@@ -176,28 +216,29 @@
           <div class="col-sm-6 col-md-4">
             <div class="form-group">
               <label class="label" for="inputEXP">
-                Certificate <span style="color:red">*</span>
+                Certificate *
               </label>
               <div class="input-group">
                 <input type="number" min="0.00" max="100.00" step="1.00" name="cert"
                   (input)="onChangeScore($event, 'CERTIFICATE')" [(ngModel)]="jd.weightScore.certificate.total"
                   onKeyPress="if(this.value.length==3) return false;" nbInput fullWidth appNumberDirective
                   [disabled]="checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
-                <div class="input-group-addon" nbTooltip="Edit">
+                <div *ngIf="!checkPreview && jd.weightScore.certificate.total > 0" class="input-group-addon"
+                  nbTooltip="Edit">
                   <nb-icon icon="settings-2" class="link" (click)="open(CertificateBox)"></nb-icon>
                 </div>
               </div>
             </div>
           </div>
           <!-- Total -->
-          <div class="col-sm-6 col-md-4">
+          <!-- <div class="col-sm-6 col-md-4">
             <div class="form-group">
               <br />
               <label for="inputEXP">
                 Total {{ sTotal }} %
               </label>
             </div>
-          </div>
+          </div> -->
         </div>
         <small class="pull-right" *ngIf="touched || touchedOut" style="color: red">{{ SErrorAll }}</small>
       </nb-card-body>

@@ -1,36 +1,41 @@
-<div *ngIf="!token" class="card">
-  <nb-icon class="link text-light-gray" icon="arrow-ios-back-outline" [routerLink]="'/index'"></nb-icon>
-  <div class="text-center">
-    <img width="80px" height="80px" src="../../../../assets/images/logo.png" />
-    <h6 class="m-0 text-green">Buddy Recruit</h6>
-    <small class="text-light-gray">(Employer)</small>
-  </div>
-  <br>
-  <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
-    <div class="form-control-group">
-      <label class="label">Username</label>
-      <input type="text" [formControl]="userName" nbInput fullWidth placeholder="Username">
-      <small *ngIf="touched && userName.errors" class="text-red">{{ sErrorUserName }}</small>
-    </div>
-    <div class="form-control-group">
-      <label class="label">Password</label>
-      <div class="input-group">
-        <input type="{{ showPassword ? 'text' : 'password' }}" [formControl]="password" nbInput fullWidth
-          placeholder="Password">
-        <div class="input-group-addon">
-          <nb-icon icon="{{ showPassword ? 'eye-off-outline' : 'eye-outline' }}" (click)="showPassword=!showPassword">
-          </nb-icon>
+<div class="bg-img-cover" [style.height.px]="innerHeight">
+  <div class="bg-backdrop" [style.height.px]="innerHeight">
+    <div *ngIf="!token" class="card">
+      <nb-icon class="link text-light-gray" icon="arrow-ios-back-outline" [routerLink]="'/index'"></nb-icon>
+      <div class="text-center">
+        <img width="80px" height="80px" src="../../../../assets/images/logo.png" />
+        <h6 class="m-0 text-green">Buddy Recruit</h6>
+        <small class="text-light-gray">(Employer)</small>
+      </div>
+      <br>
+      <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+        <div class="form-control-group">
+          <label class="label">Username</label>
+          <input type="text" [formControl]="userName" nbInput fullWidth placeholder="Username">
+          <small *ngIf="touched && userName.errors" class="text-red">{{ sErrorUserName }}</small>
         </div>
-        <small *ngIf="touched && password.errors" class="text-red">{{ sErrorPassword }}</small>
+        <div class="form-control-group">
+          <label class="label">Password</label>
+          <div class="input-group">
+            <input type="{{ showPassword ? 'text' : 'password' }}" [formControl]="password" nbInput fullWidth
+              placeholder="Password">
+            <div class="input-group-addon">
+              <nb-icon icon="{{ showPassword ? 'eye-off-outline' : 'eye-outline' }}"
+                (click)="showPassword=!showPassword">
+              </nb-icon>
+            </div>
+            <small *ngIf="touched && password.errors" class="text-red">{{ sErrorPassword }}</small>
+          </div>
+        </div>
+        <button nbButton fullWidth status="success" type="submit" class="m-b-10" [nbSpinner]="loading"
+          nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="" [disabled]="loading">Login</button>
+        <small *ngIf="loginError" class="text-red">{{ loginError }}</small>
+      </form>
+      <div>
+        <small class="pull-right">
+          <a [routerLink]="'/employer/forgot'"><b>{{ sForgotPassword }}</b></a>
+        </small>
       </div>
     </div>
-    <button nbButton fullWidth status="success" type="submit" class="m-b-10" [nbSpinner]="loading"
-      nbSpinnerStatus="success" nbSpinnerSize="tiny" nbSpinnerMessage="" [disabled]="loading">Login</button>
-    <small *ngIf="loginError" class="text-red">{{ loginError }}</small>
-  </form>
-  <div>
-    <small class="pull-right">
-      <a [routerLink]="'/employer/forgot'"><b>{{ sForgotPassword }}</b></a>
-    </small>
   </div>
 </div>
