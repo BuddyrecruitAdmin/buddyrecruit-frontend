@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, DropDownValue } from '../../../shared/interfaces/common.interface';
-import { getRole, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, DropDownValue, Devices } from '../../../shared/interfaces/common.interface';
+import { getRole, setFlowId, setCandidateId, setIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService } from '@nebular/theme';
@@ -24,6 +24,8 @@ export class CandidateComponent implements OnInit {
   criteria: Criteria;
   loading: boolean;
   checked: boolean;
+  isGridLayout: boolean;
+  devices: Devices;
   filter: {
     isFilter: boolean,
     data: {
@@ -48,6 +50,7 @@ export class CandidateComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
@@ -243,6 +246,11 @@ export class CandidateComponent implements OnInit {
       this.clearFilter();
       this.search();
     }
+  }
+
+  changeLayout(value) {
+    this.isGridLayout = value;
+    setIsGridLayout(value);
   }
 
   clearFilter() {
