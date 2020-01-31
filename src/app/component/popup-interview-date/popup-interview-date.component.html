@@ -112,6 +112,12 @@
           [ngClass]="{ 'text-green' : user.active, 'text-light-gray' : !user.active }">
           <mat-checkbox [(ngModel)]="user.active">{{ user.name }}</mat-checkbox>
         </div>
+        <div class="text-red">
+          <small *ngIf="errMsg.customize.users">
+            <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+            {{ errMsg.customize.users }}
+          </small>
+        </div>
       </div>
       <div *ngIf="outlookUsername || googleUsername" class="form-control-group m-0">
         <label class="label">Invite Meeting From <span *ngIf="!outlookUsername && !googleUsername" class="text-red">(No
