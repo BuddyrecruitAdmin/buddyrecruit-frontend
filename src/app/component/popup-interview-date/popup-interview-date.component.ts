@@ -56,10 +56,11 @@ export class PopupInterviewDateComponent implements OnInit {
     },
     customize: {
       date: '',
-      time: ''
+      time: '',
+      users: ''
     }
   };
-  pendingInterviewInfo: any;  
+  pendingInterviewInfo: any;
   result: any;
   constructor(
     private candidateService: CandidateService,
@@ -444,6 +445,18 @@ export class PopupInterviewDateComponent implements OnInit {
           isValid = false;
           this.errMsg.customize.time = 'Minute must be equal 0 or 30';
         }
+        if (this.users.length > 0 && isValid) {
+          isValid = false;
+          this.errMsg.customize.users = 'Please choose one or more user';
+          this.users.forEach(ele => {
+            if (ele.active === true) {
+              isValid = true;
+              this.errMsg.customize.users = '';
+            }
+          })
+        } else {
+          isValid = false;
+        }
         break;
     }
     return isValid;
@@ -582,7 +595,8 @@ export class PopupInterviewDateComponent implements OnInit {
       },
       customize: {
         date: '',
-        time: ''
+        time: '',
+        users: ''
       }
     };
   }
