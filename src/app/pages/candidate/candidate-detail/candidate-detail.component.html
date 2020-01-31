@@ -219,8 +219,8 @@
         </div>
 
         <!-- Interview Score -->
-        <div *ngIf="condition.block.interviewScore && interviewScores.length > 0">
-          <label class="label topic">Interview Result <span *ngIf="condition.icon.interviewScore"
+        <div *ngIf="condition.block.interviewScore">
+          <label class="label topic">Interview Score <span *ngIf="condition.icon.interviewScore"
               class="text-red">*</span></label>
           <nb-icon *ngIf="condition.icon.interviewScore" icon="edit-2-outline" class="link"
             nbTooltip="Edit Interview Result" (click)="openPopupInterviewScore(item)"></nb-icon>

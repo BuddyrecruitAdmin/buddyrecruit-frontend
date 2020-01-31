@@ -525,8 +525,9 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   openPopupInterviewScore(item: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(item._id);
+    // setFlowId(item.candidateFlow._id);
+    setFlowId();
+    setCandidateId(item.candidateFlow._id);
     this.dialogService.open(PopupEvaluationComponent,
       {
         closeOnBackdropClick: false,
