@@ -81,6 +81,7 @@ export class PopupPreviewEmailComponent implements OnInit {
   getPreviewEmail() {
     this.candidateService.candidateFlowPreviewEmail(this.flowId, this.stageId, this.buttonId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        this.actionUser = response.data.actionUser;
         if (response.status === 'W' || !this.haveEmail) {
           if (response.data.mailOptions) {
             if (!response.data.mailOptions.to[0]) {
@@ -93,10 +94,8 @@ export class PopupPreviewEmailComponent implements OnInit {
           if (response.data.mailOptions) {
             this.mailOptions = response.data.mailOptions;
             this.mailType = response.data.type;
-            this.actionUser = response.data.actionUser;
             this.previewEmail = true;
           } else {
-            this.actionUser = response.data.actionUser;
             this.previewEmail = false;
             this.nextStep();
           }
