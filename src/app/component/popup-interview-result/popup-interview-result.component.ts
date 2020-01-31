@@ -21,9 +21,10 @@ export class PopupInterviewResultComponent implements OnInit {
   passCount: any;
   comCount: any;
   notCount: any;
+  result: any;
   constructor(
-    private ref: NbDialogRef<PopupInterviewResultComponent>,
-    private utilitiesService: UtilitiesService,
+    public ref: NbDialogRef<PopupInterviewResultComponent>,
+    public utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
   ) {
     this.item = getUserCandidate();

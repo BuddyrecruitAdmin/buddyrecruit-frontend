@@ -24,10 +24,10 @@ export class PopupAvailableDateComponent implements OnInit {
   result: boolean;
   errMsg: string;
   minuteStep = 30;
-
+  candidateName: any;
   constructor(
     private calendarService: CalendarService,
-    private ref: NbDialogRef<PopupAvailableDateComponent>,
+    public ref: NbDialogRef<PopupAvailableDateComponent>,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
   ) {

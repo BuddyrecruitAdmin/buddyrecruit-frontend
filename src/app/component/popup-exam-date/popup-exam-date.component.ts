@@ -38,9 +38,11 @@ export class PopupExamDateComponent implements OnInit {
     time: ''
   }
   devices: any
+  minuteStep: any;
+  result: any;
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupExamDateComponent>,
+    public ref: NbDialogRef<PopupExamDateComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,

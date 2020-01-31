@@ -73,8 +73,8 @@ export class PopupCvComponent implements OnInit {
   allComments: any;
   constructor(
     private service: PopupCVService,
-    private ref: NbDialogRef<PopupCvComponent>,
-    private utilitiesService: UtilitiesService,
+    public ref: NbDialogRef<PopupCvComponent>,
+    public utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,

@@ -33,7 +33,7 @@ export class PopupExamScoreComponent implements OnInit {
 
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupExamScoreComponent>,
+    public ref: NbDialogRef<PopupExamScoreComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,

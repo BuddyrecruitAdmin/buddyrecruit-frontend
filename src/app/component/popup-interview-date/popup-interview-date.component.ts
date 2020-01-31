@@ -59,12 +59,12 @@ export class PopupInterviewDateComponent implements OnInit {
       time: ''
     }
   };
-  pendingInterviewInfo: any;
-
+  pendingInterviewInfo: any;  
+  result: any;
   constructor(
     private candidateService: CandidateService,
     private calendarService: CalendarService,
-    private ref: NbDialogRef<PopupInterviewDateComponent>,
+    public ref: NbDialogRef<PopupInterviewDateComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,

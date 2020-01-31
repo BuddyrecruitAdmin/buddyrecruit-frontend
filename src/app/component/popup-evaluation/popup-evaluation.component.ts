@@ -30,7 +30,7 @@ export class PopupEvaluationComponent implements OnInit {
   constructor(
     private candidateService: CandidateService,
     private evaluationService: EvaluationService,
-    private ref: NbDialogRef<PopupEvaluationComponent>,
+    public ref: NbDialogRef<PopupEvaluationComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,

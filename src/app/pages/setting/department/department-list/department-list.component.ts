@@ -28,6 +28,7 @@ export class DepartmentListComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
+  loading: any = false;
   constructor(
     private router: Router,
     private service: DepartmentService,
