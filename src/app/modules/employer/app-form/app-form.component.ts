@@ -396,7 +396,6 @@ export class AppFormComponent implements OnInit {
     this.service.getEducationList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          console.log(response.data)
           response.data.forEach(element => {
             this.degreeMaster.push({
               label: element.name,
