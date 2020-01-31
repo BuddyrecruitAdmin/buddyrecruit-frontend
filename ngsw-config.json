@@ -29,18 +29,5 @@
         ]
       }
     }
-  ],
-  "dataGroups": [
-    {
-      "name": "api-performance",
-      "urls": [
-        "https://p3qas.buddyrecruit.ai/**"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 100,
-        "maxAge": "3d"
-      }
-    }
   ]
 }

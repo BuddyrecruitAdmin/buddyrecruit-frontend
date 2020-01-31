@@ -44,7 +44,7 @@ export class CandidateDetailComponent implements OnInit {
     private router: Router,
     private location: Location,
     private service: CandidateService,
-    private utilitiesService: UtilitiesService,
+    public utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,

@@ -25,7 +25,7 @@ export class PopupCommentComponent implements OnInit {
   result: boolean = false;
   constructor(
     private service: PopupCommentService,
-    private ref: NbDialogRef<PopupCommentComponent>,
+    public ref: NbDialogRef<PopupCommentComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
   ) {

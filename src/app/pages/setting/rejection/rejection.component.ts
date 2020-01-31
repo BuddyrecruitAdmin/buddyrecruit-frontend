@@ -33,6 +33,7 @@ export class RejectionComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
+  loading: any = false;
   constructor(
     private service: RejectionService,
     private dialogService: NbDialogService,

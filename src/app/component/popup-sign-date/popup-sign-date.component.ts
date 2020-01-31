@@ -35,9 +35,11 @@ export class PopupSignDateComponent implements OnInit {
   errMsg = {
     date: ''
   }
+  minuteStep: any;
+  result: any;
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupSignDateComponent>,
+    public ref: NbDialogRef<PopupSignDateComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,

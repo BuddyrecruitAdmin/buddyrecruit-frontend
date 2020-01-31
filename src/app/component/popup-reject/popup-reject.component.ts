@@ -38,7 +38,7 @@ export class PopupRejectComponent implements OnInit {
   constructor(
     private service: PopupRejectService,
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupRejectComponent>,
+    public ref: NbDialogRef<PopupRejectComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,

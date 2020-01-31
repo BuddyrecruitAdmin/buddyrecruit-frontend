@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
   preventDuplicates = false;
   status: NbComponentStatus = 'primary';
   loading: boolean;
-
+  showPassword: any;
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,

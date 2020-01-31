@@ -18,9 +18,9 @@ export class PopupJrInfoComponent implements OnInit {
   jrDetail: any = '';
 
   constructor(
-    private ref: NbDialogRef<PopupJrInfoComponent>,
+    public ref: NbDialogRef<PopupJrInfoComponent>,
     private jrService: JrService,
-    private utilitiesService: UtilitiesService,
+    public utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
     this.jrId = getJrId();

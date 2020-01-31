@@ -122,7 +122,7 @@ export class CalendarComponent implements OnInit {
   constructor(
     private service: CalendarService,
     private dialogService: NbDialogService,
-    private utilitiesService: UtilitiesService,
+    public utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,

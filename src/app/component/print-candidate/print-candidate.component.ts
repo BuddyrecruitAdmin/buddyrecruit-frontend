@@ -25,7 +25,7 @@ export class PrintCandidateComponent implements OnInit {
   constructor(
     private ref: NbDialogRef<PrintCandidateComponent>,
     private candidateService: CandidateService,
-    private utilitiesService: UtilitiesService,
+    public utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
   ) {
     this.role = getRole();

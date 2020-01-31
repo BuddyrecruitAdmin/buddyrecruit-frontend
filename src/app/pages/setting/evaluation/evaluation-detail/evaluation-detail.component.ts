@@ -32,6 +32,7 @@ export class EvaluationDetailComponent implements OnInit {
   sErrorCate: string;
   sErrorRank: string;
   touchedRank: boolean;
+  loading: any = false;
   constructor(
     private service: EvaluationService,
     private dialogService: NbDialogService,

@@ -32,7 +32,7 @@ export class CompanyTypeComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   minPageSize = Paging.pageSizeOptions[0];
-
+  loading: any = false;
   constructor(
     private service: CompanyTypeService,
     private dialogService: NbDialogService,
