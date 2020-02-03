@@ -23,7 +23,6 @@
         "files": [
           "/assets/**",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)",
-          "https://p3qas.buddyrecruit.ai/**",
           "https://fonts.gstatic.com/s/opensans/v17/**",
           "https://p3qas.buddyrecruit.ai/assets/images/**"
         ]
