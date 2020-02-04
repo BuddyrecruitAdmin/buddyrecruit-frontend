@@ -62,6 +62,7 @@ export class PopupInterviewDateComponent implements OnInit {
   };
   pendingInterviewInfo: any;
   result: any;
+  emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
     private calendarService: CalendarService,
@@ -185,6 +186,7 @@ export class PopupInterviewDateComponent implements OnInit {
         if (response.data.email) {
           this.emailUser = response.data.email;
         }
+        this.emailCandidate = response.data.email;
         this.pendingInterviewInfo = response.data.candidateFlow.pendingInterviewInfo;
         this.location = (response.data.candidateFlow.pendingInterviewInfo.refLocation && response.data.candidateFlow.pendingInterviewInfo.refLocation._id) || this.location;
         this.selectDateFrom = response.data.candidateFlow.pendingInterviewInfo.selectDateFrom || 'AVAILABLE';

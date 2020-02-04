@@ -37,6 +37,7 @@ export class PopupSignDateComponent implements OnInit {
   }
   minuteStep: any;
   result: any;
+  emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupSignDateComponent>,
@@ -61,6 +62,7 @@ export class PopupSignDateComponent implements OnInit {
     this.loading = true;
     this.candidateName = '';
     this.jrName = '';
+    this.emailCandidate = '';
     this.signDate = null;
     this.signTime = null;
     this.agreeDate = null;
@@ -79,7 +81,7 @@ export class PopupSignDateComponent implements OnInit {
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
-
+        this.emailCandidate = response.data.email;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.sign.date)) {
           this.signDate = new Date(response.data.candidateFlow.pendingSignContractInfo.sign.date);
           this.signTime = this.utilitiesService.convertDateToTimePicker(this.signDate);

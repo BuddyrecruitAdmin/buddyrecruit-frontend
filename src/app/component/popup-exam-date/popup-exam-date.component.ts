@@ -40,6 +40,7 @@ export class PopupExamDateComponent implements OnInit {
   devices: any
   minuteStep: any;
   result: any;
+  emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupExamDateComponent>,
@@ -111,7 +112,7 @@ export class PopupExamDateComponent implements OnInit {
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
-
+        this.emailCandidate = response.data.email;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.examInfo.date)) {
           this.location = response.data.candidateFlow.examInfo.refLocation._id || this.location;
           this.date = new Date(response.data.candidateFlow.examInfo.date);

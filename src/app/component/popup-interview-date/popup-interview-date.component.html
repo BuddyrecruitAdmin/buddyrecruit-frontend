@@ -132,11 +132,17 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
+    <div *ngIf="!emailCandidate">
+      <small class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        Email not found.Can't send email to candidate.
+      </small>
+    </div>
     <div class="footer-collapse">
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()">SAVE</button>
-    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND EMAIL</button>
+    <button *ngIf="!canApprove || !emailCandidate" nbButton status="success" (click)="sendEmail()">SEND EMAIL</button>
     <button *ngIf="canApprove" nbButton status="success" (click)="passToInterview()">PASS TO INTERVIEW</button>
     <!-- <button nbButton status="primary" (click)="save()" [disabled]="!canApprove && ( 
       (selectDateFrom === 'CALENDAR' && (!date || !time)) || 
