@@ -83,7 +83,8 @@
                   "with": "src/environments/environment.qas.ts"
                 }
               ],
-              "serviceWorker": true
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
