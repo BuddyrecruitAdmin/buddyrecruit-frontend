@@ -112,7 +112,7 @@ export class ProfileComponent implements OnInit {
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
 
-    this.lineQR = 'https://qr-official.line.me/sid/L/546lxvtd.png';
+    this.lineQR = '';
   }
 
   validation(): boolean {
