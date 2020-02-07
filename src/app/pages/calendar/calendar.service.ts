@@ -16,8 +16,10 @@ export class CalendarService extends NetworkService {
     super('CalendarService', httpClient, errorHandler);
   }
 
-  getList(): Observable<ApiResponse> {
+  getList(start = null, end = null): Observable<ApiResponse> {
     const body = {
+      start: start,
+      end: end
     };
     return this.post(API_ENDPOINT.USERS.CALENDAR.LIST, body);
   }
@@ -29,38 +31,94 @@ export class CalendarService extends NetworkService {
     return this.post(API_ENDPOINT.USERS.CALENDAR.BY_JR, body);
   }
 
-  edit(data: any): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.USERS.CALENDAR.EDIT, data);
+  edit(body: any): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.USERS.CALENDAR.EDIT, body);
   }
 
-  signInOutlookCalendar(): Observable<ApiResponse> {
+  checkUsing(): Observable<ApiResponse> {
     const body = {
-      redirect_uri: 'http://localhost:4200/employer/calendar'
-    }
-    return this.signInOutlook(body);
-  }
-
-  checkTokenOutlookCalendar(username: any): Observable<ApiResponse> {
-    const url = '';
-    const body = {
-      // username: username
-      username: 'alex_cs_kku@hotmail.com'
     };
-    return this.checkTokenOutlook(url, body);
+    return this.post(API_ENDPOINT.USERS.CALENDAR.CHECK, body);
   }
 
-  getTokenOutlookCalendar(code): Observable<ApiResponse> {
+  // OUTLOOK
+
+  outlookLogin(username: string = ''): Observable<ApiResponse> {
+    const body = {
+      redirect_uri: window.location.href,
+      username: username
+    }
+    return this.post(API_ENDPOINT.OUTLOOK.LOGIN, body);
+  }
+
+  outlookDecode(code: any): Observable<ApiResponse> {
+    const href = window.location.href.split('?code')[0];
     const body = {
       code: code,
-      redirect_uri: 'http://localhost:4200/employer/calendar'
+      redirect_uri: href
     };
-    return this.getTokenOutlook(body);
+    return this.post(API_ENDPOINT.OUTLOOK.DECODE, body);
   }
 
-  getOutlookCalendars(token): Observable<ApiResponse> {
+  outlookGetToken(username: any): Observable<ApiResponse> {
     const body = {
-      token: token,
-    };
-    return this.getOutlookCalendar(body);
+      username: username
+    }
+    return this.post(API_ENDPOINT.OUTLOOK.GET_TOKEN, body);
   }
+
+  outlookGetCalendar(start, end): Observable<ApiResponse> {
+    const body = {
+      start: start,
+      end: end,
+    };
+    return this.post(API_ENDPOINT.OUTLOOK.CALENDAR, body);
+  }
+
+  outlookGetUsers(): Observable<ApiResponse> {
+    const body = {
+    };
+    return this.post(API_ENDPOINT.OUTLOOK.USERS, body);
+  }
+
+  // GOOGLE
+
+  googleLogin(username: string = ''): Observable<ApiResponse> {
+    const body = {
+      redirect_uri: window.location.href,
+      username: username
+    }
+    return this.post(API_ENDPOINT.GOOGLE.LOGIN, body);
+  }
+
+  googleDecode(code: any): Observable<ApiResponse> {
+    const href = window.location.href.split('?code')[0];
+    const body = {
+      code: code,
+      redirect_uri: href
+    };
+    return this.post(API_ENDPOINT.GOOGLE.DECODE, body);
+  }
+
+  googleGetToken(username: any): Observable<ApiResponse> {
+    const body = {
+      username: username
+    }
+    return this.post(API_ENDPOINT.GOOGLE.GET_TOKEN, body);
+  }
+
+  googleGetCalendar(start, end): Observable<ApiResponse> {
+    const body = {
+      start: start,
+      end: end,
+    };
+    return this.post(API_ENDPOINT.GOOGLE.CALENDAR, body);
+  }
+
+  googleGetUsers(): Observable<ApiResponse> {
+    const body = {
+    };
+    return this.post(API_ENDPOINT.GOOGLE.USERS, body);
+  }
+
 }

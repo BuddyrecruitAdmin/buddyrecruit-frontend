@@ -13,7 +13,8 @@ import {
   endOfMonth,
   isSameDay,
   isSameMonth,
-  addHours
+  addHours,
+  addMinutes,
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import {
@@ -23,14 +24,15 @@ import {
   CalendarView,
   CalendarMonthViewDay
 } from 'angular-calendar';
-import { getRole, getDate, setDate } from '../../shared/services/auth.service';
+import { getRole, setDate, setOutlookToken, getOutlookToken, setGoogleToken, getGoogleToken, setCandidateId, setFlowId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { CalendarService } from './calendar.service';
-import { ResponseCode, Paging } from '../../shared/app.constants';
+import { ResponseCode } from '../../shared/app.constants';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupAvailableDateComponent } from '../../component/popup-available-date/popup-available-date.component'
 import { Router, ActivatedRoute } from "@angular/router";
+import * as _ from 'lodash';
 
 const colors: any = {
   green: {
@@ -48,8 +50,25 @@ const colors: any = {
   yellow: {
     primary: '#ffc816',
     secondary: '#ffc816'
+  },
+  gray: {
+    primary: '#d2d6d9',
+    secondary: '#d2d6d9'
   }
 };
+export interface User {
+  name: string,
+  username: string,
+  picture?: any,
+}
+export interface CalendarConfig {
+  loading: boolean,
+  signIn: boolean,
+  lastUpdated: Date,
+  name: string,
+  username: string,
+  users: User[]
+}
 
 @Component({
   selector: 'ngx-calendar',
@@ -58,6 +77,7 @@ const colors: any = {
 })
 export class CalendarComponent implements OnInit {
   @ViewChild('dialogInfo', { static: true }) dialogInfo: TemplateRef<any>;
+  @ViewChild('userOutlook', { static: true }) userOutlook: TemplateRef<any>;
 
   CalendarView = CalendarView;
   view: CalendarView = CalendarView.Month;
@@ -94,15 +114,15 @@ export class CalendarComponent implements OnInit {
   candidateFlow: any;
   event: any = {};
   users: any[];
-  button: {
-    outlook: boolean,
-    gmail: boolean,
-  }
+  minutesRange = 30;
+  outlook: CalendarConfig;
+  google: CalendarConfig;
+  dialogRef: NbDialogRef<any>;
 
   constructor(
     private service: CalendarService,
     private dialogService: NbDialogService,
-    private utilitiesService: UtilitiesService,
+    public utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -110,10 +130,6 @@ export class CalendarComponent implements OnInit {
     this.role = getRole();
     this.innerHeight = window.innerHeight * 0.8;
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
-    this.button = {
-      outlook: false,
-      gmail: false
-    };
   }
 
   ngOnInit() {
@@ -121,30 +137,68 @@ export class CalendarComponent implements OnInit {
     this.events = [];
     this.excludeDays = [];
     this.dialogDate = new Date();
+    this.outlook = this.initialCalendarConfig();
+    this.google = this.initialCalendarConfig();
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params.code) {
-        this.service.getTokenOutlookCalendar(params.code).subscribe(response => {
-          if (response.data.token) {
-            this.getOutlookCalendarList(response.data.token);
+        this.service.outlookDecode(params.code).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            setOutlookToken('token');
+            this.router.navigate(['/employer/calendar']);
+          }
+        });
+        this.service.googleDecode(params.code).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            setGoogleToken('token');
+            this.router.navigate(['/employer/calendar']);
           }
         });
       } else {
-        // this.checkTokenOutlookCalendar();
-        this.getCalendarData();
+        this.getCalendar(true);
       }
     });
   }
 
-  getCalendarData() {
-    this.service.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.calendarData = response.data.calendar;
-        this.setWorkingDays();
-        this.changeCalendarType(this.byWorkingDays);
-      } else {
-        this.showToast('danger', 'Error Message', response.message || 'No data found');
+  initialCalendarConfig(): CalendarConfig {
+    return {
+      loading: false,
+      signIn: false,
+      lastUpdated: null,
+      name: '',
+      username: '',
+      users: []
+    }
+  }
+
+  async getCalendar(reCall: boolean = false) {
+    this.events = [];
+    if (reCall) {
+      // await this.outlookGetToken();
+      if (getOutlookToken()) {
+        await this.outlookGetCalendar();
       }
+      if (getGoogleToken()) {
+        await this.googleGetCalendar();
+      }
+    }
+    await this.getDetail();
+  }
+
+  getDetail() {
+    return new Promise((resolve) => {
+      const start = this.getStartDateOfMonth();
+      const end = this.getEndDateOfMonth();
+      this.service.getList(start, end).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.calendarData = response.data;
+          this.setWorkingDays();
+          this.changeCalendarType(this.byWorkingDays);
+        } else {
+          this.showToast('danger', 'Error Message', response.message || 'No data found');
+        }
+        resolve();
+      });
     });
   }
 
@@ -153,22 +207,125 @@ export class CalendarComponent implements OnInit {
     this.excludeDays = [];
     this.dialogDate = new Date();
 
+    // Outlook Calendar
+    if (this.calendarData.outlook) {
+      this.outlook.name = this.calendarData.outlook.name;
+      this.outlook.username = this.calendarData.outlook.username;
+      if (this.calendarData.outlook.period) {
+        this.calendarData.outlook.period.forEach(period => {
+          this.outlook.lastUpdated = new Date(period.lastUpdated);
+          if (period.events) {
+            period.events.forEach(event => {
+              let start = new Date(event.start);
+              let end = new Date(event.end);
+              let title = `${this.utilitiesService.convertTime(event.start)} - ${this.utilitiesService.convertTime(event.end)} (Outlook Calendar)`;
+              if (event.isAllDay) {
+                end = start;
+                title = 'All day (Outlook Calendar)';
+              }
+              this.events.push({
+                id: event.iCalUId || event.Id || event._id,
+                start: start,
+                end: end,
+                title: title,
+                color: colors.yellow,
+                meta: {
+                  type: 'warning'
+                },
+                allDay: event.isAllDay,
+                cssClass: 'other'
+              });
+            });
+          }
+        });
+      }
+    }
+
+    // Google Calendar
+    if (this.calendarData.google) {
+      this.google.name = this.calendarData.google.name;
+      this.google.username = this.calendarData.google.username;
+      if (this.calendarData.google.period) {
+        this.calendarData.google.period.forEach(period => {
+          this.google.lastUpdated = new Date(period.lastUpdated);
+          if (period.events) {
+            period.events.forEach(event => {
+              let start = new Date(event.start);
+              let end = new Date(event.end);
+              let title = `${this.utilitiesService.convertTime(event.start)} - ${this.utilitiesService.convertTime(event.end)} (Google Calendar)`;
+              if (event.isAllDay) {
+                end = start;
+                title = 'All day (Google Calendar)';
+              }
+              this.events.push({
+                id: event.iCalUId || event.Id || event._id,
+                start: start,
+                end: end,
+                title: title,
+                color: colors.yellow,
+                meta: {
+                  type: 'warning'
+                },
+                allDay: event.isAllDay,
+                cssClass: 'other'
+              });
+            });
+          }
+        });
+      }
+    }
+
+    // Interview Date
     if (this.calendarData.interviewDates) {
       this.calendarData.interviewDates.forEach(element => {
-        const startDate = element.refCandidateFlow.pendingInterviewInfo.startDate;
-        const endDate = element.refCandidateFlow.pendingInterviewInfo.endDate;
-        if (this.utilitiesService.dateIsValid(startDate)
-          && this.utilitiesService.dateIsValid(endDate)) {
-          this.events.push({
-            id: element.refCandidateFlow._id,
-            start: new Date(startDate),
-            end: new Date(endDate),
-            title: this.buildTitle(element),
-            color: colors.red,
-            meta: {
-              type: 'danger'
+        if (element.refCandidateFlow) {
+          const startDate = new Date(element.refCandidateFlow.pendingInterviewInfo.startDate);
+          const endDate = new Date(element.refCandidateFlow.pendingInterviewInfo.endDate);
+          if (this.utilitiesService.dateIsValid(startDate)
+            && this.utilitiesService.dateIsValid(endDate)) {
+            let event: CalendarEvent;
+            if (element.refCandidateFlow.reject.flag) {
+              event = {
+                id: element.refCandidateFlow._id,
+                start: new Date(startDate),
+                end: new Date(endDate),
+                title: this.buildTitle(element),
+                color: colors.gray,
+                meta: {
+                  type: 'default'
+                },
+                cssClass: 'cancelled'
+              }
+            } else {
+              event = {
+                id: element.refCandidateFlow._id,
+                start: new Date(startDate),
+                end: new Date(endDate),
+                title: this.buildTitle(element),
+                color: colors.red,
+                meta: {
+                  type: 'danger'
+                },
+              }
             }
-          });
+            if (element.refCandidateFlow.pendingInterviewInfo.outlook && element.refCandidateFlow.pendingInterviewInfo.outlook.iCalUId) {
+              const index = this.events.findIndex(event =>
+                event.id === element.refCandidateFlow.pendingInterviewInfo.outlook.iCalUId
+              );
+              if (index >= 0) {
+                this.events[index] = event;
+              }
+            } else if (element.refCandidateFlow.pendingInterviewInfo.google && element.refCandidateFlow.pendingInterviewInfo.google.iCalUId) {
+              const index = this.events.findIndex(event =>
+                event.id === element.refCandidateFlow.pendingInterviewInfo.google.iCalUId
+              );
+              if (index >= 0) {
+                this.events[index] = event;
+              }
+            } else {
+              this.events.push(event);
+            }
+          }
         }
       });
     }
@@ -179,31 +336,35 @@ export class CalendarComponent implements OnInit {
     if (byWorkingDays === true) {
       this.excludeDay();
     } else {
+      // Available Date
       this.calendarData.availableDates.forEach(element => {
         const days = this.utilitiesService.calculateDuration2Date(element.startDate, element.endDate);
         for (let index = 0; index < days; index++) {
-          const start = new Date(element.startDate);
-          const end = new Date(element.endDate);
-          for (let hour = start.getHours(); hour < end.getHours(); hour++) {
-            const startHour = addHours(addDays(startOfDay(start), index), hour);
-            const endHour = addHours(addDays(startOfDay(start), index), hour + 1);
-            const found = this.events.find(event => {
-              return event.start.getTime() === startHour.getTime()
-                && event.end.getTime() === endHour.getTime()
-                && event.color === colors.red;
-            });
-            if (found) {
-              continue;
-            }
-            this.events.push({
-              start: startHour,
-              end: endHour,
-              title: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
-              color: colors.green,
-              meta: {
-                type: 'success'
+          let start = new Date(element.startDate);
+          let end = new Date(element.endDate);
+          while (!isSameDay(start, end) || start.getTime() < end.getTime()) {
+            const startHour = new Date(start);
+            let endHour = new Date(start);
+            endHour.setMinutes(endHour.getMinutes() + this.minutesRange);
+            if (endHour.getTime() <= end.getTime()) {
+              const found = this.events.find(event => {
+                return (event.start.getTime() <= startHour.getTime()
+                  && event.end.getTime() >= endHour.getTime());
+                // && (event.color === colors.red || event.color === colors.yellow);
+              });
+              if (!found) {
+                this.events.push({
+                  start: startHour,
+                  end: endHour,
+                  title: `${this.utilitiesService.convertTime(startHour)} - ${this.utilitiesService.convertTime(endHour)}`,
+                  color: colors.green,
+                  meta: {
+                    type: 'success'
+                  }
+                });
               }
-            });
+            }
+            start = new Date(endHour);
           }
         }
       });
@@ -343,7 +504,7 @@ export class CalendarComponent implements OnInit {
     this.service.edit(request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
-        this.getCalendarData();
+        this.getCalendar();
       } else {
         this.showToast('danger', 'Error Message', response.message || 'Save error!');
       }
@@ -359,19 +520,19 @@ export class CalendarComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       if (result) {
-        this.getCalendarData();
+        this.getCalendar();
       }
     });
   }
 
   openPopupInterviewInfo(flowId: any) {
     const refCandidateFlow = this.calendarData.interviewDates.find(element => {
-      return element.refCandidateFlow._id === flowId;
+      return element.refCandidateFlow && element.refCandidateFlow._id === flowId;
     });
     if (refCandidateFlow.refCandidateFlow) {
       this.candidateFlow = refCandidateFlow.refCandidateFlow;
       this.getInterviewUsers(this.candidateFlow.refJR._id);
-      this.dialogService.open(this.dialogInfo, {
+      this.dialogRef = this.dialogService.open(this.dialogInfo, {
         closeOnBackdropClick: true,
         hasScroll: true,
       });
@@ -384,18 +545,22 @@ export class CalendarComponent implements OnInit {
       if (response.data && response.data.userInterviews.length) {
         response.data.userInterviews.forEach(user => {
           let active = false;
-          user.calendar.availableDates.forEach(element => {
-            const startDate = new Date(element.startDate);
-            const endDate = new Date(element.endDate);
-            if (this.candidateFlow.pendingInterviewInfo) {
-              if (new Date(startDate) <= new Date(this.candidateFlow.pendingInterviewInfo.startDate)) {
-                if (new Date(this.candidateFlow.pendingInterviewInfo.startDate) <= new Date(endDate)) {
-                  active = true;
-                  return;
+          if (this.candidateFlow.pendingInterviewInfo) {
+            if (this.candidateFlow.pendingInterviewInfo.selectDateFrom === 'CUSTOMIZE') {
+              active = true;
+            } else {
+              user.calendar.availableDates.forEach(element => {
+                const startDate = new Date(element.startDate);
+                const endDate = new Date(element.endDate);
+                if (new Date(startDate) <= new Date(this.candidateFlow.pendingInterviewInfo.startDate)) {
+                  if (new Date(this.candidateFlow.pendingInterviewInfo.startDate) <= new Date(endDate)) {
+                    active = true;
+                    return;
+                  }
                 }
-              }
+              });
             }
-          });
+          }
           this.users.push({
             refUser: user.refUser._id,
             name: this.utilitiesService.setFullname(user.refUser),
@@ -404,6 +569,17 @@ export class CalendarComponent implements OnInit {
         });
       }
     });
+  }
+
+  openCandidateDetail(item: any) {
+    if (item && item._id) {
+      if (this.dialogRef) {
+        this.dialogRef.close();
+      }
+      setCandidateId(item.refCandidate._id);
+      setFlowId(item._id);
+      this.router.navigate(["/employer/candidate/detail"]);
+    }
   }
 
   // CALENDAR LIB
@@ -456,10 +632,22 @@ export class CalendarComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.event = event;
-    if (event.color === colors.red) {
-      this.openPopupInterviewInfo(event.id);
-    } else {
-      this.callPopupAvailableDate();
+    switch (event.color) {
+      case colors.green:
+        this.callPopupAvailableDate();
+        break;
+      case colors.red:
+        this.openPopupInterviewInfo(event.id);
+        break;
+      case colors.yellow:
+        // on click other meeting
+        break;
+      case colors.gray:
+        this.openPopupInterviewInfo(event.id);
+        break;
+      default:
+        this.callPopupAvailableDate();
+        break;
     }
   }
 
@@ -469,35 +657,120 @@ export class CalendarComponent implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+    this.getCalendar(true);
   }
 
-  signInOutlook() {
-    this.service.signInOutlookCalendar().subscribe(response => {
+  // OUTLOOK CALENDAR
+
+  signInWithOutlook() {
+    // this.dialogService.open(this.userOutlook, {
+    //   closeOnBackdropClick: true,
+    //   hasScroll: true,
+    // });
+    this.outlookLogin();
+  }
+
+  outlookLogin(username: string = '') {
+    this.service.outlookLogin(username).subscribe(response => {
       if (response.data.loginUrl) {
-        window.open(response.data.loginUrl, '_blank', '');
+        window.open(response.data.loginUrl, '_self', '', true);
       }
     });
   }
 
-  checkTokenOutlookCalendar() {
-    this.service.checkTokenOutlookCalendar(this.role.username).subscribe(response => {
-      if (response.data.token) {
-        this.getOutlookCalendarList(response.data.token);
-      } else {
-        this.button.outlook = true;
+  outlookLogout() {
+    setOutlookToken();
+    this.outlook.signIn = false;
+    this.getCalendar(true);
+  }
+
+  // outlookGetToken() {
+  //   return new Promise((resolve) => {
+  //     const username = 'vsengi@outlook.com'; // test
+  //     this.outlook.loading = true;
+  //     this.service.outlookGetToken(username).subscribe(response => {
+  //       if (response.data.token) {
+  //         this.outlook.token = response.data.token;
+  //         this.outlook.signIn = true;
+  //       } else {
+  //         this.outlook.signIn = false;
+  //       }
+  //       this.outlook.loading = false;
+  //       resolve();
+  //     });
+  //   });
+  // }
+
+  outlookGetCalendar() {
+    return new Promise((resolve) => {
+      this.outlook.loading = true;
+      const start = this.getStartDateOfMonth();
+      const end = this.getEndDateOfMonth();
+      this.service.outlookGetCalendar(start, end).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.outlook.signIn = true;
+          // response.data.forEach(element => {
+          //   this.events.push({
+          //     id: element.Id,
+          //     start: new Date(element.Start.DateTime),
+          //     end: new Date(element.End.DateTime),
+          //     title: `${this.utilitiesService.convertTime(element.Start.DateTime)} - ${this.utilitiesService.convertTime(element.End.DateTime)} ${element.Subject}`,
+          //     color: colors.yellow,
+          //     meta: {
+          //       type: 'warning'
+          //     }
+          //   });
+          // });
+        } else {
+          this.outlook.signIn = false;
+        }
+        this.outlook.loading = false;
+        resolve();
+      });
+    });
+  }
+
+  // GOOGLE CALENDAR
+
+  signInWithGoogle() {
+    // this.dialogService.open(this.userOutlook, {
+    //   closeOnBackdropClick: true,
+    //   hasScroll: true,
+    // });
+    this.googleLogin();
+  }
+
+  googleLogin(username: string = '') {
+    this.service.googleLogin(username).subscribe(response => {
+      if (response.data.loginUrl) {
+        window.open(response.data.loginUrl, '_self', '', true);
       }
     });
   }
 
-  getOutlookCalendarList(token: any) {
-    this.service.getOutlookCalendars(token).subscribe(response => {
-      console.log('getOutlookCalendars', response);
+  googleLogout() {
+    setGoogleToken();
+    this.google.signIn = false;
+    this.getCalendar(true);
+  }
+
+  googleGetCalendar() {
+    return new Promise((resolve) => {
+      this.google.loading = true;
+      const start = this.getStartDateOfMonth();
+      const end = this.getEndDateOfMonth();
+      this.service.googleGetCalendar(start, end).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.google.signIn = true;
+        } else {
+          this.google.signIn = false;
+        }
+        this.google.loading = false;
+        resolve();
+      });
     });
   }
 
-  signInGoogle() {
-
-  }
 
   buildTitle(item: any) {
     let title = '';
@@ -515,6 +788,16 @@ export class CalendarComponent implements OnInit {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
+  }
+
+  getStartDateOfMonth() {
+    let date = this.viewDate || new Date();
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+
+  getEndDateOfMonth() {
+    let date = this.viewDate || new Date();
+    return endOfMonth(date);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

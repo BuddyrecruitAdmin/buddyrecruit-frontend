@@ -155,7 +155,7 @@ import { IndexComponent } from './index/index.component';
   declarations: [
     ModulesComponent,
     TranslatePipe,
-    IndexComponent
+    IndexComponent,
   ],
   providers: [
     TranslateService,

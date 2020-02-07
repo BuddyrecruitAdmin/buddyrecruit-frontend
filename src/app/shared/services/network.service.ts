@@ -123,31 +123,13 @@ export class NetworkService {
     };
   }
 
-  protected signInOutlook = (body): Observable<ApiResponse> => {
-    return this.httpClient.post<ApiResponse>('https://asia-east2-buddy-outlook.cloudfunctions.net/outlook/login', body, {
-      headers: this.getHeaders(), observe: 'response', withCredentials: false
+  protected testPost = (uri: any, data: any): Observable<any> => {
+    const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.httpClient.post<any>(uri, data, {
+      headers: headers, observe: 'response', withCredentials: true
     }).pipe(
       map(response => {
         return {
-          code: response.body.code,
-          status: response.body.status,
-          message: response.body.message,
-          data: response.body
-        };
-      }),
-      catchError(this._handleError('get', this.ErrorResponse()))
-    );
-  }
-
-  protected checkTokenOutlook = (uri: string, data: any): Observable<ApiResponse> => {
-    return this.httpClient.post<ApiResponse>('https://asia-east2-buddy-outlook.cloudfunctions.net/outlook/checkToken', data, {
-      headers: this.getHeaders(), observe: 'response', withCredentials: false
-    }).pipe(
-      map(response => {
-        return {
-          code: response.body.code,
-          status: response.body.status,
-          message: response.body.message,
           data: response.body
         };
       }),
@@ -155,35 +137,4 @@ export class NetworkService {
     );
   }
 
-  protected getTokenOutlook = (data: any): Observable<ApiResponse> => {
-    return this.httpClient.post<ApiResponse>('https://asia-east2-buddy-outlook.cloudfunctions.net/outlook/getToken', data, {
-      headers: this.getHeaders(), observe: 'response', withCredentials: false
-    }).pipe(
-      map(response => {
-        return {
-          code: response.body.code,
-          status: response.body.status,
-          message: response.body.message,
-          data: response.body
-        };
-      }),
-      catchError(this._handleError('post', this.ErrorResponse()))
-    );
-  }
-
-  protected getOutlookCalendar = (data: any): Observable<ApiResponse> => {
-    return this.httpClient.post<ApiResponse>('https://asia-east2-buddy-outlook.cloudfunctions.net/outlook/calendar', data, {
-      headers: this.getHeaders(), observe: 'response', withCredentials: false
-    }).pipe(
-      map(response => {
-        return {
-          code: response.body.code,
-          status: response.body.status,
-          message: response.body.message,
-          data: response.body
-        };
-      }),
-      catchError(this._handleError('post', this.ErrorResponse()))
-    );
-  }
 }

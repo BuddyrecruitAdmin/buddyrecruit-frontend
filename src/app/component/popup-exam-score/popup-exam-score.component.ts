@@ -33,7 +33,7 @@ export class PopupExamScoreComponent implements OnInit {
 
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupExamScoreComponent>,
+    public ref: NbDialogRef<PopupExamScoreComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -68,7 +68,7 @@ export class PopupExamScoreComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
 
         this.examScore = response.data.candidateFlow.pendingExamScoreInfo.examScore;
         this.examRemark = response.data.candidateFlow.pendingExamScoreInfo.examRemark;

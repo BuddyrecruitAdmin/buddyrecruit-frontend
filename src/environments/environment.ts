@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  API_URI: "https://p3bkd.buddyrecruit.ai", // QAS
+  API_URI: "https://p3bkd.buddyrecruit.ai", // PRD
   WriteLog: true
 };

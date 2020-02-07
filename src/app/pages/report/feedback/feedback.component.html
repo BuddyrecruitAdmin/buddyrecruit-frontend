@@ -6,9 +6,9 @@
     <div class="col-sm-5">
       <div class="input-group">
         <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-          (keyup.enter)="paging.pageIndex = 0; search(true)">
+          (keyup.enter)="paging.pageIndex = 0; search()">
         <div class="input-group-addon" nbTooltip="Search">
-          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+          <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
         </div>
       </div>
     </div>
@@ -124,8 +124,8 @@
     </div>
   </nb-card-body>
 </nb-card>
-<!-- data and filter  *ngIf="!loading && items.length"-->
-<div>
+<!-- data and filter  *ngIf="!loading && items.length" -->
+<div *ngIf="!devices.isMobile">
   <nb-card>
     <nb-card-body>
       <div class="table-responsive">
@@ -207,4 +207,74 @@
       </mat-paginator>
     </nb-card-body>
   </nb-card>
+</div>
+<!-- Mobile Grid layout -->
+<div *ngIf="devices.isMobile">
+  <div class="row">
+    <div class="col-lg-6" *ngFor="let item of items;">
+      <nb-card style="margin-bottom: 1rem;">
+        <nb-card-header class="link" (click)="info(item)">
+          <div *ngIf="!checked" class="title">
+            <span class="link"
+              [nbTooltip]="utilitiesService.setFullname(item.refCandidate)">{{ utilitiesService.setFullname(item.refCandidate) }}</span>
+          </div>
+          <div *ngIf="checked" class="title">
+            <label class="label">Candidate ID</label>
+            <span>{{ item?.refCandidate._id || '-' }}</span>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          <div *ngIf="!checked" class="text-group">
+            <label class="label">Job Description</label>
+            <span>{{ item?.refJR?.refJD?.position || '-' }}</span>
+          </div>
+          <div class="text-group">
+            <label class="label">Field Type</label>
+            <span>
+              {{ item?.feedbackType || '-' }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Field Name</label>
+            <span>
+              {{ item?.fieldText || '-' }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Comment</label>
+            <span>
+              {{ item?.remark || '-' }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Create Date</label>
+            <span>
+              {{ utilitiesService.convertDateTimeFromSystem(item?.createdInfo?.date) || '-' }}
+            </span>
+          </div>
+          <div class="text-group">
+            <label class="label">Create By</label>
+            <span *ngIf="!checked">
+              {{ utilitiesService.setFullname(item?.createdInfo?.refUser) || '-' }}
+            </span>
+            <span *ngIf="checked">
+              {{ item?.createdInfo?.refUser?._id || '-' }}
+            </span>
+          </div>
+          <div class="text-group" *ngIf="checked">
+            <label class="label">Checklist</label>
+            <span>
+              <mat-checkbox style="margin-top : 7px;" [(ngModel)]="item.checkList" (change)="checkList(item,$event)"></mat-checkbox>
+            </span>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-sm-12">
+      <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+        [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+        (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </div>
+  </div>
 </div>

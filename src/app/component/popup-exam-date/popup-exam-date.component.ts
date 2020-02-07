@@ -32,10 +32,18 @@ export class PopupExamDateComponent implements OnInit {
   locations: DropDownValue[];
   loading: boolean;
   canApprove: boolean;
-
+  errMsg = {
+    location: '',
+    date: '',
+    time: ''
+  }
+  devices: any
+  minuteStep: any;
+  result: any;
+  emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupExamDateComponent>,
+    public ref: NbDialogRef<PopupExamDateComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -48,6 +56,7 @@ export class PopupExamDateComponent implements OnInit {
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
@@ -102,8 +111,8 @@ export class PopupExamDateComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
-
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
+        this.emailCandidate = response.data.email;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.examInfo.date)) {
           this.location = response.data.candidateFlow.examInfo.refLocation._id || this.location;
           this.date = new Date(response.data.candidateFlow.examInfo.date);
@@ -117,17 +126,45 @@ export class PopupExamDateComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.ref.close(true);
+      });
+    }
+  }
+
+  validation() {
+    this.errMsg = this.initialErrMsg();
+    let isValid = true;
+    if (!this.location) {
+      isValid = false;
+      this.errMsg.location = 'Please select Location';
+    }
+    if (!this.date) {
+      isValid = false;
+      this.errMsg.date = 'Please select Date';
+    }
+    if (!this.time) {
+      isValid = false;
+      this.errMsg.time = 'Please input Time';
+    }
+    return isValid;
+  }
+
+  initialErrMsg(): any {
+    return {
+      time: '',
+      date: '',
+      location: ''
+    }
   }
 
   passToExam() {

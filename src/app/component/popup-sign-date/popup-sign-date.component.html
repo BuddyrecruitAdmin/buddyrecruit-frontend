@@ -37,18 +37,29 @@
           <nb-icon icon="calendar-outline" class="text-green"></nb-icon>
         </div>
       </div>
+      <small *ngIf="errMsg.date" class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        {{ errMsg.date }}
+      </small>
     </div>
     <div class="form-control-group m-0">
-      <label class="label">Note</label>
-      <textarea nbInput fullWidth [(ngModel)]="note" placeholder="Note" rows="3"></textarea>
+      <label class="label">Remark</label>
+      <textarea nbInput fullWidth [(ngModel)]="note" placeholder="Remark" rows="3"></textarea>
     </div>
   </nb-card-body>
   <nb-card-footer>
+    <div *ngIf="!emailCandidate">
+      <small class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        Email not found.Can't send email to candidate.
+      </small>
+    </div>
     <div class="footer-collapse">
       <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
     </div>
     <button nbButton status="primary" (click)="save()" [disabled]="!signDate || !signTime">SAVE</button>
-    <button *ngIf="!editable" nbButton status="success" (click)="sendEmail()" [disabled]="!signDate || !signTime">SEND
+    <button *ngIf="!editable" nbButton status="success" (click)="sendEmail()"
+      [disabled]="!signDate || !signTime || !emailCandidate">SEND
       EMAIL</button>
   </nb-card-footer>
 </nb-card>

@@ -11,7 +11,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { bounds } from 'leaflet';
 @Component({
   selector: 'ngx-location',
   templateUrl: './location.component.html',
@@ -34,7 +33,7 @@ export class LocationComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
-
+  loading: any = false;
   constructor(
     private service: LocationService,
     private dialogService: NbDialogService,
@@ -144,7 +143,6 @@ export class LocationComponent implements OnInit {
       } else {
         this.service.create(this.itemDialog).subscribe(response => {
           if (response.code === ResponseCode.Success) {
-            console.log(this.itemDialog)
             const pageIndex = Math.ceil((this.paging.length + 1) / this.paging.pageSize);
             this.paging.pageIndex = pageIndex - 1;
             this.dialogRef.close();

@@ -125,9 +125,6 @@ export class OnboardListComponent implements OnInit {
         this.items.map(item => {
           item.daysBeforeExpire = this.utilitiesService.calculateDuration2Date(new Date(), item.duration.endDate);
           item.canClose = this.utilitiesService.isDateLowerThanToday(item.onboardDate);
-          // this.service.getDetail(this.refStageId, item._id, "PENDING").subscribe(res => {
-          //   item.isOverQuota = res.isOverQuota;
-          // })
         });
         this.paging.length = response.totalDataSize;
         if (!this.filter.data.departments.length) {

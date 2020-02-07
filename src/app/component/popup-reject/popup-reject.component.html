@@ -25,7 +25,7 @@
       <textarea nbInput fullWidth [(ngModel)]="remark" placeholder="Remark" rows="3"></textarea>
     </div>
     <span *ngIf="history.length" class="link underline" (click)="showHistory = !showHistory">
-      <nb-icon icon="info-outline"></nb-icon> History Reject
+      <nb-icon icon="info-outline"></nb-icon> Reject History
     </span>
     <div *ngIf="showHistory">
       <div *ngFor="let item of history" class="text-gray m-t-10">

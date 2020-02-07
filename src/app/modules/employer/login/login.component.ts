@@ -21,6 +21,7 @@ import 'style-loader!angular2-toaster/toaster.css';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  innerHeight: any;
   token: any;
   loginForm: FormGroup;
 
@@ -47,6 +48,7 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private toastrService: NbToastrService
   ) {
+    this.innerHeight = window.innerHeight;
     this.token = getToken();
     if (this.token) {
       this.router.navigate(['/employer/home']);

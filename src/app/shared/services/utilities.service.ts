@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Devices } from '../interfaces/common.interface';
 import { InnerWidth } from '../../shared/app.constants';
-import { getRole } from '../../shared/services/auth.service';
+import { getRole, getToken, getIsGridLayout } from '../../shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -168,6 +168,19 @@ export class UtilitiesService {
     }
 
     return devices;
+  }
+
+  setIsGridLayout(): boolean {
+    const devices = this.getDevice();
+    let isGridLayout = getIsGridLayout();
+    if (isGridLayout === undefined) {
+      if (devices.isMobile || devices.isTablet) {
+        isGridLayout = true;
+      } else {
+        isGridLayout = false;
+      }
+    }
+    return isGridLayout;
   }
 
   calculatePercentage(value1: any, value2: any): string {
@@ -342,13 +355,21 @@ export class UtilitiesService {
     return date;
   }
 
-  findButtonIdByStage(stageId: any): string {
+  findButtonIdByStage(stageId: any, hasExam: any): string {
     let buttonId;
     if (stageId) {
       const role = getRole();
       if (role && role.refAuthorize && role.refAuthorize.processFlow
-        && role.refAuthorize.processFlow.exam && role.refAuthorize.processFlow.exam.steps.length) {
+        && role.refAuthorize.processFlow.exam && role.refAuthorize.processFlow.exam.steps.length
+        && hasExam) {
         const step = role.refAuthorize.processFlow.exam.steps.find(element => {
+          return element.refStage._id === stageId;
+        });
+        if (step) {
+          buttonId = step._id;
+        }
+      } else {
+        const step = role.refAuthorize.processFlow.noExam.steps.find(element => {
           return element.refStage._id === stageId;
         });
         if (step) {
@@ -404,6 +425,10 @@ export class UtilitiesService {
 
   getRole(): any {
     return getRole();
+  }
+
+  getToken(): any {
+    return getToken();
   }
 
   isValidEmail(email: string): boolean {

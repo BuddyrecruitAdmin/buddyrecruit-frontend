@@ -69,6 +69,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
   imports: [
@@ -141,7 +142,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     LogoutComponent,
     AppFormComponent,
     ForgotComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    RegistrationComponent
   ],
   providers: [
   ]

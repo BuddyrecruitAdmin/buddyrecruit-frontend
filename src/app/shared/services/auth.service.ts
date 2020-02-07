@@ -19,7 +19,11 @@ import {
   UserCandidate,
   ContactId,
   UserEmail,
-  IconId
+  IconId,
+  OutlookToken,
+  GoogleToken,
+  Notification,
+  NotifIndex
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -125,7 +129,7 @@ export function setButtonId(buttonId: string = null) {
 export function getButtonId() {
   const buttonId = JSON.parse(localStorage.getItem(ButtonId));
   return (!buttonId || buttonId === null) ? undefined : buttonId;
-} 
+}
 export function setIconId(iconId: string = null) {
   localStorage.setItem(IconId, JSON.stringify(iconId));
 }
@@ -141,7 +145,7 @@ export function setCollapse(collapse: boolean = true) {
 
 export function getCollapse() {
   const collapse = JSON.parse(localStorage.getItem(Collapse));
-  return (collapse === undefined || collapse === null) ? true : collapse;
+  return (collapse !== true && collapse !== false) ? true : collapse;
 }
 
 export function setDate(date: Date = null) {
@@ -223,4 +227,40 @@ export function setUserEmail(userEmail: string = null) {
 export function getUserEmail() {
   const userEmail = JSON.parse(localStorage.getItem(UserEmail));
   return (!userEmail || userEmail === null) ? undefined : userEmail;
+}
+
+export function setOutlookToken(outlookToken: string = null) {
+  localStorage.setItem(OutlookToken, JSON.stringify(outlookToken));
+}
+
+export function getOutlookToken() {
+  const outlookToken = JSON.parse(localStorage.getItem(OutlookToken));
+  return (!outlookToken || outlookToken === null) ? undefined : outlookToken;
+}
+
+export function setGoogleToken(googleToken: string = null) {
+  localStorage.setItem(GoogleToken, JSON.stringify(googleToken));
+}
+
+export function getGoogleToken() {
+  const googleToken = JSON.parse(localStorage.getItem(GoogleToken));
+  return (!googleToken || googleToken === null) ? undefined : googleToken;
+}
+
+export function setNotification(notification: string = null) {
+  localStorage.setItem(Notification, JSON.stringify(notification));
+}
+
+export function getNotification() {
+  const notification = JSON.parse(localStorage.getItem(Notification));
+  return (!notification || notification === null) ? undefined : notification;
+}
+
+export function setNotificationIndex(notifIndex: any = null) {
+  localStorage.setItem(NotifIndex, JSON.stringify(notifIndex));
+}
+
+export function getNotificationIndex() {
+  const notifIndex = JSON.parse(localStorage.getItem(NotifIndex));
+  return (!notifIndex || notifIndex === null) ? undefined : notifIndex;
 }

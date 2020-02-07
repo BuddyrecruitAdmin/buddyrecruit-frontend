@@ -31,10 +31,16 @@ export class PopupSignDateComponent implements OnInit {
   note: string;
   loading: boolean;
   editable: boolean;
-  iconStar:  any;
+  iconStar: any;
+  errMsg = {
+    date: ''
+  }
+  minuteStep: any;
+  result: any;
+  emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupSignDateComponent>,
+    public ref: NbDialogRef<PopupSignDateComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -56,6 +62,7 @@ export class PopupSignDateComponent implements OnInit {
     this.loading = true;
     this.candidateName = '';
     this.jrName = '';
+    this.emailCandidate = '';
     this.signDate = null;
     this.signTime = null;
     this.agreeDate = null;
@@ -73,8 +80,8 @@ export class PopupSignDateComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
-        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId);
-
+        this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
+        this.emailCandidate = response.data.email;
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.sign.date)) {
           this.signDate = new Date(response.data.candidateFlow.pendingSignContractInfo.sign.date);
           this.signTime = this.utilitiesService.convertDateToTimePicker(this.signDate);
@@ -89,17 +96,29 @@ export class PopupSignDateComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.ref.close(true);
+      });
+    }
+  }
+
+  validation(): any {
+    this.errMsg.date = '';
+    let valid = true;
+    if (this.iconStar && !this.agreeDate) {
+      valid = false;
+      this.errMsg.date = "Please input date";
+    }
+    return valid;
   }
 
   sendEmail() {

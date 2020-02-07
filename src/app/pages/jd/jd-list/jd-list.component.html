@@ -40,9 +40,9 @@
       <div class="col-md-6">
         <div class="input-group">
           <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
+            (keyup.enter)="paging.pageIndex = 0; search()">
           <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" class="text-left">Job Position</th>
+              <th scope="col">Job Position</th>
               <th scope="col">Department</th>
               <th scope="col">Division</th>
               <th *ngIf="role.refAuthorize.jd.editable" scope="col" style="width: 160px;">Actions</th>

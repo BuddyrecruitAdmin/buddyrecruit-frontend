@@ -1,18 +1,17 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ResponseCode } from '../../shared/app.constants';
 import { JdService } from '../../pages/jd/jd.service';
 import { PopupCVService } from './popup-cv.service';
-import { NbDialogService, NbDialogRef, NB_DIALOG_CONFIG } from '@nebular/theme';
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { getRole, getFlowId, setFlowId, getCandidateId, setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName, setUserCandidate } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-feedback.component';
 import { PopupInterviewResultComponent } from '../../component/popup-interview-result/popup-interview-result.component';
-import { request } from 'https';
 import * as _ from 'lodash';
 import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
 
@@ -34,15 +33,14 @@ export class PopupCvComponent implements OnInit {
   flowId: any;
   candidateId: any;
   items: any;
-  accuracy: any;
-  candidateName: string;
-  jrName: string;
   message: string;
   loading: boolean;
   buttonText: string;
   degreeMaster: DropDownValue[];
   editable: boolean;
   checked = false;
+  history: any;
+  multiJr: any;
   colorStatus: {
     nameSuccess: boolean,
     nameBug: boolean;
@@ -71,10 +69,12 @@ export class PopupCvComponent implements OnInit {
     cerSuccess: boolean,
     cerBug: boolean;
   }
+  remark: any;
+  allComments: any;
   constructor(
     private service: PopupCVService,
-    private ref: NbDialogRef<PopupCvComponent>,
-    private utilitiesService: UtilitiesService,
+    public ref: NbDialogRef<PopupCvComponent>,
+    public utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,
@@ -95,8 +95,6 @@ export class PopupCvComponent implements OnInit {
     this.buttonText = 'edit';
     this.loading = true;
     this.items = [];
-    this.candidateName = '';
-    this.jrName = '';
     this.totalMonth = 0;
     this.totalYear = 0;
     if (this.flowId) {
@@ -148,6 +146,19 @@ export class PopupCvComponent implements OnInit {
     this.service.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
+        this.history = this.items.reject;
+        this.multiJr = response.data.otherJR;
+        this.allComments = [];
+        this.items.comments.map(ele => {
+          this.allComments.push({
+            accent: (ele.lastChangedInfo.refUser._id === this.role._id) ? 'success' : 'default',
+            lastChangedInfo: {
+              refUser: ele.lastChangedInfo.refUser,
+              date: this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
+            },
+            message: ele.message
+          })
+        })
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
           this.items.birth = new Date(response.data.birth);
           var timeDiff = Math.abs(Date.now() - this.items.birth.getTime());
@@ -174,7 +185,6 @@ export class PopupCvComponent implements OnInit {
           this.items.education.map(ele => {
             if (!ele.refDegree) {
               ele.refDegree = { _id: undefined };
-              // return ele.refDegree
             }
           })
         }
@@ -199,22 +209,22 @@ export class PopupCvComponent implements OnInit {
           this.items.result = fullResult;
         }
         this.changeColor(this.items);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-        this.ref.close();
-      }
-    })
-    this.service.getEducationList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.forEach(element => {
-            this.degreeMaster.push({
-              label: element.name,
-              value: element._id
-            })
-          });
-          this.loading = false;
-        }
+        this.service.getEducationList().subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            if (response.data) {
+              response.data.forEach(element => {
+                this.degreeMaster.push({
+                  label: element.name,
+                  value: element._id
+                })
+              });
+              this.loading = false;
+            }
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+            this.ref.close();
+          }
+        })
       } else {
         this.showToast('danger', 'Error Message', response.message);
         this.ref.close();
@@ -249,7 +259,7 @@ export class PopupCvComponent implements OnInit {
         this.service.edit(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.ref.close();
+            this.ref.close(true);
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -314,8 +324,50 @@ export class PopupCvComponent implements OnInit {
     });
   }
 
+  delRemark(index: any) {
+    this.allComments.splice(index, 1);
+    this.items.comments.splice(index, 1);
+  }
+
+  addComment() {
+    let commen;
+    let dateAdd;
+    dateAdd = new Date();
+    commen = {
+      lastChangedInfo: {
+        date: dateAdd,
+        refUser: {
+          firstname: this.role.firstname,
+          lastname: this.role.lastname,
+          _id: this.role._id,
+          imageData: this.role.imagePath
+        }
+      },
+      message: this.remark,
+      accent: 'success',
+      _id: undefined
+    }
+    this.items.comments.push(commen)
+    let showCom;
+    showCom = {
+      lastChangedInfo: {
+        date: this.utilitiesService.convertDateTime(dateAdd),
+        refUser: {
+          firstname: this.role.firstname,
+          lastname: this.role.lastname,
+          _id: this.role._id,
+          imageData: this.role.imagePath
+        }
+      },
+      message: this.remark,
+      accent: 'success',
+      _id: undefined
+    }
+    this.allComments.push(showCom)
+    this.remark = '';
+  }
+
   checkCV(id) {
-    const that = this;
     this.jdService.originalCV(id, this.role._id)
       .subscribe(data =>
         this.downloadFile(data), error =>
@@ -546,7 +598,7 @@ export class PopupCvComponent implements OnInit {
         this.getList();
       }
     })
-  }  
+  }
 
   openPrintCandidate(item: any) {
     setFlowId(item.candidateFlow._id);

@@ -27,10 +27,10 @@ export class PopupSignContractComponent implements OnInit {
   capacity: number;
   substitution: boolean;
   loading: boolean;
-
+  result: any;
   constructor(
     private candidateService: CandidateService,
-    private ref: NbDialogRef<PopupSignContractComponent>,
+    public ref: NbDialogRef<PopupSignContractComponent>,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownGroup } from '../../../shared/interfaces/common.interface';
@@ -15,9 +15,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { request } from 'https';
-import { elementAt } from 'rxjs/operators';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
 @Component({
   selector: 'ngx-jr-detail',
@@ -29,35 +26,33 @@ export class JrDetailComponent implements OnInit {
   _id: any;
   state: string;
   jobDB: boolean;
-  touched: boolean;
-  touchedEva: boolean;
+  jobStatus: any;
+  editExam: boolean;
   duplicateCheck: boolean;
-  editCheck: boolean;
-  touchedStart: boolean;
-  touchedEnd: boolean;
-  touchedCheck: boolean;
-  touchedCap: boolean;
-  touchedOn: boolean;
-  emailCheck: boolean;
   role: any;
-  action: any;
+  editCheck: boolean;
+  emailCheck: boolean;
+  touchedEva: boolean;
+  sErrorEvaluation: string;
+  touched: boolean;
+  sErrorPosition: string;
+  touchedStart: boolean;
+  sErrorStart: string;
+  touchedEnd: boolean;
+  sErrorEnd: string;
+  touchedCheck: boolean;
+  sErrorCheck: string;
+  touchedCap: boolean;
+  sErrorCap: string;
+  touchedOn: boolean;
+  sErrorOn: string;
   JobPosition: DropDownValue[];
   Evaluation: DropDownValue[];
   Users: DropDownGroup[];
-  sErrorPosition: string;
-  sErrorStart: string;
-  sErrorEnd: string;
-  sErrorOn: string;
-  sErrorCheck: string;
-  sErrorCap: string;
   sErrorUser: string;
-  sErrorEvaluation: string;
   checkPreview: boolean;
   jobId: any;
-  jobStatus: any;
-  tempJob: any;
   loading: any;
-  editExam: boolean;
 
   constructor(
     private service: JrService,
@@ -67,7 +62,6 @@ export class JrDetailComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private router: Router,
-    private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
@@ -76,68 +70,35 @@ export class JrDetailComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.initialModel();
-    this.initialEvaluation();
     this.activatedRoute.params.subscribe(params => {
+      this.emailCheck = true;
+      this.jobDB = false;
+      this.checkPreview = false;
       if (params.id) {
         this._id = params.id;
         this.duplicateCheck = false;
         this.editCheck = false;
-        this.emailCheck = true;
-        this.jobDB = false;
-        this.jobStatus = undefined;
         if (params.action === State.Edit) {
           this.state = State.Edit;
-          this.initialDropDown().then((response) => {
-            this.getDetailList();
-          });
-        }
-        if (params.action === 'duplicate') {
+        } else if (params.action === 'duplicate') {
           this.state = 'duplicate';
-          this.initialDropDown().then((response) => {
-            this.getDetailList();
-          });
-        }
-        if (params.action === 'preview') {
+        } else if (params.action === 'preview') {
           this.state = 'preview';
           this.checkPreview = true;
-          this.initialDropDown().then((response) => {
-            this.getDetailList();
-          });
         }
+        this.initialDropDown().then((response) => {
+          this.getDetail();
+        });
       } else {
         this.state = State.Create;
         this.jr.requiredExam = false;
-        this.emailCheck = true;
-        this.jobDB = false;
         this.jr.capacity = 0;
         this.jobStatus = 'notUsed';
         this.loading = false;
         this.editExam = true;
-        this.checkPreview = false;
         this.initialDropDown();
       }
     });
-
-  }
-
-  initialEvaluation() {
-    this.Evaluation = [];
-    this.Evaluation.push({
-      label: '- Select Evaluation -',
-      value: undefined
-    });
-    this.service.getEvaluationList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.forEach(element => {
-            this.Evaluation.push({
-              label: element.name,
-              value: element._id
-            })
-          });
-        }
-      }
-    })
   }
 
   initialModel(): any {
@@ -162,11 +123,12 @@ export class JrDetailComponent implements OnInit {
   }
 
   async initialDropDown() {
-    await this.initialJobPosition();
-    await this.initialUser();
+    await this.getJobPosition();
+    await this.getUserList();
+    await this.getEvaluationList();
   }
 
-  initialJobPosition() {
+  getJobPosition() {
     return new Promise((resolve) => {
       this.JobPosition = [];
       this.JobPosition.push({
@@ -181,7 +143,7 @@ export class JrDetailComponent implements OnInit {
               this.JobPosition.push({
                 label: element.position,
                 value: element._id
-              })
+              });
             });
           }
         }
@@ -190,7 +152,7 @@ export class JrDetailComponent implements OnInit {
     });
   }
 
-  initialUser() {
+  getUserList() {
     return new Promise((resolve) => {
       this.Users = [];
       this.Users.push({
@@ -205,10 +167,33 @@ export class JrDetailComponent implements OnInit {
               label: this.utilitiesService.setFullname(item.refUser),
               value: item._id,
               group: 'disabled'
-            })
-          })
+            });
+          });
         }
-      })
+      });
+      resolve();
+    });
+  }
+
+  getEvaluationList() {
+    return new Promise((resolve) => {
+      this.Evaluation = [];
+      this.Evaluation.push({
+        label: '- Select Evaluation -',
+        value: undefined
+      });
+      this.service.getEvaluationList().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            response.data.forEach(element => {
+              this.Evaluation.push({
+                label: element.name,
+                value: element._id
+              })
+            });
+          }
+        }
+      });
       resolve();
     });
   }
@@ -233,7 +218,7 @@ export class JrDetailComponent implements OnInit {
     });
   }
 
-  getDetailList() {
+  getDetail() {
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setUserEmail } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -23,8 +23,6 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogR
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
-import { elementAt } from 'rxjs/operators';
-import { debug } from 'util';
 import { CalendarService } from '../../calendar/calendar.service';
 
 @Component({
@@ -234,12 +232,20 @@ export class InterviewDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         comment: false,
+        disabled: false
       },
-      isExpired: false
+      isExpired: false,
     };
-    const step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
-      return step.refStage._id === item.refStage._id;
-    });
+    let step;
+    if (item.refJR.requiredExam) {
+      step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+        return step.refStage._id === item.refStage._id;
+      });
+    } else {
+      step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
+        return step.refStage._id === item.refStage._id;
+      });
+    }
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -249,8 +255,13 @@ export class InterviewDetailComponent implements OnInit {
             if (this.tabSelected === 'PENDING') {
               condition.icon.interviewDate = true;
               condition.button.reject = true;
-              if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate) && item.pendingInterviewInfo.refLocation) {
+              if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate)
+                && item.pendingInterviewInfo.refLocation
+              ) {
                 condition.button.nextStep = true;
+                if (this.utilitiesService.isDateGreaterThanToday(item.pendingInterviewInfo.startDate)) {
+                  condition.button.disabled = true;
+                }
               } else {
                 condition.button.interviewDate = true;
               }
@@ -264,8 +275,8 @@ export class InterviewDetailComponent implements OnInit {
               if (item.pendingInterviewScoreInfo.evaluation.length) {
                 condition.button.nextStep = true;
               } else {
-                if (item.refJR.userInterviews.length) {
-                  const found = item.refJR.userInterviews.find(element => {
+                if (item.pendingInterviewInfo.userInterviews.length) {
+                  const found = item.pendingInterviewInfo.userInterviews.find(element => {
                     return element.refUser === this.role._id;
                   });
                   if (found) {
@@ -273,8 +284,8 @@ export class InterviewDetailComponent implements OnInit {
                   }
                 }
               }
-              if (item.refJR.userInterviews.length) {
-                const found = item.refJR.userInterviews.find(element => {
+              if (item.pendingInterviewInfo.userInterviews.length) {
+                const found = item.pendingInterviewInfo.userInterviews.find(element => {
                   return element.refUser === this.role._id;
                 });
                 if (found) {
@@ -329,6 +340,9 @@ export class InterviewDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
+    if (item.refCandidate.email) {
+      setUserEmail(item.refCandidate.email);
+    }
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     setButtonId(button._id);
@@ -415,7 +429,8 @@ export class InterviewDetailComponent implements OnInit {
   openCandidateDetail(item: any) {
     setTabName(this.tabSelected);
     setCollapse(this.collapseAll);
-    setCandidateId(item._id);
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
     this.router.navigate(["/employer/candidate/detail"]);
   }
 
@@ -427,9 +442,9 @@ export class InterviewDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      this.search();
       if (result) {
         setFlowId();
-        this.search();
       }
     });
   }

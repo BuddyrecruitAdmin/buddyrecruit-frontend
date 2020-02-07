@@ -47,6 +47,7 @@ export interface CompanyDetail {
   incomingEmailUser: string;
   incomingEmailPass: string;
   addresses: Address[];
+  startByHR: boolean;
 }
 
 export interface ErrMsg {
@@ -181,6 +182,7 @@ export class CompanyDetailComponent implements OnInit {
       incomingEmailUser: '',
       incomingEmailPass: '',
       addresses: [this.initialAddress()],
+      startByHR: false
     }
   }
 
@@ -503,6 +505,7 @@ export class CompanyDetailComponent implements OnInit {
         request.hero.hr = true;
         request.hero.payroll = false;
         request.hero.manager = false;
+        request.startByHR = false;
         break;
       case '2':
         request.hero.hr = true;
@@ -513,11 +516,13 @@ export class CompanyDetailComponent implements OnInit {
         request.hero.hr = true;
         request.hero.payroll = true;
         request.hero.manager = false;
+        request.startByHR = false;
         break;
       case '4':
         request.hero.hr = true;
         request.hero.payroll = true;
         request.hero.manager = true;
+        request.startByHR = false;
         break;
       default:
         break;

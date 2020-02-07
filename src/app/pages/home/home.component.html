@@ -1,13 +1,13 @@
 <nb-card>
   <nb-card-body class="content-body">
     <div class="text-center">
-      <img src="../../../assets/images/logo.png">
+      <img src="../../../assets/images/logo.png" alt="Logo | Buddy Recruit">
       <div class="name">Buddy Recruit</div>
       <div class="row justify-content-center">
         <div class="col-sm-8 col-lg-6">
           <div class="form-control-group">
             <div class="input-group">
-              <input type="text" [(ngModel)]="keyword" (keyup.enter)="search(true)" nbInput
+              <input type="text" [(ngModel)]="keyword" (keyup.enter)="search()" nbInput
                 fullWidth placeholder="Search">
               <div class="input-group-addon" nbTooltip="Search">
                 <nb-icon icon="search-outline" class="link" (click)="search()"></nb-icon>

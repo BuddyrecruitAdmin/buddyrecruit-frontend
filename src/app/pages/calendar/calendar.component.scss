@@ -14,6 +14,12 @@
 .circle.circle-danger {
   background-color: var(--color-red);
 }
+.circle.circle-warning {
+  background-color: var(--color-orange);
+}
+.circle.circle-default {
+  background-color: var(--color-light-gray);
+}
 .cell-totals {
   margin: 5px;
   text-align: center;
@@ -31,15 +37,34 @@ table {
     padding-bottom: 10px;
   }
 }
+.sync-container {
+  position: relative;
+  display: flex;
+  align-items: center;  
+}
+.sync-icon {
+  font-size: 2.5rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+.sync-content {
+  width: -webkit-fill-available;
+
+  small {
+    display: block;
+  }
+}
 .icon-microsoft {
   color: #0078d4;
-  font-size: 2rem;
-  vertical-align: middle;
-  margin-right: 0.3rem;
 }
 .icon-google {
   color: #ea4335;
-  font-size: 2rem;
-  vertical-align: middle;
-  margin-right: 0.3rem;
+}
+.user-block {
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+.user-block:hover {
+  color: var(--color-green);
+    background-color: rgba(53, 196, 178, 0.1);
 }

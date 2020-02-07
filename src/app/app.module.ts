@@ -32,6 +32,9 @@ import {
   NbButtonModule,
   NbTooltipModule,
 } from '@nebular/theme';
+import { PusherService } from './shared/services/pusher.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,8 @@ import {
     CoreModule.forRoot(),
     NbCardModule,
     NbButtonModule,
-    NbTooltipModule
+    NbTooltipModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [
     NbCardModule,
@@ -76,7 +80,8 @@ import {
         TranslateService
       ],
       multi: true
-    }
+    },
+    PusherService
   ]
 })
 export class AppModule {

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
 import * as MENU from './pages-menu';
-import { getRole } from '../shared/services/auth.service';
+import { getRole, getToken, setUrl } from '../shared/services/auth.service';
 import { ReportService } from '../pages/setting/report/report.service';
 import { ResponseCode } from '../shared/app.constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-pages',
@@ -16,12 +17,18 @@ import { ResponseCode } from '../shared/app.constants';
   `,
 })
 export class PagesComponent {
-
   menu: NbMenuItem[];
 
   constructor(
+    private router: Router,
     private reportService: ReportService,
   ) {
+    const token = getToken();
+    if (!token) {
+      setUrl(this.router.url);
+      this.router.navigate(['/employer/login']);
+    }
+
     this.menu = [];
     const role = getRole();
     // Home
@@ -176,7 +183,7 @@ export class PagesComponent {
         if (configuration.report && configuration.report.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[13]);
         }
-        if (configuration.blacklist && configuration.blacklist.visible) {
+        if (configuration.blacklist && configuration.blacklist.visible && !role.refHero.isSuperAdmin) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
         }
         // is Super Admin

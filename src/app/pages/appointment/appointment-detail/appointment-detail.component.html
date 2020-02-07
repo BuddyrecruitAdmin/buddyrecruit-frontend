@@ -21,14 +21,14 @@
       <div class="col-md-6">
         <div class="input-group">
           <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
+            (keyup.enter)="paging.pageIndex = 0; search()">
           <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
           </div>
         </div>
       </div>
       <div class="col-md-6" style="margin-top: 3px;">
-        <nb-radio-group [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
+        <nb-radio-group name="rrr2" [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
           <nb-radio [value]="true">Collapse All</nb-radio>
           <nb-radio [value]="false">Expand All</nb-radio>
         </nb-radio-group>
@@ -74,7 +74,7 @@
                   </div>
                   <div class="text-group">
                     <label class="label">Work Experience</label>
-                    <span>{{ item.refCandidate?.workExperience?.totalExpMonth || '-' }}</span>
+                    <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
                   </div>
                   <div class="text-group">
                     <label class="label">Phone</label>
@@ -85,29 +85,31 @@
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
                   <div class="text-group">
-                    <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
-                      <nb-icon icon="info-outline"></nb-icon> See more detail
+                    <span class="link underline" (click)="info(item)">
+                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                     </span>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <label class="label text-light-gray">Exam Score</label>
-                  <div class="m-l-15">
-                    <div class="text-group">
-                      <label class="label">Exam Score</label>
-                      <span>{{ item.pendingExamScoreInfo?.examScore || '0' }}</span>
-                    </div>
-                    <div class="text-group">
-                      <label class="label">Exam Remark</label>
-                      <span>{{ item.pendingExamScoreInfo?.examRemark || '-' }}</span>
-                    </div>
-                    <div class="text-group">
-                      <label class="label">Attitude Score</label>
-                      <span>{{ item.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
-                    </div>
-                    <div class="text-group">
-                      <label class="label">Attitude Remark</label>
-                      <span>{{ item.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+                  <div *ngIf="item.examInfo.flag">
+                    <label class="label text-light-gray">Exam Score</label>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Exam Score</label>
+                        <span>{{ item.pendingExamScoreInfo?.examScore || '0' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Exam Remark</label>
+                        <span>{{ item.pendingExamScoreInfo?.examRemark || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Attitude Score</label>
+                        <span>{{ item.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Attitude Remark</label>
+                        <span>{{ item.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
+                      </div>
                     </div>
                   </div>
                   <div class="m-t-5">
@@ -163,38 +165,38 @@
                 </button>
               </div>
 
-              <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
-                (click)="openPopupComment(item)">
+              <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
                 <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
                   position="top right"></nb-badge>
               </button>
 
-              <button *ngIf="item.condition.button.nextStep" nbButton status="success"
-                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
-                [disabled]="item.condition.isExpired">
+              <button *ngIf="item.condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="success" [nbTooltip]="item.condition.button.step.button"
+                (click)="approve(item, item.condition.button.step)" [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
                 </span>
               </button>
 
-              <button *ngIf="item.condition.button.interviewDate" nbButton status="success"
-                [nbTooltip]="item.refStage?.name" (click)="openPopupAppointmentDate(item)"
-                [disabled]="item.condition.isExpired">
+              <button *ngIf="item.condition.button.interviewDate" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" [nbTooltip]="item.refStage?.name"
+                (click)="openPopupAppointmentDate(item)" [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
                 </span>
               </button>
 
-              <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
-                (click)="reject(item)">
+              <button *ngIf="item.condition.button.reject" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="danger" nbTooltip="Reject" (click)="reject(item)">
                 <nb-icon icon="close-circle"></nb-icon>
               </button>
 
-              <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
-                (click)="revoke(item)">
+              <button *ngIf="item.condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="primary" nbTooltip="Revoke" (click)="revoke(item)">
                 <nb-icon icon="undo"></nb-icon>
               </button>
 

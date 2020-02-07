@@ -7,6 +7,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,18 @@ const routes: Routes = [
         path: 'appform/:action/:id',
         component: AppFormComponent,
       },
+      {
+        path: 'registration',
+        component: RegistrationComponent
+      },
+      // {
+      //   path: 'registration/:code',
+      //   component: RegistrationComponent
+      // },
+      // {
+      //   path: 'registration/:code/:message',
+      //   component: RegistrationComponent
+      // }
     ],
   },
   {

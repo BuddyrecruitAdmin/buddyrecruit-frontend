@@ -14,9 +14,9 @@
       <div class="col-xs-12 col-md-6 ">
         <div class="input-group">
           <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
+            (keyup.enter)="paging.pageIndex = 0; search()">
           <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
           </div>
         </div>
       </div>
@@ -90,8 +90,8 @@
               <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
             </div>
             <div class="text-right ">
-              <span class="link" nbTooltip="See more detail" (click)="info(item)">
-                <nb-icon icon="info-outline"></nb-icon> See more detail
+              <span class="link" (click)="info(item)">
+                <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
               </span>
             </div>
           </nb-card-body>
@@ -141,7 +141,7 @@
                 <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
               </td>
               <td class="actions">
-                <button nbButton status="info" size="tiny" nbTooltip="See more detail" (click)="info(item)">
+                <button nbButton status="info" size="tiny" nbTooltip="More Details" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">

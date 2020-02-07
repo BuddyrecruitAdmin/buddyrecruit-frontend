@@ -6,7 +6,7 @@ import { getRole, getDate, setDate } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { isSameDay } from 'date-fns';
+import { isSameDay, isPast, isDate, isToday, areRangesOverlapping } from 'date-fns';
 
 @Component({
   selector: 'ngx-popup-available-date',
@@ -23,10 +23,11 @@ export class PopupAvailableDateComponent implements OnInit {
   disabled: boolean;
   result: boolean;
   errMsg: string;
-
+  minuteStep = 30;
+  candidateName: any;
   constructor(
     private calendarService: CalendarService,
-    private ref: NbDialogRef<PopupAvailableDateComponent>,
+    public ref: NbDialogRef<PopupAvailableDateComponent>,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
   ) {
@@ -49,7 +50,7 @@ export class PopupAvailableDateComponent implements OnInit {
     this.loading = true;
     this.calendarService.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.calendarData = response.data.calendar;
+        this.calendarData = response.data;
         this.changeDate(this.date);
       } else {
         this.showToast('danger', 'Error Message', response.message);
@@ -60,8 +61,9 @@ export class PopupAvailableDateComponent implements OnInit {
 
   changeDate(date: Date) {
     this.disabled = false;
+    this.errMsg = '';
     this.periods = [];
-    if (this.utilitiesService.dateIsValid(date)) {
+    if (isDate(date)) {
       if (this.calendarData.availableDates && this.calendarData.availableDates.length) {
         const availableDates = this.calendarData.availableDates.filter(element => {
           if (isSameDay(element.startDate, date)) {
@@ -77,14 +79,20 @@ export class PopupAvailableDateComponent implements OnInit {
           });
         }
       }
-      if (this.calendarData.interviewDates.length) {
+      if (isPast(date) && !isToday(date)) {
+        this.disabled = true;
+        this.errMsg = '';
+      } else if (this.calendarData.interviewDates.length) {
         const found = this.calendarData.interviewDates.find(element => {
-          if (isSameDay(element.startDate, date)) {
-            return element;
+          if (element.refCandidateFlow) {
+            if (isSameDay(element.refCandidateFlow.pendingInterviewInfo.startDate, date)) {
+              return element;
+            }
           }
         });
         if (found) {
           this.disabled = true;
+          this.errMsg = 'This day have a Interview meeting, Can\'t edit.';
         }
       }
     }
@@ -109,19 +117,21 @@ export class PopupAvailableDateComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.calendarService.edit(request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        this.getAvailabelDate();
-        this.ref.close(true);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.result = true;
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.calendarService.edit(request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+          this.getAvailabelDate();
+          this.ref.close(true);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.result = true;
+      });
+    }
   }
 
   setRequest(): any {
@@ -145,33 +155,49 @@ export class PopupAvailableDateComponent implements OnInit {
     return request;
   }
 
-  isVisibleSave(): boolean {
+  validation(): boolean {
     this.errMsg = '';
     let isValid = true;
-    if (!this.utilitiesService.dateIsValid(this.date)) {
+    if (!isDate(this.date)) {
       isValid = false;
-      this.errMsg = 'Please select Date.';
+      this.errMsg = 'Please select Date';
     }
     if (this.periods.length) {
       this.periods.forEach((element, index) => {
         if (!element.startTime || !element.endTime) {
           isValid = false;
-          this.errMsg = 'Please input Time.';
-        }
-        if (element.startTime.hour === element.endTime.hour) {
+          this.errMsg = 'Please input Time';
+        } else if (element.startTime.hour === element.endTime.hour) {
           if (element.startTime.minute >= element.endTime.minute) {
             isValid = false;
-            this.errMsg = 'Start time must be earlier than end time.';
+            this.errMsg = 'Start time of a date cannot be after its end time';
           }
-        }
-        if (element.startTime.hour > element.endTime.hour) {
+        } else if (element.startTime.hour > element.endTime.hour) {
           isValid = false;
-          this.errMsg = 'Start time must be earlier than end time.';
+          this.errMsg = 'Start time of a date cannot be after its end time';
+        } else if ((element.startTime.minute !== 0 && element.startTime.minute !== 30)
+          || (element.endTime.minute !== 0 && element.endTime.minute !== 30)) {
+          isValid = false;
+          this.errMsg = 'Minute must be equal 0 or 30';
+        } else {
+          this.periods.forEach((compare, indC) => {
+            if (indC !== index) {
+              const startDate = this.utilitiesService.convertTimePickerToDate(element.startTime, this.date);
+              const endDate = this.utilitiesService.convertTimePickerToDate(element.endTime, this.date);
+              const compareStartDate = this.utilitiesService.convertTimePickerToDate(compare.startTime, this.date);
+              const compareEndDate = this.utilitiesService.convertTimePickerToDate(compare.endTime, this.date);
+              if (areRangesOverlapping(startDate, endDate, compareStartDate, compareEndDate)) {
+                isValid = false;
+                this.errMsg = 'Time range overlapping with another time range';
+                return;
+              }
+            }
+          });
         }
       });
     } else {
       isValid = false;
-      this.errMsg = 'Please input Time.';
+      this.errMsg = 'Please input Time';
     }
     return isValid;
   }

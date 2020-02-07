@@ -6,7 +6,7 @@ import { CompanyService } from '../../company/company.service';
 import { ResponseCode, State, Prefix } from '../../../../shared/app.constants';
 import { DropDownValue, DropDownGroup } from '../../../../shared/interfaces/common.interface';
 import { MESSAGE } from '../../../../shared/constants/message';
-import { getRole, setUrl } from '../../../../shared/services/auth.service';
+import { getRole } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -341,11 +341,6 @@ export class UserDetailComponent implements OnInit {
   validation(): boolean {
     let isValid = true;
     this.errMsg = this.initialErrMsg();
-
-    // if (!this.userDetail.title) {
-    //   this.errMsg.title = 'Please Input Title';
-    //   isValid = false;
-    // }
     if (!this.userDetail.firstname) {
       this.errMsg.firstname = 'Please Input Firstname';
       isValid = false;

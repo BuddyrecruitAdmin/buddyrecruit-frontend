@@ -8,6 +8,7 @@ export interface ApiResponse {
   count?: Count;
   isOverQuota?: boolean;
   isOverCandidate?: boolean;
+  otherJR?;
 }
 
 export interface Count {
@@ -18,6 +19,7 @@ export interface Count {
   rejected?: number;
   started?: number;
   unread?: number;
+  unRead?: number;
   unseen?: number;
 }
 

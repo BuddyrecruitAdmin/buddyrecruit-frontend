@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { ProfileService } from '../../../pages/profile/profile.service';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil, timeout } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { getRole, setFlowId, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
 import { Router } from "@angular/router";
@@ -13,6 +13,8 @@ import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Paging as IPaging } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import { AuthorizeService } from '../../../pages/setting/authorize/authorize.service';
+import { PusherService } from '../../../shared/services/pusher.service';
+
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
@@ -64,6 +66,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loading: boolean;
   role: any;
 
+  counter: {
+    notification: {
+      unread: 0,
+      unseen: 2,
+      data: []
+    },
+    processFlow: {
+      talentPool: 1,
+      pendingExam: 2,
+      pendingAppointment: 1,
+      pendingInterview: 0,
+      pendingSignContract: 0,
+      onboard: 0
+    }
+  }
+
   constructor(
     private router: Router,
     private service: HeaderService,
@@ -76,6 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private searchService: NbSearchService,
     private utilitiesService: UtilitiesService,
     private authorizeService: AuthorizeService,
+    private pusherService: PusherService
   ) {
     this.role = getRole();
     if (this.role && this.role.refAuthorize) {
@@ -91,7 +110,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     setKeyword();
     this.searchService.onSearchSubmit().subscribe((data: any) => {
       setKeyword(data.term);
-      this.router.navigate(['/employer/candidate/list']);
+      this.router.navigate(['/employer/candidate/list/' + data.term]);
     });
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
@@ -136,12 +155,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.checkNewNotification();
     this.getNotification();
-    if (this.role) {
-      setInterval(() => {
-        if (this.utilitiesService.getRole()) {
-          this.checkNewNotification();
+    // if (this.role) {
+    //   setInterval(() => {
+    //     if (this.utilitiesService.getRole() && this.utilitiesService.getToken()) {
+    //       this.checkNewNotification();
+    //     }
+    //   }, 30000);
+    // }
+
+    if (this.role && this.role._id) {
+      this.pusherService.channel.bind(`counter-${this.role._id}`, data => {
+        console.log('pusherService', data);
+        const counter = data.counter;
+        if (counter && counter.notification) {
+          this.countUnseen = counter.notification.unseen || 0;
+          this.countUnread = counter.notification.unread || 0;
+          if (counter.notification.data && counter.notification.data.length) {
+            counter.notification.data.forEach(element => {
+              this.notifications.unshift({
+                name: element.title,
+                title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
+                  this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+                picture: element.fromUser.refUser.imageData,
+                hidden: element.readed
+              });
+            });
+          }
         }
-      }, 30000);
+      });
     }
   }
 
@@ -180,7 +221,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     this.service.getNotification(criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.countUnread = response.count.unread || 0;
+        this.countUnread = response.count.unread || response.count.unRead || 0;
         if (this.notifications.length >= response.count.data) {
           this.showSeeMore = false;
         }

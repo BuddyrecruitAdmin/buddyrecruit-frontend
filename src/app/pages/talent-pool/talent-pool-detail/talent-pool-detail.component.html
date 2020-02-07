@@ -16,9 +16,9 @@
       <div class="col-md-6">
         <div class="input-group">
           <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-            (keyup.enter)="paging.pageIndex = 0; search(true)">
+            (keyup.enter)="paging.pageIndex = 0; search()">
           <div class="input-group-addon" nbTooltip="Search">
-            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search(true)"></nb-icon>
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
           </div>
         </div>
       </div>
@@ -236,8 +236,8 @@
                       </div>
                     </div>
                     <div class="text-group">
-                      <span class="link underline" nbTooltip="See more detail" (click)="info(item)">
-                        <nb-icon icon="info-outline"></nb-icon> See more detail
+                      <span class="link" (click)="info(item)">
+                        <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                       </span>
                     </div>
                     <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
@@ -382,34 +382,34 @@
                     <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
                   </button>
                 </div>
-                <button *ngIf="item.condition.button.comment" nbButton status="info" nbTooltip="Comment"
-                  (click)="openPopupComment(item)">
+                <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
                   <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
                   <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
                     position="top right"></nb-badge>
                 </button>
-                <button *ngIf="item.condition.button.nextStep" nbButton status="success"
-                  [nbTooltip]="item.condition.button.step.button"
+                <button *ngIf="item.condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  status="success" [nbTooltip]="item.condition.button.step.button"
                   (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">
                     {{ item.refJR?.refStatus?.name }}
                   </span>
                 </button>
-                <button *ngIf="item.condition.button.examDate" nbButton status="success"
-                  [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)"
+                <button *ngIf="item.condition.button.examDate" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  status="success" [nbTooltip]="item.refStage?.name" (click)="appointmentExam(item)"
                   [disabled]="item.condition.isExpired">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="calendar"></nb-icon>
                   <span *ngIf="item.condition.isExpired">
                     {{ item.refJR?.refStatus?.name }}
                   </span>
                 </button>
-                <button *ngIf="item.condition.button.reject" nbButton status="danger" nbTooltip="Reject"
-                  (click)="reject(item)">
+                <button *ngIf="item.condition.button.reject" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  status="danger" nbTooltip="Reject" (click)="reject(item)">
                   <nb-icon icon="close-circle"></nb-icon>
                 </button>
-                <button *ngIf="item.condition.button.revoke" nbButton status="primary" nbTooltip="Revoke"
-                  (click)="revoke(item)" [disabled]="showTips">
+                <button *ngIf="item.condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  status="primary" nbTooltip="Revoke" (click)="revoke(item)" [disabled]="showTips">
                   <nb-icon icon="undo"></nb-icon>
                 </button>
               </nb-card-footer>

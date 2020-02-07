@@ -41,6 +41,7 @@ export class FeedbackComponent implements OnInit {
       candidateId: any
     }
   };
+  devices: Devices;
   constructor(
     private service: ReportService,
     private utilitiesService: UtilitiesService,
@@ -48,6 +49,7 @@ export class FeedbackComponent implements OnInit {
     private dialogService: NbDialogService,
   ) {
     this.role = getRole();
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
@@ -182,13 +184,11 @@ export class FeedbackComponent implements OnInit {
   }
 
   checkList(item, checked) {
-    console.log(checked)
     this.service.edit(item._id, checked.checked).subscribe(response => {
     })
   }
 
   info(item: any) {
-    console.log(item)
     setFlowId(item.refCandidateFlow);
     setCandidateId(item.refCandidate._id);
     this.dialogService.open(PopupCvComponent,

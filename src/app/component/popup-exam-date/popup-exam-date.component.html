@@ -18,6 +18,10 @@
         <nb-option *ngFor="let location of locations" [value]="location.value">{{ location.label }}
         </nb-option>
       </nb-select>
+      <small *ngIf="errMsg.location" class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        {{ errMsg.location }}
+      </small>
     </div>
     <div class="form-control-group">
       <label class="label">Exam Date <span class="text-red">*</span></label>
@@ -28,21 +32,38 @@
           <nb-icon icon="calendar-outline" class="text-green"></nb-icon>
         </div>
       </div>
+      <small *ngIf="errMsg.date" class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        {{ errMsg.date }}
+      </small>
     </div>
     <div class="form-control-group m-0">
       <label class="label">Exam Time <span class="text-red">*</span></label>
       <ngb-timepicker [(ngModel)]="time" [minuteStep]="minuteStep" [spinners]="false" required=""></ngb-timepicker>
+      <small *ngIf="errMsg.time" class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        {{ errMsg.time }}
+      </small>
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <div class="footer-collapse">
-      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+    <div *ngIf="!emailCandidate">
+      <small class="text-red">
+        <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
+        Email not found.Can't send email to candidate.
+      </small>
     </div>
-    <button nbButton status="primary" (click)="save()"
+    <div class="footer-collapse">
+      <button nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="default"
+        (click)="ref.close(result)">CANCEL</button>
+    </div>
+    <button nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="primary" (click)="save()"
       [disabled]="!canApprove && (!location || !date || !time)">SAVE</button>
-    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()">SEND
+    <button *ngIf="!canApprove || !emailCandidate" nbButton [size]="(devices.isMobile)? 'small' : 'medium'"
+      status="success" (click)="sendEmail()">SEND
       EMAIL</button>
-    <button *ngIf="canApprove" nbButton status="success" (click)="passToExam()" [disabled]="!date || !time">PASS
+    <button *ngIf="canApprove" nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="success"
+      (click)="passToExam()" [disabled]="!date || !time">PASS
       TO EXAM</button>
   </nb-card-footer>
 </nb-card>

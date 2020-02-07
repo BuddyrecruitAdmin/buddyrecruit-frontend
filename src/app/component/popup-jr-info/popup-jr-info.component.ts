@@ -15,12 +15,12 @@ export class PopupJrInfoComponent implements OnInit {
   innerWidth: any;
   jrId: any;
   loading: boolean;
-  jrDetail: any;
+  jrDetail: any = '';
 
   constructor(
-    private ref: NbDialogRef<PopupJrInfoComponent>,
+    public ref: NbDialogRef<PopupJrInfoComponent>,
     private jrService: JrService,
-    private utilitiesService: UtilitiesService,
+    public utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
     this.jrId = getJrId();
@@ -33,8 +33,8 @@ export class PopupJrInfoComponent implements OnInit {
     this.jrService.getDetail(this.jrId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.jrDetail = response.data;
+        this.loading = false;
       }
-      this.loading = false;
     });
   }
 }
