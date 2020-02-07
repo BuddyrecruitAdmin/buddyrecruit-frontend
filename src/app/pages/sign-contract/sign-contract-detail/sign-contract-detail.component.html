@@ -181,12 +181,12 @@
               </button>
 
               <button
-                *ngIf="item.condition.button.nextStep && utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)"
+                *ngIf="item.condition.button.nextStep && utilitiesService.dateIsValid(item.pendingSignContractInfo?.sign?.date)"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
-                [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) || item.condition.isExpired || showTips"
+                [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date) || item.condition.isExpired || showTips"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)">
-                <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)"
-                  nbTooltip="Agree start date is not arrived yet" text=" ! " status="warning" position="top right">
+                <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date)"
+                  nbTooltip="Sign contract date is not arrived yet" text=" ! " status="warning" position="top right">
                 </nb-badge>
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">

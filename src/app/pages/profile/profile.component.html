@@ -57,13 +57,16 @@
         </div>
       </nb-card-body>
     </nb-card>
-    <nb-card *ngIf="lineQR">
+    <nb-card *ngIf="profileDetail.lineInfo?.active">
       <nb-card-header>
-        <span class="fab fa-line" style="color: #00b900;"></span> Line official account
+        <div>
+          <span class="fab fa-line" style="color: #00b900;"></span> Line official account
+        </div>
+        <small *ngIf="profileDetail.lineInfo?.lineId">Line ID: {{ profileDetail.lineInfo?.lineId }}</small>
       </nb-card-header>
-      <nb-card-body>
+      <nb-card-body *ngIf="profileDetail.lineInfo?.imageUrl">
         <div class="text-center">
-          <img class="img-fluid" [src]="lineQR" alt="Line official account | Buddy Recruit">
+          <img class="img-fluid" [src]="profileDetail.lineInfo?.imageUrl" alt="Line official account | Buddy Recruit">
         </div>
       </nb-card-body>
     </nb-card>

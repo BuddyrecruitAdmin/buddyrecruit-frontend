@@ -160,7 +160,7 @@ export class CandidateComponent implements OnInit {
           this.filter.data.jobStatus.push({
             label: element.refJR.refStatus.name,
             value: element.refJR.refStatus._id
-          })
+          });
           //stage
           this.filter.data.stage.push({
             label: element.refStage.name,
@@ -170,17 +170,19 @@ export class CandidateComponent implements OnInit {
           this.filter.data.subStage.push({
             label: element.refSubStage.name,
             value: element.refSubStage._id
-          })
+          });
           //department
           this.filter.data.department.push({
             label: element.department.name,
             value: element.department._id
-          })
-        })
-        this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value")
-        this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
-        this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
-        this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
+          });
+        });
+        debugger;
+        this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value");
+        this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value");
+        this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value");
+        this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value");
+
         this.items.map(item => {
           switch (item.refJR.refStatus.name) {
             case "Waiting for HR Confirm":

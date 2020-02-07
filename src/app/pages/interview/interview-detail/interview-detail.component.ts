@@ -249,6 +249,16 @@ export class InterviewDetailComponent implements OnInit {
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
+
+      if (item.pendingInterviewInfo.userInterviews.length) {
+        const found = item.pendingInterviewInfo.userInterviews.find(element => {
+          return element.refUser === this.role._id;
+        });
+        if (found) {
+          condition.icon.interviewScore = true;
+        }
+      }
+
       if (step.editable) {
         switch (item.refStage.order) {
           case 401: // Interview Taken
@@ -274,23 +284,6 @@ export class InterviewDetailComponent implements OnInit {
               condition.button.reject = true;
               if (item.pendingInterviewScoreInfo.evaluation.length) {
                 condition.button.nextStep = true;
-              } else {
-                if (item.pendingInterviewInfo.userInterviews.length) {
-                  const found = item.pendingInterviewInfo.userInterviews.find(element => {
-                    return element.refUser === this.role._id;
-                  });
-                  if (found) {
-                    condition.button.interviewScore = true;
-                  }
-                }
-              }
-              if (item.pendingInterviewInfo.userInterviews.length) {
-                const found = item.pendingInterviewInfo.userInterviews.find(element => {
-                  return element.refUser === this.role._id;
-                });
-                if (found) {
-                  condition.icon.interviewScore = true;
-                }
               }
             }
             break;

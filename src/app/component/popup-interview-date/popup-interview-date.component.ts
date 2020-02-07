@@ -62,7 +62,7 @@ export class PopupInterviewDateComponent implements OnInit {
   };
   pendingInterviewInfo: any;
   result: any;
-  emailCandidate: any;
+  emailCandidate: any = false;
   constructor(
     private candidateService: CandidateService,
     private calendarService: CalendarService,

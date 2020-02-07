@@ -48,6 +48,11 @@ export interface CompanyDetail {
   incomingEmailPass: string;
   addresses: Address[];
   startByHR: boolean;
+  lineInfo: {
+    active: boolean;
+    lineId: string;
+    imageUrl: string;
+  },
 }
 
 export interface ErrMsg {
@@ -73,6 +78,7 @@ export interface ErrMsg {
   postalCode: string;
   incomingEmailUser: string;
   incomingEmailPass: string;
+  lineInfo: string;
 }
 
 @Component({
@@ -182,7 +188,12 @@ export class CompanyDetailComponent implements OnInit {
       incomingEmailUser: '',
       incomingEmailPass: '',
       addresses: [this.initialAddress()],
-      startByHR: false
+      startByHR: false,
+      lineInfo: {
+        active: false,
+        lineId: '',
+        imageUrl: '',
+      },
     }
   }
 
@@ -219,6 +230,7 @@ export class CompanyDetailComponent implements OnInit {
       address: '',
       province: '',
       postalCode: '',
+      lineInfo: '',
     }
   }
 
@@ -414,7 +426,6 @@ export class CompanyDetailComponent implements OnInit {
         this.errMsg.expiryDate = 'Please select expiry date';
         isValid = false;
       }
-      debugger
       if (!this.companyDetail.adminEmail) {
         this.errMsg.adminEmail = 'Please Input Admin Email';
         isValid = false;
@@ -430,6 +441,12 @@ export class CompanyDetailComponent implements OnInit {
       if (!this.companyDetail.maxUser) {
         this.errMsg.maxUser = 'Please Input Number of User';
         isValid = false;
+      }
+      if (this.companyDetail.lineInfo.active) {
+        if (!this.companyDetail.lineInfo.lineId && !this.companyDetail.lineInfo.imageUrl) {
+          this.errMsg.lineInfo = 'Please Input Line ID. or Line QR Code url';
+          isValid = false;
+        }
       }
     } else {
       if (!this.companyDetail.name) {
