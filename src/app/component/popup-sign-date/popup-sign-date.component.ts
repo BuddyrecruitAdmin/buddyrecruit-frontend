@@ -90,6 +90,9 @@ export class PopupSignDateComponent implements OnInit {
           this.agreeDate = new Date(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate);
         }
         this.note = response.data.candidateFlow.pendingSignContractInfo.note;
+        if (response.data.candidateFlow.pendingSignContractInfo.sign.flag) {
+          this.iconStar = response.data.candidateFlow.pendingSignContractInfo.sign.flag;
+        }
       }
       this.loading = false;
     });

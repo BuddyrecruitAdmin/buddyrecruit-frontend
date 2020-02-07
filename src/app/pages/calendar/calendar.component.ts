@@ -284,6 +284,7 @@ export class CalendarComponent implements OnInit {
           if (this.utilitiesService.dateIsValid(startDate)
             && this.utilitiesService.dateIsValid(endDate)) {
             let event: CalendarEvent;
+            let isPush = true;
             if (element.refCandidateFlow.reject.flag) {
               event = {
                 id: element.refCandidateFlow._id,
@@ -314,15 +315,19 @@ export class CalendarComponent implements OnInit {
               );
               if (index >= 0) {
                 this.events[index] = event;
+                isPush = false;
               }
-            } else if (element.refCandidateFlow.pendingInterviewInfo.google && element.refCandidateFlow.pendingInterviewInfo.google.iCalUId) {
+            }
+            if (element.refCandidateFlow.pendingInterviewInfo.google && element.refCandidateFlow.pendingInterviewInfo.google.iCalUId) {
               const index = this.events.findIndex(event =>
                 event.id === element.refCandidateFlow.pendingInterviewInfo.google.iCalUId
               );
               if (index >= 0) {
                 this.events[index] = event;
+                isPush = false;
               }
-            } else {
+            }
+            if (isPush) {
               this.events.push(event);
             }
           }

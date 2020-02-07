@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, getCandidateId, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -210,6 +210,15 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.block.examScore = true;
           this.condition.block.interviewDate = true;
           this.condition.block.interviewScore = true;
+
+          if (item.candidateFlow.refJR.userInterviews.length) {
+            const found = item.candidateFlow.refJR.userInterviews.find(element => {
+              return element.refUser._id === this.role._id;
+            });
+            if (found) {
+              this.condition.icon.interviewScore = true;
+            }
+          }
           break;
         case 501:
           this.condition.block.examDate = true;
@@ -321,9 +330,12 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 601:
               this.condition.icon.signContract = true;
-              if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
-                this.condition.button.errMsg = 'Onboard date is not arrived';
+                this.condition.button.errMsg = 'Please input agree start date';
+              } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                this.condition.button.disabled = true;
+                this.condition.button.errMsg = 'Agree start date is not arrived';
               }
               break;
             default:
@@ -385,6 +397,9 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
+    if (item.email) {
+      setUserEmail(item.email);
+    }
     setFlowId(item.candidateFlow._id);
     setCandidateId(item._id);
     setButtonId(button._id);

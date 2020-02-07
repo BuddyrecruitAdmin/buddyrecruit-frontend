@@ -49,7 +49,6 @@ export class ProfileComponent implements OnInit {
   innerHeight: any;
   previewPicture: boolean;
   imgHeight: number;
-  lineQR: string;
 
   constructor(
     private service: ProfileService,
@@ -84,10 +83,12 @@ export class ProfileComponent implements OnInit {
         originalname: undefined,
         uploadName: undefined,
       },
+      lineInfo: undefined,
     };
     this.service.getProfile(this.role.refHero._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.profileDetail = response.data;
+        this.profileDetail.lineInfo = response.data.refCompany.lineInfo;
         if (response.data.imageData) {
           this.url = response.data.imageData;
         }
@@ -111,8 +112,6 @@ export class ProfileComponent implements OnInit {
     this.sErrorPassword = MESSAGE[50];
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
-
-    this.lineQR = '';
   }
 
   validation(): boolean {

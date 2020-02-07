@@ -324,7 +324,7 @@ export class OnboardDetailComponent implements OnInit {
   openPopupSignContractDate(item: any, button: any, icon: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
-    setButtonId(button);
+    // setButtonId(button);
     setIconId(icon);
     this.dialogService.open(PopupSignDateComponent,
       {
