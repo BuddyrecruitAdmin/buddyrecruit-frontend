@@ -47,7 +47,7 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <div *ngIf="!emailCandidate">
+    <div *ngIf="!loading && !emailCandidate">
       <small class="text-red">
         <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
         Email not found.Can't send email to candidate.
@@ -59,8 +59,8 @@
     </div>
     <button nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="primary" (click)="save()"
       [disabled]="!canApprove && (!location || !date || !time)">SAVE</button>
-    <button *ngIf="!canApprove || !emailCandidate" nbButton [size]="(devices.isMobile)? 'small' : 'medium'"
-      status="success" (click)="sendEmail()">SEND
+    <button *ngIf="!canApprove" nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="success"
+      (click)="sendEmail()" [disabled]="!emailCandidate">SEND
       EMAIL</button>
     <button *ngIf="canApprove" nbButton [size]="(devices.isMobile)? 'small' : 'medium'" status="success"
       (click)="passToExam()" [disabled]="!date || !time">PASS
