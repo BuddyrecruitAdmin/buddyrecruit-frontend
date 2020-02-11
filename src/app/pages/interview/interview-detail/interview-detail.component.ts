@@ -284,6 +284,13 @@ export class InterviewDetailComponent implements OnInit {
               condition.button.reject = true;
               if (item.pendingInterviewScoreInfo.evaluation.length) {
                 condition.button.nextStep = true;
+              } else {
+                const found = item.pendingInterviewInfo.userInterviews.find(element => {
+                  return element.refUser === this.role._id;
+                });
+                if (found) {
+                  condition.button.interviewScore = true;
+                }
               }
             }
             break;

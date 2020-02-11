@@ -48,8 +48,15 @@
                 <div class="title">
                   {{ item._id || '-' }}
                   <small class="status">
-                    Status: <label class="label"
-                      [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
+                    <span>
+                      Status:
+                      <label class="label" [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
+                    </span>
+                    <span>
+                      | Sourcing:
+                      <label class="label"
+                        [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
+                    </span>
                   </small>
                 </div>
                 <div class="actions">
@@ -191,7 +198,14 @@
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
                   <small class="status">
-                    Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                    <span>
+                      Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                    </span>
+                    <span>
+                      | Sourcing:
+                      <label class="label"
+                        [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
+                    </span>
                   </small>
                 </div>
                 <div class="actions">

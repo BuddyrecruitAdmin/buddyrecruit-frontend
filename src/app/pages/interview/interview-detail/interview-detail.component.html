@@ -53,7 +53,14 @@
                   {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
                 </label>
                 <small class="status">
-                  Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                  <span>
+                    Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                  </span>
+                  <span>
+                    | Sourcing:
+                    <label class="label"
+                      [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
+                  </span>
                 </small>
               </div>
               <div class="actions">
@@ -208,7 +215,7 @@
               </button>
 
               <button *ngIf="item.condition.button.interviewScore" nbButton
-                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Input Interview Score"
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Input Interview Info"
                 (click)="openPopupEvaluation(item)" [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
                 <span *ngIf="item.condition.isExpired">

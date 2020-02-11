@@ -458,4 +458,20 @@ export class UtilitiesService {
     }
   }
 
+  sourcingColors(key: string = ''): string {
+    let sourcingColor = 'label-gray';
+    switch (key) {
+      case 'EMAIL':
+        sourcingColor = 'label-primary'
+        break;
+      case 'JOBSDB':
+        sourcingColor = 'label-jobsdb'
+        break;
+      case 'JOBTOPGUN':
+        sourcingColor = 'label-jobtopgun'
+        break;
+    }
+    return sourcingColor;
+  }
+
 }

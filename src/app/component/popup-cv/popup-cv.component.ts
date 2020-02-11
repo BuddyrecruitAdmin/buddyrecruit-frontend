@@ -224,7 +224,7 @@ export class PopupCvComponent implements OnInit {
             this.showToast('danger', 'Error Message', response.message);
             this.ref.close();
           }
-        })
+        });
       } else {
         this.showToast('danger', 'Error Message', response.message);
         this.ref.close();

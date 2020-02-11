@@ -124,24 +124,25 @@ export class CandidateDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
         if (this.item.candidateFlow.pendingInterviewScoreInfo.flag) {
-          this.interviewScores = [];
-          if (this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
-            this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.forEach(element => {
-              if (this.item.candidateFlow.refJR.userInterviews || this.item.candidateFlow.refJR.userInterviews.length) {
-                const refUser = this.item.candidateFlow.refJR.userInterviews.find(user => {
-                  return user.refUser._id === element.createdInfo.refUser._id;
+          if (this.item.candidateFlow.pendingInterviewInfo.userInterviews && this.item.candidateFlow.pendingInterviewInfo.userInterviews.length) {
+            this.item.candidateFlow.pendingInterviewInfo.userInterviews.forEach(userInterview => {
+              let result: any;
+              if (this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
+                const evaluation = this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.find(evaluation => {
+                  return evaluation.createdInfo.refUser._id === userInterview.refUser._id
+                    || evaluation.createdInfo.refUser._id === userInterview.refUser;
                 });
-                if (refUser) {
-                  const result = element.rank.options.find(rank => {
-                    return rank.value === element.rank.selected;
-                  });
-                  this.interviewScores.push({
-                    name: this.utilitiesService.setFullname(refUser.refUser),
-                    result: (result && result.subject) || '',
-                    remark: ''
+                if (evaluation) {
+                  result = evaluation.rank.options.find(option => {
+                    return option.value === evaluation.rank.selected;
                   });
                 }
               }
+              this.interviewScores.push({
+                name: this.utilitiesService.setFullname(userInterview.refUser),
+                result: (result && result.subject) || '',
+                remark: ''
+              });
             });
           }
         }
@@ -210,10 +211,9 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.block.examScore = true;
           this.condition.block.interviewDate = true;
           this.condition.block.interviewScore = true;
-
-          if (item.candidateFlow.refJR.userInterviews.length) {
-            const found = item.candidateFlow.refJR.userInterviews.find(element => {
-              return element.refUser._id === this.role._id;
+          if (item.candidateFlow.pendingInterviewInfo.userInterviews.length) {
+            const found = item.candidateFlow.pendingInterviewInfo.userInterviews.find(element => {
+              return element.refUser._id === this.role._id || element.refUser === this.role._id;
             });
             if (found) {
               this.condition.icon.interviewScore = true;
@@ -305,14 +305,6 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 402:
               // this.condition.icon.interviewDate = true;
-              if (item.candidateFlow.refJR.userInterviews.length) {
-                const found = item.candidateFlow.refJR.userInterviews.find(element => {
-                  return element.refUser._id === this.role._id;
-                });
-                if (found) {
-                  this.condition.icon.interviewScore = true;
-                }
-              }
               if (!item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please input interview score';
@@ -320,7 +312,8 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 501:
               this.condition.icon.signContract = true;
-              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.sign.date)) {
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.sign.date)
+                || !this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please input sign contract info';
               } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.sign.date)) {

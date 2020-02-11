@@ -16,7 +16,14 @@
         {{ utilitiesService.setFullname(item) }}
       </label>
       <small class="status">
-        Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
+        <span>
+          Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
+        </span>
+        <span>
+          | Sourcing:
+          <label class="label"
+            [ngClass]="utilitiesService.sourcingColors(item.candidateFlow?.refSource?.key)">{{ item.candidateFlow?.refSource?.name || 'Email' }}</label>
+        </span>
       </small>
     </div>
     <div class="actions">
@@ -241,7 +248,7 @@
           <div class="m-l-15">
             <div class="text-group">
               <label class="label">Sign Contract Date</label>
-              <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+              <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Agree Start Date</label>
