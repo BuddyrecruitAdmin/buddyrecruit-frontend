@@ -239,7 +239,8 @@ export const API_ENDPOINT = {
     ACTION: "report",
     LIST: "report/candidate",
     LISTFEEDBACK: "feedbackReport/list",
-    EDIT: "feedbackReport/edit"
+    EDIT: "feedbackReport/edit",
+    DEPARTMENT: "dropdown/department"
   },
   HERO: {
     LIST: "hero/list"

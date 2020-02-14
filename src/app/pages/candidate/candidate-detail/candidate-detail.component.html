@@ -16,7 +16,14 @@
         {{ utilitiesService.setFullname(item) }}
       </label>
       <small class="status">
-        Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
+        <span>
+          Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
+        </span>
+        <span>
+          | Source:
+          <label class="label"
+            [ngClass]="utilitiesService.sourcingColors(item.candidateFlow?.refSource?.key)">{{ item.candidateFlow?.refSource?.name || 'Email' }}</label>
+        </span>
       </small>
     </div>
     <div class="actions">
@@ -241,9 +248,9 @@
           <div class="m-l-15">
             <div class="text-group">
               <label class="label">Sign Contract Date</label>
-              <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+              <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
             </div>
-            <div class="text-group">
+            <div class="text-group" *ngIf="!condition.block.onboard">
               <label class="label">Agree Start Date</label>
               <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
             </div>
@@ -260,12 +267,56 @@
 
         <!-- Onboard Info -->
         <div *ngIf="condition.block.onboard">
-          <label class="label topic">Onboard Info</label>
+          <label class="label topic">Onboard Info <span *ngIf="condition.icon.onboard" class="text-red">*</span></label>
+          <nb-icon *ngIf="condition.icon.onboard" icon="edit-2-outline" class="link" nbTooltip="Edit Onobard Info"
+            (click)="openPopupOnboardDate(item)"></nb-icon>
           <div class="m-l-15">
             <div class="text-group">
               <label class="label">Onboard Date</label>
-              <span>{{ utilitiesService.convertDate(item.candidateFlow?.onboard?.date) || '-' }}</span>
+              <span>{{ utilitiesService.convertDate(item.candidateFlow?.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
             </div>
+            <div class="text-group">
+              <label class="label">Remark</label>
+              <span>{{ item.candidateFlow?.onboard?.note || '-' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reject Info -->
+        <div *ngIf="condition.block.reject">
+          <label class="label text-light-gray">Reject Info</label>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Reject Reason</label>
+              <span class="text-red">{{ item.candidateFlow.reject.rejectBy.refReject.name || '-' }}</span>
+            </div>
+            <div *ngIf="item.reject.remark" class="text-group">
+              <label class="label">Reject Remark</label>
+              <span class="text-red">{{ item.candidateFlow.reject.remark || '-' }}</span>
+            </div>
+            <i class="text-gray">
+              <div class="text-group">
+                <label class="label">Reject By</label>
+                <span>{{ utilitiesService.setFullname(item.candidateFlow.reject.rejectBy.refUser) || '-' }}</span>
+              </div>
+              <div class="text-group">
+                <label class="label">Reject Date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow.reject.rejectBy.date) || '-' }}</span>
+              </div>
+              <div *ngIf="condition.button.send" class="text-group">
+                <label class="label">Email Sent Date</label>
+                <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow.reject.sendMailToCandidate.date) || '-' }}</span>
+              </div>
+              <div *ngIf="condition.button.send" class="text-group">
+                <label class="label">Sent An Email</label>
+                <nb-icon *ngIf="item.candidateFlow.reject.sendMailToCandidate.flag" icon="checkmark-outline"
+                  class="text-green">
+                </nb-icon>
+                <nb-icon *ngIf="!item.candidateFlow.reject.sendMailToCandidate.flag" icon="close-outline"
+                  class="text-red">
+                </nb-icon>
+              </div>
+            </i>
           </div>
         </div>
 
@@ -288,6 +339,11 @@
         <nb-icon icon="printer-outline"></nb-icon>
       </button>
     </div>
+
+    <button *ngIf="condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
+      nbTooltip="SendEmail" (click)="sendEmail(item)">
+      <i class="far fa-paper-plane"></i>
+    </button>
     <button *ngIf="condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
       nbTooltip="Comment" (click)="openPopupComment(item)">
       <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>

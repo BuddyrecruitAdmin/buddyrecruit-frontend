@@ -32,7 +32,7 @@ export class PopupPreviewEmailComponent implements OnInit {
   loading: boolean;
   checkedEmail: any;
   haveEmail: any;
-
+  disMail: boolean = false;
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupPreviewEmailComponent>,
@@ -117,6 +117,7 @@ export class PopupPreviewEmailComponent implements OnInit {
         return element.refStage.refMain.order === 600;
       });
       if (found) {
+        this.disMail = true;
         type = 'I';
         contents.push(`ไม่สามารถทำรายการได้ เนื่องจากผู้สมัครได้เซ็นสัญญากับ`);
         contents.push(`JR: ${found.refJR.refJD.position} - Department: ${found.refJR.departmentName} แล้ว`);
@@ -142,7 +143,7 @@ export class PopupPreviewEmailComponent implements OnInit {
       data: { type: type, contents: contents }
     });
     confirm.afterClosed().subscribe(result => {
-      if (result) {
+      if (result && !this.disMail) {
         if (data.mailOptions) {
           this.mailOptions = data.mailOptions;
           this.mailType = data.type;
@@ -175,6 +176,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     confirm.afterClosed().subscribe(result => {
       if (result) {
         const request = this.setRequest();
+        debugger
         this.candidateService.candidateFlowApprove(this.flowId, this.stageId, this.buttonId, request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);

@@ -48,8 +48,15 @@
                 <div class="title">
                   {{ item._id || '-' }}
                   <small class="status">
-                    Status: <label class="label"
-                      [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
+                    <span>
+                      Status:
+                      <label class="label" [ngClass]="item.condition.status.class">{{ item.refCVStatus?.name }}</label>
+                    </span>
+                    <span>
+                      | Source:
+                      <label class="label"
+                        [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
+                    </span>
                   </small>
                 </div>
                 <div class="actions">
@@ -191,7 +198,14 @@
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
                   <small class="status">
-                    Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                    <span>
+                      Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                    </span>
+                    <span>
+                      | Source:
+                      <label class="label"
+                        [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
+                    </span>
                   </small>
                 </div>
                 <div class="actions">
@@ -382,6 +396,11 @@
                     <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
                   </button>
                 </div>
+
+                <!-- <button *ngIf="item.condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  status="info" nbTooltip="ReSendEmail" (click)="sendEmail(item)">
+                  <i class="far fa-paper-plane"></i>
+                </button> -->
                 <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
                   status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
                   <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>

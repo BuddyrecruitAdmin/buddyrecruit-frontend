@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, getCandidateId, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -23,8 +23,10 @@ import { PopupExamScoreComponent } from '../../../component/popup-exam-score/pop
 import { PopupInterviewDateComponent } from '../../../component/popup-interview-date/popup-interview-date.component';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
 import { PopupSignDateComponent } from '../../../component/popup-sign-date/popup-sign-date.component';
+import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date/popup-onboard-date.component';
 import { PrintCandidateComponent } from '../../../component/print-candidate/print-candidate.component';
 import { Devices } from '../../../shared/interfaces/common.interface';
+import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
   selector: 'ngx-candidate-detail',
@@ -40,6 +42,7 @@ export class CandidateDetailComponent implements OnInit {
   interviewScores: any;
   condition: any;
   devices: Devices;
+  onMail: boolean = true;
   constructor(
     private router: Router,
     private location: Location,
@@ -88,6 +91,7 @@ export class CandidateDetailComponent implements OnInit {
         interviewScore: false,
         signContract: false,
         onboard: false,
+        reject: false,
       },
       icon: {
         examDate: false,
@@ -104,7 +108,8 @@ export class CandidateDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         disabled: false,
-        errMsg: ''
+        errMsg: '',
+        send: false,
       },
       isExpired: false
     };
@@ -124,26 +129,30 @@ export class CandidateDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
         if (this.item.candidateFlow.pendingInterviewScoreInfo.flag) {
-          this.interviewScores = [];
-          if (this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
-            this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.forEach(element => {
-              if (this.item.candidateFlow.refJR.userInterviews || this.item.candidateFlow.refJR.userInterviews.length) {
-                const refUser = this.item.candidateFlow.refJR.userInterviews.find(user => {
-                  return user.refUser._id === element.createdInfo.refUser._id;
+          if (this.item.candidateFlow.pendingInterviewInfo.userInterviews && this.item.candidateFlow.pendingInterviewInfo.userInterviews.length) {
+            this.item.candidateFlow.pendingInterviewInfo.userInterviews.forEach(userInterview => {
+              let result: any;
+              if (this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
+                const evaluation = this.item.candidateFlow.pendingInterviewScoreInfo.evaluation.find(evaluation => {
+                  return evaluation.createdInfo.refUser._id === userInterview.refUser._id
+                    || evaluation.createdInfo.refUser._id === userInterview.refUser;
                 });
-                if (refUser) {
-                  const result = element.rank.options.find(rank => {
-                    return rank.value === element.rank.selected;
-                  });
-                  this.interviewScores.push({
-                    name: this.utilitiesService.setFullname(refUser.refUser),
-                    result: (result && result.subject) || '',
-                    remark: ''
+                if (evaluation) {
+                  result = evaluation.rank.options.find(option => {
+                    return option.value === evaluation.rank.selected;
                   });
                 }
               }
+              this.interviewScores.push({
+                name: this.utilitiesService.setFullname(userInterview.refUser),
+                result: (result && result.subject) || '',
+                remark: ''
+              });
             });
           }
+        }
+        if(this.item.candidateFlow.reject.flag){
+          this.condition.block.reject = true;
         }
         this.setCondition(this.item);
       } else {
@@ -173,7 +182,6 @@ export class CandidateDetailComponent implements OnInit {
     if (step) {
       this.condition.button.step = step;
       this.condition.button.comment = true;
-
       // Set display block
       switch (step.refStage.order) {
         case 101:
@@ -187,10 +195,11 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.block.examDate = true;
           this.condition.block.examInfo = true;
           break;
-        case 202:
+        case 202://exam score
           this.condition.block.examDate = true;
           this.condition.block.examInfo = true;
           this.condition.block.examScore = true;
+          this.condition.button.send = true;
           break;
         case 301:
           this.condition.block.examDate = true;
@@ -210,6 +219,7 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.block.examScore = true;
           this.condition.block.interviewDate = true;
           this.condition.block.interviewScore = true;
+          this.condition.button.send = true;
           break;
         case 501:
           this.condition.block.examDate = true;
@@ -296,34 +306,50 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 402:
               // this.condition.icon.interviewDate = true;
-              if (item.candidateFlow.refJR.userInterviews.length) {
-                const found = item.candidateFlow.refJR.userInterviews.find(element => {
-                  return element.refUser._id === this.role._id;
+              if (!item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
+                this.condition.button.disabled = true;
+                this.condition.button.errMsg = 'Please input interview score';
+              }
+              if (item.candidateFlow.pendingInterviewInfo.userInterviews.length) {
+                const found = item.candidateFlow.pendingInterviewInfo.userInterviews.find(element => {
+                  return element.refUser._id === this.role._id || element.refUser === this.role._id;
                 });
                 if (found) {
                   this.condition.icon.interviewScore = true;
                 }
               }
-              if (!item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
-                this.condition.button.disabled = true;
-                this.condition.button.errMsg = 'Please input interview score';
-              }
               break;
             case 501:
               this.condition.icon.signContract = true;
-              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.sign.date)) {
-                this.condition.button.disabled = true;
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.sign.date)
+              ) {
                 this.condition.button.errMsg = 'Please input sign contract info';
+                this.condition.button.disabled = true;
+                if (!item.email) {
+                  this.condition.button.errMsg = " Email not found, Can't send email to candidate.";
+                }
               } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.sign.date)) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Sign contract date is not arrived';
+              } else if (!item.candidateFlow.pendingSignContractInfo.mail.flag) {
+                this.condition.button.disabled = true;
+                this.condition.button.errMsg = 'Please sent email in sign contract info';
+              }
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                this.onMail = false;
               }
               break;
             case 601:
-              this.condition.icon.signContract = true;
-              if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+              this.condition.icon.onboard = true;
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
-                this.condition.button.errMsg = 'Onboard date is not arrived';
+                this.condition.button.errMsg = 'Please input onboard date';
+              } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                this.condition.button.disabled = true;
+                this.condition.button.errMsg = ' date is not arrived';
+              } else if (!item.candidateFlow.onboard.mail.flag) {
+                this.condition.button.disabled = true;
+                this.condition.button.errMsg = ' Plesae send email in onboard info';
               }
               break;
             default:
@@ -385,20 +411,46 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    setFlowId(item.candidateFlow._id);
-    setCandidateId(item._id);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      setButtonId();
+    if (item.email) {
+      setUserEmail(item.email);
+    }
+    if (this.onMail) {
+      setFlowId(item.candidateFlow._id);
+      setCandidateId(item._id);
+      setButtonId(button._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        setButtonId();
+        if (result) {
+          this.getDetail();
+        }
+      });
+    } else {
+      this.nextStep(item, button);
+    }
+  }
+
+  nextStep(item: any, button: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C', content: `Do you want to pass to onboard?` }
+    });
+    confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.getDetail();
+        this.service.candidateFlowApprove(item.candidateFlow._id, item.candidateFlow.refStage._id, button._id, item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.getDetail();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
       }
     });
   }
@@ -559,6 +611,23 @@ export class CandidateDetailComponent implements OnInit {
     });
   }
 
+  openPopupOnboardDate(item: any) {
+    setFlowId(item.candidateFlow._id);
+    setCandidateId(item._id);
+    this.dialogService.open(PopupOnboardDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.getDetail();
+      }
+    });
+  }
+
   openPrintCandidate(item: any) {
     setFlowId(item.candidateFlow._id);
     setCandidateId(item._id);
@@ -579,6 +648,21 @@ export class CandidateDetailComponent implements OnInit {
         //that.setAlertMessage("E", error.statusText);
       });
   }
+
+  sendEmail(item: any) {
+    setFlowId(item.candidateFlow._id);
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.getDetail()
+      setFlowId();
+      setCandidateId();
+    });
+  }
+
 
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });

@@ -24,6 +24,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { CalendarService } from '../../calendar/calendar.service';
+import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
   selector: 'ngx-interview-detail',
@@ -232,7 +233,8 @@ export class InterviewDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         comment: false,
-        disabled: false
+        disabled: false,
+        send: false
       },
       isExpired: false,
     };
@@ -249,6 +251,16 @@ export class InterviewDetailComponent implements OnInit {
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
+
+      if (item.pendingInterviewInfo.userInterviews.length) {
+        const found = item.pendingInterviewInfo.userInterviews.find(element => {
+          return element.refUser === this.role._id;
+        });
+        if (found) {
+          condition.icon.interviewScore = true;
+        }
+      }
+
       if (step.editable) {
         switch (item.refStage.order) {
           case 401: // Interview Taken
@@ -275,26 +287,18 @@ export class InterviewDetailComponent implements OnInit {
               if (item.pendingInterviewScoreInfo.evaluation.length) {
                 condition.button.nextStep = true;
               } else {
-                if (item.pendingInterviewInfo.userInterviews.length) {
-                  const found = item.pendingInterviewInfo.userInterviews.find(element => {
-                    return element.refUser === this.role._id;
-                  });
-                  if (found) {
-                    condition.button.interviewScore = true;
-                  }
-                }
-              }
-              if (item.pendingInterviewInfo.userInterviews.length) {
                 const found = item.pendingInterviewInfo.userInterviews.find(element => {
                   return element.refUser === this.role._id;
                 });
                 if (found) {
-                  condition.icon.interviewScore = true;
+                  condition.button.interviewScore = true;
                 }
               }
             }
             break;
         }
+      } else {
+        condition.button.send = true;
       }
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
@@ -394,6 +398,20 @@ export class InterviewDetailComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  sendEmail(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
     });
   }
 

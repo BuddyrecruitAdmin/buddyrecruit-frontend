@@ -1,12 +1,17 @@
 <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
   nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-header>
-    <div class="pull-left">
+    <div class="title">
       <label class="text-cap" [nbTooltip]="utilitiesService.setFullname(items)">
         {{ utilitiesService.setFullname(items) }}
       </label>
-      <small class="status m-0">
-        {{ items.candidateFlow?.refJR?.refJD?.position }}
+      <small class="status">
+        <b>{{ items.candidateFlow?.refJR?.refJD?.position }}</b>
+        <span>
+          | Source:
+          <label class="label"
+            [ngClass]="utilitiesService.sourcingColors(items.candidateFlow?.refSource?.key)">{{ items.candidateFlow?.refSource?.name || 'Email' }}</label>
+        </span>
       </small>
     </div>
     <div *ngIf="role.refAuthorize.editCandidateInfo" class="actions">

@@ -225,6 +225,27 @@
               </div>
             </div>
           </div>
+          <hr>
+          <div class="form-control-group">
+            <label class="label">Use Line Bot</label>
+            <nb-radio-group [(ngModel)]="companyDetail.lineInfo.active" name="lineBot" class="inline">
+              <nb-radio [value]="true">Yes</nb-radio>
+              <nb-radio [value]="false">No</nb-radio>
+            </nb-radio-group>
+          </div>
+          <div *ngIf="companyDetail.lineInfo.active">
+            <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.lineInfo }">
+              <label class="label">Line ID. *</label>
+              <input type="text" [(ngModel)]="companyDetail.lineInfo.lineId" nbInput fullWidth>
+            </div>
+            <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.lineInfo }">
+              <label class="label">Line QR Code url * <small>(https://line-qrcode.png)</small> </label>
+              <input type="text" [(ngModel)]="companyDetail.lineInfo.imageUrl" nbInput fullWidth>
+              <div>
+                <small *ngIf="errMsg.lineInfo" class="text-red">{{ errMsg.lineInfo }}</small>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

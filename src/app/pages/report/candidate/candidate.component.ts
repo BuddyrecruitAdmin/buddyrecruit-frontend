@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import 'style-loader!angular2-toaster/toaster.css';
+import { DepartmentService } from '../../setting/department/department.service';
+
 @Component({
   selector: 'ngx-candidate',
   templateUrl: './candidate.component.html',
@@ -45,6 +47,7 @@ export class CandidateComponent implements OnInit {
   };
   constructor(
     private service: ReportService,
+    private departService: DepartmentService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private dialogService: NbDialogService,
@@ -155,32 +158,45 @@ export class CandidateComponent implements OnInit {
           this.paging.pageIndex--;
           this.search();
         }
-        this.items.forEach(element => {
-          //job status
+        response.filter.jobStatus.forEach(element => {
           this.filter.data.jobStatus.push({
-            label: element.refJR.refStatus.name,
-            value: element.refJR.refStatus._id
+            label: element.name,
+            value: element._id
           })
-          //stage
+        });
+        response.filter.stage.forEach(element => {
           this.filter.data.stage.push({
-            label: element.refStage.name,
-            value: element.refStage._id
-          });
-          //subStage
+            label: element.name,
+            value: element._id
+          })
+        });
+        response.filter.subStage.forEach(element => {
           this.filter.data.subStage.push({
-            label: element.refSubStage.name,
-            value: element.refSubStage._id
+            label: element.name,
+            value: element._id
           })
-          //department
-          this.filter.data.department.push({
-            label: element.department.name,
-            value: element.department._id
-          })
-        })
+        });
+        // this.items.forEach(element => {
+        //   //job status
+        //   this.filter.data.jobStatus.push({
+        //     label: element.refJR.refStatus.name,
+        //     value: element.refJR.refStatus._id
+        //   })
+        //   //stage
+        //   this.filter.data.stage.push({
+        //     label: element.refStage.name,
+        //     value: element.refStage._id
+        //   });
+        //   //subStage
+        //   this.filter.data.subStage.push({
+        //     label: element.refSubStage.name,
+        //     value: element.refSubStage._id
+        //   })
+        // })
         this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value")
         this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
         this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
-        this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
+        // this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
         this.items.map(item => {
           switch (item.refJR.refStatus.name) {
             case "Waiting for HR Confirm":
@@ -207,6 +223,18 @@ export class CandidateComponent implements OnInit {
           }
         });
         this.loading = false;
+      }
+    })
+    this.service.getListDepartment().subscribe(res => {
+      if (res.code === ResponseCode.Success) {
+        res.data.forEach(ele => {
+          //department
+          this.filter.data.department.push({
+            label: ele.name,
+            value: ele._id
+          })
+        })
+        this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value");
       }
     })
     this.service.getPositionList().subscribe(response => {

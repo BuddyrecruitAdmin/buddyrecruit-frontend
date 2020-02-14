@@ -274,41 +274,58 @@ export class DashboardComponent implements OnInit {
 		});
 		reasonKey.sort();
 		reasonKey = this.removeDups(reasonKey);
-		reasonKey.map(function (item1, index) {
+		reasonKey.map((item1, index) => {
 			const item = data.recruitmentStatus.find(function (item2) {
 				return item2.position === item1;
 			});
 
 			const startDate = new Date(item.duration.startDate);
 			const endDate = new Date(item.onboardDate);
-			const workingDays = that.getDiffDaysBetween2Date(startDate, today);
-			const targetDays = that.getDiffDaysBetween2Date(startDate, endDate);
+			const workingDays = this.getDiffDaysBetween2Date(startDate, today);
+			const targetDays = this.getDiffDaysBetween2Date(startDate, endDate);
 
-			const percentX = that.calPercentageBetween2Number(workingDays, targetDays);
+			const percentX = this.calPercentageBetween2Number(workingDays, targetDays);
 			let percentY: number;
-			switch (that.filterStatus.stage) {
-				case that.stages[0].key: // Pending Exam
-					percentY = that.calPercentageBetween2Number(item.pending_exam, item.capacity);
+			switch (this.filterStatus.stage) {
+				case this.stages[0].key: // Pending Exam
+					percentY = this.calPercentageBetween2Number(item.pending_exam, item.capacity);
+					if (isNaN(percentY)) {
+						percentY = 0;
+					}
 					break;
-				case that.stages[1].key: // Pending Appointment
-					percentY = that.calPercentageBetween2Number(item.pending_appointment, item.capacity);
+				case this.stages[1].key: // Pending Appointment
+					percentY = this.calPercentageBetween2Number(item.pending_appointment, item.capacity);
+					if (isNaN(percentY)) {
+						percentY = 0;
+					}
 					break;
-				case that.stages[2].key: // Pending Interview
-					percentY = that.calPercentageBetween2Number(item.pending_interview, item.capacity);
+				case this.stages[2].key: // Pending Interview
+					percentY = this.calPercentageBetween2Number(item.pending_interview, item.capacity);
+					if (isNaN(percentY)) {
+						percentY = 0;
+					}
 					break;
-				case that.stages[3].key: // Pending Sign Contract
-					percentY = that.calPercentageBetween2Number(item.pending_sign_contract, item.capacity);
+				case this.stages[3].key: // Pending Sign Contract
+					percentY = this.calPercentageBetween2Number(item.pending_sign_contract, item.capacity);
+					if (isNaN(percentY)) {
+						percentY = 0;
+					}
 					break;
-				case that.stages[4].key: // Onboard
-					percentY = that.calPercentageBetween2Number(item.onboard, item.capacity);
+				case this.stages[4].key: // Onboard
+					percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
+					if (isNaN(percentY)) {
+						percentY = 0;
+					}
 					break;
 				default:
-					percentY = that.calPercentageBetween2Number(item.onboard, item.capacity);
+					percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
+					if (isNaN(percentY)) {
+						percentY = 0;
+					}
 			}
 
-			const color = that.getColorByIndex(index);
-
-			that.bubbleChartData.push({
+			const color = this.getColorByIndex(index);
+			this.bubbleChartData.push({
 				data: [
 					{ x: percentX, y: percentY, r: item.capacity },
 				],
@@ -316,6 +333,7 @@ export class DashboardComponent implements OnInit {
 				backgroundColor: color,
 				pointRadius: 100
 			});
+			console.log(this.bubbleChartData)
 			if (maxScaleX < percentX) {
 				maxScaleX = percentX;
 			}
