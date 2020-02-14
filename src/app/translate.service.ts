@@ -7,11 +7,10 @@ export class TranslateService {
   data: any = {};
   path: any;
   constructor(private http: HttpClient) { 
-  this.path = getLangPath(); 
-  console.log(this.path)
   }
 
   use(lang: string): Promise<{}> {
+    this.path = getLangPath();
     return new Promise<{}>((resolve, reject) => {
       const langPath = `assets/i18n/${lang || 'en'}.json`;
 
@@ -24,7 +23,8 @@ export class TranslateService {
               resolve(this.data);
               break;
             case "APP_FORM":
-              resolve(this.data.APP_FORM);
+              this.data = this.data.APP_FORM
+              resolve(this.data);
               break;
 
             default:

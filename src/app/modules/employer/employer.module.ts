@@ -66,7 +66,7 @@ import { ComponentsModule } from '../../component/component.module';
 import { EmployerComponent } from './employer.component';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
-import { AppFormComponent } from './app-form/app-form.component';
+
 import { ForgotComponent } from './forgot/forgot.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { RegistrationComponent } from './registration/registration.component';
@@ -140,7 +140,6 @@ import { RegistrationComponent } from './registration/registration.component';
     EmployerComponent,
     LoginComponent,
     LogoutComponent,
-    AppFormComponent,
     ForgotComponent,
     ChangePasswordComponent,
     RegistrationComponent
