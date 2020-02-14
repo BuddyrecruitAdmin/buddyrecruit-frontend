@@ -48,7 +48,7 @@
                     Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
                   </span>
                   <span>
-                    | Sourcing:
+                    | Source:
                     <label class="label"
                       [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
                   </span>
@@ -91,18 +91,10 @@
                 <div class="col-md-6">
                   <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
-                    <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Sign Contract Info"
-                      (click)="openPopupSignContractDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)">
-                    </nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
                         <label class="label">Sign Contract Date</label>
                         <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
-                      </div>
-                      <div class="text-group">
-                        <label class="label">Agree Start Date</label>
-                        <span>{{ utilitiesService.convertDate(item.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Email Sent Date</label>
@@ -111,6 +103,23 @@
                       <div class="text-group">
                         <label class="label">Remark</label>
                         <span>{{ item.pendingSignContractInfo?.note || '-' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="m-t-5">
+                    <label class="label text-light-gray m-r-5">Onboard Info</label>
+                    <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Agree Start Date"
+                      (click)="openPopupOnboardDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)">
+                    </nb-icon>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Onboard Date</label>
+                        <span>{{ utilitiesService.convertDate(item.pendingSignContractInfo?.agreeStartDate) || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Remark</label>
+                        <span>{{ item.onboard?.note || '-' }}</span>
                       </div>
                     </div>
                   </div>
@@ -152,6 +161,11 @@
                 </button>
               </div>
 
+              <!-- <button *ngIf="item.condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="info" nbTooltip="ReSendEmail" (click)="sendEmail(item)">
+                <i class="far fa-paper-plane"></i>
+              </button> -->
+
               <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
                 status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
@@ -163,7 +177,7 @@
                 *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 nbTooltip="Edit Agree Start Date"
-                (click)="openPopupSignContractDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)"
+                (click)="openPopupOnboardDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)"
                 [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="edit-2-outline"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
@@ -175,7 +189,7 @@
                 *ngIf="item.condition.button.nextStep && utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
-                [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)">
+                [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) || !item.onboard.mail.flag">
                 <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)"
                   nbTooltip="Agree start date is not arrived yet" text=" ! " status="warning" position="top right">
                 </nb-badge>

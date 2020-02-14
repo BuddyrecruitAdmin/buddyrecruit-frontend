@@ -189,7 +189,7 @@ export class TalentPoolDetailComponent implements OnInit {
         buyCV: false,
         reject: false,
         revoke: false,
-        comment: false
+        comment: false,
       },
       isExpired: false
     };

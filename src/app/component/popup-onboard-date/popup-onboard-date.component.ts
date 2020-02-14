@@ -11,11 +11,11 @@ import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
-  selector: 'ngx-popup-sign-date',
-  templateUrl: './popup-sign-date.component.html',
-  styleUrls: ['./popup-sign-date.component.scss']
+  selector: 'ngx-popup-onboard-date',
+  templateUrl: './popup-onboard-date.component.html',
+  styleUrls: ['./popup-onboard-date.component.scss']
 })
-export class PopupSignDateComponent implements OnInit {
+export class PopupOnboardDateComponent implements OnInit {
   role: any;
   flowId: any;
   candidateId: any;
@@ -31,7 +31,7 @@ export class PopupSignDateComponent implements OnInit {
   note: string;
   loading: boolean;
   editable: boolean;
-  // iconStar: any;
+  iconStar: any;
   errMsg = {
     date: ''
   }
@@ -40,7 +40,7 @@ export class PopupSignDateComponent implements OnInit {
   emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
-    public ref: NbDialogRef<PopupSignDateComponent>,
+    public ref: NbDialogRef<PopupOnboardDateComponent>,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -89,7 +89,7 @@ export class PopupSignDateComponent implements OnInit {
         if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
           this.agreeDate = new Date(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate);
         }
-        this.note = response.data.candidateFlow.pendingSignContractInfo.note;
+        this.note = response.data.candidateFlow.onboard.note;
         // if (response.data.candidateFlow.pendingSignContractInfo.sign.flag) {
         //   this.iconStar = response.data.candidateFlow.pendingSignContractInfo.sign.flag;
         // }
@@ -99,6 +99,7 @@ export class PopupSignDateComponent implements OnInit {
   }
 
   save() {
+    if (this.validation()) {
       this.loading = true;
       const request = this.setRequest();
       this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
@@ -110,17 +111,18 @@ export class PopupSignDateComponent implements OnInit {
         this.loading = false;
         this.ref.close(true);
       });
+    }
   }
 
-  // validation(): any {
-  //   this.errMsg.date = '';
-  //   let valid = true;
-  //   if (this.iconStar && !this.agreeDate) {
-  //     valid = false;
-  //     this.errMsg.date = "Please input date";
-  //   }
-  //   return valid;
-  // }
+  validation(): any {
+    this.errMsg.date = '';
+    let valid = true;
+    if (!this.utilitiesService.dateIsValid(this.agreeDate)) {
+      valid = false;
+      this.errMsg.date = "Invalid date format. (Please enter dd/mm/yyyy)";
+    }
+    return valid;
+  }
 
   sendEmail() {
     this.loading = true;
@@ -163,6 +165,8 @@ export class PopupSignDateComponent implements OnInit {
           date: this.utilitiesService.convertTimePickerToDate(this.signTime, this.signDate)
         },
         agreeStartDate: new Date(this.agreeDate) || null,
+      },
+      onboard: {
         note: this.note,
       }
     };

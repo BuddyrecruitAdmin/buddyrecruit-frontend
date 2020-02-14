@@ -19,7 +19,8 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
-import { PopupSignDateComponent } from '../../../component/popup-sign-date/popup-sign-date.component';
+import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date/popup-onboard-date.component';
+// import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 @Component({
   selector: 'ngx-onboard-detail',
   templateUrl: './onboard-detail.component.html',
@@ -170,7 +171,8 @@ export class OnboardDetailComponent implements OnInit {
         nextStep: false,
         reject: false,
         revoke: false,
-        comment: false,
+        comment: false
+        // send: false
       },
       isExpired: false
     };
@@ -194,6 +196,7 @@ export class OnboardDetailComponent implements OnInit {
           condition.button.reject = true;
         } else {
           condition.button.revoke = true;
+          // condition.button.send = true
         }
       }
     }
@@ -321,12 +324,12 @@ export class OnboardDetailComponent implements OnInit {
     this.router.navigate(["/employer/candidate/detail"]);
   }
 
-  openPopupSignContractDate(item: any, button: any, icon: any) {
+  openPopupOnboardDate(item: any, button: any, icon: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     // setButtonId(button);
     setIconId(icon);
-    this.dialogService.open(PopupSignDateComponent,
+    this.dialogService.open(PopupOnboardDateComponent,
       {
         closeOnBackdropClick: false,
         hasScroll: true,
@@ -354,6 +357,20 @@ export class OnboardDetailComponent implements OnInit {
       }
     });
   }
+
+  // sendEmail(item: any ) {         
+  //   setFlowId(item._id);
+  //   setCandidateId(item.refCandidate._id);
+  //   this.dialogService.open(PopupResendEmailComponent,
+  //     {
+  //       closeOnBackdropClick: false,
+  //       hasScroll: true,
+  //     }
+  //   ).onClose.subscribe(result => {
+  //     setFlowId();
+  //     setCandidateId();
+  //   });
+  // }
 
   changePaging(event) {
     this.paging = {

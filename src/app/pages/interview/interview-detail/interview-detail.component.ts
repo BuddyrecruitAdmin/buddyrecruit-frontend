@@ -24,6 +24,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { CalendarService } from '../../calendar/calendar.service';
+import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
   selector: 'ngx-interview-detail',
@@ -232,7 +233,8 @@ export class InterviewDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         comment: false,
-        disabled: false
+        disabled: false,
+        send: false
       },
       isExpired: false,
     };
@@ -295,6 +297,8 @@ export class InterviewDetailComponent implements OnInit {
             }
             break;
         }
+      } else {
+        condition.button.send = true;
       }
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
@@ -394,6 +398,20 @@ export class InterviewDetailComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  sendEmail(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
     });
   }
 

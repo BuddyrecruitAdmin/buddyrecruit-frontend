@@ -22,6 +22,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
+import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 
 @Component({
   selector: 'ngx-exam-detail',
@@ -178,6 +179,7 @@ export class ExamDetailComponent implements OnInit {
         reject: false,
         revoke: false,
         comment: false,
+        send: false,
       },
       isExpired: false
     };
@@ -217,6 +219,8 @@ export class ExamDetailComponent implements OnInit {
                   condition.button.examScore = true;
                 }
               }
+            } else {
+              condition.button.send = true;
             }
             break;
         }
@@ -319,6 +323,20 @@ export class ExamDetailComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  sendEmail(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
     });
   }
 

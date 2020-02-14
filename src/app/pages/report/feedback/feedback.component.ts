@@ -147,28 +147,51 @@ export class FeedbackComponent implements OnInit {
           this.search();
         }
         this.items = response.data;
-        this.items.forEach(element => {
+        response.filter.candidateName.forEach(element => {
           this.filter.data.candidateName.push({
-            label: this.utilitiesService.setFullname(element.refCandidate),
-            value: element.refCandidate._id
-          })
-          this.filter.data.jobPosition.push({
-            label: element.refJR.refJD.position,
-            value: element.refJR.refJD._id
+            label: element.name,
+            value: element._id
           });
-          this.filter.data.fieldName.push({
-            label: element.fieldText,
-            value: element.fieldName
-          });
-          this.filter.data.createBy.push({
-            label: this.utilitiesService.setFullname(element.createdInfo.refUser),
-            value: element.createdInfo.refUser._id
-          })
           this.filter.data.candidateId.push({
-            label: element.refCandidate._id,
-            value: element.refCandidate._id
+            label: element._id,
+            value: element._id
           })
         });
+        response.filter.jd.forEach(element => {
+          this.filter.data.jobPosition.push({
+            label: element.position,
+            value: element._id
+          })
+        });
+        response.filter.createBy.forEach(element => {
+          this.filter.data.createBy.push({
+            label: element.name,
+            value: element._id
+          })
+        });
+        response.filter.fieldName.forEach(element => {
+          this.filter.data.fieldName.push({
+            label: element.name,
+            value: element.name
+          })
+        });
+        // this.filter.data.jobPosition.push({
+        //   label: element.refJR.refJD.position,
+        //   value: element.refJR.refJD._id
+        // });
+        // this.filter.data.fieldName.push({
+        //   label: element.fieldText,
+        //   value: element.fieldName
+        // });
+        // this.filter.data.createBy.push({
+        //   label: this.utilitiesService.setFullname(element.createdInfo.refUser),
+        //   value: element.createdInfo.refUser._id
+        // })
+        // this.filter.data.candidateId.push({
+        //   label: element.refCandidate._id,
+        //   value: element.refCandidate._id
+        // })
+
         this.filter.data.candidateName = this.removeDuplicates(this.filter.data.candidateName, "value");
         this.filter.data.jobPosition = this.removeDuplicates(this.filter.data.jobPosition, "value");
         this.filter.data.fieldName = this.removeDuplicates(this.filter.data.fieldName, "value");

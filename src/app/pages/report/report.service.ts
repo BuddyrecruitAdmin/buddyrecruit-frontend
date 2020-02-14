@@ -37,34 +37,9 @@ export class ReportService extends NetworkService {
   edit(_id: any, checkList: boolean): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.REPORT.EDIT, { _id, checkList });
   }
-  // deleteItem(item: any): Observable<ApiResponse> {
-  //   const body = {
-  //     _id: item._id
-  //   }
-  //   return this.post(API_ENDPOINT.JOBREQUEST.DELETE, body);
-  // }
 
-  // create(request: any): Observable<ApiResponse> {
-  //   return this.post(API_ENDPOINT.JOBREQUEST.CREATE, request);
-  // }
-
-  // getDetail(_id: any) {
-  //   const body = {
-  //     _id: _id
-  //   }
-  //   return this.post(API_ENDPOINT.JOBREQUEST.DETAIL, body);
-  // }
-
-  // edit(request: any): Observable<ApiResponse> {
-  //   return this.post(API_ENDPOINT.JOBREQUEST.EDIT, request);
-  // }
-
-  // getJopPositionList(action: any = undefined): Observable<ApiResponse> {
-  //   return this.post(API_ENDPOINT.JOBDESCRIPTION.LIST, { action });
-  // }
-
-  // getEvaluationList(action: any = undefined): Observable<ApiResponse> {
-  //   return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_LIST, { action });
-  // }
+  getListDepartment(keyword: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.REPORT.DEPARTMENT, keyword);
+  }
 
 }

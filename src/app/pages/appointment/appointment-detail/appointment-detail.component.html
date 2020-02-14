@@ -57,7 +57,7 @@
                     Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
                   </span>
                   <span>
-                    | Sourcing:
+                    | Source:
                     <label class="label"
                       [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
                   </span>

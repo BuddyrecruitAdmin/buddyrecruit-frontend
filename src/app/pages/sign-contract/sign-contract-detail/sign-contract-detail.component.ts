@@ -224,7 +224,6 @@ export class SignContractDetailComponent implements OnInit {
           condition.button.nextStep = true;
           condition.button.reject = true;
           if (!this.utilitiesService.convertDateTime(item.pendingSignContractInfo.sign.date)
-            || !this.utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)
           ) {
             condition.button.signInfo = true;
             condition.button.nextStep = false;
@@ -291,20 +290,53 @@ export class SignContractDetailComponent implements OnInit {
     if (item.refCandidate.email) {
       setUserEmail(item.refCandidate.email);
     }
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      setButtonId();
+    if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setButtonId(button._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        setButtonId();
+        if (result) {
+          this.search();
+        }
+      });
+    }else{
+      this.nextStep(item ,button);
+    }
+  }
+
+  nextStep(item: any, button: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C', content: `Do you want to pass to onboard?` }
+    });
+    confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.search();
+        let step;
+        if (item.refJR.requiredExam) {
+          step = this.role.refAuthorize.processFlow.exam.steps.find(step => {
+            return step.refStage._id === item.refStage._id;
+          });
+        } else {
+          step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
+            return step.refStage._id === item.refStage._id;
+          });
+        }
+        this.candidateService.candidateFlowApprove(item._id, step.refStage._id, button._id, item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
       }
     });
   }
@@ -388,9 +420,9 @@ export class SignContractDetailComponent implements OnInit {
   openPopupSignContractDate(item: any, icon: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
-    if (this.utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo.sign.date)) {
-      setIconId("True");
-    }
+    // if (this.utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo.sign.date)) {
+    //   setIconId("True");
+    // }
     this.dialogService.open(PopupSignDateComponent,
       {
         closeOnBackdropClick: false,
