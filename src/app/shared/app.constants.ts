@@ -69,6 +69,8 @@ export const OutlookToken = 'OutlookToken';
 export const GoogleToken = 'GoogleToken';
 export const Notification = 'Notification';
 export const NotifIndex = 'NotifIndex';
+export const LangPath = 'LangPath';
+export const Language = 'Language';
 
 export enum DayOfWeek {
   Sunday = 0,

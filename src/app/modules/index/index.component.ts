@@ -5,7 +5,8 @@ import * as _ from 'lodash';
 import { IndexService } from './index.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { Router, ActivatedRoute } from "@angular/router";
-
+import { TranslateService } from '../../translate.service';
+import { setLangPath, setLanguage, getLanguage } from '../../shared/services';
 export interface ContactUs {
   firstName: string;
   lastName: string;
@@ -51,6 +52,7 @@ export class IndexComponent implements OnInit {
   showNavigationArrows: boolean;
   isSubmitted: boolean = false;
   expanded: boolean = false;
+  lang: any;
 
   images = [
     {
@@ -141,6 +143,7 @@ export class IndexComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     private service: IndexService,
     private activatedRoute: ActivatedRoute,
+    private translate: TranslateService,
   ) {
     this.innerHeight = window.innerHeight * 0.75;
     this.innerWidth = window.innerWidth * 0.325;
@@ -157,6 +160,10 @@ export class IndexComponent implements OnInit {
       this.showNavigationArrows = true;
       this.size = 'small';
     }
+    this.lang = getLanguage();
+    if (!this.lang) {
+      this.lang = "en";
+    }
   }
 
   ngOnInit() {
@@ -165,6 +172,7 @@ export class IndexComponent implements OnInit {
     // this.activatedRoute.fragment.subscribe((fragment: string) => {
     //   window.location.hash = fragment;
     // });
+    this.setLang(this.lang);
   }
 
   initialModel(): ContactUs {
@@ -287,6 +295,12 @@ export class IndexComponent implements OnInit {
         break;
     }
     return request;
+  }
+
+  setLang(lang: string) {
+    setLangPath("INDEX");
+    setLanguage(lang)
+    this.translate.use(lang);
   }
 
 }

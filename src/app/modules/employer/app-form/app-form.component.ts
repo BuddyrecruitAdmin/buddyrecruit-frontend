@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppFormService } from './app-form.service';
 import { ResponseCode } from '../../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId } from '../../../shared/services/auth.service';
+import { getRole, setLanguage, getLanguage, setLangPath } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
@@ -25,11 +25,11 @@ import { Router, ActivatedRoute } from "@angular/router";
 export class AppFormComponent implements OnInit {
   role: any;
   appforms: any;
-  lang = "en";
+  lang: any;
   touched: boolean;
   applicationForm: FormGroup;
   degreeMaster: DropDownValue[];
-  actionView : boolean
+  actionView: boolean
   firstname: AbstractControl;
   lastname: AbstractControl;
   nickname: AbstractControl;
@@ -120,6 +120,10 @@ export class AppFormComponent implements OnInit {
     private location: Location,
   ) {
     this.role = getRole();
+    this.lang = getLanguage();
+    if (!this.lang) {
+      this.lang = "en";
+    }
   }
 
   ngOnInit() {
@@ -291,10 +295,10 @@ export class AppFormComponent implements OnInit {
       district: [null, Validators.required],
       amphur: [null, Validators.required],
       province: [null, Validators.required],
-      postcode: [null, [Validators.required,Validators.minLength(5)]],
-      age: [null, [Validators.required,Validators.maxLength(2)]],
+      postcode: [null, [Validators.required, Validators.minLength(5)]],
+      age: [null, [Validators.required, Validators.maxLength(2)]],
       dob: [null, Validators.required],
-      mobile: [null, [Validators.required,Validators.minLength(9)]],
+      mobile: [null, [Validators.required, Validators.minLength(9)]],
       email: [null, [Validators.required, Validators.email]],
       race: [null, Validators.required],
       nationality: [null, Validators.required],
@@ -312,7 +316,7 @@ export class AppFormComponent implements OnInit {
       emergencySurname: [null, Validators.required],
       emergencyRelation: [null, Validators.required],
       emergencyAddress: [null, Validators.required],
-      emergencyTel: [null, [Validators.required,Validators.minLength(9)]],
+      emergencyTel: [null, [Validators.required, Validators.minLength(9)]],
       sick: [null, Validators.required],
       aboutSelf: [null, Validators.required],
     })
@@ -557,6 +561,8 @@ export class AppFormComponent implements OnInit {
   }
 
   setLang(lang: string) {
+    setLangPath("APP_FORM");
+    setLanguage(lang);
     this.translate.use(lang);
   }
 

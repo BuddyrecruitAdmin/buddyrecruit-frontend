@@ -23,7 +23,9 @@ import {
   OutlookToken,
   GoogleToken,
   Notification,
-  NotifIndex
+  NotifIndex,
+  LangPath,
+  Language
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -263,4 +265,20 @@ export function setNotificationIndex(notifIndex: any = null) {
 export function getNotificationIndex() {
   const notifIndex = JSON.parse(localStorage.getItem(NotifIndex));
   return (!notifIndex || notifIndex === null) ? undefined : notifIndex;
+}
+export function setLangPath(langPath: any = null) {
+  localStorage.setItem(LangPath, JSON.stringify(langPath));
+}
+
+export function getLangPath() {
+  const langPath = JSON.parse(localStorage.getItem(LangPath));
+  return (!langPath || langPath === null) ? undefined : langPath;
+}
+export function setLanguage(language: any = null) {
+  localStorage.setItem(Language, JSON.stringify(language));
+}
+
+export function getLanguage() {
+  const language = JSON.parse(localStorage.getItem(Language));
+  return (!language || language === null) ? undefined : language;
 }
