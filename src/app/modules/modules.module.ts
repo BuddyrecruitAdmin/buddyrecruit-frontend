@@ -79,7 +79,7 @@ import {
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
-
+import { AppFormComponent } from './app-form/app-form.component';
 @NgModule({
   imports: [
     ModulesRoutingModule,
@@ -156,6 +156,7 @@ import { IndexComponent } from './index/index.component';
     ModulesComponent,
     TranslatePipe,
     IndexComponent,
+    AppFormComponent,
   ],
   providers: [
     TranslateService,
