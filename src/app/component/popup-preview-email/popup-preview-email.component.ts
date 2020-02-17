@@ -8,7 +8,8 @@ import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-
+import { PopupCvComponent } from '../../component/popup-cv/popup-cv.component';
+import { NbDialogService } from '@nebular/theme';
 @Component({
   selector: 'ngx-popup-preview-email',
   templateUrl: './popup-preview-email.component.html',
@@ -39,6 +40,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
+    private dialogService: NbDialogService,
   ) {
     this.role = getRole();
     this.flowId = getFlowId();
@@ -129,6 +131,8 @@ export class PopupPreviewEmailComponent implements OnInit {
         });
         if (!this.haveEmail) {
           contents.push('***ไม่พบอีเมลของผู้สมัคร*** ');
+        } else {
+          setUserEmail(this.haveEmail);
         }
         contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
       }
@@ -137,6 +141,8 @@ export class PopupPreviewEmailComponent implements OnInit {
         type = 'W';
         contents.push('ไม่พบอีเมลของผู้สมัคร ');
         contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
+      } else {
+        setUserEmail(this.haveEmail);
       }
     const confirm = this.matDialog.open(PopupMessageComponent, {
       width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -144,7 +150,9 @@ export class PopupPreviewEmailComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result && !this.disMail) {
-        if (data.mailOptions) {
+        if (result === 'edit') {
+          this.info();
+        } else if (data.mailOptions) {
           this.mailOptions = data.mailOptions;
           this.mailType = data.type;
           this.actionUser = data.actionUser;
@@ -168,6 +176,21 @@ export class PopupPreviewEmailComponent implements OnInit {
     });
   }
 
+  info() {
+    setFlowId(this.flowId);
+    setCandidateId(this.candidateId);
+    this.dialogService.open(PopupCvComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      this.ref.close(true);
+    });
+  }
+
   nextStep() {
     const confirm = this.matDialog.open(PopupMessageComponent, {
       width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -176,7 +199,6 @@ export class PopupPreviewEmailComponent implements OnInit {
     confirm.afterClosed().subscribe(result => {
       if (result) {
         const request = this.setRequest();
-        debugger
         this.candidateService.candidateFlowApprove(this.flowId, this.stageId, this.buttonId, request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
