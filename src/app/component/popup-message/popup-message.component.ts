@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { setUserEmail, getUserEmail } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'ngx-popup-message',
@@ -7,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./popup-message.component.css']
 })
 export class PopupMessageComponent implements OnInit {
-
+  userEmail: any;
   constructor(
     public dialogRef: MatDialogRef<PopupMessageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -17,7 +18,10 @@ export class PopupMessageComponent implements OnInit {
       contents: string[],
       btnText: string
     }
-  ) { }
+  ) {
+    this.userEmail = getUserEmail();
+    setUserEmail();
+   }
 
   ngOnInit() {
     switch (this.data.type) {
