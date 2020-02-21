@@ -366,7 +366,7 @@ export class CandidateDetailComponent implements OnInit {
           const found = item.candidateFlow.pendingInterviewInfo.userInterviews.find(element => {
             return element.refUser._id === this.role._id || element.refUser === this.role._id;
           });
-          if (found) {
+          if (found && step.refStage.order === 402) {
             this.condition.icon.interviewScore = true;
           }
         }
