@@ -335,9 +335,9 @@ export class CandidateDetailComponent implements OnInit {
                   this.condition.button.disabled = true;
                   this.condition.button.errMsg = 'Please sent email in sign contract info';
                 }
-                // if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
-                //   this.onMail = false;
-                // }
+                if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                  this.onMail = false;
+                }
               }
               break;
             case 601:
