@@ -188,7 +188,7 @@
 
           <!-- PENDING, SELECTED, REJECT -->
           <div *ngIf="tabSelected !== 'NOT BUY'">
-            <nb-card *ngFor="let item of items" accent="success">
+            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i">
               <nb-card-header>
                 <div class="title">
                   <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
@@ -250,7 +250,7 @@
                       </div>
                     </div>
                     <div class="text-group">
-                      <span class="link" (click)="info(item)">
+                      <span class="link" (click)="info(item, 'page'+i)">
                         <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                       </span>
                     </div>
