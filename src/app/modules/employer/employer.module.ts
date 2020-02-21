@@ -23,7 +23,13 @@ import {
   NbSpinnerModule
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { TranslateModule } from '@ngx-translate/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import {
   MatAutocompleteModule,
@@ -132,7 +138,13 @@ import { RegistrationComponent } from './registration/registration.component';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
-    TranslateModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     NbSpinnerModule,
     DigitOnlyModule
   ],

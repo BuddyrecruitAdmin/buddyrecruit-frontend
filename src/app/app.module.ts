@@ -7,15 +7,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { TagInputModule } from 'ngx-chips';
 import { AppRoutingModule } from './app-routing.module';
 import { TranslateService } from './translate.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { NumberDirective } from "./shared/directive/number.directive";
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 export function setupTranslateFactory(
   service: TranslateService): Function {
   return () => service.use('en');
@@ -33,7 +37,6 @@ import {
   NbTooltipModule,
 } from '@nebular/theme';
 import { PusherService } from './shared/services/pusher.service';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -63,7 +66,13 @@ import { environment } from '../environments/environment';
     NbCardModule,
     NbButtonModule,
     NbTooltipModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   exports: [
     NbCardModule,

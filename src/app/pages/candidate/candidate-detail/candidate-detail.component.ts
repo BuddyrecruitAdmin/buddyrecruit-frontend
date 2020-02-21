@@ -361,6 +361,15 @@ export class CandidateDetailComponent implements OnInit {
               break;
           }
         }
+      } else {
+        if (item.candidateFlow.pendingInterviewInfo.userInterviews.length && this.condition.block.interviewScore) {
+          const found = item.candidateFlow.pendingInterviewInfo.userInterviews.find(element => {
+            return element.refUser._id === this.role._id || element.refUser === this.role._id;
+          });
+          if (found) {
+            this.condition.icon.interviewScore = true;
+          }
+        }
       }
       // Set when expired
       if (item.candidateFlow.refJR.refStatus.status !== 'JRS002') {

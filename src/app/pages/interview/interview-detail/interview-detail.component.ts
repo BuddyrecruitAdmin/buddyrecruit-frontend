@@ -258,9 +258,9 @@ export class InterviewDetailComponent implements OnInit {
         });
         if (found) {
           condition.icon.interviewScore = true;
+          condition.button.interviewScore = true;
         }
       }
-
       if (step.editable) {
         switch (item.refStage.order) {
           case 401: // Interview Taken
@@ -294,11 +294,13 @@ export class InterviewDetailComponent implements OnInit {
                   condition.button.interviewScore = true;
                 }
               }
+            } else {
+              condition.icon.interviewScore = false;
+              condition.button.interviewScore = false;
+              condition.button.send = true;
             }
             break;
         }
-      } else {
-        condition.button.send = true;
       }
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
