@@ -290,7 +290,7 @@ export class SignContractDetailComponent implements OnInit {
     if (item.refCandidate.email) {
       setUserEmail(item.refCandidate.email);
     }
-    // if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
+    if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
       setFlowId(item._id);
       setCandidateId(item.refCandidate._id);
       setButtonId(button._id);
@@ -307,9 +307,9 @@ export class SignContractDetailComponent implements OnInit {
           this.search();
         }
       });
-    // }else{
-    //   this.nextStep(item ,button);
-    // }
+    } else {
+      this.nextStep(item, button);
+    }
   }
 
   nextStep(item: any, button: any) {
