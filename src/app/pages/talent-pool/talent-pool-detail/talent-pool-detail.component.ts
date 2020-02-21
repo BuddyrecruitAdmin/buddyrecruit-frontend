@@ -306,6 +306,12 @@ export class TalentPoolDetailComponent implements OnInit {
     }
   }
 
+  toScroll(namee): void {
+    var el = document.getElementById(namee);
+    console.log(el)
+    el.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
+
   onClickCollapseAll(value: any) {
     setCollapse(value);
     if (this.items.length) {
@@ -389,7 +395,7 @@ export class TalentPoolDetailComponent implements OnInit {
     });
   }
 
-  info(item: any) {
+  info(item: any, pageNum: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     this.dialogService.open(PopupCvComponent,
@@ -400,9 +406,14 @@ export class TalentPoolDetailComponent implements OnInit {
     ).onClose.subscribe(result => {
       setFlowId();
       if (result) {
-        this.search();
+        this.getScroll(pageNum);
       }
     });
+  }
+
+  async getScroll(pageNum: any) {
+    await this.search()
+    await this.toScroll(pageNum)
   }
 
   openCandidateDetail(item: any) {
