@@ -314,13 +314,7 @@ export class TalentPoolDetailComponent implements OnInit {
   toScroll(namee): void {
     setTimeout(() => {
       var el = document.getElementById(namee);
-      console.log(el)
-      el.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-      var scrolledY = window.scrollY;
-
-      if (scrolledY) {
-        window.scroll(0, scrolledY + 76);
-      }
+      el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }, 500);
   }
 

@@ -32,7 +32,7 @@
   </nb-card-body>
 </nb-card>
 
-<nb-card>
+<nb-card id="mainCard">
   <nb-card-body style="padding: 0.5rem;">
     <nb-tabset fullWidth="true" (changeTab)="onSelectTab($event)">
       <nb-tab *ngFor="let tab of tabs" [tabTitle]="tab.name" [active]="tabSelected && tabSelected === tab.name"
