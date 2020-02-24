@@ -151,6 +151,9 @@ export class JdDetailComponent implements OnInit {
           this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
           this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
           this.jd.departmentId = this.role.departmentId || undefined;
+          if(this.jd.departmentId){
+            this.onChangeDepartment(this.jd.departmentId)
+          }
         }
       });
     });
