@@ -154,13 +154,13 @@
               </span>
             </div>
             <div class="text-group" *ngIf="checked">
-              <label class="label">Reject Reason</label>
+              <label class="label">Rejected Reason</label>
               <span>
                 {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
               </span>
             </div>
             <div class="text-group" *ngIf="checked">
-              <label class="label">Reject By</label>
+              <label class="label">Rejected By</label>
               <span>
                 {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
               </span>
@@ -190,8 +190,8 @@
               <th scope="col" style="width: 120px;">Stage</th>
               <th scope="col" style="width: 120px;">Sub Stage</th>
               <th scope="col" style="width: 120px;">Last changed update</th>
-              <th *ngIf="checked" scope="col">Reject Reason</th>
-              <th *ngIf="checked" scope="col" style="width: 90px;">Reject By</th>
+              <th *ngIf="checked" scope="col">Rejected Reason</th>
+              <th *ngIf="checked" scope="col" style="width: 90px;">Rejected By</th>
             </tr>
           </thead>
           <tbody>

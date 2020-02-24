@@ -151,9 +151,6 @@ export class CandidateDetailComponent implements OnInit {
             });
           }
         }
-        if(this.item.candidateFlow.reject.flag){
-          this.condition.block.reject = true;
-        }
         this.setCondition(this.item);
       } else {
         const confirm = this.matDialog.open(PopupMessageComponent, {
@@ -199,7 +196,6 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.block.examDate = true;
           this.condition.block.examInfo = true;
           this.condition.block.examScore = true;
-          this.condition.button.send = true;
           break;
         case 301:
           this.condition.block.examDate = true;
@@ -219,7 +215,6 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.block.examScore = true;
           this.condition.block.interviewDate = true;
           this.condition.block.interviewScore = true;
-          this.condition.button.send = true;
           break;
         case 501:
           this.condition.block.examDate = true;
@@ -241,12 +236,17 @@ export class CandidateDetailComponent implements OnInit {
         default:
           break;
       }
+      if (item.candidateFlow.reject.flag) {
+        this.condition.block.reject = true;
+      }
 
       // Set action
       if (step.editable) {
         if (item.candidateFlow.reject.flag) {
           if (step.refStage.order !== 202 && step.refStage.order !== 402) {
             this.condition.button.revoke = true;
+          } else {
+            this.condition.button.send = true;
           }
         } else {
           this.condition.button.nextStep = true;
@@ -325,18 +325,19 @@ export class CandidateDetailComponent implements OnInit {
               ) {
                 this.condition.button.errMsg = 'Please input sign contract info';
                 this.condition.button.disabled = true;
+              } else {
                 if (!item.email) {
                   this.condition.button.errMsg = " Email not found, Can't send email to candidate.";
+                } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.sign.date)) {
+                  this.condition.button.disabled = true;
+                  this.condition.button.errMsg = 'Sign contract date is not arrived';
+                } else if (!item.candidateFlow.pendingSignContractInfo.mail.flag) {
+                  this.condition.button.disabled = true;
+                  this.condition.button.errMsg = 'Please sent email in sign contract info';
                 }
-              } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.sign.date)) {
-                this.condition.button.disabled = true;
-                this.condition.button.errMsg = 'Sign contract date is not arrived';
-              } else if (!item.candidateFlow.pendingSignContractInfo.mail.flag) {
-                this.condition.button.disabled = true;
-                this.condition.button.errMsg = 'Please sent email in sign contract info';
-              }
-              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
-                this.onMail = false;
+                if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                  this.onMail = false;
+                }
               }
               break;
             case 601:
@@ -344,16 +345,29 @@ export class CandidateDetailComponent implements OnInit {
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please input onboard date';
-              } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
-                this.condition.button.disabled = true;
-                this.condition.button.errMsg = ' date is not arrived';
-              } else if (!item.candidateFlow.onboard.mail.flag) {
-                this.condition.button.disabled = true;
-                this.condition.button.errMsg = ' Plesae send email in onboard info';
+              } else {
+                if (!item.email) {
+                  this.condition.button.errMsg = "Email not found, Can't send email to candidate.";
+                } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                  this.condition.button.disabled = true;
+                  this.condition.button.errMsg = ' date is not arrived';
+                } else if (!item.candidateFlow.onboard.mail.flag) {
+                  this.condition.button.disabled = true;
+                  this.condition.button.errMsg = ' Plesae send email in onboard info';
+                }
               }
               break;
             default:
               break;
+          }
+        }
+      } else {
+        if (item.candidateFlow.pendingInterviewInfo.userInterviews.length && this.condition.block.interviewScore) {
+          const found = item.candidateFlow.pendingInterviewInfo.userInterviews.find(element => {
+            return element.refUser._id === this.role._id || element.refUser === this.role._id;
+          });
+          if (found && step.refStage.order === 402) {
+            this.condition.icon.interviewScore = true;
           }
         }
       }

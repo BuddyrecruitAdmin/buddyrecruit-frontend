@@ -341,7 +341,7 @@
     </div>
 
     <button *ngIf="condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
-      nbTooltip="SendEmail" (click)="sendEmail(item)">
+      nbTooltip="ReSendEmail" (click)="sendEmail(item)">
       <i class="far fa-paper-plane"></i>
     </button>
     <button *ngIf="condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"

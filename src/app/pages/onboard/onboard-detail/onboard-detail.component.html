@@ -189,7 +189,8 @@
                 *ngIf="item.condition.button.nextStep && utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
-                [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) || !item.onboard.mail.flag">
+                [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) 
+                || (item.refCandidate.email !== '' && !item.onboard.mail.flag )">
                 <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)"
                   nbTooltip="Agree start date is not arrived yet" text=" ! " status="warning" position="top right">
                 </nb-badge>

@@ -20,6 +20,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
+import { resolve } from 'url';
 
 @Component({
   selector: 'ngx-talent-pool-detail',
@@ -137,41 +138,45 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   search() {
-    this.loading = true;
-    this.criteria = {
-      keyword: this.keyword.trim(),
-      skip: (this.paging.pageIndex * this.paging.pageSize),
-      limit: this.paging.pageSize,
-      filter: [
-        'refCandidate.firstname',
-        'refCandidate.lastname',
-        'refCandidate.age',
-        'refCandidate.phone',
-        'refCandidate.email',
-        'refStage.name',
-      ]
-    };
-    this.items = [];
-    this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.items = response.data;
-        this.showTips = response.isOverCandidate;
-        this.items.map(item => {
-          item.collapse = this.collapseAll;
-          item.condition = this.setCondition(item);
-          if (item.refCandidate && item.refCandidate.birth) {
-            if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
-              item.refCandidate.birth = new Date((item.refCandidate.birth));
-              var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
-              item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+    return new Promise((resolve) => {
+      this.loading = true;
+      this.criteria = {
+        keyword: this.keyword.trim(),
+        skip: (this.paging.pageIndex * this.paging.pageSize),
+        limit: this.paging.pageSize,
+        filter: [
+          'refCandidate.firstname',
+          'refCandidate.lastname',
+          'refCandidate.age',
+          'refCandidate.phone',
+          'refCandidate.email',
+          'refStage.name',
+        ]
+      };
+      this.items = [];
+      this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.items = response.data;
+          this.showTips = response.isOverCandidate;
+          this.items.map(item => {
+            item.collapse = this.collapseAll;
+            item.condition = this.setCondition(item);
+            if (item.refCandidate && item.refCandidate.birth) {
+              if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
+                item.refCandidate.birth = new Date((item.refCandidate.birth));
+                var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
+                item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+              }
             }
-          }
-        });
-        this.paging.length = (response.count && response.count.data) || response.totalDataSize;
-        this.setTabCount(response.count);
-      }
-      this.loading = false;
-    });
+          });
+          this.paging.length = (response.count && response.count.data) || response.totalDataSize;
+          this.setTabCount(response.count);
+        }
+        this.loading = false;
+        console.log("Ros")
+        resolve();
+      });
+    })
   }
 
   setCondition(item: any): any {
@@ -306,6 +311,13 @@ export class TalentPoolDetailComponent implements OnInit {
     }
   }
 
+  toScroll(namee): void {
+    setTimeout(() => {
+      var el = document.getElementById(namee);
+      el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    }, 500);
+  }
+
   onClickCollapseAll(value: any) {
     setCollapse(value);
     if (this.items.length) {
@@ -389,7 +401,7 @@ export class TalentPoolDetailComponent implements OnInit {
     });
   }
 
-  info(item: any) {
+  info(item: any, pageNum: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
     this.dialogService.open(PopupCvComponent,
@@ -400,9 +412,14 @@ export class TalentPoolDetailComponent implements OnInit {
     ).onClose.subscribe(result => {
       setFlowId();
       if (result) {
-        this.search();
+        this.getScroll(pageNum);
       }
     });
+  }
+
+  async getScroll(pageNum: any) {
+    await this.search();
+    this.toScroll(pageNum)
   }
 
   openCandidateDetail(item: any) {

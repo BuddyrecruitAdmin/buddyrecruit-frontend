@@ -307,8 +307,8 @@ export class SignContractDetailComponent implements OnInit {
           this.search();
         }
       });
-    }else{
-      this.nextStep(item ,button);
+    } else {
+      this.nextStep(item, button);
     }
   }
 

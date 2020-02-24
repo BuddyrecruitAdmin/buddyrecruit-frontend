@@ -610,7 +610,7 @@
           <div class="form-control-group">
             <label class="label">{{ 'TEL' | translate }}<small class="text-red">*</small></label>
             <input type="number" [formControl]="emergencyTel" [(ngModel)]="appforms.contactEmergency.tel"
-              pattern="[0-9]*" inputmode="numeric" digitOnly onKeyPress="if(this.value.length==5) return false;"
+              pattern="[0-9]*" inputmode="numeric" digitOnly onKeyPress="if(this.value.length==11) return false;"
               placeholder="" nbInput fullWidth>
             <small *ngIf="touched && emergencyTel.errors" class="text-red">{{ sErrorEmerTel }}</small>
           </div>
