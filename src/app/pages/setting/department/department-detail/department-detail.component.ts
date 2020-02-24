@@ -154,26 +154,34 @@ export class DepartmentDetailComponent implements OnInit {
   save() {
     if (this.validation()) {
       const request = this.setRequest();
-      if (this.state === State.Create) {
-        this.service.create(request).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/employer/setting/department']);
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C' }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          if (this.state === State.Create) {
+            this.service.create(request).subscribe(response => {
+              if (response.code === ResponseCode.Success) {
+                this.showToast('success', 'Success Message', response.message);
+                this.router.navigate(['/employer/setting/department']);
+              } else {
+                this.showToast('danger', 'Error Message', response.message);
+              }
+            });
           } else {
-            this.showToast('danger', 'Error Message', response.message);
+            this.service.edit(request).subscribe(response => {
+              if (response.code === ResponseCode.Success) {
+                this.showToast('success', 'Success Message', response.message);
+                this.getDetail(request._id);
+                this.router.navigate(['/employer/setting/department']);
+              } else {
+                this.showToast('danger', 'Error Message', response.message);
+              }
+            });
           }
-        });
-      } else {
-        this.service.edit(request).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.getDetail(request._id);
-            this.router.navigate(['/employer/setting/department']);
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
-      }
+        }
+      })
     }
   }
 
