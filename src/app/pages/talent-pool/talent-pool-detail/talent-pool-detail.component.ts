@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -14,6 +14,7 @@ import { PopupRejectComponent } from '../../../component/popup-reject/popup-reje
 import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup-exam-date.component';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
+import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -433,6 +434,23 @@ export class TalentPoolDetailComponent implements OnInit {
   openPopupComment(item: any) {
     setFlowId(item._id);
     this.dialogService.open(PopupCommentComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.search();
+      if (result) {
+        setFlowId();
+      }
+    });
+  }
+
+  openPopupTransfer(item: any) {
+    setFlowId(item._id);
+    setFieldName(this.utilitiesService.setFullname(item.refCandidate));
+    setJdName(this.jrName);
+    this.dialogService.open(PopupTransferComponent,
       {
         closeOnBackdropClick: true,
         hasScroll: true,

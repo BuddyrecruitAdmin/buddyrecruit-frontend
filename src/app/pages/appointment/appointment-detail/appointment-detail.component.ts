@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setUserEmail } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -21,7 +21,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from '../../../shared/constants/message';
 import { CandidateService } from '../../candidate/candidate.service';
 import { CalendarService } from '../../calendar/calendar.service';
-
+import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 @Component({
   selector: 'ngx-appointment-detail',
   templateUrl: './appointment-detail.component.html',
@@ -322,6 +322,23 @@ export class AppointmentDetailComponent implements OnInit {
             this.showToast('danger', 'Error Message', response.message);
           }
         });
+      }
+    });
+  }
+
+  openPopupTransfer(item: any) {
+    setFlowId(item._id);
+    setFieldName(this.utilitiesService.setFullname(item.refCandidate));
+    setJdName(this.jrName);
+    this.dialogService.open(PopupTransferComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.search();
+      if (result) {
+        setFlowId();
       }
     });
   }

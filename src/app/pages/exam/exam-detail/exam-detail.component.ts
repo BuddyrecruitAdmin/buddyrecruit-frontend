@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -23,7 +23,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
-
+import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 @Component({
   selector: 'ngx-exam-detail',
   templateUrl: './exam-detail.component.html',
@@ -303,6 +303,23 @@ export class ExamDetailComponent implements OnInit {
       setCandidateId();
       if (result) {
         this.search();
+      }
+    });
+  }
+
+  openPopupTransfer(item: any) {
+    setFlowId(item._id);
+    setFieldName(this.utilitiesService.setFullname(item.refCandidate));
+    setJdName(this.jrName);
+    this.dialogService.open(PopupTransferComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.search();
+      if (result) {
+        setFlowId();
       }
     });
   }
