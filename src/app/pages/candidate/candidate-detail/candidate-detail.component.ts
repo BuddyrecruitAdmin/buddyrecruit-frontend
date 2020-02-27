@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -27,7 +27,7 @@ import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date
 import { PrintCandidateComponent } from '../../../component/print-candidate/print-candidate.component';
 import { Devices } from '../../../shared/interfaces/common.interface';
 import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
-
+import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 @Component({
   selector: 'ngx-candidate-detail',
   templateUrl: './candidate-detail.component.html',
@@ -110,15 +110,18 @@ export class CandidateDetailComponent implements OnInit {
         disabled: false,
         errMsg: '',
         send: false,
+        trans: false
       },
       isExpired: false
     };
   }
 
   back() {
-    setFlowId();
-    setCandidateId();
-    this.location.back();
+    if (!this.item.blacklist) {
+      this.gotoJR();
+    } else {
+      this.router.navigate(["/employer/setting/blacklist"]);
+    }
   }
 
   getDetail() {
@@ -242,7 +245,7 @@ export class CandidateDetailComponent implements OnInit {
 
       // Set action
       if (step.editable) {
-        if (item.candidateFlow.reject.flag) {
+        if (item.candidateFlow.reject.flag || item.blacklist) {
           if (step.refStage.order !== 202 && step.refStage.order !== 402) {
             this.condition.button.revoke = true;
           } else {
@@ -253,11 +256,14 @@ export class CandidateDetailComponent implements OnInit {
           this.condition.button.reject = true;
           switch (step.refStage.order) {
             case 101:
+              this.condition.button.trans = true;
               break;
             case 102:
+              this.condition.button.trans = true;
               break;
             case 103:
               this.condition.icon.examDate = true;
+              this.condition.button.trans = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.examInfo.date)) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please select exam date';
@@ -266,6 +272,7 @@ export class CandidateDetailComponent implements OnInit {
             case 201:
               this.condition.icon.examDate = true;
               this.condition.icon.examInfo = true;
+              this.condition.button.trans = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.examInfo.date)) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please select exam date';
@@ -280,6 +287,7 @@ export class CandidateDetailComponent implements OnInit {
             case 202:
               this.condition.icon.examInfo = true;
               this.condition.icon.examScore = true;
+              this.condition.button.trans = true;
               if (item.candidateFlow.pendingExamScoreInfo) {
                 if (!item.candidateFlow.pendingExamScoreInfo.examScore
                   || !item.candidateFlow.pendingExamScoreInfo.attitudeScore) {
@@ -290,6 +298,7 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 301:
               this.condition.icon.interviewDate = true;
+              this.condition.button.trans = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingInterviewInfo.startDate)
                 || !item.candidateFlow.pendingInterviewInfo.refLocation) {
                 this.condition.button.disabled = true;
@@ -298,6 +307,7 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 401:
               this.condition.icon.interviewDate = true;
+              this.condition.button.trans = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingInterviewInfo.startDate)
                 || !item.candidateFlow.pendingInterviewInfo.refLocation) {
                 this.condition.button.disabled = true;
@@ -306,6 +316,7 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 402:
               // this.condition.icon.interviewDate = true;
+              this.condition.button.trans = true;
               if (!item.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please input interview score';
@@ -501,6 +512,22 @@ export class CandidateDetailComponent implements OnInit {
             this.showToast('danger', 'Error Message', response.message);
           }
         });
+      }
+    });
+  }
+
+  openPopupTransfer(item: any) {
+    setFlowId(item.candidateFlow._id);
+    setFieldName(this.utilitiesService.setFullname(item));
+    setJdName(item.candidateFlow.refJR.refJD.position);
+    this.dialogService.open(PopupTransferComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      if (result) {
+        this.getDetail();
       }
     });
   }

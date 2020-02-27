@@ -1,7 +1,7 @@
 <div class="content-header with-shadow">
   <div class="breadcrumb">
     <h5>
-      <span class="link text-gray" (click)="gotoJR()">
+      <span class="link text-gray" (click)="back()">
         <nb-icon icon="arrow-ios-back-outline" style="font-size: 100%;"></nb-icon>Back
       </span>
     </h5>
@@ -340,6 +340,10 @@
       </button>
     </div>
 
+    <button *ngIf="condition.button.trans" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="transfer"
+      (click)="openPopupTransfer(item)">
+      <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
+    </button>
     <button *ngIf="condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
       nbTooltip="ReSendEmail" (click)="sendEmail(item)">
       <i class="far fa-paper-plane"></i>
