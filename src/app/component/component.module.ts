@@ -101,6 +101,8 @@ import { PopupFeedbackComponent } from './popup-feedback/popup-feedback.componen
 import { PopupInterviewResultComponent } from './popup-interview-result/popup-interview-result.component';
 import { PrintCandidateComponent } from './print-candidate/print-candidate.component';
 import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-date.component';
+import { PopupTransferComponent } from './popup-transfer/popup-transfer.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   imports: [
@@ -181,7 +183,8 @@ import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-da
     ChartsModule,
     TagInputModule,
     AngularEditorModule,
-    DigitOnlyModule
+    DigitOnlyModule,
+    Ng2SearchPipeModule
   ],
   declarations: [
     PopupMessageComponent,
@@ -203,6 +206,7 @@ import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-da
     PopupInterviewResultComponent,
     PrintCandidateComponent,
     PopupOnboardDateComponent,
+    PopupTransferComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -223,7 +227,8 @@ import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-da
     PopupFeedbackComponent,
     PopupInterviewResultComponent,
     PrintCandidateComponent,
-    PopupOnboardDateComponent
+    PopupOnboardDateComponent,
+    PopupTransferComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -244,7 +249,8 @@ import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-da
     PopupFeedbackComponent,
     PopupInterviewResultComponent,
     PrintCandidateComponent,
-    PopupOnboardDateComponent
+    PopupOnboardDateComponent,
+    PopupTransferComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

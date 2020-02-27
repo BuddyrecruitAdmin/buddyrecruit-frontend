@@ -273,5 +273,11 @@ export const API_ENDPOINT = {
     GET_TOKEN: "google/getToken",
     CALENDAR: "google/calendar",
     USERS: "google/users",
+  },
+  TRANSFER: {
+    DEPARTMENT_LIST: "dropdown/departments",
+    DIVISION_LIST: "dropdown/divisions",
+    JR_LIST: "dropdown/jrs",
+    SAVE: "transfer/candidateFlow",
   }
 };

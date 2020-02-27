@@ -1,0 +1,89 @@
+<nb-card [style.width.px]="innerWidth" [style.height.px]="innerCardHeight" [nbSpinner]="loading"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+    <nb-card-header>
+        <div class="title">
+            <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+            <small class="status text-gray m-0">
+                {{ jrName }}
+            </small>
+        </div>
+        <div class="actions">
+            <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="input-group">
+                    <input type="text" [(ngModel)]="term" nbInput fullWidth placeholder="Search">
+                    <div class="input-group-addon" nbTooltip="Search">
+                        <nb-icon class="unlink" icon="search-outline"></nb-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tableFixHead" [style.height.px]="innerCardBodyHeight">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Department</th>
+                        <th scope="col">Division</th>
+                        <th scope="col">JR</th>
+                        <th scope="col" style="z-index: 10;">Transfer</th>
+                    </tr>
+                </thead>
+                <tbody style="padding: 14px 16px; z-index: 1;">
+                    <tr *ngFor="let item of items | filter:term ">
+                        <td>
+                            <span>
+                                {{ item.departmentName || '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ item.divisionName || '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ item.refJD.position || '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <!-- <nb-checkbox (checkedChange)="transferList(item)"></nb-checkbox> -->
+                            <mat-checkbox (change)="transferList(item)"></mat-checkbox>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="footer-collapse">
+            <button nbButton status="default" size="small" (click)="ref.close(result)">CANCEL</button>
+        </div>
+        <button nbButton status="primary" size="small" (click)="save(dialog)">ACCEPT</button>
+        <!-- <button nbButton status="success" (click)="sendEmail()"
+            [disabled]="!signDate || !signTime || !emailCandidate">SEND
+            EMAIL</button> -->
+    </nb-card-footer>
+</nb-card>
+
+<!-- dialog -->
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Transfer Comfirmation</nb-card-header>
+        <nb-card-body>
+            <div *ngFor="let item of transShow;let i = index;">
+                <label> {{ i+1 }}</label>. <label> {{ item.departmentName }}-</label><label *ngIf="item.divisionName">
+                    {{ item.divisionName }}-</label><label>{{ item.refJD.position }}</label>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="footer-collapse">
+                <button nbButton status="success" (click)="ref.close(true)">Confirm</button>
+            </div>
+            <button nbButton status="danger" (click)="ref.close(false)">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
