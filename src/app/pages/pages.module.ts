@@ -111,7 +111,6 @@ import { CandidateDetailComponent } from './candidate/candidate-detail/candidate
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-
 @NgModule({
   imports: [
     CommonModule,

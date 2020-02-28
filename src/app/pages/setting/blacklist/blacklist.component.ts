@@ -12,7 +12,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import { NbDialogService } from '@nebular/theme';
-
+import { Router } from "@angular/router";
 @Component({
   selector: 'ngx-blacklist',
   templateUrl: './blacklist.component.html',
@@ -31,6 +31,7 @@ export class BlacklistComponent implements OnInit {
   isGridLayout: boolean;
 
   constructor(
+    private router: Router,
     private service: CandidateService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
@@ -108,17 +109,9 @@ export class BlacklistComponent implements OnInit {
   info(item: any) {
     setCandidateId(item.refCandidate._id);
     setFlowId(item.refCandidateFlow._id);
-    this.dialogService.open(PopupCvComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-    });
+    this.router.navigate(["/employer/candidate/detail"]);
   }
-  
+
   changeLayout(value) {
     this.isGridLayout = value;
     setIsGridLayout(value);
