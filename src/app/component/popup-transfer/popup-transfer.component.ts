@@ -67,11 +67,22 @@ export class PopupTransferComponent implements OnInit {
   }
 
   transferList(item) {
-    this.transList.push({
-      candidateFlowId: this.flowId,
-      jrId: item._id
-    });
-    this.transShow.push(item)
+    let found;
+    this.transList.forEach((element, index) => {
+      if (element.jrId === item._id) {
+        found = index;
+      }
+    })
+    if (found >= 0) {
+      this.transList.splice(found, 1);
+      this.transShow.splice(found, 1);
+    } else {
+      this.transList.push({
+        candidateFlowId: this.flowId,
+        jrId: item._id
+      });
+      this.transShow.push(item)
+    }
   }
   // onChangeDepartment(value) {
   //   this.divisions = [];

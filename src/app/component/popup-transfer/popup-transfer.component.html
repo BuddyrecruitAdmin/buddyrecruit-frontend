@@ -62,7 +62,8 @@
         <div class="footer-collapse">
             <button nbButton status="default" size="small" (click)="ref.close(result)">CANCEL</button>
         </div>
-        <button nbButton status="primary" size="small" (click)="save(dialog)">ACCEPT</button>
+        <button nbButton status="primary" size="small" [disabled]="transList.length === 0"
+            (click)="save(dialog)">ACCEPT</button>
         <!-- <button nbButton status="success" (click)="sendEmail()"
             [disabled]="!signDate || !signTime || !emailCandidate">SEND
             EMAIL</button> -->
