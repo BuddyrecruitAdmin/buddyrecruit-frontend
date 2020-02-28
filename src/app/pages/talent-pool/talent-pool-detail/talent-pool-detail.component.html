@@ -401,7 +401,8 @@
                   status="info" nbTooltip="ReSendEmail" (click)="sendEmail(item)">
                   <i class="far fa-paper-plane"></i>
                 </button> -->
-                <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Transfer"
+                <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  style="color:white;background: #A0A0A0;border-color: #A0A0A0;" nbTooltip="Transfer"
                   (click)="openPopupTransfer(item)">
                   <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
                 </button>

@@ -34,6 +34,21 @@
     </div> -->
   </nb-card-header>
   <nb-card-body *ngIf="!loading" class="dialog-body">
+    <!-- Transfer -->
+    <div *ngIf="items.transfrom">
+      <div class="title">
+        <span style="color: red" class="link underline" (click)="showTrans = !showTrans">
+          <nb-icon icon="info-outline"></nb-icon> Transfer History
+        </span>
+        <div *ngIf="showTrans" class="border-padbottom border-all-reject box-pad box-header with-border">
+          <div class="text-gray m-t-10">
+            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+            <span>{{ items.department }}-{{ items.division }}-{{ items.position }} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="(!showTrans && items.transfrom )" style="padding-bottom: 25px;"></div>
     <!-- Reject -->
     <div *ngIf="history.length">
       <div class="title">

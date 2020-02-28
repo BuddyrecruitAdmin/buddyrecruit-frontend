@@ -327,7 +327,6 @@ export class CompanyDetailComponent implements OnInit {
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }
       }
-      this.loading = false;
     });
     this.service.getListAdmin(this._id).subscribe(res => {
       if (res.code === ResponseCode.Success) {
@@ -345,6 +344,9 @@ export class CompanyDetailComponent implements OnInit {
           }
           if (element.refAuthorize.isDefault) {
             this.companyDetail.adminEmail = element._id;
+            this.loading = false;
+          } else {
+            this.loading = false;
           }
         });
       }

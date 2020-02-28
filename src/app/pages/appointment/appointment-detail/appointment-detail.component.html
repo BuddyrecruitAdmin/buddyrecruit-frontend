@@ -173,7 +173,7 @@
               </div>
 
               <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="transfer"
-                (click)="openPopupTransfer(item)">
+              style="color:white;background: #A0A0A0;border-color: #A0A0A0;" (click)="openPopupTransfer(item)">
                 <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
               </button>
               <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
