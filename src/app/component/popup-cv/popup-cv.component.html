@@ -37,13 +37,15 @@
     <!-- Transfer -->
     <div *ngIf="items.transfrom">
       <div class="title">
-        <span style="color: red" class="link underline" (click)="showTrans = !showTrans">
+        <span style="color:blue" class="link underline" (click)="showTrans = !showTrans">
           <nb-icon icon="info-outline"></nb-icon> Transfer History
         </span>
         <div *ngIf="showTrans" class="border-padbottom border-all-reject box-pad box-header with-border">
           <div class="text-gray m-t-10">
             <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-            <span>{{ items.department }}-{{ items.division }}-{{ items.position }} </span>
+            <span *ngIf="items.transfrom.department">Deartment: {{ items.transfrom.department }}- </span>
+            <span *ngIf="items.transfrom.division">Division: {{ items.transfrom.division }}-</span><span
+              *ngIf="items.transfrom.position">Position: {{ items.transfrom.position }}</span>
           </div>
         </div>
       </div>
