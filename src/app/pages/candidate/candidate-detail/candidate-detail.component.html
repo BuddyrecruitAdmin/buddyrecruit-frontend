@@ -341,7 +341,7 @@
     </div>
 
     <button *ngIf="condition.button.trans" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
-      nbTooltip="Transfer" (click)="openPopupTransfer(item)">
+    style="color:white;background: #A0A0A0;border-color: #A0A0A0;" nbTooltip="Transfer" (click)="openPopupTransfer(item)">
       <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
     </button>
     <button *ngIf="condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"

@@ -1,4 +1,4 @@
-<nb-card [style.width.px]="innerWidth" [style.height.px]="innerCardHeight" [nbSpinner]="loading"
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerCardHeight" [nbSpinner]="loading"
     nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
     <nb-card-header>
         <div class="title">
@@ -52,7 +52,10 @@
                         </td>
                         <td>
                             <!-- <nb-checkbox (checkedChange)="transferList(item)"></nb-checkbox> -->
-                            <mat-checkbox [(ngModel)]="item.checkTrans" (change)="transferList(item)"></mat-checkbox>
+                            <div style="margin-top: 8px;">
+                                <mat-checkbox [(ngModel)]="item.checkTrans" (change)="transferList(item)">
+                                </mat-checkbox>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -63,19 +66,18 @@
         <div class="footer-collapse">
             <button nbButton status="default" size="small" (click)="ref.close(result)">CANCEL</button>
         </div>
+        <!-- <mat-checkbox (change)="transferAll($event)">
+        </mat-checkbox> -->
         <button nbButton status="primary" size="small" [disabled]="transList.length === 0"
             (click)="save(dialog)">ACCEPT</button>
-        <!-- <button nbButton status="success" (click)="sendEmail()"
-            [disabled]="!signDate || !signTime || !emailCandidate">SEND
-            EMAIL</button> -->
     </nb-card-footer>
 </nb-card>
 
 <!-- dialog -->
 <ng-template #dialog let-data let-ref="dialogRef">
-    <nb-card>
+    <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerCardHeight">
         <nb-card-header>Transfer Comfirmation</nb-card-header>
-        <nb-card-body>
+        <nb-card-body class="dialog-body">
             <div *ngFor="let item of transShow;let i = index;">
                 <label> {{ i+1 }}</label>. <label> {{ item.departmentName }}-</label><label *ngIf="item.divisionName">
                     {{ item.divisionName }}-</label><label>{{ item.refJD.position }}</label>
