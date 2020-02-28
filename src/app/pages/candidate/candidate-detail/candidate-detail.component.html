@@ -340,8 +340,8 @@
       </button>
     </div>
 
-    <button *ngIf="condition.button.trans" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="transfer"
-      (click)="openPopupTransfer(item)">
+    <button *ngIf="condition.button.trans" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
+      nbTooltip="Transfer" (click)="openPopupTransfer(item)">
       <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
     </button>
     <button *ngIf="condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
@@ -355,6 +355,7 @@
         position="top right">
       </nb-badge>
     </button>
+    <br *ngIf="devices.isMobile">
     <button *ngIf="condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
       [nbTooltip]="condition.button.step.button" (click)="approve(item, condition.button.step)"
       [disabled]="condition.button.disabled">

@@ -7,7 +7,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef, NbDialogService } from '@nebular/theme';
 import { PopupTransferService } from './popup-transfer.service';
 import { validateEvents } from 'angular-calendar/modules/common/util';
-import { DropDownValue, DropDownGroup } from '../../shared/interfaces/common.interface';
+import { DropDownValue, DropDownGroup, Devices } from '../../shared/interfaces/common.interface';
 import { resolve } from 'url';
 
 @Component({
@@ -28,6 +28,7 @@ export class PopupTransferComponent implements OnInit {
   innerWidth: any;
   term: any;
   transShow: any;
+  devices: Devices;
   constructor(
     private service: PopupTransferService,
     public ref: NbDialogRef<PopupTransferComponent>,
@@ -38,10 +39,15 @@ export class PopupTransferComponent implements OnInit {
     this.candidateName = getFieldName();
     this.jrName = getJdName();
     this.flowId = getFlowId();
+    this.devices = this.utilitiesService.getDevice();
     this.innerCardBodyHeight = window.innerHeight * 0.55;
     this.innerCardHeight = window.innerHeight * 0.95;
     this.innerHeight = window.innerHeight * 0.9;
-    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    if(this.devices.isPC){
+      this.innerWidth = window.innerWidth * 0.75
+    }else{
+      this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    }
   }
 
   ngOnInit() {
@@ -67,12 +73,24 @@ export class PopupTransferComponent implements OnInit {
   }
 
   transferList(item) {
-    this.transList.push({
-      candidateFlowId: this.flowId,
-      jrId: item._id
-    });
-    this.transShow.push(item)
+    let found;
+    this.transList.forEach((element, index) => {
+      if (element.jrId === item._id) {
+        found = index;
+      }
+    })
+    if (found >= 0) {
+      this.transList.splice(found, 1);
+      this.transShow.splice(found, 1);
+    } else {
+      this.transList.push({
+        candidateFlowId: this.flowId,
+        jrId: item._id
+      });
+      this.transShow.push(item)
+    }
   }
+
   // onChangeDepartment(value) {
   //   this.divisions = [];
   //   this.divisions.push({
