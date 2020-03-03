@@ -707,7 +707,13 @@ export class CandidateDetailComponent implements OnInit {
 
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
-    const url = window.URL.createObjectURL(data);
+    // const url = (window.URL || window.webkitURL).createObjectURL(blob);
+    // console.log(url)
+    // window.open(url);
+
+    var fileReader = new FileReader();
+    fileReader.readAsDataURL(blob);
+    const url = (window.URL || (window as any).webkitURL).createObjectURL(blob);
     window.open(url);
   }
 
