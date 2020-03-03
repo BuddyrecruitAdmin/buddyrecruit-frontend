@@ -38,14 +38,17 @@
     <div *ngIf="items.transfrom">
       <div class="title">
         <span style="color:blue" class="link underline" (click)="showTrans = !showTrans">
-          <nb-icon icon="info-outline"></nb-icon> Transfer History
+          <nb-icon icon="info-outline"></nb-icon> Transfer From
         </span>
         <div *ngIf="showTrans" class="border-padbottom border-all-reject box-pad box-header with-border">
           <div class="text-gray m-t-10">
             <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-            <span *ngIf="items.transfrom.department">Deartment: {{ items.transfrom.department }}- </span>
-            <span *ngIf="items.transfrom.division">Division: {{ items.transfrom.division }}-</span><span
-              *ngIf="items.transfrom.position">Position: {{ items.transfrom.position }}</span>
+            <label *ngIf="items.transfrom.department"><strong>Deartment:</strong>
+              {{ items.transfrom.department }} </label>
+            <label *ngIf="items.transfrom.division"><strong>Division</strong>:
+              -{{ items.transfrom.division }}</label><br>
+            <label *ngIf="items.transfrom.position"><strong>Position</strong>:
+              {{ items.transfrom.position }}</label>
           </div>
         </div>
       </div>
@@ -83,7 +86,8 @@
     </div>
     <div *ngIf="showMulti" class="border-padbottom border-all-reject box-pad box-header with-border">
       <div *ngFor="let mul of multiJr;let i = index;" class="text-gray m-t-10">
-        <span>{{ i+1 }}. JR: {{ mul.refJR.refJD.position }} - Department: {{ mul.refJR.departmentName }} </span>
+        <span>{{ i+1 }}. <strong>JR:</strong> {{ mul.refJR.refJD.position }} - <strong>Department:</strong>
+          {{ mul.refJR.departmentName }} </span>
         <div>
           <small class="m-l-20">(stage: {{ mul.refStage.name }})</small>
         </div>

@@ -180,6 +180,7 @@ export class ExamDetailComponent implements OnInit {
         revoke: false,
         comment: false,
         send: false,
+        trans: true
       },
       isExpired: false
     };
@@ -221,6 +222,7 @@ export class ExamDetailComponent implements OnInit {
               }
             } else {
               condition.button.send = true;
+              condition.button.trans = false;
             }
             break;
         }

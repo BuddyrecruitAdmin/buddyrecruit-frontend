@@ -46,9 +46,9 @@
                 <small class="status">
                   <span>
                     Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
-                  </span>
+                  </span><br *ngIf="devices.isMobile">
                   <span>
-                    | Source:
+                    <span *ngIf="!devices.isMobile">|</span> Source:
                     <label class="label"
                       [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
                   </span>
@@ -190,8 +190,9 @@
                 </button>
               </div>
 
-              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="transfer"
-              style="color:white;background: #A0A0A0;border-color: #A0A0A0;" (click)="openPopupTransfer(item)">
+              <button *ngIf="item.condition.button.trans" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="info" nbTooltip="transfer" style="color:white;background: #A0A0A0;border-color: #A0A0A0;"
+                (click)="openPopupTransfer(item)">
                 <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
               </button>
               <button *ngIf="item.condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
