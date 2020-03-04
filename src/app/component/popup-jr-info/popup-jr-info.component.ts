@@ -4,7 +4,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { getRole, getJrId, getJdName, setJrId, setJdName } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { JrService } from '../../pages/jr/jr.service';
-
+import { Devices } from '../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-popup-jr-info',
   templateUrl: './popup-jr-info.component.html',
@@ -16,7 +16,7 @@ export class PopupJrInfoComponent implements OnInit {
   jrId: any;
   loading: boolean;
   jrDetail: any = '';
-
+  devices: Devices;
   constructor(
     public ref: NbDialogRef<PopupJrInfoComponent>,
     private jrService: JrService,
@@ -25,7 +25,12 @@ export class PopupJrInfoComponent implements OnInit {
     this.role = getRole();
     this.jrId = getJrId();
     setJrId();
-    this.innerWidth = window.innerWidth * 0.4;
+    this.devices = this.utilitiesService.getDevice();
+    if (this.devices.isMobile) {
+      this.innerWidth = window.innerWidth * 0.8;
+    } else {
+      this.innerWidth = window.innerWidth * 0.4;
+    }
   }
 
   ngOnInit() {

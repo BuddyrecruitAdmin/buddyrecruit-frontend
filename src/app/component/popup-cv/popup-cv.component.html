@@ -7,15 +7,17 @@
       </label>
       <small class="status">
         <b>{{ items.candidateFlow?.refJR?.refJD?.position }}</b>
-        <span>
-          | Source:
-          <label class="label"
-            [ngClass]="utilitiesService.sourcingColors(items.candidateFlow?.refSource?.key)">{{ items.candidateFlow?.refSource?.name || 'Email' }}</label>
-        </span>
+        <span *ngIf="!devices.isMobile">
+          |
+        </span><br *ngIf="devices.isMobile">
+        Source:
+        <label class="label"
+          [ngClass]="utilitiesService.sourcingColors(items.candidateFlow?.refSource?.key)">{{ items.candidateFlow?.refSource?.name || 'Email' }}</label>
       </small>
     </div>
-    <div *ngIf="role.refAuthorize.editCandidateInfo" class="actions">
-      <button size="small" nbButton status="success" (click)="changeMode()">
+    <div *ngIf="role.refAuthorize.editCandidateInfo">
+      <button style="float: right;" [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton status="success"
+        (click)="changeMode()">
         <nb-icon *ngIf="editable" icon="eye-outline"></nb-icon>
         <nb-icon *ngIf="!editable" icon="edit-2-outline"></nb-icon>
         {{ buttonText.toUpperCase() }}
@@ -42,11 +44,10 @@
         </span>
         <div *ngIf="showTrans" class="border-padbottom border-all-reject box-pad box-header with-border">
           <div class="text-gray m-t-10">
-            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
-            <label *ngIf="items.transfrom.department"><strong>Deartment:</strong>
-              {{ items.transfrom.department }} </label>
+            <label *ngIf="items.transfrom.department"><strong>Department:</strong>
+              {{ items.transfrom.department }} </label><br>
             <label *ngIf="items.transfrom.division"><strong>Division</strong>:
-              -{{ items.transfrom.division }}</label><br>
+              {{ items.transfrom.division }}</label><br>
             <label *ngIf="items.transfrom.position"><strong>Position</strong>:
               {{ items.transfrom.position }}</label>
           </div>
@@ -621,20 +622,23 @@
       </div>
     </div>
   </nb-card-body>
-  <nb-card-footer>
+  <nb-card-footer style="padding-left: 5px;padding-right: 20px;">
     <div class="float-left">
-      <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton status="default" size="small"
-        (click)="checkCV(items._id)" nbTooltip="Original CV">
+      <button *ngIf="role.refAuthorize?.showOriginalCV" [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton
+        status="default" (click)="checkCV(items._id)" nbTooltip="Original CV">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
-      <button nbButton status="default" size="small" (click)="openPrintCandidate(items)" nbTooltip="Print">
+      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+        (click)="openPrintCandidate(items)" nbTooltip="Print">
         <nb-icon icon="printer-outline"></nb-icon>
       </button>
-      <button nbButton status="default" size="small" (click)="bugReport('All','all')" nbTooltip="Feedback">
+      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="bugReport('All','all')"
+        nbTooltip="Feedback">
         <nb-icon icon="alert-triangle-outline"></nb-icon>
       </button>
-      <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" nbButton status="info" size="small"
-        (click)="openApplication(items._id)" nbTooltip="Application Form">
+      <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" nbButton status="info"
+        [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openApplication(items._id)"
+        nbTooltip="Application Form">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
     </div>
@@ -644,10 +648,12 @@
     <!-- <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" class="txt-left" size="small"
       nbButton status="info" (click)="openApplication(items._id)">App Form</button> -->
     <!-- <button class="txt-left" size="small" nbButton ghost (click)="bugReport('All','all')">Feedback</button> -->
-    <button *ngIf="editable" nbButton size="small" status="success" (click)="edit()" nbTooltip="Save">
+    <button *ngIf="editable" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" (click)="edit()"
+      nbTooltip="Save">
       <nb-icon icon="save-outline"></nb-icon>
     </button>
-    <button nbButton status="default" size="small" (click)="ref.close(true)" nbTooltip="Close">
+    <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="ref.close(true)"
+      nbTooltip="Close">
       <nb-icon icon="close-outline"></nb-icon>
     </button>
   </nb-card-footer>
