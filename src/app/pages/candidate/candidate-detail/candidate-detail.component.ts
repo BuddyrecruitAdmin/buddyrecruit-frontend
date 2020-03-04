@@ -527,7 +527,8 @@ export class CandidateDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       if (result) {
-        this.getDetail();
+        // this.getDetail();
+        this.router.navigate(['/employer/talent-pool/list']);
       }
     });
   }
