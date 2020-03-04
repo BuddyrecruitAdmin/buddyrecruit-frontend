@@ -139,12 +139,12 @@
       </small>
     </div>
     <div class="footer-collapse">
-      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()">SAVE</button>
-    <button *ngIf="!canApprove" nbButton status="success" (click)="sendEmail()" [disabled]="!emailCandidate">SEND
+    <button nbButton status="primary" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="save()">SAVE</button>
+    <button *ngIf="!canApprove" nbButton status="success" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="sendEmail()" [disabled]="!emailCandidate">SEND
       EMAIL</button>
-    <button *ngIf="canApprove" nbButton status="success" (click)="passToInterview()">PASS TO INTERVIEW</button>
+    <button *ngIf="canApprove" nbButton status="success" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="passToInterview()">PASS TO INTERVIEW</button>
     <!-- <button nbButton status="primary" (click)="save()" [disabled]="!canApprove && ( 
       (selectDateFrom === 'CALENDAR' && (!date || !time)) || 
       (selectDateFrom === 'CUSTOMIZE' && (!date2 || !startTime || !endTime)))">SAVE</button>

@@ -11,7 +11,7 @@ import { getCandidateId, getFlowId, getRole, getJrId, setButtonId, setCandidateI
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { isSameDay } from 'date-fns';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
-
+import { Devices } from '../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-popup-interview-date',
   templateUrl: './popup-interview-date.component.html',
@@ -60,6 +60,7 @@ export class PopupInterviewDateComponent implements OnInit {
       users: ''
     }
   };
+  devices: Devices;
   pendingInterviewInfo: any;
   result: any;
   emailCandidate: any = false;
@@ -80,6 +81,7 @@ export class PopupInterviewDateComponent implements OnInit {
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

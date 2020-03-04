@@ -31,11 +31,13 @@
   </nb-card-body>
   <nb-card-footer>
     <div class="footer-collapse">
-      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+        (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()">SAVE</button>
-    <button nbButton status="success" (click)="passToAppointment()" [disabled]="examScore < 0 || attitudeScore < 0">
-      PASS TO APPOINTMENT
+    <button nbButton status="primary" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="save()">SAVE</button>
+    <button nbButton status="success" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="passToAppointment()"
+      [disabled]="examScore < 0 || attitudeScore < 0">
+      PASS
     </button>
   </nb-card-footer>
 </nb-card>

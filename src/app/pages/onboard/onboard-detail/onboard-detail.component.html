@@ -208,6 +208,10 @@
                 <nb-badge *ngIf="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate)"
                   nbTooltip="Agree start date is not arrived yet" text=" ! " status="warning" position="top right">
                 </nb-badge>
+                <nb-badge
+                  *ngIf="utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) && !item.onboard.mail.flag"
+                  nbTooltip="Plesae send email in onboard info" text=" ! " status="warning" position="top right">
+                </nb-badge>
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}

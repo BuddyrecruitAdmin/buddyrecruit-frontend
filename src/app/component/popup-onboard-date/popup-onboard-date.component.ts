@@ -9,7 +9,7 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { NbDialogService } from '@nebular/theme';
 import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
-
+import { Devices } from '../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-popup-onboard-date',
   templateUrl: './popup-onboard-date.component.html',
@@ -35,6 +35,7 @@ export class PopupOnboardDateComponent implements OnInit {
   errMsg = {
     date: ''
   }
+  devices: Devices;
   minuteStep: any;
   result: any;
   emailCandidate: any;
@@ -56,6 +57,7 @@ export class PopupOnboardDateComponent implements OnInit {
     setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

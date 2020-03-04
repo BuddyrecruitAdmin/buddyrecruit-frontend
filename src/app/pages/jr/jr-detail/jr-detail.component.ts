@@ -241,8 +241,8 @@ export class JrDetailComponent implements OnInit {
             this.editExam = true;
           }
           if (this.state != State.Create) {
-            this.loading = false;
             this.onChangeJobposition(this.jr.refJD._id);
+
           }
           if (this.state === State.Edit) {
             if (this.jr.refStatus.name === 'Active' || this.jr.refStatus.name === 'Inactive') {
@@ -255,6 +255,7 @@ export class JrDetailComponent implements OnInit {
             }
           }
           this.selectedCheck();
+          this.loading = false;
         }
       }
     })

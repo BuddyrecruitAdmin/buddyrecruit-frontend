@@ -352,6 +352,7 @@ export class CandidateDetailComponent implements OnInit {
               }
               break;
             case 601:
+              debugger
               this.condition.icon.onboard = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
@@ -359,12 +360,14 @@ export class CandidateDetailComponent implements OnInit {
               } else {
                 if (!item.email) {
                   this.condition.button.errMsg = "Email not found, Can't send email to candidate.";
-                } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
-                  this.condition.button.disabled = true;
-                  this.condition.button.errMsg = ' date is not arrived';
-                } else if (!item.candidateFlow.onboard.mail.flag) {
+                }
+                if (!item.candidateFlow.onboard.mail.flag) {
                   this.condition.button.disabled = true;
                   this.condition.button.errMsg = ' Plesae send email in onboard info';
+                }
+                if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                  this.condition.button.disabled = true;
+                  this.condition.button.errMsg = ' date is not arrived';
                 }
               }
               break;

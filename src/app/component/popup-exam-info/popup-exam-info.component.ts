@@ -8,6 +8,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
+import { Devices } from '../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-popup-exam-info',
@@ -30,6 +31,7 @@ export class PopupExamInfoComponent implements OnInit {
   loading: boolean;
   canApprove: boolean;
   result: any;
+  devices: Devices;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupExamInfoComponent>,
@@ -42,6 +44,7 @@ export class PopupExamInfoComponent implements OnInit {
     this.candidateId = getCandidateId();
     setFlowId();
     setCandidateId();
+    this.devices = this.utilitiesService.getDevice();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
   }

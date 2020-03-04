@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
@@ -54,6 +54,7 @@ export class TalentPoolListComponent implements OnInit {
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
@@ -68,6 +69,12 @@ export class TalentPoolListComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.activatedRoute.params.subscribe(params => {
+    //   if (params._id && params.jrs) {
+    //     let arr = params.jrs.split(',');
+
+    //   }
+    // })
     this.keyword = '';
     this.paging = {
       length: 0,

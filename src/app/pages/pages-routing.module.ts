@@ -105,6 +105,10 @@ const routes: Routes = [
         path: 'talent-pool/list',
         component: TalentPoolListComponent,
       },
+      // {
+      //   path: 'talent-pool/list/:id/:jrs',
+      //   component: TalentPoolListComponent,
+      // },
       {
         path: 'talent-pool/detail',
         component: TalentPoolDetailComponent,

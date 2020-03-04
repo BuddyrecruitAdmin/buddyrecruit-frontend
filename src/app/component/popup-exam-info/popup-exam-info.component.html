@@ -34,11 +34,11 @@
   </nb-card-body>
   <nb-card-footer>
     <div class="footer-collapse">
-      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()"
+    <button nbButton status="primary" (click)="save()" [size]="(devices.isMobile)? 'tiny' : 'medium'"
       [disabled]="!canApprove && (!availableDate && !afterSignContract)">SAVE</button>
-    <button *ngIf="canApprove" nbButton status="success" (click)="examTaken()"
+    <button *ngIf="canApprove" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" (click)="examTaken()"
       [disabled]="!availableDate && !afterSignContract">
       EXAM TAKEN
     </button>
