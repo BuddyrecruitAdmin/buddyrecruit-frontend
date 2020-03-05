@@ -372,7 +372,6 @@ export class PopupCvComponent implements OnInit {
   }
 
   checkCV(id) {
-    window.open("url","_blank");
     this.jdService.originalCV(id, this.role._id)
       .subscribe(data =>
         this.downloadFile(data), error =>
@@ -383,7 +382,9 @@ export class PopupCvComponent implements OnInit {
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
-    window.open(url,"_blank");
+    var windowReference = window.open();
+    windowReference.location.href = url;
+    // window.open(url, "_blank");
   }
 
   openApplication(id: any) {
