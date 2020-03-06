@@ -382,9 +382,11 @@ export class PopupCvComponent implements OnInit {
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
-    var windowReference = window.open();
-    windowReference.location.href = url;
-    // window.open(url, "_blank");
+    // var windowReference = window.open();
+    // windowReference.location.href = url;
+    window.open(url, "_system");
+    // window.location.assign(url);
+
   }
 
   openApplication(id: any) {
