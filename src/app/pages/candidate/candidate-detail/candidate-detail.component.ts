@@ -712,7 +712,8 @@ export class CandidateDetailComponent implements OnInit {
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
-    window.open(url);
+    // window.open(url);
+    window.location.assign(url);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

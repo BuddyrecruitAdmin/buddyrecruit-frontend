@@ -384,7 +384,9 @@ export class PopupCvComponent implements OnInit {
     const url = window.URL.createObjectURL(data);
     // var windowReference = window.open();
     // windowReference.location.href = url;
-    window.open(url, "_blank");
+    window.open(url, "_system");
+    // window.location.assign(url);
+
   }
 
   openApplication(id: any) {
