@@ -72,10 +72,11 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MatFormFieldModule
 } from '@angular/material';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TagInputModule } from 'ngx-chips';
-
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { SettingComponent } from './setting.component';
 import { CompanyListComponent } from './company/company-list/company-list.component';
 import { CompanyTypeComponent } from './company-type/company-type.component';
@@ -99,6 +100,8 @@ import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation
 import { BlacklistComponent } from './blacklist/blacklist.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 @NgModule({
   declarations: [
     SettingComponent,
@@ -198,7 +201,11 @@ import { HttpClientModule } from '@angular/common/http';
 
     AngularEditorModule,
     TagInputModule,
-    HttpClientModule
+    HttpClientModule,
+    Ng2SearchPipeModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    NgxMatSelectSearchModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

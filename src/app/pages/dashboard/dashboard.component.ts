@@ -333,7 +333,7 @@ export class DashboardComponent implements OnInit {
 				backgroundColor: color,
 				pointRadius: 100
 			});
-			console.log(this.bubbleChartData)
+			// console.log(this.bubbleChartData)
 			if (maxScaleX < percentX) {
 				maxScaleX = percentX;
 			}
