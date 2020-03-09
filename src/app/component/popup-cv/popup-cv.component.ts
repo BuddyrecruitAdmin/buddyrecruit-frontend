@@ -87,7 +87,6 @@ export class PopupCvComponent implements OnInit {
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
     this.devices = this.utilitiesService.getDevice();
-    console.log(this.devices)
   }
 
   ngOnInit() {
@@ -384,13 +383,13 @@ export class PopupCvComponent implements OnInit {
     const url = window.URL.createObjectURL(data);
     // var windowReference = window.open();
     // windowReference.location.href = url;
-    window.open(url, "_system");
-    // window.location.assign(url);
+    // window.open(url, "_system");
+    window.location.assign(url);//open in current tab not new tab
 
   }
 
   openApplication(id: any) {
-    const path = '/employer/appform/view/' + id;
+    const path = '/appform/view/' + id;
     this.router.navigate([path])
   }
 

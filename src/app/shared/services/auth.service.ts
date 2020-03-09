@@ -25,7 +25,9 @@ import {
   Notification,
   NotifIndex,
   LangPath,
-  Language
+  Language,
+  allList,
+  allListName
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -281,4 +283,20 @@ export function setLanguage(language: any = null) {
 export function getLanguage() {
   const language = JSON.parse(localStorage.getItem(Language));
   return (!language || language === null) ? undefined : language;
+}
+export function setAllList(all: any = null) {
+  localStorage.setItem(allList, JSON.stringify(all));
+}
+
+export function getAllList() {
+  const all = JSON.parse(localStorage.getItem(allList));
+  return (!all || all === null) ? undefined : all;
+}
+export function setAllListName(allName: any = null) {
+  localStorage.setItem(allListName, JSON.stringify(allName));
+}
+
+export function getAllListName() {
+  const allName = JSON.parse(localStorage.getItem(allListName));
+  return (!allName || allName === null) ? undefined : allName;
 }

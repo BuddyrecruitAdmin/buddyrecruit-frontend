@@ -253,7 +253,7 @@ export class AppFormComponent implements OnInit {
           isSelected: false,
         },
         {
-          source: "JobsDB",
+          source: "Job Board",
           isSelected: false,
         },
         {
@@ -266,6 +266,11 @@ export class AppFormComponent implements OnInit {
         },
         {
           source: "WEBSITE",
+          isSelected: false,
+          remark: ""
+        },
+        {
+          source: "Other",
           isSelected: false,
           remark: ""
         },

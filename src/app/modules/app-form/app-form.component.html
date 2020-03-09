@@ -45,7 +45,7 @@
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
-            <label class="label">{{'NICKNAME' | translate }}<small class="text-red">*</small></label>
+            <label class="label">{{'NICKNAME' | translate }}</label>
             <input type="text" [formControl]="nickname" [(ngModel)]="appforms.nickname" nbInput fullWidth>
             <small *ngIf="touched && nickname.errors" class="text-red">{{ sErrorNickName }}</small>
           </div>
@@ -62,7 +62,7 @@
         </div>
         <div class="col-md-4 col-lg-4">
           <div class="form-control-group">
-            <label class="label">{{'SALARY' | translate }}<small class="text-red">*</small></label>
+            <label class="label">{{'SALARY' | translate }}</label>
             <input type="number" [formControl]="salary" [(ngModel)]="appforms.salary" nbInput fullWidth>
             <small *ngIf="touched && salary.errors" class="text-red">{{ sErrorSalary }}</small>
           </div>
@@ -624,10 +624,16 @@
           </mat-checkbox>
         </div>
       </div>
-      <div class="row">
+      <div *ngIf="appforms.knowCompanyFrom[4].isSelected" class="row">
         <div class="col-md-4 col-lg-4  offset-md-8">
-          <input *ngIf="appforms.knowCompanyFrom[4].isSelected" [disabled]="!edtiable" type="text"
-            [(ngModel)]="appforms.knowCompanyFrom[4].remark" placeholder="remark" nbInput fullWidth>
+          <input [disabled]="!edtiable" type="text" [(ngModel)]="appforms.knowCompanyFrom[4].remark"
+            placeholder="remark" nbInput fullWidth>
+        </div>
+      </div>
+      <div *ngIf="appforms.knowCompanyFrom[5]?.isSelected" class="row">
+        <div class="col-md-4 col-lg-4  offset-md-8">
+          <input [disabled]="!edtiable" type="text" [(ngModel)]="appforms.knowCompanyFrom[5].remark"
+            placeholder="remark" nbInput fullWidth>
         </div>
       </div>
       <br>
@@ -662,12 +668,13 @@
           </div>
         </div>
         <div class="col-lg-7" *ngIf="appforms.contagiousDisease.answer">
-          <input type="text" [(ngModel)]="appforms.contagiousDisease.remark" placeholder="remark" nbInput fullWidth>
+          <input type="text" [(ngModel)]="appforms.contagiousDisease.remark" [disabled]="!edtiable" placeholder="remark"
+            nbInput fullWidth>
         </div>
       </div>
       <small *ngIf="touched && sick.errors" class="text-red">{{ sErrorSick }}</small><br>
       <!-- Introduce -->
-      <label>{{ 'REMARK' | translate }}<small class="text-red">*</small></label>
+      <label>{{ 'REMARK' | translate }}</label>
       <div class="row">
         <div class="col-lg-12">
           <textarea [formControl]="aboutSelf" type="" nbInput fullWidth>{{ appforms.aboutYourself }}</textarea>

@@ -229,7 +229,7 @@ export class SignContractListComponent implements OnInit {
   }
 
   navigate(link: string) {
-    console.log(link);
+    // console.log(link);
     this.router.navigate([link]);
   }
 

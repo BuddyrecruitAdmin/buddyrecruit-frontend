@@ -204,7 +204,8 @@
               </div>
 
               <!-- Mobile -->
-              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" *ngIf="devices.isMobile"
+              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                *ngIf="devices.isMobile && role.refCompany.transferable"
                 style="color:white;background: #A0A0A0;border-color: #A0A0A0; text-align: left;" nbTooltip="Transfer"
                 (click)="openPopupTransfer(item)">
                 <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
@@ -217,7 +218,8 @@
                   position="top right"></nb-badge>
               </button>
               <!-- Desktop -->
-              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" *ngIf="!devices.isMobile"
+              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                *ngIf="!devices.isMobile && role.refCompany.transferable"
                 style="color:white;background: #A0A0A0;border-color: #A0A0A0;" nbTooltip="Transfer"
                 (click)="openPopupTransfer(item)">
                 <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>

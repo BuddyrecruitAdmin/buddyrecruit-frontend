@@ -713,7 +713,7 @@ export class CandidateDetailComponent implements OnInit {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
     // window.open(url);
-    window.location.assign(url);
+    window.location.assign(url);//open in current tab not new tab
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
