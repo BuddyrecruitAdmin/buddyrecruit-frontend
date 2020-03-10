@@ -367,7 +367,7 @@
       <nb-icon icon="close-circle"></nb-icon>
     </button>
     <button *ngIf="condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary"
-      nbTooltip="Revoke" (click)="revoke(item)">
+      [nbTooltip]="(item.blacklist)? 'unblock' : 'revoke'" (click)="revoke(item)">
       <nb-icon icon="undo"></nb-icon>
     </button>
   </nb-card-footer>
