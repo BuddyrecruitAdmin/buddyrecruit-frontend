@@ -507,14 +507,26 @@ export class CandidateDetailComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.candidateFlowRevoke(item.candidateFlow._id, item.candidateFlow.refStage._id).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.getDetail();
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
+        if (item.candidateFlow.reject.flag) {
+          this.service.candidateFlowRevoke(item.candidateFlow._id, item.candidateFlow.refStage._id).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.getDetail();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
+        if (item.blacklist === true) {
+          this.service.candidateUnblock(item._id, item.candidateFlow._id).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.getDetail();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
       }
     });
   }
