@@ -55,6 +55,7 @@ export const API_ENDPOINT = {
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",
+    // LIST_JR: "transfer/inform"
   },
   PENDING_EXAM: {
     LIST: "pendingExam/list",

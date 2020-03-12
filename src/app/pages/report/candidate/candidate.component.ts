@@ -45,6 +45,11 @@ export class CandidateComponent implements OnInit {
       department: any,
     }
   };
+  filteredList: any;
+  filteredList2: any;
+  filteredList3: any;
+  filteredList4: any;
+  filteredList5: any;
   constructor(
     private service: ReportService,
     private departService: DepartmentService,
@@ -54,6 +59,11 @@ export class CandidateComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
+    if (this.devices.isMobile) {
+      this.changeLayout(true);
+    } else {
+      this.changeLayout(false);
+    }
   }
 
   ngOnInit() {
@@ -196,6 +206,9 @@ export class CandidateComponent implements OnInit {
         this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value")
         this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
         this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
+        this.filteredList3 = this.filter.data.jobStatus.slice();
+        this.filteredList4 = this.filter.data.stage.slice();
+        this.filteredList5 = this.filter.data.subStage.slice();
         // this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
         this.items.map(item => {
           switch (item.refJR.refStatus.name) {
@@ -235,6 +248,7 @@ export class CandidateComponent implements OnInit {
           })
         })
         this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value");
+        this.filteredList = this.filter.data.department.slice();
       }
     })
     this.service.getPositionList().subscribe(response => {
@@ -246,6 +260,7 @@ export class CandidateComponent implements OnInit {
           })
         });
         this.filter.data.jobPosition = this.removeDuplicates(this.filter.data.jobPosition, "value");
+        this.filteredList2 = this.filter.data.jobPosition.slice();
       }
     })
   }

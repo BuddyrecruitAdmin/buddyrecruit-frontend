@@ -39,10 +39,12 @@
       </small>
     </div>
     <div class="footer-collapse">
-      <button nbButton status="default" (click)="ref.close(result)">CANCEL</button>
+      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+        (click)="ref.close(result)">CANCEL</button>
     </div>
-    <button nbButton status="primary" (click)="save()" [disabled]="!signDate || !signTime || !agreeDate">SAVE</button>
-    <button nbButton status="success" (click)="sendEmail()"
+    <button nbButton status="primary" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="save()"
+      [disabled]="!signDate || !signTime || !agreeDate">SAVE</button>
+    <button nbButton status="success" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="sendEmail()"
       [disabled]="!signDate || !signTime || !agreeDate || !emailCandidate">SEND
       EMAIL</button>
   </nb-card-footer>

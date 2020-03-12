@@ -13,6 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import * as _ from 'lodash';
+import { Devices } from '../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-popup-reject',
@@ -34,7 +35,7 @@ export class PopupRejectComponent implements OnInit {
   history: any;
   loading: boolean;
   result: boolean = false;
-
+  devices: Devices;
   constructor(
     private service: PopupRejectService,
     private candidateService: CandidateService,
@@ -49,8 +50,13 @@ export class PopupRejectComponent implements OnInit {
     this.candidateId = getCandidateId();
     setFlowId();
     setCandidateId();
-    this.innerWidth = window.innerWidth * 0.4;
     this.innerHeight = window.innerHeight * 0.8;
+    this.devices = this.utilitiesService.getDevice();
+    if (this.devices.isMobile) {
+      this.innerWidth = window.innerWidth * 0.8;
+    } else {
+      this.innerWidth = window.innerWidth * 0.4;
+    }
   }
 
   ngOnInit() {

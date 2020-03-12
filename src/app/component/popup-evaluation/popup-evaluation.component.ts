@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import * as _ from 'lodash';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { Devices } from '../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-popup-evaluation',
@@ -27,6 +28,7 @@ export class PopupEvaluationComponent implements OnInit {
   scoring: any;
   editable: boolean;
   state: string;
+  devices: Devices;
   constructor(
     private candidateService: CandidateService,
     private evaluationService: EvaluationService,
@@ -40,8 +42,9 @@ export class PopupEvaluationComponent implements OnInit {
     this.candidateId = getCandidateId();
     setFlowId();
     setCandidateId();
-    this.innerWidth = window.innerWidth * 0.55;
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.9;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

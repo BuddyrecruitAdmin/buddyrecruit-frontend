@@ -43,7 +43,7 @@ export class ForgotComponent implements OnInit {
 
   forgot(value) {
     this.touched = true;
-    console.log(this.emailForm.valid);
+    // console.log(this.emailForm.valid);
     if (this.emailForm.valid) {
       this.forgotService.submitEmail(value.email).subscribe(response => {
         if (response.code === ResponseCode.Success) {

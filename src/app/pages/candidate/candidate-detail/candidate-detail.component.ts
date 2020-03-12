@@ -352,6 +352,7 @@ export class CandidateDetailComponent implements OnInit {
               }
               break;
             case 601:
+              debugger
               this.condition.icon.onboard = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
@@ -359,12 +360,14 @@ export class CandidateDetailComponent implements OnInit {
               } else {
                 if (!item.email) {
                   this.condition.button.errMsg = "Email not found, Can't send email to candidate.";
-                } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
-                  this.condition.button.disabled = true;
-                  this.condition.button.errMsg = ' date is not arrived';
-                } else if (!item.candidateFlow.onboard.mail.flag) {
+                }
+                if (!item.candidateFlow.onboard.mail.flag) {
                   this.condition.button.disabled = true;
                   this.condition.button.errMsg = ' Plesae send email in onboard info';
+                }
+                if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+                  this.condition.button.disabled = true;
+                  this.condition.button.errMsg = ' date is not arrived';
                 }
               }
               break;
@@ -504,14 +507,26 @@ export class CandidateDetailComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.candidateFlowRevoke(item.candidateFlow._id, item.candidateFlow.refStage._id).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.getDetail();
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
+        if (item.candidateFlow.reject.flag) {
+          this.service.candidateFlowRevoke(item.candidateFlow._id, item.candidateFlow.refStage._id).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.getDetail();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
+        if (item.blacklist === true) {
+          this.service.candidateUnblock(item._id, item.candidateFlow._id).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.getDetail();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
       }
     });
   }
@@ -527,7 +542,8 @@ export class CandidateDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       if (result) {
-        this.getDetail();
+        // this.getDetail();
+        this.router.navigate(['/employer/talent-pool/list']);
       }
     });
   }
@@ -708,7 +724,8 @@ export class CandidateDetailComponent implements OnInit {
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
-    window.open(url);
+    // window.open(url);
+    window.location.assign(url);//open in current tab not new tab
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

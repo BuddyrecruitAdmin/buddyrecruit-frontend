@@ -46,7 +46,8 @@ export class ExamListComponent implements OnInit {
     }
   };
   showStepper: boolean;
-
+  filteredList: any;
+  filteredList2: any;
   constructor(
     private router: Router,
     private service: ExamService,
@@ -118,15 +119,17 @@ export class ExamListComponent implements OnInit {
     this.items = [];
     this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        let itemIndex = 0;
         response.data.map(element => {
           if (element.requiredExam) {
-            this.items.push(element)
+            this.items.push(element);
+            itemIndex++;
           }
         });
         this.items.map(item => {
           item.daysBeforeExpire = this.utilitiesService.calculateDuration2Date(new Date(), item.duration.endDate);
         });
-        this.paging.length = response.totalDataSize;
+        this.paging.length = itemIndex;
         if (!this.filter.data.departments.length) {
           response.filter.departments.forEach(department => {
             this.filter.data.departments.push({
@@ -152,6 +155,7 @@ export class ExamListComponent implements OnInit {
               }
             });
           });
+          this.filteredList = this.filter.data.departments.slice();
         }
       }
       this.loading = false;
@@ -204,6 +208,7 @@ export class ExamListComponent implements OnInit {
           }
         });
       }
+      this.filteredList2 = this.filter.data.divisions.slice();
     }
     this.search();
   }

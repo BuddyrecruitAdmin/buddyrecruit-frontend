@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { setUserEmail, getUserEmail } from '../../shared/services/auth.service';
-
+import { Devices } from '../../shared/interfaces/common.interface';
+import { UtilitiesService } from '../../shared/services/utilities.service';
 @Component({
   selector: 'ngx-popup-message',
   templateUrl: './popup-message.component.html',
@@ -9,8 +10,10 @@ import { setUserEmail, getUserEmail } from '../../shared/services/auth.service';
 })
 export class PopupMessageComponent implements OnInit {
   userEmail: any;
+  devices: Devices;
   constructor(
     public dialogRef: MatDialogRef<PopupMessageComponent>,
+    private utilitiesService: UtilitiesService,
     @Inject(MAT_DIALOG_DATA) public data: {
       type: string,
       title: string,
@@ -21,9 +24,11 @@ export class PopupMessageComponent implements OnInit {
   ) {
     this.userEmail = getUserEmail();
     setUserEmail();
-   }
+    this.devices = this.utilitiesService.getDevice();
+  }
 
   ngOnInit() {
+    // console.log(this.data)
     switch (this.data.type) {
       case "C": { // Confirmation
         this.data.title = this.data.title || "Confirmation";

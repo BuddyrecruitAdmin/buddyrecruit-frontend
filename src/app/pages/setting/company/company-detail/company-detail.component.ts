@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { CompanyService } from '../company.service';
 import { CompanyTypeService } from '../../company-type/company-type.service';
 import { ResponseCode, Paging, State } from '../../../../shared/app.constants';
 import { MESSAGE } from '../../../../shared/constants/message';
 import { DropDownValue, Address } from '../../../../shared/interfaces/common.interface';
-import { getRole, getContactId, setContactId } from '../../../../shared/services/auth.service';
+import { getRole, getContactId, setContactId, setAllList, setAllListName } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
+import { PopupSearchDropdownComponent } from '../../../../component/popup-search-dropdown/popup-search-dropdown.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { ContactUsService } from '../../contact-us/contact-us.service';
-
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
 export interface CompanyDetail {
   refCompanyType: any;
   name: string;
@@ -84,7 +85,8 @@ export interface ErrMsg {
 @Component({
   selector: 'ngx-company-detail',
   templateUrl: './company-detail.component.html',
-  styleUrls: ['./company-detail.component.scss']
+  styleUrls: ['./company-detail.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CompanyDetailComponent implements OnInit {
   refHero: any;
@@ -102,6 +104,10 @@ export class CompanyDetailComponent implements OnInit {
   buttonLoading: boolean;
   editabled: boolean;
   bigAdmin: DropDownValue[];
+  htmlToAdd: any;
+  inputCheck: boolean = false;
+  searchText: any;
+  filteredList5: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -111,10 +117,12 @@ export class CompanyDetailComponent implements OnInit {
     public matDialog: MatDialog,
     private utilitiesService: UtilitiesService,
     private contactUsService: ContactUsService,
+    private dialogService: NbDialogService,
   ) {
     this.role = getRole();
     this.contactId = getContactId();
     setContactId();
+    this.htmlToAdd = '<div class="two">twoๅ<input id="input" type="number"></div>';
   }
 
   ngOnInit() {
@@ -154,6 +162,20 @@ export class CompanyDetailComponent implements OnInit {
       });
     });
   }
+
+  // testOpen() {
+  //   if (!this.inputCheck) {
+  //     setTimeout(() => {
+  //       var options = document.getElementById("options");
+  //       options.innerHTML = options.innerHTML + "<input type='text' style='height: 40px;width: -webkit-fill-available;' (input)='onSearchChange($event.target.value)' nbInput>"
+  //     }, 100);
+  //     this.inputCheck = true;
+  //   }
+  // }
+
+  // onSearchChange(event) {
+  //   console.log(event,"dd")
+  // }
 
   initialModel(): CompanyDetail {
     return {
@@ -327,7 +349,6 @@ export class CompanyDetailComponent implements OnInit {
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }
       }
-      this.loading = false;
     });
     this.service.getListAdmin(this._id).subscribe(res => {
       if (res.code === ResponseCode.Success) {
@@ -345,8 +366,12 @@ export class CompanyDetailComponent implements OnInit {
           }
           if (element.refAuthorize.isDefault) {
             this.companyDetail.adminEmail = element._id;
+            this.loading = false;
+          } else {
+            this.loading = false;
           }
         });
+        this.filteredList5 = this.bigAdmin.slice();
       }
     })
   }
@@ -374,6 +399,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   save() {
+    console.log(this.companyDetail.adminEmail)
     if (this.validation()) {
       this.buttonLoading = true;
       const request = this.setRequest();
@@ -548,6 +574,21 @@ export class CompanyDetailComponent implements OnInit {
       request.refParent = undefined;
     }
     return request;
+  }
+
+  openSearch() {
+    setAllList(this.bigAdmin);
+    setAllListName("Admin Company");
+    this.dialogService.open(PopupSearchDropdownComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      if (result.value) {
+        this.companyDetail.adminEmail = result.value;
+      }
+    })
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

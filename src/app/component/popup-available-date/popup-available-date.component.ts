@@ -7,6 +7,7 @@ import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { isSameDay, isPast, isDate, isToday, areRangesOverlapping } from 'date-fns';
+import { Devices } from '../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-popup-available-date',
@@ -15,6 +16,7 @@ import { isSameDay, isPast, isDate, isToday, areRangesOverlapping } from 'date-f
 })
 export class PopupAvailableDateComponent implements OnInit {
   innerHeight: any;
+  innerWidth: any;
   role: any;
   loading: boolean;
   calendarData: any;
@@ -25,6 +27,7 @@ export class PopupAvailableDateComponent implements OnInit {
   errMsg: string;
   minuteStep = 30;
   candidateName: any;
+  devices: Devices;
   constructor(
     private calendarService: CalendarService,
     public ref: NbDialogRef<PopupAvailableDateComponent>,
@@ -35,6 +38,8 @@ export class PopupAvailableDateComponent implements OnInit {
     this.date = getDate();
     this.innerHeight = window.innerHeight * 0.8;
     setDate();
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard()
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {

@@ -55,8 +55,8 @@
               <label [nbTooltip]="item.name">{{ item.name }}</label>
             </div>
             <div class="actions">
-              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                [routerLink]="'/employer/setting/department-detail/'+item._id">
+              <nb-icon *ngIf="role.refAuthorize.configuration.department.editable" icon="edit-outline" class="link"
+                nbTooltip="Edit" [routerLink]="'/employer/setting/department-detail/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)"
                 *ngIf="!item.active && item.isUsed">

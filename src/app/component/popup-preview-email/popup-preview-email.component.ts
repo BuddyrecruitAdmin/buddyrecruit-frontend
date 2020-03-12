@@ -10,6 +10,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupCvComponent } from '../../component/popup-cv/popup-cv.component';
 import { NbDialogService } from '@nebular/theme';
+import { Devices } from '../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-popup-preview-email',
   templateUrl: './popup-preview-email.component.html',
@@ -34,6 +35,7 @@ export class PopupPreviewEmailComponent implements OnInit {
   checkedEmail: any;
   haveEmail: any;
   disMail: boolean = false;
+  devices: Devices;
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupPreviewEmailComponent>,
@@ -61,6 +63,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     setCandidateId();
     setButtonId();
     setUserEmail();
+    this.devices = this.utilitiesService.getDevice();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
   }
@@ -125,15 +128,15 @@ export class PopupPreviewEmailComponent implements OnInit {
         contents.push(`JR: ${found.refJR.refJD.position} - Department: ${found.refJR.departmentName} แล้ว`);
       } else {
         type = 'W';
-        contents.push('พบผู้สมัครอยู่หลาย JR ดังต่อไปนี้');
-        data.otherJR.map((element, index) => {
-          contents.push(`${index + 1}. JR: ${element.refJR.refJD.position} - Department: ${element.refJR.departmentName} (${element.refStage.refMain.name})`);
-        });
         if (!this.haveEmail) {
           contents.push('***ไม่พบอีเมลของผู้สมัคร*** ');
         } else {
           setUserEmail(this.haveEmail);
         }
+        contents.push('พบผู้สมัครอยู่หลาย JR ดังต่อไปนี้');
+        data.otherJR.map((element, index) => {
+          contents.push(`${index + 1}. JR: ${element.refJR.refJD.position} - Department: ${element.refJR.departmentName} (${element.refStage.refMain.name})`);
+        });
         contents.push('คุณต้องการทำรายการต่อหรือไม่ ?');
       }
     } else

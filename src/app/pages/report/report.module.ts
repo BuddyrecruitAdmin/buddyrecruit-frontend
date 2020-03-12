@@ -74,7 +74,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ReportComponent } from './report.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { FeedbackComponent } from './feedback/feedback.component';
-
+import { MatSelectFilterModule } from 'mat-select-filter';
 @NgModule({
   declarations: [
     ReportComponent,
@@ -147,7 +147,8 @@ import { FeedbackComponent } from './feedback/feedback.component';
     NbDialogModule.forRoot(),
     NbWindowModule.forChild(),
     NbAccordionModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    MatSelectFilterModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

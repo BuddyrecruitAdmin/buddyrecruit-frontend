@@ -573,7 +573,50 @@
     }
   }
 
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: #edf1f7;
+    background-color: #F7F9FC;
+    border-radius: 5px;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: #35C4B2;
+  }
+  .select-red{
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      color: var(--color-red);
+    }
+  }
+  .select-disabled{
+    cursor: not-allowed;
+  }    
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.2175rem 0.6rem 0.6rem !important;
+  }
+  .mat-select-disabled .mat-select-value {
+    font-weight: 550;
+    font-family: Open Sans, sans-serif;
+    color: #C5CEDF;
+    padding-bottom: 2px;
+}
+  .mat-select .mat-select-value {
+    font-weight: 550;
+    font-family: Open Sans, sans-serif;
+    padding-bottom: 2px;
+}
 
+  .mat-select-arrow-wrapper{
+    padding-top: 5px;
+  }
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+  // .mat-form-field-appearance-outline .mat-form-field-flex {
+  //   background-color: #F7F9FC !important;
+  // }
+  //tem
+  // mat-form-field.mat-form-field {
+  //   cursor: not-allowed;
+  // }
   // --------------------------------------------------------------------
   // CARD
 

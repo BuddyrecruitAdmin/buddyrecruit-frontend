@@ -258,7 +258,15 @@ export class InterviewDetailComponent implements OnInit {
         });
         if (found) {
           condition.icon.interviewScore = true;
-          condition.button.interviewScore = true;
+          if (item.pendingInterviewScoreInfo.evaluation.length) {
+            condition.button.interviewScore = false;
+          } else {
+            condition.button.interviewScore = true
+          }
+        }
+        if (this.tabSelected != 'PENDING') {
+          condition.button.interviewScore = false;
+          condition.icon.interviewScore = false;
         }
       }
       if (step.editable) {
@@ -266,6 +274,7 @@ export class InterviewDetailComponent implements OnInit {
           case 401: // Interview Taken
             if (this.tabSelected === 'PENDING') {
               condition.icon.interviewDate = true;
+              condition.button.interviewScore = false;
               condition.button.reject = true;
               if (this.utilitiesService.dateIsValid(item.pendingInterviewInfo.startDate)
                 && item.pendingInterviewInfo.refLocation
@@ -307,6 +316,7 @@ export class InterviewDetailComponent implements OnInit {
       condition.isExpired = true;
       condition.icon.interviewDate = false;
       condition.icon.interviewScore = false;
+      condition.button.interviewScore = false;
     }
     return condition;
   }

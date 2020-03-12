@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, setFlowId } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, setAllList, setAllListName } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -16,6 +16,8 @@ import { PopupMessageComponent } from '../../../component/popup-message/popup-me
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
+import { PopupSearchDropdownComponent } from '../../../component/popup-search-dropdown/popup-search-dropdown.component';
+
 @Component({
   selector: 'ngx-jr-detail',
   templateUrl: './jr-detail.component.html',
@@ -53,7 +55,9 @@ export class JrDetailComponent implements OnInit {
   checkPreview: boolean;
   jobId: any;
   loading: any;
-
+  filteredList: any;
+  filteredList2: any;
+  filteredList3: any;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -131,10 +135,10 @@ export class JrDetailComponent implements OnInit {
   getJobPosition() {
     return new Promise((resolve) => {
       this.JobPosition = [];
-      this.JobPosition.push({
-        label: '- Select Job Position -',
-        value: undefined
-      });
+      // this.JobPosition.push({
+      //   label: '- Select Job Position -',
+      //   value: undefined
+      // });
       this.service.getJobPositionList(this.jobStatus).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
@@ -145,6 +149,7 @@ export class JrDetailComponent implements OnInit {
                 value: element._id
               });
             });
+            this.filteredList = this.JobPosition.slice();
           }
         }
         resolve();
@@ -155,11 +160,11 @@ export class JrDetailComponent implements OnInit {
   getUserList() {
     return new Promise((resolve) => {
       this.Users = [];
-      this.Users.push({
-        label: '- Select Users Interview -',
-        value: undefined,
-        group: 'disabled'
-      });
+      // this.Users.push({
+      //   label: '- Select Users Interview -',
+      //   value: undefined,
+      //   group: 'disabled'
+      // });
       this.dropdownService.getUser().subscribe(res => {
         if (res.code === ResponseCode.Success) {
           res.data.forEach(item => {
@@ -178,10 +183,10 @@ export class JrDetailComponent implements OnInit {
   getEvaluationList() {
     return new Promise((resolve) => {
       this.Evaluation = [];
-      this.Evaluation.push({
-        label: '- Select Evaluation -',
-        value: undefined
-      });
+      // this.Evaluation.push({
+      //   label: '- Select Evaluation -',
+      //   value: undefined
+      // });
       this.service.getEvaluationList().subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
@@ -191,6 +196,7 @@ export class JrDetailComponent implements OnInit {
                 value: element._id
               })
             });
+            this.filteredList3 = this.Evaluation.slice();
           }
         }
       });
@@ -214,6 +220,7 @@ export class JrDetailComponent implements OnInit {
             }
           })
         })
+        this.filteredList2 = this.Users.slice();
       }
     });
   }
@@ -241,8 +248,8 @@ export class JrDetailComponent implements OnInit {
             this.editExam = true;
           }
           if (this.state != State.Create) {
-            this.loading = false;
             this.onChangeJobposition(this.jr.refJD._id);
+
           }
           if (this.state === State.Edit) {
             if (this.jr.refStatus.name === 'Active' || this.jr.refStatus.name === 'Inactive') {
@@ -255,6 +262,7 @@ export class JrDetailComponent implements OnInit {
             }
           }
           this.selectedCheck();
+          this.loading = false;
         }
       }
     })
@@ -413,6 +421,48 @@ export class JrDetailComponent implements OnInit {
     ).onClose.subscribe(result => {
       setFlowId();
     });
+  }
+
+  openSearch(dataList: any, nameField: string, field: any) {
+    setAllListName(nameField);
+    if (field === 'user') {
+      let arr = [];
+      arr.push({
+        label: '',
+        value: undefined,
+        group: undefined
+      })
+      dataList.map((ele, index) => {
+        if (ele.group === "enable") {
+          arr.push({
+            label: ele.label,
+            value: ele.value,
+            group: ele.group
+          })
+        }
+      })
+      dataList = arr;
+    }
+    setAllList(dataList);
+    this.dialogService.open(PopupSearchDropdownComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      if (result.value) {
+        switch (field) {
+          case 'user':
+            this.jr.userInterviews = result.value;
+            break;
+          case 'evaluation':
+            this.jr.refEvaluation = result.value;
+            break;
+          default:
+            break;
+        }
+      }
+    })
   }
 
   setRequest(): any {

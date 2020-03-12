@@ -43,9 +43,9 @@ export class PopupTransferComponent implements OnInit {
     this.innerCardBodyHeight = window.innerHeight * 0.55;
     this.innerCardHeight = window.innerHeight * 0.95;
     this.innerHeight = window.innerHeight * 0.9;
-    if(this.devices.isPC){
-      this.innerWidth = window.innerWidth * 0.75
-    }else{
+    if (this.devices.isPC || this.devices.isNotebook) {
+      this.innerWidth = window.innerWidth * 0.75;
+    } else {
       this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     }
   }
@@ -88,6 +88,14 @@ export class PopupTransferComponent implements OnInit {
         jrId: item._id
       });
       this.transShow.push(item)
+    }
+  }
+
+  transferAll(event) {
+    if (event.checked) {
+      this.items.map(ele => {
+        ele.checkTrans = true;
+      })
     }
   }
 

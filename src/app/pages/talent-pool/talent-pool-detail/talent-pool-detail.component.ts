@@ -174,7 +174,6 @@ export class TalentPoolDetailComponent implements OnInit {
           this.setTabCount(response.count);
         }
         this.loading = false;
-        console.log("Ros")
         resolve();
       });
     })

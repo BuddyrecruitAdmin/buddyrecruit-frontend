@@ -43,4 +43,12 @@ export class TalentPoolService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.BUY_CV, body);
   }
 
+  // getListJR(_id: string, jrs: any = undefined): Observable<ApiResponse> {
+  //   const body = {
+  //     candidateFlowId: _id,
+  //     JRs: jrs
+  //   };
+  //   return this.post(API_ENDPOINT.TALENT_POOL.LIST_JR, body);
+  // }
+
 }

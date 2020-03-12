@@ -54,10 +54,11 @@
                 </label>
                 <small class="status">
                   <span>
-                    Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
-                  </span>
+                    Status: <label class="label label-gray" style="word-wrap: break-word;
+                    white-space: initial;">{{ item.refStage?.name || item.refStage }}</label>
+                  </span><br *ngIf="devices.isMobile">
                   <span>
-                    | Source:
+                    <span *ngIf="!devices.isMobile">|</span> Source:
                     <label class="label"
                       [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
                   </span>
@@ -162,36 +163,61 @@
             </nb-card-body>
             <nb-card-footer>
               <div class="footer-collapse">
-                <button *ngIf="item.collapse" nbButton outline shape="round" size="small" status="default"
-                  (click)="item.collapse = !item.collapse" nbTooltip="Expand">
+                <button *ngIf="item.collapse && !devices.isMobile" nbButton outline shape="round" size="small"
+                  status="default" (click)="item.collapse = !item.collapse" nbTooltip="Expand">
                   <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
                 </button>
-                <button *ngIf="!item.collapse" nbButton outline shape="round" size="small" status="default"
-                  (click)="item.collapse = !item.collapse" nbTooltip="Collapse">
+                <button *ngIf="!item.collapse && !devices.isMobile" nbButton outline shape="round" size="small"
+                  status="default" (click)="item.collapse = !item.collapse" nbTooltip="Collapse">
                   <nb-icon icon="arrow-ios-upward-outline"></nb-icon>
                 </button>
+                <div *ngIf="item.collapse && devices.isMobile"
+                  style="padding-top: 5px;border-radius: 15px;border: 1px solid #edf1f7;">
+                  <nb-icon (click)="item.collapse = !item.collapse" icon="arrow-ios-downward-outline"></nb-icon>
+                </div>
+                <div *ngIf="!item.collapse && devices.isMobile"
+                  style="padding-top: 5px;border-radius: 15px;border: 1px solid #edf1f7;">
+                  <nb-icon (click)="item.collapse = !item.collapse" icon="arrow-ios-upward-outline"
+                    nbTooltip="Collapse"></nb-icon>
+                </div>
               </div>
 
-              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="transfer"
+              <!-- Mobile -->
+              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                *ngIf="devices.isMobile && role.refCompany.transferable"
+                style="color:white;background: #A0A0A0;border-color: #A0A0A0; text-align: left;" nbTooltip="Transfer"
                 (click)="openPopupTransfer(item)">
                 <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
               </button>
-              <button *ngIf="item.condition.button.comment" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                status="info" nbTooltip="Comment" (click)="openPopupComment(item)">
+              <button *ngIf="item.condition.button.comment && devices.isMobile" nbButton style="text-align: left;"
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
+                (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
+                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
                   position="top right"></nb-badge>
               </button>
-              <br *ngIf="devices.isMobile">
+              <!-- Desktop -->
+              <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                *ngIf="!devices.isMobile && role.refCompany.transferable"
+                style="color:white;background: #A0A0A0;border-color: #A0A0A0;" nbTooltip="Transfer"
+                (click)="openPopupTransfer(item)">
+                <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
+              </button>
+              <button *ngIf="item.condition.button.comment && !devices.isMobile" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
+                (click)="openPopupComment(item)">
+                <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
+                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                  position="top right"></nb-badge>
+              </button>
               <button *ngIf="item.condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
                 status="success" [nbTooltip]="item.condition.button.step.button"
-                (click)="approve(item, item.condition.button.step)" [disabled]="item.condition.isExpired">
+                (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}
                 </span>
               </button>
-
               <button *ngIf="item.condition.button.interviewDate" nbButton
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" [nbTooltip]="item.refStage?.name"
                 (click)="openPopupAppointmentDate(item)" [disabled]="item.condition.isExpired">
@@ -200,17 +226,14 @@
                   {{ item.refJR?.refStatus?.name }}
                 </span>
               </button>
-
               <button *ngIf="item.condition.button.reject" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
                 status="danger" nbTooltip="Reject" (click)="reject(item)">
                 <nb-icon icon="close-circle"></nb-icon>
               </button>
-
               <button *ngIf="item.condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
                 status="primary" nbTooltip="Revoke" (click)="revoke(item)">
                 <nb-icon icon="undo"></nb-icon>
               </button>
-
             </nb-card-footer>
           </nb-card>
           <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"

@@ -13,7 +13,7 @@
 </div>
 
 <nb-card>
-  <nb-card-body>
+  <nb-card-body class="body-card">
     <div class="row">
       <div class="col-xs-12 col-md-6 ">
         <div class="input-group">
@@ -42,26 +42,47 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">
-            <nb-select multiple fullWidth [(selected)]="filter.selected.departments"
+            <label class="label">Department</label>
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.departments" (ngModelChange)="changeFilter(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                    [array]="filter.data.departments" (filteredReturn)="filteredList =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <!-- <nb-select multiple fullWidth [(selected)]="filter.selected.departments"
               (selectedChange)="changeFilter(true)" placeholder="Department">
               <nb-option *ngFor="let option of filter.data.departments" [value]="option.value">
                 {{ option.label }}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-control-group">
-            <nb-select multiple fullWidth [(selected)]="filter.selected.divisions"
+            <label class="label">Division</label>
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.divisions" (ngModelChange)="changeFilter(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.divisions"
+                    (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList2" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <!-- <nb-select multiple fullWidth [(selected)]="filter.selected.divisions"
               (selectedChange)="changeFilter(false)" placeholder="Division">
               <nb-option *ngFor="let option of filter.data.divisions" [value]="option.value">
                 {{ option.label }}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
         <div class="col-md-4">
-          <div class="form-control-group">
+          <div class="form-control-group" style="margin-top: 3px;">
+            <br> 
             <button nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
               Clear Filter
             </button>

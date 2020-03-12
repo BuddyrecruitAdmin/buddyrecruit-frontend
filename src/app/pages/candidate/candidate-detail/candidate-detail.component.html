@@ -18,9 +18,9 @@
       <small class="status">
         <span>
           Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
-        </span>
+        </span><br *ngIf="devices.isMobile">
         <span>
-          | Source:
+          <span *ngIf="!devices.isMobile">|</span> Source:
           <label class="label"
             [ngClass]="utilitiesService.sourcingColors(item.candidateFlow?.refSource?.key)">{{ item.candidateFlow?.refSource?.name || 'Email' }}</label>
         </span>
@@ -328,7 +328,7 @@
       </label>
     </div>
   </nb-card-body>
-  <nb-card-footer>
+  <nb-card-footer style="padding-left: 0px;padding-right: 6px;">
     <div class="float-left">
       <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
         status="default" (click)="checkCV(item._id)" nbTooltip="Original CV">
@@ -341,7 +341,8 @@
     </div>
 
     <button *ngIf="condition.button.trans" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
-      nbTooltip="Transfer" (click)="openPopupTransfer(item)">
+      style="color:white;background: #A0A0A0;border-color: #A0A0A0;" nbTooltip="Transfer"
+      (click)="openPopupTransfer(item)">
       <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
     </button>
     <button *ngIf="condition.button.send" ghost nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info"
@@ -355,7 +356,7 @@
         position="top right">
       </nb-badge>
     </button>
-    <br *ngIf="devices.isMobile">
+    <!-- <br *ngIf="devices.isMobile"> -->
     <button *ngIf="condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
       [nbTooltip]="condition.button.step.button" (click)="approve(item, condition.button.step)"
       [disabled]="condition.button.disabled">
@@ -366,7 +367,7 @@
       <nb-icon icon="close-circle"></nb-icon>
     </button>
     <button *ngIf="condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary"
-      nbTooltip="Revoke" (click)="revoke(item)">
+      [nbTooltip]="(item.blacklist)? 'unblock' : 'revoke'" (click)="revoke(item)">
       <nb-icon icon="undo"></nb-icon>
     </button>
   </nb-card-footer>

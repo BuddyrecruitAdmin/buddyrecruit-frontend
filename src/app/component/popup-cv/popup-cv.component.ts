@@ -14,6 +14,7 @@ import { PopupFeedbackComponent } from '../../component/popup-feedback/popup-fee
 import { PopupInterviewResultComponent } from '../../component/popup-interview-result/popup-interview-result.component';
 import * as _ from 'lodash';
 import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
+import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interfaces/common.interface';
 
 @Component({
   selector: 'ngx-popup-cv',
@@ -41,6 +42,7 @@ export class PopupCvComponent implements OnInit {
   checked = false;
   history: any;
   multiJr: any;
+  devices: Devices;
   colorStatus: {
     nameSuccess: boolean,
     nameBug: boolean;
@@ -84,6 +86,7 @@ export class PopupCvComponent implements OnInit {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
+    this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
@@ -378,11 +381,15 @@ export class PopupCvComponent implements OnInit {
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(data);
-    window.open(url);
+    // var windowReference = window.open();
+    // windowReference.location.href = url;
+    // window.open(url, "_system");
+    window.location.assign(url);//open in current tab not new tab
+
   }
 
   openApplication(id: any) {
-    const path = '/employer/appform/view/' + id;
+    const path = '/appform/view/' + id;
     this.router.navigate([path])
   }
 

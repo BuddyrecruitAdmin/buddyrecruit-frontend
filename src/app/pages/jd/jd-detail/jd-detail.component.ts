@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { JdService } from '../jd.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
-import { getRole } from '../../../shared/services/auth.service';
+import { getRole, setAllList, setAllListName } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
 import { DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -22,6 +22,7 @@ import { environment } from '../../../../environments/environment';
 import { saveAs } from "file-saver";
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
 import { UserService } from '../../setting/user/user.service';
+import { PopupSearchDropdownComponent } from '../../../component/popup-search-dropdown/popup-search-dropdown.component';
 
 @Component({
   selector: 'ngx-jd-detail',
@@ -59,9 +60,12 @@ export class JdDetailComponent implements OnInit {
   keyword: string;
   dialogRef: NbDialogRef<any>;
   positionMaster: DropDownValue[];
+  filteredList: any;
   departMentAdmin: DropDownValue[];
+  filteredList2: any;
   divisionOptions: DropDownGroup[];
   divisionAll: DropDownGroup[];
+  filteredList3: any;
   alertType: string;
   alertMessage: string;
   private _alertMessage = new Subject<string>();
@@ -151,7 +155,7 @@ export class JdDetailComponent implements OnInit {
           this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
           this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
           this.jd.departmentId = this.role.departmentId || undefined;
-          if(this.jd.departmentId){
+          if (this.jd.departmentId) {
             this.onChangeDepartment(this.jd.departmentId)
           }
         }
@@ -228,6 +232,7 @@ export class JdDetailComponent implements OnInit {
               }
               return 0;
             });
+            this.filteredList = this.positionMaster.slice();
           }
         }
         resolve();
@@ -268,6 +273,7 @@ export class JdDetailComponent implements OnInit {
                 });
               }
             });
+            this.filteredList2 = this.departMentAdmin.slice();
           }
         }
         resolve();
@@ -340,6 +346,7 @@ export class JdDetailComponent implements OnInit {
       division.forEach(element => {
         this.divisionOptions.push(element);
       });
+      this.filteredList3 = this.divisionOptions.slice();
     } else {
       this.checkDivision = false;
       this.countDivision = 0;
@@ -363,6 +370,7 @@ export class JdDetailComponent implements OnInit {
         division.forEach(element => {
           this.divisionOptions.push(element);
         });
+        this.filteredList3 = this.divisionOptions.slice();
       } else {
         this.checkDivision = false;
         this.countDivision = 0;
@@ -950,6 +958,33 @@ export class JdDetailComponent implements OnInit {
 
   downloadFile(data: any) {
     saveAs(data, this.jd.attachment.originalname);
+  }
+
+  openSearch(dataList: any, nameField: string, field: any) {
+    setAllList(dataList);
+    setAllListName(nameField);
+    this.dialogService.open(PopupSearchDropdownComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      if (result.value) {
+        switch (field) {
+          case 'job':
+            this.jd.refPosition = result.value;
+            break;
+          case 'department':
+            this.jd.departmentId = result.value;
+            break;
+          case 'division':
+            this.jd.divisionId = result.value;
+            break;
+          default:
+            break;
+        }
+      }
+    })
   }
 
   Validation(): boolean {
