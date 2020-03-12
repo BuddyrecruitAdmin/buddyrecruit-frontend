@@ -74,6 +74,7 @@ import {
   MatTreeModule,
   MatFormFieldModule
 } from '@angular/material';
+import { MatSelectFilterModule } from 'mat-select-filter';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TagInputModule } from 'ngx-chips';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
@@ -205,7 +206,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     Ng2SearchPipeModule,
     MatSelectModule,
     MatFormFieldModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatSelectFilterModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

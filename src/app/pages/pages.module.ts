@@ -111,6 +111,7 @@ import { CandidateDetailComponent } from './candidate/candidate-detail/candidate
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { MatSelectFilterModule } from 'mat-select-filter';
 @NgModule({
   imports: [
     CommonModule,
@@ -201,7 +202,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     }),
     NgbModalModule,
     DigitOnlyModule,
-    ImageCropperModule
+    ImageCropperModule,
+    MatSelectFilterModule
   ],
   declarations: [
     PagesComponent,

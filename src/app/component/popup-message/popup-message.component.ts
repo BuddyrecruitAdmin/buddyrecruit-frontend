@@ -28,7 +28,7 @@ export class PopupMessageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.data)
+    // console.log(this.data)
     switch (this.data.type) {
       case "C": { // Confirmation
         this.data.title = this.data.title || "Confirmation";

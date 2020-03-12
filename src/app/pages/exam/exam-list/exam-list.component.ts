@@ -46,7 +46,8 @@ export class ExamListComponent implements OnInit {
     }
   };
   showStepper: boolean;
-
+  filteredList: any;
+  filteredList2: any;
   constructor(
     private router: Router,
     private service: ExamService,
@@ -154,6 +155,7 @@ export class ExamListComponent implements OnInit {
               }
             });
           });
+          this.filteredList = this.filter.data.departments.slice();
         }
       }
       this.loading = false;
@@ -206,6 +208,7 @@ export class ExamListComponent implements OnInit {
           }
         });
       }
+      this.filteredList2 = this.filter.data.divisions.slice();
     }
     this.search();
   }

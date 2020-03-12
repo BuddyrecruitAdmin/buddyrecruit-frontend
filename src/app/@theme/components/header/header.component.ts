@@ -165,7 +165,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     if (this.role && this.role._id) {
       this.pusherService.channel.bind(`counter-${this.role._id}`, data => {
-        console.log('pusherService', data);
+        // console.log('pusherService', data);
         const counter = data.counter;
         if (counter && counter.notification) {
           this.countUnseen = counter.notification.unseen || 0;

@@ -18,27 +18,40 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedJobPo }">
-              <label class="label">Job Position <span style="color:red">*</span></label>
+              <label class="label">Job Position <span style="color:red">*</span>
+              </label>
               <input type="text" name="position" [(ngModel)]="jd.position" [disabled]="checkPreview" nbInput
                 fullWidth />
               <small *ngIf="touchedJobPo" class="text-red">{{ sErrorPosition }}</small>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedJobMail }">
+            <div class="form-control-group"
+              [ngClass]="{ 'select-red': touchedJobMail,'select-disabled': checkPreview }">
               <label class="label">
                 Job Position in job board <span style="color:red">*</span>
                 <small> (Configuration data)</small>
+                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
+                  (click)="openSearch(positionMaster, 'Job Position in job board', 'job')"></nb-icon> -->
                 <!-- <span *ngIf="role.refAuthorize.configuration.jobPosition.editable && !checkPreview" class="float-right">
                   <nb-icon icon="plus-square-outline" class="link text-green"></nb-icon>
                 </span> -->
               </label>
-              <nb-select [(ngModel)]="jd.refPosition" [ngModelOptions]="{ standalone: true }" [disabled]="checkPreview"
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="jd.refPosition" [disabled]="checkPreview">
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="positionMaster"
+                    (filteredReturn)="filteredList =$event"></mat-select-filter>
+                  <mat-option *ngFor="let position of filteredList" [value]="position.value">
+                    {{position.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <nb-select [(ngModel)]="jd.refPosition" [ngModelOptions]="{ standalone: true }" [disabled]="checkPreview"
                 fullWidth>
                 <nb-option [disabled]="checkPreview" *ngFor="let position of positionMaster" [value]="position.value">
                   {{ position.label }}
                 </nb-option>
-              </nb-select>
+              </nb-select> -->
               <small *ngIf="touchedJobMail" class="text-red">{{ sErrorrefCheck }}</small>
             </div>
           </div>
@@ -46,27 +59,53 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedDep }">
-              <label class="label" for="name">Department <span style="color:red">*</span></label>
-              <nb-select [disabled]="checkPreview" [(ngModel)]="jd.departmentId" [ngModelOptions]="{ standalone: true }"
+            <div class="form-control-group" [ngClass]="{ 'select-red': touchedDep,'select-disabled': checkPreview }">
+              <label class="label" for="name">Department <span style="color:red">*</span>
+                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
+                  (click)="openSearch(departMentAdmin, 'Department', 'department')"></nb-icon> -->
+              </label>
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="jd.departmentId" [disabled]="checkPreview"
+                  (ngModelChange)="onChangeDepartment($event)">
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="departMentAdmin"
+                    (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let department of filteredList2" [value]="department.value">
+                    {{department.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <nb-select [disabled]="checkPreview" [(ngModel)]="jd.departmentId" [ngModelOptions]="{ standalone: true }"
                 fullWidth (selectedChange)="onChangeDepartment($event)">
                 <nb-option [disabled]="checkPreview" *ngFor="let department of departMentAdmin"
                   [value]="department.value">
                   {{ department.label }}
                 </nb-option>
-              </nb-select>
+              </nb-select> -->
               <small *ngIf="touchedDep || !jd.departmentId" class="text-red">{{ sErrorDe }}</small>
             </div>
           </div>
           <div class="col-md-6" *ngIf="checkDivision">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedDi }">
-              <label class="label" for="name">Division <span style="color:red">*</span></label>
-              <nb-select [disabled]="divisionOptions.length <= 1 || checkPreview" [(ngModel)]="jd.divisionId"
+            <div class="form-control-group"
+              [ngClass]="{ 'select-red': touchedDi,'select-disabled': divisionOptions.length <= 1 || checkPreview }">
+              <label class="label" for="name">Division <span style="color:red">*</span>
+                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
+                  (click)="openSearch(divisionOptions, 'Division', 'division')"></nb-icon> -->
+              </label>
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="jd.divisionId" [disabled]="divisionOptions.length <= 1 || checkPreview">
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="divisionOptions"
+                    (filteredReturn)="filteredList3 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList3" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <nb-select [disabled]="divisionOptions.length <= 1 || checkPreview" [(ngModel)]="jd.divisionId"
                 [ngModelOptions]="{ standalone: true }" fullWidth>
                 <nb-option [disabled]="checkPreview" *ngFor="let option of divisionOptions" [value]="option.value">
                   {{ option.label }}
                 </nb-option>
-              </nb-select>
+              </nb-select> -->
               <small *ngIf="touchedDi || !jd.departmentId" class="text-red">{{ sErrorDivision }}</small>
             </div>
           </div>

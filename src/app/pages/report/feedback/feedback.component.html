@@ -32,45 +32,83 @@
         <div class="col-md-3">
           <div class="form-control-group">
             <label>Candidate Name</label>
-            <nb-select multiple [(selected)]="filter.selected.candidateName" (selectedChange)="search(true)" fullWidth
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.candidateName" (ngModelChange)="search(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                    [array]="filter.data.candidateName" (filteredReturn)="filteredList =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <!-- <nb-select multiple [(selected)]="filter.selected.candidateName" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let option of filter.data.candidateName" [value]="option.value">
                 {{option.label}}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-control-group">
             <label>Job Description</label>
-            <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
+            <div style="background-color: #F7F9FC;height: 56px;">
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.jobPosition" (ngModelChange)="search(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                    [array]="filter.data.jobPosition" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList2" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- <nb-select multiple [(selected)]="filter.selected.jobPosition" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let job of filter.data.jobPosition" [value]="job.value">
                 {{job.label}}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-control-group">
             <label>Field Name</label>
-            <nb-select multiple [(selected)]="filter.selected.fieldName" (selectedChange)="search(true)" fullWidth
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.fieldName" (ngModelChange)="search(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.fieldName"
+                    (filteredReturn)="filteredList3 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList3" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <!-- <nb-select multiple [(selected)]="filter.selected.fieldName" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let field of filter.data.fieldName" [value]="field.value">
                 {{field.label}}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-control-group">
             <label>Create By</label>
-            <nb-select multiple [(selected)]="filter.selected.createBy" (selectedChange)="search(true)" fullWidth
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.createBy" (ngModelChange)="search(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.createBy"
+                    (filteredReturn)="filteredList4 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList4" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <!-- <nb-select multiple [(selected)]="filter.selected.createBy" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let cre of filter.data.createBy" [value]="cre.value">
                 {{cre.label}}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
       </div>
@@ -81,12 +119,23 @@
         <div class="col-md-4">
           <div class="form-control-group">
             <label>Candidate ID</label>
-            <nb-select multiple [(selected)]="filter.selected.candidateId" (selectedChange)="search(true)" fullWidth
+            <div style="background-color: #F7F9FC;height: 56px;">
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="filter.selected.candidateId" (ngModelChange)="search(true)" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                    [array]="filter.data.candidateId" (filteredReturn)="filteredList5 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let option of filteredList5" [value]="option.value">
+                    {{option.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- <nb-select multiple [(selected)]="filter.selected.candidateId" (selectedChange)="search(true)" fullWidth
               placeholder="All">
               <nb-option *ngFor="let can of filter.data.candidateId" [value]="can.value">
                 {{can.label}}
               </nb-option>
-            </nb-select>
+            </nb-select> -->
           </div>
         </div>
         <div class="col-md-4">
@@ -264,7 +313,8 @@
           <div class="text-group" *ngIf="checked">
             <label class="label">Checklist</label>
             <span>
-              <mat-checkbox style="margin-top : 7px;" [(ngModel)]="item.checkList" (change)="checkList(item,$event)"></mat-checkbox>
+              <mat-checkbox style="margin-top : 7px;" [(ngModel)]="item.checkList" (change)="checkList(item,$event)">
+              </mat-checkbox>
             </span>
           </div>
         </nb-card-body>
