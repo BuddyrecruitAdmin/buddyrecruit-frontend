@@ -16,16 +16,27 @@
       <nb-card-body>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touched }">
+            <div class="form-control-group"
+              [ngClass]="{ 'select-red': touched,'select-disabled': editCheck || duplicateCheck || checkPreview }">
               <label class="label" for="name">Job Position <span class="text-red">*</span></label>
-              <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
+              <mat-form-field appearance="outline">
+                <mat-select [(ngModel)]="jr.refJD._id" [disabled]="editCheck || duplicateCheck || checkPreview"
+                  (ngModelChange)="onChangeJobposition($event)">
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="JobPosition"
+                    (filteredReturn)="filteredList =$event"></mat-select-filter>
+                  <mat-option *ngFor="let job of filteredList" [value]="job.value">
+                    {{job.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
                 [disabled]="editCheck || duplicateCheck || checkPreview" (selectedChange)="onChangeJobposition($event)"
                 fullWidth>
                 <nb-option *ngFor="let job of JobPosition" [value]="job.value"
                   [disabled]="editCheck || duplicateCheck || checkPreview">
                   {{ job.label }}
                 </nb-option>
-              </nb-select>
+              </nb-select> -->
               <small *ngIf="touched" class="text-red">{{ sErrorPosition }}</small>
             </div>
           </div>
@@ -89,32 +100,56 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': sErrorUser }">
+            <div class="form-control-group"
+              [ngClass]="{ 'select-red': sErrorUser,'select-disabled': checkPreview || !jr.refJD._id }">
               <label class="label">Users Interview <span class="text-red">*</span>
                 <small> (Please select Job Position first)</small>
+                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
+                  (click)="openSearch(Users, 'User Interview', 'user')"></nb-icon> -->
               </label>
-              <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="jr.userInterviews" [disabled]="checkPreview || !jr.refJD._id" multiple>
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="Users"
+                    (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+                  <mat-option [hidden]="user.group === 'disabled'" *ngFor="let user of filteredList2"
+                    [value]="user.value">
+                    {{user.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
                 [disabled]="checkPreview || !jr.refJD._id">
                 <nb-option [hidden]="user.group === 'disabled'" *ngFor="let user of Users" [value]="user.value"
                   [disabled]="checkPreview">
                   {{ user.label }}
                 </nb-option>
-              </nb-select>
+              </nb-select> -->
               <small *ngIf="sErrorUser" class="text-red">{{ sErrorUser }}</small>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedEva }">
+            <div class="form-control-group" [ngClass]="{ 'select-red': touchedEva,'select-disabled': checkPreview}">
               <label class="label">Evaluation Template <span class="text-red">*</span>
                 <small> (Configuration data)</small>
+                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
+                  (click)="openSearch(Evaluation, 'Evaluation Template', 'evaluation')"></nb-icon> -->
               </label>
-              <nb-select [(ngModel)]="jr.refEvaluation" [ngModelOptions]="{ standalone: true }" fullWidth
+              <mat-form-field [color]="primary" appearance="outline">
+                <mat-select [(ngModel)]="jr.refEvaluation" [disabled]="checkPreview">
+                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="Evaluation"
+                    (filteredReturn)="filteredList3 =$event"></mat-select-filter>
+                  <mat-option *ngFor="let eva of filteredList3" (click)="selectedEva()" [value]="eva.value">
+                    {{eva.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!-- <nb-select [(ngModel)]="jr.refEvaluation" [ngModelOptions]="{ standalone: true }" fullWidth
                 [disabled]="checkPreview">
                 <nb-option *ngFor="let eva of Evaluation" (click)="selectedEva()" [value]="eva.value"
                   [disabled]="checkPreview">
                   {{ eva.label }}
                 </nb-option>
-              </nb-select>
+              </nb-select> -->
               <small *ngIf="touchedEva" class="text-red">{{ sErrorEvaluation }}</small>
               <small *ngIf="jr.refEvaluation" class="link" (click)="openPopupEvaluation(jr.refEvaluation)">
                 <nb-icon icon="info-outline"></nb-icon>Click to see preview evaluation form

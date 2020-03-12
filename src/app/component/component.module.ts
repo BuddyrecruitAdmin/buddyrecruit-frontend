@@ -28,6 +28,7 @@ import {
   NbAccordionModule,
   NbProgressBarModule,
   NbChatModule,
+  NbListModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 // import { NbMomentDateModule } from '@nebular/moment';
@@ -103,6 +104,7 @@ import { PrintCandidateComponent } from './print-candidate/print-candidate.compo
 import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-date.component';
 import { PopupTransferComponent } from './popup-transfer/popup-transfer.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-search-dropdown.component';
 
 @NgModule({
   imports: [
@@ -184,7 +186,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     TagInputModule,
     AngularEditorModule,
     DigitOnlyModule,
-    Ng2SearchPipeModule
+    Ng2SearchPipeModule,
+    NbListModule
   ],
   declarations: [
     PopupMessageComponent,
@@ -207,6 +210,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     PrintCandidateComponent,
     PopupOnboardDateComponent,
     PopupTransferComponent,
+    PopupSearchDropdownComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -228,7 +232,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     PopupInterviewResultComponent,
     PrintCandidateComponent,
     PopupOnboardDateComponent,
-    PopupTransferComponent
+    PopupTransferComponent,
+    PopupSearchDropdownComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -250,7 +255,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     PopupInterviewResultComponent,
     PrintCandidateComponent,
     PopupOnboardDateComponent,
-    PopupTransferComponent
+    PopupTransferComponent,
+    PopupSearchDropdownComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

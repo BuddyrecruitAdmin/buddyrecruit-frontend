@@ -42,6 +42,11 @@ export class FeedbackComponent implements OnInit {
     }
   };
   devices: Devices;
+  filteredList: any;
+  filteredList2: any;
+  filteredList3: any;
+  filteredList4: any;
+  filteredList5: any;
   constructor(
     private service: ReportService,
     private utilitiesService: UtilitiesService,
@@ -197,7 +202,11 @@ export class FeedbackComponent implements OnInit {
         this.filter.data.fieldName = this.removeDuplicates(this.filter.data.fieldName, "value");
         this.filter.data.createBy = this.removeDuplicates(this.filter.data.createBy, "value");
         this.filter.data.candidateId = this.removeDuplicates(this.filter.data.candidateId, "value");
-
+        this.filteredList = this.filter.data.candidateName.slice();
+        this.filteredList2 = this.filter.data.jobPosition.slice();
+        this.filteredList3 = this.filter.data.fieldName.slice();
+        this.filteredList4 = this.filter.data.createBy.slice();
+        this.filteredList5 = this.filter.data.candidateId.slice();
       }
     })
   }

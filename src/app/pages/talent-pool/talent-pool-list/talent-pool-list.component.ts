@@ -46,7 +46,8 @@ export class TalentPoolListComponent implements OnInit {
     }
   };
   showStepper: boolean;
-
+  filteredList: any;
+  filteredList2: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -155,6 +156,7 @@ export class TalentPoolListComponent implements OnInit {
               }
             });
           });
+          this.filteredList = this.filter.data.departments.slice();
         }
       }
       this.loading = false;
@@ -207,6 +209,7 @@ export class TalentPoolListComponent implements OnInit {
           }
         });
       }
+      this.filteredList2 = this.filter.data.divisions.slice();
     }
     this.search();
   }
