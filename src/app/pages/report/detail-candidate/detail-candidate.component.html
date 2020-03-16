@@ -1,0 +1,424 @@
+<div class="content-header with-shadow">
+    <h3>Candidate Report Detail</h3>
+</div>
+
+<!-- <nb-card>
+    <nb-card-body>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+                        (keyup.enter)="paging.pageIndex = 0; search()">
+                    <div class="input-group-addon" nbTooltip="Search">
+                        <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 actions-block">
+                <nb-actions size="small" class="h-100 pull-right">
+                    <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+                        (click)="changeLayout(true)">
+                    </nb-action>
+                    <nb-action class="link" icon="list-outline" nbTooltip="List"
+                        [ngClass]="{ 'active' : !isGridLayout }" (click)="changeLayout(false)"></nb-action>
+                </nb-actions>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card> -->
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+    nbSpinnerMessage="Loading...">
+    <nb-card-body>
+        <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+    </nb-card-body>
+</nb-card>
+
+<!-- Table layout -->
+<div>
+    <nb-card *ngIf="!loading && items.length">
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <td scope="col">
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="filter.selected.name" nbInput fullWidth
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                    <div class="input-group-addon" nbTooltip="Search">
+                                        <nb-icon icon="search-outline" class="link"
+                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                    </div>
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="filter.selected.jr" nbInput fullWidth
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                    <div class="input-group-addon" nbTooltip="Search">
+                                        <nb-icon icon="search-outline" class="link"
+                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                    </div>
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="filter.selected.comment" nbInput fullWidth
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                    <div class="input-group-addon" nbTooltip="Search">
+                                        <nb-icon icon="search-outline" class="link"
+                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                    </div>
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="filter.selected.exam" nbInput fullWidth
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                    <div class="input-group-addon" nbTooltip="Search">
+                                        <nb-icon icon="search-outline" class="link"
+                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                    </div>
+                                </div>
+                            </td>
+                            <td scope="col">
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="filter.selected.interview" nbInput fullWidth
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                    <div class="input-group-addon" nbTooltip="Search">
+                                        <nb-icon icon="search-outline" class="link"
+                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                    </div>
+                                </div>
+                            </td>
+                            <td scope="col">
+                            </td>
+                            <td scope="col">
+                                <div class="input-group">
+                                    <input type="text" [(ngModel)]="filter.selected.reject" nbInput fullWidth
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                    <div class="input-group-addon" nbTooltip="Search">
+                                        <nb-icon icon="search-outline" class="link"
+                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="font-size: 14px;">
+                            <th scope="col">Candidate Name</th>
+                            <th scope="col">Job Request</th>
+                            <th scope="col">Comments</th>
+                            <th scope="col">Exam Result</th>
+                            <th scope="col">Interview Result</th>
+                            <th scope="col">Application Form</th>
+                            <th scope="col">Reject History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- *ngFor="let item of items;" -->
+                        <tr *ngFor="let item of items;" style="font-size: 14px;">
+                            <td class="text-left">
+                                <span>
+                                    {{ utilitiesService.setFullname(item) }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="img-badge">
+                                    <nb-badge style="right: 5%" [text]="item.jr.count" status="danger"
+                                        position="top right">
+                                    </nb-badge>
+                                    <img src="https://image.flaticon.com/icons/svg/2681/2681033.svg" width="35"
+                                        height="35" (click)="open(jr, 'jr')" class="link">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="img-badge">
+                                    <nb-badge style="right: 5%" [text]="item.comments.count" status="danger"
+                                        position="top right">
+                                    </nb-badge>
+                                    <img src="https://image.flaticon.com/icons/svg/2190/2190552.svg" width="35"
+                                        height="35" (click)="open(comment, 'comment')" class="link">
+                                </div>
+
+                            </td>
+                            <td>
+                                <div class="img-badge">
+                                    <nb-badge style="right: 5%" [text]="item.examResult.count" status="danger"
+                                        position="top right">
+                                    </nb-badge>
+                                    <img src="https://image.flaticon.com/icons/svg/2302/2302867.svg" width="35"
+                                        height="35" (click)="open(exam, 'exam')" class="link">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="img-badge">
+                                    <nb-badge style="right: 10%" [text]="item.interviewResult.count" status="danger"
+                                        position="top right">
+                                    </nb-badge>
+                                    <img src="https://image.flaticon.com/icons/svg/201/201635.svg" width="35"
+                                        height="35" (click)="open(interview, 'interview')" class="link">
+                                </div>
+                            </td>
+                            <td>
+                                <img src="https://image.flaticon.com/icons/svg/270/270024.svg" width="35" height="35"
+                                    (click)="openApplication(item)" class="link">
+                            </td>
+                            <td>
+                                <div class="img-badge">
+                                    <nb-badge style="right: 10%" [text]="item.rejectHistory.count" status="danger"
+                                        position="top right">
+                                    </nb-badge>
+                                    <img src="https://image.flaticon.com/icons/svg/2258/2258595.svg" width="35"
+                                        height="35" (click)="open(reject, 'reject')" class="link">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+                [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+            </mat-paginator> -->
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!--Job Request -->
+<ng-template #jr let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <nb-card-header class="text-center">
+            Interview Result
+            <div class="actions">
+                <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th scope="col">JR</th>
+                            <th scope="col" style="width: 170px;">Stage</th>
+                            <th scope="col" style="width: 90px;">Last Changed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-size: 14px;">
+                            <td class="text-left">
+                                <span>
+                                    {{ item.jr.jrs.position }}
+                                </span>
+                            </td>
+                            <td class="text-left">
+                                <span>
+                                    {{ item.jr.jrs.stage }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ item.jr.jrs.lastChange }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Close</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+<!-- Comments -->
+<ng-template #comment let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <nb-card-header class="text-center">
+            Comments
+            <div class="actions">
+                <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th scope="col">JR</th>
+                            <th scope="col" style="width: 170px;">Stage</th>
+                            <th scope="col" style="width: 90px;">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-size: 14px;">
+                            <td class="text-left">
+                                <span>
+                                    Classrom
+                                </span>
+                            </td>
+                            <td class="text-left">
+                                <span>
+                                    Sukhumvit
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    Comment
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Close</button>
+            <!-- <button nbButton status="default" (click)="exportAsXLSX()">Export</button> -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<!-- Exam Result -->
+<ng-template #exam let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <nb-card-header class="text-center">
+            Exam Result
+            <div class="actions">
+                <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th scope="col">JR</th>
+                            <th scope="col" style="width: 170px;">Exam Score</th>
+                            <th scope="col" style="width: 90px;">Remark</th>
+                            <th scope="col" style="width: 170px;">Attitude Score</th>
+                            <th scope="col" style="width: 90px;">Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-size: 14px;">
+                            <td class="text-left">
+                                <span>
+                                    Classrom
+                                </span>
+                            </td>
+                            <td class="text-left">
+                                <span>
+                                    Sukhumvit
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    Comment
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Close</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<!-- Interview Result -->
+<ng-template #interview let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <nb-card-header class="text-center">
+            Interview Result
+            <div class="actions">
+                <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th scope="col">JR</th>
+                            <th scope="col" style="width: 170px;">Score</th>
+                            <th scope="col" style="width: 90px;">Result</th>
+                            <th scope="col" style="width: 170px;">Interview User</th>
+                            <th scope="col" style="width: 90px;">Evaluation Form</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-size: 14px;">
+                            <td class="text-left">
+                                <span>
+                                    Classrom
+                                </span>
+                            </td>
+                            <td class="text-left">
+                                <span>
+                                    Sukhumvit
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    Comment
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Close</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<!-- Reject History -->
+<ng-template #reject let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <nb-card-header class="text-center">
+            Exam Result
+            <div class="actions">
+                <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th scope="col">Reject Reason</th>
+                            <th scope="col" style="width: 170px;">Reject by</th>
+                            <th scope="col" style="width: 90px;">Reject Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="font-size: 14px;">
+                            <td class="text-left">
+                                <span>
+                                    Classrom
+                                </span>
+                            </td>
+                            <td class="text-left">
+                                <span>
+                                    Sukhumvit
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    Comment
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Close </button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

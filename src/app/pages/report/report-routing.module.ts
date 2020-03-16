@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportComponent } from './report.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { DetailCandidateComponent } from './detail-candidate/detail-candidate.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path: 'feedback',
         component: FeedbackComponent,
+      },
+      {
+        path: 'detail',
+        component: DetailCandidateComponent,
       },
       {
         path: '**',
