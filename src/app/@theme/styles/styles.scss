@@ -38,9 +38,13 @@
 };
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@font-face {
+@font-face {  
   font-family: sukhumvit;
   src: url(../../../assets/font/SukhumvitSet/SukhumvitSet-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: kanit;
+  src: url(../../../assets/font/Kanit/Kanit-Light.ttf) format("opentype");
 }
 :root {
   --color-blue: #1B74B6;
@@ -588,28 +592,31 @@
   }
   .select-disabled{
     cursor: not-allowed;
-  }    
-  .mat-form-field-appearance-outline .mat-form-field-infix {
-    padding: 0.2175rem 0.6rem 0.6rem !important;
   }
-  .mat-select-disabled .mat-select-value {
-    font-weight: 550;
-    font-family: Open Sans, sans-serif;
-    color: #C5CEDF;
-    padding-bottom: 2px;
-}
-  .mat-select .mat-select-value {
-    font-weight: 550;
-    font-family: Open Sans, sans-serif;
-    padding-bottom: 2px;
-}
+  .form-control-group{
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+      padding: 0.2175rem 0.6rem 0.6rem !important;
+    }
+    .mat-select-disabled .mat-select-value {
+      font-weight: 550;
+      font-family: Open Sans, sans-serif;
+      color: #C5CEDF;
+      padding-bottom: 2px;
+      cursor: not-allowed;
+  }
+    .mat-select .mat-select-value {
+      font-weight: 550;
+      font-family: Open Sans, sans-serif;
+      padding-bottom: 2px;
+  }
+    .mat-select-arrow-wrapper{
+      padding-top: 5px;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0 !important;
+    }
+  }
 
-  .mat-select-arrow-wrapper{
-    padding-top: 5px;
-  }
-  .mat-form-field-wrapper {
-    padding-bottom: 0 !important;
-  }
   // .mat-form-field-appearance-outline .mat-form-field-flex {
   //   background-color: #F7F9FC !important;
   // }

@@ -164,6 +164,7 @@ export class AppointmentDetailComponent implements OnInit {
         'refCandidate.phone',
         'refCandidate.email',
         'refStage.name',
+        'refSource.name'
       ]
     };
     this.items = [];

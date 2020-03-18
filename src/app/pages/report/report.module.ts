@@ -23,6 +23,7 @@ import {
   NbWindowModule,
   NbAccordionModule,
   NbSpinnerModule,
+  NbBadgeModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -75,11 +76,13 @@ import { ReportComponent } from './report.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { DetailCandidateComponent } from './detail-candidate/detail-candidate.component';
 @NgModule({
   declarations: [
     ReportComponent,
     CandidateComponent,
     FeedbackComponent,
+    DetailCandidateComponent,
   ],
   imports: [
     CommonModule,
@@ -148,7 +151,8 @@ import { MatSelectFilterModule } from 'mat-select-filter';
     NbWindowModule.forChild(),
     NbAccordionModule,
     NbSpinnerModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    NbBadgeModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

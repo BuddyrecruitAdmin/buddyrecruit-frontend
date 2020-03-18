@@ -152,6 +152,7 @@ export class TalentPoolDetailComponent implements OnInit {
           'refCandidate.phone',
           'refCandidate.email',
           'refStage.name',
+          'refSource.name'
         ]
       };
       this.items = [];

@@ -89,6 +89,7 @@
     "tslib": "^1.10.0",
     "typeface-exo": "0.0.22",
     "web-animations-js": "github:angular/web-animations-js#release_pr208",
+    "xlsx": "^0.15.5",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {

@@ -108,6 +108,11 @@ export class PagesComponent {
                   })) {
                     menuReport[1].children.push(MENU.MENU_REPORT_CHILD[1]);
                   }
+                  if (response.data.find(element => {
+                    return element.active && element.refReport.code === 'REPORT_03';
+                  })) {
+                    menuReport[1].children.push(MENU.MENU_REPORT_CHILD[2]);
+                  }
                   menuReport.forEach(element => {
                     this.menu.push(element);
                   });

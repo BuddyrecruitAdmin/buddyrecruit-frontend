@@ -79,7 +79,7 @@
                 [nbTooltip]="item.position">{{ item.position }}</label>
             </div>
             <div *ngIf="role.refAuthorize.jd.editable" class="actions">
-              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
+              <nb-icon *ngIf="!item.isUsed" icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/jd/detail/edit/'+item._id">
               </nb-icon>
               <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
@@ -144,7 +144,7 @@
                 <span>{{ item.division.name || '-' }}</span>
               </td>
               <td *ngIf="role.refAuthorize.jd.editable" class="actions">
-                <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                <button *ngIf="!item.isUsed" nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/jd/detail/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>

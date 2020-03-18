@@ -24,6 +24,8 @@
         </div>
       </nb-card-header>
       <nb-card-body style="min-height: auto">
+        <span *ngIf="item.fromTransfer.flag" class="label">Transfer from:
+          {{ item.fromTransfer?.refJR?.refJD?.position }}</span><br>
         <span style="word-wrap: break-word;">{{ item.message }}</span>
       </nb-card-body>
     </nb-card>

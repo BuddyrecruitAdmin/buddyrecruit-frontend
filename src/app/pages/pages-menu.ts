@@ -116,6 +116,11 @@ export const MENU_REPORT_CHILD: NbMenuItem[] = [
     link: '/employer/report/feedback',
     hidden: false,
   },
+  {
+    title: 'Detail Report',
+    link: '/employer/report/detail',
+    hidden: false,
+  },
 ];
 
 export const MENU_SETTING: NbMenuItem[] = [
