@@ -38,9 +38,13 @@
 };
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@font-face {
+@font-face {  
   font-family: sukhumvit;
   src: url(../../../assets/font/SukhumvitSet/SukhumvitSet-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: kanit;
+  src: url(../../../assets/font/Kanit/Kanit-Light.ttf) format("opentype");
 }
 :root {
   --color-blue: #1B74B6;
