@@ -21,7 +21,8 @@ import {
   NbPopoverModule,
   NbTooltipModule,
   NbDatepickerModule,
-  NbSpinnerModule
+  NbSpinnerModule,
+  NbLayoutModule
 } from '@nebular/theme';
 import { TranslateService } from '../translate.service';
 export function setupTranslateFactory(
@@ -150,7 +151,8 @@ import { AppFormComponent } from './app-form/app-form.component';
     NgbCarouselModule,
     NgbCollapseModule,
     NgbDropdownModule,
-    NgbButtonsModule
+    NgbButtonsModule,
+    NbLayoutModule
   ],
   declarations: [
     ModulesComponent,

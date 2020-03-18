@@ -65,6 +65,7 @@ export class PopupCommentComponent implements OnInit {
               message: element.message,
               accent: element.refUser._id === this.role._id ? 'success' : 'default',
               canDelete: element.refUser._id === this.role._id ? true : false,
+              fromTransfer: element.fromTransfer
             })
           });
         }

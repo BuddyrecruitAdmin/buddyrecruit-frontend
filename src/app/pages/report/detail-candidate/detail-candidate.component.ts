@@ -17,12 +17,15 @@ import { DepartmentService } from '../../setting/department/department.service';
 })
 export class DetailCandidateComponent implements OnInit {
   items: any;
+  select: any;
   role: any;
   devices: Devices;
   loading: boolean;
   dialogRef: NbDialogRef<any>;
   paging: IPaging;
   keyword: string;
+  innerWidth: any;
+  innerHeight: any;
   filter: {
     isFilter: boolean,
     data: any,
@@ -45,6 +48,8 @@ export class DetailCandidateComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
+    this.innerHeight = window.innerHeight * 0.8;
+    this.innerWidth = window.innerWidth * 0.6;
     // if (this.devices.isMobile) {
     //   this.changeLayout(true);
     // } else {
@@ -128,8 +133,8 @@ export class DetailCandidateComponent implements OnInit {
     this.service.exportAsExcelFile(this.items, 'sample');
   }
 
-  open(dialog: TemplateRef<any>, name: string) {
-    console.log(name)
+  open(dialog: TemplateRef<any>, name: string, item: any) {
+    this.select = item;
     this.callDialog(dialog);
   }
 

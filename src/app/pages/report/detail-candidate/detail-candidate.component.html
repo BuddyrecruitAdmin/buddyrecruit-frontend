@@ -30,6 +30,76 @@
 <nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
     nbSpinnerMessage="Loading...">
     <nb-card-body>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr style="font-size: 14px;">
+                        <td scope="col">
+                            <div class="input-group">
+                                <input type="text" [(ngModel)]="filter.selected.name" nbInput fullWidth
+                                    placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
+                                <div class="input-group-addon" nbTooltip="Search">
+                                    <nb-icon icon="search-outline" class="link"
+                                        (click)="paging.pageIndex = 0; getList()"></nb-icon>
+                                </div>
+                            </div>
+                        </td>
+                        <td scope="col">
+                            <div class="input-group">
+                                <input type="text" [(ngModel)]="filter.selected.jr" nbInput fullWidth
+                                    placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
+                                <div class="input-group-addon" nbTooltip="Search">
+                                    <nb-icon icon="search-outline" class="link"
+                                        (click)="paging.pageIndex = 0; getList()"></nb-icon>
+                                </div>
+                            </div>
+                        </td>
+                        <td scope="col">
+                            <div class="input-group">
+                                <input type="text" [(ngModel)]="filter.selected.comment" nbInput fullWidth
+                                    placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
+                                <div class="input-group-addon" nbTooltip="Search">
+                                    <nb-icon icon="search-outline" class="link"
+                                        (click)="paging.pageIndex = 0; getList()"></nb-icon>
+                                </div>
+                            </div>
+                        </td>
+                        <td scope="col">
+                            <div class="input-group">
+                                <input type="text" [(ngModel)]="filter.selected.exam" nbInput fullWidth
+                                    placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
+                                <div class="input-group-addon" nbTooltip="Search">
+                                    <nb-icon icon="search-outline" class="link"
+                                        (click)="paging.pageIndex = 0; getList()"></nb-icon>
+                                </div>
+                            </div>
+                        </td>
+                        <td scope="col">
+                            <div class="input-group">
+                                <input type="text" [(ngModel)]="filter.selected.interview" nbInput fullWidth
+                                    placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
+                                <div class="input-group-addon" nbTooltip="Search">
+                                    <nb-icon icon="search-outline" class="link"
+                                        (click)="paging.pageIndex = 0; getList()"></nb-icon>
+                                </div>
+                            </div>
+                        </td>
+                        <td scope="col">
+                        </td>
+                        <td scope="col">
+                            <div class="input-group">
+                                <input type="text" [(ngModel)]="filter.selected.reject" nbInput fullWidth
+                                    placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
+                                <div class="input-group-addon" nbTooltip="Search">
+                                    <nb-icon icon="search-outline" class="link"
+                                        (click)="paging.pageIndex = 0; getList()"></nb-icon>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
         <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
     </nb-card-body>
 </nb-card>
@@ -45,50 +115,50 @@
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.name" nbInput fullWidth
-                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
                                     <div class="input-group-addon" nbTooltip="Search">
                                         <nb-icon icon="search-outline" class="link"
-                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                            (click)="paging.pageIndex = 0; getList()"></nb-icon>
                                     </div>
                                 </div>
                             </td>
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.jr" nbInput fullWidth
-                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
                                     <div class="input-group-addon" nbTooltip="Search">
                                         <nb-icon icon="search-outline" class="link"
-                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                            (click)="paging.pageIndex = 0; getList()"></nb-icon>
                                     </div>
                                 </div>
                             </td>
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.comment" nbInput fullWidth
-                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
                                     <div class="input-group-addon" nbTooltip="Search">
                                         <nb-icon icon="search-outline" class="link"
-                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                            (click)="paging.pageIndex = 0; getList()"></nb-icon>
                                     </div>
                                 </div>
                             </td>
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.exam" nbInput fullWidth
-                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
                                     <div class="input-group-addon" nbTooltip="Search">
                                         <nb-icon icon="search-outline" class="link"
-                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                            (click)="paging.pageIndex = 0; getList()"></nb-icon>
                                     </div>
                                 </div>
                             </td>
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.interview" nbInput fullWidth
-                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
                                     <div class="input-group-addon" nbTooltip="Search">
                                         <nb-icon icon="search-outline" class="link"
-                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                            (click)="paging.pageIndex = 0; getList()"></nb-icon>
                                     </div>
                                 </div>
                             </td>
@@ -97,10 +167,10 @@
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.reject" nbInput fullWidth
-                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; search()">
+                                        placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
                                     <div class="input-group-addon" nbTooltip="Search">
                                         <nb-icon icon="search-outline" class="link"
-                                            (click)="paging.pageIndex = 0; search()"></nb-icon>
+                                            (click)="paging.pageIndex = 0; getList()"></nb-icon>
                                     </div>
                                 </div>
                             </td>
@@ -129,7 +199,7 @@
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2681/2681033.svg" width="35"
-                                        height="35" (click)="open(jr, 'jr')" class="link">
+                                        height="35" (click)="open(jr, 'jr',item)" class="link">
                                 </div>
                             </td>
                             <td>
@@ -138,7 +208,7 @@
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2190/2190552.svg" width="35"
-                                        height="35" (click)="open(comment, 'comment')" class="link">
+                                        height="35" (click)="open(comment, 'comment',item)" class="link">
                                 </div>
 
                             </td>
@@ -148,7 +218,7 @@
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2302/2302867.svg" width="35"
-                                        height="35" (click)="open(exam, 'exam')" class="link">
+                                        height="35" (click)="open(exam, 'exam',item)" class="link">
                                 </div>
                             </td>
                             <td>
@@ -157,7 +227,7 @@
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/201/201635.svg" width="35"
-                                        height="35" (click)="open(interview, 'interview')" class="link">
+                                        height="35" (click)="open(interview, 'interview',item)" class="link">
                                 </div>
                             </td>
                             <td>
@@ -170,7 +240,7 @@
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2258/2258595.svg" width="35"
-                                        height="35" (click)="open(reject, 'reject')" class="link">
+                                        height="35" (click)="open(reject, 'reject',item)" class="link">
                                 </div>
                             </td>
                         </tr>
@@ -186,7 +256,7 @@
 
 <!--Job Request -->
 <ng-template #jr let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card [style.width.px]="innerWidth">
         <nb-card-header class="text-center">
             Interview Result
             <div class="actions">
@@ -199,25 +269,25 @@
                     <thead>
                         <tr style="font-size: 14px;">
                             <th scope="col">JR</th>
-                            <th scope="col" style="width: 170px;">Stage</th>
-                            <th scope="col" style="width: 90px;">Last Changed</th>
+                            <th scope="col">Stage</th>
+                            <th scope="col">Last Changed</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="font-size: 14px;">
+                        <tr *ngFor="let JRs of select.jr.jrs" style="font-size: 14px;">
                             <td class="text-left">
                                 <span>
-                                    {{ item.jr.jrs.position }}
+                                    {{ JRs.position || '-' }}
                                 </span>
                             </td>
                             <td class="text-left">
                                 <span>
-                                    {{ item.jr.jrs.stage }}
+                                    {{ JRs.stage || '-' }}
                                 </span>
                             </td>
                             <td>
                                 <span>
-                                    {{ item.jr.jrs.lastChange }}
+                                    {{ JRs.lastChange || '-' }}
                                 </span>
                             </td>
                         </tr>
@@ -232,7 +302,7 @@
 </ng-template>
 <!-- Comments -->
 <ng-template #comment let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card [style.width.px]="innerWidth">
         <nb-card-header class="text-center">
             Comments
             <div class="actions">
@@ -245,25 +315,25 @@
                     <thead>
                         <tr style="font-size: 14px;">
                             <th scope="col">JR</th>
-                            <th scope="col" style="width: 170px;">Stage</th>
-                            <th scope="col" style="width: 90px;">Comments</th>
+                            <th scope="col">Stage</th>
+                            <th scope="col">Comments</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="font-size: 14px;">
+                        <tr *ngFor="let com of select.comments.comments" style="font-size: 14px;">
                             <td class="text-left">
                                 <span>
-                                    Classrom
+                                    {{ com.position || '-' }}
                                 </span>
                             </td>
                             <td class="text-left">
                                 <span>
-                                    Sukhumvit
+                                    {{ com.stage || '-' }}
                                 </span>
                             </td>
                             <td>
                                 <span>
-                                    Comment
+                                    {{ com.comment || '-' }}
                                 </span>
                             </td>
                         </tr>
@@ -280,7 +350,7 @@
 
 <!-- Exam Result -->
 <ng-template #exam let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card [style.width.px]="innerWidth">
         <nb-card-header class="text-center">
             Exam Result
             <div class="actions">
@@ -293,27 +363,37 @@
                     <thead>
                         <tr style="font-size: 14px;">
                             <th scope="col">JR</th>
-                            <th scope="col" style="width: 170px;">Exam Score</th>
-                            <th scope="col" style="width: 90px;">Remark</th>
-                            <th scope="col" style="width: 170px;">Attitude Score</th>
-                            <th scope="col" style="width: 90px;">Remark</th>
+                            <th scope="col">Exam Score</th>
+                            <th scope="col">Remark</th>
+                            <th scope="col">Attitude Score</th>
+                            <th scope="col">Remark</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="font-size: 14px;">
+                        <tr *ngFor="let exam of select.examResult.examResults" style="font-size: 14px;">
                             <td class="text-left">
                                 <span>
-                                    Classrom
+                                    {{ exam.position || '-' }}
                                 </span>
                             </td>
                             <td class="text-left">
                                 <span>
-                                    Sukhumvit
+                                    {{ exam.examScore || '-' }}
                                 </span>
                             </td>
                             <td>
                                 <span>
-                                    Comment
+                                    {{ exam.examRemark || '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ exam.attitudeScore || '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ exam.attitudeRemark || '-' }}
                                 </span>
                             </td>
                         </tr>
@@ -329,7 +409,7 @@
 
 <!-- Interview Result -->
 <ng-template #interview let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card [style.width.px]="innerWidth">
         <nb-card-header class="text-center">
             Interview Result
             <div class="actions">
@@ -342,14 +422,14 @@
                     <thead>
                         <tr style="font-size: 14px;">
                             <th scope="col">JR</th>
-                            <th scope="col" style="width: 170px;">Score</th>
-                            <th scope="col" style="width: 90px;">Result</th>
-                            <th scope="col" style="width: 170px;">Interview User</th>
-                            <th scope="col" style="width: 90px;">Evaluation Form</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Result</th>
+                            <th scope="col">Interview User</th>
+                            <th scope="col">Evaluation Form</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="font-size: 14px;">
+                        <tr *ngFor="let view of select.interviewResult.interviewResult" style="font-size: 14px;">
                             <td class="text-left">
                                 <span>
                                     Classrom
@@ -378,9 +458,9 @@
 
 <!-- Reject History -->
 <ng-template #reject let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card [style.width.px]="innerWidth">
         <nb-card-header class="text-center">
-            Exam Result
+            Reject History
             <div class="actions">
                 <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
             </div>
@@ -391,12 +471,12 @@
                     <thead>
                         <tr style="font-size: 14px;">
                             <th scope="col">Reject Reason</th>
-                            <th scope="col" style="width: 170px;">Reject by</th>
-                            <th scope="col" style="width: 90px;">Reject Date</th>
+                            <th scope="col">Reject by</th>
+                            <th scope="col">Reject Date</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style="font-size: 14px;">
+                        <tr *ngFor="let reject of select.rejectHistory" style="font-size: 14px;">
                             <td class="text-left">
                                 <span>
                                     Classrom
