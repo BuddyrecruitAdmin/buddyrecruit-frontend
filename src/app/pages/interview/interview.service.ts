@@ -35,4 +35,9 @@ export class InterviewService extends NetworkService {
     };
     return this.post(API_ENDPOINT.PENDING_INTERVIEW.DETAIL, body);
   }
+  
+  sourceList(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  }
+
 }

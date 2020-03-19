@@ -55,7 +55,7 @@ export const API_ENDPOINT = {
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",
-    // LIST_JR: "transfer/inform"
+    SOURCE: "incomingsource/list"
   },
   PENDING_EXAM: {
     LIST: "pendingExam/list",
@@ -241,7 +241,8 @@ export const API_ENDPOINT = {
     LIST: "report/candidate",
     LISTFEEDBACK: "feedbackReport/list",
     EDIT: "feedbackReport/edit",
-    DEPARTMENT: "dropdown/department"
+    DEPARTMENT: "dropdown/department",
+    ListCandidate: "candidateReport/list"
   },
   HERO: {
     LIST: "hero/list"
