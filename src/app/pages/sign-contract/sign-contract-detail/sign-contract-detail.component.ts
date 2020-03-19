@@ -50,6 +50,8 @@ export class SignContractDetailComponent implements OnInit {
   loading: boolean;
   count: Count;
   showTips: boolean;
+  sourceBy: any;
+  soList: any;
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -108,6 +110,8 @@ export class SignContractDetailComponent implements OnInit {
     this.items = [];
     this.comments = [];
     this.keyword = '';
+    this.soList = [];
+    this.sourceBy = [];
     this.showTips = false;
     this.paging = {
       length: 0,
@@ -115,6 +119,28 @@ export class SignContractDetailComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.onModel();
+  }
+
+  async onModel() {
+    await this.sourceList();
+    await this.search();
+  }
+
+  sourceList() {
+    return new Promise((resolve) => {
+      this.service.sourceList().subscribe(response => {
+        if (ResponseCode.Success && response.code) {
+          this.soList = response.data;
+          this.soList.map(element => {
+            if (element.active === true) {
+              this.sourceBy.push(element._id);
+            }
+          })
+        }
+        resolve();
+      })
+    })
   }
 
   onSelectTab(event: any) {
@@ -142,7 +168,8 @@ export class SignContractDetailComponent implements OnInit {
         'refCandidate.email',
         'refStage.name',
         'refSource.name'
-      ]
+      ],
+      filters: this.sourceBy
     };
     this.items = [];
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -188,6 +215,21 @@ export class SignContractDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  filterSource(event, _id) {
+    this.sourceBy = [];
+    this.soList.map(element => {
+      if (element._id === _id) {
+        element.active = event;
+        if (element.active === true) {
+          this.sourceBy.push(element._id);
+        }
+      } else if (element.active === true) {
+        this.sourceBy.push(element._id);
+      }
+    })
+    this.search();
   }
 
   setCondition(item: any): any {

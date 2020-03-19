@@ -35,4 +35,8 @@ export class ExamService extends NetworkService {
     };
     return this.post(API_ENDPOINT.PENDING_EXAM.DETAIL, body);
   }
+  
+  sourceList(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  }
 }

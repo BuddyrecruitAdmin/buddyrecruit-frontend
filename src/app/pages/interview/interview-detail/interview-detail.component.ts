@@ -57,7 +57,8 @@ export class InterviewDetailComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   showTips: boolean;
-
+  sourceBy: any;
+  soList: any;
   constructor(
     private router: Router,
     private service: InterviewService,
@@ -137,6 +138,8 @@ export class InterviewDetailComponent implements OnInit {
 
   ngOnInit() {
     this.items = [];
+    this.soList = [];
+    this.sourceBy = [];
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -144,6 +147,28 @@ export class InterviewDetailComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.onModel();
+  }
+
+  async onModel() {
+    await this.sourceList();
+    await this.search();
+  }
+
+  sourceList() {
+    return new Promise((resolve) => {
+      this.service.sourceList().subscribe(response => {
+        if (ResponseCode.Success && response.code) {
+          this.soList = response.data;
+          this.soList.map(element => {
+            if (element.active === true) {
+              this.sourceBy.push(element._id);
+            }
+          })
+        }
+        resolve();
+      })
+    })
   }
 
   onSelectTab(event: any) {
@@ -171,7 +196,8 @@ export class InterviewDetailComponent implements OnInit {
         'refCandidate.email',
         'refStage.name',
         'refSource.name'
-      ]
+      ],
+      filters: this.sourceBy
     };
     this.items = [];
     this.score = [];
@@ -218,6 +244,21 @@ export class InterviewDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  filterSource(event, _id) {
+    this.sourceBy = [];
+    this.soList.map(element => {
+      if (element._id === _id) {
+        element.active = event;
+        if (element.active === true) {
+          this.sourceBy.push(element._id);
+        }
+      } else if (element.active === true) {
+        this.sourceBy.push(element._id);
+      }
+    })
+    this.search();
   }
 
   setCondition(item: any): any {

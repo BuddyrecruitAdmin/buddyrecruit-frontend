@@ -1,0 +1,13 @@
+.inline{
+    display: -webkit-inline-box;
+ }
+.label{
+    margin-top: 10px;
+}
+@media (max-width: 767px) {
+    nb-checkbox{
+        label{
+            padding: 0.375rem 0.5rem 0.375rem 0;
+        }
+    }
+}

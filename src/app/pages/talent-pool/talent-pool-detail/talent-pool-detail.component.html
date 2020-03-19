@@ -29,6 +29,19 @@
         </nb-radio-group>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-12">
+        <label class="label">Sourcing</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 inline">
+        <div *ngFor="let sol of soList">
+          <nb-checkbox (checkedChange)="filterSource($event,sol._id)" [(ngModel)]="sol.active">{{ sol.name }}
+          </nb-checkbox>
+        </div>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
 

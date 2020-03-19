@@ -42,4 +42,8 @@ export class OnboardService extends NetworkService {
     };
     return this.post(API_ENDPOINT.JOBREQUEST.CLOSE, body);
   }
+
+  sourceList(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  }
 }
