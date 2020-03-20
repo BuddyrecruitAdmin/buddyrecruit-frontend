@@ -269,6 +269,9 @@ export class CandidateDetailComponent implements OnInit {
                 this.condition.button.errMsg = 'Please select exam date';
               }
               break;
+            case 104:
+              this.condition.button.trans = true;
+              break;
             case 201:
               this.condition.icon.examDate = true;
               this.condition.icon.examInfo = true;
