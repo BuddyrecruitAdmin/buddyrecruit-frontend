@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   //API_URI: 'http://35.247.152.36:4401', //PRD
-  API_URI: 'http://10.35.1.0:9001', // DEV N gos 15
+  API_URI: 'https://p3bkd.buddyrecruit.ai', // DEV N gos 15
 
   WriteLog: true
 };
