@@ -4,10 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: true,
-  //API_URI: 'http://35.247.152.36:4401', //PRD
-  API_URI: 'https://p3bkd.buddyrecruit.ai', // DEV N gos 15
-
+  production: false,
+  API_URI: 'https://p3bkd-qas.buddyrecruit.ai', //QAS
   WriteLog: true
 };
 
