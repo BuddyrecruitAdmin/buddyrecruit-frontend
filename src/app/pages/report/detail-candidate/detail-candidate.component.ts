@@ -26,6 +26,7 @@ export class DetailCandidateComponent implements OnInit {
   keyword: string;
   innerWidth: any;
   innerHeight: any;
+  innerCardBodyHeight: any;
   filter: {
     isFilter: boolean,
     data: any,
@@ -48,8 +49,9 @@ export class DetailCandidateComponent implements OnInit {
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
-    this.innerHeight = window.innerHeight * 0.8;
+    this.innerHeight = window.innerHeight * 0.95;
     this.innerWidth = window.innerWidth * 0.6;
+    this.innerCardBodyHeight = window.innerHeight * 0.55;
     // if (this.devices.isMobile) {
     //   this.changeLayout(true);
     // } else {
@@ -58,7 +60,7 @@ export class DetailCandidateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = false;
+    this.loading = true;
     this.items = [];
     this.keyword = '';
     this.paging = {
@@ -85,6 +87,8 @@ export class DetailCandidateComponent implements OnInit {
   }
 
   getList() {
+    this.items = [];
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
@@ -119,7 +123,13 @@ export class DetailCandidateComponent implements OnInit {
     this.service.getListCandidate(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
+        this.paging.length = response.totalDataSize;
+        if (!this.items.length && this.paging.pageIndex > 0) {
+          this.paging.pageIndex--;
+          this.getList();
+        }
       }
+      this.loading = false;
     })
   }
 
@@ -146,6 +156,24 @@ export class DetailCandidateComponent implements OnInit {
       pageSizeOptions: Paging.pageSizeOptions
     }
     this.getList();
+  }
+
+  resultColor(result) {
+    let statusClass = 'label-gray';
+    switch (result) {
+      case 'ผ่านการสัมภาษณ์':
+        statusClass = 'label-success';
+        break;
+      case 'ไม่ผ่านการสัมภาษณ์':
+        statusClass = 'label-danger';
+        break;
+      case 'รอพิจารณา':
+        statusClass = 'label-warning';
+        break;
+      default:
+        break;
+    }
+    return statusClass
   }
 
   callDialog(dialog: TemplateRef<any>) {
