@@ -303,4 +303,8 @@ export class IndexComponent implements OnInit {
     this.translate.use(lang);
   }
 
+  scrollToElement(element): void {
+    element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
+  
 }

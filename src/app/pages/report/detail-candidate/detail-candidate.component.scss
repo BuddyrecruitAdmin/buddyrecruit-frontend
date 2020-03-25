@@ -5,3 +5,5 @@ nb-badge.status-danger, .badge-danger {
     background: var(--color-red);
     color: var(--color-white);
   }
+  .tableFixHead          { overflow-y: auto; }
+.tableFixHead thead th { position: sticky; top: 0; }

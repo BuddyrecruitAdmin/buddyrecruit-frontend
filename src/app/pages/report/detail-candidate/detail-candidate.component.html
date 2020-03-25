@@ -27,8 +27,7 @@
     </nb-card-body>
 </nb-card> -->
 
-<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
-    nbSpinnerMessage="Loading...">
+<!-- <nb-card>
     <nb-card-body>
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
@@ -102,16 +101,16 @@
         </div>
         <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
     </nb-card-body>
-</nb-card>
+</nb-card> -->
 
 <!-- Table layout -->
 <div>
-    <nb-card *ngIf="!loading && items.length">
+    <nb-card>
         <nb-card-body>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
-                        <tr style="font-size: 14px;">
+                        <tr>
                             <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.name" nbInput fullWidth
@@ -163,8 +162,6 @@
                                 </div>
                             </td>
                             <td scope="col">
-                            </td>
-                            <td scope="col">
                                 <div class="input-group">
                                     <input type="text" [(ngModel)]="filter.selected.reject" nbInput fullWidth
                                         placeholder="Search" (keyup.enter)="paging.pageIndex = 0; getList()">
@@ -174,6 +171,8 @@
                                     </div>
                                 </div>
                             </td>
+                            <td scope="col">
+                            </td>
                         </tr>
                         <tr style="font-size: 14px;">
                             <th scope="col">Candidate Name</th>
@@ -181,11 +180,11 @@
                             <th scope="col">Comments</th>
                             <th scope="col">Exam Result</th>
                             <th scope="col">Interview Result</th>
-                            <th scope="col">Application Form</th>
                             <th scope="col">Reject History</th>
+                            <th scope="col">Application Form</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="!loading && items.length">
                         <!-- *ngFor="let item of items;" -->
                         <tr *ngFor="let item of items;" style="font-size: 14px;">
                             <td class="text-left">
@@ -195,7 +194,7 @@
                             </td>
                             <td>
                                 <div class="img-badge">
-                                    <nb-badge style="right: 5%" [text]="item.jr.count" status="danger"
+                                    <nb-badge style="right: 25%" [text]="item.jr.count" status="danger"
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2681/2681033.svg" width="35"
@@ -204,7 +203,7 @@
                             </td>
                             <td>
                                 <div class="img-badge">
-                                    <nb-badge style="right: 5%" [text]="item.comments.count" status="danger"
+                                    <nb-badge style="right: 25%" [text]="item.comments.count" status="danger"
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2190/2190552.svg" width="35"
@@ -214,7 +213,7 @@
                             </td>
                             <td>
                                 <div class="img-badge">
-                                    <nb-badge style="right: 5%" [text]="item.examResult.count" status="danger"
+                                    <nb-badge style="right: 25%" [text]="item.examResult.count" status="danger"
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2302/2302867.svg" width="35"
@@ -223,7 +222,7 @@
                             </td>
                             <td>
                                 <div class="img-badge">
-                                    <nb-badge style="right: 10%" [text]="item.interviewResult.count" status="danger"
+                                    <nb-badge style="right: 25%" [text]="item.interviewResult.count" status="danger"
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/201/201635.svg" width="35"
@@ -231,40 +230,48 @@
                                 </div>
                             </td>
                             <td>
-                                <img src="https://image.flaticon.com/icons/svg/270/270024.svg" width="35" height="35"
-                                    (click)="openApplication(item)" class="link">
-                            </td>
-                            <td>
                                 <div class="img-badge">
-                                    <nb-badge style="right: 10%" [text]="item.rejectHistory.count" status="danger"
+                                    <nb-badge style="right: 25%" [text]="item.rejectHistory.count" status="danger"
                                         position="top right">
                                     </nb-badge>
                                     <img src="https://image.flaticon.com/icons/svg/2258/2258595.svg" width="35"
                                         height="35" (click)="open(reject, 'reject',item)" class="link">
                                 </div>
                             </td>
+                            <td>
+                                <img *ngIf="item.haveAppForm" src="https://image.flaticon.com/icons/svg/270/270024.svg"
+                                    width="35" height="35" (click)="openApplication(item)" class="link">
+                                <img *ngIf="!item.haveAppForm" src="https://image.flaticon.com/icons/svg/401/401036.svg"
+                                    width="25" height="25">
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+            <nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+                nbSpinnerMessage="Loading...">
+                <nb-card-body>
+                    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+                </nb-card-body>
+            </nb-card>
+            <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
                 [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
-            </mat-paginator> -->
+            </mat-paginator>
         </nb-card-body>
     </nb-card>
 </div>
 
 <!--Job Request -->
 <ng-template #jr let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="innerWidth">
+    <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
         <nb-card-header class="text-center">
-            Interview Result
+            Job Request
             <div class="actions">
                 <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
             </div>
         </nb-card-header>
         <nb-card-body>
-            <div class="table-responsive">
+            <div class="table-responsive tableFixHead" [style.height.px]="innerCardBodyHeight">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr style="font-size: 14px;">
@@ -302,7 +309,7 @@
 </ng-template>
 <!-- Comments -->
 <ng-template #comment let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="innerWidth">
+    <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
         <nb-card-header class="text-center">
             Comments
             <div class="actions">
@@ -310,7 +317,7 @@
             </div>
         </nb-card-header>
         <nb-card-body>
-            <div class="table-responsive">
+            <div class="table-responsive tableFixHead" [style.height.px]="innerCardBodyHeight">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr style="font-size: 14px;">
@@ -350,7 +357,7 @@
 
 <!-- Exam Result -->
 <ng-template #exam let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="innerWidth">
+    <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
         <nb-card-header class="text-center">
             Exam Result
             <div class="actions">
@@ -358,7 +365,7 @@
             </div>
         </nb-card-header>
         <nb-card-body>
-            <div class="table-responsive">
+            <div class="table-responsive tableFixHead" [style.height.px]="innerCardBodyHeight">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr style="font-size: 14px;">
@@ -376,13 +383,13 @@
                                     {{ exam.position || '-' }}
                                 </span>
                             </td>
-                            <td class="text-left">
+                            <td>
                                 <span>
                                     {{ exam.examScore || '-' }}
                                 </span>
                             </td>
                             <td>
-                                <span>
+                                <span class="text-left">
                                     {{ exam.examRemark || '-' }}
                                 </span>
                             </td>
@@ -392,7 +399,7 @@
                                 </span>
                             </td>
                             <td>
-                                <span>
+                                <span class="text-left">
                                     {{ exam.attitudeRemark || '-' }}
                                 </span>
                             </td>
@@ -409,7 +416,7 @@
 
 <!-- Interview Result -->
 <ng-template #interview let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="innerWidth">
+    <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
         <nb-card-header class="text-center">
             Interview Result
             <div class="actions">
@@ -417,32 +424,36 @@
             </div>
         </nb-card-header>
         <nb-card-body>
-            <div class="table-responsive">
+            <div class="table-responsive tableFixHead" [style.height.px]="innerCardBodyHeight">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr style="font-size: 14px;">
-                            <th scope="col">JR</th>
+                            <th scope="col">Position</th>
                             <th scope="col">Score</th>
                             <th scope="col">Result</th>
-                            <th scope="col">Interview User</th>
-                            <th scope="col">Evaluation Form</th>
+                            <th scope="col">UserInterview</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let view of select.interviewResult.interviewResult" style="font-size: 14px;">
+                        <tr *ngFor="let view of select.interviewResult.interviewResults" style="font-size: 14px;">
                             <td class="text-left">
                                 <span>
-                                    Classrom
-                                </span>
-                            </td>
-                            <td class="text-left">
-                                <span>
-                                    Sukhumvit
+                                    {{ view.position || '-' }}
                                 </span>
                             </td>
                             <td>
                                 <span>
-                                    Comment
+                                    {{ view.score || '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span [ngClass]="resultColor(view.result)">
+                                    {{ view.result || '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ view.userInterview || '-' }}
                                 </span>
                             </td>
                         </tr>
@@ -458,7 +469,7 @@
 
 <!-- Reject History -->
 <ng-template #reject let-data let-ref="dialogRef">
-    <nb-card [style.width.px]="innerWidth">
+    <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
         <nb-card-header class="text-center">
             Reject History
             <div class="actions">
@@ -466,7 +477,7 @@
             </div>
         </nb-card-header>
         <nb-card-body>
-            <div class="table-responsive">
+            <div class="table-responsive tableFixHead" [style.height.px]="innerCardBodyHeight">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr style="font-size: 14px;">
@@ -476,20 +487,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let reject of select.rejectHistory" style="font-size: 14px;">
-                            <td class="text-left">
-                                <span>
-                                    Classrom
-                                </span>
-                            </td>
-                            <td class="text-left">
-                                <span>
-                                    Sukhumvit
+                        <tr *ngFor="let reject of select.rejectHistory.rejectHistories" style="font-size: 14px;">
+                            <td>
+                                <span class="text-left">
+                                    {{ reject.rejectReason || '-' }}
                                 </span>
                             </td>
                             <td>
                                 <span>
-                                    Comment
+                                    {{ reject.rejectBy || '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ reject.rejectDate || '-' }}
                                 </span>
                             </td>
                         </tr>

@@ -1,4 +1,4 @@
-<div class="font-family">
+<div class="homepage">
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -14,178 +14,275 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
-      <!-- <ul class="navbar-nav my-2 my-lg-0">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
-          <a class="nav-link" [routerLink]="'.'" fragment="home">Home</a>
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">Home<span
+              class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="'.'" fragment="features">Features</a>
+        <li class="nav-item active">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(features)">Features</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="'.'" fragment="faq">FAQ</a>
+        <!-- <li class="nav-item active">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a>
+        </li> -->
+        <li class="nav-item active">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">Contact us</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="'.'" fragment="contact-us">Contact Us</a>
-        </li>
-      </ul> -->
+      </ul>
       <ul class="navbar-nav ml-md-auto">
-        <li class="nav-item ml-auto">
-          <a class="nav-link">
-            <button nbButton outline status="success" [size]="size" class="m-r-10"
-              [routerLink]="'/employer/login'">Employer
-              Site</button>
-            <button nbButton status="success" [size]="size" [routerLink]="'/employer/login'">Sign In</button>
+        <!-- <li class="nav-item dropdown">
+          <a style="text-align: center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span *ngIf="lang === 'en'" class="flag-icon flag-icon-us flag-icon-squared"></span><span
+              *ngIf="lang === 'en'"> English</span>
+            <span *ngIf="lang === 'th'" class="flag-icon flag-icon-th flag-icon-squared"></span><span
+              *ngIf="lang === 'th'"> ภาษาไทย</span>
           </a>
-        </li>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" style="text-align: center;cursor: pointer;margin-top: 3px"
+              (click)="setLang('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English</a>
+            <a class="dropdown-item" style="text-align: center;cursor: pointer;" (click)="setLang('th')"><span
+                class="flag-icon flag-icon-th flag-icon-squared"></span> ภาษาไทย</a>
+          </div>
+        </li> -->
+        <button style="text-align: center;" nbButton outline status="success" [routerLink]="'/employer/login'">Sign
+          In</button>
       </ul>
     </div>
   </nav>
 
-  <!-- Slide Show -->
-  <!-- <ngb-carousel id="home" name="home" *ngIf="images" [showNavigationArrows]="showNavigationArrows">
-    <ng-template ngbSlide *ngFor="let image of images">
-      <div class="picsum-img-wrapper">
-        <img class="img-fluid" [src]="image.img">
-      </div>
-      <div class="carousel-caption">
-        <h3 class="text-white">{{ image.title }}</h3>
-        <p class="text-white">{{ image.remark }}</p>
-      </div>
-    </ng-template>
-  </ngb-carousel> -->
 
   <!-- Home -->
-  <div id="home">
-    <img class="img-fluid" src="../../../assets/images/bg.jpg">
+  <div #home id="home">
+    <!-- <img class="img-bg" src="../../../assets/images/ngIndex.jpg"> -->
     <div class="image-text" *ngIf="devices.isPC || devices.isNotebook || devices.other">
-      <h3>
-        Buddy Recruit
-      </h3>
-      <h6>
-        Your Buddy for Successful Recruitment
-      </h6>
-      <!-- <h3>
-        ระบบจัดการผู้สมัครงาน
-        <div>
-          <label>
-            {{ 'TITLE' | translate }}
-          </label>
-          <div class="pull-right">
-            <label class="label" class="mg-r-10">{{ 'LANGUAGE' | translate }} :</label>
-            <label class="link" (click)="setLang('en')">{{'ENGLISH' | translate}}</label>
-            <label class="label">/</label>
-            <label class="link" (click)="setLang('th')">{{ 'THAI' | translate}}</label>
-          </div>
+      <div class="row">
+        <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+          <h3 style="float: right">
+            <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+              alt="Buddy Recruit Logo" />
+          </h3>
         </div>
-      </h3>
-      <h6>
-        Buddy Recruit เป็นผู้ให้บริการในด้านการจัดการบุคคลากร ที่มาพร้อมกับระบบ AI ช่วยในการเก็บข้อมูล
-        ซึ่งจะช่วยให้จัดการ
-        คัดสรรข้อมูลของบุคคลากรให้ง่ายยิ่งขึ้น
-      </h6> -->
-      <!-- <h6>
-        Let <b>"BUDDY RECRUIT"</b> help you!
-      </h6> -->
-    </div>
-  </div>
-  <div *ngIf="devices.isMobile || devices.isTablet" class="header-border">
-    <div class="container" style="text-align: center;">
-      <h2>
-        Buddy Recruit
-      </h2>
-      <span>
-        Your Buddy for Successful Recruitment
-      </span>
-      <!-- <h2>
-        ระบบจัดการผู้สมัครงาน
-      </h2>
-      <span>
-        Buddy Recruit เป็นผู้ให้บริการในด้านการจัดการบุคคลากร ที่มาพร้อมกับระบบ AI ช่วยในการเก็บข้อมูล
-        ซึ่งจะช่วยให้จัดการ
-        คัดสรรข้อมูลของบุคคลากรให้ง่ายยิ่งขึ้น
-      </span> -->
-    </div>
-  </div>
-  <!-- Upcoming -->
-  <!-- <section id="upcoming">
-    <div class="container">
-      <div class="header">
-        <h2>Upcoming Event</h2>
-        <h3>พบกับ Buddy Recruit ได้ในงาน <b>"CEBIT ASEAN Thailand 2019"</b></h3>
-        <h3>ระหว่างวันที่ 27-29 พฤศจิกายน 2562 ณ บูท C25 อาคาร 7 อิมแพ็ค เมืองทองธานี</h3>
-        <h3>
-          <a target="_blank" href="https://cebitasean.com">ลงทะเบียนเข้าร่วมงาน</a>
-        </h3>
+        <div class="col-9 col-sm-9 col-md-9 col-lg-9">
+          <h3>
+            Buddy Recruit
+          </h3>
+          <span style="color: white">
+            Your Buddy for Successful Recruitment
+          </span>
+          <br>
+          <span style="color: white">
+            AI automate hiring part of your workflow
+          </span>
+        </div>
       </div>
-      <a target="_blank" href="https://cebitasean.com">
-        <img class="img-fluid" src="../../../assets/images/brochure/Buddy Recruit Set1.jpg" alt="event">
-      </a>
     </div>
-  </section> -->
+    <div class="image-text" *ngIf="devices.isMobile || devices.isTablet">
+      <div class="row" style="width: 100%">
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+          <h3>
+            <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+              alt="Buddy Recruit Logo" />
+          </h3>
+        </div>
+        <div class="col-12 col-sm-9 col-md-9 col-lg-9" style="text-align: center">
+          <br>
+          <h3>
+            Buddy Recruit
+          </h3>
+          <br>
+          <label style="color: white">
+            Your Buddy for Successful Recruitment
+          </label>
+          <br>
+          <span style="color: white;padding-top: 5px;">
+            AI automate hiring part of your workflow
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- About -->
+  <div id="second" class="about-bg">
+    <div class="for-mobile">
+      <div class="row rwid">
+        <div class="col-12 col-sm-11 col-md-6 col-lg-6">
+          <img class="img-bg" src="../../../assets/images/about1.jpg">
+        </div>
+        <div class="col-12 col-sm-11 col-md-6 col-lg-6 text-center text-mob">
+          <h2 class="font-family ">Buddy Recruit คืออะไร?</h2>
+          <hr class="line-color">
+          <p>แพลตฟอร์มเพื่อช่วยเพิ่มประสิทธิภาพ</p>
+          <p> ในการคัดสรรผู้สมัครในองค์กรโดยใช้ระบบ</p>
+          <p> AI (Artificial Intelligence)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Get Started -->
+  <div id="contact-us" class="ready-bg">
+    <div class="row rwid">
+      <div class="col-md-6 col-lg-6 text-center text-mob">
+        <h2 class="font-family ">Ready to get started?</h2>
+        <p>Create a free account in 2 minutes</p>
+        <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button>
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <img class="img-bg" src="../../../assets/images/ready.jpg">
+      </div>
+    </div>
+  </div>
 
   <!-- Features -->
-  <section id="features">
+  <section #features id="feature">
     <div class="container">
       <div class="header">
-        <h2>Features</h2>
-        <h3>The future of recruitment experience</h3>
+        <h2>OUR FEATURES</h2>
       </div>
-      <div class="row">
-        <div class="col-md-6 col-lg-3">
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-5">
           <nb-card>
-            <nb-card-body class="text-center">
-              <h1 class="card-icon">
-                <nb-icon icon="monitor-outline"></nb-icon>
-              </h1>
-              <h5 class="card-title text-cap">Simply Process</h5>
-              <p class="card-text">
-                A modern, Intelligent & friendly ATS
-              </p>
-              <!-- <div class="text-right">
-                <small class="link text-orange">Learn More
-                  <nb-icon icon="arrow-forward-outline"></nb-icon>
-                </small>
-              </div> -->
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <h1>
+                    <img class="img-icon" src="../../../assets/images/simply.png">
+                  </h1>
+                </div>
+                <div class="col-md-8 col-lg-8 tleft">
+                  <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>imply Process</h5>
+                  <p>
+                    A modern, Intelligent <br>& friendly ATS<br>
+                  </p>
+                </div>
+              </div>
             </nb-card-body>
           </nb-card>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <!-- <div class="col-md-3 col-lg-3">
+          <h1>
+            <img class="img-icon" src="../../../assets/images/simply.jpg">
+          </h1>
+        </div>
+        <div class="col-md-3 col-lg-3 tleft">
+          <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>imply Process</h5>
+          <p>
+            A modern, Intelligent <br>& friendly ATS
+          </p>
+        </div> -->
+        <div class="col-md-5">
           <nb-card>
-            <nb-card-body class="text-center">
-              <h1 class="card-icon">
-                <nb-icon icon="search-outline"></nb-icon>
-              </h1>
-              <h5 class="card-title text-cap">Smart Matching</h5>
-              <p class="card-text">
-                Get qualified candidates & Collaborate effectively
-              </p>
+            <nb-card-body class="">
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <h1>
+                    <img class="img-icon" src="../../../assets/images/smart.png">
+                  </h1>
+                </div>
+                <div class="col-md-8 col-lg-8 tleft">
+                  <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>mart Matching</h5>
+                  <p>
+                    Get qualified candidates <br>& Collaborate effectively<br>
+                  </p>
+                </div>
+              </div>
             </nb-card-body>
           </nb-card>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <!-- <div class="col-md-2 col-lg-2">
+          <h1>
+            <img class="img-icon" src="../../../assets/images/smart.jpg">
+          </h1>
+        </div>
+        <div class="col-md-4 col-lg-4 tleft">
+          <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>mart Matching</h5>
+          <p>
+            Get qualified candidates <br>& Collaborate effectively
+          </p>
+        </div> -->
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-5">
           <nb-card>
-            <nb-card-body class="text-center">
-              <h1 class="card-icon">
-                <nb-icon icon="bar-chart-outline"></nb-icon>
-              </h1>
-              <h5 class="card-title text-cap">Intelligent Scoring</h5>
-              <p class="card-text">
-                Candidate screening is a BIG CHALLENGE
-              </p>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <h1>
+                    <img class="img-icon" src="../../../assets/images/driven.png">
+                  </h1>
+                </div>
+                <div class="col-md-8 col-lg-8 tleft">
+                  <h5 class="card-title text-cap"><span style="font-weight: 600;">D</span>ata-Driven</h5>
+                  <p>
+                    Be Data-Driven,<br> more effective <br> Recruitment
+                  </p>
+                </div>
+              </div>
             </nb-card-body>
           </nb-card>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-5">
           <nb-card>
-            <nb-card-body class="text-center">
-              <h1 class="card-icon">
-                <nb-icon icon="pie-chart-outline"></nb-icon>
-              </h1>
-              <h5 class="card-title text-cap">Data-Driven</h5>
-              <p class="card-text">
-                Be Data-Driven, more effective Recruitment
-              </p>
+            <nb-card-body class="">
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <h1>
+                    <img class="img-icon" src="../../../assets/images/scoring.png">
+                  </h1>
+                </div>
+                <div class="col-md-8 col-lg-8 tleft">
+                  <h5 class="card-title text-cap"><span style="font-weight: 600;">I</span>ntelligent Scoring</h5>
+                  <p>
+                    Candidate screening<br> is a BIG CHALLENGE<br>
+                  </p>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-5">
+          <nb-card>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <h1>
+                    <img class="img-icon" src="../../../assets/images/calendar.png">
+                  </h1>
+                </div>
+                <div class="col-md-8 col-lg-8 tleft-over">
+                  <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>ync Multiple Calendars</h5>
+                  <p>
+                    Be convenient with Calendar <br>& Schedule Management<br>
+                  </p>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-5">
+          <nb-card>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-4 col-lg-4">
+                  <h1>
+                    <img class="img-icon" src="../../../assets/images/lock.png">
+                  </h1>
+                </div>
+                <div class="col-md-8 col-lg-8 tleft-over">
+                  <h5 class="card-title text-cap"><span style="font-weight: 600;">D</span>ata Privacy Compliance (PDPA)
+                  </h5>
+                  <p>
+                    Important point in Data protection,<br> privacy and security
+                  </p>
+                </div>
+              </div>
             </nb-card-body>
           </nb-card>
         </div>
@@ -201,8 +298,122 @@
     </div>
   </aside>
 
+  <!-- How TO -->
+  <section id="howTo">
+    <div class="container">
+      <div class="header">
+        <h2><span style="font-weight: bold;
+          color: var(--color-green)">Buddy Recruit</span><br *ngIf="devices.isMobile"> ทำงานอย่างไร?</h2>
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-6 col-lg-6 text-mob">
+          <p>
+            Email Automation
+          </p>
+          <label class="sub-head">ดึงอีเมลเข้าระบบอัตโนมัติ</label><br>
+          <span class="sub-body">ระบบจะทำการอ่านอีเมลสมัครงาน รวมถึงแหล่งต่างๆ<br>
+            ดึงเข้าระบบแบบ Automation และมีการส่งอีเมลระหว่างขั้นตอน<br>
+            ทั้งภายในองค์กร ภายนอกไปยังผู้สมัครงานได้ง่ายโดยผ่านทางระบบโดยตรง
+          </span>
+        </div>
+        <div class="col-md-5 col-lg-5 text-mob-wide">
+          <img class="img-bg" src="../../../assets/images/emailPic.jpg">
+        </div>
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div *ngIf="!devices.isMobile" class="col-md-6 col-lg-6 pd1">
+          <img class="img-bg-wide" src="../../../assets/images/Scored.jpg">
+        </div>
+        <div *ngIf="!devices.isMobile" class="col-md-5 col-lg-5 text-mob-wide">
+          <p>
+            CV scoring qualification
+          </p>
+          <label class="sub-head">คิดคะแนนตามคุณสมบัติที่ต้องการได้จาก CV</label><br>
+          <span class="sub-body">ใช้เทคโนโลยีอัจฉริยะ AI ช่วยวิเคราะห์ใบสมัครงาน<br>
+            และสามารถคิดคะแนนได้ตรงตามเกณฑ์คุณสมบัติ<br>
+            ของงานที่กำหนดไว้ แสดงคะแนน CV เพื่อให้ได้<br>
+            ผู้สมัครที่เหมาะกับงาน
+          </span>
+        </div>
+        <div *ngIf="devices.isMobile" class="col-md-6 col-lg-6 text-mob-wide">
+          <p>
+            CV scoring qualification
+          </p>
+          <label class="sub-head">คิดคะแนนตามคุณสมบัติที่ต้องการได้จาก CV</label><br>
+          <span class="sub-body">ใช้เทคโนโลยีอัจฉริยะ AI ช่วยวิเคราะห์ใบสมัครงาน<br>
+            และสามารถคิดคะแนนได้ตรงตามเกณฑ์คุณสมบัติ<br>
+            ของงานที่กำหนดไว้ แสดงคะแนน CV เพื่อให้ได้<br>
+            ผู้สมัครที่เหมาะกับงาน
+          </span>
+        </div>
+        <div *ngIf="devices.isMobile" class="col-md-5 col-lg-5 pd1">
+          <img class="img-bg-wide" src="../../../assets/images/Scored.jpg">
+        </div>
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-6 col-lg-6 txt-top">
+          <p>
+            Easy Process Flow
+          </p>
+          <label class="sub-head">ขั้นตอนไม่ซับซ้อนใช้งานง่าย</label><br>
+          <span class="sub-body">Buddy Recruit มีขั้นตอนที่ช่วยคัดกรองผู้สมัครไปตาม Stage ต่างๆ<br>
+            ตั้งแต่ Talent pool จนถึง Onboard
+            เพื่อให้มีการทำงานเป็นระบบ
+          </span>
+        </div>
+        <div class="col-md-5 col-lg-5 text-mob-wide">
+          <img class="img-bg-2" src="../../../assets/images/listMenu.jpg">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Price -->
+  <section id="package">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 col-lg-2"></div>
+        <div class="col-md-4 col-lg-4">
+          <nb-card>
+            <nb-card-header>
+              <button nbButton shape="round" size="giant" ghost class="btn-stand">STANDARD</button>
+            </nb-card-header>
+            <nb-card-body>
+              <label>Job Request <span>5</span></label>
+              <hr>
+              <label>User Account <span>10</span></label>
+              <hr>
+              <label>Features <span>All</span></label>
+              <hr>
+              <label> <span>100 cv / day</span></label>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <nb-card>
+            <nb-card-header>
+              <button nbButton shape="round" size="giant" ghost class="btn-pro">PRO</button>
+            </nb-card-header>
+            <nb-card-body>
+              <label>Job Request <span>Unlimit</span></label>
+              <hr>
+              <label>User Account <span>Unlimit</span></label>
+              <hr>
+              <label>Features <span>All</span></label>
+              <hr>
+              <label> <span>900 cv / day</span></label>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-2 col-lg-2"></div>
+      </div>
+    </div>
+  </section>
   <!-- News -->
-  <section id="news">
+  <!-- <section id="news">
     <div class="container">
       <div class="header">
         <h2>News and Promotion</h2>
@@ -212,7 +423,6 @@
         <div *ngFor="let new of news" class="col-md-6 col-lg-4">
           <div class="card">
             <div class="card-image" [style.backgroundImage]="'url('+ new.img +')'">
-              <!-- <img [src]="new.img" class="card-img-top"> -->
             </div>
             <div class="card-body text-left">
               <h6 class="card-title text-dot">{{ new.title }}</h6>
@@ -230,14 +440,11 @@
           </div>
         </div>
       </div>
-      <!-- <div class="text-center m-t-10">
-        <button nbButton outline status="success">Read More</button>
-      </div> -->
     </div>
-  </section>
+  </section> -->
 
   <!-- FAQ -->
-  <section id="faq">
+  <!-- <section id="faq">
     <div class="container">
       <div class="header">
         <h2>FAQ</h2>
@@ -299,22 +506,10 @@
         </nb-accordion-item>
       </nb-accordion>
     </div>
-  </section>
-
-  <!-- Get Started -->
-  <section id="contact-us">
-    <div class="container">
-      <div class="header">
-        <h2>Ready to get <span class="text-green">started</span>?</h2>
-        <h3>Create a free account in just 2 minutes</h3>
-      </div>
-      <button nbButton status="warning" class="m-r-10" (click)="expanded = true">Try it free</button>
-      <button nbButton outline status="success" (click)="expanded = true">Get Demo</button>
-    </div>
-  </section>
+  </section> -->
 
   <!-- Customer -->
-  <section id="customer">
+  <!-- <section id="customer">
     <div class="container">
       <div class="header">
         <h2><small>Some of our work that our customer might have seen</small></h2>
@@ -325,19 +520,20 @@
         <img src="https://humanize.co.th/image/new-logo2.png">
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Footer -->
-  <footer>
+  <footer #contact>
     <div class="container">
       <div class="row">
         <div class="col-md-4 m-b-20">
           <div class="sitemap">
             <h6>Sitemap</h6>
-            <a>Home</a>
-            <a>Features</a>
-            <a>FAQ</a>
-            <a>Contact us</a>
+            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">Home<span
+                class="sr-only">(current)</span></a>
+            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(features)">Features</a>
+            <!-- <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a> -->
+            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">Contact us</a>
           </div>
         </div>
         <div class="col-md-4 m-b-20">
@@ -371,10 +567,7 @@
     <nb-accordion [style.width.px]="innerWidth">
       <nb-accordion-item [expanded]="expanded">
         <nb-accordion-item-header (click)="toggleRegister()">
-          <!-- Contact Buddy Recruit for free Demo&Trial -->
           <div class="title">
-            <!-- <div>ลงทะเบียนเพื่อรับสิทธิ์ Promotion เดียวกับงาน</div>
-            <div>CEBIT ASEAN Thailand 2019</div> -->
             <div *ngIf="!devices.isMobile">ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
             <div *ngIf="devices.isMobile">รับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
           </div>
@@ -450,16 +643,6 @@
               </small>
             </div>
           </div>
-          <!-- <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.userRole }">
-            <label class="label">Role in the recruitment process <span class="text-red">*</span></label>
-            <nb-radio-group [(ngModel)]="contactUs.userRole">
-              <nb-radio *ngFor="let option of roleOptions" [value]="option.value">{{ option.label }}</nb-radio>
-            </nb-radio-group>
-            <small *ngIf="errMsg.userRole" class="text-red">
-              <nb-icon icon="alert-circle-outline"></nb-icon>
-              {{ errMsg.userRole }}
-            </small>
-          </div> -->
           <div class="form-control-group">
             <label class="label">Message</label>
             <textarea type="text" nbInput fullWidth [(ngModel)]="contactUs.remark"></textarea>
