@@ -112,6 +112,8 @@ import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { ListComponent } from './consent/list/list.component';
+import { DetailComponent } from './consent/detail/detail.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -228,6 +230,8 @@ import { MatSelectFilterModule } from 'mat-select-filter';
     CandidateListComponent,
     CandidateDetailComponent,
     CalendarComponent,
+    ListComponent,
+    DetailComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

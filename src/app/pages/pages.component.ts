@@ -63,6 +63,7 @@ export class PagesComponent {
           || (menu.onboard && menu.onboard.active)
         ) {
           this.menu.push(MENU.MENU_PROCESS_FLOW[0]);
+          this.menu.push(MENU.MENU_PROCESS_FLOW[7]);
           if (menu.talentPool && menu.talentPool.active) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[1]);
           }

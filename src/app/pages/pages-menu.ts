@@ -87,6 +87,12 @@ export const MENU_PROCESS_FLOW: NbMenuItem[] = [
     link: '/employer/onboard/list',
     hidden: false,
   },
+  {
+    title: 'Consent Lists',
+    icon: 'shopping-bag-outline',
+    link: '/employer/consent/list',
+    hidden: false,
+  },
 ];
 
 export const MENU_REPORT: NbMenuItem[] = [

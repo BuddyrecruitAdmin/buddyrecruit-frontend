@@ -408,24 +408,31 @@
         <div class="col-md-6">
           <div class="form-control-group" [ngClass]="{ 'select-red': errMsg.adminEmail }">
             <label class="label" for="name">Admin Company <span class="text-red">*</span>
-              <!-- <nb-icon icon="search-outline" style="width: 15px" class="link" (click)="openSearch()"></nb-icon> -->
             </label>
-              <mat-form-field [color]="primary" appearance="outline">
-                <mat-select [(ngModel)]="companyDetail.adminEmail">
-                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="bigAdmin"
-                    (filteredReturn)="filteredList5 =$event"></mat-select-filter>
-                  <mat-option *ngFor="let item of filteredList5" [value]="item.value">
-                    {{item.label}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            <!-- <nb-select [(ngModel)]="companyDetail.adminEmail" [ngModelOptions]="{ standalone: true }" fullWidth>
-              <nb-option *ngFor="let ad of bigAdmin | filter:searchText" [value]="ad.value">
-                {{ ad.label }}
-              </nb-option>
-            </nb-select> -->
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="companyDetail.adminEmail">
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="bigAdmin"
+                  (filteredReturn)="filteredList5 =$event"></mat-select-filter>
+                <mat-option *ngFor="let item of filteredList5" [value]="item.value">
+                  {{item.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
             <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
           </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="role.refHero.isAdmin">
+        <div class="col-md-6">
+          <label style="font-weight: bold;">Consent Settings</label><br>
+          <div class="form-control-group">
+            <label class="label">Waiting Period</label>
+            <input type="text" [(ngModel)]="companyDetail.waitinPeriod" pattern="[0-9]*" inputmode="numeric" digitOnly
+              onKeyPress="if(this.value.length==3) return false;" nbInput>
+          </div>
+          <!-- <div>
+            <small *ngIf="errMsg.waitinPeriod" class="text-red">{{ errMsg.waitinPeriod }}</small>
+          </div> -->
         </div>
       </div>
     </div>

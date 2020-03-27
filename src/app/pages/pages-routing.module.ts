@@ -7,6 +7,8 @@ import { JdListComponent } from './jd/jd-list/jd-list.component';
 import { JdDetailComponent } from './jd/jd-detail/jd-detail.component';
 import { JrListComponent } from './jr/jr-list/jr-list.component';
 import { JrDetailComponent } from './jr/jr-detail/jr-detail.component';
+import { ListComponent } from './consent/list/list.component';
+import { DetailComponent } from './consent/detail/detail.component';
 import { TalentPoolListComponent } from './talent-pool/talent-pool-list/talent-pool-list.component';
 import { TalentPoolDetailComponent } from './talent-pool/talent-pool-detail/talent-pool-detail.component';
 import { ExamListComponent } from './exam/exam-list/exam-list.component';
@@ -23,7 +25,6 @@ import { CandidateListComponent } from './candidate/candidate-list/candidate-lis
 import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
-
 const routes: Routes = [
   {
     path: '',
@@ -102,13 +103,17 @@ const routes: Routes = [
       },
       // Talent Pool
       {
+        path: 'consent/list',
+        component: ListComponent,
+      },
+      {
+        path: 'consent/detail',
+        component: DetailComponent,
+      },
+      {
         path: 'talent-pool/list',
         component: TalentPoolListComponent,
       },
-      // {
-      //   path: 'talent-pool/list/:id/:jrs',
-      //   component: TalentPoolListComponent,
-      // },
       {
         path: 'talent-pool/detail',
         component: TalentPoolDetailComponent,
