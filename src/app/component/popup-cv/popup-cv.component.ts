@@ -372,15 +372,17 @@ export class PopupCvComponent implements OnInit {
 
   checkCV(id) {
     this.jdService.originalCV(id, this.role._id)
-      .subscribe(data =>
+      .subscribe(data => {
+        console.log(data)
         this.downloadFile(data), error =>
-        this.showToast('danger', 'Error Message', "can't find original CV")
+          this.showToast('danger', 'Error Message', "can't find original CV")
+      }
       );
   }
 
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
-    const url = window.URL.createObjectURL(data);
+    const url = window.URL.createObjectURL(blob);
     // var windowReference = window.open();
     // windowReference.location.href = url;
     // window.open(url, "_system");
