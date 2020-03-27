@@ -371,9 +371,59 @@
     </div>
   </section>
 
+  <!-- PDPA -->
+  <div id="pdpa" class="pdpa-bg">
+    <div class="row rwid">
+      <div class="col-md-6 col-lg-6 text-center text-mob">
+        <h2 class="font-family ">Security Services in "PDPA"</h2>
+        <p>PRIVACY of Personal Information</p>
+        <p>ระบบมีนโยบายตามกฎหมายปกป้องข้อมูลส่วนบุคคลตาม<p>
+            <p>พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</p>
+            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <img class="img-bg" src="../../../assets/images/PDPA.jpg">
+      </div>
+    </div>
+  </div>
+
+  <!-- News -->
+  <section id="news">
+    <div class="container">
+      <div class="header">
+        <h2>News and Promotion</h2>
+        <h3>News and promotion that we serve</h3>
+      </div>
+      <div class="row text-mob">
+        <div *ngFor="let new of news" class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-image" [style.backgroundImage]="'url('+ new.img +')'">
+            </div>
+            <div class="card-body text-left">
+              <h6 class="card-title text-dot">{{ new.title }}</h6>
+              <p class="card-text text-dot2">
+                {{ new.remark }}
+              </p>
+              <div class="text-right">
+                <a target="_blank" [href]="new.link" class="link text-orange">
+                  <small>
+                    Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
+                  </small>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Price -->
   <section id="package">
     <div class="container">
+      <div class="header">
+        <h2>PACKAGE</h2>
+      </div>
       <div class="row">
         <div class="col-md-2 col-lg-2"></div>
         <div class="col-md-4 col-lg-4">
@@ -412,39 +462,25 @@
       </div>
     </div>
   </section>
-  <!-- News -->
-  <!-- <section id="news">
-    <div class="container">
-      <div class="header">
-        <h2>News and Promotion</h2>
-        <h3>News and promotion that we serve</h3>
+
+  <!-- Thai team -->
+  <div id="thai" class="about-bg">
+    <div class="row rwid">
+      <div class="col-md-6 col-lg-6 text-center text-mob">
+        <h2 class="font-family ">Our Team Support</h2>
+        <p>ทีม Buddy Recruit เราคือนักพัฒนาคนไทย</p>
+        <p>ที่คอยดูแลระบบ Recruitment ให้มีประสิทธิภาพ<p>
+            <p>ตลอดจนขับเคลื่อนองค์กรให้ก้าวหน้าในอนาคตต่อไป</p>
+            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
       </div>
-      <div class="row">
-        <div *ngFor="let new of news" class="col-md-6 col-lg-4">
-          <div class="card">
-            <div class="card-image" [style.backgroundImage]="'url('+ new.img +')'">
-            </div>
-            <div class="card-body text-left">
-              <h6 class="card-title text-dot">{{ new.title }}</h6>
-              <p class="card-text text-dot2">
-                {{ new.remark }}
-              </p>
-              <div class="text-right">
-                <a target="_blank" [href]="new.link" class="link text-orange">
-                  <small>
-                    Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                  </small>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="col-md-6 col-lg-6">
+        <img class="img-bg" src="../../../assets/images/thai.jpg">
       </div>
     </div>
-  </section> -->
+  </div>
 
   <!-- FAQ -->
-  <!-- <section id="faq">
+  <section id="faq">
     <div class="container">
       <div class="header">
         <h2>FAQ</h2>
@@ -506,7 +542,7 @@
         </nb-accordion-item>
       </nb-accordion>
     </div>
-  </section> -->
+  </section>
 
   <!-- Customer -->
   <!-- <section id="customer">
@@ -523,9 +559,9 @@
   </section> -->
 
   <!-- Footer -->
-  <footer #contact>
+  <footer #contact id="contact">
     <div class="container">
-      <div class="row">
+      <div class="row text-mob">
         <div class="col-md-4 m-b-20">
           <div class="sitemap">
             <h6>Sitemap</h6>

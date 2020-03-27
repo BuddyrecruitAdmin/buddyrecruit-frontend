@@ -31,6 +31,27 @@ export class UtilitiesService {
     return fullName;
   }
 
+  setFullnameURL(refUser: any): string {
+    let fullName = '';
+    if (refUser) {
+      if (refUser.firstname) {
+        fullName = refUser.firstname;
+      }
+      if (refUser.lastname) {
+        fullName = fullName + '_' + refUser.lastname;
+      }
+      if (!refUser.firstname && !refUser.lastname) {
+        if (refUser.email) {
+          fullName = fullName + '_' + refUser.email;
+        } else if (refUser.phone) {
+          fullName = fullName + '_' + refUser.phone;
+        }
+      }
+    }
+    fullName = fullName.trim();
+    return fullName;
+  }
+
   dateIsValid(date: Date): boolean {
     let isValid = false;
     if (date) {

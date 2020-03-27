@@ -372,18 +372,20 @@ export class PopupCvComponent implements OnInit {
     this.remark = '';
   }
 
-  checkCV(id) {
+  checkCV(id, items) {
+    var name = this.utilitiesService.setFullnameURL(items);
     this.jdService.originalCV(id, this.role._id)
       .subscribe(data =>
-        this.downloadFile(data), error =>
+        this.downloadFile(data, name), error =>
         this.showToast('danger', 'Error Message', "can't find original CV")
       );
   }
 
-  downloadFile(data: any) {
+  downloadFile(data: any, name: string) {
     const blob = new Blob([data], { type: "image/jpeg" });
     const url = window.URL.createObjectURL(blob);
-    FileSaver.saveAs(blob, "image.jpeg");
+    const name_url = name + ".jpeg"
+    FileSaver.saveAs(blob, name_url);
     window.open(url);
 
   }

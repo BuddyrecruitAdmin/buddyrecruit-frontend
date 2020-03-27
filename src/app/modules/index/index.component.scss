@@ -305,6 +305,55 @@ section .header h3 {
     padding-top: 1rem;
   }
 }
+#pdpa{
+  position: relative;
+  padding-bottom: 2rem;
+  h2{
+    padding-top: 25%;
+    // font-weight: bold;
+    text-align: center;
+    color: white;
+  }
+  .img-bg{
+    height: auto;
+    width: 100%
+  }
+  .line-color{
+    border: 5px solid #35C4B2;
+    border-radius: 10px;
+    width: 50%;
+  }
+  p{
+    color: white;
+    font-size: 1.15rem;
+  }
+}
+.pdpa-bg{
+  width: 100%;
+  background-color: #382a5d;
+}
+#thai{
+  position: relative;
+  h2{
+    padding-top: 25%;
+    padding-bottom: 5%;
+    text-align: center;
+    color: black;
+  }
+  .img-bg{
+    height: auto;
+    width: 100%
+  }
+  .line-color{
+    border: 5px solid #35C4B2;
+    border-radius: 10px;
+    width: 50%;
+  }
+  p{
+    color: black;
+    font-size: 1.15rem;
+  }
+}
 #package{
   nb-card{
     border-radius: 2rem;
@@ -529,6 +578,13 @@ footer {
       position: relative;
     }
   }
+  #news{
+    position: relative;
+    .text-mob{
+      left: calc(4%);
+      position: relative;
+    }
+  }
   #howTo{
     position: relative;
     text-align: center;
@@ -565,5 +621,38 @@ footer {
   }
   #package{
     text-align: -webkit-center;
+  }
+  #pdpa{
+    h2{
+      padding-top: 2rem;
+    }
+    .img-bg{
+      left: calc(4%);
+      position: relative;
+      }
+    .text-mob{
+      left: calc(4%);
+      position: relative;
+    }
+  }
+  #thai{
+    h2{
+      padding-top: 2rem;
+    }
+    .img-bg{
+      left: calc(4%);
+      position: relative;
+      }
+    .text-mob{
+      left: calc(4%);
+      position: relative;
+    }
+  }
+  #contact{
+    position: relative;
+    .text-mob{
+      left: calc(4%);
+      position: relative;
+    }
   }
 }
