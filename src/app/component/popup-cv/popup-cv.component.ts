@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interfaces/common.interface';
 import { DomSanitizer } from '@angular/platform-browser';
+var FileSaver = require('file-saver');
 @Component({
   selector: 'ngx-popup-cv',
   templateUrl: './popup-cv.component.html',
@@ -373,19 +374,17 @@ export class PopupCvComponent implements OnInit {
 
   checkCV(id) {
     this.jdService.originalCV(id, this.role._id)
-      .subscribe(data => {
-        console.log(data)
+      .subscribe(data =>
         this.downloadFile(data), error =>
-          this.showToast('danger', 'Error Message', "can't find original CV")
-      }
+        this.showToast('danger', 'Error Message', "can't find original CV")
       );
   }
 
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
     const url = window.URL.createObjectURL(blob);
-    window.open(url, "_system");
-    // window.location.assign(url);
+    FileSaver.saveAs(blob, "text.pdf");
+    window.open(url);
 
   }
 

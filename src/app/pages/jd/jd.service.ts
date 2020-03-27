@@ -37,7 +37,7 @@ export class JdService extends NetworkService {
     const body = { _id: id,
     userId : userId };
     return this.httpClient.post(URL2, body, {
-      responseType: "blob",
+      responseType: "arraybuffer",
       headers: new HttpHeaders().append("Content-Type", "application/json")
     });
   }
