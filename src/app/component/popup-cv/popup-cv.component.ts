@@ -382,11 +382,19 @@ export class PopupCvComponent implements OnInit {
 
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
+    const reader = new FileReader();
+    reader.addEventListener('loadend', () => {
+      // reader.result contains the contents of blob as a typed array
+    });
+    reader.readAsArrayBuffer(blob);
+    console.log(blob)
+    console.log(reader.result)
     const url = window.URL.createObjectURL(blob);
+    console.log(url)
     // var windowReference = window.open();
     // windowReference.location.href = url;
-    // window.open(url, "_system");
-    window.location.assign(url);//open in current tab not new tab
+    window.open(url, "_system");
+    // window.location.assign(url);
 
   }
 
