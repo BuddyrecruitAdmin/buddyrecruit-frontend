@@ -52,6 +52,10 @@ export const API_ENDPOINT = {
     CLOSE: "jr/close",
     TOGGLE: "jr/active"
   },
+  CONSENT:{
+    LIST: "consentStage/list",
+    DETAIL: "consentStage/detail",
+  },
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",

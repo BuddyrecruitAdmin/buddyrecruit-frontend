@@ -54,6 +54,7 @@ export interface CompanyDetail {
     lineId: string;
     imageUrl: string;
   },
+  waitinPeriod: number;
 }
 
 export interface ErrMsg {
@@ -216,6 +217,7 @@ export class CompanyDetailComponent implements OnInit {
         lineId: '',
         imageUrl: '',
       },
+      waitinPeriod: 0
     }
   }
 
@@ -535,6 +537,10 @@ export class CompanyDetailComponent implements OnInit {
         this.errMsg.adminEmail = 'Please Input Admin Email';
         isValid = false;
       }
+      // if (!this.companyDetail.waitinPeriod) {
+      //   this.errMsg.waitinPeriod = 'Please Input Waiting Period';
+      //   isValid = false;
+      // }
     }
     return isValid;
   }

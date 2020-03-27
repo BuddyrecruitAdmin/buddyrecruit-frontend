@@ -102,6 +102,8 @@ import { BlacklistComponent } from './blacklist/blacklist.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ExanOnlineListComponent } from './exam-online/exan-online-list/exan-online-list.component';
+import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan-online-detail.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +129,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     EvaluationListComponent,
     BlacklistComponent,
     ContactUsComponent,
+    ExanOnlineListComponent,
+    ExanOnlineDetailComponent,
   ],
   imports: [
     CommonModule,

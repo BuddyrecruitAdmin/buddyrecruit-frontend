@@ -474,4 +474,25 @@ export class UtilitiesService {
     return sourcingColor;
   }
 
+  setConsent(key: string = ''): string {
+    let consentColor = 'label-gray'
+    switch (key) {
+      case 'PENDING':
+        consentColor = 'label-warning';
+        break;
+      case 'REJECT':
+        consentColor = 'label-danger';
+        break;
+      case 'CONSENTED':
+        consentColor = 'label-success';
+        break;
+      case 'EXPIRED':
+        consentColor = 'label-gray';
+        break;
+      default:
+        break;
+    }
+    return consentColor;
+  }
+
 }
