@@ -15,7 +15,7 @@ import { PopupInterviewResultComponent } from '../../component/popup-interview-r
 import * as _ from 'lodash';
 import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interfaces/common.interface';
-
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'ngx-popup-cv',
   templateUrl: './popup-cv.component.html',
@@ -82,6 +82,7 @@ export class PopupCvComponent implements OnInit {
     private router: Router,
     private dialogService: NbDialogService,
     private jdService: JdService,
+    private sanitizer: DomSanitizer
   ) {
     this.role = getRole();
     this.innerWidth = window.innerWidth * 0.8;
@@ -382,17 +383,7 @@ export class PopupCvComponent implements OnInit {
 
   downloadFile(data: any) {
     const blob = new Blob([data], { type: "text/pdf" });
-    const reader = new FileReader();
-    reader.addEventListener('loadend', () => {
-      // reader.result contains the contents of blob as a typed array
-    });
-    reader.readAsArrayBuffer(blob);
-    console.log(blob)
-    console.log(reader.result)
     const url = window.URL.createObjectURL(blob);
-    console.log(url)
-    // var windowReference = window.open();
-    // windowReference.location.href = url;
     window.open(url, "_system");
     // window.location.assign(url);
 
