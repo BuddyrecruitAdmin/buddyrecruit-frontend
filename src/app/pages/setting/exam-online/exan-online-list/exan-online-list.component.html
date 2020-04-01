@@ -50,18 +50,16 @@
             <div class="col-md-6 col-lg-6" *ngFor="let item of items;">
                 <nb-card *ngIf="!loading" [accent]="item.isActive ? 'success' : 'default'">
                     <nb-card-header>
-                        <div class="title">
+                        <div class="title link" [routerLink]="'/employer/setting/exam-online/preview/'+item._id">
                             <label>{{ item.name || item._id }}</label>
                         </div>
-                        <!-- <div *ngIf="role.refAuthorize.configuration.evaluation.editable" class="actions">
+                        <div class="actions">
                             <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
-                                [routerLink]="'/employer/setting/evaluation-detail/edit/'+item._id">
+                                [routerLink]="'/employer/setting/exam-online/edit/'+item._id">
                             </nb-icon>
-                            <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
-                                [routerLink]="'/employer/setting/evaluation-detail/duplicate/'+item._id"></nb-icon>
-                            <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
-                                (click)="delete(item)"></nb-icon>
-                        </div> -->
+                            <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
+                            </nb-icon>
+                        </div>
                     </nb-card-header>
                     <nb-card-body>
                         <i class="text-gray">
@@ -107,7 +105,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of items;">
-                                <td class="text-left" >
+                                <td class="text-left link"
+                                    [routerLink]="'/employer/setting/exam-online/preview/'+item._id">
                                     {{ item.name || item._id }}</td>
                                 <td>
                                     {{ item.lastChangedInfo?.refUser?.firstname }}
@@ -116,14 +115,10 @@
                                 <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
                                 </td>
                                 <td class="actions" *ngIf="role.refAuthorize.configuration.evaluation.editable">
-                                    <!-- <button nbButton status="primary" size="tiny" nbTooltip="Edit"
-                                        [routerLink]="'/employer/setting/evaluation-detail/edit/'+item._id">
+                                    <button nbButton status="primary" size="tiny" nbTooltip="Edit"
+                                        [routerLink]="'/employer/setting/exam-online/edit/'+item._id">
                                         <nb-icon icon="edit-outline"></nb-icon>
                                     </button>
-                                    <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
-                                        [routerLink]="'/employer/setting/evaluation-detail/duplicate/'+item._id">
-                                        <nb-icon icon="copy-outline"></nb-icon>
-                                    </button> -->
                                     <button nbButton status="danger" size="tiny" nbTooltip="Delete"
                                         (click)="delete(item)">
                                         <nb-icon icon="trash-2-outline"></nb-icon>

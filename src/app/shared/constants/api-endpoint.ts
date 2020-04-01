@@ -211,6 +211,9 @@ export const API_ENDPOINT = {
 
     EXAM_ONLINE_CREATE: "exam/create",
     EXAM_ONLINE_LIST: "exam/list",
+    EXAM_ONLINE_DELETE: "exam/delete",
+    EXAM_ONLINE_DETAIL: "exam/detail",
+    EXAM_ONLINE_EDIT: "exam/edit",
 
     MAIL_TEMPLATE_CREATE: "mailTemplate/create",
     MAIL_ACTION_LIST: "mailAction/list",

@@ -9,9 +9,10 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group" [ngClass]="{ 'has-error': touchedName }">
-                        <label class="text-black"><b>ชื่อแบบทดสอบ/Name Exam Form</b> <span
+                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exam Form</b> <span
                                 class="text-red">*</span></label>
-                        <input type="text" [(ngModel)]="examName" name="name" nbInput fullWidth>
+                        <input *ngIf="!preview" type="text" [(ngModel)]="examName" name="name" nbInput fullWidth>
+                        <label *ngIf="preview" class="text-black"><b>{{ examName || '' }}</b></label>
                         <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
                     </div>
                 </div>
@@ -23,7 +24,7 @@
                     <div class="input-group">
                         <label> {{ topic.name }}</label>
                     </div>
-                    <div class="input-group-addon">
+                    <div *ngIf="!preview" class="input-group-addon">
                         <nb-icon status="danger" icon="minus-square-outline" class="text-light-gray" class="link"
                             (click)="deleteTopic(topicOption,i)">
                         </nb-icon>
@@ -31,71 +32,66 @@
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;"
                             class="input-group form-control-group">
-                            <!-- <label *ngIf="option.type === 'label'">{{ option.name }}</label> -->
                             <textarea *ngIf="option.type === 'label'" type="text" [(ngModel)]="option.value" nbInput
-                                fullWidth placeholder="question here"></textarea>
+                                fullWidth placeholder="question here" [disabled]="preview"></textarea>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
-                                fullWidth placeholder="answer here" disabled>
+                                fullWidth placeholder="answer here" [disabled]="!preview">
                             <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput fullWidth
-                                placeholder="answer here" disabled></textarea>
+                                placeholder="answer here" [disabled]="!preview"></textarea>
                             <!-- radio -->
                             <div *ngIf="option.type === 'radio'">
                                 <br>
                                 <div *ngFor="let group of option.group;let r = index"
                                     class="input-group form-control-group">
-                                    <input type="text" [(ngModel)]="group.label" nbInput fullWidth
+                                    <input *ngIf="!preview" type="text" [(ngModel)]="group.label" nbInput fullWidth
                                         placeholder="choice text here">
-                                    <div class="input-group-addon">
+                                    <div *ngIf="!preview" class="input-group-addon">
                                         <nb-icon status="danger" icon="minus-square-outline" class="text-light-gray"
                                             class="link" (click)="deleteTopic(option.group, r)">
                                         </nb-icon>
                                     </div>
                                 </div>
-                                <!-- <nb-radio-group [(ngModel)]="option.value">
+                                <nb-radio-group *ngIf="preview" [(ngModel)]="option.value">
                                     <nb-radio *ngFor="let group of option.group;let r = index" [value]="group.value">
-                                        <div class="input-group">
-                                            <input type="text" [(ngModel)]="group.label" nbInput fullWidth
-                                                placeholder="choice text here">
-                                        </div>
-                                        <div class="input-group-addon">
-                                            <nb-icon status="danger" icon="minus-square-outline" class="text-light-gray"
-                                                class="link" (click)="deleteTopic(option.group, r)">
-                                            </nb-icon>
-                                        </div>
+                                        {{ group.label }}
                                     </nb-radio>
-                                </nb-radio-group> -->
-                                <button nbButton ghost status="danger">
+                                </nb-radio-group>
+                                <button *ngIf="!preview" nbButton ghost status="danger">
                                     <nb-icon icon="plus-square-outline" class="text-light-gray" class="link"
                                         (click)="addRadio(option)">
                                     </nb-icon>
                                 </button>
                             </div>
-                            <div *ngIf="option.type === 'file'" style="text-align:center">
-                                <img class="img-default" (click)="fileInput.click()"
-                                    [src]="option.src ? option.src : 'https://image.flaticon.com/icons/png/512/55/55089.png'">
-                                <br>
-                                <small class="text-gray">
-                                    <a style="cursor: pointer;" (click)="fileInput.click()">
-                                        <span class="fa fa-images"></span>
-                                        <input #fileInput type="file"
-                                            (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
-                                            accept="image/*" />
-                                        <span class="m-l-5">Select Profile Picture</span>
-                                    </a>
-                                </small>
+                            <div class="row" *ngIf="option.type === 'file'" style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img *ngIf="!preview" class="img-default" (click)="fileInput.click()"
+                                        [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                    <img *ngIf="preview" class="img-default"
+                                        [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                    <br>
+                                    <small *ngIf="!preview" class="text-gray">
+                                        <a style="cursor: pointer;" (click)="fileInput.click()">
+                                            <span class="fa fa-images"></span>
+                                            <input #fileInput type="file"
+                                                (change)="fileChangeEvent(option,$event.target.files)"
+                                                style="display:none;" accept="image/*" />
+                                            <span class="m-l-5">Select Exam Picture</span>
+                                        </a>
+                                    </small>
+                                </div>
                             </div>
                             <div *ngIf="option.type === 'getFile'" style="text-align: center">
                                 <small class="text-gray">
-                                    <a style="cursor: pointer;" (click)="fileInput.click()">
+                                    <a style="cursor: pointer;" (click)="fileInput.click()" [disabled]="!preview">
                                         <span class="fa fa-images"></span>
                                         <input #fileInput type="file"
                                             (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
                                             accept="image/*" />
-                                        <span class="m-l-5">Select Profile Picture</span>
+                                        <span class="m-l-5">Upload Your Picture</span>
                                     </a>
                                 </small>
                             </div>
-                            <div class="input-group-addon">
+                            <div *ngIf="!preview" class="input-group-addon">
                                 <nb-icon status="danger" icon="minus-square-outline" class="text-light-gray"
                                     class="link" (click)="deleteTopic(topicOption[i].examOptions,j)">
                                 </nb-icon>
@@ -103,7 +99,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="!preview">
                     <div class="col-lg-12">
                         <button [nbPopover]="component" (click)="setTopic(topic)" nbPopoverPlacement="top" nbButton
                             ghost size="small">
@@ -114,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!preview">
                 <div class="col-lg-12 text-center">
                     <button (click)="addTopic(dialog,'topic')" nbPopoverPlacement="top" status="success" shape="round"
                         nbButton size="small">
@@ -123,7 +119,7 @@
                     </button>
                 </div>
             </div>
-            <div class="row btn-save">
+            <div *ngIf="!preview" class="row btn-save">
                 <div class="col-lg-12">
                     <button (click)="save()" nbPopoverPlacement="top" nbButton size="small">
                         Save
@@ -157,7 +153,7 @@
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
         <nb-card-header>
-            <label class="label">Please input field name</label></nb-card-header>
+            <label class="label">Add Topic</label></nb-card-header>
         <nb-card-body>
             <div class="form-control-group">
                 <input type="text" [(ngModel)]="fieldName" nbInput fullWidth placeholder="field name">

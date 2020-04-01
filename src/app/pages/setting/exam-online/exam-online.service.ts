@@ -17,7 +17,7 @@ export class ExamOnlineService extends NetworkService {
   }
 
 
-  create(request: any, jdId: any,examName: any): Observable<ApiResponse> {
+  create(request: any, jdId: any, examName: any): Observable<ApiResponse> {
     const body = {
       departmentId: jdId,
       exams: request,
@@ -43,23 +43,29 @@ export class ExamOnlineService extends NetworkService {
   //   return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_LIST, body);
   // }
 
-  // deleteItem(item: any): Observable<ApiResponse> {
-  //   const body = {
-  //     _id: item._id
-  //   }
-  //   return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_DELETE, body);
-  // }
+  deleteItem(item: any): Observable<ApiResponse> {
+    const body = {
+      _id: item._id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_DELETE, body);
+  }
 
 
-  // getDetail(_id: any) {
-  //   const body = {
-  //     _id: _id
-  //   }
-  //   return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_DETAIL, body);
-  // }
+  getDetail(_id: any) {
+    const body = {
+      _id: _id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_DETAIL, body);
+  }
 
-  // edit(request: any): Observable<ApiResponse> {
-  //   return this.post(API_ENDPOINT.CONFIGURATION.EVALUATION_EDIT, request);
-  // }
+  edit(request: any, jdId: any, examName: any, _id: any): Observable<ApiResponse> {
+    const body = {
+      departmentId: jdId,
+      exams: request,
+      name: examName,
+      _id: _id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_EDIT, body);
+  }
 
 }

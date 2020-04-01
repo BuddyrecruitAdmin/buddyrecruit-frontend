@@ -30,21 +30,44 @@ export class ExanOnlineDetailComponent implements OnInit {
   touchedName: boolean;
   examName: any;
   sErrorName: string;
+  state: any;
+  _id: any;
+  preview: boolean;
+  loading: boolean;
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
     private service: ExamOnlineService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
   }
 
   ngOnInit() {
     this.component = this.templateTabs;
+    this.loading = true;
     this.createTopic = "";
     this.examName = "";
     this.topicOption = [];
+    this.preview = false;
     this.initialModel();
+    this.activatedRoute.params.subscribe(params => {
+      if (params.action === "create") {
+        this.state = "create";
+        this.loading = false;
+      }
+      if (params.action === "edit") {
+        this._id = params.id;
+        this.state = "edit";
+        this.getDetail();
+      }
+      if (params.action === "preview") {
+        this._id = params.id;
+        this.preview = true;
+        this.getDetail();
+      }
+    });
   }
 
   initialModel(): any {
@@ -52,6 +75,16 @@ export class ExanOnlineDetailComponent implements OnInit {
       { value: '1', label: 'Option 1' },
       { value: '2', label: 'Option 2' },
     ]
+  }
+
+  getDetail() {
+    this.service.getDetail(this._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.topicOption = response.data.exams;
+        this.examName = response.data.name;
+      }
+      this.loading = false;
+    })
   }
 
   addTopic(dialog: TemplateRef<any>, option: any) {
@@ -162,16 +195,26 @@ export class ExanOnlineDetailComponent implements OnInit {
   }
 
   save() {
-    console.log(this.topicOption)
     if (this.validation()) {
-      this.service.create(this.topicOption, this.role.departmentId,this.examName).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.showToast('success', 'Success Message', response.message);
-          this.router.navigate(['/employer/setting/evaluation']);
-        } else {
-          this.showToast('danger', 'Error Message', response.message);
-        }
-      })
+      if (this.state === "create") {
+        this.service.create(this.topicOption, this.role.departmentId, this.examName).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.router.navigate(['/employer/setting/exam-online']);
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        })
+      } else {
+        this.service.edit(this.topicOption, this.role.departmentId, this.examName, this._id).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.router.navigate(['/employer/setting/exam-online']);
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        })
+      }
     }
   }
 

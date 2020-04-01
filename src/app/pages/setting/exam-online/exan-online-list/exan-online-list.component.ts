@@ -79,6 +79,25 @@ export class ExanOnlineListComponent implements OnInit {
     });
   }
 
+  delete(item: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'D' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.deleteItem(item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
+    });
+  }
+
   changePaging(event) {
     this.paging = {
       length: event.length,
