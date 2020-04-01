@@ -166,5 +166,6 @@ export const MESSAGE = {
   156: "Total educatuin score must be equal maximum score",
   157: "Please enter evaluation name",
   158: "Please select division",
-  159: "Do you want to Block?"
+  159: "Do you want to Block?",
+  160: "Please enter exam form name"
 };

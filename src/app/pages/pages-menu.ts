@@ -221,4 +221,9 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     link: '/employer/setting/blacklist',
     hidden: false,
   },
+  {
+    title: 'Exam Online',
+    link: '/employer/setting/exam-online',
+    hidden: false,
+  },
 ];

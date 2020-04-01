@@ -1,0 +1,27 @@
+.img-default {
+    padding: 3px;
+    border: none;
+    position: relative;
+    margin: 10px auto 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--color-green);
+    cursor: pointer;
+    
+  }
+  .input-group {
+    .input-group-addon {
+      position: absolute;
+      right: 10px;
+      // margin-top: 5px;
+      color: #8f9bb3;
+      cursor: pointer;
+    }
+  }
+  .btn-save {
+    position: fixed;
+    top: 76px;
+    right: 17px;
+    z-index: 1030;
+  }

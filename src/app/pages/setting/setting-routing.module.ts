@@ -22,6 +22,9 @@ import { RejectStageComponent } from './reject-stage/reject-stage.component';
 import { EvaluationDetailComponent } from './evaluation/evaluation-detail/evaluation-detail.component';
 import { EvaluationListComponent } from './evaluation/evaluation-list/evaluation-list.component';
 import { BlacklistComponent } from './blacklist/blacklist.component';
+import { ExanOnlineListComponent } from './exam-online/exan-online-list/exan-online-list.component';
+import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan-online-detail.component';
+
 import { ContactUsComponent } from './contact-us/contact-us.component';
 
 const routes: Routes = [
@@ -76,6 +79,18 @@ const routes: Routes = [
       {
         path: 'mail-template-detail/:id',
         component: MailTemplateDetailComponent,
+      },
+      {
+        path: 'exam-online',
+        component: ExanOnlineListComponent,
+      },
+      {
+        path: 'exam-online/:action',
+        component: ExanOnlineDetailComponent,
+      },
+      {
+        path: 'exam-online/:action/:id',
+        component: ExanOnlineDetailComponent,
       },
       {
         path: 'evaluation',

@@ -52,7 +52,7 @@ export const API_ENDPOINT = {
     CLOSE: "jr/close",
     TOGGLE: "jr/active"
   },
-  CONSENT:{
+  CONSENT: {
     LIST: "consentStage/list",
     DETAIL: "consentStage/detail",
   },
@@ -208,6 +208,9 @@ export const API_ENDPOINT = {
     EVALUATION_DELETE: "evaluation/delete",
     EVALUATION_DETAIL: "evaluation/detail",
     EVALUATION_EDIT: "evaluation/edit",
+
+    EXAM_ONLINE_CREATE: "exam/create",
+    EXAM_ONLINE_LIST: "exam/list",
 
     MAIL_TEMPLATE_CREATE: "mailTemplate/create",
     MAIL_ACTION_LIST: "mailAction/list",

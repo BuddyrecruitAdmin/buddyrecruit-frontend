@@ -165,7 +165,8 @@ export class OnboardDetailComponent implements OnInit {
         'refCandidate.email',
         'refStage.name',
         'refSource.name'
-      ]
+      ],
+      filters: this.sourceBy
     };
     this.items = [];
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {

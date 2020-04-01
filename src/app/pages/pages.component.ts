@@ -170,6 +170,7 @@ export class PagesComponent {
         if (configuration.jobPosition && configuration.jobPosition.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
+        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[15]);
         if (configuration.evaluation && configuration.evaluation.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[7]);
         }
