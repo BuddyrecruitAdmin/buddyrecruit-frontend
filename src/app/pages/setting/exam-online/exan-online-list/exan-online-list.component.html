@@ -51,7 +51,7 @@
                 <nb-card *ngIf="!loading" [accent]="item.isActive ? 'success' : 'default'">
                     <nb-card-header>
                         <div class="title">
-                            <label class="link" nbTooltip="preview">{{ item.name || item._id }}</label>
+                            <label>{{ item.name || item._id }}</label>
                         </div>
                         <!-- <div *ngIf="role.refAuthorize.configuration.evaluation.editable" class="actions">
                             <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
@@ -107,7 +107,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of items;">
-                                <td class="text-left link" nbTooltip="Preview">
+                                <td class="text-left" >
                                     {{ item.name || item._id }}</td>
                                 <td>
                                     {{ item.lastChangedInfo?.refUser?.firstname }}
@@ -123,11 +123,11 @@
                                     <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
                                         [routerLink]="'/employer/setting/evaluation-detail/duplicate/'+item._id">
                                         <nb-icon icon="copy-outline"></nb-icon>
-                                    </button>
-                                    <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
+                                    </button> -->
+                                    <button nbButton status="danger" size="tiny" nbTooltip="Delete"
                                         (click)="delete(item)">
                                         <nb-icon icon="trash-2-outline"></nb-icon>
-                                    </button> -->
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
