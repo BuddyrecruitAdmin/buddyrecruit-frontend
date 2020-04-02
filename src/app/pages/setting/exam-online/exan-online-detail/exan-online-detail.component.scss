@@ -26,3 +26,7 @@
   #preview{
     line-height: 2.75rem;
   }
+
+  ::ng-deep .nb-theme-default nb-popover {
+  border-radius: 1.75rem;;
+}
