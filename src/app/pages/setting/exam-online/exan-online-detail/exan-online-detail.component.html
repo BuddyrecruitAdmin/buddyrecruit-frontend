@@ -18,7 +18,7 @@
                 </div>
             </div>
         </nb-card-header>
-        <nb-card-body>
+        <nb-card-body *ngIf="!preview">
             <div class="row" *ngFor="let topic of topicOption;let i = index;">
                 <div class="col-md-12 col-lg-12">
                     <div class="input-group">
@@ -56,9 +56,8 @@
                                         {{ group.label }}
                                     </nb-radio>
                                 </nb-radio-group>
-                                <button *ngIf="!preview" nbButton ghost status="danger">
-                                    <nb-icon icon="plus-square-outline" class="text-light-gray" class="link"
-                                        (click)="addRadio(option)">
+                                <button *ngIf="!preview" (click)="addRadio(option,j)" nbButton ghost status="danger">
+                                    <nb-icon icon="plus-square-outline" class="text-light-gray" class="link">
                                     </nb-icon>
                                 </button>
                             </div>
@@ -82,7 +81,7 @@
                             </div>
                             <div *ngIf="option.type === 'getFile'" style="text-align: center">
                                 <small class="text-gray">
-                                    <a style="cursor: pointer;" (click)="fileInput.click()" [disabled]="!preview">
+                                    <a style="cursor: pointer;" (click)="fileInput.click()">
                                         <span class="fa fa-images"></span>
                                         <input #fileInput type="file"
                                             (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
@@ -127,24 +126,70 @@
                 </div>
             </div>
         </nb-card-body>
+        <!-- show preview -->
+        <nb-card-body id="preview" *ngIf="preview">
+            <div class="row" *ngFor="let topic of topicOption;let i = index;">
+                <div class="col-md-12 col-lg-12">
+                    <div>
+                        <h3 class="text-black"> {{ topic.name }}</h3>
+                    </div>
+                    <div *ngIf="topic.examOptions">
+                        <div *ngFor="let option of topic.examOptions;let j = index;">
+                            <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
+                            <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
+                                fullWidth placeholder="answer here">
+                            <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput fullWidth
+                                placeholder="Answer here"></textarea>
+                            <!-- radio -->
+                            <div *ngIf="option.type === 'radio'">
+                                <nb-radio-group [(ngModel)]="option.value">
+                                    <nb-radio *ngFor="let group of option.group" [value]="group.value">
+                                        {{ group.label }}
+                                    </nb-radio>
+                                </nb-radio-group>
+                            </div>
+                            <div class="row" *ngIf="option.type === 'file'" style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img *ngIf="preview" class="img-default"
+                                        [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                    <br>
+                                </div>
+                            </div>
+                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
+                                <small class="text-gray">
+                                    <a style="cursor: pointer;" (click)="fileInput.click()">
+                                        <span class="fa fa-images"></span>
+                                        <input #fileInput type="file"
+                                            (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
+                                            accept="image/*" />
+                                        <span class="m-l-5">Upload Your File</span>
+                                    </a>
+                                    <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
     </nb-card>
 </div>
 <!-- 4 btn label, input, checkbox, upload -->
 <ng-template id="option" #tabs>
-    <button (click)="addInput('input')" nbButton ghost>
+    <button (click)="addInput('input')" nbTooltip="Add Text" nbButton ghost>
         <nb-icon icon="text-outline">
         </nb-icon>
     </button>
-    <button (click)="addInput('area')" nbButton ghost>
+    <button (click)="addInput('area')" nbTooltip="Add Text Area" nbButton ghost>
         <nb-icon icon="menu-outline"></nb-icon>
     </button>
-    <button (click)="addInput('radio')" nbButton ghost>
+    <button (click)="addInput('radio')" nbTooltip="Add Choice" nbButton ghost>
         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
     </button>
-    <button (click)="addInput('file')" nbButton ghost>
+    <button (click)="addInput('file')" nbTooltip="Add File Internal" nbButton ghost>
         <nb-icon icon="file-add-outline"></nb-icon>
     </button>
-    <button (click)="addInput('getFile')" nbButton ghost>
+    <button (click)="addInput('getFile')" nbTooltip="Add File External" nbButton ghost>
         <nb-icon icon="arrow-circle-down-outline"></nb-icon>
     </button>
 </ng-template>

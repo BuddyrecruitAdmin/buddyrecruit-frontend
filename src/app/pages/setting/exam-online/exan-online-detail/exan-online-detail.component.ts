@@ -22,7 +22,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   radioGroup: any;
   dialogRef: NbDialogRef<any>;
   topic: any;
-
+  countRadio: number;
   role: any;
 
   url: any;
@@ -34,6 +34,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   _id: any;
   preview: boolean;
   loading: boolean;
+  fileText: any;
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -47,6 +48,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   ngOnInit() {
     this.component = this.templateTabs;
     this.loading = true;
+    this.countRadio = 0;
     this.createTopic = "";
     this.examName = "";
     this.topicOption = [];
@@ -72,8 +74,8 @@ export class ExanOnlineDetailComponent implements OnInit {
 
   initialModel(): any {
     this.radioGroup = [
-      { value: '1', label: 'Option 1' },
-      { value: '2', label: 'Option 2' },
+      { value: 1, label: 'Option 1' },
+      { value: 2, label: 'Option 2' },
     ]
   }
 
@@ -112,11 +114,11 @@ export class ExanOnlineDetailComponent implements OnInit {
           type: "label",
           value: ""
         }, {
-          name: "",
-          type: this.createTopic,
-          value: undefined,
-          group: this.radioGroup
-        })
+        name: "",
+        type: this.createTopic,
+        value: undefined,
+        group: [{ value: 1, label: 'Option 1' }]
+      })
     } else if (this.createTopic === 'file') {
       this.topic.examOptions.push(
         {
@@ -124,15 +126,15 @@ export class ExanOnlineDetailComponent implements OnInit {
           type: "label",
           value: ""
         }, {
-          name: "",
-          type: this.createTopic,
-          value: undefined,
-          src: undefined
-        }, {
-          name: this.fieldName,
-          type: "area",
-          value: undefined,
-        }
+        name: "",
+        type: this.createTopic,
+        value: undefined,
+        src: undefined
+      }, {
+        name: this.fieldName,
+        type: "area",
+        value: undefined,
+      }
       )
     } else if (this.createTopic === 'getFile') {
       this.topic.examOptions.push(
@@ -141,10 +143,10 @@ export class ExanOnlineDetailComponent implements OnInit {
           type: "label",
           value: ""
         }, {
-          name: this.fieldName,
-          type: this.createTopic,
-          src: undefined
-        })
+        name: this.fieldName,
+        type: this.createTopic,
+        src: undefined
+      })
     } else {
       this.topic.examOptions.push(
         {
@@ -152,18 +154,18 @@ export class ExanOnlineDetailComponent implements OnInit {
           type: "label",
           value: ""
         }, {
-          name: this.fieldName,
-          type: this.createTopic,
-          value: ""
-        })
+        name: this.fieldName,
+        type: this.createTopic,
+        value: ""
+      })
     }
     this.dialogRef.close();
   }
 
-  addRadio(option) {
+  addRadio(option, index) {
     let i = option.group.length + 1;
     option.group.push({
-      value: i, label: 'Option 1'
+      value: option.group.length + 1, label: 'Option ' + i
     })
   }
 
@@ -172,6 +174,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   }
 
   fileChangeEvent(option, files: FileList): void {
+    this.fileText = "";
     var reader = new FileReader();
     reader.readAsDataURL(files[0]); // read file as data url
     reader.onload = (e) => {
@@ -186,6 +189,7 @@ export class ExanOnlineDetailComponent implements OnInit {
         this.showToast('danger', 'Error Message', 'file size more than 10 mb');
       } else {
         option.src = img.src;
+        this.fileText = "upload success!"
       }
     };
   }
