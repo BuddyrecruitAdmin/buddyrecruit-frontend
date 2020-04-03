@@ -35,8 +35,37 @@ export class ExamService extends NetworkService {
     };
     return this.post(API_ENDPOINT.PENDING_EXAM.DETAIL, body);
   }
-  
+
   sourceList(): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  }
+
+  // getListExamOnline(criteria: any = undefined): Observable<ApiResponse> {
+  //   const body = {
+
+  //     criteria: criteria
+  //   }
+  //   return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_LIST, body);
+  // }
+  getListExamOnline(_id: any) {
+    const body = {
+      _id: _id
+    }
+    return this.post(API_ENDPOINT.JOBREQUEST.DETAIL, body);
+  }
+
+  semdExam(examId: any, candidateFlowId: any): Observable<ApiResponse> {
+    const body = {
+      examId: examId,
+      candidateFlowId: candidateFlowId
+    }
+    return this.post(API_ENDPOINT.EXAM.EXAM_TEST, body);
+  }
+  answerExam(candidateFlowId: any, examId: any): Observable<ApiResponse> {
+    const body = {
+      candidateFlowId: candidateFlowId,
+      examId: examId
+    }
+    return this.post(API_ENDPOINT.EXAM.EXAM_ANSWER, body);
   }
 }

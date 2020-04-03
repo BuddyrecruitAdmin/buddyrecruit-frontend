@@ -81,6 +81,7 @@ import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
+import { ExamFormComponent } from './exam-form/exam-form.component';
 @NgModule({
   imports: [
     ModulesRoutingModule,
@@ -159,6 +160,7 @@ import { AppFormComponent } from './app-form/app-form.component';
     TranslatePipe,
     IndexComponent,
     AppFormComponent,
+    ExamFormComponent,
   ],
   providers: [
     TranslateService,

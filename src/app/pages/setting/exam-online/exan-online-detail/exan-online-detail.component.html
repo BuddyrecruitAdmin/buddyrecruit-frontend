@@ -50,9 +50,17 @@
                                             <nb-card-body>
                                                 <div *ngFor="let group of option.group;let r = index"
                                                     class="input-group form-control-group">
+                                                    <img *ngIf="group.src" class="img-incard"
+                                                        [src]="group.src ? group.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                                     <input type="text" [(ngModel)]="group.label" nbInput fullWidth
                                                         placeholder="choice text here">
                                                     <div *ngIf="!preview" class="input-group-addon">
+                                                        <a style="cursor: pointer;" (click)="fileInput.click()">
+                                                            <span class="fa fa-images"></span>
+                                                            <input #fileInput type="file"
+                                                                (change)="fileChangeEvent(group,$event.target.files)"
+                                                                style="display:none;" accept="image/*" />
+                                                        </a>
                                                         <nb-icon status="danger" icon="minus-square-outline"
                                                             class="text-light-gray" class="link"
                                                             (click)="deleteTopic(option.group, r)">
@@ -153,6 +161,8 @@
                             <div *ngIf="option.type === 'radio'">
                                 <nb-radio-group [name]="option._id" [(ngModel)]="option.value">
                                     <nb-radio *ngFor="let group of option.group" [value]="group.value">
+                                        <img *ngIf="group.src" class="img-incard"
+                                            [src]="group.src ? group.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                         {{ group.label }}
                                     </nb-radio>
                                 </nb-radio-group>

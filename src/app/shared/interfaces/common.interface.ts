@@ -3,6 +3,7 @@ export interface ApiResponse {
   filter?;
   code: number;
   status?: string;
+  done?: boolean;
   message?: string;
   totalDataSize?: number;
   count?: Count;

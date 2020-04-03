@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
@@ -8,7 +8,7 @@ import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import { PopupCommentComponent } from '../../../component/popup-comment/popup-comment.component';
@@ -28,6 +28,7 @@ import { PrintCandidateComponent } from '../../../component/print-candidate/prin
 import { Devices } from '../../../shared/interfaces/common.interface';
 import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
+import { DropDownValue } from '../../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-candidate-detail',
   templateUrl: './candidate-detail.component.html',
@@ -43,6 +44,12 @@ export class CandidateDetailComponent implements OnInit {
   condition: any;
   devices: Devices;
   onMail: boolean = true;
+  examUserId: any;
+  dialogRef: NbDialogRef<any>;
+  listExamDialog: any;
+  ExamLists: DropDownValue[];
+  filteredListExam: any;
+  exanTest: any;
   constructor(
     private router: Router,
     private location: Location,
@@ -63,12 +70,33 @@ export class CandidateDetailComponent implements OnInit {
   ngOnInit() {
     this.condition = this.initialModel();
     this.interviewScores = [];
+    this.exanTest = [];
+    this.ExamLists = [];
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         setFlowId(params.id);
         this.router.navigate(['/employer/candidate/detail']);
       } else {
         this.getDetail();
+      }
+    });
+  }
+
+  examShowList() {
+    this.service.getListExamOnline(this.item.candidateFlow.refJR._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data.exams) {
+          console.log(response.data.exams)
+          response.data.exams.map(element => {
+            this.ExamLists.push({
+              label: element.refExam.name,
+              value: element.refExam._id
+            });
+          });
+          this.filteredListExam = this.ExamLists.slice();
+          console.log(this.filteredListExam)
+          console.log(this.ExamLists)
+        }
       }
     });
   }
@@ -131,6 +159,9 @@ export class CandidateDetailComponent implements OnInit {
     this.service.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.item = response.data;
+        if (this.item.candidateFlow.refJR._id) {
+          this.examShowList();
+        }
         if (this.item.candidateFlow.pendingInterviewScoreInfo.flag) {
           if (this.item.candidateFlow.pendingInterviewInfo.userInterviews && this.item.candidateFlow.pendingInterviewInfo.userInterviews.length) {
             this.item.candidateFlow.pendingInterviewInfo.userInterviews.forEach(userInterview => {
@@ -721,6 +752,45 @@ export class CandidateDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
     });
+  }
+
+  openPopupSendExam(dialog: TemplateRef<any>, _id) {
+    this.examUserId = _id;
+    this.callDialog(dialog);
+  }
+
+  sendExam() {
+    this.service.semdExam(this.exanTest, this.examUserId).subscribe((response) => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.getDetail();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
+    this.dialogRef.close();
+  }
+
+  checkExam(dialog: TemplateRef<any>, item, _id) {
+    this.examUserId = _id;
+    this.listExamDialog = item;
+    this.callDialog(dialog)
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+  }
+
+  showExamCand(examId) {
+    const path = '/exam-form/view/' + examId + '/' + this.examUserId;
+    this.router.navigate([path]);
+    // this.service.answerExam(this.examUserId, examId).subscribe((response) => {
+    //   if (response.code === ResponseCode.Success) {
+
+    //   } else {
+    //     this.showToast('danger', 'Error Message', response.message);
+    //   }
+    // })
   }
 
 

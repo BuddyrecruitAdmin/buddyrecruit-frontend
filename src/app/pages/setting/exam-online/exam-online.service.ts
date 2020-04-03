@@ -51,9 +51,10 @@ export class ExamOnlineService extends NetworkService {
   }
 
 
-  getDetail(_id: any) {
+  getDetail(_id: any, isUser) {
     const body = {
-      _id: _id
+      _id: _id,
+      isUser: isUser
     }
     return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_DETAIL, body);
   }

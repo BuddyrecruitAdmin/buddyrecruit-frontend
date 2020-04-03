@@ -100,6 +100,11 @@
                       <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                     </span>
                   </div>
+                  <div *ngIf="item.exams" class="text-group">
+                    <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
+                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
+                    </span>
+                  </div>
                   <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
                     <label class="label text-light-gray">Reject Info</label>
                     <div class="m-l-15">
@@ -164,6 +169,14 @@
                         <span>{{ item.pendingExamInfo?.remark || '-' }}</span>
                       </div>
                     </div>
+                  </div>
+                  <div class="m-t-5">
+                    <label class="label text-light-gray m-r-5">Send Exam to Candidate</label>
+                    <nb-icon *ngIf="item.condition.icon.examScore" icon="alert-circle-outline" class="link"
+                      style="color: yellow" nbTooltip="Select Exam Form" (click)="openPopupSendExam(dialog,item._id)">
+                    </nb-icon>
+                    <nb-icon *ngIf="item.condition.icon.examScore" icon="edit-2-outline" class="link"
+                      nbTooltip="Select Exam Form" (click)="openPopupSendExam(dialog,item._id)"></nb-icon>
                   </div>
                   <div *ngIf="item.condition.icon.examScore" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Exam Score</label>
@@ -347,4 +360,59 @@
               itemSelected.weightScore?.certificate?.total)" status="danger" size="tiny">
     </nb-progress-bar>
   </div>
+</ng-template>
+
+
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+    <nb-card-header>
+      <label>Please Select Exam Form</label></nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <mat-form-field [color]="primary" appearance="outline">
+            <mat-select [(ngModel)]="exanTest" [disabled]="checkPreview" multiple>
+              <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="ExamLists"
+                (filteredReturn)="filteredListExam =$event"></mat-select-filter>
+              <mat-option *ngFor="let exam of filteredListExam" [value]="exam.value">
+                {{exam.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="checkPreview" class="row">
+        <div *ngFor="let show of examShow;let i = index;" class="col-md-12 col-lg-12">
+          <label class="text-left link" (click)="examLink(show._id)">{{ i+1 }}.
+            {{ show.name }}</label>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+      <button nbButton status="success" (click)="sendExam()" [disabled]="!exanTest">OK</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<!-- dialogPopup List -->
+<ng-template #dialogExam let-data let-ref="dialogRef">
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+    <nb-card-body>
+      <div class="row">
+        <div *ngFor="let list of listExamDialog ;let i = index;" class="col-md-12 col-lg-12">
+          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id)">
+            {{ i+1 }}. {{ list.refExam.name }}
+          </label>
+          <label *ngIf="!list.done">
+            {{ i+1 }}. {{ list.refExam.name }}
+          </label>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
 </ng-template>

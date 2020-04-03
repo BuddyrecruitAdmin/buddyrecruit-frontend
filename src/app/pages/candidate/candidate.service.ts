@@ -146,4 +146,19 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.BLACKLIST, body);
   }
 
+  getListExamOnline(_id: any) {
+    const body = {
+      _id: _id
+    }
+    return this.post(API_ENDPOINT.JOBREQUEST.DETAIL, body);
+  }
+
+  semdExam(examId: any, candidateFlowId: any): Observable<ApiResponse> {
+    const body = {
+      examId: examId,
+      candidateFlowId: candidateFlowId
+    }
+    return this.post(API_ENDPOINT.EXAM.EXAM_TEST, body);
+  }
+
 }

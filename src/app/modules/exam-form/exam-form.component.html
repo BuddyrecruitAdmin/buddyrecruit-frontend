@@ -1,0 +1,91 @@
+<nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+    nbSpinnerMessage="Loading...">
+    <nb-card-body></nb-card-body>
+</nb-card>
+<div *ngIf="!loading">
+    <nb-card *ngIf="!done">
+        <nb-card-body id="preview">
+            <div class="row" *ngFor="let topic of topicOption;let i = index;">
+                <div class="col-md-12 col-lg-12">
+                    <div>
+                        <h3 class="text-black"> {{ topic.name }}</h3>
+                    </div>
+                    <div *ngIf="topic.examOptions">
+                        <div *ngFor="let option of topic.examOptions;let j = index;">
+                            <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
+                            <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
+                                fullWidth placeholder="answer here" [disabled]="actionView">
+                            <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput fullWidth
+                                placeholder="Answer here" [disabled]="actionView"></textarea>
+                            <!-- radio -->
+                            <div *ngIf="option.type === 'radio'">
+                                <nb-radio-group [name]="option._id" [(ngModel)]="option.value" [disabled]="actionView">
+                                    <nb-radio *ngFor="let group of option.group" [value]="group.value">
+                                        {{ group.label }}
+                                    </nb-radio>
+                                </nb-radio-group>
+                            </div>
+                            <div class="row" *ngIf="option.type === 'file'" style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img class="img-default"
+                                        [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                    <br>
+                                </div>
+                            </div>
+                            <div *ngIf="option.type === 'getFile' && actionView === 'true'" style="text-align: center">
+                                <img class="img-default" (click)="showImg(option.src)"
+                                    [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                            </div>
+                            <div *ngIf="option.type === 'getFile' && actionView === 'false'" style="text-align: center">
+                                <small class="text-gray">
+                                    <a style="cursor: pointer;" (click)="fileInput.click()">
+                                        <span class="fa fa-images"></span>
+                                        <input #fileInput type="file"
+                                            (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
+                                            accept="image/*" />
+                                        <span class="m-l-5">Upload Your File</span>
+                                    </a>
+                                    <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer *ngIf="!actionView">
+            <button nbButton size="small" status="success" (click)="save()">SEND</button>
+        </nb-card-footer>
+    </nb-card>
+    <!-- Thank you for your information  External-->
+    <div *ngIf="actionView === false && done" class="thank" [style.height.px]="innerHeight">
+        <div class="thank-wrapper">
+            <h2>คำตอบได้ถูกส่งไปเรียบร้อยเเล้ว</h2>
+            <!-- <br>
+            <br>
+            <p>We have received your information and would like to thank you for writing to us.</p>
+            <p>If your inquiry is urgent,</p>
+            <p>please use the email listed below to talk to one of our staff members.</p>
+            <p>Otherwise, we will reply by email as soon as possible.</p>
+            <br>
+            <br>
+            <h5>Talk to you soon,</h5>
+            <br>
+            <h5>hr@zygencenter.com</h5>
+            <h5><b>ZyGen Company Limited</b></h5> -->
+        </div>
+    </div>
+</div>
+
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <nb-card-body>
+            <img style="width: 100%;"
+                [src]="getOptionImg ? getOptionImg : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

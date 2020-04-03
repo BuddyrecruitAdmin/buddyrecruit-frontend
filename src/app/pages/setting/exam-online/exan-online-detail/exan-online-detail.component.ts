@@ -24,7 +24,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   topic: any;
   countRadio: number;
   role: any;
-
+  isUser: boolean;
   url: any;
   imgHeight: number;
   touchedName: boolean;
@@ -52,6 +52,7 @@ export class ExanOnlineDetailComponent implements OnInit {
     this.createTopic = "";
     this.examName = "";
     this.topicOption = [];
+    this.isUser = true;
     this.preview = false;
     this.initialModel();
     this.activatedRoute.params.subscribe(params => {
@@ -80,7 +81,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   }
 
   getDetail() {
-    this.service.getDetail(this._id).subscribe(response => {
+    this.service.getDetail(this._id, this.isUser).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.topicOption = response.data.exams;
         this.examName = response.data.name;
@@ -165,7 +166,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   addRadio(option, index) {
     let i = option.group.length + 1;
     option.group.push({
-      value: option.group.length + 1, label: 'Option ' + i
+      value: option.group.length + 1, label: 'Option ' + i, src: ''
     })
   }
 

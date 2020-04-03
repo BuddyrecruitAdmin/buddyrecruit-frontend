@@ -214,6 +214,7 @@ export const API_ENDPOINT = {
     EXAM_ONLINE_DELETE: "exam/delete",
     EXAM_ONLINE_DETAIL: "exam/detail",
     EXAM_ONLINE_EDIT: "exam/edit",
+    EXAM_ONLINE_SUBMIT: "exam/submit",
 
     MAIL_TEMPLATE_CREATE: "mailTemplate/create",
     MAIL_ACTION_LIST: "mailAction/list",
@@ -291,5 +292,9 @@ export const API_ENDPOINT = {
     DIVISION_LIST: "dropdown/divisions",
     JR_LIST: "dropdown/jrs",
     SAVE: "transfer/candidateFlow",
+  },
+  EXAM:{
+    EXAM_TEST: "sendmail/exam",
+    EXAM_ANSWER: "exam/candidateAnswer",
   }
 };

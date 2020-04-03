@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { ModulesComponent } from './modules.component';
 import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
+import { ExamFormComponent } from './exam-form/exam-form.component';
 const routes: Routes = [
   {
     path: '',
@@ -20,6 +21,14 @@ const routes: Routes = [
       {
         path: 'appform/:action/:id',
         component: AppFormComponent,
+      },
+      {
+        path: 'exam-form/:examId/:id',
+        component: ExamFormComponent,
+      },
+      {
+        path: 'exam-form/:action/:examId/:id',
+        component: ExamFormComponent,
       },
       {
         path: 'employer',
