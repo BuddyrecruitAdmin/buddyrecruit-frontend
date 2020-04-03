@@ -73,4 +73,12 @@ export class JrService extends NetworkService {
     return this.post(API_ENDPOINT.JOBREQUEST.TOGGLE, { jrId });
   }
 
+  getListExamOnline(criteria: any = undefined): Observable<ApiResponse> {
+    const body = {
+
+      criteria: criteria
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_LIST, body);
+  }
+
 }

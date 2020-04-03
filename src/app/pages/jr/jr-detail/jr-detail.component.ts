@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging, State } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownGroup } from '../../../shared/interfaces/common.interface';
@@ -17,6 +17,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupEvaluationComponent } from '../../../component/popup-evaluation/popup-evaluation.component';
 import { PopupSearchDropdownComponent } from '../../../component/popup-search-dropdown/popup-search-dropdown.component';
+import { resolve } from 'url';
 
 @Component({
   selector: 'ngx-jr-detail',
@@ -49,6 +50,7 @@ export class JrDetailComponent implements OnInit {
   touchedOn: boolean;
   sErrorOn: string;
   JobPosition: DropDownValue[];
+  ExamLists: DropDownValue[];
   Evaluation: DropDownValue[];
   Users: DropDownGroup[];
   sErrorUser: string;
@@ -58,6 +60,12 @@ export class JrDetailComponent implements OnInit {
   filteredList: any;
   filteredList2: any;
   filteredList3: any;
+  filteredListExam: any;
+  examShow: any;
+  dialogRef: NbDialogRef<any>;
+  tempExam: any;
+  innerWidth: any;
+  innerHeight: any;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -69,10 +77,14 @@ export class JrDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
+    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.innerHeight = window.innerHeight * 0.6;
   }
 
   ngOnInit() {
     this.loading = true;
+    this.tempExam = [];
+    this.examShow = [];
     this.initialModel();
     this.activatedRoute.params.subscribe(params => {
       this.emailCheck = true;
@@ -130,6 +142,28 @@ export class JrDetailComponent implements OnInit {
     await this.getJobPosition();
     await this.getUserList();
     await this.getEvaluationList();
+    await this.getExamOnlineList();
+  }
+
+  getExamOnlineList() {
+    return new Promise((resolve) => {
+      this.ExamLists = [];
+      this.service.getListExamOnline().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            console.log(response.data)
+            response.data.forEach(element => {
+              this.ExamLists.push({
+                label: element.name,
+                value: element._id
+              });
+            });
+            this.filteredListExam = this.ExamLists.slice();
+          }
+        }
+        resolve();
+      });
+    });
   }
 
   getJobPosition() {
@@ -230,6 +264,17 @@ export class JrDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.jr = response.data;
+          if (response.data.exams) {
+            let getExam = [];
+            response.data.exams.map((element) => {
+              getExam.push(element.refExam._id);
+              this.examShow.push({
+                name: element.refExam.name,
+                _id: element.refExam._id
+              });
+            });
+            this.jr.exams = getExam;
+          }
           if (this.utilitiesService.dateIsValid(response.data.duration.startDate)) {
             this.jr.duration.startDate = new Date(response.data.duration.startDate);
           }
@@ -463,6 +508,29 @@ export class JrDetailComponent implements OnInit {
         }
       }
     })
+  }
+
+  callExam(dialog: TemplateRef<any>, option: any) {
+    this.callDialog(dialog);
+  }
+
+  saveExam(result) {
+    if (result) {
+      this.tempExam = this.jr.exams;
+    } else {
+      this.jr.exams = this.tempExam;
+    }
+    this.dialogRef.close();
+  }
+
+  examLink(_id) {
+    let path = '/employer/setting/exam-online/preview/' + _id
+    this.router.navigate([path]);
+    this.dialogRef.close();
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
   setRequest(): any {

@@ -178,7 +178,11 @@
             </div>
           </div>
           <div class="col-sm-2 col-md-2">
-            <label class="label">Have Exam</label>
+            <label *ngIf="!jr.requiredExam" class="label">Have Exam</label>
+            <label *ngIf="jr.requiredExam" class="label link m-r-5" (click)="callExam(dialog)">Have Exam</label>
+            <nb-icon *ngIf="jr.requiredExam" icon="edit-2-outline" class="link" nbTooltip="Edit Exam Online"
+              (click)="callExam(dialog)">
+            </nb-icon>
             <div>
               <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview || !editExam">Yes
               </mat-checkbox>
@@ -208,3 +212,36 @@
   nbSpinnerMessage="Loading...">
   <nb-card-body></nb-card-body>
 </nb-card>
+
+<!-- dialogPopup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+    <nb-card-header>
+      <label>Please Select Exam Form</label></nb-card-header>
+    <nb-card-body>
+      <div *ngIf="!checkPreview" class="row">
+        <div class="col-md-12 col-lg-12">
+          <mat-form-field [color]="primary" appearance="outline">
+            <mat-select [(ngModel)]="jr.exams" [disabled]="checkPreview" multiple>
+              <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="ExamLists"
+                (filteredReturn)="filteredListExam =$event"></mat-select-filter>
+              <mat-option *ngFor="let exam of filteredListExam" [value]="exam.value">
+                {{exam.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="checkPreview" class="row">
+        <div *ngFor="let show of examShow;let i = index;" class="col-md-12 col-lg-12">
+          <label class="text-left link" (click)="examLink(show._id)">{{ i+1 }}.
+            {{ show.name }}</label>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="saveExam(false)">Cancel</button>
+      <button nbButton status="success" (click)="saveExam(true)" [disabled]="!jr.exams">OK</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

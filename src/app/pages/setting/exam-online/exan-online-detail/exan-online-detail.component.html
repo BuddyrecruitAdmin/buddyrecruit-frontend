@@ -151,7 +151,7 @@
                                 placeholder="Answer here"></textarea>
                             <!-- radio -->
                             <div *ngIf="option.type === 'radio'">
-                                <nb-radio-group [(ngModel)]="option.value">
+                                <nb-radio-group [name]="option._id" [(ngModel)]="option.value">
                                     <nb-radio *ngFor="let group of option.group" [value]="group.value">
                                         {{ group.label }}
                                     </nb-radio>
@@ -190,7 +190,7 @@
         <nb-icon icon="text-outline">
         </nb-icon>
     </button>
-    <button (click)="addInput('area')" nbTooltip=" paragrape/eassay" nbButton ghost>
+    <button (click)="addInput('area')" nbTooltip=" paragrape/essay" nbButton ghost>
         <nb-icon icon="menu-outline"></nb-icon>
     </button>
     <button (click)="addInput('radio')" nbTooltip="check list" nbButton ghost>
@@ -212,11 +212,6 @@
         <nb-card-body>
             <div class="form-control-group">
                 <input type="text" [(ngModel)]="fieldName" nbInput fullWidth placeholder="Create your question!">
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-12">
-
-                </div>
             </div>
         </nb-card-body>
         <nb-card-footer>
