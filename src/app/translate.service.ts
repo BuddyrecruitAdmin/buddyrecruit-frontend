@@ -6,7 +6,7 @@ export class TranslateService {
 
   data: any = {};
   path: any;
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
 
   use(lang: string): Promise<{}> {
@@ -18,15 +18,18 @@ export class TranslateService {
         translation => {
           this.data = Object.assign({}, translation || {});
           switch (this.path) {
-            case "INDEX": 
-              this.data = this.data.INDEX
+            case "INDEX":
+              this.data = this.data.INDEX;
               resolve(this.data);
               break;
             case "APP_FORM":
-              this.data = this.data.APP_FORM
+              this.data = this.data.APP_FORM;
               resolve(this.data);
               break;
-
+            case "RESUME":
+              this.data = this.data.RESUME;
+              resolve(this.data);
+              break;
             default:
               resolve(this.data);
               break;

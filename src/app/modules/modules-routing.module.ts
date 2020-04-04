@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { ModulesComponent } from './modules.component';
 import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
+import { ResumeComponent } from './resume/resume.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -20,6 +22,10 @@ const routes: Routes = [
       {
         path: 'appform/:action/:id',
         component: AppFormComponent,
+      },
+      {
+        path: 'resume',
+        component: ResumeComponent,
       },
       {
         path: 'employer',

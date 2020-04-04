@@ -9,6 +9,7 @@ import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { TagInputModule } from 'ngx-chips';
@@ -48,6 +49,8 @@ import { environment } from '../environments/environment';
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     TagInputModule,

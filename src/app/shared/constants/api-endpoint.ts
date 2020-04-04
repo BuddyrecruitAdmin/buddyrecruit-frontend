@@ -291,5 +291,12 @@ export const API_ENDPOINT = {
     DIVISION_LIST: "dropdown/divisions",
     JR_LIST: "dropdown/jrs",
     SAVE: "transfer/candidateFlow",
+  },
+  RESUME: {
+    CREATE: "resume/create",
+    LIST: "resume/list",
+    DETAIL: "resume/detail",
+    EDIT: "resume/edit",
+    DELETE: "resume/delete",
   }
 };
