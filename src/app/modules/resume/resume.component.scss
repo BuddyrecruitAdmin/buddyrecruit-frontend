@@ -1,0 +1,164 @@
+#resume {
+  font-family: kanit !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+.mat-card {
+  font-family: kanit !important;
+}
+
+.nav-bar {
+  padding: 1rem;
+  background: var(--color-green);
+  color: #fff;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+
+  .back-icon {
+    font-size: 2rem;
+  }
+  .nav-brand {
+    .mat-icon {
+      font-size: 5rem;
+      width: auto;
+      height: auto;
+    }
+    .title {
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .sub-title {
+      color: var(--color-gray);
+      font-size: 1rem;
+    }
+  }
+  .lang {
+    color: var(--color-gray);
+    cursor: pointer;
+  }
+  .lang.active {
+    color: var(--color-white);
+    font-weight: 600;
+    cursor: default;
+  }
+}
+
+.card {
+  margin: 2rem 0;
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    color: #333;
+    display: none;
+
+    .mat-icon {
+      margin-right: 10px;
+    }
+    small {
+      color: #999;
+    }
+  }
+  .card-body {
+    font-size: 14px;
+
+    .add-more {
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .box-dashed {
+      padding: 1rem;
+      border-radius: 5px;
+      border-style: dashed;
+      border-width: 1px;
+      border-color: var(--color-light-gray);
+    }
+    .upload-file {
+      text-align: center;
+      margin-top: 20px;
+
+      .file-preview {
+        color: gray;
+
+        .mat-icon {
+          vertical-align: middle;
+          margin-right: 5px;
+        }
+        .delete {
+          margin-left: 10px;
+          font-size: 1rem;
+          vertical-align: middle;
+          width: auto;
+          height: auto;
+          cursor: pointer;
+        }
+        span {
+          vertical-align: middle;
+        }
+      }
+    }
+    .topic {
+      text-align: center;
+      margin: 1rem 0 2rem;
+      color: gray;
+
+      .mat-icon {
+        font-size: 2.5rem;
+        width: auto;
+        height: auto;
+      }
+      p {
+        font-size: 1.25rem;
+        color: gray;
+      }
+    }
+    .deletion {
+      color: gray;
+      margin-top: -1rem;
+      margin-bottom: 1rem;
+      background: #eee;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+
+      button {
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+.checkbox-margin {
+  margin-top: 15px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+
+@media (max-width: 767px) {
+  .card {
+    .card-body {
+      .deletion {
+        text-align: center;
+        span {
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+  .checkbox-margin {
+    margin-top: -15px;
+    margin-bottom: 10px;
+  }
+}
