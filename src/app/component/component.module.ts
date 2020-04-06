@@ -105,6 +105,7 @@ import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-da
 import { PopupTransferComponent } from './popup-transfer/popup-transfer.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-search-dropdown.component';
+import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.component';
 
 @NgModule({
   imports: [
@@ -211,6 +212,7 @@ import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-sear
     PopupOnboardDateComponent,
     PopupTransferComponent,
     PopupSearchDropdownComponent,
+    PopupExamFormComponent,
   ],
   exports: [
     PopupMessageComponent,
