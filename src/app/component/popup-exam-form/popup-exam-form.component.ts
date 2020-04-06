@@ -5,6 +5,8 @@ import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, getExamId, getCandidateId } from '../../shared/services/auth.service';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
 import { NbDialogService } from '@nebular/theme';
+import { NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { UtilitiesService } from '../../shared/services/utilities.service';
 @Component({
   selector: 'ngx-popup-exam-form',
   templateUrl: './popup-exam-form.component.html',
@@ -19,15 +21,21 @@ export class PopupExamFormComponent implements OnInit {
   constructor(
     private service: ExamService,
     private dialogService: NbDialogService,
+    private toastrService: NbToastrService,
+    private utilitiesService: UtilitiesService,
+    public ref: NbDialogRef<PopupExamFormComponent>,
   ) {
     this.jrId = getJrId();
-    // this.exanTest = getExamId();
     this.examUserId = getCandidateId();
   }
 
   ngOnInit() {
     this.ExamLists = [];
-    this.examShowList();
+    if (this.jrId) {
+      this.examShowList();
+    } else {
+      this.ref.close();
+    }
   }
 
   examShowList() {
@@ -42,14 +50,13 @@ export class PopupExamFormComponent implements OnInit {
             });
           });
           this.filteredListExam = this.ExamLists.slice();
-          console.log(this.filteredListExam)
-          console.log(this.ExamLists)
         }
       }
     });
   }
 
   sendExam() {
+    this.ref.close();
     setExamId(this.exanTest)
     setCandidateId(this.examUserId);
     this.dialogService.open(PopupResendEmailComponent,
@@ -58,6 +65,7 @@ export class PopupExamFormComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      this.ref.close();
       setExamId();
       setCandidateId();
     });
