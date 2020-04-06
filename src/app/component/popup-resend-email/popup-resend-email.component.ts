@@ -53,7 +53,8 @@ export class PopupResendEmailComponent implements OnInit {
     this.mailType = '';
     this.previewEmail = false;
     this.today = new Date();
-    if (this.flowId) {
+    debugger
+    if (this.flowId || this.examId) {
       this.getReSendEmail();
     } else {
       this.ref.close();
@@ -79,29 +80,29 @@ export class PopupResendEmailComponent implements OnInit {
         this.loading = false;
       });
     } else {
-      this.candidateService.getCandidateDetail(this.flowId).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.stageId = response.data.candidateFlow.refStage._id;
-          this.isReject = response.data.candidateFlow.reject.flag;
+    this.candidateService.getCandidateDetail(this.flowId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.stageId = response.data.candidateFlow.refStage._id;
+        this.isReject = response.data.candidateFlow.reject.flag;
 
-          this.candidateService.candidateFlowReSendEmail(this.flowId, this.stageId, this.isReject).subscribe(response => {
-            if (response.code === ResponseCode.Success) {
-              if (response.data.mailOptions) {
-                this.mailOptions = response.data.mailOptions;
-                this.mailType = response.data.type;
-                this.previewEmail = true;
-              } else {
-                this.previewEmail = false;
-                this.ref.close();
-              }
+        this.candidateService.candidateFlowReSendEmail(this.flowId, this.stageId, this.isReject).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            if (response.data.mailOptions) {
+              this.mailOptions = response.data.mailOptions;
+              this.mailType = response.data.type;
+              this.previewEmail = true;
             } else {
               this.previewEmail = false;
               this.ref.close();
             }
-            this.loading = false;
-          });
-        }
-      });
+          } else {
+            this.previewEmail = false;
+            this.ref.close();
+          }
+          this.loading = false;
+        });
+      }
+    });
     }
   }
 
