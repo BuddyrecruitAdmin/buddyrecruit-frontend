@@ -293,9 +293,16 @@ export const API_ENDPOINT = {
     JR_LIST: "dropdown/jrs",
     SAVE: "transfer/candidateFlow",
   },
-  EXAM:{
+  EXAM: {
     EXAM_TEST: "sendmail/exam",
     EXAM_ANSWER: "exam/candidateAnswer",
     EXAM_EMAIL: "previewEmail/exam",
+  },
+  RESUME: {
+    CREATE: "resume/create",
+    LIST: "resume/list",
+    DETAIL: "resume/detail",
+    EDIT: "resume/edit",
+    DELETE: "resume/delete",
   }
 };

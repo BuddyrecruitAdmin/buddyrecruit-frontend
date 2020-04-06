@@ -1,4 +1,5 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ModulesRoutingModule } from './modules-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -69,6 +70,7 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+  MAT_DATE_LOCALE,
 } from '@angular/material';
 import {
   NgbModule,
@@ -82,9 +84,12 @@ import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
+import { ResumeComponent } from './resume/resume.component';
+
 @NgModule({
   imports: [
     ModulesRoutingModule,
+    CommonModule,
     ThemeModule,
     FormsModule,
     ReactiveFormsModule,
@@ -107,7 +112,6 @@ import { ExamFormComponent } from './exam-form/exam-form.component';
     NbToastrModule.forRoot(),
     NgxEchartsModule,
     NbDatepickerModule,
-    MatDatepickerModule,
     ComponentsModule,
     MatAutocompleteModule,
     MatBadgeModule,
@@ -161,6 +165,7 @@ import { ExamFormComponent } from './exam-form/exam-form.component';
     IndexComponent,
     AppFormComponent,
     ExamFormComponent,
+    ResumeComponent,
   ],
   providers: [
     TranslateService,
@@ -171,7 +176,15 @@ import { ExamFormComponent } from './exam-form/exam-form.component';
         TranslateService
       ],
       multi: true
-    }
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: 'en-GB'
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB'
+    },
   ]
 })
 export class ModulesModule {
