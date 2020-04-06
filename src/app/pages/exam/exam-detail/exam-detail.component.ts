@@ -459,7 +459,6 @@ export class ExamDetailComponent implements OnInit {
 
   openPopupSendExam(_id) {
     this.examUserId = _id;
-    setExamId(this.exanTest)
     setCandidateId(this.examUserId);
     setJrId(this.jrId);
     this.dialogService.open(PopupExamFormComponent,
