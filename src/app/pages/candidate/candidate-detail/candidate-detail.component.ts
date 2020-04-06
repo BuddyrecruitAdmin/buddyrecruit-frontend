@@ -29,6 +29,7 @@ import { Devices } from '../../../shared/interfaces/common.interface';
 import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
+import { PopupExamFormComponent } from '../../../component/popup-exam-form/popup-exam-form.component';
 @Component({
   selector: 'ngx-candidate-detail',
   templateUrl: './candidate-detail.component.html',
@@ -754,15 +755,12 @@ export class CandidateDetailComponent implements OnInit {
     });
   }
 
-  openPopupSendExam(dialog: TemplateRef<any>, _id) {
+  openPopupSendExam(_id) {
     this.examUserId = _id;
-    this.callDialog(dialog);
-  }
 
-  sendExam() {
-    setExamId(this.exanTest)
     setCandidateId(this.examUserId);
-    this.dialogService.open(PopupResendEmailComponent,
+    setJrId(this.item.candidateFlow.refJR._id);
+    this.dialogService.open(PopupExamFormComponent,
       {
         closeOnBackdropClick: false,
         hasScroll: true,
@@ -772,6 +770,25 @@ export class CandidateDetailComponent implements OnInit {
       setCandidateId();
       this.getDetail();
     });
+  }
+
+  sendExam() {
+    //   this.dialogRef.close();
+    //   this.dialogRef.onClose.subscribe(res => {
+    //     setExamId(this.exanTest)
+    //     setCandidateId(this.examUserId);
+    //     this.dialogService.open(PopupResendEmailComponent,
+    //       {
+    //         closeOnBackdropClick: false,
+    //         hasScroll: true,
+    //       }
+    //     ).onClose.subscribe(result => {
+    //       setExamId();
+    //       setCandidateId();
+    //       this.getDetail();
+    //     });
+    // })
+
     // this.service.semdExam(this.exanTest, this.examUserId).subscribe((response) => {
     //   if (response.code === ResponseCode.Success) {
     //     this.showToast('success', 'Success Message', response.message);

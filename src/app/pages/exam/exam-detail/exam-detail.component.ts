@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -16,6 +16,7 @@ import { PopupExamInfoComponent } from '../../../component/popup-exam-info/popup
 import { PopupExamScoreComponent } from '../../../component/popup-exam-score/popup-exam-score.component';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
+import { PopupExamFormComponent } from '../../../component/popup-exam-form/popup-exam-form.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
@@ -130,28 +131,28 @@ export class ExamDetailComponent implements OnInit {
 
   async onModel() {
     await this.sourceList();
+    // await this.examShowList();
     await this.search();
-    await this.examShowList();
   }
 
-  examShowList() {
-    this.service.getListExamOnline(this.jrId).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data.exams) {
-          console.log(response.data.exams)
-          response.data.exams.map(element => {
-            this.ExamLists.push({
-              label: element.refExam.name,
-              value: element.refExam._id
-            });
-          });
-          this.filteredListExam = this.ExamLists.slice();
-          console.log(this.filteredListExam)
-          console.log(this.ExamLists)
-        }
-      }
-    });
-  }
+  // examShowList() {
+  //   this.service.getListExamOnline(this.jrId).subscribe(response => {
+  //     if (response.code === ResponseCode.Success) {
+  //       if (response.data.exams) {
+  //         console.log(response.data.exams)
+  //         response.data.exams.map(element => {
+  //           this.ExamLists.push({
+  //             label: element.refExam.name,
+  //             value: element.refExam._id
+  //           });
+  //         });
+  //         this.filteredListExam = this.ExamLists.slice();
+  //         console.log(this.filteredListExam)
+  //         console.log(this.ExamLists)
+  //       }
+  //     }
+  //   });
+  // }
 
   sourceList() {
     return new Promise((resolve) => {
@@ -456,16 +457,11 @@ export class ExamDetailComponent implements OnInit {
     this.router.navigate(["/employer/candidate/detail"]);
   }
 
-  openPopupSendExam(dialog: TemplateRef<any>, _id) {
+  openPopupSendExam(_id) {
     this.examUserId = _id;
-    this.callDialog(dialog);
-  }
-
-  sendExam() {
-    // email
-    setExamId(this.exanTest)
     setCandidateId(this.examUserId);
-    this.dialogService.open(PopupResendEmailComponent,
+    setJrId(this.jrId);
+    this.dialogService.open(PopupExamFormComponent,
       {
         closeOnBackdropClick: false,
         hasScroll: true,
@@ -475,6 +471,12 @@ export class ExamDetailComponent implements OnInit {
       setCandidateId();
       this.search();
     });
+  }
+
+  sendExam() {
+    setExamId(this.exanTest)
+    setCandidateId(this.examUserId);
+
     // this.service.semdExam(this.exanTest, this.examUserId).subscribe((response) => {
     //   if (response.code === ResponseCode.Success) {
     //     this.showToast('success', 'Success Message', response.message);
