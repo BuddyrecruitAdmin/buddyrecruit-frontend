@@ -469,7 +469,7 @@ export class ExamDetailComponent implements OnInit {
     ).onClose.subscribe(result => {
       setExamId();
       setCandidateId();
-      this.search();
+      // this.search();
     });
   }
 

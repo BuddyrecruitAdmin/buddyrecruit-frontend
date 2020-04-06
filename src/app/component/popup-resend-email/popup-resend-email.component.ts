@@ -53,7 +53,8 @@ export class PopupResendEmailComponent implements OnInit {
     this.mailType = '';
     this.previewEmail = false;
     this.today = new Date();
-    if (this.flowId) {
+    debugger
+    if (this.flowId || this.examId) {
       this.getReSendEmail();
     } else {
       this.ref.close();
@@ -121,6 +122,8 @@ export class PopupResendEmailComponent implements OnInit {
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
+            this.loading = false;
+            this.ref.close(true);
           })
         } else {
           this.candidateService.candidateFlowSendEmail(this.flowId, this.stageId, request, this.isReject).subscribe(response => {

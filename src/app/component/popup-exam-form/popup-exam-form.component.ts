@@ -4,6 +4,7 @@ import { ResponseCode, Paging } from '../../shared/app.constants';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, getExamId, getCandidateId } from '../../shared/services/auth.service';
 import { PopupResendEmailComponent } from '../../component/popup-resend-email/popup-resend-email.component';
+import { PopupPreviewEmailComponent } from '../../component/popup-preview-email/popup-preview-email.component';
 import { NbDialogService } from '@nebular/theme';
 import { NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { UtilitiesService } from '../../shared/services/utilities.service';
@@ -18,6 +19,7 @@ export class PopupExamFormComponent implements OnInit {
   jrId: any;
   exanTest: any;
   examUserId: any;
+  loading: any;
   constructor(
     private service: ExamService,
     private dialogService: NbDialogService,
@@ -30,6 +32,7 @@ export class PopupExamFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.ExamLists = [];
     if (this.jrId) {
       this.examShowList();
@@ -52,11 +55,12 @@ export class PopupExamFormComponent implements OnInit {
           this.filteredListExam = this.ExamLists.slice();
         }
       }
+      this.loading = false;
     });
   }
 
   sendExam() {
-    this.ref.close();
+    setFlowId(this.examUserId);
     setExamId(this.exanTest)
     setCandidateId(this.examUserId);
     this.dialogService.open(PopupResendEmailComponent,
@@ -65,9 +69,9 @@ export class PopupExamFormComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
-      this.ref.close();
       setExamId();
       setCandidateId();
+      this.loading = false;
     });
   }
 
