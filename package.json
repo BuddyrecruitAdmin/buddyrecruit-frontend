@@ -58,6 +58,7 @@
     "echarts": "^4.6.0",
     "eva-icons": "^1.1.2",
     "file-saver": "^2.0.2",
+    "hammerjs": "^2.0.8",
     "intl": "1.2.5",
     "ionicons": "2.0.1",
     "lazysizes": "^5.2.0",

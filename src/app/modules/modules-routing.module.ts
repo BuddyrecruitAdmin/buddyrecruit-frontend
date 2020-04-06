@@ -5,6 +5,8 @@ import { ModulesComponent } from './modules.component';
 import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
+import { ResumeComponent } from './resume/resume.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -29,6 +31,10 @@ const routes: Routes = [
       {
         path: 'exam-form/:action/:examId/:id',
         component: ExamFormComponent,
+      },
+      {
+        path: 'resume',
+        component: ResumeComponent,
       },
       {
         path: 'employer',
