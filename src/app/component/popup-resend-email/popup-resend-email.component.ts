@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, getExamId, setExamId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -27,7 +27,7 @@ export class PopupResendEmailComponent implements OnInit {
   previewEmail: boolean;
   today: Date;
   loading: boolean;
-
+  examId: any;
   constructor(
     private candidateService: CandidateService,
     private ref: NbDialogRef<PopupResendEmailComponent>,
@@ -38,6 +38,8 @@ export class PopupResendEmailComponent implements OnInit {
     this.role = getRole();
     this.flowId = getFlowId();
     this.candidateId = getCandidateId();
+    this.examId = getExamId();
+    setExamId();
     setFlowId();
     setCandidateId();
     this.innerWidth = window.innerWidth * 0.8;
@@ -59,29 +61,48 @@ export class PopupResendEmailComponent implements OnInit {
   }
 
   getReSendEmail() {
-    this.candidateService.getCandidateDetail(this.flowId).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.stageId = response.data.candidateFlow.refStage._id;
-        this.isReject = response.data.candidateFlow.reject.flag;
-
-        this.candidateService.candidateFlowReSendEmail(this.flowId, this.stageId, this.isReject).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            if (response.data.mailOptions) {
-              this.mailOptions = response.data.mailOptions;
-              this.mailType = response.data.type;
-              this.previewEmail = true;
-            } else {
-              this.previewEmail = false;
-              this.ref.close();
-            }
+    if (this.examId) {
+      this.candidateService.examEmail(this.examId, this.candidateId).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data.mailOptions) {
+            this.mailOptions = response.data.mailOptions;
+            this.mailType = response.data.type;
+            this.previewEmail = true;
           } else {
             this.previewEmail = false;
             this.ref.close();
           }
-          this.loading = false;
-        });
-      }
-    });
+        } else {
+          this.previewEmail = false;
+          this.ref.close();
+        }
+        this.loading = false;
+      });
+    } else {
+      this.candidateService.getCandidateDetail(this.flowId).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.stageId = response.data.candidateFlow.refStage._id;
+          this.isReject = response.data.candidateFlow.reject.flag;
+
+          this.candidateService.candidateFlowReSendEmail(this.flowId, this.stageId, this.isReject).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              if (response.data.mailOptions) {
+                this.mailOptions = response.data.mailOptions;
+                this.mailType = response.data.type;
+                this.previewEmail = true;
+              } else {
+                this.previewEmail = false;
+                this.ref.close();
+              }
+            } else {
+              this.previewEmail = false;
+              this.ref.close();
+            }
+            this.loading = false;
+          });
+        }
+      });
+    }
   }
 
   sendEmail() {
@@ -93,17 +114,27 @@ export class PopupResendEmailComponent implements OnInit {
       if (result) {
         this.loading = true;
         const request = this.setRequest();
-        this.candidateService.candidateFlowSendEmail(this.flowId, this.stageId, request, this.isReject).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
+        if (this.examId) {
+          this.candidateService.semdExam(this.examId, this.candidateId, request).subscribe((response) => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
-            this.loading = false;
-            this.ref.close(true);
-          }
-        });
+          })
+        } else {
+          this.candidateService.candidateFlowSendEmail(this.flowId, this.stageId, request, this.isReject).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              if (response.code === ResponseCode.Success) {
+                this.showToast('success', 'Success Message', response.message);
+              } else {
+                this.showToast('danger', 'Error Message', response.message);
+              }
+              this.loading = false;
+              this.ref.close(true);
+            }
+          });
+        }
       } else {
         this.ref.close();
       }

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -462,15 +462,28 @@ export class ExamDetailComponent implements OnInit {
   }
 
   sendExam() {
-    this.service.semdExam(this.exanTest, this.examUserId).subscribe((response) => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        this.search();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
+    // email
+    setExamId(this.exanTest)
+    setCandidateId(this.examUserId);
+    this.dialogService.open(PopupResendEmailComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
       }
-    })
-    this.dialogRef.close();
+    ).onClose.subscribe(result => {
+      setExamId();
+      setCandidateId();
+      this.search();
+    });
+    // this.service.semdExam(this.exanTest, this.examUserId).subscribe((response) => {
+    //   if (response.code === ResponseCode.Success) {
+    //     this.showToast('success', 'Success Message', response.message);
+    //     this.search();
+    //   } else {
+    //     this.showToast('danger', 'Error Message', response.message);
+    //   }
+    // })
+    // this.dialogRef.close();
   }
 
   checkExam(dialog: TemplateRef<any>, item, _id) {

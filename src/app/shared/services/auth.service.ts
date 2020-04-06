@@ -27,7 +27,8 @@ import {
   LangPath,
   Language,
   allList,
-  allListName
+  allListName,
+  examId
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -299,4 +300,13 @@ export function setAllListName(allName: any = null) {
 export function getAllListName() {
   const allName = JSON.parse(localStorage.getItem(allListName));
   return (!allName || allName === null) ? undefined : allName;
+}
+
+export function setExamId(exam: string = null) {
+  localStorage.setItem(examId, JSON.stringify(exam));
+}
+
+export function getExamId() {
+  const exam = JSON.parse(localStorage.getItem(examId));
+  return (!exam || exam === null) ? undefined : exam;
 }
