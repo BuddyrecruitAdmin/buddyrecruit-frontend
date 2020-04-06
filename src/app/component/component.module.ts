@@ -235,7 +235,8 @@ import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.compon
     PrintCandidateComponent,
     PopupOnboardDateComponent,
     PopupTransferComponent,
-    PopupSearchDropdownComponent
+    PopupSearchDropdownComponent,
+    PopupExamFormComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -258,7 +259,8 @@ import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.compon
     PrintCandidateComponent,
     PopupOnboardDateComponent,
     PopupTransferComponent,
-    PopupSearchDropdownComponent
+    PopupSearchDropdownComponent,
+    PopupExamFormComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
