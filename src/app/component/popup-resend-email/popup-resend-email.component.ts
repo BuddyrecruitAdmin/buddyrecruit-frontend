@@ -80,29 +80,29 @@ export class PopupResendEmailComponent implements OnInit {
         this.loading = false;
       });
     } else {
-    this.candidateService.getCandidateDetail(this.flowId).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.stageId = response.data.candidateFlow.refStage._id;
-        this.isReject = response.data.candidateFlow.reject.flag;
+      this.candidateService.getCandidateDetail(this.flowId).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.stageId = response.data.candidateFlow.refStage._id;
+          this.isReject = response.data.candidateFlow.reject.flag;
 
-        this.candidateService.candidateFlowReSendEmail(this.flowId, this.stageId, this.isReject).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            if (response.data.mailOptions) {
-              this.mailOptions = response.data.mailOptions;
-              this.mailType = response.data.type;
-              this.previewEmail = true;
+          this.candidateService.candidateFlowReSendEmail(this.flowId, this.stageId, this.isReject).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              if (response.data.mailOptions) {
+                this.mailOptions = response.data.mailOptions;
+                this.mailType = response.data.type;
+                this.previewEmail = true;
+              } else {
+                this.previewEmail = false;
+                this.ref.close();
+              }
             } else {
               this.previewEmail = false;
               this.ref.close();
             }
-          } else {
-            this.previewEmail = false;
-            this.ref.close();
-          }
-          this.loading = false;
-        });
-      }
-    });
+            this.loading = false;
+          });
+        }
+      });
     }
   }
 
@@ -122,6 +122,8 @@ export class PopupResendEmailComponent implements OnInit {
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
+            this.loading = false;
+            this.ref.close(true);
           })
         } else {
           this.candidateService.candidateFlowSendEmail(this.flowId, this.stageId, request, this.isReject).subscribe(response => {
