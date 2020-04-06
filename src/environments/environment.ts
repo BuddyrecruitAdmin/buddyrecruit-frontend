@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URI: 'http://8d96fb85.ngrok.io', //QAS
+  API_URI: 'http://bkd.buddyrecruit.ai:4401', //PRD
   WriteLog: true
 };
 
