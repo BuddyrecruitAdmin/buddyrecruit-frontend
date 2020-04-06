@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URI: 'http://bkd.buddyrecruit.ai', //PRD
+  API_URI: 'https://p3bkd.buddyrecruit.ai', //PRD
   WriteLog: true
 };
 
