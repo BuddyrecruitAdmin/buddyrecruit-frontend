@@ -5,3 +5,13 @@ h2{
     position: absolute;
     top: 50%;
 }
+.img-incard{
+  width: 150px;
+  height: 150px;
+}
+img{
+  cursor: pointer;
+}
+::ng-deep .modal-dialog {
+  max-width: fit-content;
+}

@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import 'style-loader!angular2-toaster/toaster.css';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { MESSAGE } from "../../shared/constants/message";
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from "@angular/router";
 @Component({
   selector: 'ngx-exam-form',
@@ -35,6 +36,7 @@ export class ExamFormComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   getOptionImg: any;
   innerHeight: any;
+  examName: string;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -46,15 +48,19 @@ export class ExamFormComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private location: Location,
+    private config: NgbModalConfig,
+    private modalService: NgbModal
   ) {
-    this.innerHeight = window.innerHeight;
-   }
+    config.backdrop = 'static';
+    config.keyboard = false;
+    this.innerHeight = window.innerHeight * 0.9;
+  }
 
   ngOnInit() {
     this.topicOption = [];
     this.actionView = false;
     this.loading = true;
-    this.isUser = false;
+    // this.isUser = false;
     this.activatedRoute.params.subscribe(params => {
       this._id = undefined;
       if (params.id) {
@@ -63,8 +69,8 @@ export class ExamFormComponent implements OnInit {
         console.log(params)
         if (params.action === "view") {
           this.actionView = true;
-          this.isUser = true;
-          this.getDetail();
+          // this.isUser = true;
+          this.getDetailAnswer();
         } else {
           this.getDetail();
         }
@@ -76,6 +82,7 @@ export class ExamFormComponent implements OnInit {
     this.loading = true;
     this.service.getDetail(this._id, this.examId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
         if (this.actionView) {
@@ -85,6 +92,22 @@ export class ExamFormComponent implements OnInit {
       this.loading = false;
     })
   }
+
+  getDetailAnswer() {
+    this.loading = true;
+    this.service.answerExam(this._id, this.examId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.examName = response.data.name;
+        this.topicOption = response.data.exams;
+        this.done = response.done;
+        if (this.actionView) {
+          this.done = false;
+        }
+      }
+      this.loading = false;
+    })
+  }
+
   save() {
     console.log(this.topicOption);
     this.service.submit(this._id, this.topicOption, this.examId).subscribe(response => {
@@ -116,9 +139,9 @@ export class ExamFormComponent implements OnInit {
     };
   }
 
-  showImg(dialog: TemplateRef<any>, option) {
+  open(content, option) {
     this.getOptionImg = option;
-    this.callDialog(dialog);
+    this.modalService.open(content, { size: 'xl', centered: true, scrollable: true });
   }
 
   callDialog(dialog: TemplateRef<any>) {
