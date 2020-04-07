@@ -7,6 +7,11 @@ export interface IResume {
   phone: string;
   email: string;
   address: string;
+  addressNo: string;
+  road: string;
+  district: string;
+  province: string;
+  postcode: string;
   gender: string;
   expectedSalary: string;
 
