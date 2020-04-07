@@ -21,6 +21,8 @@
                             <div *ngIf="option.type === 'radio'">
                                 <nb-radio-group [name]="option._id" [(ngModel)]="option.value" [disabled]="actionView">
                                     <nb-radio *ngFor="let group of option.group" [value]="group.value">
+                                        <img *ngIf="group.src" class="img-incard"
+                                            [src]="group.src ? group.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                         {{ group.label }}
                                     </nb-radio>
                                 </nb-radio-group>
