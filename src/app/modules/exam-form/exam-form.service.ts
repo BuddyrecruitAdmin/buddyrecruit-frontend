@@ -32,4 +32,12 @@ export class ExamFormService extends NetworkService {
     }
     return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_SUBMIT, body);
   }
+
+  answerExam(candidateFlowId: any, examId: any): Observable<ApiResponse> {
+    const body = {
+      candidateFlowId: candidateFlowId,
+      examId: examId
+    }
+    return this.post(API_ENDPOINT.EXAM.EXAM_ANSWER, body);
+  }
 }

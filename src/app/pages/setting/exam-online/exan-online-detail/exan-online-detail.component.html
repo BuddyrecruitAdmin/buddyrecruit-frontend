@@ -9,12 +9,17 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group" [ngClass]="{ 'has-error': touchedName }">
-                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exam Form</b> <span
+                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exaเm Form</b> <span
                                 class="text-red">*</span></label>
                         <input *ngIf="!preview" type="text" placeholder="ใส่ชื่อแบบทดสอบ" [(ngModel)]="examName"
                             name="name" nbInput fullWidth>
                         <label *ngIf="preview" class="text-black"><b>{{ examName || '' }}</b></label>
                         <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12">
+                    <div class="form-control-group">
+                        <ngb-timepicker [(ngModel)]="duration"></ngb-timepicker>
                     </div>
                 </div>
             </div>
@@ -169,7 +174,7 @@
                             </div>
                             <div class="row" *ngIf="option.type === 'file'" style="text-align:center">
                                 <div class="col-md-12 col-lg-12">
-                                    <img *ngIf="preview" class="img-default"
+                                    <img *ngIf="preview" class="img-default" (click)="showImg(imgShow,option.src)"
                                         [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                     <br>
                                 </div>
@@ -227,6 +232,19 @@
         <nb-card-footer>
             <button nbButton status="default" (click)="ref.close()">Cancel</button>
             <button nbButton status="success" (click)="createField()" [disabled]="!fieldName">OK</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<!-- dialogPopup -->
+<ng-template #imgShow let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.max-height.px]="innerHeight">
+        <nb-card-body>
+            <img style="width: 100%;"
+                [src]="getOptionImg ? getOptionImg : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Cancel</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>
