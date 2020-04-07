@@ -73,6 +73,7 @@ export const LangPath = 'LangPath';
 export const Language = 'Language';
 export const allList = 'allList';
 export const allListName = 'allListName';
+export const examId = 'examId';
 
 export enum DayOfWeek {
   Sunday = 0,

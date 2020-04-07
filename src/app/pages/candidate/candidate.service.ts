@@ -153,12 +153,21 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.JOBREQUEST.DETAIL, body);
   }
 
-  semdExam(examId: any, candidateFlowId: any): Observable<ApiResponse> {
+  semdExam(examId: any, candidateFlowId: any, mailOptions: any): Observable<ApiResponse> {
+    const body = {
+      examId: examId,
+      candidateFlowId: candidateFlowId,
+      mailOptions: mailOptions
+    }
+    return this.post(API_ENDPOINT.EXAM.EXAM_TEST, body);
+  }
+
+  examEmail(examId: any, candidateFlowId: any): Observable<ApiResponse> {
     const body = {
       examId: examId,
       candidateFlowId: candidateFlowId
     }
-    return this.post(API_ENDPOINT.EXAM.EXAM_TEST, body);
+    return this.post(API_ENDPOINT.EXAM.EXAM_EMAIL, body);
   }
 
 }

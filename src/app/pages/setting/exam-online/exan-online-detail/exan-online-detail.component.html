@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group" [ngClass]="{ 'has-error': touchedName }">
-                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exam Form</b> <span
+                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exaเm Form</b> <span
                                 class="text-red">*</span></label>
                         <input *ngIf="!preview" type="text" placeholder="ใส่ชื่อแบบทดสอบ" [(ngModel)]="examName"
                             name="name" nbInput fullWidth>
@@ -17,6 +17,11 @@
                         <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
                     </div>
                 </div>
+                <!-- <div class="col-md-12 col-lg-12">
+                    <div class="form-control-group">
+                        <ngb-timepicker [(ngModel)]="duration"></ngb-timepicker>
+                    </div>
+                </div> -->
             </div>
         </nb-card-header>
         <nb-card-body *ngIf="!preview">
@@ -169,7 +174,7 @@
                             </div>
                             <div class="row" *ngIf="option.type === 'file'" style="text-align:center">
                                 <div class="col-md-12 col-lg-12">
-                                    <img *ngIf="preview" class="img-default"
+                                    <img *ngIf="preview" class="img-default" (click)="showImg(imgShow,option.src)"
                                         [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                     <br>
                                 </div>
@@ -196,20 +201,20 @@
 <!-- 4 btn label, input, checkbox, upload -->
 <ng-template id="option" #tabs>
     <label class="text-black">Select answer type</label><br>
-    <button (click)="addInput('input')" nbTooltip="free text" nbButton ghost>
+    <button (click)="addInput('input')" nbTooltip="Short answer" nbButton ghost>
         <nb-icon icon="text-outline">
         </nb-icon>
     </button>
-    <button (click)="addInput('area')" nbTooltip=" paragrape/essay" nbButton ghost>
+    <button (click)="addInput('area')" nbTooltip="Paragrape/essay" nbButton ghost>
         <nb-icon icon="menu-outline"></nb-icon>
     </button>
-    <button (click)="addInput('radio')" nbTooltip="check list" nbButton ghost>
+    <button (click)="addInput('radio')" nbTooltip="Check list" nbButton ghost>
         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
     </button>
-    <button (click)="addInput('file')" nbTooltip="upload file from user" nbButton ghost>
+    <button (click)="addInput('file')" nbTooltip="Question with picture" nbButton ghost>
         <nb-icon icon="file-add-outline"></nb-icon>
     </button>
-    <button (click)="addInput('getFile')" nbTooltip="upload file from external" nbButton ghost>
+    <button (click)="addInput('getFile')" nbTooltip="Answer with picture" nbButton ghost>
         <nb-icon icon="arrow-circle-down-outline"></nb-icon>
     </button>
 </ng-template>
@@ -227,6 +232,19 @@
         <nb-card-footer>
             <button nbButton status="default" (click)="ref.close()">Cancel</button>
             <button nbButton status="success" (click)="createField()" [disabled]="!fieldName">OK</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<!-- dialogPopup -->
+<ng-template #imgShow let-data let-ref="dialogRef">
+    <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.max-height.px]="innerHeight">
+        <nb-card-body>
+            <img style="width: 100%;"
+                [src]="getOptionImg ? getOptionImg : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Cancel</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

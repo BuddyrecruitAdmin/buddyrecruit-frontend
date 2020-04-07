@@ -296,6 +296,7 @@ export const API_ENDPOINT = {
   EXAM: {
     EXAM_TEST: "sendmail/exam",
     EXAM_ANSWER: "exam/candidateAnswer",
+    EXAM_EMAIL: "previewEmail/exam",
   },
   RESUME: {
     CREATE: "resume/create",
