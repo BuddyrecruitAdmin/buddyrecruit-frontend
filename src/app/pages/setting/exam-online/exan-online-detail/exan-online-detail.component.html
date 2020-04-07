@@ -17,11 +17,13 @@
                         <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
                     </div>
                 </div>
-                <!-- <div class="col-md-12 col-lg-12">
+                <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
-                        <ngb-timepicker [(ngModel)]="duration"></ngb-timepicker>
+                        <label class="text-black">ระยะเวลาในการสอบ</label>
+                        <ngb-timepicker [(ngModel)]="duration" [spinners]="false">
+                        </ngb-timepicker>
                     </div>
-                </div> -->
+                </div>
             </div>
         </nb-card-header>
         <nb-card-body *ngIf="!preview">

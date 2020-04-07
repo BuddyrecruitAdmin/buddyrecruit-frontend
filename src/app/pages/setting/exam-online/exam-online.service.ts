@@ -17,11 +17,12 @@ export class ExamOnlineService extends NetworkService {
   }
 
 
-  create(request: any, jdId: any, examName: any): Observable<ApiResponse> {
+  create(request: any, jdId: any, examName: any, duration: any = undefined): Observable<ApiResponse> {
     const body = {
       departmentId: jdId,
       exams: request,
-      name: examName
+      name: examName,
+      duration: duration
     }
     return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_CREATE, body);
   }
@@ -59,12 +60,13 @@ export class ExamOnlineService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_DETAIL, body);
   }
 
-  edit(request: any, jdId: any, examName: any, _id: any): Observable<ApiResponse> {
+  edit(request: any, jdId: any, examName: any, _id: any, duration: any = undefined): Observable<ApiResponse> {
     const body = {
       departmentId: jdId,
       exams: request,
       name: examName,
-      _id: _id
+      _id: _id,
+      duration: duration
     }
     return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_EDIT, body);
   }

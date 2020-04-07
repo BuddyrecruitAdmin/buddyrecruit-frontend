@@ -85,9 +85,6 @@ export class ExamFormComponent implements OnInit {
         this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
-        if (this.actionView) {
-          this.done = false;
-        }
       }
       this.loading = false;
     })

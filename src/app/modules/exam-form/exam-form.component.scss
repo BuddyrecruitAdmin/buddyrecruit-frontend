@@ -15,3 +15,13 @@ img{
 ::ng-deep .modal-dialog {
   max-width: fit-content;
 }
+.img-default {
+  padding: 3px;
+  border: none;
+  position: relative;
+  margin: 10px auto 10px;
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+  
+}
