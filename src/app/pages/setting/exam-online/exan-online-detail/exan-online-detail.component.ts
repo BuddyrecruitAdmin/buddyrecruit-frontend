@@ -6,6 +6,7 @@ import { ResponseCode } from '../../../../shared/app.constants';
 import { getRole } from '../../../../shared/services/auth.service';
 import { MESSAGE } from '../../../../shared/constants/message';
 import { Router, ActivatedRoute } from "@angular/router";
+import { UtilitiesService } from '../../../../shared/services/utilities.service';
 @Component({
   selector: 'ngx-exan-online-detail',
   templateUrl: './exan-online-detail.component.html',
@@ -29,20 +30,25 @@ export class ExanOnlineDetailComponent implements OnInit {
   imgHeight: number;
   touchedName: boolean;
   examName: any;
+  duration: any;
   sErrorName: string;
   state: any;
   _id: any;
   preview: boolean;
   loading: boolean;
   fileText: any;
+  getOptionImg: any;
+  innerHeight: any;
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
     private service: ExamOnlineService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
+    this.innerHeight = window.innerHeight * 0.9;
   }
 
   ngOnInit() {
@@ -232,6 +238,11 @@ export class ExanOnlineDetailComponent implements OnInit {
       isValid = false;
     }
     return isValid
+  }
+
+  showImg(dialog: TemplateRef<any>, option) {
+    this.getOptionImg = option;
+    this.callDialog(dialog);
   }
 
   callDialog(dialog: TemplateRef<any>) {
