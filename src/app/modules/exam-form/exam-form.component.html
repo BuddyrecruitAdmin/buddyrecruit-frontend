@@ -38,21 +38,26 @@
                                     <br>
                                 </div>
                             </div>
-                            <div *ngIf="option.type === 'getFile' && actionView" style="text-align: center">
-                                <img class="img-default" (click)="open(content,option.src)"
-                                    [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
+                                <div *ngIf="!actionView">
+                                    <small class="text-gray">
+                                        <a style="cursor: pointer;" (click)="fileInput.click()">
+                                            <span class="fa fa-images"></span>
+                                            <input #fileInput type="file"
+                                                (change)="fileChangeEvent(option,$event.target.files)"
+                                                style="display:none;" accept="image/*" />
+                                            <span class="m-l-5">Upload Your File</span>
+                                        </a>
+                                        <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
+                                    </small>
+                                </div>
+                                <div *ngIf="actionView">
+                                    <img class="img-default" (click)="open(content,option.src)"
+                                        [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                </div>
                             </div>
-                            <div *ngIf="option.type === 'getFile' && !actionView" style="text-align: center">
-                                <small class="text-gray">
-                                    <a style="cursor: pointer;" (click)="fileInput.click()">
-                                        <span class="fa fa-images"></span>
-                                        <input #fileInput type="file"
-                                            (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
-                                            accept="image/*" />
-                                        <span class="m-l-5">Upload Your File</span>
-                                    </a>
-                                    <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
-                                </small>
+                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
+
                             </div>
                         </div>
                     </div>

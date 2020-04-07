@@ -36,7 +36,7 @@ export class ExamFormComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   getOptionImg: any;
   innerHeight: any;
-  examName: string;
+  examName: string; 
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
