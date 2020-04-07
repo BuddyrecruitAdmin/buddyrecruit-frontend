@@ -17,11 +17,11 @@
                         <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-12">
+                <!-- <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
                         <ngb-timepicker [(ngModel)]="duration"></ngb-timepicker>
                     </div>
-                </div>
+                </div> -->
             </div>
         </nb-card-header>
         <nb-card-body *ngIf="!preview">
@@ -201,20 +201,20 @@
 <!-- 4 btn label, input, checkbox, upload -->
 <ng-template id="option" #tabs>
     <label class="text-black">Select answer type</label><br>
-    <button (click)="addInput('input')" nbTooltip="free text" nbButton ghost>
+    <button (click)="addInput('input')" nbTooltip="Short answer" nbButton ghost>
         <nb-icon icon="text-outline">
         </nb-icon>
     </button>
-    <button (click)="addInput('area')" nbTooltip=" paragrape/essay" nbButton ghost>
+    <button (click)="addInput('area')" nbTooltip="Paragrape/essay" nbButton ghost>
         <nb-icon icon="menu-outline"></nb-icon>
     </button>
-    <button (click)="addInput('radio')" nbTooltip="check list" nbButton ghost>
+    <button (click)="addInput('radio')" nbTooltip="Check list" nbButton ghost>
         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
     </button>
-    <button (click)="addInput('file')" nbTooltip="upload file from user" nbButton ghost>
+    <button (click)="addInput('file')" nbTooltip="Question with picture" nbButton ghost>
         <nb-icon icon="file-add-outline"></nb-icon>
     </button>
-    <button (click)="addInput('getFile')" nbTooltip="upload file from external" nbButton ghost>
+    <button (click)="addInput('getFile')" nbTooltip="Answer with picture" nbButton ghost>
         <nb-icon icon="arrow-circle-down-outline"></nb-icon>
     </button>
 </ng-template>
