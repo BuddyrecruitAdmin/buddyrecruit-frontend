@@ -105,7 +105,8 @@ import { PopupOnboardDateComponent } from './popup-onboard-date/popup-onboard-da
 import { PopupTransferComponent } from './popup-transfer/popup-transfer.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-search-dropdown.component';
-
+import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.component';
+import { MatSelectFilterModule } from 'mat-select-filter';
 @NgModule({
   imports: [
     CommonModule,
@@ -187,7 +188,8 @@ import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-sear
     AngularEditorModule,
     DigitOnlyModule,
     Ng2SearchPipeModule,
-    NbListModule
+    NbListModule,
+    MatSelectFilterModule
   ],
   declarations: [
     PopupMessageComponent,
@@ -211,6 +213,7 @@ import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-sear
     PopupOnboardDateComponent,
     PopupTransferComponent,
     PopupSearchDropdownComponent,
+    PopupExamFormComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -233,7 +236,8 @@ import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-sear
     PrintCandidateComponent,
     PopupOnboardDateComponent,
     PopupTransferComponent,
-    PopupSearchDropdownComponent
+    PopupSearchDropdownComponent,
+    PopupExamFormComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -256,7 +260,8 @@ import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-sear
     PrintCandidateComponent,
     PopupOnboardDateComponent,
     PopupTransferComponent,
-    PopupSearchDropdownComponent
+    PopupSearchDropdownComponent,
+    PopupExamFormComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -192,9 +192,9 @@
             <div class="m-t-5">
               <label class="label text-light-gray m-r-5">Send Exam to Candidate</label>
               <nb-icon *ngIf="condition.icon.examScore" icon="alert-circle-outline" class="link" style="color: yellow"
-                nbTooltip="Select Exam Form" (click)="openPopupSendExam(dialog,item.candidateFlow._id)"></nb-icon>
+                nbTooltip="Select Exam Form" (click)="openPopupSendExam(item._id)"></nb-icon>
               <nb-icon *ngIf="condition.icon.examScore" icon="edit-2-outline" class="link" nbTooltip="Select Exam Form"
-                (click)="openPopupSendExam(dialog,item.candidateFlow._id)"></nb-icon>
+                (click)="openPopupSendExam(item.candidateFlow._id)"></nb-icon>
             </div>
 
             <label class="label topic">Exam Score <span *ngIf="condition.icon.examScore"

@@ -85,7 +85,7 @@ import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
-
+import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   imports: [
     ModulesRoutingModule,
@@ -169,6 +169,7 @@ import { ResumeComponent } from './resume/resume.component';
   ],
   providers: [
     TranslateService,
+    NgbModalConfig, NgbModal,
     {
       provide: APP_INITIALIZER,
       useFactory: setupTranslateFactory,
