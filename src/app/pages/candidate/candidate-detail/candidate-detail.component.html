@@ -183,20 +183,19 @@
 
           <!-- Exam Score -->
           <div *ngIf="condition.block.examScore">
-            <div class="text-group">
-              <span class="link underline"
-                (click)="checkExam(dialogExam, item.candidateFlow.exams, item.candidateFlow._id)">
-                <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
-              </span>
-            </div>
-            <div class="m-t-5">
+            <div *ngIf="condition.icon.examScore" class="m-t-5">
               <label class="label text-light-gray m-r-5">Send Exam to Candidate</label>
               <nb-icon *ngIf="condition.icon.examScore" icon="alert-circle-outline" class="link" style="color: yellow"
                 nbTooltip="Select Exam Form" (click)="openPopupSendExam(item._id)"></nb-icon>
               <nb-icon *ngIf="condition.icon.examScore" icon="edit-2-outline" class="link" nbTooltip="Select Exam Form"
                 (click)="openPopupSendExam(item.candidateFlow._id)"></nb-icon>
             </div>
-
+            <div class="text-group">
+              <span class="link underline"
+                (click)="checkExam(dialogExam, item.candidateFlow.exams, item.candidateFlow._id)">
+                <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
+              </span>
+            </div>
             <label class="label topic">Exam Score <span *ngIf="condition.icon.examScore"
                 class="text-red">*</span></label>
             <nb-icon *ngIf="condition.icon.examScore" icon="edit-2-outline" class="link" nbTooltip="Edit Exam Score"

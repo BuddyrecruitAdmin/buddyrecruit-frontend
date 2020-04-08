@@ -3,7 +3,7 @@
   }
 h2{
     position: absolute;
-    top: 50%;
+    top: 45%;
 }
 .img-incard{
   width: 150px;
@@ -15,3 +15,43 @@ img{
 ::ng-deep .modal-dialog {
   max-width: fit-content;
 }
+.img-default {
+  padding: 3px;
+  border: none;
+  position: relative;
+  margin: 10px auto 10px;
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+  
+}
+  /* Thank you for your information */
+  .thankExam {
+    height: 100%;
+  }
+  .thankExam-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 8%;
+    text-align: center;
+  }
+  .time{
+    position: fixed;
+    top: 10px;
+    right: 17px;
+    z-index: 1030;
+    font-size: 1.75rem;
+  }
+  .time-out{
+    position: fixed;
+    top: 10px;
+    right: 17px;
+    z-index: 1030;
+    font-size: 1.75rem; 
+    color:red;
+  }
+  .btn-start{
+    position: relative;
+    text-align: center;
+    top: 50%;
+  }

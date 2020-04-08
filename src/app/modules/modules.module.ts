@@ -86,6 +86,7 @@ import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CountdownTimerModule } from 'ngx-countdown-timer';
 @NgModule({
   imports: [
     ModulesRoutingModule,
@@ -157,7 +158,9 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     NgbCollapseModule,
     NgbDropdownModule,
     NgbButtonsModule,
-    NbLayoutModule
+    NbLayoutModule,
+    CountdownTimerModule.forRoot()
+
   ],
   declarations: [
     ModulesComponent,

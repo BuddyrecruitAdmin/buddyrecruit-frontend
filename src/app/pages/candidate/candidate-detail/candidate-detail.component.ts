@@ -633,6 +633,9 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   openPopupExamScore(item: any) {
+    if (item.email) {
+      setUserEmail(item.email);
+    }
     setFlowId(item.candidateFlow._id);
     setCandidateId(item._id);
     this.dialogService.open(PopupExamScoreComponent,

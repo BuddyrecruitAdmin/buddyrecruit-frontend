@@ -91,6 +91,7 @@ export class ExanOnlineDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.topicOption = response.data.exams;
         this.examName = response.data.name;
+        this.duration = response.data.duration;
       }
       this.loading = false;
     })
@@ -208,7 +209,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   save() {
     if (this.validation()) {
       if (this.state === "create") {
-        this.service.create(this.topicOption, this.role.departmentId, this.examName).subscribe(response => {
+        this.service.create(this.topicOption, this.role.departmentId, this.examName, this.duration).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/employer/setting/exam-online']);
@@ -217,7 +218,7 @@ export class ExanOnlineDetailComponent implements OnInit {
           }
         })
       } else {
-        this.service.edit(this.topicOption, this.role.departmentId, this.examName, this._id).subscribe(response => {
+        this.service.edit(this.topicOption, this.role.departmentId, this.examName, this._id, this.duration).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.router.navigate(['/employer/setting/exam-online']);

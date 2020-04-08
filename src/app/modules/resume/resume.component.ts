@@ -7,7 +7,9 @@ import { API_ENDPOINT } from '../../shared/constants';
 import { setLangPath } from '../../shared/services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ResumeService } from './resume.service';
+import { JdService } from '../../pages/jd/jd.service';
 import { ResponseCode } from '../../shared/app.constants';
+import { DropDownValue } from '../../shared/interfaces';
 
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
 
@@ -19,6 +21,8 @@ const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
 export class ResumeComponent implements OnInit {
   language: string;
   resume: IResume;
+  degreesEN: DropDownValue[];
+  degreesTH: DropDownValue[];
 
   hardSkill = {
     keyword: '',
@@ -47,6 +51,7 @@ export class ResumeComponent implements OnInit {
     private translate: TranslateService,
     private formBuilder: FormBuilder,
     private service: ResumeService,
+    private jdService: JdService,
   ) {
     setLangPath("RESUME");
     this.language = 'en';
@@ -54,6 +59,7 @@ export class ResumeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getDegrees();
     this.initialForm();
     this.initialModel();
     this.loading = false;
@@ -79,6 +85,11 @@ export class ResumeComponent implements OnInit {
       phone: '',
       email: '',
       address: '',
+      addressNo: '',
+      road: '',
+      district: '',
+      province: '',
+      postcode: '',
       gender: '',
       expectedSalary: '',
       workExperience: {
@@ -94,6 +105,27 @@ export class ResumeComponent implements OnInit {
         uploadName: '',
       }
     };
+  }
+
+  getDegrees() {
+    this.degreesEN = [];
+    this.degreesTH = [];
+    this.jdService.getEducationList().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.forEach(element => {
+            this.degreesEN.push({
+              label: element.name,
+              value: element._id
+            });
+            this.degreesTH.push({
+              label: element.nameTH || element.name,
+              value: element._id
+            });
+          });
+        }
+      }
+    })
   }
 
   setLang(lang) {
@@ -129,7 +161,7 @@ export class ResumeComponent implements OnInit {
 
   addEducation() {
     this.resume.education.push({
-      refDegree: '',
+      refDegree: undefined,
       gpa: '',
       university: '',
       major: '',
@@ -308,7 +340,7 @@ export class ResumeComponent implements OnInit {
   setRequest(): IResume {
     const request = JSON.parse(JSON.stringify(this.resume));
     request.birth = new Date(request.birth);
-    if (request.workExperience.work && request.workExperience.work.length){
+    if (request.workExperience.work && request.workExperience.work.length) {
       request.workExperience.work.map(element => {
         element.start = new Date(element.start);
         if (!element.isPresent) {

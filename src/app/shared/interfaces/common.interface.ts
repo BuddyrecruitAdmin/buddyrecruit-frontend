@@ -4,6 +4,7 @@ export interface ApiResponse {
   code: number;
   status?: string;
   done?: boolean;
+  startAt?;
   message?: string;
   totalDataSize?: number;
   count?: Count;

@@ -53,7 +53,6 @@ export class PopupResendEmailComponent implements OnInit {
     this.mailType = '';
     this.previewEmail = false;
     this.today = new Date();
-    debugger
     if (this.flowId || this.examId) {
       this.getReSendEmail();
     } else {

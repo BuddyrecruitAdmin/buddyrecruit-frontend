@@ -104,7 +104,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ExanOnlineListComponent } from './exam-online/exan-online-list/exan-online-list.component';
 import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan-online-detail.component';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     SettingComponent,
@@ -211,7 +211,8 @@ import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan
     MatSelectModule,
     MatFormFieldModule,
     NgxMatSelectSearchModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    NgbModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

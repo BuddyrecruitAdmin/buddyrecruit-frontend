@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ExamFormService, } from './exam-form.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -18,6 +18,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { MESSAGE } from "../../shared/constants/message";
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from "@angular/router";
+import { isSameDay } from 'date-fns';
 @Component({
   selector: 'ngx-exam-form',
   templateUrl: './exam-form.component.html',
@@ -37,6 +38,18 @@ export class ExamFormComponent implements OnInit {
   getOptionImg: any;
   innerHeight: any;
   examName: string;
+  // countConfig: CountdownConfig = {
+  //   leftTime: 50,
+  //   demand: false,
+  // };
+  checkStart: boolean;
+  dateStart: any;
+  dateNow: any;
+  timeCount: boolean;
+  interVal: any;
+  miN: any;
+  seC: any;
+  TotalTime: any;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -59,7 +72,10 @@ export class ExamFormComponent implements OnInit {
   ngOnInit() {
     this.topicOption = [];
     this.actionView = false;
+    this.checkStart = false;
+    this.timeCount = false;
     this.loading = true;
+    this.TotalTime = 0;
     // this.isUser = false;
     this.activatedRoute.params.subscribe(params => {
       this._id = undefined;
@@ -78,26 +94,99 @@ export class ExamFormComponent implements OnInit {
     });
   }
 
+  start() {
+    this.getDetail();
+  }
+
   getDetail() {
     this.loading = true;
-    this.service.getDetail(this._id, this.examId).subscribe(response => {
+    this.service.getDetail(this._id, this.examId, this.checkStart).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
-        if (this.actionView) {
-          this.done = false;
+        if (!this.done) {
+          if (!response.startAt) {
+            this.checkStart = true;
+          } else {
+            if (this.checkStart) {
+              if (response.data.duration) {
+                this.timeCount = true;
+                let time = 0;
+                time = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60);
+                this.TotalTime = time;
+                this.miN = Math.floor(time / 60);
+                this.seC = Math.abs(time - (this.miN * 60))
+                this.interVal = setInterval(() => {
+                  if (this.seC === 0 && this.miN > 0) {
+                    this.miN = this.miN - 1;
+                    this.seC = this.seC + 60;
+                  }
+                  if (this.seC === 0 && this.miN === 0) {
+                    clearInterval(this.interVal)
+                    this.save();
+                  } else {
+                    this.TotalTime--;
+                    this.seC--;
+                  }
+                }, 1000)
+              }
+              this.checkStart = false;
+            } else if (response.data.duration) {
+              this.timeCount = true;
+              let diffMinute = 0;
+              let diffSec = 0;
+              const date1 = new Date(response.startAt);
+              const date2 = new Date();
+              const diffTime = date2.getTime() - date1.getTime();
+              diffMinute = Math.floor(diffTime / (1000 * 60));//minute
+              diffSec = Math.floor(Math.abs(diffTime / (1000 * 60)) - diffMinute);// เศษ วินาที
+              diffMinute = Math.abs(diffMinute) - 420; //real linut - 7 hours
+              diffMinute = Math.abs(diffMinute * 60) + diffSec; //sec
+              let timeTotal = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60); //second
+              this.TotalTime = timeTotal;
+              if (timeTotal > diffMinute) {
+                let timeRemain = timeTotal - diffMinute;
+                this.miN = Math.floor(timeRemain / 60);
+                this.seC = Math.abs(timeRemain - (this.miN * 60))
+                this.interVal = setInterval(() => {
+                  if (this.seC === 0 && this.miN > 0) {
+                    this.miN = this.miN - 1;
+                    this.seC = this.seC + 60;
+                  }
+                  if (this.seC === 0 && this.miN === 0) {
+                    clearInterval(this.interVal)
+                    this.save();
+                  } else {
+                    this.TotalTime--;
+                    this.seC--;
+                  }
+                }, 1000)
+              } else {
+                this.save();
+              }
+            }
+          }
         }
       }
       this.loading = false;
     })
   }
 
+  // handleEvent(e: CountdownEvent) {
+  //   if (e.action === 'done') {
+  //     this.save();
+  //   }
+  // }
+  handleEvent() {
+    this.save();
+  }
+
   getDetailAnswer() {
     this.loading = true;
     this.service.answerExam(this._id, this.examId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.examName = response.data.name;
+        this.examName = response.data.refExam.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
         if (this.actionView) {
@@ -109,7 +198,6 @@ export class ExamFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.topicOption);
     this.service.submit(this._id, this.topicOption, this.examId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
