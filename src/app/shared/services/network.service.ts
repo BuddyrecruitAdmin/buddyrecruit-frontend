@@ -55,7 +55,8 @@ export class NetworkService {
           totalDataSize: response.body.totalDataSize,
           count: response.body.count || undefined,
           isOverQuota: response.body.isOverQuota || false,
-          done: response.body.done
+          done: response.body.done,
+          startAt: response.body.startAt
         };
       }),
       catchError(this._handleError('post', this.ErrorResponse()))

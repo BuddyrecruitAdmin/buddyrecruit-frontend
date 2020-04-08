@@ -3,7 +3,7 @@
     <nb-card-body></nb-card-body>
 </nb-card>
 <div *ngIf="!loading">
-    <nb-card *ngIf="!done">
+    <nb-card *ngIf="!done && !checkStart">
         <nb-card-header>
             <h5 class="text-center text-green">Exam Online</h5>
             <h4 class="text-black"><b>{{ examName || '' }}</b></h4>
@@ -38,21 +38,23 @@
                                     <br>
                                 </div>
                             </div>
-                            <div *ngIf="option.type === 'getFile' && actionView === 'true'" style="text-align: center">
-                                <img class="img-default" (click)="open(content,option.src)"
-                                    [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
-                            </div>
-                            <div *ngIf="option.type === 'getFile' && actionView === 'false'" style="text-align: center">
-                                <small class="text-gray">
-                                    <a style="cursor: pointer;" (click)="fileInput.click()">
-                                        <span class="fa fa-images"></span>
-                                        <input #fileInput type="file"
-                                            (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
-                                            accept="image/*" />
-                                        <span class="m-l-5">Upload Your File</span>
-                                    </a>
-                                    <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
-                                </small>
+                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
+                                <div *ngIf="!actionView">
+                                    <small class="text-gray">
+                                        <a style="cursor: pointer;" (click)="fileInput.click()">
+                                            <span class="fa fa-images"></span>
+                                            <input #fileInput type="file"
+                                                (change)="fileChangeEvent(option,$event.target.files)"
+                                                style="display:none;" accept="image/*" />
+                                            <span class="m-l-5">Upload Your File</span>
+                                        </a>
+                                        <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
+                                    </small>
+                                </div>
+                                <div *ngIf="actionView">
+                                    <img class="img-default" (click)="open(content,option.src)"
+                                        [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -61,11 +63,27 @@
         </nb-card-body>
         <nb-card-footer *ngIf="!actionView">
             <button nbButton size="small" status="success" (click)="save()">SEND</button>
+            <div [ngClass]="{  'time': TotalTime > 30, 'time-out': TotalTime < 31 }" *ngIf="timeCount">
+                <label>{{ miN }} นาที {{ seC }} วินาที</label>
+            </div>
+            <!-- <countdown-timer class="time" (zeroTrigger)="handleEvent()" [end]="30"></countdown-timer> -->
+            <!-- <countdown *ngIf="timeCount"
+                [ngClass]="{  'time': countConfig.leftTime > 30, 'time-out': countConfig.leftTime < 31 }" #countdown
+                [config]="countConfig" (event)="handleEvent($event)">
+                $!m!:$!s!
+            </countdown> -->
         </nb-card-footer>
     </nb-card>
+    <!-- Before Start -->
+    <div *ngIf="checkStart" [style.height.px]="innerHeight">
+        <div class="btn-start">
+            <button class="btn-start" nbButton size="giant" status="success" (click)="start()">Start</button>
+        </div>
+    </div>
+
     <!-- Thank you for your information  External-->
-    <div *ngIf="actionView === false && done" class="thank" [style.height.px]="innerHeight">
-        <div class="thank-wrapper">
+    <div *ngIf="actionView === false && done" class="thankExam" [style.height.px]="innerHeight">
+        <div class="thankExam-wrapper">
             <h2>Your successfully created your answer</h2>
             <!-- <br>
             <br>

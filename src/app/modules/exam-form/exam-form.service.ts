@@ -16,10 +16,11 @@ export class ExamFormService extends NetworkService {
     super('ExamFormService', httpClient, errorHandler);
   }
 
-  getDetail(_id: any, examId) {
+  getDetail(_id: any, examId, start) {
     const body = {
       candidateFlowId: _id,
       examId: examId,
+      start: start
     }
     return this.post(API_ENDPOINT.CONFIGURATION.EXAM_ONLINE_DETAIL, body);
   }
