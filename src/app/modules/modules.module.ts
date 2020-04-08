@@ -179,12 +179,7 @@ import { CountdownTimerModule } from 'ngx-countdown-timer';
     NgbCollapseModule,
     NgbDropdownModule,
     NgbButtonsModule,
-<<<<<<< HEAD
-=======
-    NbLayoutModule,
     CountdownTimerModule.forRoot()
-
->>>>>>> master
   ],
   declarations: [
     ModulesComponent,
