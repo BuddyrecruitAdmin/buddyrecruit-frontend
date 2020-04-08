@@ -34,6 +34,13 @@ import { TranslatePipe } from '../translate.pipe';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { TranslateModule } from '@ngx-translate/core';
 import { DigitOnlyModule } from '@uiowa/digit-only';
+
+import { A11yModule } from '@angular/cdk/a11y';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -72,6 +79,7 @@ import {
   MatTreeModule,
   MAT_DATE_LOCALE,
 } from '@angular/material';
+
 import {
   NgbModule,
   NgbCarouselModule,
@@ -79,6 +87,7 @@ import {
   NgbDropdownModule,
   NgbButtonsModule
 } from '@ng-bootstrap/ng-bootstrap';
+
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
 import { IndexComponent } from './index/index.component';
@@ -86,13 +95,17 @@ import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   imports: [
-    ModulesRoutingModule,
     CommonModule,
-    ThemeModule,
     FormsModule,
+    NgbModule,
     ReactiveFormsModule,
+    ComponentsModule,
+    ModulesRoutingModule,
+    
+    ThemeModule,
     NbCardModule,
     NbCheckboxModule,
     NbTabsetModule,
@@ -100,6 +113,7 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     NbButtonModule,
     NbInputModule,
     NbSelectModule,
+    NbSpinnerModule,
     NbTooltipModule,
     NbUserModule,
     NbAccordionModule,
@@ -112,7 +126,14 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     NbToastrModule.forRoot(),
     NgxEchartsModule,
     NbDatepickerModule,
-    ComponentsModule,
+    NbLayoutModule,
+    
+    A11yModule,
+    CdkStepperModule,
+    CdkTableModule,
+    CdkTreeModule,
+    DragDropModule,
+    ScrollingModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -148,8 +169,8 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+
     TranslateModule.forRoot(),
-    NbSpinnerModule,
     DigitOnlyModule,
 
     NgbModule,
@@ -157,7 +178,6 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
     NgbCollapseModule,
     NgbDropdownModule,
     NgbButtonsModule,
-    NbLayoutModule
   ],
   declarations: [
     ModulesComponent,

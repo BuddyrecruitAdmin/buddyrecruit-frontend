@@ -49,9 +49,17 @@
           <div class="col-md-4">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
+              <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate" [formControl]="f.birth"
+                [(ngModel)]="resume.birth" required readonly (click)="birthDate.open()"
+                (dateInput)="onChangeBirthday($event.target.value)">
+              <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
+              <mat-datepicker #birthDate></mat-datepicker>
+            </mat-form-field>
+            <!-- <mat-form-field appearance="outline">
+              <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
               <input matInput type="date" id="birth" name="birth" [formControl]="f.birth" [(ngModel)]="resume.birth"
                 (change)="onChangeBirthday($event.target.value)" required>
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
           <div class="col-md-2">
             <mat-form-field appearance="outline">
@@ -168,10 +176,17 @@
           </div>
           <div class="row">
             <div class="col-md-4">
-              <mat-form-field appearance="outline">
+              <!-- <mat-form-field appearance="outline">
                 <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
                 <input matInput type="date" id="start{{i}}" [(ngModel)]="work.start"
                   [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field> -->
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
+                <input matInput type="text" id="start" name="start" [matDatepicker]="startDate" [(ngModel)]="work.start"
+                  [ngModelOptions]="{standalone: true}" required readonly (click)="startDate.open()">
+                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
               </mat-form-field>
             </div>
             <div class="col-md-2 checkbox-margin">
@@ -181,9 +196,16 @@
             <div *ngIf="!work.isPresent" class="col-md-4">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'PERIOD_TO' | translate }}</mat-label>
+                <input matInput type="text" id="end" name="end" [matDatepicker]="endDate" [(ngModel)]="work.end"
+                  [ngModelOptions]="{standalone: true}" required readonly (click)="endDate.open()">
+                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                <mat-datepicker #endDate></mat-datepicker>
+              </mat-form-field>
+              <!-- <mat-form-field appearance="outline">
+                <mat-label>{{ 'PERIOD_TO' | translate }}</mat-label>
                 <input matInput type="date" id="end{{i}}" [(ngModel)]="work.end" [ngModelOptions]="{standalone: true}"
                   required>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
           </div>
           <div class="row">
@@ -237,7 +259,23 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <div class="form-control-group">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'DEGREE' | translate }}</mat-label>
+                <mat-select *ngIf="language === 'en'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
+                  [ngModelOptions]="{ standalone: true }" required>
+                  <mat-option *ngFor="let degree of degreesEN" [value]="degree.value">
+                    {{ degree.label }}
+                  </mat-option>
+                </mat-select>
+                <mat-select *ngIf="language === 'th'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
+                  [ngModelOptions]="{ standalone: true }" required>
+                  <mat-option *ngFor="let degree of degreesTH" [value]="degree.value">
+                    {{ degree.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- <div class="form-control-group">
                 <select class="form-control" *ngIf="language === 'en'" id="refDegree{{i}}"
                   [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }" required fullWidth>
                   <option [value]="undefined">{{ 'DEGREE' | translate }} *</option>
@@ -248,7 +286,7 @@
                   <option [value]="undefined">{{ 'DEGREE' | translate }} *</option>
                   <option *ngFor="let degree of degreesTH" [value]="degree.value">{{ degree.label }}</option>
                 </select>
-              </div>
+              </div> -->
             </div>
             <div class="col-md-3">
               <mat-form-field appearance="outline">

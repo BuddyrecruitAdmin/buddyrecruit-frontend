@@ -114,6 +114,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { ListComponent } from './consent/list/list.component';
 import { DetailComponent } from './consent/detail/detail.component';
+
 @NgModule({
   imports: [
     CommonModule,
