@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ExamFormService, } from './exam-form.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
@@ -18,6 +18,8 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { MESSAGE } from "../../shared/constants/message";
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from "@angular/router";
+import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
+import { isSameDay } from 'date-fns';
 @Component({
   selector: 'ngx-exam-form',
   templateUrl: './exam-form.component.html',
@@ -37,6 +39,15 @@ export class ExamFormComponent implements OnInit {
   getOptionImg: any;
   innerHeight: any;
   examName: string;
+  countConfig: CountdownConfig = {
+    leftTime: 50,
+    demand: false,
+  };
+  @ViewChild('countdown', { static: false }) counter: CountdownComponent;
+  checkStart: boolean;
+  dateStart: any;
+  dateNow: any;
+  timeCount: boolean;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -59,6 +70,8 @@ export class ExamFormComponent implements OnInit {
   ngOnInit() {
     this.topicOption = [];
     this.actionView = false;
+    this.checkStart = false;
+    this.timeCount = false;
     this.loading = true;
     // this.isUser = false;
     this.activatedRoute.params.subscribe(params => {
@@ -78,16 +91,62 @@ export class ExamFormComponent implements OnInit {
     });
   }
 
+  start() {
+    this.getDetail();
+  }
+
   getDetail() {
     this.loading = true;
-    this.service.getDetail(this._id, this.examId).subscribe(response => {
+    this.service.getDetail(this._id, this.examId, this.checkStart).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
+        if (!this.done) {
+          if (!response.startAt) {
+            this.checkStart = true;
+          } else {
+            if (this.checkStart) {
+              if (response.data.duration) {
+                this.timeCount = true;
+                let time = 0;
+                time = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60);
+                this.countConfig = {
+                  leftTime: time,
+                  demand: false,
+                }
+              }
+              this.checkStart = false;
+            } else if (response.data.duration) {
+              this.timeCount = true;
+              let diffMinute = 0;
+              const date1 = new Date(response.startAt);
+              const date2 = new Date();
+              const diffTime = date2.getTime() - date1.getTime();
+              diffMinute = Math.ceil(diffTime / (1000 * 60));//minute
+              diffMinute = Math.abs(diffMinute) - 420; //real linut - 7 hours
+              diffMinute = Math.abs(diffMinute * 60); //sec
+              let timeTotal = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60); //second
+              if (timeTotal > diffMinute) {
+                let timeRemain = timeTotal - diffMinute;
+                this.countConfig = {
+                  leftTime: timeRemain
+                }
+              } else {
+                this.save();
+              }
+            }
+          }
+        }
       }
       this.loading = false;
     })
+  }
+
+  handleEvent(e: CountdownEvent) {
+    if (e.action === 'done') {
+      this.save();
+    }
   }
 
   getDetailAnswer() {
@@ -106,7 +165,6 @@ export class ExamFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.topicOption);
     this.service.submit(this._id, this.topicOption, this.examId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);

@@ -3,7 +3,7 @@
     <nb-card-body></nb-card-body>
 </nb-card>
 <div *ngIf="!loading">
-    <nb-card *ngIf="!done">
+    <nb-card *ngIf="!done && !checkStart">
         <nb-card-header>
             <h5 class="text-center text-green">Exam Online</h5>
             <h4 class="text-black"><b>{{ examName || '' }}</b></h4>
@@ -63,8 +63,20 @@
         </nb-card-body>
         <nb-card-footer *ngIf="!actionView">
             <button nbButton size="small" status="success" (click)="save()">SEND</button>
+            <countdown *ngIf="timeCount"
+                [ngClass]="{  'time': countConfig.leftTime > 30, 'time-out': countConfig.leftTime < 31 }" #countdown
+                [config]="countConfig" (event)="handleEvent($event)">
+                $!m!:$!s!
+            </countdown>
         </nb-card-footer>
     </nb-card>
+    <!-- Before Start -->
+    <div *ngIf="checkStart" [style.height.px]="innerHeight">
+        <div class="btn-start">
+            <button class="btn-start" nbButton size="giant" status="success" (click)="start()">Start</button>
+        </div>
+    </div>
+
     <!-- Thank you for your information  External-->
     <div *ngIf="actionView === false && done" class="thankExam" [style.height.px]="innerHeight">
         <div class="thankExam-wrapper">
