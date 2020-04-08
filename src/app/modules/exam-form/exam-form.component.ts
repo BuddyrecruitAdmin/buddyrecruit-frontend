@@ -18,7 +18,6 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { MESSAGE } from "../../shared/constants/message";
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from "@angular/router";
-import { CountdownConfig, CountdownEvent } from 'ngx-countdown';
 import { isSameDay } from 'date-fns';
 @Component({
   selector: 'ngx-exam-form',
@@ -39,14 +38,18 @@ export class ExamFormComponent implements OnInit {
   getOptionImg: any;
   innerHeight: any;
   examName: string;
-  countConfig: CountdownConfig = {
-    leftTime: 50,
-    demand: false,
-  };
+  // countConfig: CountdownConfig = {
+  //   leftTime: 50,
+  //   demand: false,
+  // };
   checkStart: boolean;
   dateStart: any;
   dateNow: any;
   timeCount: boolean;
+  interVal: any;
+  miN: any;
+  seC: any;
+  TotalTime: any;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -72,6 +75,7 @@ export class ExamFormComponent implements OnInit {
     this.checkStart = false;
     this.timeCount = false;
     this.loading = true;
+    this.TotalTime = 0;
     // this.isUser = false;
     this.activatedRoute.params.subscribe(params => {
       this._id = undefined;
@@ -110,27 +114,54 @@ export class ExamFormComponent implements OnInit {
                 this.timeCount = true;
                 let time = 0;
                 time = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60);
-                this.countConfig = {
-                  leftTime: time,
-                  demand: false,
-                }
+                this.TotalTime = time;
+                this.miN = Math.floor(time / 60);
+                this.seC = Math.abs(time - (this.miN * 60))
+                this.interVal = setInterval(() => {
+                  if (this.seC === 0 && this.miN > 0) {
+                    this.miN = this.miN - 1;
+                    this.seC = this.seC + 60;
+                  }
+                  if (this.seC === 0 && this.miN === 0) {
+                    clearInterval(this.interVal)
+                    this.save();
+                  } else {
+                    this.TotalTime--;
+                    this.seC--;
+                  }
+                }, 1000)
               }
               this.checkStart = false;
             } else if (response.data.duration) {
               this.timeCount = true;
               let diffMinute = 0;
+              let diffSec = 0;
               const date1 = new Date(response.startAt);
               const date2 = new Date();
               const diffTime = date2.getTime() - date1.getTime();
-              diffMinute = Math.ceil(diffTime / (1000 * 60));//minute
+              diffMinute = Math.floor(diffTime / (1000 * 60));//minute
+              diffSec = Math.floor(Math.abs(diffTime / (1000 * 60)) - diffMinute);// เศษ วินาที
               diffMinute = Math.abs(diffMinute) - 420; //real linut - 7 hours
-              diffMinute = Math.abs(diffMinute * 60); //sec
+              diffMinute = Math.abs(diffMinute * 60) + diffSec; //sec
               let timeTotal = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60); //second
+              this.TotalTime = timeTotal;
               if (timeTotal > diffMinute) {
                 let timeRemain = timeTotal - diffMinute;
-                this.countConfig = {
-                  leftTime: timeRemain
-                }
+                this.miN = Math.floor(timeRemain / 60);
+                this.seC = Math.abs(timeRemain - (this.miN * 60))
+                this.interVal = setInterval(() => {
+                  if (this.seC === 0 && this.miN > 0) {
+                    this.miN = this.miN - 1;
+                    this.seC = this.seC + 60;
+                  }
+                  if (this.seC === 0 && this.miN === 0) {
+                    clearInterval(this.interVal)
+                    this.save();
+                  } else {
+                    this.TotalTime--;
+                    this.seC--;
+                  }
+                }, 1000)
               } else {
                 this.save();
               }
@@ -142,10 +173,13 @@ export class ExamFormComponent implements OnInit {
     })
   }
 
-  handleEvent(e: CountdownEvent) {
-    if (e.action === 'done') {
-      this.save();
-    }
+  // handleEvent(e: CountdownEvent) {
+  //   if (e.action === 'done') {
+  //     this.save();
+  //   }
+  // }
+  handleEvent() {
+    this.save();
   }
 
   getDetailAnswer() {

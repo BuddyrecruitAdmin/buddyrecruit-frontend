@@ -63,11 +63,15 @@
         </nb-card-body>
         <nb-card-footer *ngIf="!actionView">
             <button nbButton size="small" status="success" (click)="save()">SEND</button>
-            <countdown *ngIf="timeCount"
+            <div [ngClass]="{  'time': TotalTime > 30, 'time-out': TotalTime < 31 }" *ngIf="timeCount">
+                <label>{{ miN }} นาที {{ seC }} วินาที</label>
+            </div>
+            <!-- <countdown-timer class="time" (zeroTrigger)="handleEvent()" [end]="30"></countdown-timer> -->
+            <!-- <countdown *ngIf="timeCount"
                 [ngClass]="{  'time': countConfig.leftTime > 30, 'time-out': countConfig.leftTime < 31 }" #countdown
                 [config]="countConfig" (event)="handleEvent($event)">
                 $!m!:$!s!
-            </countdown>
+            </countdown> -->
         </nb-card-footer>
     </nb-card>
     <!-- Before Start -->
