@@ -18,7 +18,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { MESSAGE } from "../../shared/constants/message";
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from "@angular/router";
-import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
+import { CountdownConfig, CountdownEvent } from 'ngx-countdown';
 import { isSameDay } from 'date-fns';
 @Component({
   selector: 'ngx-exam-form',
@@ -43,7 +43,6 @@ export class ExamFormComponent implements OnInit {
     leftTime: 50,
     demand: false,
   };
-  @ViewChild('countdown', { static: false }) counter: CountdownComponent;
   checkStart: boolean;
   dateStart: any;
   dateNow: any;

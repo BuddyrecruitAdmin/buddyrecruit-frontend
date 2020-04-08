@@ -20,8 +20,9 @@
                 </div>
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
-                        <label class="text-black">ระยะเวลาในการสอบ</label>
-                        <ngb-timepicker [(ngModel)]="duration" [spinners]="false">
+                        <label class="text-black">ระยะเวลาในการสอบ <span *ngIf="preview">{{ duration.hour }} :
+                                {{ duration.minute }}</span></label>
+                        <ngb-timepicker *ngIf="!preview" [(ngModel)]="duration" [spinners]="false">
                         </ngb-timepicker>
                     </div>
                 </div>
