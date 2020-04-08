@@ -56,9 +56,6 @@
                                         [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                 </div>
                             </div>
-                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
-
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,9 +66,9 @@
         </nb-card-footer>
     </nb-card>
     <!-- Thank you for your information  External-->
-    <div *ngIf="actionView === false && done" class="row" [style.height.px]="innerHeight">
-        <div class="col-md-12 col-lg-12 text-center">
-            <h2 style="top: 45%;padding-left: 35%;">Your successfully created your answer</h2>
+    <div *ngIf="actionView === false && done" class="thankExam" [style.height.px]="innerHeight">
+        <div class="thankExam-wrapper">
+            <h2>Your successfully created your answer</h2>
             <!-- <br>
             <br>
             <p>We have received your information and would like to thank you for writing to us.</p>

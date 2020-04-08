@@ -36,7 +36,7 @@ export class ExamFormComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   getOptionImg: any;
   innerHeight: any;
-  examName: string; 
+  examName: string;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -94,7 +94,7 @@ export class ExamFormComponent implements OnInit {
     this.loading = true;
     this.service.answerExam(this._id, this.examId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        this.examName = response.data.name;
+        this.examName = response.data.refExam.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
         if (this.actionView) {

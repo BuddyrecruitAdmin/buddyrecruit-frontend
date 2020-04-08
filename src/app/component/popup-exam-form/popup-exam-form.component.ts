@@ -69,6 +69,9 @@ export class PopupExamFormComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
+      if(result){
+        this.ref.close();
+      }
       setExamId();
       setCandidateId();
       this.loading = false;

@@ -13,7 +13,8 @@
                                 class="text-red">*</span></label>
                         <input *ngIf="!preview" type="text" placeholder="ใส่ชื่อแบบทดสอบ" [(ngModel)]="examName"
                             name="name" nbInput fullWidth>
-                        <label *ngIf="preview" class="text-black"><b>{{ examName || '' }}</b></label>
+                        <!-- <label *ngIf="preview" class="text-black"><b>{{ examName || '' }}</b></label> -->
+                        <h4 *ngIf="preview" class="text-black"><b>{{ examName || '' }}</b></h4>
                         <small *ngIf="touchedName" class="text-red">{{ sErrorName }}</small>
                     </div>
                 </div>

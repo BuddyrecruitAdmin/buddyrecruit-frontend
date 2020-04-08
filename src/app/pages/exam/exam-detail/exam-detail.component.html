@@ -100,11 +100,6 @@
                       <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
                     </span>
                   </div>
-                  <div *ngIf="item.exams" class="text-group">
-                    <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
-                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
-                    </span>
-                  </div>
                   <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
                     <label class="label text-light-gray">Reject Info</label>
                     <div class="m-l-15">
@@ -178,6 +173,11 @@
                     </nb-icon>
                     <nb-icon *ngIf="item.condition.icon.examScore" icon="edit-2-outline" class="link"
                       nbTooltip="Select Exam Form" (click)="openPopupSendExam(item._id)"></nb-icon>
+                  </div>
+                  <div *ngIf="item.exams" class="text-group">
+                    <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
+                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
+                    </span>
                   </div>
                   <div *ngIf="item.condition.icon.examScore" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Exam Score</label>

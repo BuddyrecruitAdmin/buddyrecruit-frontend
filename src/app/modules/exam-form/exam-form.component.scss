@@ -3,7 +3,7 @@
   }
 h2{
     position: absolute;
-    top: 50%;
+    top: 45%;
 }
 .img-incard{
   width: 150px;
@@ -25,3 +25,13 @@ img{
   cursor: pointer;
   
 }
+  /* Thank you for your information */
+  .thankExam {
+    height: 100%;
+  }
+  .thankExam-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 8%;
+    text-align: center;
+  }
