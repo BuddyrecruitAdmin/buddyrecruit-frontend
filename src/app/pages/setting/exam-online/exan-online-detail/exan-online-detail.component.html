@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group" [ngClass]="{ 'has-error': touchedName }">
-                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exaเm Form</b> <span
+                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exam Form</b> <span
                                 class="text-red">*</span></label>
                         <input *ngIf="!preview" type="text" placeholder="ใส่ชื่อแบบทดสอบ" [(ngModel)]="examName"
                             name="name" nbInput fullWidth>
@@ -20,8 +20,10 @@
                 </div>
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
-                        <label class="text-black">ระยะเวลาในการสอบ <span *ngIf="preview">{{ duration.hour }} :
-                                {{ duration.minute }}</span></label>
+                        <label class="text-black">ระยะเวลาในการสอบ <span *ngIf="preview && duration">{{ duration.hour }}
+                                :
+                                {{ duration.minute }} <span *ngIf="preview && !duration">
+                                    ไม่จำกัดเวลา</span></span></label>
                         <ngb-timepicker *ngIf="!preview" [(ngModel)]="duration" [spinners]="false">
                         </ngb-timepicker>
                     </div>

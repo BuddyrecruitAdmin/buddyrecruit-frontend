@@ -495,6 +495,7 @@ export class ExamDetailComponent implements OnInit {
   }
 
   showExamCand(examId) {
+    this.dialogRef.close();
     const path = '/exam-form/view/' + examId + '/' + this.examUserId;
     this.router.navigate([path]);
     // this.service.answerExam(this.examUserId, examId).subscribe((response) => {

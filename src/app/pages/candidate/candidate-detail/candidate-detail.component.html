@@ -190,7 +190,7 @@
               <nb-icon *ngIf="condition.icon.examScore" icon="edit-2-outline" class="link" nbTooltip="Select Exam Form"
                 (click)="openPopupSendExam(item.candidateFlow._id)"></nb-icon>
             </div>
-            <div class="text-group">
+            <div *ngIf="item.candidateFlow.exams.length > 0" class="text-group">
               <span class="link underline"
                 (click)="checkExam(dialogExam, item.candidateFlow.exams, item.candidateFlow._id)">
                 <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
