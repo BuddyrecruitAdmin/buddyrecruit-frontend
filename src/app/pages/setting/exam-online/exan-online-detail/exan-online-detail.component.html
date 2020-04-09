@@ -57,7 +57,7 @@
                                     <!-- radio -->
                                     <div *ngIf="option.type === 'radio'">
                                         <br>
-                                        <nb-card>
+                                        <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
                                             <nb-card-body>
                                                 <div *ngFor="let group of option.group;let r = index"
                                                     class="input-group form-control-group">
