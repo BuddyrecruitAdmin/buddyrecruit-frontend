@@ -179,9 +179,11 @@
           </div>
           <div class="col-sm-2 col-md-2">
             <label *ngIf="!jr.requiredExam" class="label">Have Exam</label>
-            <label *ngIf="jr.requiredExam" class="label link m-r-5" (click)="callExam(dialog)">Have Exam</label>
-            <nb-icon *ngIf="jr.requiredExam" icon="edit-2-outline" class="link" nbTooltip="Edit Exam Online"
-              (click)="callExam(dialog)">
+            <label *ngIf="jr.requiredExam && role.refAuthorize.editExam" class="label link m-r-5"
+              (click)="callExam(dialog)">Have Exam</label>
+            <label *ngIf="jr.requiredExam && !role.refAuthorize.editExam" class="label">Have Exam</label>
+            <nb-icon *ngIf="jr.requiredExam && role.refAuthorize.editExam" icon="edit-2-outline" class="link"
+              nbTooltip="Edit Exam Online" (click)="callExam(dialog)">
             </nb-icon>
             <div>
               <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview || !editExam">Yes
