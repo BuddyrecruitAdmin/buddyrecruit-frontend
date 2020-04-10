@@ -10,6 +10,7 @@ import { ResumeService } from './resume.service';
 import { JdService } from '../../pages/jd/jd.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { DropDownValue } from '../../shared/interfaces';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
 
@@ -23,6 +24,8 @@ export class ResumeComponent implements OnInit {
   resume: IResume;
   degreesEN: DropDownValue[];
   degreesTH: DropDownValue[];
+
+  selectedItem = '2';
 
   hardSkill = {
     keyword: '',
@@ -52,6 +55,7 @@ export class ResumeComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: ResumeService,
     private jdService: JdService,
+    private toastrService: NbToastrService,
   ) {
     setLangPath("RESUME");
     this.language = 'en';
@@ -260,8 +264,11 @@ export class ResumeComponent implements OnInit {
       this.loading = true;
       this.service.create(request).subscribe(response => {
         if (response.code === ResponseCode.Success) {
-          this.loading = false;
+          this.showToast('success', response.message || 'Saved Successful', '');
+        } else {
+          this.showToast('danger', response.message || 'Error!', '');
         }
+        this.loading = false;
       });
     }
   }
@@ -351,6 +358,18 @@ export class ResumeComponent implements OnInit {
       });
     }
     return request;
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.BOTTOM_LEFT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
   }
 
 }

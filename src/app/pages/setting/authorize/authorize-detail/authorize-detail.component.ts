@@ -53,6 +53,7 @@ export interface Auth {
     authorize: Control;
     user: Control;
     jobPosition: Control;
+    examOnline: Control;
     evaluation: Control;
     location: Control;
     mailTemplate: Control;
@@ -72,6 +73,10 @@ export interface Auth {
   showApplicationForm: boolean;
   showSalary: boolean;
   closeJR: boolean;
+  editExam: boolean;
+  sendExam: boolean;
+  checkAswer: boolean;
+  // addScore: boolean;
   isUsed?: boolean;
 }
 export interface ErrMsg {
@@ -182,6 +187,11 @@ export class AuthorizeDetailComponent implements OnInit {
           editable: false,
           active: true
         },
+        examOnline: {
+          visible: false,
+          editable: false,
+          active: true
+        },
         evaluation: {
           visible: false,
           editable: false,
@@ -232,6 +242,10 @@ export class AuthorizeDetailComponent implements OnInit {
       showApplicationForm: false,
       showSalary: false,
       closeJR: false,
+      editExam: false,
+      sendExam: false,
+      checkAswer: false,
+      // addScore: false,
     }
     auth.processFlow.exam.steps.forEach(element => {
       element.editable = false;
@@ -417,6 +431,10 @@ export class AuthorizeDetailComponent implements OnInit {
         this.authDetail.showApplicationForm = auth.showApplicationForm;
         this.authDetail.showSalary = auth.showSalary;
         this.authDetail.closeJR = auth.closeJR;
+        this.authDetail.editExam = auth.editExam;
+        this.authDetail.sendExam = auth.sendExam;
+        this.authDetail.checkAswer = auth.checkAswer;
+        // this.authDetail.addScore = auth.addScore;
 
         this.authDetail.processFlow.exam.steps.map(element => {
           element.disabled = element.editable;
@@ -691,6 +709,17 @@ export class AuthorizeDetailComponent implements OnInit {
         } else {
           if (this.authDetail.configuration.jobPosition.editable) {
             this.authDetail.configuration.jobPosition.visible = true;
+          }
+        }
+        break;
+      case 'EXAMONLINE':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.examOnline.visible) {
+            this.authDetail.configuration.examOnline.editable = false;
+          }
+        } else {
+          if (this.authDetail.configuration.examOnline.editable) {
+            this.authDetail.configuration.examOnline.visible = true;
           }
         }
         break;

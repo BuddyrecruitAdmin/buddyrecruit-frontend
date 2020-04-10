@@ -54,7 +54,7 @@ export interface CompanyDetail {
     lineId: string;
     imageUrl: string;
   },
-  waitinPeriod: number;
+  waitingPeriod: number;
 }
 
 export interface ErrMsg {
@@ -217,7 +217,7 @@ export class CompanyDetailComponent implements OnInit {
         lineId: '',
         imageUrl: '',
       },
-      waitinPeriod: 0
+      waitingPeriod: 0
     }
   }
 
