@@ -40,7 +40,7 @@ export class PopupResendEmailComponent implements OnInit {
     this.candidateId = getCandidateId();
     this.examId = getExamId();
     setExamId();
-    setFlowId();
+    // setFlowId();
     setCandidateId();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
