@@ -37,9 +37,12 @@
                         <div class="col-md-12 col-lg-12">
                             <div class="input-group">
                                 <!-- <label> {{ topic.name }}</label> -->
-                                <input type="text" [(ngModel)]="topic.name" nbInput fullWidth
+                                <input [style.color]="topic.color" type="text" [(ngModel)]="topic.name" nbInput fullWidth
                                     placeholder="Question Here">
                                 <div *ngIf="!preview" class="input-group-addon">
+                                    <nb-icon (click)="insertTopic(dialog,'topic',i)" icon="plus-square-outline"
+                                        class="text-light-gray" class="link">
+                                    </nb-icon>
                                     <nb-icon status="danger" icon="trash-2-outline" class="text-light-gray" class="link"
                                         (click)="deleteTopic(topicOption,i)">
                                     </nb-icon>
@@ -48,22 +51,26 @@
                             <div *ngIf="topic.examOptions">
                                 <div *ngFor="let option of topic.examOptions;let j = index;"
                                     class="input-group form-control-group">
-                                    <textarea *ngIf="option.type === 'label'" type="text" [(ngModel)]="option.value"
-                                        nbInput fullWidth placeholder="Question here" [disabled]="preview"></textarea>
-                                    <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value"
-                                        nbInput fullWidth placeholder="answer here" [disabled]="!preview">
-                                    <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput
-                                        fullWidth placeholder="answer here" [disabled]="!preview"></textarea>
+                                    <img *ngIf="option.src" class="img-default" [src]="option.src">
+                                    <textarea [style.color]="option.color" *ngIf="option.type === 'label'" type="text"
+                                        [(ngModel)]="option.value" nbInput fullWidth placeholder="Question here"
+                                        [disabled]="preview"></textarea>
+                                    <input [style.color]="option.color" *ngIf="option.type === 'input'" type="text"
+                                        [(ngModel)]="option.value" nbInput fullWidth placeholder="answer here"
+                                        [disabled]="!preview">
+                                    <textarea [style.color]="option.color" *ngIf="option.type === 'area'"
+                                        [(ngModel)]="option.value" nbInput fullWidth placeholder="answer here"
+                                        [disabled]="!preview"></textarea>
                                     <!-- radio -->
                                     <div *ngIf="option.type === 'radio'">
                                         <br>
                                         <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
-                                            <nb-card-body>
+                                            <nb-card-body id="imgCard">
                                                 <div *ngFor="let group of option.group;let r = index"
                                                     class="input-group form-control-group">
                                                     <img *ngIf="group.src" class="img-incard"
                                                         [src]="group.src ? group.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
-                                                    <input type="text" [(ngModel)]="group.label" nbInput fullWidth
+                                                    <input [style.color]="group.color" type="text" [(ngModel)]="group.label" nbInput fullWidth
                                                         placeholder="choice text here">
                                                     <div *ngIf="!preview" class="input-group-addon">
                                                         <a style="cursor: pointer;" (click)="fileInput.click()">
@@ -116,6 +123,17 @@
                                         </small>
                                     </div>
                                     <div *ngIf="!preview" class="input-group-addon">
+                                        <a *ngIf="option.type === 'label'" style="cursor: pointer;"
+                                            (click)="fileInput.click()">
+                                            <span class="fa fa-images"></span>
+                                            <input #fileInput type="file"
+                                                (change)="fileChangeEvent(option,$event.target.files)"
+                                                style="display:none;" accept="image/*" />
+                                        </a>
+                                        <nb-icon [nbPopover]="tabs" (click)="setTopicIndex(topic , j)"
+                                            nbPopoverPlacement="top" icon="plus-square-outline" class="text-light-gray"
+                                            class="link">
+                                        </nb-icon>
                                         <nb-icon status="danger" icon="minus-square-outline" class="text-light-gray"
                                             class="link" (click)="deleteTopic(topicOption[i].examOptions,j)">
                                         </nb-icon>
@@ -126,7 +144,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 text-center" *ngIf="!preview">
-                            <button [nbPopover]="component" (click)="setTopic(topic)" nbPopoverPlacement="top" nbButton
+                            <button [nbPopover]="tabs" (click)="setTopic(topic)" nbPopoverPlacement="top" nbButton
                                 ghost size="small">
                                 <nb-icon icon="plus-square-outline" class="text-light-gray" class="link"
                                     style="margin-top:10px">
@@ -163,13 +181,14 @@
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
+                            <img *ngIf="option.src" class="img-default" [src]="option.src"><br *ngIf="option.src">
                             <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here">
                             <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput fullWidth
                                 placeholder="Answer here"></textarea>
                             <!-- radio -->
-                            <div *ngIf="option.type === 'radio'">
+                            <div id="imgCard" *ngIf="option.type === 'radio'">
                                 <nb-radio-group [name]="option._id" [(ngModel)]="option.value">
                                     <nb-radio *ngFor="let group of option.group" [value]="group.value">
                                         <img *ngIf="group.src" class="img-incard"
@@ -217,9 +236,9 @@
     <button (click)="addInput('radio')" nbTooltip="Check list" nbButton ghost>
         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
     </button>
-    <button (click)="addInput('file')" nbTooltip="Question with picture" nbButton ghost>
+    <!-- <button (click)="addInput('file')" nbTooltip="Question with picture" nbButton ghost>
         <nb-icon icon="file-add-outline"></nb-icon>
-    </button>
+    </button> -->
     <button (click)="addInput('getFile')" nbTooltip="Answer with picture" nbButton ghost>
         <nb-icon icon="arrow-circle-down-outline"></nb-icon>
     </button>

@@ -8,9 +8,20 @@
   cursor: pointer;
   
 }
+  // .img-incard{
+  //   width: 150px;
+  //   height: 150px;
+  // }
+
+  #imgCard{
+    img {
+      max-width: 100%;
+      max-height: 100%;
+  }
   .img-incard{
     width: 150px;
     height: 150px;
+  }
   }
   .input-group {
     .input-group-addon {
@@ -23,7 +34,7 @@
   }
   .btn-save {
     position: fixed;
-    top: 76px;
+    bottom: 0px;
     right: 17px;
     z-index: 1030;
   }

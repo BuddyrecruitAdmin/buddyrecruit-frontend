@@ -16,6 +16,7 @@
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
+                            <img *ngIf="option.src" class="img-default" [src]="option.src"><br *ngIf="option.src">
                             <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here" [disabled]="actionView">
