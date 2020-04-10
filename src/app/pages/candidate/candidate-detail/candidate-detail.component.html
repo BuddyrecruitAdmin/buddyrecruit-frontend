@@ -345,7 +345,7 @@
   <nb-card-footer style="padding-left: 0px;padding-right: 6px;">
     <div class="float-left">
       <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-        status="default" (click)="checkCV(item._id)" nbTooltip="Original CV">
+        status="default" (click)="checkCV(item._id, item)" nbTooltip="Original CV">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
       <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default"
