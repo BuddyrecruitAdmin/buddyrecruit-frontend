@@ -16,6 +16,7 @@
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
+                            <img *ngIf="option.src" class="img-default" [src]="option.src"><br *ngIf="option.src">
                             <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here" [disabled]="actionView">
@@ -75,10 +76,40 @@
         </nb-card-footer>
     </nb-card>
     <!-- Before Start -->
-    <div *ngIf="checkStart" [style.height.px]="innerHeight">
-        <div class="btn-start">
-            <button class="btn-start" nbButton size="giant" status="success" (click)="start()">Start</button>
-        </div>
+    <div id="start" style="padding: 8%;" *ngIf="checkStart" [style.height.px]="innerHeight">
+        <nb-card>
+            <nb-card-body>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <label>ข้อสอบนี้เป็นแบบทดสอบเพื่อคัดเลือกบุคคลเข้าทำงานกับ
+                            บริษัท ไซเจ็น จำกัด ห้ามผู้ใดทำซ้ำ คัดลอก ลอกเลียน ดัดแปลง ปลอมแปลง จัดเผยแพร่ เข้าครอบครอง
+                            เรียกดึงข้อมูล บันทึก ส่งผ่าน หรือกระทำการใดๆ
+                            เกี่ยวกับข้อมูลในชุดข้อสอบนี้ โดยไม่ได้รับอนุญาตอย่างเป็นทางการจากบริษัทฯ
+                            หรือโดยก่อให้เกิดความเสียหาย อันเป็นการกระทำความผิด
+                            ตามพระราชบัญญัติทรัพย์สินทางปัญญาฯและกฎหมายอื่นที่เกี่ยวข้อง
+                            บริษัทฯ สงวนสิทธิในการยับยั้งการกระทำนั้นในทันที
+                            และจะดำเนินการทางกฎหมายต่อผู้กระทำละเมิดอย่างเด็ดขาดโดยไม่มีข้อยกเว้น </label>
+                        <br>
+                        <b>คำแนะนำในการทำข้อสอบออนไลน์ </b>
+                        <br>
+                        <label>1. ให้ผู้สอบทำข้อสอบด้วยความสามารถของตนเอง หากข้อสอบข้อใดไม่ชัดเจน
+                            ให้ผู้สอบทำข้อสอบโดยเขียนสมมุติฐานประกอบไว้ในคำตอบ </label><br>
+                        <label>2. ไม่อนุญาตให้ผู้เข้าสอบใช้เครื่องคิดเลขในการคำนวณ </label><br>
+                        <label>3. หลังจากกด Start ข้อสอบจะจับเวลาทันที และไม่สามารถกดหยุดเวลาได้
+                            ให้ผู้สอบเตรียมตัวให้พร้อมก่อนกด Start </label><br>
+                        <label>4. ไม่อนุญาตให้ผู้เข้าสอบปิด Browser ระหว่างการทำข้อสอบ
+                            จะทำให้ข้อสอบนั้นๆสูญหายและไม่ได้คะแนน ในกรณีที่หมดเวลาสอบ ระบบจะ submit คำตอบอัตโนมัติ
+                        </label><br>
+                    </div>
+                </div>
+            </nb-card-body>
+            <nb-card-footer>
+                <button class="btn-start" nbButton size="giant" status="success" (click)="start()">Start</button>
+            </nb-card-footer>
+        </nb-card>
+        <!-- <div class="btn-start">
+         
+        </div> -->
     </div>
 
     <!-- Thank you for your information  External-->
