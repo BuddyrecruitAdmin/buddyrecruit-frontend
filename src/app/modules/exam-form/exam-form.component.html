@@ -16,7 +16,13 @@
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
-                            <img *ngIf="option.src" class="img-default" [src]="option.src"><br *ngIf="option.src">
+                            <div class="row" *ngIf="option.src && option.type !== 'file' && option.type !=='getFile'"
+                                style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img class="img-default" style="text-align:center" [src]="option.src"><br
+                                        *ngIf="option.src">
+                                </div>
+                            </div>
                             <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here" [disabled]="actionView">
@@ -24,8 +30,9 @@
                                 placeholder="Answer here" [disabled]="actionView"></textarea>
                             <!-- radio -->
                             <div *ngIf="option.type === 'radio'">
-                                <nb-radio-group [name]="option._id" [(ngModel)]="option.value" [disabled]="actionView">
-                                    <nb-radio *ngFor="let group of option.group" [value]="group.value">
+                                <nb-radio-group [name]="option._id" [(ngModel)]="option.value">
+                                    <nb-radio *ngFor="let group of option.group" [value]="group.value"
+                                        [disabled]="actionView && group.value !== option.value">
                                         <img *ngIf="group.src" class="img-incard" (click)="open(content,group.src)"
                                             [src]="group.src ? group.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                         {{ group.label }}

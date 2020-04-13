@@ -39,6 +39,7 @@ export class ExanOnlineDetailComponent implements OnInit {
   getOptionImg: any;
   innerHeight: any;
   addIdex: any;
+  topicColor: any;
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -174,7 +175,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            align: "center"
           }, {
           name: this.fieldName,
           type: this.createTopic,
@@ -262,6 +264,19 @@ export class ExanOnlineDetailComponent implements OnInit {
     this.topic = topic;
     this.addIdex = index + 1;
   }
+
+  setOption(topic) {
+    this.topicColor = topic;
+  }
+
+  setColor(rgb) {
+    this.topicColor.color = rgb;
+  }
+
+  // changeAlign(align) {
+  //   console.log(this.topicColor)
+  //   this.topicColor.align = align;
+  // }
 
   fileChangeEvent(option, files: FileList): void {
     this.fileText = "";
