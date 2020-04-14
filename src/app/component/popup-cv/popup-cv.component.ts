@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import { PrintCandidateComponent } from '../../component/print-candidate/print-candidate.component';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interfaces/common.interface';
 import { DomSanitizer } from '@angular/platform-browser';
+import { saveAs } from "file-saver";
 var FileSaver = require('file-saver');
 @Component({
   selector: 'ngx-popup-cv',
@@ -382,11 +383,20 @@ export class PopupCvComponent implements OnInit {
   }
 
   downloadFile(data: any, name: string) {
-    const blob = new Blob([data], { type: "image/jpeg" });
-    const url = window.URL.createObjectURL(blob);
-    const name_url = name + ".jpeg"
-    FileSaver.saveAs(blob, name_url);
-    window.open(url);
+    if (data.type === 'image/jpeg') {
+      const blob = new Blob([data], { type: "image/jpeg" });
+      const url = window.URL.createObjectURL(blob);
+      saveAs(url, name);
+      window.open(url);
+    } else {
+      const blob = new Blob([data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      saveAs(url, name);
+      window.open(url);
+    }
+    // const name_url = name + ".jpeg"
+    // FileSaver.saveAs(blob, name_url);
+    // window.open(url);
 
   }
 

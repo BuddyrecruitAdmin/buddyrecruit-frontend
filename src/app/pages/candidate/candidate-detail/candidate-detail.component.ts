@@ -747,11 +747,22 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   downloadFile(data: any, name) {
-    const blob = new Blob([data], { type: "image/jpeg" });
-    const url = window.URL.createObjectURL(blob);
-    const name_url = name + ".jpeg"
-    FileSaver.saveAs(blob, name_url);
-    window.open(url);
+    // const blob = new Blob([data], { type: "image/jpeg" });
+    // const url = window.URL.createObjectURL(blob);
+    // const name_url = name + ".jpeg"
+    // FileSaver.saveAs(blob, name_url);
+    // window.open(url);
+    if (data.type === 'image/jpeg') {
+      const blob = new Blob([data], { type: "image/jpeg" });
+      const url = window.URL.createObjectURL(blob);
+      FileSaver.saveAs(blob, name);
+      window.open(url);
+    } else {
+      const blob = new Blob([data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      FileSaver.saveAs(blob, name);
+      window.open(url);
+    }
   }
 
   sendEmail(item: any) {
