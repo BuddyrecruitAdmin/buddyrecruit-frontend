@@ -58,6 +58,8 @@
                                         [nbPopover]="colorPicker" nbPopoverPlacement="top" (click)="setOption(option)"
                                         type="text" [(ngModel)]="option.value" nbInput fullWidth
                                         placeholder="Question here" [disabled]="preview"></textarea>
+                                    <input *ngIf="option.type === 'label'" style="color: red;" type="text"
+                                        [(ngModel)]="option.score" nbInput fullWidth placeholder="score here">
                                     <input *ngIf="option.type === 'input'" [style.color]="option.color"
                                         [nbPopover]="colorPicker" nbPopoverPlacement="top" (click)="setOption(option)"
                                         type="text" [(ngModel)]="option.value" nbInput fullWidth
@@ -194,6 +196,7 @@
                                 </div>
                             </div>
                             <label *ngIf="option.type === 'label'" [style.color]="option.color"> {{ option.value }}
+                                <span *ngIf="option.score" style="color: red;">{{ option.score }}</span>
                             </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here">

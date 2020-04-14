@@ -12,7 +12,7 @@
             <div class="row" *ngFor="let topic of topicOption;let i = index;">
                 <div class="col-md-12 col-lg-12">
                     <div>
-                        <h3 class="text-black"> {{ topic.name }}</h3>
+                        <h3 [style.color]="topic.color"> {{ topic.name }}</h3>
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
@@ -23,7 +23,9 @@
                                         *ngIf="option.src">
                                 </div>
                             </div>
-                            <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
+                            <label *ngIf="option.type === 'label'" [style.color]="option.color"> {{ option.value }}
+                                <span *ngIf="option.score" style="color: red;">{{ option.score }}</span>
+                            </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here" [disabled]="actionView">
                             <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput fullWidth

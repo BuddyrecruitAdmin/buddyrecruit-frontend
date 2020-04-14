@@ -132,7 +132,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            score: ""
           }, {
           name: "",
           type: this.createTopic,
@@ -146,7 +147,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            score: ""
           }, {
           name: "",
           type: this.createTopic,
@@ -163,7 +165,8 @@ export class ExanOnlineDetailComponent implements OnInit {
           {
             name: this.fieldName,
             type: "label",
-            value: ""
+            value: "",
+            score: ""
           }, {
           name: this.fieldName,
           type: this.createTopic,
@@ -176,12 +179,14 @@ export class ExanOnlineDetailComponent implements OnInit {
             type: "label",
             value: "",
             color: "black",
-            align: "center"
+            align: "center",
+            score: ""
           }, {
           name: this.fieldName,
           type: this.createTopic,
           value: "",
-          color: "black"
+          color: "black",
+          score: ""
         })
       }
     } else { //add in last arr
@@ -191,7 +196,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            score: ""
           }, {
           name: "",
           type: this.createTopic,
@@ -204,7 +210,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            score: ""
           }, {
           name: "",
           type: this.createTopic,
@@ -223,7 +230,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            score: ""
           }, {
           name: this.fieldName,
           type: this.createTopic,
@@ -235,7 +243,8 @@ export class ExanOnlineDetailComponent implements OnInit {
             name: this.fieldName,
             type: "label",
             value: "",
-            color: "black"
+            color: "black",
+            score: ""
           }, {
           name: this.fieldName,
           type: this.createTopic,
