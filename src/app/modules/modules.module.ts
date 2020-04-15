@@ -96,6 +96,7 @@ import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
+import { ApplicationFormComponent } from './application-form/application-form.component';
 
 @NgModule({
   imports: [
@@ -188,6 +189,7 @@ import { CountdownTimerModule } from 'ngx-countdown-timer';
     AppFormComponent,
     ExamFormComponent,
     ResumeComponent,
+    ApplicationFormComponent,
   ],
   providers: [
     TranslateService,

@@ -1,15 +1,10 @@
 <div id="resume">
 
   <div class="nav-bar">
-    <div class="nav-left">
-      <button mat-icon-button type="button" class="back-icon" [routerLink]="'/index'">
-        <mat-icon>keyboard_backspace</mat-icon>
-      </button>
-    </div>
     <div class="nav-brand">
       <mat-icon>account_box</mat-icon>
-      <div class="title">{{ 'TITLE' | translate }}</div>
-      <div class="sub-title">Buddy Recruit</div>
+      <div class="title">{{ 'APP_FROM' | translate }}</div>
+      <div class="sub-title">({{ 'PREVIEW' | translate }})</div>
     </div>
     <div class="nav-right">
       <span class="lang" [ngClass]="{ 'active' : language === 'en' }" (click)="setLang('en')">ENG</span>
@@ -18,87 +13,84 @@
     </div>
   </div>
 
-  <form class="container" [formGroup]="formGroup" (ngSubmit)="save()">
+  <div class="container">
 
     <!-- Personal Details -->
-    <div class="card">
+    <div class="card" *ngIf="template.fieldControl.personalDetail.visible">
       <div class="card-body">
         <div class="topic">
           <mat-icon>account_circle</mat-icon>
           <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="template.fieldControl.firstname.visible">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
-              <input matInput type="text" id="firstname" name="firstname" [formControl]="f.firstname"
-                [(ngModel)]="resume.firstname" required>
+              <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
+                [required]=template.fieldControl.firstname.required>
             </mat-form-field>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="template.fieldControl.lastname.visible">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
-              <input matInput type="text" id="lastname" name="lastname" [formControl]="f.lastname"
-                [(ngModel)]="resume.lastname" required>
+              <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
+                [required]=template.fieldControl.lastname.required>
             </mat-form-field>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-4" *ngIf="template.fieldControl.birth.visible">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
-              <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate" [formControl]="f.birth"
-                [(ngModel)]="resume.birth" required readonly (click)="birthDate.open()"
-                (dateInput)="onChangeBirthday($event.target.value)">
+              <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate"
+                [(ngModel)]="appForm.birth" readonly (click)="birthDate.open()"
+                (dateInput)="onChangeBirthday($event.target.value)" [required]=template.fieldControl.birth.required>
               <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
               <mat-datepicker #birthDate></mat-datepicker>
             </mat-form-field>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-2" *ngIf="template.fieldControl.age.visible">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'AGE' | translate }}</mat-label>
-              <input matInput type="number" [(ngModel)]="resume.age" [ngModelOptions]="{standalone: true}" disabled>
+              <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age"
+                [required]=template.fieldControl.age.required>
             </mat-form-field>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="template.fieldControl.phone.visible">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'PHONE' | translate }}</mat-label>
-              <input matInput type="text" id="phone" name="phone" [formControl]="f.phone" [(ngModel)]="resume.phone"
-                required>
+              <input matInput type="text" id="phone" name="phone" [(ngModel)]="appForm.phone"
+                [required]=template.fieldControl.phone.required>
             </mat-form-field>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6" *ngIf="template.fieldControl.email.visible">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'EMAIL' | translate }}</mat-label>
-              <input matInput type="text" id="email" name="email" [formControl]="f.email" [(ngModel)]="resume.email"
-                required>
+              <input matInput type="text" id="email" name="email" [(ngModel)]="appForm.email"
+                [required]=template.fieldControl.email.required>
             </mat-form-field>
           </div>
         </div>
-        <div class="box-dashed" style="padding-bottom: 0;">
+        <div class="box-dashed" *ngIf="template.fieldControl.address.visible" style="padding-bottom: 0;">
           <p>{{ 'ADDRESS' | translate }}</p>
           <div class="row">
             <div class="col-md-4">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'ADDRESS_NO' | translate }}</mat-label>
-                <input matInput type="text" id="addressNo" name="addressNo" [(ngModel)]="resume.addressNo"
-                  [ngModelOptions]="{standalone: true}">
+                <input matInput type="text" id="addressNo" name="addressNo" [(ngModel)]="appForm.addressNo"
+                  [required]=template.fieldControl.address.required>
               </mat-form-field>
             </div>
             <div class="col-md-4">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'ROAD' | translate }}</mat-label>
-                <input matInput type="text" id="road" name="road" [(ngModel)]="resume.road"
-                  [ngModelOptions]="{standalone: true}">
+                <input matInput type="text" id="road" name="road" [(ngModel)]="appForm.road"
+                  [required]=template.fieldControl.address.required>
               </mat-form-field>
             </div>
             <div class="col-md-4">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'DISTRICT' | translate }}</mat-label>
-                <input matInput type="text" id="district" name="district" [(ngModel)]="resume.district"
-                  [ngModelOptions]="{standalone: true}">
+                <input matInput type="text" id="district" name="district" [(ngModel)]="appForm.district"
+                  [required]=template.fieldControl.address.required>
               </mat-form-field>
             </div>
           </div>
@@ -106,15 +98,15 @@
             <div class="col-md-6">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
-                <input matInput type="text" id="province" name="province" [(ngModel)]="resume.province"
-                  [ngModelOptions]="{standalone: true}">
+                <input matInput type="text" id="province" name="province" [(ngModel)]="appForm.province"
+                  [required]=template.fieldControl.address.required>
               </mat-form-field>
             </div>
             <div class="col-md-6">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'POSTCODE' | translate }}</mat-label>
-                <input matInput type="text" id="postcode" name="postcode" [(ngModel)]="resume.postcode"
-                  [ngModelOptions]="{standalone: true}">
+                <input matInput type="text" id="postcode" name="postcode" [(ngModel)]="appForm.postcode"
+                  [required]=template.fieldControl.address.required>
               </mat-form-field>
             </div>
           </div>
@@ -123,14 +115,14 @@
     </div>
 
     <!-- Work Experience -->
-    <div class="card">
+    <div class="card" *ngIf="template.fieldControl.workExperience.visible">
       <div class="card-body">
         <div class="topic">
           <mat-icon>work</mat-icon>
           <p>{{ 'WORK_EXP' | translate }}</p>
           <span>{{ 'WORK_EXP_SUB' | translate }}</span>
         </div>
-        <div *ngFor="let work of resume.workExperience.work; let i = index" class="box-dashed m-b-10">
+        <div *ngFor="let work of appForm.workExperience.work; let i = index" class="box-dashed m-b-10">
           <p>
             {{ 'WORK_EXP' | translate }} ({{ i + 1 }})
             <button mat-icon-button type="button" class="text-gray" (click)="work.deletion = true"
@@ -208,14 +200,14 @@
     </div>
 
     <!-- Education -->
-    <div class="card">
+    <div class="card" *ngIf="template.fieldControl.education.visible">
       <div class="card-body">
         <div class="topic">
           <mat-icon>school</mat-icon>
           <p>{{ 'EDUCATION' | translate }}</p>
           <span>{{ 'EDUCATION_SUB' | translate }}</span>
         </div>
-        <div *ngFor="let education of resume.education; let i = index" class="box-dashed m-b-10">
+        <div *ngFor="let education of appForm.education; let i = index" class="box-dashed m-b-10">
           <p>
             {{ 'EDUCATION' | translate }} ({{ i + 1 }})
             <button mat-icon-button type="button" class="text-gray" (click)="education.deletion = true"
@@ -285,7 +277,7 @@
     </div>
 
     <!-- Hard Skills -->
-    <div class="card">
+    <div class="card" *ngIf="template.fieldControl.hardSkill.visible">
       <div class="card-body">
         <div class="topic">
           <mat-icon>highlight</mat-icon>
@@ -297,7 +289,7 @@
             <mat-form-field appearance="outline">
               <mat-label>{{ 'HARD_SKILL' | translate }}</mat-label>
               <input matInput (keyup.enter)="addHardSkill()" [(ngModel)]="hardSkill.keyword"
-                [ngModelOptions]="{standalone: true}" [disabled]="resume.hardSkill.length === 20">
+                [ngModelOptions]="{standalone: true}" [disabled]="appForm.hardSkill.length === 20">
               <mat-hint align="end">{{ 'MAX_HARD_SKILLS' | translate }}</mat-hint>
               <mat-hint align="start" class="text-red">
                 <span *ngIf="hardSkill.required">{{ 'HARD_SKILLS_REQUIRED' | translate }}</span>
@@ -308,18 +300,18 @@
         </div>
         <div class="add-more">
           <button mat-flat-button type="button" color="primary" (click)="addHardSkill()"
-            [disabled]="resume.hardSkill.length === 20">
+            [disabled]="appForm.hardSkill.length === 20">
             <mat-icon>add</mat-icon>
             {{ 'ADD_HARD_SKILL' | translate }}
           </button>
         </div>
         <div class="text-right text-gray">
-          <span>{{ resume.hardSkill.length }}/20</span>
+          <span>{{ appForm.hardSkill.length }}/20</span>
         </div>
         <div class="box-dashed">
           <mat-chip-list>
             <mat-chip color="primary" selected>{{ 'HARD_SKILLS' | translate }}</mat-chip> :
-            <mat-chip *ngFor="let value of resume.hardSkill; let i = index">
+            <mat-chip *ngFor="let value of appForm.hardSkill; let i = index">
               {{ value }}
               <mat-icon matChipRemove (click)="removeHardSkill(i)">cancel</mat-icon>
             </mat-chip>
@@ -329,7 +321,7 @@
     </div>
 
     <!-- Soft Skills -->
-    <div class="card">
+    <div class="card" *ngIf="template.fieldControl.softSkill.visible">
       <div class="card-body">
         <div class="topic">
           <mat-icon>highlight</mat-icon>
@@ -341,7 +333,7 @@
             <mat-form-field appearance="outline">
               <mat-label>{{ 'SOFT_SKILL' | translate }}</mat-label>
               <input matInput (keyup.enter)="addSoftSkill()" [(ngModel)]="softSkill.keyword"
-                [ngModelOptions]="{standalone: true}" [disabled]="resume.softSkill.length === 20">
+                [ngModelOptions]="{standalone: true}" [disabled]="appForm.softSkill.length === 20">
               <mat-hint align="end">{{ 'MAX_SOFT_SKILLS' | translate }}</mat-hint>
               <mat-hint align="start" class="text-red">
                 <span *ngIf="softSkill.required">{{ 'SOFT_SKILLS_REQUIRED' | translate }}</span>
@@ -352,18 +344,18 @@
         </div>
         <div class="add-more">
           <button mat-flat-button type="button" color="primary" (click)="addSoftSkill()"
-            [disabled]="resume.softSkill.length === 20">
+            [disabled]="appForm.softSkill.length === 20">
             <mat-icon>add</mat-icon>
             {{ 'ADD_SOFT_SKILL' | translate }}
           </button>
         </div>
         <div class="text-right text-gray">
-          <span>{{ resume.softSkill.length }}/20</span>
+          <span>{{ appForm.softSkill.length }}/20</span>
         </div>
         <div class="box-dashed">
           <mat-chip-list>
             <mat-chip color="primary" selected>{{ 'SOFT_SKILLS' | translate }}</mat-chip> :
-            <mat-chip *ngFor="let value of resume.softSkill; let i = index">
+            <mat-chip *ngFor="let value of appForm.softSkill; let i = index">
               {{ value }}
               <mat-icon matChipRemove (click)="removeSoftSkill(i)">cancel</mat-icon>
             </mat-chip>
@@ -372,79 +364,97 @@
       </div>
     </div>
 
-    <!-- Certifications -->
-    <div class="card">
+    <!-- Questions -->
+    <div class="card" *ngFor="let question of template.questions; let iQuestion = index;">
       <div class="card-body">
-        <div class="topic">
-          <mat-icon>turned_in</mat-icon>
-          <p>{{ 'CERTIFICATIONS' | translate }}</p>
-          <span>{{ 'CERTIFICATIONS_SUB' | translate }}</span>
+
+        <div class="topic" *ngIf="question.type === InputType.Label" style="margin-bottom: 1rem;">
+          <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
+          <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
         </div>
-        <div class="row">
+        <div class="topic" *ngIf="question.type !== InputType.Label">
+          <mat-icon>help_outline</mat-icon>
+          <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
+          <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
+        </div>
+
+        <div *ngIf="question.type === InputType.Input" class="row">
           <div class="offset-lg-2 col-lg-8">
             <mat-form-field appearance="outline">
-              <mat-label>{{ 'CERTIFICATION' | translate }}</mat-label>
-              <input matInput (keyup.enter)="addCertificate()" [(ngModel)]="certificate.keyword"
-                [ngModelOptions]="{standalone: true}" [disabled]="resume.certificate.length === 5">
-              <mat-hint align="end">{{ 'MAX_CERT' | translate }}</mat-hint>
-              <mat-hint align="start" class="text-red">
-                <span *ngIf="certificate.required">{{ 'CERT_REQUIRED' | translate }}</span>
-                <span *ngIf="certificate.duplication">{{ 'CERT_DUPLICATE' | translate }}</span>
-              </mat-hint>
+              <input matInput type="text" [(ngModel)]="question.answer.input" [required]="question.required">
             </mat-form-field>
           </div>
         </div>
-        <div class="add-more">
-          <button mat-flat-button type="button" color="primary" (click)="addCertificate()"
-            [disabled]="resume.certificate.length === 5">
-            <mat-icon>add</mat-icon>
-            {{ 'ADD_CERT' | translate }}
-          </button>
+        <div *ngIf="question.type === InputType.TextArea" class="row">
+          <div class="offset-lg-2 col-lg-8">
+            <mat-form-field appearance="outline">
+              <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3"
+                [required]="question.required"></textarea>
+            </mat-form-field>
+          </div>
         </div>
-        <div class="text-right text-gray">
-          <span>{{ resume.certificate.length }}/5</span>
+        <div *ngIf="question.type === InputType.Radio" class="row">
+          <div class="offset-lg-2 col-lg-8">
+            <div class="box-dashed">
+              <mat-radio-group class="option-group" [(ngModel)]="question.answer.selected">
+                <mat-radio-button class="option-item" *ngFor="let option of question.answer.options; let i = index"
+                  [value]="i.toString()">
+                  {{ option.label }}
+                </mat-radio-button>
+                <mat-radio-button *ngIf="question.answer.hasOther" class="option-item"
+                  [value]="question.answer.options.length.toString()">
+                  {{ question.answer.otherLabel }}
+                </mat-radio-button>
+              </mat-radio-group>
+              <mat-form-field appearance="outline"
+                *ngIf="question.answer.selected === question.answer.options.length.toString()">
+                <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                <input matInput type="text" [(ngModel)]="question.answer.otherInput" required>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
-        <div class="box-dashed">
-          <mat-chip-list>
-            <mat-chip color="primary" selected>{{ 'CERTIFICATIONS' | translate }}</mat-chip> :
-            <mat-chip *ngFor="let value of resume.certificate; let i = index">
-              {{ value }}
-              <mat-icon matChipRemove (click)="removeCertificate(i)">cancel</mat-icon>
-            </mat-chip>
-          </mat-chip-list>
+        <div *ngIf="question.type === InputType.ChcekBox" class="row">
+          <div class="offset-lg-2 col-lg-8">
+            <div class="box-dashed">
+              <div *ngFor="let option of question.answer.options; let i = index" class="option-item">
+                <mat-checkbox [(ngModel)]="option.checked"> {{ option.label }}</mat-checkbox>
+              </div>
+              <div *ngIf="question.answer.hasOther" class="option-item">
+                <mat-checkbox [(ngModel)]="question.answer.otherChecked">{{ question.answer.otherLabel }}</mat-checkbox>
+              </div>
+              <mat-form-field appearance="outline" *ngIf="question.answer.otherChecked">
+                <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                <input matInput type="text" [(ngModel)]="question.answer.otherInput" required>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
+        <div *ngIf="question.type === InputType.Dropdown" class="row">
+          <div class="offset-lg-2 col-lg-8">
+            <mat-form-field appearance="outline" class="fit-content">
+              <mat-label>Select Answer</mat-label>
+              <mat-select [(ngModel)]="question.answer.selected">
+                <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i.toString()">
+                  {{ option.label }}
+                </mat-option>
+                <mat-option [value]="question.answer.options.length.toString()">
+                  {{ question.answer.otherLabel }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+              *ngIf="question.answer.selected === question.answer.options.length.toString()">
+              <mat-label>{{ question.answer.otherLabel }}</mat-label>
+              <input matInput type="text" [(ngModel)]="question.answer.otherInput" required>
+            </mat-form-field>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Resume -->
-    <!-- <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>account_box</mat-icon>
-        <div>
-          <div>{{ 'RESUME' | translate }}</div>
-          <small>{{ 'RESUME_SUB' | translate }}</small>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="upload-file">
-          <p class="file-preview">
-            <mat-icon>insert_drive_file</mat-icon>
-            <span *ngIf="!resume.attachment.originalname">{{ 'NO_FILE' | translate }}</span>
-            <span *ngIf="resume.attachment.originalname">{{ resume.attachment.originalname }}</span>
-            <mat-icon *ngIf="resume.attachment.originalname" class="delete" (click)="clearAttachFile()">cancel
-            </mat-icon>
-          </p>
-          <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -
-              {{ 'MAX_UPLOAD' | translate }})</small></p>
-          <button mat-flat-button type="button" color="primary" (click)="fileInput.click()">
-            <mat-icon>cloud_upload</mat-icon> {{ 'UPLOAD_RESUME' | translate }}
-            <input #fileInput type="file" id="file" (change)="handleFileInput($event.target.files)" accept="image/*" />
-          </button>
-        </div>
-      </div>
-    </div> -->
-
-    <div class="footer">
+    <div *ngIf="!isPreview" class="footer">
       <button mat-flat-button type="button" [routerLink]="'/index'">
         <mat-icon>keyboard_backspace</mat-icon> {{ 'BACK' | translate }}
       </button>
@@ -452,6 +462,11 @@
         <mat-icon>save</mat-icon> {{ 'SAVE' | translate }}
       </button>
     </div>
+    <div *ngIf="isPreview" class="footer-right">
+      <button mat-flat-button type="button" color="primary" (click)="closeWindow()">
+        <mat-icon>close</mat-icon> {{ 'CLOSE_PREVIEW' | translate }}
+      </button>
+    </div>
 
-  </form>
+  </div>
 </div>

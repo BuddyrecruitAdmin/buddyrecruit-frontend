@@ -74,6 +74,7 @@ export const Language = 'Language';
 export const allList = 'allList';
 export const allListName = 'allListName';
 export const examId = 'examId';
+export const AppFormData = 'AppFormData';
 
 export enum DayOfWeek {
   Sunday = 0,
@@ -88,6 +89,7 @@ export enum DayOfWeek {
 export enum State {
   Create = 'create',
   Edit = 'edit',
+  Preview = 'preview',
   Duplicate = 'duplicate',
 }
 
@@ -109,4 +111,13 @@ export const InnerWidth = {
   SM: 767, // Tablet
   MD: 991, // Notebook
   LG: 1199, // PC Monitor
+};
+
+export const InputType = {
+  Label: 'Label',
+  Input: 'Input',
+  TextArea: 'Text Area',
+  Radio: 'Radio',
+  ChcekBox: 'Chcekbox',
+  Dropdown: 'Dropdown',
 };

@@ -1,0 +1,10 @@
+.option-group {
+  display: flex;
+  flex-direction: column;
+}
+.option-item {
+  margin: .5rem;;
+}
+.option-item:last-child {
+  margin-bottom: 0;
+}

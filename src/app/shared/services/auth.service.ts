@@ -28,7 +28,8 @@ import {
   Language,
   allList,
   allListName,
-  examId
+  examId,
+  AppFormData
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -309,4 +310,13 @@ export function setExamId(exam: string = null) {
 export function getExamId() {
   const exam = JSON.parse(localStorage.getItem(examId));
   return (!exam || exam === null) ? undefined : exam;
+}
+
+export function setAppFormData(data: any = null) {
+  localStorage.setItem(AppFormData, JSON.stringify(data));
+}
+
+export function getAppFormData() {
+  const data = JSON.parse(localStorage.getItem(AppFormData));
+  return (!data || data === null) ? undefined : data;
 }

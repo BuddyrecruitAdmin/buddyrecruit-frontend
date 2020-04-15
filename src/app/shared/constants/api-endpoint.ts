@@ -223,6 +223,14 @@ export const API_ENDPOINT = {
     MAIL_TEMPLATE_DETAIL: "mailTemplate/detail",
     MAIL_ACTION_DETAIL: "mailAction/detail",
     MAIL_TEMPLATE_DELETE: "mailTemplate/delete",
+    
+    APP_FORM: {
+      CREATE: "appFormTemplate/create",
+      LIST: "appFormTemplate/list",
+      DETAIL: "appFormTemplate/detail",
+      EDIT: "appFormTemplate/edit",
+      DELETE: "appFormTemplate/delete",
+    }
   },
   CV: {
     DETAIL: "candidate/id",
@@ -304,5 +312,12 @@ export const API_ENDPOINT = {
     DETAIL: "resume/detail",
     EDIT: "resume/edit",
     DELETE: "resume/delete",
-  }
+  },
+  APPLICATION_FORM: {
+    CREATE: "applicationForm/create",
+    LIST: "applicationForm/list",
+    DETAIL: "applicationForm/detail",
+    EDIT: "applicationForm/edit",
+    DELETE: "applicationForm/delete",
+  },
 };
