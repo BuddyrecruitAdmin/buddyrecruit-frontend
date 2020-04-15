@@ -755,12 +755,12 @@ export class CandidateDetailComponent implements OnInit {
     if (data.type === 'image/jpeg') {
       const blob = new Blob([data], { type: "image/jpeg" });
       const url = window.URL.createObjectURL(blob);
-      FileSaver.saveAs(blob, name);
+      FileSaver.saveAs(blob, name + ".jpeg");
       window.open(url);
     } else {
       const blob = new Blob([data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      FileSaver.saveAs(blob, name+".pdf");
+      FileSaver.saveAs(blob, name + ".pdf");
       window.open(url);
     }
   }

@@ -386,12 +386,12 @@ export class PopupCvComponent implements OnInit {
     if (data.type === 'image/jpeg') {
       const blob = new Blob([data], { type: "image/jpeg" });
       const url = window.URL.createObjectURL(blob);
-      saveAs(url, name);
+      saveAs(url, name + ".jpeg");
       window.open(url);
     } else {
       const blob = new Blob([data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      saveAs(url, name+".pdf");
+      saveAs(url, name + ".pdf");
       window.open(url);
     }
     // const name_url = name + ".jpeg"
