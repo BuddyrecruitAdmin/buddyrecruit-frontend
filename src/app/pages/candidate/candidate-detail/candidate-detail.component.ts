@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName, setExamId } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName, setExamId, setFlagExam } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -834,18 +834,13 @@ export class CandidateDetailComponent implements OnInit {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
-  showExamCand(examId) {
+  showExamCand(examId, flag) {
     this.dialogRef.close();
+    setFlagExam(flag)
     const path = '/exam-form/view/' + examId + '/' + this.examUserId;
     this.router.navigate([path]);
-    // this.service.answerExam(this.examUserId, examId).subscribe((response) => {
-    //   if (response.code === ResponseCode.Success) {
-
-    //   } else {
-    //     this.showToast('danger', 'Error Message', response.message);
-    //   }
-    // })
   }
+  
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {

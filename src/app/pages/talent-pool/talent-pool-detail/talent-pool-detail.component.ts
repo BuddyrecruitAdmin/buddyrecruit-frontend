@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -17,7 +17,7 @@ import { PopupPreviewEmailComponent } from '../../../component/popup-preview-ema
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
@@ -56,6 +56,9 @@ export class TalentPoolDetailComponent implements OnInit {
   other: boolean = true;
   sourceBy: any;
   soList: any;
+  examUserId: any;
+  dialogRef: NbDialogRef<any>;
+  listExamDialog: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -489,6 +492,23 @@ export class TalentPoolDetailComponent implements OnInit {
         setFlowId();
       }
     });
+  }
+
+  checkExam(dialog: TemplateRef<any>, item, _id) {
+    this.examUserId = _id;
+    this.listExamDialog = item;
+    this.callDialog(dialog)
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+  }
+
+  showExamCand(examId, flag) {
+    this.dialogRef.close();
+    setFlagExam(flag)
+    const path = '/exam-form/view/' + examId + '/' + this.examUserId;
+    this.router.navigate([path]);
   }
 
   openPopupTransfer(item: any) {

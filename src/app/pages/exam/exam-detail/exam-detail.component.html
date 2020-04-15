@@ -368,11 +368,19 @@
     <nb-card-body>
       <div class="row">
         <div *ngFor="let list of listExamDialog ;let i = index;" class="col-md-12 col-lg-12">
-          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id)">
+          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id,list.fromTransfer)">
             {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
           </label>
           <label *ngIf="!list.done">
             {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
           </label>
         </div>
       </div>
