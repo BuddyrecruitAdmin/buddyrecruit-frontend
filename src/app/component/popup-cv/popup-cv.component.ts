@@ -391,7 +391,7 @@ export class PopupCvComponent implements OnInit {
     } else {
       const blob = new Blob([data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      saveAs(url, name);
+      saveAs(url, name+".pdf");
       window.open(url);
     }
     // const name_url = name + ".jpeg"

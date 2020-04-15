@@ -760,7 +760,7 @@ export class CandidateDetailComponent implements OnInit {
     } else {
       const blob = new Blob([data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      FileSaver.saveAs(blob, name);
+      FileSaver.saveAs(blob, name+".pdf");
       window.open(url);
     }
   }
