@@ -1,10 +1,17 @@
-.option-group {
-  display: flex;
-  flex-direction: column;
+.loading {
+  margin: 2rem 0;
+  height: 5rem;
 }
-.option-item {
-  margin: .5rem;;
-}
-.option-item:last-child {
-  margin-bottom: 0;
+.submitted {
+  text-align: center;
+  .topic {
+    font-size: 16px;
+    line-height: 1.4;
+    .mat-icon {
+      color: var(--color-green);
+    }
+    p {
+      margin-top: 0.25rem;
+    }
+  }
 }

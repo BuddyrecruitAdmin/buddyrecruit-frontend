@@ -90,7 +90,7 @@ const routes: Routes = [
         component: AppFormDetailComponent,
       },
       {
-        path: 'app-form:action/:id',
+        path: 'app-form/:action/:id',
         component: AppFormDetailComponent,
       },
       {

@@ -16,7 +16,7 @@ export class AppFormService extends NetworkService {
     super('AppFormService', httpClient, errorHandler);
   }
 
-  getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
+  getList(criteria: any = undefined): Observable<ApiResponse> {
     const body = {
       criteria: criteria
     };

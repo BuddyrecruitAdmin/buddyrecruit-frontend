@@ -29,21 +29,32 @@ export class ApplicationFormService extends NetworkService {
   }
 
   create(request: IApplicationForm): Observable<ApiResponse> {
-    const body = {
-      resume: request,
-    };
-    return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, body);
+    return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, request);
   }
 
   edit(request: IApplicationForm): Observable<ApiResponse> {
     const body = {
-      resume: request,
+      appForm: request,
     };
     return this.post(API_ENDPOINT.APPLICATION_FORM.EDIT, { body });
   }
 
   deleteItem(_id: any): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.APPLICATION_FORM.DELETE, { _id: _id });
+  }
+
+  getTemplate(refTemplate): Observable<ApiResponse> {
+    const body = {
+      refTemplate: refTemplate
+    }
+    return this.post(API_ENDPOINT.APPLICATION_FORM.GET_TEMPLATE, body);
+  }
+
+  getJR(refCompany = undefined): Observable<ApiResponse> {
+    const body = {
+      refCompany: refCompany
+    }
+    return this.post(API_ENDPOINT.APPLICATION_FORM.JR_LIST, body);
   }
 
 }

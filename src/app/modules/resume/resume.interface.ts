@@ -21,7 +21,7 @@ export interface IResume {
   softSkill: string[];
   certificate: string[];
 
-  attachment: IAttachment;
+  attachFile: string;
 }
 
 export interface IWorkExperience {
@@ -46,9 +46,4 @@ export interface IEducation {
   university: string;
   major: string;
   deletion: boolean;
-}
-
-export interface IAttachment {
-  originalname: string;
-  uploadName: string;
 }

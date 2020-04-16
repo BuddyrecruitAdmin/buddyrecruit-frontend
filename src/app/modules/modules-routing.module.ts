@@ -34,7 +34,11 @@ const routes: Routes = [
         component: ExamFormComponent,
       },
       {
-        path: 'application-form/preview',
+        path: 'application-form/:action',
+        component: ApplicationFormComponent,
+      },
+      {
+        path: 'application-form/:action/:templateId',
         component: ApplicationFormComponent,
       },
       {

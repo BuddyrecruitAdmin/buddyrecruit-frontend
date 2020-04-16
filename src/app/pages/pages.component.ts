@@ -23,11 +23,11 @@ export class PagesComponent {
     private router: Router,
     private reportService: ReportService,
   ) {
-    // const token = getToken();
-    // if (!token) {
-    //   setUrl(this.router.url);
-    //   this.router.navigate(['/employer/login']);
-    // }
+    const token = getToken();
+    if (!token) {
+      setUrl(this.router.url);
+      this.router.navigate(['/employer/login']);
+    }
 
     this.menu = [];
     const role = getRole();
@@ -134,6 +134,7 @@ export class PagesComponent {
         || (configuration.authorize && configuration.authorize.visible)
         || (configuration.user && configuration.user.visible)
         || (configuration.jobPosition && configuration.jobPosition.visible)
+        || (configuration.examOnline && configuration.examOnline.visible)
         || (configuration.evaluation && configuration.evaluation.visible)
         || (configuration.location && configuration.location.visible)
         || (configuration.mailTemplate && configuration.mailTemplate.visible)
@@ -170,10 +171,9 @@ export class PagesComponent {
         if (configuration.jobPosition && configuration.jobPosition.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
-
-        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[16]);
-        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[15]);
-
+        if (configuration.examOnline && configuration.examOnline.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[15]);
+        }
         if (configuration.evaluation && configuration.evaluation.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[7]);
         }

@@ -50,7 +50,8 @@ export const API_ENDPOINT = {
     ACTION: "jr/action",
     USERS: "jr/users",
     CLOSE: "jr/close",
-    TOGGLE: "jr/active"
+    TOGGLE: "jr/active",
+    GET_ACTIVE: "jr/getActive",
   },
   CONSENT: {
     LIST: "consentStage/list",
@@ -314,10 +315,12 @@ export const API_ENDPOINT = {
     DELETE: "resume/delete",
   },
   APPLICATION_FORM: {
-    CREATE: "applicationForm/create",
-    LIST: "applicationForm/list",
-    DETAIL: "applicationForm/detail",
-    EDIT: "applicationForm/edit",
-    DELETE: "applicationForm/delete",
+    CREATE: "generalAppForm/create",
+    LIST: "generalAppForm/list",
+    DETAIL: "generalAppForm/detail",
+    EDIT: "generalAppForm/edit",
+    DELETE: "generalAppForm/delete",
+    JR_LIST: "generalAppForm/jrs",
+    GET_TEMPLATE: "generalAppForm/getTemplate"
   },
 };

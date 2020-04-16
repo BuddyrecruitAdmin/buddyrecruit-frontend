@@ -1,5 +1,9 @@
 export interface IApplicationForm {
   _id?;
+  refCompany?;
+  refTemplate?;
+  refJR?;
+  otherJob: string;
   firstname: string;
   lastname: string;
   birth: Date;
@@ -20,6 +24,7 @@ export interface IApplicationForm {
   hardSkill: string[];
   softSkill: string[];
   certificate: string[];
+  questions: IQuestion[];
 
   attachment: IAttachment;
 }
@@ -49,6 +54,35 @@ export interface IEducation {
 }
 
 export interface IAttachment {
-  originalname: string;
-  uploadName: string;
+  src: string;
+  name: string;
+  type: string;
+  size: number;
+}
+
+export interface IQuestion {
+  type: string;
+  title: string;
+  subTitle: string;
+  showSubTitle: boolean;
+  required: boolean;
+  imgaeURL: string;
+  answer: IAnswer;
+}
+
+export interface IAnswer {
+  input: string;
+  textArea: string;
+  options: IOption[];
+  selected: string;
+  hasOther: boolean;
+  otherLabel: string;
+  otherChecked: boolean;
+  otherInput: string;
+}
+
+export interface IOption {
+  label: string;
+  imgaeURL: string;
+  checked?: boolean;
 }

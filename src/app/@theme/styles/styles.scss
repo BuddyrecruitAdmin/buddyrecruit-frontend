@@ -1560,6 +1560,24 @@
   // APP FORM
 
   #app-form {
+    .nav-bar {
+      position: relative;
+      padding: 1rem;
+      color: #fff;
+      text-align: center;
+      .mat-icon {
+        font-size: 5rem;
+        width: auto;
+        height: auto;
+      }
+      .title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      .sub-title {
+        font-size: 1rem;
+      }
+    }
     .card,
     nb-card {
       margin: 2rem 0;
@@ -1581,6 +1599,21 @@
       nb-card-body {
         font-size: 14px;
 
+        .image-preview {
+          margin: 0.5rem 2rem 1rem;
+          position: relative;
+          display: inline-block;
+          padding: 5px;
+          border: 1px solid #eee;
+
+          .icon-remove {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            background: #eee;
+            border-radius: 50%;
+          }
+        }
         .add-more {
           text-align: center;
           margin-top: 1rem;
@@ -1702,7 +1735,7 @@
           height: auto;
         }
         .title {
-          text-transform: uppercase;
+          // text-transform: uppercase;
           font-size: 1.5rem;
           margin-bottom: 1rem;
         }
@@ -1718,16 +1751,17 @@
 
         .lang {
           color: var(--color-gray);
+          opacity: 0.5;
           cursor: pointer;
         }
         .lang.active {
+          opacity: 1;
           color: var(--color-white);
           font-weight: 600;
           cursor: default;
         }
       }
     }
-
     .card {
       margin: 2rem 0;
 
@@ -1747,6 +1781,42 @@
       .card-body {
         font-size: 14px;
 
+        .question-image {
+          margin-bottom: 1rem;
+          img {
+            border-radius: 5px;
+          }
+        }
+        .answer-image {
+          -webkit-box-align: center;
+          -webkit-align-items: center;
+          box-align: center;
+          align-items: center;
+          align-self: flex-start;
+          display: flex;
+          height: 200px;
+          line-height: 200px;
+          margin-bottom: 12px;
+          padding: 10px;
+          width: 100%;
+          border-radius: 5px;
+          border-style: dashed;
+          border-width: 1px;
+          border-color: var(--color-light-gray);
+          cursor: pointer;
+
+          img {
+            margin: auto;
+            max-height: 100%;
+            max-width: 100%;
+            min-height: 0%;
+            min-width: 0%;
+            vertical-align: middle;
+          }
+        }
+        .answer-image.active {
+          border-color: var(--color-green);
+        }
         .add-more {
           text-align: center;
           margin-top: 1rem;
@@ -1785,7 +1855,7 @@
         }
         .topic {
           text-align: center;
-          margin: 1rem 0 1rem;
+          margin: 0.5rem 0 1.5rem;
           color: gray;
 
           .mat-icon {
@@ -1812,9 +1882,25 @@
         }
       }
     }
+    // .card.has-error {
+    //   border-color: var(--color-red);
+    // }
 
     .checkbox-margin {
       margin-top: 15px;
+    }
+    .terms {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: gray;
+
+      .mat-checkbox {
+        margin-right: 15px;
+        label {
+          margin-bottom: 0;
+        }
+      }
     }
     .footer {
       display: flex;
@@ -1823,7 +1909,7 @@
     }
     .footer-right {
       text-align: right;
-      margin: 2rem 0;
+      margin: 1rem 0;
     }
   }
 

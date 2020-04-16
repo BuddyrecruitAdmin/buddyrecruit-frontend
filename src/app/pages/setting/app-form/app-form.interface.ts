@@ -1,34 +1,60 @@
-export interface IAppForm {
+export interface IAppFormTemplate {
   _id?;
   refCompany: any;
   formName: string;
   formRemark: string;
+
+  title: string;
+  subTitle: string;
+  bgColor: string;
+  titleColor: string;
+  subTitleColor: string;
   questions: IQuestion[];
-  fieldControl: IFieldControl;
-}
-
-export interface IWorkExperience {
-  totalExpMonth: number;
-  work: IWork[];
-}
-
-export interface IWork {
-  position: string;
-  company: string;
-  start: Date;
-  end: Date;
-  isPresent: boolean;
-  duty: string;
-  expMonth: number;
-  deletion: boolean;
-}
-
-export interface IEducation {
-  refDegree: string;
-  gpa: string;
-  university: string;
-  major: string;
-  deletion: boolean;
+  personalDetail: {
+    active: boolean;
+    firstname: IAction;
+    lastname: IAction;
+    birth: IAction;
+    age: IAction;
+    phone: IAction;
+    email: IAction;
+    address: IAction;
+    addressNo: IAction;
+    road: IAction;
+    district: IAction;
+    province: IAction;
+    postcode: IAction;
+    gender: IAction;
+    expectedSalary: IAction;
+  };
+  workExperience: {
+    active: boolean;
+    position: IAction;
+    company: IAction;
+    start: IAction;
+    end: IAction;
+    isPresent: IAction;
+    duty: IAction;
+  };
+  education: {
+    active: boolean;
+    refDegree: IAction;
+    gpa: IAction;
+    university: IAction;
+    major: IAction;
+  };
+  hardSkill: {
+    active: boolean;
+  };
+  softSkill: {
+    active: boolean;
+  };
+  certificate: {
+    active: boolean;
+  };
+  uploadCV: {
+    active: boolean;
+  }
 }
 
 export interface IQuestion {
@@ -37,7 +63,8 @@ export interface IQuestion {
   subTitle: string;
   showSubTitle: boolean;
   required: boolean;
-  answer?: IAnswer;
+  imgaeURL: string;
+  answer: IAnswer;
 }
 
 export interface IAnswer {
@@ -53,31 +80,8 @@ export interface IAnswer {
 
 export interface IOption {
   label: string;
+  imgaeURL: string;
   checked?: boolean;
-}
-
-export interface IFieldControl {
-  firstname: IAction;
-  lastname: IAction;
-  birth: IAction;
-  age: IAction;
-  phone: IAction;
-  email: IAction;
-  address: IAction;
-  addressNo: IAction;
-  road: IAction;
-  district: IAction;
-  province: IAction;
-  postcode: IAction;
-  gender: IAction;
-  expectedSalary: IAction;
-
-  personalDetail: IAction;
-  workExperience: IAction;
-  education: IAction;
-  hardSkill: IAction;
-  softSkill: IAction;
-  certificate: IAction;
 }
 
 export interface IAction {

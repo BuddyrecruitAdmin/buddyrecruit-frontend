@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData } from '../../shared/services';
-import { IApplicationForm } from './application-form.interface';
+import { setLangPath, getAppFormData, getRole } from '../../shared/services';
+import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
 import { JdService } from '../../pages/jd/jd.service';
 import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition } from '@nebular/theme';
-import { ResponseCode, InputType } from '../../shared/app.constants';
+import { ResponseCode, InputType, State } from '../../shared/app.constants';
+import { IAppFormTemplate } from '../../pages/setting/app-form/app-form.interface';
+import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
+import { MatDialog } from '@angular/material';
+import { UtilitiesService } from '../../shared/services/utilities.service';
 
 @Component({
   selector: 'ngx-application-form',
@@ -18,12 +22,14 @@ import { ResponseCode, InputType } from '../../shared/app.constants';
 export class ApplicationFormComponent implements OnInit {
   InputType = InputType;
   language: string;
-  template: any;
+  template: IAppFormTemplate;
+  role: any;
 
   appForm: IApplicationForm;
 
   degreesEN: DropDownValue[];
   degreesTH: DropDownValue[];
+  jrs: DropDownValue[];
 
   selectedItem = '2';
 
@@ -43,37 +49,86 @@ export class ApplicationFormComponent implements OnInit {
     duplication: false,
   };
 
-  formGroup: FormGroup;
-  submitted = false;
   loading = true;
-  isPreview = true;
+  submitted = false;
+  isPreview = false;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
-    private formBuilder: FormBuilder,
     private service: ApplicationFormService,
     private jdService: JdService,
     private toastrService: NbToastrService,
+    public matDialog: MatDialog,
+    private utilitiesService: UtilitiesService,
   ) {
+    this.role = getRole();
     setLangPath("RESUME");
     this.language = 'en';
     this.setLang(this.language);
-
   }
 
   ngOnInit() {
     this.getDegrees();
-    this.initialForm();
     this.initialModel();
-    this.loading = false;
-    
-    this.template = getAppFormData();
-    this.isPreview = true;
+
+    this.activatedRoute.params.subscribe(params => {
+      const action = params.action;
+      const templateId = params.templateId;
+
+      if (action) {
+        if (action === State.Preview) {
+          if (templateId) {
+            this.getTemplate(templateId);
+          } else {
+            this.template = getAppFormData();
+            if (this.template) {
+              this.appForm.refCompany = this.template.refCompany;
+              this.appForm.refTemplate = this.template._id;
+              this.appForm.questions = this.template.questions;
+              this.getJR(this.role && this.role.refCompany ? this.role.refCompany : undefined);
+            } else {
+              this.onError();
+            }
+          }
+          this.isPreview = true;
+        } else if (action === State.Submit) {
+          if (templateId) {
+            this.getTemplate(templateId);
+          } else {
+            this.onError();
+          }
+        } else {
+          this.onError();
+        }
+      } else {
+        this.onError();
+      }
+    });
   }
 
   setLang(lang) {
     this.language = lang;
     this.translate.use(lang);
+  }
+
+  getJR(refCompany: string) {
+    this.jrs = [];
+    this.service.getJR(refCompany).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.forEach(element => {
+            if (element._id && element.refJD && element.refJD.position) {
+              this.jrs.push({
+                label: element.refJD.position,
+                value: element._id
+              });
+            }
+          });
+        }
+      }
+      this.loading = false;
+    });
   }
 
   getDegrees() {
@@ -97,19 +152,12 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
-  initialForm() {
-    this.formGroup = this.formBuilder.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      birth: [null, Validators.required],
-      phone: ['', Validators.required],
-      email: ['', Validators.required],
-    });
-  }
-  get f() { return this.formGroup.controls; }
-
   initialModel() {
     this.appForm = {
+      refCompany: undefined,
+      refTemplate: undefined,
+      refJR: undefined,
+      otherJob: '',
       firstname: '',
       lastname: '',
       birth: null,
@@ -132,12 +180,37 @@ export class ApplicationFormComponent implements OnInit {
       hardSkill: [],
       softSkill: [],
       certificate: [],
-      attachment: {
-        originalname: '',
-        uploadName: '',
-      }
+      attachment: this.initialAttahment(),
+      questions: []
     };
-  } onChangeBirthday(value: any) {
+  }
+
+  initialAttahment(): IAttachment {
+    return {
+      src: '',
+      name: '',
+      type: '',
+      size: 0,
+    };
+  }
+
+  getTemplate(templateId: string) {
+    this.service.getTemplate(templateId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          this.template = response.data;
+          this.appForm.refCompany = this.template.refCompany;
+          this.appForm.refTemplate = this.template._id;
+          this.appForm.questions = this.template.questions;
+        }
+        this.getJR(this.template.refCompany);
+      } else {
+        this.onError();
+      }
+    });
+  }
+
+  onChangeBirthday(value: any) {
     const birthDay = new Date(value);
     const ageDifMs = Date.now() - birthDay.getTime();
     const ageDate = new Date(ageDifMs);
@@ -238,88 +311,136 @@ export class ApplicationFormComponent implements OnInit {
   removeCertificate(index: number) {
     this.appForm.certificate.splice(index, 1);
   }
+
+  onError() {
+    let message = 'Something went wrong. Please try again.';
+    if (this.language === 'th') {
+      message = 'เกิดข้อผิดพลาดบางอย่าง กรุณาลองใหม่ (หน้าต่างจะปิดตัวลง)';
+    }
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'I', content: message }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        window.close();
+      }
+    });
+  }
+
+  closeWindow() {
+    let message = 'Are you sure you want to close this window?';
+    if (this.language === 'th') {
+      message = 'คุณต้องการจะปิดหน้าต่างนี้หรือไม่ ?';
+    }
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C', content: message }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        window.close();
+      }
+    });
+  }
+
   save() {
-    this.submitted = true;
     if (this.validation()) {
-      const request = this.setRequest();
-      this.loading = true;
-      this.service.create(request).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.showToast('success', response.message || 'Saved Successful', '');
-        } else {
-          this.showToast('danger', response.message || 'Error!', '');
+      let content;
+      if (this.language === 'th') {
+        content = 'คุณต้องการทำต่อหรือไม่ ?';
+      }
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: content }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          this.loading = true;
+          const request = this.setRequest();
+          this.service.create(request).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.submitted = true;
+            } else {
+              this.showToast('danger', response.message || 'Error!', '');
+            }
+            this.loading = false;
+          });
         }
-        this.loading = false;
       });
     }
   }
 
+  getQuestionElementError(): any {
+    let isQuestionValid = true;
+    let qElement: any;
+
+    this.appForm.questions.forEach((question, index) => {
+
+      const element = document.getElementById('question' + index);
+      element.classList.remove("has-error");
+
+      if (question.required) {
+        switch (question.type) {
+          case this.InputType.Input:
+            if (!question.answer.input) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.TextArea:
+            if (!question.answer.textArea) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Radio:
+            if (!question.answer.selected) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.ChcekBox:
+            const found = question.answer.options.find(element => {
+              return element.checked;
+            });
+            if (!found && !question.answer.otherChecked) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Dropdown:
+            if (!question.answer.selected) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+        }
+
+        if (!isQuestionValid && !qElement) {
+          qElement = element;
+        }
+      }
+    });
+
+    return qElement;
+  }
+
   validation(): boolean {
     let isValid = true;
-    let isPersonalValid = true;
-    let isWorkExpValid = true;
-    let isEducationValid = true;
 
-    if (this.formGroup.invalid) {
-      isPersonalValid = false;
-      if (this.f.firstname.invalid) {
-        document.getElementById('firstname').focus();
-      } else if (this.f.lastname.invalid) {
-        document.getElementById('lastname').focus();
-      } else if (this.f.birth.invalid) {
-        document.getElementById('birth').focus();
-      } else if (this.f.phone.invalid) {
-        document.getElementById('phone').focus();
-      } else if (this.f.email.invalid) {
-        document.getElementById('email').focus();
-      }
-    }
-    if (isPersonalValid) {
-      if (this.appForm.workExperience.work && this.appForm.workExperience.work.length) {
-        this.appForm.workExperience.work.forEach((element, index) => {
-          if (isWorkExpValid) {
-            if (!element.position) {
-              isWorkExpValid = false;
-              document.getElementById('position' + index).focus();
-            } else if (!element.company) {
-              isWorkExpValid = false;
-              document.getElementById('company' + index).focus();
-            } else if (!element.start) {
-              isWorkExpValid = false;
-              document.getElementById('start' + index).focus();
-            } else if (!element.isPresent && !element.end) {
-              isWorkExpValid = false;
-              document.getElementById('end' + index).focus();
-            } else if (!element.duty) {
-              isWorkExpValid = false;
-              document.getElementById('duty' + index).focus();
-            }
-          }
-        });
-      }
-    }
-
-    if (isPersonalValid && isWorkExpValid) {
-      if (this.appForm.education && this.appForm.education.length) {
-        this.appForm.education.forEach((element, index) => {
-          if (isEducationValid) {
-            if (!element.refDegree) {
-              isEducationValid = false;
-              document.getElementById('refDegree' + index).focus();
-            } else if (!element.university) {
-              isEducationValid = false;
-              document.getElementById('company' + index).focus();
-            } else if (!element.major) {
-              isEducationValid = false;
-              document.getElementById('major' + index).focus();
-            }
-          }
-        });
-      }
-    }
-
-    if (!isPersonalValid || !isWorkExpValid || !isEducationValid) {
+    const elements = document.getElementsByClassName('mat-input-element ng-invalid');
+    if (elements.length > 0) {
       isValid = false;
+      const id = elements.item(0).getAttribute('id');
+      if (id) {
+        document.getElementById(id).focus();
+      }
+    }
+
+    const qElement = this.getQuestionElementError();
+    if (isValid && qElement) {
+      qElement.scrollIntoView();
     }
 
     return isValid;
@@ -341,7 +462,32 @@ export class ApplicationFormComponent implements OnInit {
     return request;
   }
 
-  showToast(type: NbComponentStatus, title: string, body: string) {
+  uploadFile(target, files: FileList): void {
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      let imgage = new Image;
+      const chImg = reader.result;
+      imgage.src = chImg.toString();
+      imgage.onload = (ee) => {
+      };
+      const FileSize = files[0].size / 1024 / 1024; // MB
+      if (FileSize > 10) {
+        this.showToast('danger', 'File size more than 10MB');
+      } else {
+        target.src = imgage.src;
+        target.name = files[0].name;
+        target.type = files[0].type;
+        target.size = files[0].size;
+      }
+    };
+  }
+
+  clearFile(target): void {
+    target = this.initialAttahment();
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string = '') {
     const config = {
       status: type,
       destroyByClick: true,

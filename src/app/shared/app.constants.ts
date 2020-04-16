@@ -91,6 +91,7 @@ export enum State {
   Edit = 'edit',
   Preview = 'preview',
   Duplicate = 'duplicate',
+  Submit = 'submit',
 }
 
 export const Paging = {

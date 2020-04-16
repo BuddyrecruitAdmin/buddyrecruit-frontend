@@ -429,9 +429,9 @@
         <div class="upload-file">
           <p class="file-preview">
             <mat-icon>insert_drive_file</mat-icon>
-            <span *ngIf="!resume.attachment.originalname">{{ 'NO_FILE' | translate }}</span>
-            <span *ngIf="resume.attachment.originalname">{{ resume.attachment.originalname }}</span>
-            <mat-icon *ngIf="resume.attachment.originalname" class="delete" (click)="clearAttachFile()">cancel
+            <span *ngIf="!resume.attachFile">{{ 'NO_FILE' | translate }}</span>
+            <span *ngIf="resume.attachFile">{{ resume.attachFile }}</span>
+            <mat-icon *ngIf="resume.attachFile" class="delete" (click)="clearAttachFile()">cancel
             </mat-icon>
           </p>
           <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -
