@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ExamFormService, } from './exam-form.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, setLanguage, getLanguage, setLangPath } from '../../shared/services/auth.service';
+import { getRole, setLanguage, getLanguage, setLangPath,getFlagExam } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
@@ -50,6 +50,7 @@ export class ExamFormComponent implements OnInit {
   miN: any;
   seC: any;
   TotalTime: any;
+  flagExam: any;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -64,6 +65,7 @@ export class ExamFormComponent implements OnInit {
     private config: NgbModalConfig,
     private modalService: NgbModal
   ) {
+    this.flagExam = getFlagExam();
     config.backdrop = 'static';
     config.keyboard = false;
     this.innerHeight = window.innerHeight * 0.9;
@@ -184,7 +186,7 @@ export class ExamFormComponent implements OnInit {
 
   getDetailAnswer() {
     this.loading = true;
-    this.service.answerExam(this._id, this.examId).subscribe(response => {
+    this.service.answerExam(this._id, this.examId,this.flagExam).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.examName = response.data.refExam.name;
         this.topicOption = response.data.exams;

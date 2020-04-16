@@ -142,7 +142,12 @@
               nbTooltip="See More Job Positon">{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
           </div>
         </div>
-
+        <div *ngIf="item.candidateFlow.exams.length > 0  && role.refAuthorize.checkAswer" class="text-group">
+          <span class="link underline"
+            (click)="checkExam(dialogExam, item.candidateFlow.exams, item.candidateFlow._id)">
+            <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
+          </span>
+        </div>
         <div *ngIf="item.candidateFlow?.refJR?.requiredExam">
           <!-- Exam Date -->
           <div *ngIf="condition.block.examDate">
@@ -189,12 +194,6 @@
                 nbTooltip="Select Exam Form" (click)="openPopupSendExam(item._id)"></nb-icon>
               <nb-icon *ngIf="condition.icon.examScore" icon="edit-2-outline" class="link" nbTooltip="Select Exam Form"
                 (click)="openPopupSendExam(item.candidateFlow._id)"></nb-icon>
-            </div>
-            <div *ngIf="item.candidateFlow.exams.length > 0  && role.refAuthorize.checkAswer" class="text-group">
-              <span class="link underline"
-                (click)="checkExam(dialogExam, item.candidateFlow.exams, item.candidateFlow._id)">
-                <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
-              </span>
             </div>
             <label class="label topic">Exam Score <span *ngIf="condition.icon.examScore"
                 class="text-red">*</span></label>
@@ -488,11 +487,19 @@
     <nb-card-body>
       <div class="row">
         <div *ngFor="let list of listExamDialog ;let i = index;" class="col-md-12 col-lg-12">
-          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id)">
+          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id,list.fromTransfer)">
             {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
           </label>
           <label *ngIf="!list.done">
             {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
           </label>
         </div>
       </div>

@@ -33,13 +33,19 @@ export class JdService extends NetworkService {
   //   return this.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body);
   // }
 
-  originalCV(id: String, userId: string) {
-    const body = { _id: id,
-    userId : userId };
-    return this.httpClient.post(URL2, body, {
-      responseType: "arraybuffer",
-      headers: new HttpHeaders().append("Content-Type", "application/json")
-    });
+  originalCV(id: String, userId: string): Observable<any> {
+    const body = {
+      _id: id,
+      userId: userId
+    };
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.httpClient.post(URL2, body, { headers: headers, responseType: 'blob' });
+
+    // return this.httpClient.post(URL2, body, {
+    //   responseType: "blob" as 'json',
+    //   headers: new HttpHeaders().append("Content-Type", "application/json")
+    // });
   }
 
   getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
