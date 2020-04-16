@@ -3,7 +3,7 @@
     <nb-card-body></nb-card-body>
 </nb-card>
 <div *ngIf="!loading">
-    <nb-card *ngIf="!done && !checkStart">
+    <nb-card *ngIf="!done && !checkStart && !isExpired">
         <nb-card-header>
             <h5 class="text-center text-green">Exam Online</h5>
             <h4 class="text-black"><b>{{ examName || '' }}</b></h4>
@@ -85,7 +85,7 @@
         </nb-card-footer>
     </nb-card>
     <!-- Before Start -->
-    <div id="start" style="padding: 8%;" *ngIf="checkStart" [style.height.px]="innerHeight">
+    <div id="start" style="padding: 8%;" *ngIf="checkStart && !isExpired" [style.height.px]="innerHeight">
         <nb-card>
             <nb-card-body>
                 <div class="row">
@@ -137,6 +137,12 @@
             <br>
             <h5>hr@zygencenter.com</h5>
             <h5><b>ZyGen Company Limited</b></h5> -->
+        </div>
+    </div>
+    <!-- Expired Link -->
+    <div *ngIf="checkStart && isExpired" class="thankExam" [style.height.px]="innerHeight">
+        <div class="thankExam-wrapper">
+            <h2>The Link You Followed Has Expired</h2>
         </div>
     </div>
 </div>

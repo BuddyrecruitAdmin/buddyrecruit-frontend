@@ -12,6 +12,7 @@ export interface ApiResponse {
   isOverCandidate?: boolean;
   otherJR?;
   usedTime?;
+  isExpired?;
 }
 
 export interface Count {
