@@ -130,6 +130,7 @@ export class ExamFormComponent implements OnInit {
                     clearInterval(this.interVal)
                     this.save();
                   } else {
+                    setExamData(this.topicOption);
                     this.TotalTime--;
                     this.seC--;
                   }
