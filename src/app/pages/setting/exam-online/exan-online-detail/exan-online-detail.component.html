@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group" [ngClass]="{ 'has-error': touchedName }">
-                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exaเm Form</b> <span
+                        <label *ngIf="!preview" class="text-black"><b>ชื่อแบบทดสอบ/Name Exam Form</b> <span
                                 class="text-red">*</span></label>
                         <input *ngIf="!preview" type="text" placeholder="ใส่ชื่อแบบทดสอบ" [(ngModel)]="examName"
                             name="name" nbInput fullWidth>
@@ -20,24 +20,30 @@
                 </div>
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
-                        <label class="text-black">ระยะเวลาในการสอบ <span *ngIf="preview">{{ duration.hour }} :
-                                {{ duration.minute }}</span></label>
+                        <label class="text-black">ระยะเวลาในการสอบ <span *ngIf="preview && duration">{{ duration.hour }}
+                                :
+                                {{ duration.minute }} <span *ngIf="preview && !duration">
+                                    ไม่จำกัดเวลา</span></span></label>
                         <ngb-timepicker *ngIf="!preview" [(ngModel)]="duration" [spinners]="false">
                         </ngb-timepicker>
                     </div>
                 </div>
             </div>
         </nb-card-header>
-        <nb-card-body *ngIf="!preview">
+        <nb-card-body *ngIf="!preview" style="word-break: break-word;">
             <nb-card *ngFor="let topic of topicOption;let i = index;">
                 <nb-card-body>
                     <div class="row">
                         <div class="col-md-12 col-lg-12">
                             <div class="input-group">
                                 <!-- <label> {{ topic.name }}</label> -->
-                                <input type="text" [(ngModel)]="topic.name" nbInput fullWidth
+                                <input [style.color]="topic.color" [nbPopover]="colorPicker" nbPopoverPlacement="top"
+                                    (click)="setOption(topic)" type="text" [(ngModel)]="topic.name" nbInput fullWidth
                                     placeholder="Question Here">
                                 <div *ngIf="!preview" class="input-group-addon">
+                                    <nb-icon (click)="insertTopic(dialog,'topic',i)" icon="plus-square-outline"
+                                        class="text-light-gray" class="link">
+                                    </nb-icon>
                                     <nb-icon status="danger" icon="trash-2-outline" class="text-light-gray" class="link"
                                         (click)="deleteTopic(topicOption,i)">
                                     </nb-icon>
@@ -46,17 +52,27 @@
                             <div *ngIf="topic.examOptions">
                                 <div *ngFor="let option of topic.examOptions;let j = index;"
                                     class="input-group form-control-group">
-                                    <textarea *ngIf="option.type === 'label'" type="text" [(ngModel)]="option.value"
-                                        nbInput fullWidth placeholder="Question here" [disabled]="preview"></textarea>
-                                    <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value"
-                                        nbInput fullWidth placeholder="answer here" [disabled]="!preview">
-                                    <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput
-                                        fullWidth placeholder="answer here" [disabled]="!preview"></textarea>
+                                    <img *ngIf="option.src" class="img-default" [nbPopover]="selectAlign"
+                                        nbPopoverPlacement="top" (click)="setOption(option)" [src]="option.src">
+                                    <textarea *ngIf="option.type === 'label'" [style.color]="option.color"
+                                        [nbPopover]="colorPicker" nbPopoverPlacement="top" (click)="setOption(option)"
+                                        type="text" [(ngModel)]="option.value" nbInput fullWidth
+                                        placeholder="Question here" [disabled]="preview"></textarea>
+                                    <input *ngIf="option.type === 'label'" style="color: red;" type="text"
+                                        [(ngModel)]="option.score" nbInput fullWidth placeholder="score here">
+                                    <input *ngIf="option.type === 'input'" [style.color]="option.color"
+                                        [nbPopover]="colorPicker" nbPopoverPlacement="top" (click)="setOption(option)"
+                                        type="text" [(ngModel)]="option.value" nbInput fullWidth
+                                        placeholder="answer here" [disabled]="!preview">
+                                    <textarea *ngIf="option.type === 'area'" [style.color]="option.color"
+                                        [nbPopover]="colorPicker" nbPopoverPlacement="top" (click)="setOption(option)"
+                                        [(ngModel)]="option.value" nbInput fullWidth placeholder="answer here"
+                                        [disabled]="!preview"></textarea>
                                     <!-- radio -->
                                     <div *ngIf="option.type === 'radio'">
                                         <br>
-                                        <nb-card>
-                                            <nb-card-body>
+                                        <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+                                            <nb-card-body id="imgCard">
                                                 <div *ngFor="let group of option.group;let r = index"
                                                     class="input-group form-control-group">
                                                     <img *ngIf="group.src" class="img-incard"
@@ -114,6 +130,17 @@
                                         </small>
                                     </div>
                                     <div *ngIf="!preview" class="input-group-addon">
+                                        <a *ngIf="option.type === 'label'" style="cursor: pointer;"
+                                            (click)="fileInput.click()">
+                                            <span class="fa fa-images"></span>
+                                            <input #fileInput type="file"
+                                                (change)="fileChangeEvent(option,$event.target.files)"
+                                                style="display:none;" accept="image/*" />
+                                        </a>
+                                        <nb-icon [nbPopover]="tabs" (click)="setTopicIndex(topic , j)"
+                                            nbPopoverPlacement="top" icon="plus-square-outline" class="text-light-gray"
+                                            class="link">
+                                        </nb-icon>
                                         <nb-icon status="danger" icon="minus-square-outline" class="text-light-gray"
                                             class="link" (click)="deleteTopic(topicOption[i].examOptions,j)">
                                         </nb-icon>
@@ -124,8 +151,8 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 text-center" *ngIf="!preview">
-                            <button [nbPopover]="component" (click)="setTopic(topic)" nbPopoverPlacement="top" nbButton
-                                ghost size="small">
+                            <button [nbPopover]="tabs" (click)="setTopic(topic)" nbPopoverPlacement="top" nbButton ghost
+                                size="small">
                                 <nb-icon icon="plus-square-outline" class="text-light-gray" class="link"
                                     style="margin-top:10px">
                                 </nb-icon>
@@ -144,30 +171,39 @@
                     </button>
                 </div>
             </div>
-            <div *ngIf="!preview" class="row btn-save">
+            <!-- <div *ngIf="!preview" class="row btn-save">
                 <div class="col-lg-12">
                     <button (click)="save()" nbPopoverPlacement="top" nbButton size="small">
                         Save
                     </button>
                 </div>
-            </div>
+            </div> -->
         </nb-card-body>
         <!-- show preview -->
         <nb-card-body id="preview" *ngIf="preview">
             <div class="row" *ngFor="let topic of topicOption;let i = index;">
                 <div class="col-md-12 col-lg-12">
                     <div>
-                        <h3 class="text-black"> {{ topic.name }}</h3>
+                        <h3 [style.color]="topic.color"> {{ topic.name }}</h3>
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
-                            <label *ngIf="option.type === 'label'"> {{ option.value }} </label>
+                            <div class="row" *ngIf="option.src && option.type !== 'file' && option.type !=='getFile'"
+                                style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img class="img-default" style="text-align:center" [src]="option.src"><br
+                                        *ngIf="option.src">
+                                </div>
+                            </div>
+                            <label *ngIf="option.type === 'label'" [style.color]="option.color"> {{ option.value }}
+                                <span *ngIf="option.score" style="color: red;">{{ option.score }}</span>
+                            </label>
                             <input *ngIf="option.type === 'input'" type="text" [(ngModel)]="option.value" nbInput
                                 fullWidth placeholder="answer here">
                             <textarea *ngIf="option.type === 'area'" [(ngModel)]="option.value" nbInput fullWidth
-                                placeholder="Answer here"></textarea>
+                                placeholder="answer here"></textarea>
                             <!-- radio -->
-                            <div *ngIf="option.type === 'radio'">
+                            <div id="imgCard" *ngIf="option.type === 'radio'">
                                 <nb-radio-group [name]="option._id" [(ngModel)]="option.value">
                                     <nb-radio *ngFor="let group of option.group" [value]="group.value">
                                         <img *ngIf="group.src" class="img-incard"
@@ -200,6 +236,13 @@
                 </div>
             </div>
         </nb-card-body>
+        <nb-card-footer>
+            <div *ngIf="!preview">
+                <button (click)="save()" nbPopoverPlacement="top" nbButton size="small">
+                    Save
+                </button>
+            </div>
+        </nb-card-footer>
     </nb-card>
 </div>
 <!-- 4 btn label, input, checkbox, upload -->
@@ -215,22 +258,50 @@
     <button (click)="addInput('radio')" nbTooltip="Check list" nbButton ghost>
         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
     </button>
-    <button (click)="addInput('file')" nbTooltip="Question with picture" nbButton ghost>
+    <!-- <button (click)="addInput('file')" nbTooltip="Question with picture" nbButton ghost>
         <nb-icon icon="file-add-outline"></nb-icon>
-    </button>
+    </button> -->
     <button (click)="addInput('getFile')" nbTooltip="Answer with picture" nbButton ghost>
         <nb-icon icon="arrow-circle-down-outline"></nb-icon>
     </button>
 </ng-template>
 
-<!-- dialogPopup -->
+<!-- color picker -->
+<ng-template id="option" #colorPicker>
+    <button nbButton ghost>
+        <span (click)="setColor('#1B74B6')" class="dot" style="background-color: #1B74B6;"></span>&nbsp;&nbsp;
+        <span (click)="setColor('#35C4B2')" class="dot" style="background-color: #35C4B2;"></span>&nbsp;&nbsp;
+        <span (click)="setColor('#ED5154')" class="dot" style="background-color: #ED5154;"></span>&nbsp;&nbsp;
+        <span (click)="setColor('#FFC816')" class="dot" style="background-color: #FFC816;"></span>&nbsp;&nbsp;
+        <span (click)="setColor('#000000')" class="dot" style="background-color: #000000;"></span>&nbsp;&nbsp;
+        <span (click)="setColor('#707070')" class="dot" style="background-color: #707070;"></span>&nbsp;&nbsp;
+        <span (click)="setColor('#D2D6D9')" class="dot" style="background-color: #D2D6D9;"></span>
+    </button>
+</ng-template>
+
+<!-- img align -->
+<!-- <ng-template id="option" #selectAlign>
+    <button nbButton ghost>
+        <button (click)="changeAlign('left')" nbTooltip="left" nbButton ghost>
+            <i class="fas fa-align-left"></i>
+        </button>
+        <button (click)="changeAlign('center')" nbTooltip="center" nbButton ghost>
+            <i class="fas fa-align-center"></i>
+        </button>
+        <button (click)="changeAlign('right')" nbTooltip="right" nbButton ghost>
+            <i class="fas fa-align-right"></i>
+        </button>
+    </button>
+</ng-template> -->
+
+<!-- Add heading -->
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
         <nb-card-header>
-            <label>Add Question</label></nb-card-header>
+            <label>Add heading</label></nb-card-header>
         <nb-card-body>
             <div class="form-control-group">
-                <input type="text" [(ngModel)]="fieldName" nbInput fullWidth placeholder="Create your question!">
+                <input type="text" [(ngModel)]="fieldName" nbInput fullWidth placeholder="Create your heading!">
             </div>
         </nb-card-body>
         <nb-card-footer>
@@ -240,7 +311,7 @@
     </nb-card>
 </ng-template>
 
-<!-- dialogPopup -->
+<!-- Show Img -->
 <ng-template #imgShow let-data let-ref="dialogRef">
     <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()" [style.max-height.px]="innerHeight">
         <nb-card-body>

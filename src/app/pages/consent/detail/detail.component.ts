@@ -97,7 +97,7 @@ export class DetailComponent implements OnInit {
   setConsent(key): string {
     let accent = 'success'
     switch (key) {
-      case 'WAITING':
+      case 'PENDING':
         accent = 'warning';
         break;
       case 'REJECT':
@@ -157,7 +157,7 @@ export class DetailComponent implements OnInit {
       this.count = count;
       this.tabs.map(element => {
         switch (element.name) {
-          case 'WAITING':
+          case 'PENDING':
             element.badgeText = count.pending;
             element.badgeStatus = 'danger';
             break;

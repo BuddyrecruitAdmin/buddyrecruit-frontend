@@ -165,7 +165,7 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="item.condition.icon.examScore" class="m-t-5">
+                  <div *ngIf="item.condition.icon.examScore && role.refAuthorize.sendExam" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Send Exam to Candidate</label>
                     <nb-icon icon="alert-circle-outline" class="link" style="color: yellow" nbTooltip="Select Exam Form"
                       (click)="openPopupSendExam(item.refCandidate._id)">
@@ -173,7 +173,7 @@
                     <nb-icon *ngIf="item.condition.icon.examScore" icon="edit-2-outline" class="link"
                       nbTooltip="Select Exam Form" (click)="openPopupSendExam(item._id)"></nb-icon>
                   </div>
-                  <div *ngIf="item.exams" class="text-group">
+                  <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
                     <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
                       <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
                     </span>
@@ -368,11 +368,19 @@
     <nb-card-body>
       <div class="row">
         <div *ngFor="let list of listExamDialog ;let i = index;" class="col-md-12 col-lg-12">
-          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id)">
+          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id,list.fromTransfer)">
             {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
           </label>
           <label *ngIf="!list.done">
             {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
           </label>
         </div>
       </div>

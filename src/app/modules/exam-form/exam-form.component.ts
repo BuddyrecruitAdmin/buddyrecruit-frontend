@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ExamFormService, } from './exam-form.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, setLanguage, getLanguage, setLangPath } from '../../shared/services/auth.service';
+import { getRole, setLanguage, getLanguage, setLangPath, getFlagExam, getExamData, setExamData } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
@@ -50,6 +50,9 @@ export class ExamFormComponent implements OnInit {
   miN: any;
   seC: any;
   TotalTime: any;
+  flagExam: any;
+  examData: any;
+  isExpired: any;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -64,6 +67,8 @@ export class ExamFormComponent implements OnInit {
     private config: NgbModalConfig,
     private modalService: NgbModal
   ) {
+    this.flagExam = getFlagExam();
+    this.examData = getExamData();
     config.backdrop = 'static';
     config.keyboard = false;
     this.innerHeight = window.innerHeight * 0.9;
@@ -105,6 +110,7 @@ export class ExamFormComponent implements OnInit {
         this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
+        this.isExpired = response.isExpired;
         if (!this.done) {
           if (!response.startAt) {
             this.checkStart = true;
@@ -126,6 +132,7 @@ export class ExamFormComponent implements OnInit {
                     clearInterval(this.interVal)
                     this.save();
                   } else {
+                    setExamData(this.topicOption);
                     this.TotalTime--;
                     this.seC--;
                   }
@@ -133,16 +140,19 @@ export class ExamFormComponent implements OnInit {
               }
               this.checkStart = false;
             } else if (response.data.duration) {
+              if (this.examData) {
+                this.topicOption = this.examData;
+              }
               this.timeCount = true;
-              let diffMinute = 0;
-              let diffSec = 0;
-              const date1 = new Date(response.startAt);
-              const date2 = new Date();
-              const diffTime = date2.getTime() - date1.getTime();
-              diffMinute = Math.floor(diffTime / (1000 * 60));//minute
-              diffSec = Math.floor(Math.abs(diffTime / (1000 * 60)) - diffMinute);// เศษ วินาที
-              diffMinute = Math.abs(diffMinute) - 420; //real linut - 7 hours
-              diffMinute = Math.abs(diffMinute * 60) + diffSec; //sec
+              let diffMinute = (response.usedTime.hours * 60 * 60) + (response.usedTime.minutes * 60) + response.usedTime.seconds; //second;
+              // let diffSec = 0;
+              // const date1 = new Date(response.startAt);
+              // const date2 = new Date();
+              // const diffTime = date2.getTime() - date1.getTime();
+              // diffMinute = Math.floor(diffTime / (1000 * 60));//minute
+              // diffSec = Math.floor(Math.abs(diffTime / (1000 * 60)) - diffMinute);// เศษ วินาที
+              // diffMinute = Math.abs(diffMinute) - 420; //real linut - 7 hours
+              // diffMinute = Math.abs(diffMinute * 60) + diffSec; //sec
               let timeTotal = (response.data.duration.hour * 60 * 60) + (response.data.duration.minute * 60); //second
               this.TotalTime = timeTotal;
               if (timeTotal > diffMinute) {
@@ -158,6 +168,7 @@ export class ExamFormComponent implements OnInit {
                     clearInterval(this.interVal)
                     this.save();
                   } else {
+                    setExamData(this.topicOption);
                     this.TotalTime--;
                     this.seC--;
                   }
@@ -184,7 +195,7 @@ export class ExamFormComponent implements OnInit {
 
   getDetailAnswer() {
     this.loading = true;
-    this.service.answerExam(this._id, this.examId).subscribe(response => {
+    this.service.answerExam(this._id, this.examId, this.flagExam).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.examName = response.data.refExam.name;
         this.topicOption = response.data.exams;

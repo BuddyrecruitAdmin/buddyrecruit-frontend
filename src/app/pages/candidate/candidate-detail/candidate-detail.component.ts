@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName, setExamId } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName, setExamId, setFlagExam } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -30,6 +30,7 @@ import { PopupResendEmailComponent } from '../../../component/popup-resend-email
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { PopupExamFormComponent } from '../../../component/popup-exam-form/popup-exam-form.component';
+var FileSaver = require('file-saver');
 @Component({
   selector: 'ngx-candidate-detail',
   templateUrl: './candidate-detail.component.html',
@@ -737,11 +738,31 @@ export class CandidateDetailComponent implements OnInit {
     });
   }
 
-  checkCV(id) {
+  checkCV(id, items) {
+    var name = this.utilitiesService.setFullnameURL(items);
     this.jdService.originalCV(id, this.role._id)
-      .subscribe(data => this.downloadFile(data), function (error) {
+      .subscribe(data => this.downloadFile(data, name), function (error) {
         //that.setAlertMessage("E", error.statusText);
       });
+  }
+
+  downloadFile(data: any, name) {
+    // const blob = new Blob([data], { type: "image/jpeg" });
+    // const url = window.URL.createObjectURL(blob);
+    // const name_url = name + ".jpeg"
+    // FileSaver.saveAs(blob, name_url);
+    // window.open(url);
+    if (data.type === 'image/jpeg') {
+      const blob = new Blob([data], { type: "image/jpeg" });
+      const url = window.URL.createObjectURL(blob);
+      FileSaver.saveAs(blob, name + ".jpeg");
+      window.open(url);
+    } else {
+      const blob = new Blob([data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      FileSaver.saveAs(blob, name + ".pdf");
+      window.open(url);
+    }
   }
 
   sendEmail(item: any) {
@@ -813,25 +834,13 @@ export class CandidateDetailComponent implements OnInit {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
-  showExamCand(examId) {
+  showExamCand(examId, flag) {
+    this.dialogRef.close();
+    setFlagExam(flag)
     const path = '/exam-form/view/' + examId + '/' + this.examUserId;
     this.router.navigate([path]);
-    // this.service.answerExam(this.examUserId, examId).subscribe((response) => {
-    //   if (response.code === ResponseCode.Success) {
-
-    //   } else {
-    //     this.showToast('danger', 'Error Message', response.message);
-    //   }
-    // })
   }
-
-
-  downloadFile(data: any) {
-    const blob = new Blob([data], { type: "text/pdf" });
-    const url = window.URL.createObjectURL(data);
-    // window.open(url);
-    window.location.assign(url);//open in current tab not new tab
-  }
+  
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {

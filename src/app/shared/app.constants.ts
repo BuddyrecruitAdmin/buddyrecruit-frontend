@@ -75,6 +75,8 @@ export const allList = 'allList';
 export const allListName = 'allListName';
 export const examId = 'examId';
 export const AppFormData = 'AppFormData';
+export const flagExam = 'flagExam';
+export const ExamData = 'ExamData';
 
 export enum DayOfWeek {
   Sunday = 0,

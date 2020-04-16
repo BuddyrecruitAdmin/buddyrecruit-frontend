@@ -20,7 +20,6 @@ export class ExanOnlineDetailComponent implements OnInit {
   fieldName: any;
   createTopic: any;
   topicOption: any;
-  radioGroup: any;
   dialogRef: NbDialogRef<any>;
   topic: any;
   countRadio: number;
@@ -39,6 +38,8 @@ export class ExanOnlineDetailComponent implements OnInit {
   fileText: any;
   getOptionImg: any;
   innerHeight: any;
+  addIdex: any;
+  topicColor: any;
   constructor(
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
@@ -60,7 +61,6 @@ export class ExanOnlineDetailComponent implements OnInit {
     this.topicOption = [];
     this.isUser = true;
     this.preview = false;
-    this.initialModel();
     this.activatedRoute.params.subscribe(params => {
       if (params.action === "create") {
         this.state = "create";
@@ -79,13 +79,6 @@ export class ExanOnlineDetailComponent implements OnInit {
     });
   }
 
-  initialModel(): any {
-    this.radioGroup = [
-      { value: 1, label: 'Option 1' },
-      { value: 2, label: 'Option 2' },
-    ]
-  }
-
   getDetail() {
     this.service.getDetail(this._id, this.isUser).subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -100,6 +93,14 @@ export class ExanOnlineDetailComponent implements OnInit {
   addTopic(dialog: TemplateRef<any>, option: any) {
     this.fieldName = "";
     this.createTopic = option;
+    this.addIdex = "";
+    this.callDialog(dialog);
+  }
+
+  insertTopic(dialog: TemplateRef<any>, option: any, index) {
+    this.fieldName = "";
+    this.createTopic = option;
+    this.addIdex = index + 1;
     this.callDialog(dialog);
   }
 
@@ -111,63 +112,149 @@ export class ExanOnlineDetailComponent implements OnInit {
 
   createField() {
     if (this.createTopic === 'topic') {
-      this.topicOption.push({
-        name: this.fieldName,
-        examOptions: []
-      })
-    } else if (this.createTopic === 'radio') {
-      this.topic.examOptions.push(
-        {
+      if (this.addIdex) {
+        this.topicOption.splice(this.addIdex, 0, {
           name: this.fieldName,
-          type: "label",
-          value: ""
-        }, {
-        name: "",
-        type: this.createTopic,
-        value: undefined,
-        group: [{ value: 1, label: 'Option 1' }]
-      })
-    } else if (this.createTopic === 'file') {
-      this.topic.examOptions.push(
-        {
+          examOptions: [],
+          color: "black"
+        })
+      } else {
+        this.topicOption.push({
           name: this.fieldName,
-          type: "label",
-          value: ""
-        }, {
-        name: "",
-        type: this.createTopic,
-        value: undefined,
-        src: undefined
-      }, {
-        name: this.fieldName,
-        type: "area",
-        value: undefined,
+          examOptions: [],
+          color: "black"
+        })
       }
-      )
-    } else if (this.createTopic === 'getFile') {
-      this.topic.examOptions.push(
-        {
-          name: this.fieldName,
-          type: "label",
-          value: ""
+    } else if (this.addIdex) {
+      if (this.createTopic === 'radio') {
+        this.topic.examOptions.splice(this.addIdex, 0,
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            score: ""
+          }, {
+          name: "",
+          type: this.createTopic,
+          value: undefined,
+          group: [{ value: 1, label: 'Option 1', color: "black" }]
+        })
+        console.log(this.topic.examOptions)
+      } else if (this.createTopic === 'file') {
+        this.topic.examOptions.splice(this.addIdex, 0,
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            score: ""
+          }, {
+          name: "",
+          type: this.createTopic,
+          value: undefined,
+          src: undefined
         }, {
-        name: this.fieldName,
-        type: this.createTopic,
-        src: undefined
-      })
-    } else {
-      this.topic.examOptions.push(
-        {
           name: this.fieldName,
-          type: "label",
-          value: ""
+          type: "area",
+          value: undefined,
+        }
+        )
+      } else if (this.createTopic === 'getFile') {
+        this.topic.examOptions.splice(this.addIdex, 0,
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            score: ""
+          }, {
+          name: this.fieldName,
+          type: this.createTopic,
+          src: undefined
+        })
+      } else {
+        this.topic.examOptions.splice(this.addIdex, 0,
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            align: "center",
+            score: ""
+          }, {
+          name: this.fieldName,
+          type: this.createTopic,
+          value: "",
+          color: "black",
+          score: ""
+        })
+      }
+    } else { //add in last arr
+      if (this.createTopic === 'radio') {
+        this.topic.examOptions.push(
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            score: ""
+          }, {
+          name: "",
+          type: this.createTopic,
+          value: undefined,
+          group: [{ value: 1, label: 'Option 1', color: "" }]
+        })
+      } else if (this.createTopic === 'file') {
+        this.topic.examOptions.push(
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            score: ""
+          }, {
+          name: "",
+          type: this.createTopic,
+          value: undefined,
+          src: undefined
         }, {
-        name: this.fieldName,
-        type: this.createTopic,
-        value: ""
-      })
+          name: this.fieldName,
+          type: "area",
+          value: undefined,
+          color: "black"
+        }
+        )
+      } else if (this.createTopic === 'getFile') {
+        this.topic.examOptions.push(
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            score: ""
+          }, {
+          name: this.fieldName,
+          type: this.createTopic,
+          src: undefined
+        })
+      } else {
+        this.topic.examOptions.push(
+          {
+            name: this.fieldName,
+            type: "label",
+            value: "",
+            color: "black",
+            score: ""
+          }, {
+          name: this.fieldName,
+          type: this.createTopic,
+          value: "",
+          color: "black"
+        })
+      }
     }
     this.dialogRef.close();
+    // this.popover.hide()
   }
 
   addRadio(option, index) {
@@ -179,7 +266,26 @@ export class ExanOnlineDetailComponent implements OnInit {
 
   setTopic(topic) {
     this.topic = topic;
+    this.addIdex = "";
   }
+
+  setTopicIndex(topic, index) {
+    this.topic = topic;
+    this.addIdex = index + 1;
+  }
+
+  setOption(topic) {
+    this.topicColor = topic;
+  }
+
+  setColor(rgb) {
+    this.topicColor.color = rgb;
+  }
+
+  // changeAlign(align) {
+  //   console.log(this.topicColor)
+  //   this.topicColor.align = align;
+  // }
 
   fileChangeEvent(option, files: FileList): void {
     this.fileText = "";

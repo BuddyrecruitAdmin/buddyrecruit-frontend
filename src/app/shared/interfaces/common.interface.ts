@@ -11,6 +11,8 @@ export interface ApiResponse {
   isOverQuota?: boolean;
   isOverCandidate?: boolean;
   otherJR?;
+  usedTime?;
+  isExpired?;
 }
 
 export interface Count {
