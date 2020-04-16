@@ -198,14 +198,14 @@
               </button>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="template.workExperience.position.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'POSITION' | translate }}</mat-label>
                   <input matInput type="text" id="position{{i}}" [(ngModel)]="work.position"
                     [required]="template.workExperience.position.required" [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="template.workExperience.company.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'COMPANY' | translate }}</mat-label>
                   <input matInput type="text" id="company{{i}}" [(ngModel)]="work.company"
@@ -214,7 +214,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-4" *ngIf="template.workExperience.start.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
                   <input matInput type="text" id="start{{i}}" name="start" [matDatepicker]="startDate"
@@ -224,11 +224,11 @@
                   <mat-datepicker #startDate></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="col-md-2 checkbox-margin">
+              <div class="col-md-2 checkbox-margin" *ngIf="template.workExperience.start.visible">
                 <mat-checkbox [(ngModel)]="work.isPresent" [ngModelOptions]="{standalone: true}">
                   {{ 'PRESENT' | translate }}</mat-checkbox>
               </div>
-              <div *ngIf="!work.isPresent" class="col-md-4">
+              <div *ngIf="template.workExperience.end.visible && !work.isPresent" class="col-md-4">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'PERIOD_TO' | translate }}</mat-label>
                   <input matInput type="text" id="end{{i}}" name="end" [matDatepicker]="endDate" [(ngModel)]="work.end"
@@ -240,7 +240,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-12" *ngIf="template.workExperience.duty.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'RESPONSIBILITY' | translate }}</mat-label>
                   <textarea matInput type="text" id="duty{{i}}" rows="3" [(ngModel)]="work.duty"
@@ -285,7 +285,7 @@
               </button>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="template.education.refDegree.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'DEGREE' | translate }}</mat-label>
                   <mat-select *ngIf="language === 'en'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
@@ -302,7 +302,7 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-3" *ngIf="template.education.gpa.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'GPA' | translate }}</mat-label>
                   <input matInput type="text" id="gpa{{i}}" [(ngModel)]="education.gpa"
@@ -311,14 +311,14 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="template.education.university.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'UNIVERSITY' | translate }}</mat-label>
                   <input matInput type="text" id="university{{i}}" [(ngModel)]="education.university"
                     [ngModelOptions]="{standalone: true}" [required]="template.education.university.required">
                 </mat-form-field>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6" *ngIf="template.education.major.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'MAJOR' | translate }}</mat-label>
                   <input matInput type="text" id="major{{i}}" [(ngModel)]="education.major"

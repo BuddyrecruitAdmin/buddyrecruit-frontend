@@ -26,7 +26,7 @@
       </mat-form-field>
       <div *ngIf="state === State.Edit" class="url-line">
         <div class="w-100">
-          <input type="text" id="url" [(ngModel)]="url" nbInput fullWidth disabled>
+          <input type="text" id="url" [(ngModel)]="url" nbInput fullWidth disabled style="color: #c5cee0;">
         </div>
         <button mat-icon-button type="button" matTooltip="Copy to clipboard" matTooltipPosition="above"
           (click)="copyToClipboard()">

@@ -440,6 +440,7 @@ export class ApplicationFormComponent implements OnInit {
 
     const qElement = this.getQuestionElementError();
     if (isValid && qElement) {
+      isValid = false;
       qElement.scrollIntoView();
     }
 
