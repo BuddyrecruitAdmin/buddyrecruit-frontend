@@ -29,7 +29,8 @@ import {
   allList,
   allListName,
   examId,
-  flagExam
+  flagExam,
+  ExamData
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -319,4 +320,13 @@ export function setFlagExam(flag: string = null) {
 export function getFlagExam() {
   const flag = JSON.parse(localStorage.getItem(flagExam));
   return (!flag || flag === null) ? undefined : flag;
+}
+
+export function setExamData(exam: string = null) {
+  localStorage.setItem(ExamData, JSON.stringify(exam));
+}
+
+export function getExamData() {
+  const exam = JSON.parse(localStorage.getItem(ExamData));
+  return (!exam || exam === null) ? undefined : exam;
 }

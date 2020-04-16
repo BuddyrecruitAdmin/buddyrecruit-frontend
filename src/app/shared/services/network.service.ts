@@ -56,7 +56,8 @@ export class NetworkService {
           count: response.body.count || undefined,
           isOverQuota: response.body.isOverQuota || false,
           done: response.body.done,
-          startAt: response.body.startAt
+          startAt: response.body.startAt,
+          usedTime: response.body.usedTime
         };
       }),
       catchError(this._handleError('post', this.ErrorResponse()))
