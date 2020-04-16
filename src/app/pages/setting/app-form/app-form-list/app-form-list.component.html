@@ -118,7 +118,7 @@
               <td>
                 {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
               </td>
-              <td class="actions" *ngIf="role.refAuthorize.configuration.evaluation.editable">
+              <td class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="Copy to clipboard"
                   (click)="copyToClipboard(item)">
                   <nb-icon icon="attach-2-outline"></nb-icon>
