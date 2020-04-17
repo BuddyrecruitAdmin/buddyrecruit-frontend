@@ -601,12 +601,22 @@
                     [title]="item.lastChangedInfo.date" [picture]="item.lastChangedInfo.refUser.imageData"></nb-user>
                 </div>
                 <div class="actions">
+                  <nb-icon *ngIf="item.lastChangedInfo.refUser._id === role._id && editable" icon="edit-outline"
+                    class="link text-green" nbTooltip="Edit" (click)="editComment(i)"></nb-icon>
                   <nb-icon *ngIf="item.lastChangedInfo.refUser._id === role._id && editable" icon="trash-2-outline"
                     class="link text-red" nbTooltip="Delete" (click)="delRemark(i)"></nb-icon>
                 </div>
               </nb-card-header>
               <nb-card-body style="min-height: auto">
-                <label style="word-break: break-word;"> {{ item.message }} </label>
+                <label *ngIf="!editRemark" style="word-break: break-word;"> {{ item.message }} </label>
+                <div *ngIf="item.lastChangedInfo.refUser._id === role._id && editable && editRemark"
+                  class="box-body text-center">
+                  <textarea nbInput fullWidth [(ngModel)]="item.message" [disabled]="!editable">
+                  </textarea>
+                </div>
+                <div *ngIf="item.lastChangedInfo.refUser._id !== role._id && editable && editRemark" class="box-body">
+                  <label style="word-break: break-word;"> {{ item.message }} </label>
+                </div>
               </nb-card-body>
             </nb-card>
           </div>

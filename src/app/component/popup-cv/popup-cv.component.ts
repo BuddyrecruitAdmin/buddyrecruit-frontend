@@ -75,6 +75,7 @@ export class PopupCvComponent implements OnInit {
   }
   remark: any;
   allComments: any;
+  editRemark: boolean;
   constructor(
     private service: PopupCVService,
     public ref: NbDialogRef<PopupCvComponent>,
@@ -100,6 +101,7 @@ export class PopupCvComponent implements OnInit {
     this.editable = false;
     this.buttonText = 'edit';
     this.loading = true;
+    this.editRemark = false;
     this.items = [];
     this.totalMonth = 0;
     this.totalYear = 0;
@@ -116,6 +118,7 @@ export class PopupCvComponent implements OnInit {
     } else {
       this.buttonText = "display";
     }
+    this.editRemark = false;
     this.editable = !this.editable;
   }
 
@@ -275,6 +278,18 @@ export class PopupCvComponent implements OnInit {
   }
 
   setRequest(): any {
+    console.log(this.items.comments)
+    console.log(this.allComments)
+    if (this.items.comments) {
+      this.items.comments.map((ele, index) => {
+        this.allComments.forEach((element, i) => {
+          if (index === i) {
+            ele.message = element.message;
+          }
+        });
+      })
+      console.log(this.items.comments)
+    }
     if (this.items.hardSkill.length > 0) {
       this.items.hardSkill = this.convertArray(this.items.hardSkill);
     }
@@ -333,6 +348,10 @@ export class PopupCvComponent implements OnInit {
   delRemark(index: any) {
     this.allComments.splice(index, 1);
     this.items.comments.splice(index, 1);
+  }
+
+  editComment(index: any) {
+    this.editRemark = !this.editRemark
   }
 
   addComment() {

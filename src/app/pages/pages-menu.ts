@@ -222,7 +222,7 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
-    title: 'Exam Online',
+    title: 'Online Exam',
     link: '/employer/setting/exam-online',
     hidden: false,
   },

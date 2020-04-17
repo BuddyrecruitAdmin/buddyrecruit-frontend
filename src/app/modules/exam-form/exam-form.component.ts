@@ -81,6 +81,7 @@ export class ExamFormComponent implements OnInit {
     this.timeCount = false;
     this.loading = true;
     this.TotalTime = 0;
+    this.isExpired = false;
     // this.isUser = false;
     this.activatedRoute.params.subscribe(params => {
       this._id = undefined;
@@ -110,7 +111,7 @@ export class ExamFormComponent implements OnInit {
         this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
-        this.isExpired = response.isExpired;
+        console.log()
         if (!this.done) {
           if (!response.startAt) {
             this.checkStart = true;
@@ -179,6 +180,9 @@ export class ExamFormComponent implements OnInit {
             }
           }
         }
+      }
+      if (response.code === ResponseCode.Unauthorized) {
+        this.isExpired = response.isExpired;
       }
       this.loading = false;
     })

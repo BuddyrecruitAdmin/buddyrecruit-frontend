@@ -77,6 +77,7 @@ import { CandidateComponent } from './candidate/candidate.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { DetailCandidateComponent } from './detail-candidate/detail-candidate.component';
+import { ExcelService } from './excel.service';
 @NgModule({
   declarations: [
     ReportComponent,
@@ -158,6 +159,7 @@ import { DetailCandidateComponent } from './detail-candidate/detail-candidate.co
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
+    ExcelService,
     {
       provide: LOCALE_ID,
       useValue: 'en-GB'
