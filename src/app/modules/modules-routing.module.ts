@@ -6,6 +6,7 @@ import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
+import { ApplicationFormComponent } from './application-form/application-form.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,14 @@ const routes: Routes = [
       {
         path: 'exam-form/:action/:examId/:id',
         component: ExamFormComponent,
+      },
+      {
+        path: 'application-form/:action',
+        component: ApplicationFormComponent,
+      },
+      {
+        path: 'application-form/:action/:templateId',
+        component: ApplicationFormComponent,
       },
       {
         path: 'resume',

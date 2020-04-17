@@ -50,7 +50,8 @@ export const API_ENDPOINT = {
     ACTION: "jr/action",
     USERS: "jr/users",
     CLOSE: "jr/close",
-    TOGGLE: "jr/active"
+    TOGGLE: "jr/active",
+    GET_ACTIVE: "jr/getActive",
   },
   CONSENT: {
     LIST: "consentStage/list",
@@ -223,6 +224,14 @@ export const API_ENDPOINT = {
     MAIL_TEMPLATE_DETAIL: "mailTemplate/detail",
     MAIL_ACTION_DETAIL: "mailAction/detail",
     MAIL_TEMPLATE_DELETE: "mailTemplate/delete",
+    
+    APP_FORM: {
+      CREATE: "appFormTemplate/create",
+      LIST: "appFormTemplate/list",
+      DETAIL: "appFormTemplate/detail",
+      EDIT: "appFormTemplate/edit",
+      DELETE: "appFormTemplate/delete",
+    }
   },
   CV: {
     DETAIL: "candidate/id",
@@ -304,5 +313,14 @@ export const API_ENDPOINT = {
     DETAIL: "resume/detail",
     EDIT: "resume/edit",
     DELETE: "resume/delete",
-  }
+  },
+  APPLICATION_FORM: {
+    CREATE: "generalAppForm/create",
+    LIST: "generalAppForm/list",
+    DETAIL: "generalAppForm/detail",
+    EDIT: "generalAppForm/edit",
+    DELETE: "generalAppForm/delete",
+    JR_LIST: "generalAppForm/jrs",
+    GET_TEMPLATE: "generalAppForm/getTemplate"
+  },
 };

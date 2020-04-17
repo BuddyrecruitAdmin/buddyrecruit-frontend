@@ -1,5 +1,9 @@
-export interface IResume {
+export interface IApplicationForm {
   _id?;
+  refCompany?;
+  refTemplate?;
+  refJR?;
+  otherJob: string;
   firstname: string;
   lastname: string;
   birth: Date;
@@ -20,8 +24,9 @@ export interface IResume {
   hardSkill: string[];
   softSkill: string[];
   certificate: string[];
+  questions: IQuestion[];
 
-  attachFile: string;
+  attachment: IAttachment;
 }
 
 export interface IWorkExperience {
@@ -46,4 +51,38 @@ export interface IEducation {
   university: string;
   major: string;
   deletion: boolean;
+}
+
+export interface IAttachment {
+  src: string;
+  name: string;
+  type: string;
+  size: number;
+}
+
+export interface IQuestion {
+  type: string;
+  title: string;
+  subTitle: string;
+  showSubTitle: boolean;
+  required: boolean;
+  imgaeURL: string;
+  answer: IAnswer;
+}
+
+export interface IAnswer {
+  input: string;
+  textArea: string;
+  options: IOption[];
+  selected: string;
+  hasOther: boolean;
+  otherLabel: string;
+  otherChecked: boolean;
+  otherInput: string;
+}
+
+export interface IOption {
+  label: string;
+  imgaeURL: string;
+  checked?: boolean;
 }

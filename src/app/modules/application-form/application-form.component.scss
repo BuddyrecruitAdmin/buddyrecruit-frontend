@@ -1,0 +1,17 @@
+.loading {
+  margin: 2rem 0;
+  height: 5rem;
+}
+.submitted {
+  text-align: center;
+  .topic {
+    font-size: 16px;
+    line-height: 1.4;
+    .mat-icon {
+      color: var(--color-green);
+    }
+    p {
+      margin-top: 0.25rem;
+    }
+  }
+}

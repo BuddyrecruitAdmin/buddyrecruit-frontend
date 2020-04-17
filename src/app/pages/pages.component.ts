@@ -172,6 +172,9 @@ export class PagesComponent {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
         if (configuration.examOnline && configuration.examOnline.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[16]);
+        }
+        if (configuration.examOnline && configuration.examOnline.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[15]);
         }
         if (configuration.evaluation && configuration.evaluation.visible) {
