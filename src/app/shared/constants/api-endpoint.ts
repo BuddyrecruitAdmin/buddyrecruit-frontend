@@ -91,6 +91,7 @@ export const API_ENDPOINT = {
         LIST: "candidate/flow/comment/list",
         CREATE: "candidate/flow/comment/create",
         DELETE: "candidate/flow/comment/delete",
+        EDIT: "candidate/flow/comment/edit",
       },
       DETAIL: "candidate/flow/detail",
       EDIT: "candidate/flow/edit",

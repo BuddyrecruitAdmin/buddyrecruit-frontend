@@ -84,8 +84,8 @@
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div>
-                        <mat-checkbox class="label" [(ngModel)]="allowAll" [disabled]="preview"><span
-                                class="text-black" style="font-size: 15px;">Share
+                        <mat-checkbox class="label" [(ngModel)]="allowAll" [disabled]="preview"><span class="text-black"
+                                style="font-size: 15px;">Share
                                 exam all department</span>
                         </mat-checkbox>
                     </div>
@@ -298,8 +298,8 @@
                 </div>
             </div>
         </nb-card-body>
-        <nb-card-footer>
-            <div *ngIf="!preview">
+        <nb-card-footer *ngIf="!preview">
+            <div>
                 <button (click)="save()" nbPopoverPlacement="top" nbButton size="small">
                     Save
                 </button>

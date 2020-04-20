@@ -17,6 +17,7 @@ import { PrintCandidateComponent } from '../../component/print-candidate/print-c
 import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interfaces/common.interface';
 import { DomSanitizer } from '@angular/platform-browser';
 import { saveAs } from "file-saver";
+import { TrafficChartService } from '../../@core/mock/traffic-chart.service';
 var FileSaver = require('file-saver');
 @Component({
   selector: 'ngx-popup-cv',
@@ -101,7 +102,7 @@ export class PopupCvComponent implements OnInit {
     this.editable = false;
     this.buttonText = 'edit';
     this.loading = true;
-    this.editRemark = false;
+    // this.editRemark = false;
     this.items = [];
     this.totalMonth = 0;
     this.totalYear = 0;
@@ -118,7 +119,10 @@ export class PopupCvComponent implements OnInit {
     } else {
       this.buttonText = "display";
     }
-    this.editRemark = false;
+    // this.editRemark = false;
+    this.allComments.map(element => {
+      element.editFlag = false;
+    })
     this.editable = !this.editable;
   }
 
@@ -165,7 +169,9 @@ export class PopupCvComponent implements OnInit {
               refUser: ele.lastChangedInfo.refUser,
               date: this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
             },
-            message: ele.message
+            message: ele.message,
+            editFlag: false,
+            _id: ele._id
           })
         })
         if (this.utilitiesService.dateIsValid(response.data.birth)) {
@@ -350,8 +356,18 @@ export class PopupCvComponent implements OnInit {
     this.items.comments.splice(index, 1);
   }
 
-  editComment(index: any) {
-    this.editRemark = !this.editRemark
+  editComment(item: any) {
+    // this.editRemark = !this.editRemark
+    item.editFlag = true;
+    this.allComments.map(element => {
+      if (element._id !== item._id) {
+        element.editFlag = false;
+      }
+    })
+  }
+
+  escEdit(item: any) {
+    item.editFlag = false;
   }
 
   addComment() {

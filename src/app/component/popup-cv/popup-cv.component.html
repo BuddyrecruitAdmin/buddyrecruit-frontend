@@ -602,21 +602,22 @@
                 </div>
                 <div class="actions">
                   <nb-icon *ngIf="item.lastChangedInfo.refUser._id === role._id && editable" icon="edit-outline"
-                    class="link text-green" nbTooltip="Edit" (click)="editComment(i)"></nb-icon>
+                    class="link text-green" nbTooltip="Edit" (click)="editComment(item)"></nb-icon>
                   <nb-icon *ngIf="item.lastChangedInfo.refUser._id === role._id && editable" icon="trash-2-outline"
                     class="link text-red" nbTooltip="Delete" (click)="delRemark(i)"></nb-icon>
                 </div>
               </nb-card-header>
               <nb-card-body style="min-height: auto">
-                <label *ngIf="!editRemark" style="word-break: break-word;"> {{ item.message }} </label>
-                <div *ngIf="item.lastChangedInfo.refUser._id === role._id && editable && editRemark"
-                  class="box-body text-center">
+                <label *ngIf="!item.editFlag" style="word-break: break-word;"> {{ item.message }} </label>
+                <div *ngIf="item.editFlag" class="box-body text-center">
                   <textarea nbInput fullWidth [(ngModel)]="item.message" [disabled]="!editable">
                   </textarea>
                 </div>
-                <div *ngIf="item.lastChangedInfo.refUser._id !== role._id && editable && editRemark" class="box-body">
+                <small *ngIf="item.editFlag">กดเพื่อ<span style=" text-decoration: underline;cursor: pointer;"
+                  (click)="escEdit(item)">ยกเลิก</span></small>
+                <!-- <div *ngIf="editFlag && editable && editRemark" class="box-body">
                   <label style="word-break: break-word;"> {{ item.message }} </label>
-                </div>
+                </div> -->
               </nb-card-body>
             </nb-card>
           </div>
