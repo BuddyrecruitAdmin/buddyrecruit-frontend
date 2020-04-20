@@ -31,6 +31,15 @@ export class PopupCommentService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.CREATE, body);
   }
 
+  edit(flowId: string, message: any, candidteFlowId: any): Observable<ApiResponse> {
+    const body = {
+      _id: flowId,
+      message: message,
+      candidteFlowId: candidteFlowId
+    };
+    return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.EDIT, body);
+  }
+
   deleteItem(flowId: string, commentId: any): Observable<ApiResponse> {
     const body = {
       refCandidateFlowId: flowId,
