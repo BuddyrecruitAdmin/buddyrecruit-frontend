@@ -105,6 +105,9 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ExanOnlineListComponent } from './exam-online/exan-online-list/exan-online-list.component';
 import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan-online-detail.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppFormListComponent } from './app-form/app-form-list/app-form-list.component';
+import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
+
 @NgModule({
   declarations: [
     SettingComponent,
@@ -131,6 +134,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ContactUsComponent,
     ExanOnlineListComponent,
     ExanOnlineDetailComponent,
+    AppFormListComponent,
+    AppFormDetailComponent,
   ],
   imports: [
     CommonModule,

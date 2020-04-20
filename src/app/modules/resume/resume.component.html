@@ -1,16 +1,18 @@
 <div id="resume">
 
   <div class="nav-bar">
-    <button mat-icon-button type="button" [routerLink]="'/index'">
-      <mat-icon>keyboard_backspace</mat-icon>
-    </button>
+    <div class="nav-left">
+      <button mat-icon-button type="button" class="back-icon" [routerLink]="'/index'">
+        <mat-icon>keyboard_backspace</mat-icon>
+      </button>
+    </div>
     <div class="nav-brand">
       <mat-icon>account_box</mat-icon>
       <div class="title">{{ 'TITLE' | translate }}</div>
       <div class="sub-title">Buddy Recruit</div>
     </div>
-    <div>
-      <span class="lang" [ngClass]="{ 'active' : language === 'en' }" (click)="setLang('en')">EN</span>
+    <div class="nav-right">
+      <span class="lang" [ngClass]="{ 'active' : language === 'en' }" (click)="setLang('en')">ENG</span>
       |
       <span class="lang" [ngClass]="{ 'active' : language === 'th' }" (click)="setLang('th')">ไทย</span>
     </div>
@@ -20,10 +22,6 @@
 
     <!-- Personal Details -->
     <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>account_circle</mat-icon>
-        <span>{{ 'PERSONAL_DETAILS' | translate }}</span>
-      </div>
       <div class="card-body">
         <div class="topic">
           <mat-icon>account_circle</mat-icon>
@@ -55,11 +53,6 @@
               <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
               <mat-datepicker #birthDate></mat-datepicker>
             </mat-form-field>
-            <!-- <mat-form-field appearance="outline">
-              <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
-              <input matInput type="date" id="birth" name="birth" [formControl]="f.birth" [(ngModel)]="resume.birth"
-                (change)="onChangeBirthday($event.target.value)" required>
-            </mat-form-field> -->
           </div>
           <div class="col-md-2">
             <mat-form-field appearance="outline">
@@ -131,10 +124,6 @@
 
     <!-- Work Experience -->
     <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>work</mat-icon>
-        <span>{{ 'WORK_EXP' | translate }}</span>
-      </div>
       <div class="card-body">
         <div class="topic">
           <mat-icon>work</mat-icon>
@@ -176,11 +165,6 @@
           </div>
           <div class="row">
             <div class="col-md-4">
-              <!-- <mat-form-field appearance="outline">
-                <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
-                <input matInput type="date" id="start{{i}}" [(ngModel)]="work.start"
-                  [ngModelOptions]="{standalone: true}" required>
-              </mat-form-field> -->
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
                 <input matInput type="text" id="start" name="start" [matDatepicker]="startDate" [(ngModel)]="work.start"
@@ -201,11 +185,6 @@
                 <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                 <mat-datepicker #endDate></mat-datepicker>
               </mat-form-field>
-              <!-- <mat-form-field appearance="outline">
-                <mat-label>{{ 'PERIOD_TO' | translate }}</mat-label>
-                <input matInput type="date" id="end{{i}}" [(ngModel)]="work.end" [ngModelOptions]="{standalone: true}"
-                  required>
-              </mat-form-field> -->
             </div>
           </div>
           <div class="row">
@@ -230,10 +209,6 @@
 
     <!-- Education -->
     <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>school</mat-icon>
-        <span>{{ 'EDUCATION' | translate }}</span>
-      </div>
       <div class="card-body">
         <div class="topic">
           <mat-icon>school</mat-icon>
@@ -274,19 +249,6 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
-              <!-- <div class="form-control-group">
-                <select class="form-control" *ngIf="language === 'en'" id="refDegree{{i}}"
-                  [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }" required fullWidth>
-                  <option [value]="undefined">{{ 'DEGREE' | translate }} *</option>
-                  <option *ngFor="let degree of degreesEN" [value]="degree.value">{{ degree.label }}</option>
-                </select>
-                <select class="form-control" *ngIf="language === 'th'" id="refDegree{{i}}"
-                  [(ngModel)]="education.refDegree" [ngModelOptions]="{ standalone: true }" required fullWidth>
-                  <option [value]="undefined">{{ 'DEGREE' | translate }} *</option>
-                  <option *ngFor="let degree of degreesTH" [value]="degree.value">{{ degree.label }}</option>
-                </select>
-              </div> -->
             </div>
             <div class="col-md-3">
               <mat-form-field appearance="outline">
@@ -324,10 +286,6 @@
 
     <!-- Hard Skills -->
     <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>highlight</mat-icon>
-        <div>{{ 'HARD_SKILLS' | translate }}</div>
-      </div>
       <div class="card-body">
         <div class="topic">
           <mat-icon>highlight</mat-icon>
@@ -372,10 +330,6 @@
 
     <!-- Soft Skills -->
     <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>highlight</mat-icon>
-        <div>{{ 'SOFT_SKILLS' | translate }}</div>
-      </div>
       <div class="card-body">
         <div class="topic">
           <mat-icon>highlight</mat-icon>
@@ -420,10 +374,6 @@
 
     <!-- Certifications -->
     <div class="card">
-      <div class="card-header with-border">
-        <mat-icon>turned_in</mat-icon>
-        <div>{{ 'CERTIFICATIONS' | translate }}</div>
-      </div>
       <div class="card-body">
         <div class="topic">
           <mat-icon>turned_in</mat-icon>
@@ -479,9 +429,9 @@
         <div class="upload-file">
           <p class="file-preview">
             <mat-icon>insert_drive_file</mat-icon>
-            <span *ngIf="!resume.attachment.originalname">{{ 'NO_FILE' | translate }}</span>
-            <span *ngIf="resume.attachment.originalname">{{ resume.attachment.originalname }}</span>
-            <mat-icon *ngIf="resume.attachment.originalname" class="delete" (click)="clearAttachFile()">cancel
+            <span *ngIf="!resume.attachFile">{{ 'NO_FILE' | translate }}</span>
+            <span *ngIf="resume.attachFile">{{ resume.attachFile }}</span>
+            <mat-icon *ngIf="resume.attachFile" class="delete" (click)="clearAttachFile()">cancel
             </mat-icon>
           </p>
           <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -

@@ -1,0 +1,631 @@
+<div *ngIf="loading">
+  <div class="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerMessage="Loading Document...">
+  </div>
+</div>
+
+<div *ngIf="!loading" id="app-form">
+
+  <div class="header">
+    <button mat-flat-button type="button" (click)="back()">
+      <mat-icon>keyboard_backspace</mat-icon> Back
+    </button>
+    <button nbButton type="button" status="primary" (click)="preview()">
+      <nb-icon icon="eye-outline"></nb-icon> PREVIEW
+    </button>
+  </div>
+
+  <nb-card accent="success" [style.border-top-width.px]="10" style="margin-top: 0;">
+    <nb-card-body style="padding-bottom: 0;">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" id="formName" [(ngModel)]="appForm.formName" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Remark</mat-label>
+        <input matInput type="text" id="formRemark" [(ngModel)]="appForm.formRemark">
+      </mat-form-field>
+      <div *ngIf="state === State.Edit" class="url-line">
+        <div class="w-100">
+          <input type="text" id="url" [(ngModel)]="url" nbInput fullWidth disabled style="color: #c5cee0;">
+        </div>
+        <button mat-icon-button type="button" matTooltip="Copy to clipboard" matTooltipPosition="above"
+          (click)="copyToClipboard()">
+          <mat-icon>file_copy</mat-icon>
+        </button>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <nb-card>
+    <nb-card-body>
+      <mat-form-field appearance="outline">
+        <mat-label>Application Form Title</mat-label>
+        <input matInput type="text" id="title" [(ngModel)]="appForm.title" required>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Application Form Subtitle</mat-label>
+        <input matInput type="text" id="subTitle" [(ngModel)]="appForm.subTitle">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="m-b-20">
+        <mat-label>Background Color</mat-label>
+        <input matInput type="text" id="bgColor" [(ngModel)]="appForm.bgColor">
+        <mat-hint align="start" style="font-size: 20px;">
+          <mat-icon *ngFor="let color of bgColors;" class="link" [style.color]="color"
+            (click)="appForm.bgColor = color">lens</mat-icon>
+          <mat-icon class="link" (click)="appForm.bgColor = '#ffffff'">panorama_fish_eye</mat-icon>
+          <!-- <mat-icon class="link" (click)="addBgColor()">color_lens</mat-icon> -->
+        </mat-hint>
+      </mat-form-field>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="m-b-20">
+            <mat-label>Title Color</mat-label>
+            <input matInput type="text" id="titleColor" [(ngModel)]="appForm.titleColor">
+            <mat-hint align="start" style="font-size: 20px;">
+              <mat-icon class="link" (click)="appForm.titleColor = '#ffffff'">panorama_fish_eye</mat-icon>
+              <mat-icon class="link" style="color: #707070;" (click)="appForm.titleColor = '#707070'">lens</mat-icon>
+              <mat-icon class="link" style="color: #000000;" (click)="appForm.titleColor = '#000000'">lens</mat-icon>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline" class="m-b-20">
+            <mat-label>Subtitle Color</mat-label>
+            <input matInput type="text" id="subTitleColor" [(ngModel)]="appForm.subTitleColor">
+            <mat-hint align="start" style="font-size: 20px;">
+              <mat-icon class="link" (click)="appForm.subTitleColor = '#ffffff'">panorama_fish_eye</mat-icon>
+              <mat-icon class="link" style="color: #707070;" (click)="appForm.subTitleColor = '#707070'">lens</mat-icon>
+              <mat-icon class="link" style="color: #000000;" (click)="appForm.subTitleColor = '#000000'">lens</mat-icon>
+            </mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer class="text-left">
+      <p class="text-gray"><small>Preview</small></p>
+      <div class="nav-bar" [style.background]="appForm.bgColor">
+        <mat-icon [style.color]="appForm.titleColor">account_box</mat-icon>
+        <div class="title" [style.color]="appForm.titleColor">{{ appForm.title }}</div>
+        <div class="sub-title" [style.color]="appForm.subTitleColor">{{ appForm.subTitle }}</div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+
+  <!-- Personal Details -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.personalDetail.active" disabled>
+        Personal Details
+      </mat-checkbox>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="table-control">
+        <div class="table-control-name"></div>
+        <div class="table-control-actions">
+          <span class="table-control-actions-item">Visible</span>
+          <span class="table-control-actions-item">Required</span>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Fisrt name</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.firstname.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.required"
+              [disabled]="!appForm.personalDetail.firstname.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Last name</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.lastname.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.required"
+              [disabled]="!appForm.personalDetail.lastname.visible"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Birthday</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.birth.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.birth.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.birth.required"
+              [disabled]="!appForm.personalDetail.birth.visible"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Age</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.age.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.age.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.age.required"
+              [disabled]="!appForm.personalDetail.age.visible"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Phone</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.phone.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.phone.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.phone.required"
+              [disabled]="!appForm.personalDetail.phone.visible"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Email</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.email.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.email.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.email.required"
+              [disabled]="!appForm.personalDetail.email.visible"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Address</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.address.visible" (change)="changePersonalCheckbox()"
+              [disabled]="appForm.personalDetail.address.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.address.required"
+              [disabled]="!appForm.personalDetail.address.visible"></mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <!-- Work Experience -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.workExperience.active">
+        Work Experience
+        <span class="text-gray">
+          ({{ appForm.workExperience.active ? 'Visible' : 'Disable' }})
+        </span>
+      </mat-checkbox>
+    </nb-card-header>
+    <nb-card-body *ngIf="appForm.workExperience.active">
+      <div class="table-control">
+        <div class="table-control-name"></div>
+        <div class="table-control-actions">
+          <span class="table-control-actions-item">Visible</span>
+          <span class="table-control-actions-item">Required</span>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Position</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.position.visible"
+              (change)="changeWorkExperienceCheckbox()" [disabled]="appForm.workExperience.position.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.position.required"
+              [disabled]="!appForm.workExperience.position.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Company</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.company.visible" (change)="changeWorkExperienceCheckbox()"
+              [disabled]="appForm.workExperience.company.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.company.required"
+              [disabled]="!appForm.workExperience.company.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Period from</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.start.visible" (change)="changeWorkExperienceCheckbox()"
+              [disabled]="appForm.workExperience.start.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.start.required"
+              [disabled]="!appForm.workExperience.start.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Period to</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.end.visible" (change)="changeWorkExperienceCheckbox()"
+              [disabled]="appForm.workExperience.end.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.end.required"
+              [disabled]="!appForm.workExperience.end.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Roles and responsibilities</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.duty.visible" (change)="changeWorkExperienceCheckbox()"
+              [disabled]="appForm.workExperience.duty.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.workExperience.duty.required"
+              [disabled]="!appForm.workExperience.duty.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <!-- Education -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.education.active">
+        Education
+        <span class="text-gray">
+          ({{ appForm.education.active ? 'Visible' : 'Disable' }})
+        </span>
+      </mat-checkbox>
+    </nb-card-header>
+    <nb-card-body *ngIf="appForm.education.active">
+      <div class="table-control">
+        <div class="table-control-name"></div>
+        <div class="table-control-actions">
+          <span class="table-control-actions-item">Visible</span>
+          <span class="table-control-actions-item">Required</span>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Degree</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.refDegree.visible" (change)="changeEducationCheckbox()"
+              [disabled]="appForm.education.refDegree.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.refDegree.required"
+              [disabled]="!appForm.education.refDegree.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">GPA</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.gpa.visible" (change)="changeEducationCheckbox()"
+              [disabled]="appForm.education.gpa.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.gpa.required" [disabled]="!appForm.education.gpa.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">University</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.university.visible" (change)="changeEducationCheckbox()"
+              [disabled]="appForm.education.university.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.university.required"
+              [disabled]="!appForm.education.university.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="table-control">
+        <div class="table-control-name">Major</div>
+        <div class="table-control-actions">
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.major.visible" (change)="changeEducationCheckbox()"
+              [disabled]="appForm.education.major.disabled">
+            </mat-checkbox>
+          </div>
+          <div class="table-control-actions-item">
+            <mat-checkbox [(ngModel)]="appForm.education.major.required" [disabled]="!appForm.education.major.visible">
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <!-- Hard Skills -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.hardSkill.active">
+        Hard Skills
+        <span class="text-gray">
+          ({{ appForm.hardSkill.active ? 'Visible' : 'Disable' }})
+        </span>
+      </mat-checkbox>
+    </nb-card-header>
+  </nb-card>
+
+  <!-- Soft Skills -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.softSkill.active">
+        Soft Skills
+        <span class="text-gray">
+          ({{ appForm.softSkill.active ? 'Visible' : 'Disable' }})
+        </span>
+      </mat-checkbox>
+    </nb-card-header>
+  </nb-card>
+
+  <!-- Certifications -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.certificate.active">
+        Certifications
+        <span class="text-gray">
+          ({{ appForm.certificate.active ? 'Visible' : 'Disable' }})
+        </span>
+      </mat-checkbox>
+    </nb-card-header>
+  </nb-card>
+
+  <!-- Upload CV -->
+  <nb-card>
+    <nb-card-header>
+      <mat-checkbox [(ngModel)]="appForm.uploadCV.active">
+        Upload CV/Resume
+        <span class="text-gray">
+          ({{ appForm.uploadCV.active ? 'Visible' : 'Disable' }})
+        </span>
+      </mat-checkbox>
+    </nb-card-header>
+  </nb-card>
+
+  <!-- Question -->
+  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+    <nb-card *ngFor="let question of appForm.questions; let iQuestion = index;"
+      accent="{{ question.required ? 'danger' : '' }}" class="card" cdkDrag>
+      <nb-card-header>
+        <div class="icon-move" cdkDragHandle>
+          <mat-icon>drag_indicator</mat-icon>
+        </div>
+        <div class="console">
+          <div class="text-left">
+            <mat-form-field appearance="outline" class="fit-content">
+              <mat-label>Select Question Type</mat-label>
+              <mat-select [(ngModel)]="question.type">
+                <mat-select-trigger>
+                  <mat-icon>{{ getSelectedType(question.type) }}</mat-icon>
+                  <span class="select-label">{{ question.type }}</span>
+                </mat-select-trigger>
+                <mat-option [value]="InputType.Label"
+                  (click)="question.imgaeURL = ''; question.required = false; fileInput.value = ''">
+                  <mat-icon>text_fields</mat-icon> {{ InputType.Label }}
+                </mat-option>
+                <mat-divider></mat-divider>
+                <mat-option [value]="InputType.Input">
+                  <mat-icon>short_text</mat-icon> {{ InputType.Input }}
+                </mat-option>
+                <mat-option [value]="InputType.TextArea">
+                  <mat-icon>subject</mat-icon> {{ InputType.TextArea }}
+                </mat-option>
+                <mat-divider></mat-divider>
+                <mat-option [value]="InputType.Radio">
+                  <mat-icon>radio_button_checked</mat-icon> {{ InputType.Radio }}
+                </mat-option>
+                <mat-option [value]="InputType.ChcekBox">
+                  <mat-icon>check_box</mat-icon> {{ InputType.ChcekBox }}
+                </mat-option>
+                <mat-option [value]="InputType.Dropdown">
+                  <mat-icon>arrow_drop_down_circle</mat-icon> {{ InputType.Dropdown }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="text-right">
+            <button *ngIf="question.type !== InputType.Label" mat-icon-button type="button" (click)="fileInput.click()">
+              <mat-icon class="showPhoto">photo</mat-icon>
+              <input #fileInput type="file" (change)="uploadFile(question, $event.target.files)" style="display:none;"
+                accept="image/*" />
+            </button>
+            <button mat-icon-button type="button" [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item type="button" (click)="question.showSubTitle = !question.showSubTitle">
+                <mat-icon [ngClass]="{ 'text-green' : question.showSubTitle }">
+                  {{ question.showSubTitle ? 'check_box' : 'check_box_outline_blank' }}
+                </mat-icon>
+                <span>Show Remark</span>
+              </button>
+              <button *ngIf="question.type !== InputType.Label" mat-menu-item type="button"
+                (click)="question.required = !question.required">
+                <mat-icon [ngClass]="{ 'text-green' : question.required }">
+                  {{ question.required ? 'check_box' : 'check_box_outline_blank' }}
+                </mat-icon>
+                <span>Required</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item type="button" (click)="duplicateQuestion(iQuestion)">
+                <mat-icon>filter_none</mat-icon>
+                <span>Duplicate</span>
+              </button>
+              <button mat-menu-item type="button" (click)="deleteQuestion(iQuestion)">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </nb-card-header>
+
+      <nb-card-body>
+        <div class="console">
+          <div class="w-100">
+            <mat-form-field>
+              <mat-label>Question</mat-label>
+              <input matInput type="text" id="qTitle{{iQuestion}}" [(ngModel)]="question.title"
+                (click)="$event.target.select()" required>
+            </mat-form-field>
+          </div>
+        </div>
+        <small>
+          <mat-form-field *ngIf="question.showSubTitle">
+            <mat-label>Remark</mat-label>
+            <input matInput type="text" id="qSubTitle{{iQuestion}}" [(ngModel)]="question.subTitle"
+              (click)="$event.target.select()" required>
+          </mat-form-field>
+        </small>
+        <div *ngIf="question.imgaeURL" class="image-preview">
+          <img [src]="question.imgaeURL" class="w-100">
+          <div class="icon-remove">
+            <button mat-icon-button type="button" (click)="question.imgaeURL = ''; fileInput.value = ''">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="question.type === InputType.Input">
+          <mat-form-field appearance="outline">
+            <mat-label>Answer</mat-label>
+            <input matInput type="text" [(ngModel)]="question.answer.input" disabled>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="question.type === InputType.TextArea">
+          <mat-form-field appearance="outline">
+            <mat-label>Answer</mat-label>
+            <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3" disabled></textarea>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="question.type === InputType.Radio 
+        || question.type === InputType.ChcekBox 
+        || question.type === InputType.Dropdown">
+          <div *ngFor="let option of question.answer.options; let iOption = index;">
+            <div class="radio-line">
+              <mat-icon>{{ getSelectedOption(question.type) }}</mat-icon>
+              <mat-form-field class="w-100 m-l-10">
+                <input matInput type="text" id="qLabel{{iOption}}" [(ngModel)]="option.label"
+                  (click)="$event.target.select()" required>
+              </mat-form-field>
+              <button *ngIf="question.type === InputType.Radio || question.type === InputType.ChcekBox" mat-icon-button
+                type="button" (click)="fileInput.click()">
+                <mat-icon class="showPhoto">photo</mat-icon>
+                <input #fileInput type="file" (change)="uploadFile(option, $event.target.files)" style="display:none;"
+                  accept="image/*" />
+              </button>
+              <button mat-icon-button type="button" (click)="deleteOption(iQuestion, iOption)"
+                [disabled]="question.answer.options.length === 1">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="option.imgaeURL" class="image-preview">
+              <img [src]="option.imgaeURL" width="200">
+              <div class="icon-remove">
+                <button mat-icon-button type="button" (click)="option.imgaeURL = ''; fileInput.value = ''">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="question.answer.hasOther" class="radio-line">
+            <mat-icon>{{ getSelectedOption(question.type) }}</mat-icon>
+            <mat-form-field>
+              <input matInput type="text" id="qOtherLabel{{iQuestion}}" [(ngModel)]="question.answer.otherLabel"
+                disabled>
+            </mat-form-field>
+            <button mat-icon-button type="button" (click)="question.answer.hasOther = false">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <div class="radio-line-add">
+            <mat-icon class="text-light-gray m-r-10">{{ getSelectedOption(question.type) }}</mat-icon>
+            <span class="link" (click)="addOption(iQuestion)">Add Option</span>
+            <span *ngIf="!question.answer.hasOther" class="m-l-10 m-r-10">|</span>
+            <span *ngIf="!question.answer.hasOther" class="link" (click)="question.answer.hasOther = true">Add
+              Other</span>
+          </div>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <!-- Add Question -->
+  <nb-card class="link" (click)="addQuestion()">
+    <nb-card-body>
+      <div class="topic" style="margin-bottom: 0;">
+        <mat-icon>add_circle_outline</mat-icon>
+        <p>Other Form</p>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+  <div class="footer">
+    <div class="text-left">
+      <button mat-flat-button type="button" (click)="back()">
+        <mat-icon>keyboard_backspace</mat-icon> Back
+      </button>
+    </div>
+    <div class="text-right">
+      <button nbButton type="button" status="primary" (click)="preview()">
+        <nb-icon icon="eye-outline"></nb-icon> PREVIEW
+      </button>
+      <button nbButton type="submit" status="success" class="m-l-10" (click)="save()">
+        <nb-icon icon="save-outline"></nb-icon> SAVE
+      </button>
+    </div>
+  </div>
+
+</div>

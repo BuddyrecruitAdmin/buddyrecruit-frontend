@@ -3,7 +3,7 @@
     <nb-card-body></nb-card-body>
 </nb-card>
 <div *ngIf="!loading">
-    <nb-card *ngIf="!done && !checkStart">
+    <nb-card *ngIf="!done && !checkStart && !isExpired">
         <nb-card-header>
             <h5 class="text-center text-green">Exam Online</h5>
             <h4 class="text-black"><b>{{ examName || '' }}</b></h4>
@@ -70,6 +70,11 @@
                     </div>
                 </div>
             </div>
+            <div class="row pull-right">
+                <small class="text-red-right">
+                    หมายเหตุ : เมื่อเวลาในการทำข้อสอบหมด ระบบจะทำการบันทึกคำตอบโดยอัตโนมัติ
+                </small>
+            </div>
         </nb-card-body>
         <nb-card-footer *ngIf="!actionView">
             <button nbButton size="small" status="success" (click)="save()">SEND</button>
@@ -85,7 +90,7 @@
         </nb-card-footer>
     </nb-card>
     <!-- Before Start -->
-    <div id="start" style="padding: 8%;" *ngIf="checkStart" [style.height.px]="innerHeight">
+    <div id="start" style="padding: 8%;" *ngIf="checkStart && !isExpired" [style.height.px]="innerHeight">
         <nb-card>
             <nb-card-body>
                 <div class="row">
@@ -137,6 +142,12 @@
             <br>
             <h5>hr@zygencenter.com</h5>
             <h5><b>ZyGen Company Limited</b></h5> -->
+        </div>
+    </div>
+    <!-- Expired Link -->
+    <div *ngIf="isExpired" class="thankExam" [style.height.px]="innerHeight">
+        <div class="thankExam-wrapper">
+            <h2>The link has expired.</h2>
         </div>
     </div>
 </div>

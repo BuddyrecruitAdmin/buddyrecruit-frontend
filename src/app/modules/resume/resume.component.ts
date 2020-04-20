@@ -12,7 +12,7 @@ import { ResponseCode } from '../../shared/app.constants';
 import { DropDownValue } from '../../shared/interfaces';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 
-const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
+const URL = environment.API_URI + '/' + API_ENDPOINT.FILE.UPLOAD;
 
 @Component({
   selector: 'ngx-resume',
@@ -57,7 +57,7 @@ export class ResumeComponent implements OnInit {
     private jdService: JdService,
     private toastrService: NbToastrService,
   ) {
-    setLangPath("RESUME");
+    setLangPath('RESUME');
     this.language = 'en';
     this.setLang(this.language);
   }
@@ -104,10 +104,7 @@ export class ResumeComponent implements OnInit {
       hardSkill: [],
       softSkill: [],
       certificate: [],
-      attachment: {
-        originalname: '',
-        uploadName: '',
-      }
+      attachFile: '',
     };
   }
 
@@ -245,15 +242,13 @@ export class ResumeComponent implements OnInit {
       this.clearAttachFile();
       return;
     } else {
-      this.resume.attachment.originalname = files.item(0).name;
-      this.resume.attachment.uploadName = "";
+      this.resume.attachFile = files.item(0).name;
       this.fileToUpload = files.item(0);
     }
   }
 
   clearAttachFile() {
-    this.resume.attachment.originalname = "";
-    this.resume.attachment.uploadName = "";
+    this.resume.attachFile = '';
     this.fileToUpload = null;
   }
 
