@@ -11,7 +11,8 @@ import { ChartsModule } from 'ng2-charts';
 import {
 	MatButtonModule,
 	MatButtonToggleModule,
-	MatProgressSpinnerModule
+	MatProgressSpinnerModule,
+	MatIconModule
 } from '@angular/material';
 import {
 	NbSpinnerModule,
@@ -43,6 +44,7 @@ const routes: Routes = [{
 		MatButtonToggleModule,
 		NbSpinnerModule,
 		MatProgressSpinnerModule,
+		MatIconModule,
 		NbCardModule,
 		NbAccordionModule,
 		NbButtonModule,

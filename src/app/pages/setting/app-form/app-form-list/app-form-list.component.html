@@ -51,9 +51,13 @@
         <nb-card accent="success">
           <nb-card-header>
             <div class="title">
-              <label [nbTooltip]="item.formName">{{ item.formName || item._id }}</label>
+              <label class="link" (click)="preview(item)" [nbTooltip]="item.formName">
+                {{ item.formName || item._id }}
+              </label>
             </div>
             <div class="actions">
+              <nb-icon icon="eye-outline" class="link" nbTooltip="Preview" (click)="preview(item)">
+              </nb-icon>
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/setting/app-form/edit/'+item._id">
               </nb-icon>
@@ -106,7 +110,9 @@
           <tbody>
             <tr *ngFor="let item of items;">
               <td class="text-left">
-                <span [nbTooltip]="item.formName">{{ item.formName }}</span>
+                <span [nbTooltip]="item.formName" class="link" (click)="preview(item)">
+                  {{ item.formName }}
+                </span>
               </td>
               <td class="text-left">
                 <span [nbTooltip]="item.formName">{{ item.formRemark || '-' }}</span>
@@ -119,9 +125,8 @@
                 {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
               </td>
               <td class="actions">
-                <button nbButton status="info" size="tiny" nbTooltip="Copy to clipboard"
-                  (click)="copyToClipboard(item)">
-                  <nb-icon icon="attach-2-outline"></nb-icon>
+                <button nbButton status="info" size="tiny" nbTooltip="Preview" (click)="preview(item)">
+                  <nb-icon icon="eye-outline"></nb-icon>
                 </button>
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/setting/app-form/edit/'+item._id">

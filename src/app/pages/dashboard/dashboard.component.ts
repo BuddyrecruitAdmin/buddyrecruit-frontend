@@ -7,13 +7,23 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { DashboardService } from './dashboard.service';
 import { getRole } from '../../shared/services/auth.service';
 import { ResponseCode } from '../../shared/app.constants';
+import { ITimeToFill } from './dashboard.interface';
+import { UtilitiesService } from '../../shared/services/utilities.service';
 
 @Component({
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-	thisYear = new Date().getFullYear();
+	role: any;
+	thisYear = new Date().getFullYear().toString();
+	beginYear = 2019;
+	reportDate: string;
+	rejection = {
+		enabled: false,
+		year: this.thisYear
+	};
+
 	stages = [
 		{
 			key: "pending_exam",
@@ -53,27 +63,30 @@ export class DashboardComponent implements OnInit {
 		position: "ALL",
 		positions: []
 	};
-
-	rejection = {
-		enabled: false,
-		year: this.thisYear
+	filterTimeToFill = {
+		year: this.thisYear,
+		years: [],
+		department: "ALL",
+		departments: [],
+		position: "ALL",
+		positions: []
 	};
 
-	role: any;
 	enabledRecruitStatus: boolean;
 	enabledRejection: boolean;
+	enabledTimeToFill: boolean;
 	noData: boolean;
 
 	recruiteData: any;
 	rejectionData: any;
-
-	reportDate: string;
+	timeToFillData: any;
 
 	legendLabel: any;
 	legendPosition: any;
 	aspectRatio: any;
 
 	loading = true;
+	loadingTimeToFill = true;
 
 	// Color master
 	backgroundColor = [
@@ -123,9 +136,13 @@ export class DashboardComponent implements OnInit {
 	public barChart2Colors: Color[] = [
 		{ backgroundColor: this.backgroundColor }
 	];
+
+	timeToFill: ITimeToFill;
+
 	constructor(
 		private service: DashboardService,
-		public sanitizer: DomSanitizer
+		public sanitizer: DomSanitizer,
+		public utilitiesService: UtilitiesService,
 	) {
 		this.role = getRole();
 		this.enabledRecruitStatus = false;
@@ -145,7 +162,68 @@ export class DashboardComponent implements OnInit {
 		this.bubbleChartData = [];
 		this.barChartData = [];
 		this.barChart2Data = [];
+		this.timeToFill = this.initialTimeToFill();
+
 		this.getDashboard();
+	}
+
+	initialTimeToFill(): ITimeToFill {
+		return {
+			applications: {
+				name: 'Applications',
+				bgColor: '#F0B27A',
+				countPerson: 0,
+				countDays: 0,
+				avgDays: 0,
+				percent: 100,
+				data: [],
+			},
+			screened: {
+				name: 'Screened',
+				bgColor: '#D98880',
+				countPerson: 0,
+				countDays: 0,
+				avgDays: 0,
+				percent: 0,
+				data: [],
+			},
+			examPassed: {
+				name: 'Exam Passed',
+				bgColor: '#C39BD3',
+				countPerson: 0,
+				countDays: 0,
+				avgDays: 0,
+				percent: 0,
+				data: [],
+			},
+			interviewed: {
+				name: 'Interviewed',
+				bgColor: '#7FB3D5',
+				countPerson: 0,
+				countDays: 0,
+				avgDays: 0,
+				percent: 0,
+				data: [],
+			},
+			singedContract: {
+				name: 'Singed Contract',
+				bgColor: '#85C1E9',
+				countPerson: 0,
+				countDays: 0,
+				avgDays: 0,
+				percent: 0,
+				data: [],
+			},
+			jobStarted: {
+				name: 'Job Started',
+				bgColor: '#76D7C4',
+				countPerson: 0,
+				countDays: 0,
+				avgDays: 0,
+				percent: 0,
+				data: [],
+			},
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -171,6 +249,13 @@ export class DashboardComponent implements OnInit {
 					})) {
 						this.enabledRejection = true;
 					}
+					// Time to Fill
+					if (response.data.find(element => {
+						return element.active && element.refDashboard.code === 'DASHBOARD_04';
+					})) {
+						this.enabledTimeToFill = true;
+						this.getTimeToFill(this.thisYear);
+					}
 				}
 
 				if (this.enabledRecruitStatus || this.enabledRejection) {
@@ -194,7 +279,7 @@ export class DashboardComponent implements OnInit {
 
 	getDashboardSuccess(res: any) {
 		const that = this;
-		let thisYear = this.thisYear;
+		let thisYear = parseInt(this.thisYear);
 		if (this.enabledRecruitStatus) {
 			this.recruiteData = res.data;
 			this.setChartRecruitmentStatus();
@@ -651,7 +736,7 @@ export class DashboardComponent implements OnInit {
 	// Filter Rejection Report
 	// ------------------------------------------------------------------
 
-	onChangeFilterRejectionYear(value: number) {
+	onChangeFilterRejectionYear(value: any) {
 		this.filterRejection.years = [];
 		this.filterRejection.year = value;
 		this.filterRejection.departments = [];
@@ -687,23 +772,185 @@ export class DashboardComponent implements OnInit {
 	}
 
 	// ------------------------------------------------------------------
+	// Time to Fill
+	// ------------------------------------------------------------------
+
+	getTimeToFill(year: string) {
+		let thisYear = parseInt(this.thisYear);
+		this.timeToFillData = [];
+		this.filterTimeToFill.years = [];
+		this.filterTimeToFill.year = year;
+		this.filterTimeToFill.departments = [];
+		this.filterTimeToFill.department = 'ALL';
+		this.filterTimeToFill.positions = [];
+		this.filterTimeToFill.position = 'ALL';
+		this.loadingTimeToFill = true;
+		this.service.getLogList(year).subscribe(response => {
+			if (response.code === ResponseCode.Success) {
+				if (response.data) {
+					this.timeToFillData = response.data.filter(element => {
+						return element.refStage.order === 103 ||
+							element.refStage.order === 202 ||
+							element.refStage.order === 402 ||
+							element.refStage.order === 501 ||
+							element.refStage.order === 601;
+					});
+					while (thisYear >= this.beginYear) {
+						this.filterTimeToFill.years.push(thisYear.toString());
+						thisYear--;
+					}
+					this.timeToFillData.forEach(element => {
+						this.filterTimeToFill.departments.push(element.refJR.departmentName || element.refJR.departmentId);
+					});
+					this.timeToFillData.forEach(element => {
+						this.filterTimeToFill.positions.push(element.refJR.refJD.position || element.refJR.refJD);
+					});
+					this.filterTimeToFill.departments = this.removeDups(this.filterTimeToFill.departments);
+					this.filterTimeToFill.positions = this.removeDups(this.filterTimeToFill.positions);
+					this.setTimeToFill();
+				}
+			}
+			this.loadingTimeToFill = false;
+		});
+	}
+
+	setTimeToFill() {
+		this.timeToFill = this.initialTimeToFill();
+
+		let data = JSON.parse(JSON.stringify(this.timeToFillData));
+		if (this.filterTimeToFill.department && this.filterTimeToFill.department !== 'ALL') {
+			data = data.filter(element => {
+				return element.refJR.departmentName ?
+					element.refJR.departmentName === this.filterTimeToFill.department :
+					element.refJR.departmentId === this.filterTimeToFill.department;
+			});
+			this.filterTimeToFill.positions = [];
+			data.forEach(element => {
+				this.filterTimeToFill.positions.push(element.refJR.refJD.position || element.refJR.refJD);
+			});
+			this.filterTimeToFill.positions = this.removeDups(this.filterTimeToFill.positions);
+		}
+		if (this.filterTimeToFill.position && this.filterTimeToFill.position !== 'ALL') {
+			data = data.filter(element => {
+				return element.refJR.refJD.position ?
+					element.refJR.refJD.position === this.filterTimeToFill.position :
+					element.refJR.refJD === this.filterTimeToFill.position;
+			});
+		}
+
+		if (data && data.length) {
+
+			data.forEach(element => {
+				const days = this.getDiffDaysBetween2Date(element.refJR.duration.startDate, element.actionBy.date);
+
+				// Applications
+				this.timeToFill.applications.data.push(element);
+				this.timeToFill.applications.countPerson++;
+
+				switch (element.refStage.order) {
+					case 103: // Screened
+						this.timeToFill.screened.data.push(element);
+						this.timeToFill.screened.countPerson++;
+						this.timeToFill.screened.countDays += days;
+						break;
+
+					case 202: // Exam Passed
+						this.timeToFill.examPassed.data.push(element);
+						this.timeToFill.examPassed.countPerson++;
+						this.timeToFill.examPassed.countDays += days;
+						break;
+
+					case 402: // Interviewed
+						this.timeToFill.interviewed.data.push(element);
+						this.timeToFill.interviewed.countPerson++;
+						this.timeToFill.interviewed.countDays += days;
+						break;
+
+					case 501: // Singed Contract
+						this.timeToFill.singedContract.data.push(element);
+						this.timeToFill.singedContract.countPerson++;
+						this.timeToFill.singedContract.countDays += days;
+						break;
+
+					case 601: // Job Started
+						this.timeToFill.jobStarted.data.push(element);
+						this.timeToFill.jobStarted.countPerson++;
+						this.timeToFill.jobStarted.countDays += days;
+						break;
+				}
+			});
+			// Calculate Percentage
+			this.timeToFill.screened.percent = this.calPercentageBetween2Number(
+				this.timeToFill.screened.countPerson, this.timeToFill.applications.countPerson, 2
+			);
+			this.timeToFill.examPassed.percent = this.calPercentageBetween2Number(
+				this.timeToFill.examPassed.countPerson, this.timeToFill.applications.countPerson, 2
+			);
+			this.timeToFill.interviewed.percent = this.calPercentageBetween2Number(
+				this.timeToFill.interviewed.countPerson, this.timeToFill.applications.countPerson, 2
+			);
+			this.timeToFill.singedContract.percent = this.calPercentageBetween2Number(
+				this.timeToFill.singedContract.countPerson, this.timeToFill.applications.countPerson, 2
+			);
+			this.timeToFill.jobStarted.percent = this.calPercentageBetween2Number(
+				this.timeToFill.jobStarted.countPerson, this.timeToFill.applications.countPerson, 2
+			);
+
+			// Calculate Days
+			this.timeToFill.screened.avgDays = parseFloat(
+				(this.timeToFill.screened.countDays / this.timeToFill.screened.countPerson).toFixed(2)
+			) || 0;
+			this.timeToFill.examPassed.avgDays = parseFloat(
+				(this.timeToFill.examPassed.countDays / this.timeToFill.examPassed.countPerson).toFixed(2)
+			) || 0;
+			this.timeToFill.interviewed.avgDays = parseFloat(
+				(this.timeToFill.interviewed.countDays / this.timeToFill.interviewed.countPerson).toFixed(2)
+			) || 0;
+			this.timeToFill.singedContract.avgDays = parseFloat(
+				(this.timeToFill.singedContract.countDays / this.timeToFill.singedContract.countPerson).toFixed(2)
+			) || 0;
+			this.timeToFill.jobStarted.avgDays = parseFloat(
+				(this.timeToFill.jobStarted.countDays / this.timeToFill.jobStarted.countPerson).toFixed(2)
+			) || 0;
+		}
+	}
+
+	onChangeFilterTimeToFillYear(year: string) {
+		this.getTimeToFill(year);
+	}
+
+	onChangeFilterTimeToFillDepartment(value: string) {
+		this.filterTimeToFill.department = value;
+		this.filterTimeToFill.positions = [];
+		this.filterTimeToFill.position = "ALL";
+		this.setTimeToFill();
+	}
+
+	onChangeFilterTimeToFillPosition(value: string) {
+		this.filterStatus.position = value;
+		this.setTimeToFill();
+	}
+	
+	// ------------------------------------------------------------------
 	// Helper
 	// ------------------------------------------------------------------
 
 	getDiffDaysBetween2Date(date1: Date, date2: Date): number {
 		const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+		date1 = new Date(date1);
+		date2 = new Date(date2);
 		const firstDate = new Date(date1.getFullYear(), date1.getMonth() - 1, date1.getDate());
 		const secondDate = new Date(date2.getFullYear(), date2.getMonth() - 1, date2.getDate());
 
 		const diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
 		return diffDays;
 	}
-	calPercentageBetween2Number(num1: number, num2: number): number {
+	calPercentageBetween2Number(num1: number, num2: number, digit = 1): number {
 		let percent: number;
 		percent = 0;
 		if (num2 > 0) {
 			// percent = parseInt((num1 / num2 * 100).toFixed(1));
-			percent = parseFloat((num1 / num2 * 100).toFixed(1));
+			percent = parseFloat((num1 / num2 * 100).toFixed(digit));
 		}
 		return percent;
 	}
@@ -720,6 +967,7 @@ export class DashboardComponent implements OnInit {
 		// return this.backgroundColor[index];
 	}
 	convertDateReport(date: Date): string {
+		date = new Date()
 		const monthNames = ["January", "February", "March", "April", "May", "June",
 			"July", "August", "September", "October", "November", "December"
 		];

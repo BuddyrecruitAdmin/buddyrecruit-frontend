@@ -121,6 +121,6 @@ export const InputType = {
   Input: 'Input',
   TextArea: 'Text Area',
   Radio: 'Radio',
-  ChcekBox: 'Chcekbox',
+  ChcekBox: 'Checkbox',
   Dropdown: 'Dropdown',
 };

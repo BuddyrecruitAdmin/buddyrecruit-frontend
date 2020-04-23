@@ -182,7 +182,7 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
-    title: 'Evaluation',
+    title: 'Evaluation Form',
     link: '/employer/setting/evaluation',
     hidden: false,
   },
