@@ -65,7 +65,8 @@ export class PopupCommentComponent implements OnInit {
               message: element.message,
               accent: element.refUser._id === this.role._id ? 'success' : 'default',
               canDelete: element.refUser._id === this.role._id ? true : false,
-              fromTransfer: element.fromTransfer
+              fromTransfer: element.fromTransfer,
+              editFlag: false
             })
           });
         }
@@ -99,5 +100,26 @@ export class PopupCommentComponent implements OnInit {
         });
       }
     });
+  }
+
+  editComment(item: any) {
+    item.editFlag = true;
+    this.items.map(element => {
+      if (element._id !== item._id) {
+        element.editFlag = false;
+      }
+    })
+  }
+
+  edit(item: any) {
+    this.service.edit(item._id, item.message, this.flowId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        item.editFlag = false;
+      }
+    })
+  }
+
+  escEdit(item: any) {
+    item.editFlag = false;
   }
 }

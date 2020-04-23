@@ -29,6 +29,68 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group" [ngClass]="{ 'select-red': touchedDep,'select-disabled': preview }">
+                        <label class="text-black" for="name">Department <span style="color:red">*</span>
+                        </label>
+                        <mat-form-field [color]="primary" appearance="outline">
+                            <mat-select [(ngModel)]="departmentId" [disabled]="preview"
+                                (ngModelChange)="onChangeDepartment($event)">
+                                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                                    [array]="departMentAdmin" (filteredReturn)="filteredList2 =$event">
+                                </mat-select-filter>
+                                <mat-option *ngFor="let department of filteredList2" [value]="department.value">
+                                    {{department.label}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <small *ngIf="touchedDep || !departmentId" class="text-red">{{ sErrorDe }}</small>
+                    </div>
+                </div>
+                <div class="col-md-6" *ngIf="!preview && checkDivision">
+                    <div class="form-control-group">
+                        <label class="text-black" for="name">Division
+                        </label>
+                        <mat-form-field [color]="primary" appearance="outline">
+                            <mat-select [(ngModel)]="divisionId" [disabled]="divisionOptions.length <= 1 || preview">
+                                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                                    [array]="divisionOptions" (filteredReturn)="filteredList3 =$event">
+                                </mat-select-filter>
+                                <mat-option *ngFor="let option of filteredList3" [value]="option.value">
+                                    {{option.label}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div *ngIf="preview && divisionId" class="col-md-6">
+                    <div class="form-control-group">
+                        <label class="text-black" for="name">Division
+                        </label>
+                        <mat-form-field [color]="primary" appearance="outline">
+                            <mat-select [(ngModel)]="divisionId" [disabled]="divisionOptions.length <= 1 || preview">
+                                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                                    [array]="divisionOptions" (filteredReturn)="filteredList3 =$event">
+                                </mat-select-filter>
+                                <mat-option *ngFor="let option of filteredList3" [value]="option.value">
+                                    {{option.label}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div>
+                        <mat-checkbox class="label" [(ngModel)]="allowAll" [disabled]="preview"><span class="text-black"
+                                style="font-size: 15px;">Share
+                                exam all department</span>
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
         </nb-card-header>
         <nb-card-body *ngIf="!preview" style="word-break: break-word;">
             <nb-card *ngFor="let topic of topicOption;let i = index;">
@@ -236,8 +298,8 @@
                 </div>
             </div>
         </nb-card-body>
-        <nb-card-footer>
-            <div *ngIf="!preview">
+        <nb-card-footer *ngIf="!preview">
+            <div>
                 <button (click)="save()" nbPopoverPlacement="top" nbButton size="small">
                     Save
                 </button>

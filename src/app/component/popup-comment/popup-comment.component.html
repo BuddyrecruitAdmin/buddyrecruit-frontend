@@ -19,6 +19,8 @@
           <nb-user size="medium" [name]="item.name" [title]="item.title" [picture]="item.picture"></nb-user>
         </div>
         <div class="actions">
+          <nb-icon *ngIf="item.canDelete" icon="edit-outline" class="link" nbTooltip="Edit" (click)="editComment(item)">
+          </nb-icon>
           <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="link text-red" nbTooltip="Delete"
             (click)="delete(item)"></nb-icon>
         </div>
@@ -26,7 +28,13 @@
       <nb-card-body style="min-height: auto">
         <span *ngIf="item.fromTransfer.flag" class="label">Transfer from:
           {{ item.fromTransfer?.refJR?.refJD?.position }}</span><br>
-        <span style="word-wrap: break-word;">{{ item.message }}</span>
+        <span *ngIf="!item.editFlag" style="word-wrap: break-word;">{{ item.message }}</span>
+        <div *ngIf="item.editFlag" class="box-body text-center">
+          <textarea nbInput fullWidth [(ngModel)]="item.message" (keyup.enter)="edit(item)">
+          </textarea>
+        </div>
+        <small *ngIf="item.editFlag">กดเพื่อ<span style=" text-decoration: underline;cursor: pointer;"
+            (click)="escEdit(item)">ยกเลิก</span></small>
       </nb-card-body>
     </nb-card>
   </nb-card-body>

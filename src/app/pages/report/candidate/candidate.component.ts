@@ -11,7 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { DepartmentService } from '../../setting/department/department.service';
-
+import { ExcelService } from '../excel.service';
 @Component({
   selector: 'ngx-candidate',
   templateUrl: './candidate.component.html',
@@ -56,6 +56,7 @@ export class CandidateComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private dialogService: NbDialogService,
+    private excelService: ExcelService
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
@@ -308,6 +309,24 @@ export class CandidateComponent implements OnInit {
       this.filter.selected.department = [];
       this.search();
     }
+  }
+
+  exportAsXLSX(): void {
+    console.log(this.items)
+    let data = [];
+    this.items.forEach((item) => {
+      data.push({
+        "Candidate Name": this.utilitiesService.setFullname(item.refCandidate),
+        "Job Description": item.refJR.refJD.position,
+        "Job Status": item.refJR.refStatus.name,
+        "Stage": item.refStage.name,
+        "Sub Stage": item.refSubStage.name,
+        "Last changed update": this.utilitiesService.convertDateTimeFromSystem(item.actionDate),
+        "Rejected Reason": (item.reject.rejectBy.refReject) ? item.reject.rejectBy.refReject.name : "",
+        "Rejected By": this.utilitiesService.setFullname(item.reject.rejectBy.refUser)
+      })
+    })
+    this.excelService.exportAsExcelFile(data, 'sample');
   }
 
   removeDuplicates(myArr, prop) {

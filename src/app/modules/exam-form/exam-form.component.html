@@ -70,6 +70,11 @@
                     </div>
                 </div>
             </div>
+            <div class="row pull-right">
+                <small class="text-red-right">
+                    หมายเหตุ : เมื่อเวลาในการทำข้อสอบหมด ระบบจะทำการบันทึกคำตอบโดยอัตโนมัติ
+                </small>
+            </div>
         </nb-card-body>
         <nb-card-footer *ngIf="!actionView">
             <button nbButton size="small" status="success" (click)="save()">SEND</button>
@@ -140,9 +145,9 @@
         </div>
     </div>
     <!-- Expired Link -->
-    <div *ngIf="checkStart && isExpired" class="thankExam" [style.height.px]="innerHeight">
+    <div *ngIf="isExpired" class="thankExam" [style.height.px]="innerHeight">
         <div class="thankExam-wrapper">
-            <h2>The Link You Followed Has Expired</h2>
+            <h2>The link has expired.</h2>
         </div>
     </div>
 </div>

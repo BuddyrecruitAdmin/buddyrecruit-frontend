@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DashboardComponent } from './dashboard.component';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
-
+import { NgApexchartsModule } from "ng-apexcharts";
 import {
 	MatButtonModule,
 	MatButtonToggleModule,
@@ -50,7 +50,8 @@ const routes: Routes = [{
 		NbButtonModule,
 		NbIconModule,
 		NbInputModule,
-		NbSelectModule
+		NbSelectModule,
+		NgApexchartsModule
 	],
 	declarations: [DashboardComponent]
 })

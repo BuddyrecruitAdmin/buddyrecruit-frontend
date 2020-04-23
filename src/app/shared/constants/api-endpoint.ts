@@ -91,6 +91,7 @@ export const API_ENDPOINT = {
         LIST: "candidate/flow/comment/list",
         CREATE: "candidate/flow/comment/create",
         DELETE: "candidate/flow/comment/delete",
+        EDIT: "candidate/flow/comment/edit",
       },
       DETAIL: "candidate/flow/detail",
       EDIT: "candidate/flow/edit",
@@ -203,6 +204,7 @@ export const API_ENDPOINT = {
     DASHBOARD_EDIT: "dashboard/edit",
     DASHBOARD_DELETE: "dashboard/delete",
     DASHBOARD_DETAIL: "dashboard/detail",
+    DASHBOARD_SOURCE: "dashboard/source",
 
     EVALUATION_CREATE: "evaluation/create",
     EVALUATION_LIST: "evaluation/list",
@@ -224,7 +226,7 @@ export const API_ENDPOINT = {
     MAIL_TEMPLATE_DETAIL: "mailTemplate/detail",
     MAIL_ACTION_DETAIL: "mailAction/detail",
     MAIL_TEMPLATE_DELETE: "mailTemplate/delete",
-    
+
     APP_FORM: {
       CREATE: "appFormTemplate/create",
       LIST: "appFormTemplate/list",
