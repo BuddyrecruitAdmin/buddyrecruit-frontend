@@ -173,4 +173,22 @@
       </nb-accordion-item>
     </nb-accordion>
   </div>
+
+  <!-- Jobboard -->
+  <div *ngIf="enabledJobboard" class="form-group">
+    <nb-accordion>
+      <nb-accordion-item [expanded]="true">
+        <nb-accordion-item-header class="text-green">Jobboard Report</nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div *ngIf="!pieLabels || !pieOption" class="text-center">
+            No data found
+          </div>
+          <div id="chart">
+            <apx-chart [series]="pieChartOptions.series" [chart]="pieChartOptions.chart"
+              [labels]="pieChartOptions.labels" [responsive]="pieChartOptions.responsive"></apx-chart>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+    </nb-accordion>
+  </div>
 </div>

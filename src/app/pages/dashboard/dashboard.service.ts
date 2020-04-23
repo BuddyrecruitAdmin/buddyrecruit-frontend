@@ -16,10 +16,11 @@ export class DashboardService extends NetworkService {
     super('DashboardService', httpClient, errorHandler);
   }
 
-  getDashboard(recruitmentStatus: any, rejection: any): Observable<ApiResponse> {
+  getDashboard(recruitmentStatus: any, rejection: any, enabledJobboard: any): Observable<ApiResponse> {
     const body = {
       recruitmentStatus: recruitmentStatus,
       rejection: rejection,
+      enabledJobboard: enabledJobboard
     };
     return this.post(API_ENDPOINT.DASHBOARD.DASHBOARD, body);
   }

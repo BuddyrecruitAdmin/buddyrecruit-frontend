@@ -114,6 +114,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { ListComponent } from './consent/list/list.component';
 import { DetailComponent } from './consent/detail/detail.component';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 @NgModule({
   imports: [
@@ -206,7 +207,8 @@ import { DetailComponent } from './consent/detail/detail.component';
     NgbModalModule,
     DigitOnlyModule,
     ImageCropperModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    NgApexchartsModule
   ],
   declarations: [
     PagesComponent,

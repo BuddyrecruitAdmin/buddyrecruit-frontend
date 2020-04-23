@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
@@ -7,7 +7,20 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { DashboardService } from './dashboard.service';
 import { getRole } from '../../shared/services/auth.service';
 import { ResponseCode } from '../../shared/app.constants';
+import { ChartComponent } from "ng-apexcharts";
 
+import {
+	ApexNonAxisChartSeries,
+	ApexResponsive,
+	ApexChart
+} from "ng-apexcharts";
+
+export type PieChartOptions = {
+	series: ApexNonAxisChartSeries;
+	chart: ApexChart;
+	responsive: ApexResponsive[];
+	labels: any;
+};
 @Component({
 	templateUrl: './dashboard.component.html',
 	styleUrls: ['./dashboard.component.scss']
@@ -62,6 +75,7 @@ export class DashboardComponent implements OnInit {
 	role: any;
 	enabledRecruitStatus: boolean;
 	enabledRejection: boolean;
+	enabledJobboard: boolean;
 	noData: boolean;
 
 	recruiteData: any;
@@ -123,6 +137,11 @@ export class DashboardComponent implements OnInit {
 	public barChart2Colors: Color[] = [
 		{ backgroundColor: this.backgroundColor }
 	];
+	@ViewChild("chart", { static: true }) chart: ChartComponent;
+	public pieChartOptions: Partial<PieChartOptions>;
+	pieOption: any = [];
+	pieLabels: any = [];
+	jobData: any;
 	constructor(
 		private service: DashboardService,
 		public sanitizer: DomSanitizer
@@ -130,6 +149,7 @@ export class DashboardComponent implements OnInit {
 		this.role = getRole();
 		this.enabledRecruitStatus = false;
 		this.enabledRejection = false;
+		this.enabledJobboard = false;
 	}
 
 	ngOnInit() {
@@ -155,7 +175,6 @@ export class DashboardComponent implements OnInit {
 	getDashboard() {
 		this.loading = true;
 		this.noData = true;
-
 		this.service.getList(undefined, this.role.refCompany).subscribe(response => {
 			if (response.code === ResponseCode.Success) {
 				if (response.data && response.data.length) {
@@ -171,14 +190,20 @@ export class DashboardComponent implements OnInit {
 					})) {
 						this.enabledRejection = true;
 					}
+					// Jobboard Report
+					if (response.data.find(element => {
+						return element.active && element.refDashboard.code === 'DASHBOARD_03';
+					})) {
+						this.enabledJobboard = true;
+					}
 				}
 
-				if (this.enabledRecruitStatus || this.enabledRejection) {
+				if (this.enabledRecruitStatus || this.enabledRejection || this.enabledJobboard) {
 					this.rejection = {
 						enabled: this.enabledRejection,
 						year: this.thisYear
 					};
-					this.service.getDashboard(this.enabledRecruitStatus, this.rejection).subscribe(response => {
+					this.service.getDashboard(this.enabledRecruitStatus, this.rejection, this.enabledJobboard).subscribe(response => {
 						this.loading = false;
 						this.noData = false;
 						this.getDashboardSuccess(response);
@@ -227,6 +252,30 @@ export class DashboardComponent implements OnInit {
 			this.filterRejection.departments = this.removeDups(this.filterRejection.departments);
 			this.filterRejection.positions = this.removeDups(this.filterRejection.positions);
 			// this.loading = false;
+		}
+		if (this.enabledJobboard) {
+			this.pieLabels = Object.keys(res.data.jobboard);
+			this.pieOption = Object.values(res.data.jobboard);
+			this.pieChartOptions = {
+				series: this.pieOption,
+				chart: {
+					type: "donut"
+				},
+				labels: this.pieLabels,
+				responsive: [
+					{
+						breakpoint: 480,
+						options: {
+							chart: {
+								width: 200
+							},
+							legend: {
+								position: "bottom"
+							}
+						}
+					}
+				]
+			};
 		}
 
 	}
@@ -667,7 +716,7 @@ export class DashboardComponent implements OnInit {
 			year: this.filterRejection.year
 		};
 
-		this.service.getDashboard(this.enabledRecruitStatus, this.rejection)
+		this.service.getDashboard(this.enabledRecruitStatus, this.rejection, this.enabledJobboard)
 			.subscribe(
 				res => this.getDashboardSuccess(res),
 				err => this.getDashboardFailed(err)
