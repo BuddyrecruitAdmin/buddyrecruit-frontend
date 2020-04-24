@@ -256,7 +256,8 @@ export const API_ENDPOINT = {
     CREATE: "appForm/create",
   },
   DASHBOARD: {
-    DASHBOARD: "dashboard"
+    DASHBOARD: "dashboard",
+    TIME_TO_FILL: "flowLog/list",
   },
   REPORT: {
     ACTION: "report",

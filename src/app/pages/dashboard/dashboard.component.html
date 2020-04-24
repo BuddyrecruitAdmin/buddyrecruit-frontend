@@ -16,9 +16,9 @@
   <div *ngIf="enabledRecruitStatus" class="form-group">
     <nb-accordion>
       <nb-accordion-item [expanded]="true">
-        <nb-accordion-item-header class="text-green">
-          <span> Recruitment Status Report <small class="text-gray">
-              (Reporting Date: {{ reportDate }})</small> </span>
+        <nb-accordion-item-header>
+          <span class="text-green m-r-10">Recruitment Status Report</span>
+          <small class="text-gray">(Reporting Date: {{ reportDate }})</small>
         </nb-accordion-item-header>
         <nb-accordion-item-body>
           <div *ngIf="bubbleChartData.length > 0">
@@ -27,37 +27,37 @@
               <div class="col-md-4">
                 <div class="form-control-group">
                   <label class="label">Department</label>
-                  <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.department"
-                    (change)="onChangeFilterRecruiteDepartment($event.target.value)">
-                    <option value="ALL">All</option>
-                    <option *ngFor="let department of filterStatus.departments; let i = index" value="{{ department }}">
+                  <nb-select [(ngModel)]="filterStatus.department" fullWidth
+                    (selectedChange)="onChangeFilterRecruiteDepartment($event)">
+                    <nb-option value="ALL">All</nb-option>
+                    <nb-option *ngFor="let department of filterStatus.departments" value="{{ department }}">
                       {{ department }}
-                    </option>
-                  </select>
+                    </nb-option>
+                  </nb-select>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-control-group">
                   <label class="label">Position</label>
-                  <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.position"
-                    (change)="onChangeFilterRecruitePosition($event.target.value)">
-                    <option value="ALL">All</option>
-                    <option *ngFor="let position of filterStatus.positions; let i = index" value="{{ position }}">
+                  <nb-select [(ngModel)]="filterStatus.position" fullWidth
+                    (selectedChange)="onChangeFilterRecruitePosition($event)">
+                    <nb-option value="ALL">All</nb-option>
+                    <nb-option *ngFor="let position of filterStatus.positions" value="{{ position }}">
                       {{ position }}
-                    </option>
-                  </select>
+                    </nb-option>
+                  </nb-select>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-control-group">
                   <label class="label">Stage</label>
-                  <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterStatus.stage"
-                    (change)="onChangeFilterRecruiteStage($event.target.value)">
-                    <!-- <option value="ALL">All</option> -->
-                    <option *ngFor="let stage of filterStatus.stages; let i = index" value="{{ stage.key }}">
+                  <nb-select [(ngModel)]="filterStatus.stage" fullWidth
+                    (selectedChange)="onChangeFilterRecruiteStage($event)">
+                    <!-- <nb-option value="ALL">All</nb-option> -->
+                    <nb-option *ngFor="let stage of filterStatus.stages" value="{{ stage.key }}">
                       {{ stage.value }}
-                    </option>
-                  </select>
+                    </nb-option>
+                  </nb-select>
                 </div>
               </div>
             </div>
@@ -85,56 +85,56 @@
   <div *ngIf="enabledRejection" class="form-group">
     <nb-accordion>
       <nb-accordion-item [expanded]="true">
-        <nb-accordion-item-header class="text-green">Rejection Analysis Report</nb-accordion-item-header>
+        <nb-accordion-item-header>
+          <span class="text-green">Rejection Analysis Report</span>
+        </nb-accordion-item-header>
         <nb-accordion-item-body>
           <!-- Filter Rejection -->
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <label class="label">Year</label>
-                <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterRejection.year"
-                  (change)="onChangeFilterRejectionYear($event.target.value)">
-                  <option *ngFor="let year of filterRejection.years; let i = index" value="{{ year }}">{{ year }}
-                  </option>
-                </select>
+                <nb-select [(ngModel)]="filterRejection.year" fullWidth
+                  (selectedChange)="onChangeFilterRejectionYear($event)">
+                  <nb-option *ngFor="let year of filterRejection.years" value="{{ year }}">
+                    {{ year }}
+                  </nb-option>
+                </nb-select>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label class="label">Department</label>
-                <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterRejection.department"
-                  (change)="onChangeFilterRejectionDepartment($event.target.value)">
-                  <option value="ALL">All</option>
-                  <option *ngFor="let department of filterRejection.departments; let i = index"
-                    value="{{ department }}">
+                <nb-select [(ngModel)]="filterRejection.department" fullWidth
+                  (selectedChange)="onChangeFilterRejectionDepartment($event)">
+                  <nb-option value="ALL">All</nb-option>
+                  <nb-option *ngFor="let department of filterRejection.departments" value="{{ department }}">
                     {{ department }}
-                  </option>
-                </select>
+                  </nb-option>
+                </nb-select>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label class="label">Position</label>
-                <select class="form-control" tabindex="-1" aria-hidden="true" [(ngModel)]="filterRejection.position"
-                  (change)="onChangeFilterRejectionPosition($event.target.value)">
-                  <option value="ALL">All</option>
-                  <option *ngFor="let position of filterRejection.positions; let i = index" value="{{ position }}">
+                <nb-select [(ngModel)]="filterRejection.position" fullWidth
+                  (selectedChange)="onChangeFilterRejectionPosition($event)">
+                  <nb-option value="ALL">All</nb-option>
+                  <nb-option *ngFor="let position of filterRejection.positions" value="{{ position }}">
                     {{ position }}
-                  </option>
-                </select>
+                  </nb-option>
+                </nb-select>
               </div>
             </div>
           </div>
           <div class="row">
             <!-- Company Reject Reason -->
             <div class="col-md-6">
-              <nb-card>
-                <nb-card-header class="text-green">
-                  <div>
-                    <label> Reject by Company</label>
-                  </div>
-                </nb-card-header>
-                <nb-card-body>
+              <div class="card form-group">
+                <div class="card-header">
+                  <small>Reject by Company</small>
+                </div>
+                <div class="card-body">
                   <div *ngIf="barChartData.length === 0 || !barChartData" class="text-center">
                     No data found
                   </div>
@@ -145,16 +145,16 @@
                     </canvas>
                     <small>*Unit: (%)</small>
                   </div>
-                </nb-card-body>
-              </nb-card>
+                </div>
+              </div>
             </div>
             <!-- Candidate Reject Reason -->
             <div class="col-md-6">
-              <nb-card>
-                <nb-card-header class="text-green">
-                  <label>Reject by Candidate</label>
-                </nb-card-header>
-                <nb-card-body>
+              <div class="card form-group">
+                <div class="card-header">
+                  <small>Reject by Candidate</small>
+                </div>
+                <div class="card-body">
                   <div *ngIf="barChart2Data.length === 0 || !barChartData" class="text-center">
                     No data found
                   </div>
@@ -165,8 +165,8 @@
                     </canvas>
                     <small>*Unit: (%)</small>
                   </div>
-                </nb-card-body>
-              </nb-card>
+                </div>
+              </div>
             </div>
           </div>
         </nb-accordion-item-body>
@@ -177,8 +177,10 @@
   <!-- Jobboard -->
   <div *ngIf="enabledJobboard" class="form-group">
     <nb-accordion>
-      <nb-accordion-item [expanded]="true">
-        <nb-accordion-item-header class="text-green">Jobboard Report</nb-accordion-item-header>
+      <nb-accordion-item [expanded]="true">        
+        <nb-accordion-item-header>
+          <span class="text-green">Jobboard Report</span>
+        </nb-accordion-item-header>
         <nb-accordion-item-body>
           <div *ngIf="!pieLabels || !pieOption" class="text-center">
             No data found
@@ -191,4 +193,167 @@
       </nb-accordion-item>
     </nb-accordion>
   </div>
+
+  <!-- Time to Fill -->
+  <div *ngIf="enabledTimeToFill" class="form-group">
+    <nb-accordion [nbSpinner]="loadingTimeToFill" nbSpinnerStatus="success" nbSpinnerSize="large"
+      nbSpinnerMessage="Loading...">
+      <nb-accordion-item [expanded]="true">
+        <nb-accordion-item-header>
+          <span class="text-green">Average Time to Fill</span>
+        </nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div *ngIf="!loadingTimeToFill">
+            <!-- Filter -->
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label">Year</label>
+                  <nb-select [(ngModel)]="filterTimeToFill.year" fullWidth
+                    (selectedChange)="onChangeFilterTimeToFillYear($event)">
+                    <nb-option *ngFor="let year of filterTimeToFill.years" value="{{ year }}">
+                      {{ year }}
+                    </nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label">Department</label>
+                  <nb-select [(ngModel)]="filterTimeToFill.department" fullWidth
+                    (selectedChange)="onChangeFilterTimeToFillDepartment($event)">
+                    <nb-option value="ALL">All</nb-option>
+                    <nb-option *ngFor="let department of filterTimeToFill.departments" value="{{ department }}">
+                      {{ department }}
+                    </nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="label">Position</label>
+                  <nb-select [(ngModel)]="filterTimeToFill.position" fullWidth
+                    (selectedChange)="onChangeFilterTimeToFillPosition($event)">
+                    <nb-option value="ALL">All</nb-option>
+                    <nb-option *ngFor="let position of filterTimeToFill.positions" value="{{ position }}">
+                      {{ position }}
+                    </nb-option>
+                  </nb-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="m-t-15">
+              <div class="funnel" style="width: 100%;">
+                <div class="funnel-icon">
+                  <mat-icon>label</mat-icon>
+                </div>
+                <div class="funnel-percent">
+                  <label>{{ timeToFill.applications.percent }}%</label>
+                </div>
+                <div class="funnel-body" [style.background]="timeToFill.applications.bgColor">
+                  <label>{{ timeToFill.applications.name }}</label>
+                  <div class="funnel-detail">
+                    <mat-icon>people_alt</mat-icon>
+                    <span>{{ timeToFill.applications.countPerson }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="funnel" style="width: 95%;">
+                <div class="funnel-icon">
+                  <mat-icon>label</mat-icon>
+                </div>
+                <div class="funnel-percent">
+                  <label>{{ timeToFill.screened.percent }}%</label>
+                </div>
+                <div class="funnel-body" [style.background]="timeToFill.screened.bgColor">
+                  <label>{{ timeToFill.screened.name }}</label>
+                  <div class="funnel-detail">
+                    <mat-icon>people_alt</mat-icon>
+                    <span>{{ timeToFill.screened.countPerson }}</span>
+                    <span class="funnel-pipe">|</span>
+                    <mat-icon>timer</mat-icon>
+                    <span>{{ timeToFill.screened.avgDays }} <small>Days</small></span>
+                  </div>
+                </div>
+              </div>
+              <div class="funnel" style="width: 90%;">
+                <div class="funnel-icon">
+                  <mat-icon>label</mat-icon>
+                </div>
+                <div class="funnel-percent">
+                  <label>{{ timeToFill.examPassed.percent }}%</label>
+                </div>
+                <div class="funnel-body" [style.background]="timeToFill.examPassed.bgColor">
+                  <label>{{ timeToFill.examPassed.name }}</label>
+                  <div class="funnel-detail">
+                    <mat-icon>people_alt</mat-icon>
+                    <span>{{ timeToFill.examPassed.countPerson }}</span>
+                    <span class="funnel-pipe">|</span>
+                    <mat-icon>timer</mat-icon>
+                    <span>{{ timeToFill.examPassed.avgDays }} <small>Days</small></span>
+                  </div>
+                </div>
+              </div>
+              <div class="funnel" style="width: 85%;">
+                <div class="funnel-icon">
+                  <mat-icon>label</mat-icon>
+                </div>
+                <div class="funnel-percent">
+                  <label>{{ timeToFill.interviewed.percent }}%</label>
+                </div>
+                <div class="funnel-body" [style.background]="timeToFill.interviewed.bgColor">
+                  <label>{{ timeToFill.interviewed.name }}</label>
+                  <div class="funnel-detail">
+                    <mat-icon>people_alt</mat-icon>
+                    <span>{{ timeToFill.interviewed.countPerson }}</span>
+                    <span class="funnel-pipe">|</span>
+                    <mat-icon>timer</mat-icon>
+                    <span>{{ timeToFill.interviewed.avgDays }} <small>Days</small></span>
+                  </div>
+                </div>
+              </div>
+              <div class="funnel" style="width: 80%;">
+                <div class="funnel-icon">
+                  <mat-icon>label</mat-icon>
+                </div>
+                <div class="funnel-percent">
+                  <label>{{ timeToFill.singedContract.percent }}%</label>
+                </div>
+                <div class="funnel-body" [style.background]="timeToFill.singedContract.bgColor">
+                  <label>{{ timeToFill.singedContract.name }}</label>
+                  <div class="funnel-detail">
+                    <mat-icon>people_alt</mat-icon>
+                    <span>{{ timeToFill.singedContract.countPerson }}</span>
+                    <span class="funnel-pipe">|</span>
+                    <mat-icon>timer</mat-icon>
+                    <span>{{ timeToFill.singedContract.avgDays }} <small>Days</small></span>
+                  </div>
+                </div>
+              </div>
+              <div class="funnel" style="width: 75%;">
+                <div class="funnel-icon">
+                  <mat-icon>label</mat-icon>
+                </div>
+                <div class="funnel-percent">
+                  <label>{{ timeToFill.jobStarted.percent }}%</label>
+                </div>
+                <div class="funnel-body" [style.background]="timeToFill.jobStarted.bgColor">
+                  <label>{{ timeToFill.jobStarted.name }}</label>
+                  <div class="funnel-detail">
+                    <mat-icon>people_alt</mat-icon>
+                    <span>{{ timeToFill.jobStarted.countPerson }}</span>
+                    <span class="funnel-pipe">|</span>
+                    <mat-icon>timer</mat-icon>
+                    <span>{{ timeToFill.jobStarted.avgDays }} <small>Days</small></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+    </nb-accordion>
+  </div>
+
 </div>

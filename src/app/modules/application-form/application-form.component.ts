@@ -361,6 +361,12 @@ export class ApplicationFormComponent implements OnInit {
           this.service.create(request).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.submitted = true;
+            } else if (response.code === ResponseCode.Duplicate) {
+              let message = 'You have applied for this job position.';
+              if (this.language === 'th') {
+                message = 'คุณได้สมัครตำแหน่งงานนี้ไปแล้ว';
+              }
+              this.showToast('danger', message);
             } else {
               this.showToast('danger', response.message || 'Error!', '');
             }

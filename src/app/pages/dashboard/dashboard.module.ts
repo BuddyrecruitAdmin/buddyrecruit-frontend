@@ -11,7 +11,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import {
 	MatButtonModule,
 	MatButtonToggleModule,
-	MatProgressSpinnerModule
+	MatProgressSpinnerModule,
+	MatIconModule
 } from '@angular/material';
 import {
 	NbSpinnerModule,
@@ -43,6 +44,7 @@ const routes: Routes = [{
 		MatButtonToggleModule,
 		NbSpinnerModule,
 		MatProgressSpinnerModule,
+		MatIconModule,
 		NbCardModule,
 		NbAccordionModule,
 		NbButtonModule,

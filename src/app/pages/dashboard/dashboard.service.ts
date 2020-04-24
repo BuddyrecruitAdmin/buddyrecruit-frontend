@@ -35,4 +35,10 @@ export class DashboardService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.DASHBOARD_LIST, body);
   }
 
+  getLogList(year): Observable<ApiResponse> {
+    const body = {
+      year: year
+    }
+    return this.post(API_ENDPOINT.DASHBOARD.TIME_TO_FILL, body);
+  }
 }

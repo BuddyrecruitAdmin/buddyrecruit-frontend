@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -11,7 +12,6 @@ import { AppFormService } from '../app-form.service';
 import { getRole, getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
-
 @Component({
   selector: 'ngx-app-form-list',
   templateUrl: './app-form-list.component.html',
@@ -30,6 +30,7 @@ export class AppFormListComponent implements OnInit {
   role: any;
 
   constructor(
+    private router: Router,
     private service: AppFormService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
@@ -77,6 +78,11 @@ export class AppFormListComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  preview(item: any) {
+    const url = `/application-form/preview/${item._id}`;
+    this.router.navigate([]).then(result => { window.open(url, '_blank'); });
   }
 
   copyToClipboard(item: any) {
