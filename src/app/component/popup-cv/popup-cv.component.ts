@@ -61,6 +61,8 @@ export class PopupCvComponent implements OnInit {
     emailBug: boolean;
     addressSuccess: boolean,
     addressBug: boolean;
+    salarySuccess: boolean;
+    salaryBug: boolean;
     cvSuccess: boolean,
     cvBug: boolean;
     workSuccess: boolean,
@@ -142,6 +144,8 @@ export class PopupCvComponent implements OnInit {
       emailBug: false,
       addressSuccess: false,
       addressBug: false,
+      salarySuccess: false,
+      salaryBug: false,
       cvSuccess: false,
       cvBug: false,
       workSuccess: false,
@@ -518,6 +522,12 @@ export class PopupCvComponent implements OnInit {
               this.colorStatus.addressBug = false;
             };
             break;
+          case "salary":
+            this.colorStatus.salarySuccess = true;
+            if (this.colorStatus.salaryBug === true) {
+              this.colorStatus.salaryBug = false;
+            };
+            break;
           case "CV Score":
             this.colorStatus.cvSuccess = true;
             if (this.colorStatus.cvBug === true) {
@@ -599,6 +609,12 @@ export class PopupCvComponent implements OnInit {
             this.colorStatus.addressBug = true;
             if (this.colorStatus.addressSuccess === true) {
               this.colorStatus.addressSuccess = false;
+            }
+            break;
+          case "salary":
+            this.colorStatus.salaryBug = true;
+            if (this.colorStatus.salarySuccess === true) {
+              this.colorStatus.salarySuccess = false;
             }
             break;
           case "CV Score":

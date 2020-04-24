@@ -68,6 +68,10 @@
               <span>{{ item.address || '-' }}</span>
             </div>
           </div>
+          <div *ngIf="role.refAuthorize.showSalary" class="text-group">
+            <label class="label">Expected Salary</label>
+            <span>{{ item.expectedSalary || '-' }}</span>
+          </div>
         </div>
 
         <!-- Work Experience -->
