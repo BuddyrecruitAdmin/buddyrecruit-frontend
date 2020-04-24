@@ -233,6 +233,13 @@
               <nb-radio [value]="false">No</nb-radio>
             </nb-radio-group>
           </div>
+          <div class="form-control-group">
+            <label class="label">Enable Consent</label>
+            <nb-radio-group [(ngModel)]="companyDetail.consentFlag" name="consent" class="inline">
+              <nb-radio [value]="true">Yes</nb-radio>
+              <nb-radio [value]="false">No</nb-radio>
+            </nb-radio-group>
+          </div>
           <div *ngIf="companyDetail.lineInfo.active">
             <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.lineInfo }">
               <label class="label">Line ID. *</label>

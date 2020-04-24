@@ -237,6 +237,7 @@ export class ExamFormComponent implements OnInit {
         this.showToast('danger', 'Error Message', 'file size more than 10 mb');
       } else {
         option.src = img.src;
+        option.name = files[0].name;
         this.fileText = "upload success!"
       }
     };

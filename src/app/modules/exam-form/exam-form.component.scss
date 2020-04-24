@@ -66,3 +66,34 @@ img{
     line-height: 5rem;
     }
   }
+  .box-dashed {
+    padding: 1rem;
+    border-radius: 5px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: var(--color-light-gray);
+  }
+  .upload-file {
+    text-align: center;
+    margin-top: 20px;
+  
+    .file-preview {
+      color: gray;
+  
+      .mat-icon {
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+      .delete {
+        margin-left: 10px;
+        font-size: 1rem;
+        vertical-align: middle;
+        width: auto;
+        height: auto;
+        cursor: pointer;
+      }
+      span {
+        vertical-align: middle;
+      }
+    }
+  }

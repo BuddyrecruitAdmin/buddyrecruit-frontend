@@ -61,9 +61,12 @@ export class PagesComponent {
           || (menu.pendingInterview && menu.pendingInterview.active)
           || (menu.pendingSignContract && menu.pendingSignContract.active)
           || (menu.onboard && menu.onboard.active)
+          || role.refCompany.consentFlag
         ) {
           this.menu.push(MENU.MENU_PROCESS_FLOW[0]);
-          this.menu.push(MENU.MENU_PROCESS_FLOW[7]);
+          if (role.refCompany.consentFlag) {
+            this.menu.push(MENU.MENU_PROCESS_FLOW[7]);// consent list
+          }
           if (menu.talentPool && menu.talentPool.active) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[1]);
           }

@@ -20,10 +20,11 @@
                 </div>
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
-                        <label class="text-black">ระยะเวลาในการสอบ <span *ngIf="preview && duration">{{ duration.hour }}
+                        <label class="text-black">ระยะเวลาในการสอบ <span
+                                *ngIf="preview && duration">{{ duration.hour || '' }}
                                 :
-                                {{ duration.minute }} <span *ngIf="preview && !duration">
-                                    ไม่จำกัดเวลา</span></span></label>
+                                {{ duration.minute || '' }} </span><span *ngIf="preview && !duration">
+                                ไม่จำกัดเวลา</span></label>
                         <ngb-timepicker *ngIf="!preview" [(ngModel)]="duration" [spinners]="false">
                         </ngb-timepicker>
                     </div>
@@ -180,13 +181,12 @@
                                             </small>
                                         </div>
                                     </div>
-                                    <div *ngIf="option.type === 'getFile'" style="text-align: center">
+                                    <div *ngIf="option.type === 'getFile'" class="upload-file box-dashed"
+                                        style="text-align: center">
                                         <small class="text-gray">
-                                            <a style="cursor: pointer;" (click)="fileInput.click()">
+                                            <a (click)="fileInput.click()">
                                                 <span class="fa fa-images"></span>
-                                                <input #fileInput type="file"
-                                                    (change)="fileChangeEvent(option,$event.target.files)"
-                                                    style="display:none;" accept="image/*" />
+                                                <input style="display:none;" accept="image/*" />
                                                 <span class="m-l-5">Upload Your Picture</span>
                                             </a>
                                         </small>
@@ -281,17 +281,19 @@
                                     <br>
                                 </div>
                             </div>
-                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
+                            <div *ngIf="option.type === 'getFile'" class="upload-file box-dashed"
+                                style="text-align: center">
+                                <p><small *ngIf="option.name">{{ option.name }}</small></p>
                                 <small class="text-gray">
-                                    <a style="cursor: pointer;" (click)="fileInput.click()">
+                                    <a (click)="fileInput.click()">
                                         <span class="fa fa-images"></span>
-                                        <input #fileInput type="file"
-                                            (change)="fileChangeEvent(option,$event.target.files)" style="display:none;"
-                                            accept="image/*" />
+                                        <input style="display:none;" accept="image/*" />
                                         <span class="m-l-5">Upload Your File</span>
                                     </a>
                                     <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
                                 </small>
+                                <p><small>Attach file (pdf, doc, docx, jpeg, png -
+                                        Max 10 MB</small></p>
                             </div>
                         </div>
                     </div>

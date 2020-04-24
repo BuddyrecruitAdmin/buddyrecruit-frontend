@@ -48,8 +48,10 @@
                                     <br>
                                 </div>
                             </div>
-                            <div *ngIf="option.type === 'getFile'" style="text-align: center">
+                            <div *ngIf="option.type === 'getFile'" class="upload-file box-dashed"
+                                style="text-align: center">
                                 <div *ngIf="!actionView">
+                                    <p><small *ngIf="option.name">{{ option.name }}</small></p>
                                     <small class="text-gray">
                                         <a style="cursor: pointer;" (click)="fileInput.click()">
                                             <span class="fa fa-images"></span>
@@ -60,6 +62,8 @@
                                         </a>
                                         <span *ngIf="fileText" class="m-l-5"> {{ fileText }} </span>
                                     </small>
+                                    <p><small>Attach file (pdf, doc, docx, jpeg, png -
+                                            Max 10 MB</small></p>
                                 </div>
                                 <div *ngIf="actionView">
                                     <img class="img-default" (click)="open(content,option.src)"
@@ -70,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row pull-right">
+            <div *ngIf="!actionView" class="row pull-right">
                 <small class="text-red-right">
                     หมายเหตุ : เมื่อเวลาในการทำข้อสอบหมด ระบบจะทำการบันทึกคำตอบโดยอัตโนมัติ
                 </small>

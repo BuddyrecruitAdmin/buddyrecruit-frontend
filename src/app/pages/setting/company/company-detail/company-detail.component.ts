@@ -55,6 +55,7 @@ export interface CompanyDetail {
     imageUrl: string;
   },
   waitingPeriod: number;
+  consentFlag: boolean;
 }
 
 export interface ErrMsg {
@@ -81,6 +82,7 @@ export interface ErrMsg {
   incomingEmailUser: string;
   incomingEmailPass: string;
   lineInfo: string;
+  consentFlag: string;
 }
 
 @Component({
@@ -217,8 +219,10 @@ export class CompanyDetailComponent implements OnInit {
         lineId: '',
         imageUrl: '',
       },
-      waitingPeriod: 0
+      waitingPeriod: 0,
+      consentFlag: false
     }
+
   }
 
   initialAddress(): Address {
@@ -255,6 +259,7 @@ export class CompanyDetailComponent implements OnInit {
       province: '',
       postalCode: '',
       lineInfo: '',
+      consentFlag: ''
     }
   }
 
