@@ -112,6 +112,11 @@
                   </div>
                 </div>
                 <div class="col-md-6">
+                  <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
+                    <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
+                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
+                    </span>
+                  </div>
                   <label class="label text-light-gray m-r-5">Interview Date</label>
                   <nb-icon *ngIf="item.condition.icon.interviewDate" icon="edit-2-outline" class="link"
                     nbTooltip="Edit Interview Date" (click)="openPopupInterviewDate(item)"></nb-icon>
@@ -355,4 +360,33 @@
               itemSelected.weightScore?.certificate?.total)" status="danger" size="tiny">
     </nb-progress-bar>
   </div>
+</ng-template>
+
+<!-- dialogPopup List -->
+<ng-template #dialogExam let-data let-ref="dialogRef">
+  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+    <nb-card-body>
+      <div class="row">
+        <div *ngFor="let list of listExamDialog ;let i = index;" class="col-md-12 col-lg-12">
+          <label *ngIf="list.done" class="link" (click)="showExamCand(list.refExam._id,list.fromTransfer)">
+            {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
+          </label>
+          <label *ngIf="!list.done">
+            {{ i+1 }}. {{ list.refExam.name }}
+            <span>
+              <img *ngIf="list.fromTransfer" src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15"
+                height="15">
+            </span>
+          </label>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
 </ng-template>

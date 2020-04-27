@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setFlagExam, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -16,7 +16,7 @@ import { PopupInterviewDateComponent } from '../../../component/popup-interview-
 import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from '../../../shared/constants/message';
 import { CandidateService } from '../../candidate/candidate.service';
@@ -54,6 +54,9 @@ export class AppointmentDetailComponent implements OnInit {
   showTips: boolean;
   sourceBy: any;
   soList: any;
+  examUserId: any;
+  listExamDialog: any;
+  dialogRef: NbDialogRef<any>;
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -440,6 +443,23 @@ export class AppointmentDetailComponent implements OnInit {
         this.search();
       }
     });
+  }
+
+  checkExam(dialog: TemplateRef<any>, item, _id) {
+    this.examUserId = _id;
+    this.listExamDialog = item;
+    this.callDialog(dialog);
+  }
+
+  showExamCand(examId, flag) {
+    this.dialogRef.close();
+    setFlagExam(flag)
+    const path = '/exam-form/view/' + examId + '/' + this.examUserId;
+    this.router.navigate([path]);
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
   changePaging(event) {

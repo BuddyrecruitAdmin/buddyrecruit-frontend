@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setFlagExam, setUserCandidate, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -59,6 +59,8 @@ export class InterviewDetailComponent implements OnInit {
   showTips: boolean;
   sourceBy: any;
   soList: any;
+  examUserId: any;
+  listExamDialog: any;
   constructor(
     private router: Router,
     private service: InterviewService,
@@ -587,6 +589,23 @@ export class InterviewDetailComponent implements OnInit {
         this.search();
       }
     });
+  }
+
+  checkExam(dialog: TemplateRef<any>, item, _id) {
+    this.examUserId = _id;
+    this.listExamDialog = item;
+    this.callDialog(dialog);
+  }
+
+  showExamCand(examId, flag) {
+    this.dialogRef.close();
+    setFlagExam(flag)
+    const path = '/exam-form/view/' + examId + '/' + this.examUserId;
+    this.router.navigate([path]);
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
   changePaging(event) {
