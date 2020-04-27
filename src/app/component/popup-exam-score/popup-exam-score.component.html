@@ -15,7 +15,7 @@
     <div class="form-control-group" [ngClass]="{ 'has-error': touchedExam }">
       <label class="label">Exam Score </label>
       <input type="number" [(ngModel)]="examScore" nbInput placeholder="0">
-      <small *ngIf="touchedExam" class="text-red">{{ sErrorOn }}</small>
+      <small *ngIf="touchedExam" class="text-red">{{ errorExam }}</small>
     </div>
     <div class="form-control-group">
       <label class="label">Exam Remark</label>
@@ -24,7 +24,7 @@
     <div *ngIf="attitudeFlag" [ngClass]="{ 'has-error': touchedAtt }" class="form-control-group">
       <label class="label">Attitude Score </label>
       <input type="number" [(ngModel)]="attitudeScore" nbInput placeholder="0">
-      <small *ngIf="touchedAtt" class="text-red">{{ sErrorOn }}</small>
+      <small *ngIf="touchedAtt" class="text-red">{{ errorAtt }}</small>
     </div>
     <div *ngIf="attitudeFlag" class="form-control-group m-0">
       <label class="label">Attitude Remark</label>
