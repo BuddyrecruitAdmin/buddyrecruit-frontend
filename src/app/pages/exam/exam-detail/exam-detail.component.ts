@@ -491,7 +491,7 @@ export class ExamDetailComponent implements OnInit {
   checkExam(dialog: TemplateRef<any>, item, _id) {
     this.examUserId = _id;
     this.listExamDialog = item;
-    this.callDialog(dialog)
+    this.callDialog(dialog);
   }
 
   showExamCand(examId, flag) {
