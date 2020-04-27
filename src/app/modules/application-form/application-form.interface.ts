@@ -54,8 +54,8 @@ export interface IEducation {
 }
 
 export interface IAttachment {
-  src: string;
-  name: string;
+  uploadName: string;
+  originalName: string;
   type: string;
   size: number;
 }

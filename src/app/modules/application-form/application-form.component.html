@@ -471,6 +471,7 @@
 
       <!-- Resume -->
       <div class="card" *ngIf="template.uploadCV.active">
+        <mat-progress-bar *ngIf="loadingUpload" mode="indeterminate"></mat-progress-bar>
         <div class="card-body">
           <div class="topic">
             <mat-icon>account_box</mat-icon>
@@ -480,19 +481,20 @@
           <div class="upload-file box-dashed">
             <p class="file-preview">
               <mat-icon>insert_drive_file</mat-icon>
-              <span *ngIf="!appForm.attachment.name">{{ 'NO_FILE' | translate }}</span>
-              <span *ngIf="appForm.attachment.name">{{ appForm.attachment.name }}</span>
-              <mat-icon *ngIf="appForm.attachment.name" class="delete"
-                (click)="appForm.attachment = initialAttahment(); fileInput.value = ''">
+              <span *ngIf="!appForm.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
+              <span *ngIf="appForm.attachment.originalName">{{ appForm.attachment.originalName }}</span>
+              <mat-icon *ngIf="appForm.attachment.originalName" class="delete"
+                (click)="clearFile(appForm.attachment); fileInput.value = ''">
                 cancel
               </mat-icon>
             </p>
             <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -
                 {{ 'MAX_UPLOAD' | translate }})</small></p>
-            <button mat-flat-button type="button" color="primary" (click)="fileInput.click()">
+            <button mat-flat-button type="button" color="primary" (click)="fileInput.click()"
+              [disabled]="loadingUpload">
               <mat-icon>cloud_upload</mat-icon> {{ 'UPLOAD_RESUME' | translate }}
-              <input #fileInput type="file" (change)="uploadFile(appForm.attachment, $event.target.files)" accept="*"
-                style="display:none;" />
+              <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+                (change)="uploadFile(appForm.attachment, $event.target.files)" accept="*" style="display:none;" />
             </button>
           </div>
         </div>
