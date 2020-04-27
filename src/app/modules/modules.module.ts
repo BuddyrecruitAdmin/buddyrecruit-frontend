@@ -87,6 +87,7 @@ import {
   NgbDropdownModule,
   NgbButtonsModule
 } from '@ng-bootstrap/ng-bootstrap';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
@@ -180,7 +181,8 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     NgbCollapseModule,
     NgbDropdownModule,
     NgbButtonsModule,
-    CountdownTimerModule.forRoot()
+    CountdownTimerModule.forRoot(),
+    FileUploadModule
   ],
   declarations: [
     ModulesComponent,

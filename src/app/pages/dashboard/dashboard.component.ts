@@ -871,11 +871,6 @@ export class DashboardComponent implements OnInit {
 					element.refJR.departmentName === this.filterTimeToFill.department :
 					element.refJR.departmentId === this.filterTimeToFill.department;
 			});
-			this.filterTimeToFill.positions = [];
-			data.forEach(element => {
-				this.filterTimeToFill.positions.push(element.refJR.refJD.position || element.refJR.refJD);
-			});
-			this.filterTimeToFill.positions = this.removeDups(this.filterTimeToFill.positions);
 		}
 		if (this.filterTimeToFill.position && this.filterTimeToFill.position !== 'ALL') {
 			data = data.filter(element => {
@@ -886,6 +881,11 @@ export class DashboardComponent implements OnInit {
 		}
 
 		if (data && data.length) {
+			this.filterTimeToFill.positions = [];
+			data.forEach(element => {
+				this.filterTimeToFill.positions.push(element.refJR.refJD.position || element.refJR.refJD);
+			});
+			this.filterTimeToFill.positions = this.removeDups(this.filterTimeToFill.positions);
 
 			data.forEach(element => {
 				const days = this.getDiffDaysBetween2Date(element.refJR.duration.startDate, element.actionBy.date);

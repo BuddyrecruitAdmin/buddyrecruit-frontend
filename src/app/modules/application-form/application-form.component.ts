@@ -14,6 +14,11 @@ import { PopupMessageComponent } from '../../component/popup-message/popup-messa
 import { MatDialog } from '@angular/material';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 
+import { API_ENDPOINT } from '../../shared/constants';
+import { environment } from '../../../environments/environment';
+import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
+const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_UPLOAD;
+
 @Component({
   selector: 'ngx-application-form',
   templateUrl: './application-form.component.html',
@@ -50,8 +55,11 @@ export class ApplicationFormComponent implements OnInit {
   };
 
   loading = true;
+  loadingUpload = false;
   submitted = false;
   isPreview = false;
+
+  uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -187,8 +195,8 @@ export class ApplicationFormComponent implements OnInit {
 
   initialAttahment(): IAttachment {
     return {
-      src: '',
-      name: '',
+      uploadName: '',
+      originalName: '',
       type: '',
       size: 0,
     };
@@ -204,6 +212,14 @@ export class ApplicationFormComponent implements OnInit {
           this.appForm.questions = this.template.questions;
         }
         this.getJR(this.template.refCompany);
+        this.uploader = new FileUploader({
+          url: URL,
+          itemAlias: 'data',
+          headers: [{
+            name: 'refCompany',
+            value: this.appForm.refCompany
+          }],
+        });
       } else {
         this.onError();
       }
@@ -470,28 +486,48 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   uploadFile(target, files: FileList): void {
-    let reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-    reader.onload = (e) => {
-      let imgage = new Image;
-      const chImg = reader.result;
-      imgage.src = chImg.toString();
-      imgage.onload = (ee) => {
-      };
-      const FileSize = files[0].size / 1024 / 1024; // MB
-      if (FileSize > 10) {
-        this.showToast('danger', 'File size more than 10MB');
-      } else {
-        target.src = imgage.src;
-        target.name = files[0].name;
-        target.type = files[0].type;
-        target.size = files[0].size;
+    const FileSize = files[0].size / 1024 / 1024; // MB
+    if (FileSize > 10) {
+      this.showToast('danger', 'File size more than 10MB');
+      target.uploadName = '';
+      target.originalName = '';
+      target.type = '';
+      target.size = 0;
+    } else {
+      const queue = this.uploader.queue.find(element => {
+        return element.file.name === files[0].name
+          && element.file.type === files[0].type
+          && element.file.size === files[0].size;
+      });
+      if (queue) {
+        this.loadingUpload = true;
+        this.uploader.uploadItem(queue);
+        this.uploader.onSuccessItem = (item, response, status, headers) => {
+          const responseData = JSON.parse(response);
+          target.uploadName = responseData.uploadName;
+          target.originalName = files[0].name;
+          target.type = files[0].type;
+          target.size = files[0].size;
+          this.loadingUpload = false;
+        };
       }
-    };
+    }
   }
 
   clearFile(target): void {
-    target = this.initialAttahment();
+    const queue = this.uploader.queue.find(element => {
+      return element.file.name === target.originalName
+        && element.file.type === target.type
+        && element.file.size === target.size;
+    });
+    if (queue) {
+      this.uploader.cancelItem(queue);
+      this.uploader.removeFromQueue(queue);
+    }
+    target.uploadName = '';
+    target.originalName = '';
+    target.type = '';
+    target.size = 0;
   }
 
   showToast(type: NbComponentStatus, title: string, body: string = '') {
