@@ -212,11 +212,11 @@
                 <label class="label">Exam Remark</label>
                 <span>{{ item.candidateFlow?.pendingExamScoreInfo?.examRemark || '-' }}</span>
               </div>
-              <div class="text-group">
+              <div *ngIf="item.candidateFlow.refJR.requiredAttitude" class="text-group">
                 <label class="label">Attitude Score</label>
                 <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
               </div>
-              <div class="text-group">
+              <div *ngIf="item.candidateFlow.refJR.requiredAttitude" class="text-group">
                 <label class="label">Attitude Remark</label>
                 <span>{{ item.candidateFlow?.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
               </div>

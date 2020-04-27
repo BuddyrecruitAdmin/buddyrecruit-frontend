@@ -12,19 +12,21 @@
     </div>
   </nb-card-header>
   <nb-card-body class="dialog-body">
-    <div class="form-control-group">
+    <div class="form-control-group" [ngClass]="{ 'has-error': touchedExam }">
       <label class="label">Exam Score </label>
       <input type="number" [(ngModel)]="examScore" nbInput placeholder="0">
+      <small *ngIf="touchedExam" class="text-red">{{ sErrorOn }}</small>
     </div>
     <div class="form-control-group">
       <label class="label">Exam Remark</label>
       <textarea [(ngModel)]="examRemark" nbInput fullWidth rows="2" placeholder="Remark"></textarea>
     </div>
-    <div class="form-control-group">
+    <div *ngIf="attitudeFlag" [ngClass]="{ 'has-error': touchedAtt }" class="form-control-group">
       <label class="label">Attitude Score </label>
       <input type="number" [(ngModel)]="attitudeScore" nbInput placeholder="0">
+      <small *ngIf="touchedAtt" class="text-red">{{ sErrorOn }}</small>
     </div>
-    <div class="form-control-group m-0">
+    <div *ngIf="attitudeFlag" class="form-control-group m-0">
       <label class="label">Attitude Remark</label>
       <textarea [(ngModel)]="attitudeRemark" nbInput fullWidth rows="2" placeholder="Remark"></textarea>
     </div>

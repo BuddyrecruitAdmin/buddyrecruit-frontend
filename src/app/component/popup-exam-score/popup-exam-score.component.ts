@@ -32,6 +32,11 @@ export class PopupExamScoreComponent implements OnInit {
   loading: boolean;
   result: boolean = false;
   devices: Devices;
+  attitudeFlag: boolean;
+  touchedExam: boolean;
+  touchedAtt: boolean;
+  errorExam: string;
+  errorAtt: string;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupExamScoreComponent>,
@@ -55,7 +60,8 @@ export class PopupExamScoreComponent implements OnInit {
     this.jrName = '';
     this.examScore = null;
     this.examRemark = '';
-    this.attitudeScore = null;
+    // this.attitudeScore = null;
+    this.attitudeFlag = false;
     this.attitudeRemark = '';
     if (this.flowId) {
       this.getDetail();
@@ -76,36 +82,58 @@ export class PopupExamScoreComponent implements OnInit {
         this.examRemark = response.data.candidateFlow.pendingExamScoreInfo.examRemark;
         this.attitudeScore = response.data.candidateFlow.pendingExamScoreInfo.attitudeScore;
         this.attitudeRemark = response.data.candidateFlow.pendingExamScoreInfo.attitudeRemark;
+        this.attitudeFlag = response.data.candidateFlow.refJR.requiredAttitude;
       }
       this.loading = false;
     });
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-      this.ref.close(true);
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+        this.ref.close(true);
+      });
+    }
   }
 
   passToAppointment() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.previewEmail();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-        this.ref.close();
-      }
-    });
+    if (this.validation()) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.previewEmail();
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+          this.ref.close();
+        }
+      });
+    }
+  }
+
+  validation(): boolean {
+    let isValid = true;
+    this.touchedAtt = false;
+    this.touchedExam = false;
+    if (!this.examScore) {
+      this.touchedExam = true;
+      isValid = false;
+      this.errorExam = "please enter exam score";
+    }
+    if (!this.attitudeScore) {
+      this.touchedAtt = true;
+      isValid = false;
+      this.errorAtt = "please enter attitude score";
+    }
+    return isValid;
   }
 
   previewEmail() {
