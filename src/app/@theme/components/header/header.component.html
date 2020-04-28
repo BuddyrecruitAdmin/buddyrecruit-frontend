@@ -39,7 +39,7 @@
           <div *ngFor="let notification of notifications; let i = index;" class="notification-body"
             [ngClass]="{ 'read' : notification.hidden, 'unread' : !notification.hidden}"
             (click)="onClickNotification(i)">
-            <nb-user size="medium" [name]="notification.name" [title]="notification.title" [picture]="user?.picture">
+            <nb-user size="medium" [name]="notification.name" [title]="notification.title" [picture]="notification?.picture">
             </nb-user>
           </div>
         </nb-card-body>

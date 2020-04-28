@@ -176,7 +176,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 name: element.title,
                 title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
                   this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
-                picture: element.fromUser.refUser.imageData,
+                picture: element.fromUser.refUser.imageData || 'https://image.flaticon.com/icons/png/512/55/55089.png',
                 hidden: element.readed
               });
             });
@@ -227,13 +227,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
         response.data.forEach(element => {
           this.notificationData.push(element);
-          this.notifications.push({
-            name: element.title,
-            title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
-              this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
-            picture: element.fromUser.refUser.imageData,
-            hidden: element.readed
-          });
+          if (element.fromUser.refUser) {
+            this.notifications.push({
+              name: element.title,
+              title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
+                this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+              picture: element.fromUser.refUser.imageData || 'https://image.flaticon.com/icons/png/512/55/55089.png',
+              hidden: element.readed
+            });
+          } else {
+            this.notifications.push({
+              name: element.title,
+              title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
+                this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+              picture: 'https://image.flaticon.com/icons/png/512/55/55089.png',
+              hidden: element.readed
+            });
+          }
         });
         this.loading = false;
       }
