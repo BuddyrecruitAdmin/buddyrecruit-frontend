@@ -267,6 +267,7 @@ export class ExamDetailComponent implements OnInit {
             break;
           case 202: // Exam Score
             if (this.tabSelected === 'PENDING') {
+              condition.icon.examDate = true;
               condition.icon.examInfo = true;
               condition.icon.examScore = true;
               condition.button.reject = true;

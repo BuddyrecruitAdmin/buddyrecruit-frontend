@@ -321,6 +321,7 @@ export class CandidateDetailComponent implements OnInit {
               }
               break;
             case 202:
+              this.condition.icon.examDate = true;
               this.condition.icon.examInfo = true;
               this.condition.icon.examScore = true;
               this.condition.button.trans = true;
