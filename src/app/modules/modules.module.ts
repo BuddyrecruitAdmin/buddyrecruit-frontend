@@ -98,6 +98,8 @@ import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
 import { ApplicationFormComponent } from './application-form/application-form.component';
+import { HomeComponent } from './home/home.component';
+import { FeaturesComponent } from './features/features.component';
 
 @NgModule({
   imports: [
@@ -192,6 +194,8 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     ExamFormComponent,
     ResumeComponent,
     ApplicationFormComponent,
+    HomeComponent,
+    FeaturesComponent,
   ],
   providers: [
     TranslateService,
