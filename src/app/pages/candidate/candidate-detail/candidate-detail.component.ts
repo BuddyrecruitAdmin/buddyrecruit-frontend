@@ -326,10 +326,18 @@ export class CandidateDetailComponent implements OnInit {
               this.condition.icon.examScore = true;
               this.condition.button.trans = true;
               if (item.candidateFlow.pendingExamScoreInfo) {
-                if (!item.candidateFlow.pendingExamScoreInfo.examScore
-                  || !item.candidateFlow.pendingExamScoreInfo.attitudeScore) {
-                  this.condition.button.disabled = true;
-                  this.condition.button.errMsg = 'Please input exam score';
+                if (item.candidateFlow.refJR.requiredAttitude) {
+                  if (!item.candidateFlow.pendingExamScoreInfo.examScore
+                    || !item.candidateFlow.pendingExamScoreInfo.attitudeScore) {
+                    this.condition.button.disabled = true;
+                    this.condition.button.errMsg = 'Please input exam score and attitude score';
+                  }
+                } else {
+                  if (!item.candidateFlow.pendingExamScoreInfo.examScore
+                  ) {
+                    this.condition.button.disabled = true;
+                    this.condition.button.errMsg = 'Please input exam score';
+                  }
                 }
               }
               break;
@@ -841,7 +849,7 @@ export class CandidateDetailComponent implements OnInit {
     const path = '/exam-form/view/' + examId + '/' + this.examUserId;
     this.router.navigate([path]);
   }
-  
+
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {

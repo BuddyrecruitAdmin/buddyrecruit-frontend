@@ -272,10 +272,18 @@ export class ExamDetailComponent implements OnInit {
               condition.icon.examScore = true;
               condition.button.reject = true;
               if (item.pendingExamScoreInfo) {
-                if (item.pendingExamScoreInfo.examScore || item.pendingExamScoreInfo.attitudeScore) {
-                  condition.button.nextStep = true;
+                if (item.refJR.requiredAttitude) {
+                  if (item.pendingExamScoreInfo.examScore && item.pendingExamScoreInfo.attitudeScore) {
+                    condition.button.nextStep = true;
+                  } else {
+                    condition.button.examScore = true;
+                  }
                 } else {
-                  condition.button.examScore = true;
+                  if (item.pendingExamScoreInfo.examScore) {
+                    condition.button.nextStep = true;
+                  } else {
+                    condition.button.examScore = true;
+                  }
                 }
               }
             } else {
