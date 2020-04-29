@@ -87,6 +87,7 @@ import {
   NgbDropdownModule,
   NgbButtonsModule
 } from '@ng-bootstrap/ng-bootstrap';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { ModulesComponent } from './modules.component';
 import { ComponentsModule } from '../component/component.module';
@@ -97,6 +98,8 @@ import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
 import { ApplicationFormComponent } from './application-form/application-form.component';
+import { HomeComponent } from './home/home.component';
+import { FeaturesComponent } from './features/features.component';
 
 @NgModule({
   imports: [
@@ -180,7 +183,8 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     NgbCollapseModule,
     NgbDropdownModule,
     NgbButtonsModule,
-    CountdownTimerModule.forRoot()
+    CountdownTimerModule.forRoot(),
+    FileUploadModule
   ],
   declarations: [
     ModulesComponent,
@@ -190,6 +194,8 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     ExamFormComponent,
     ResumeComponent,
     ApplicationFormComponent,
+    HomeComponent,
+    FeaturesComponent,
   ],
   providers: [
     TranslateService,

@@ -248,7 +248,9 @@ export const API_ENDPOINT = {
   },
   FILE: {
     UPLOAD: "jd/upload",
-    DOWNLOAD: "jd/download"
+    DOWNLOAD: "jd/download",
+    FILE_UPLOAD: "file/upload",
+    FILE_DOWNLOAD: "file/download",
   },
   APPFORM: {
     ACTION: "appForm/action",

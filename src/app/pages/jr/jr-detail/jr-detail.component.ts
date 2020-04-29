@@ -108,6 +108,7 @@ export class JrDetailComponent implements OnInit {
       } else {
         this.state = State.Create;
         this.jr.requiredExam = false;
+        this.jr.requiredAttitude = false;
         this.jr.capacity = 0;
         this.jobStatus = 'notUsed';
         this.loading = false;
@@ -130,6 +131,7 @@ export class JrDetailComponent implements OnInit {
       },
       onboardDate: null,
       requiredExam: undefined,
+      requiredAttitude: undefined,
       refSource: undefined,
       remark: '',
       refStatus: undefined,
