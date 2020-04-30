@@ -89,19 +89,17 @@ export class PopupExamScoreComponent implements OnInit {
   }
 
   save() {
-    if (this.validation()) {
-      this.loading = true;
-      const request = this.setRequest();
-      this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.showToast('success', 'Success Message', response.message);
-        } else {
-          this.showToast('danger', 'Error Message', response.message);
-        }
-        this.loading = false;
-        this.ref.close(true);
-      });
-    }
+    this.loading = true;
+    const request = this.setRequest();
+    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+      this.loading = false;
+      this.ref.close(true);
+    });
   }
 
   passToAppointment() {
@@ -128,7 +126,7 @@ export class PopupExamScoreComponent implements OnInit {
       isValid = false;
       this.errorExam = "please enter exam score";
     }
-    if (!this.attitudeScore) {
+    if (!this.attitudeScore && this.attitudeFlag) {
       this.touchedAtt = true;
       isValid = false;
       this.errorAtt = "please enter attitude score";

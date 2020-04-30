@@ -267,14 +267,23 @@ export class ExamDetailComponent implements OnInit {
             break;
           case 202: // Exam Score
             if (this.tabSelected === 'PENDING') {
+              condition.icon.examDate = true;
               condition.icon.examInfo = true;
               condition.icon.examScore = true;
               condition.button.reject = true;
               if (item.pendingExamScoreInfo) {
-                if (item.pendingExamScoreInfo.examScore || item.pendingExamScoreInfo.attitudeScore) {
-                  condition.button.nextStep = true;
+                if (item.refJR.requiredAttitude) {
+                  if (item.pendingExamScoreInfo.examScore && item.pendingExamScoreInfo.attitudeScore) {
+                    condition.button.nextStep = true;
+                  } else {
+                    condition.button.examScore = true;
+                  }
                 } else {
-                  condition.button.examScore = true;
+                  if (item.pendingExamScoreInfo.examScore) {
+                    condition.button.nextStep = true;
+                  } else {
+                    condition.button.examScore = true;
+                  }
                 }
               }
             } else {
