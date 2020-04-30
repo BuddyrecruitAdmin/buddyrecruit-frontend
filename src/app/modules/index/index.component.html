@@ -14,38 +14,28 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">Home<span
+      <ul class="navbar-nav ml-md-auto">
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">หน้าเเรก<span
               class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(features)">Features</a>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(howTo)">เกี่ยวกับ</a>
         </li>
-        <!-- <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a>
-        </li> -->
-        <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">Contact us</a>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
         </li>
-      </ul>
-      <ul class="navbar-nav ml-md-auto">
-        <!-- <li class="nav-item dropdown">
-          <a style="text-align: center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span *ngIf="lang === 'en'" class="flag-icon flag-icon-us flag-icon-squared"></span><span
-              *ngIf="lang === 'en'"> English</span>
-            <span *ngIf="lang === 'th'" class="flag-icon flag-icon-th flag-icon-squared"></span><span
-              *ngIf="lang === 'th'"> ภาษาไทย</span>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" style="text-align: center;cursor: pointer;margin-top: 3px"
-              (click)="setLang('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English</a>
-            <a class="dropdown-item" style="text-align: center;cursor: pointer;" (click)="setLang('th')"><span
-                class="flag-icon flag-icon-th flag-icon-squared"></span> ภาษาไทย</a>
-          </div>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(package)">ราคา</a>
+        </li>
+        <!-- <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
         </li> -->
-        <button style="text-align: center;" nbButton outline status="success" [routerLink]="'/employer/login'">Sign
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">ติดต่อเรา</a>
+        </li>
+        <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
+          [routerLink]="'/employer/login'">Sign
           In</button>
       </ul>
     </div>
@@ -54,8 +44,7 @@
 
   <!-- Home -->
   <div #home id="home">
-    <!-- <img class="img-bg" src="../../../assets/images/ngIndex.jpg"> -->
-    <div class="image-text" *ngIf="devices.isPC || devices.isNotebook || devices.other">
+    <div class="image-text" style="margin-top: 66px;" *ngIf="devices.isPC || devices.isNotebook || devices.other">
       <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3">
           <h3 style="float: right">
@@ -64,7 +53,7 @@
           </h3>
         </div>
         <div class="col-9 col-sm-9 col-md-9 col-lg-9">
-          <h3>
+          <h3 style="font-weight: 700;">
             Buddy Recruit
           </h3>
           <span style="color: white">
@@ -77,7 +66,7 @@
         </div>
       </div>
     </div>
-    <div class="image-text" *ngIf="devices.isMobile || devices.isTablet">
+    <div class="image-text" style="margin-top: 66px;" *ngIf="devices.isMobile || devices.isTablet">
       <div class="row" style="width: 100%">
         <div class="col-12 col-sm-3 col-md-3 col-lg-3">
           <h3>
@@ -87,7 +76,7 @@
         </div>
         <div class="col-12 col-sm-9 col-md-9 col-lg-9" style="text-align: center">
           <br>
-          <h3>
+          <h3 style="font-weight: 700;">
             Buddy Recruit
           </h3>
           <br>
@@ -135,7 +124,7 @@
   </div>
 
   <!-- Features -->
-  <section #features id="feature">
+  <!-- <section #features id="feature">
     <div class="container">
       <div class="header">
         <h2>OUR FEATURES</h2>
@@ -161,17 +150,6 @@
             </nb-card-body>
           </nb-card>
         </div>
-        <!-- <div class="col-md-3 col-lg-3">
-          <h1>
-            <img class="img-icon" src="../../../assets/images/simply.jpg">
-          </h1>
-        </div>
-        <div class="col-md-3 col-lg-3 tleft">
-          <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>imply Process</h5>
-          <p>
-            A modern, Intelligent <br>& friendly ATS
-          </p>
-        </div> -->
         <div class="col-md-5">
           <nb-card>
             <nb-card-body class="">
@@ -191,17 +169,6 @@
             </nb-card-body>
           </nb-card>
         </div>
-        <!-- <div class="col-md-2 col-lg-2">
-          <h1>
-            <img class="img-icon" src="../../../assets/images/smart.jpg">
-          </h1>
-        </div>
-        <div class="col-md-4 col-lg-4 tleft">
-          <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>mart Matching</h5>
-          <p>
-            Get qualified candidates <br>& Collaborate effectively
-          </p>
-        </div> -->
       </div>
       <div class="row rwid text-mob">
         <div class="col-md-1 col-lg-1"></div>
@@ -288,7 +255,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Concept -->
   <aside id="concept">
@@ -299,11 +266,11 @@
   </aside>
 
   <!-- How TO -->
-  <section id="howTo">
+  <section #howTo id="howTo">
     <div class="container">
       <div class="header">
-        <h2><span style="font-weight: bold;
-          color: var(--color-green)">Buddy Recruit</span><br *ngIf="devices.isMobile"> ทำงานอย่างไร?</h2>
+        <h2 style="padding-top: 2.75rem;font-size: 3rem;"><span style="font-weight: bold;
+          color: var(--color-green);">Buddy Recruit</span><br *ngIf="devices.isMobile"> ทำงานอย่างไร?</h2>
       </div>
       <div class="row rwid text-mob">
         <div class="col-md-1 col-lg-1"></div>
@@ -419,7 +386,7 @@
   </section>
 
   <!-- Price -->
-  <section id="package">
+  <!-- <section id="package">
     <div class="container">
       <div class="header">
         <h2>PACKAGE</h2>
@@ -459,6 +426,43 @@
           </nb-card>
         </div>
         <div class="col-md-2 col-lg-2"></div>
+      </div>
+    </div>
+  </section> -->
+  <section #package id="package" style="padding-bottom: 5rem;">
+    <div class="container">
+      <div class="header">
+        <h2>แพ็คเกจของเรา</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-4 col-lg-4">
+          <nb-card style="background-color: #132b57">
+            <nb-card-body>
+              <h3>Standard</h3>
+              <label>ตำแหน่งงาน <span>5</span></label>
+              <label>จำนวนผู้เข้าใช้ <span>10</span></label>
+              <label>คุณสมบัติ <span>ทั้งหมด</span></label>
+              <label>จำนวน CV ต่อวัน <span>100</span></label>
+              <button nbButton shape="round" size="giant" ghost class="btn-stand">เลือก</button>
+            </nb-card-body>
+
+          </nb-card>
+        </div>
+        <div class="col-md-2 col-lg-2"></div>
+        <div class="col-md-4 col-lg-4">
+          <nb-card style="background-color: #132b57">
+            <nb-card-body>
+              <h3>Pro</h3>
+              <label>ตำแหน่งงาน <span>ไม่จำกัด</span></label>
+              <label>จำนวนผู้เข้าใช้ <span>ไม่จำกัด</span></label>
+              <label>คุณสมบัติ <span>ทั้งหมด</span></label>
+              <label>จำนวน CV ต่อวัน <span>900</span></label>
+              <button nbButton shape="round" size="giant" ghost class="btn-pro">เลือก</button>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-1 col-lg-1"></div>
       </div>
     </div>
   </section>
@@ -565,11 +569,12 @@
         <div class="col-md-4 m-b-20">
           <div class="sitemap">
             <h6>Sitemap</h6>
-            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">Home<span
+            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">หน้าเเรก<span
                 class="sr-only">(current)</span></a>
-            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(features)">Features</a>
-            <!-- <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a> -->
-            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">Contact us</a>
+            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(howTo)">เกี่ยวกับ</a>
+            <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(package)">ราคา</a>
+            <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
           </div>
         </div>
         <div class="col-md-4 m-b-20">
@@ -604,16 +609,17 @@
       <nb-accordion-item [expanded]="expanded">
         <nb-accordion-item-header (click)="toggleRegister()">
           <div class="title">
-            <div *ngIf="!devices.isMobile">ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
-            <div *ngIf="devices.isMobile">รับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
+            <div *ngIf="!devices.isMobile" style="font-family: kanit;">
+              ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
+            <div *ngIf="devices.isMobile" style="font-family: kanit;">รับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
           </div>
         </nb-accordion-item-header>
         <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">
           <div class="label text-center text-gray m-b-20">
-            <div class="m-b-5">
+            <div class="m-b-5" style="font-family: kanit;">
               Your <b class="text-black">BUDDY</b> for <span class="text-green">SUCCESSFUL</span> Recruitment.
             </div>
-            <div>
+            <div style="font-family: kanit;">
               Let Buddy Recruit help you make the <span class="text-black">RIGHT</span> hire, <span
                 class="text-black">FASTER</span>.
             </div>
@@ -671,7 +677,8 @@
             <label class="label">Plan To Use <span class="text-red">*</span></label>
             <div class="m-l-15">
               <nb-radio-group [(ngModel)]="contactUs.planToUse">
-                <nb-radio *ngFor="let option of planOptions" [value]="option.value">{{ option.label }}</nb-radio>
+                <nb-radio *ngFor="let option of planOptions" [value]="option.value" style="font-family: kanit;">
+                  {{ option.label }}</nb-radio>
               </nb-radio-group>
               <small *ngIf="errMsg.planToUse" class="text-red">
                 <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -685,7 +692,8 @@
           </div>
           <hr>
           <div class="m-t-20">
-            <button nbButton status="success" size="small" class="pull-right" (click)="submit()">Submit</button>
+            <button nbButton status="success" size="small" class="pull-right" (click)="submit()"
+              style="font-family: kanit;">Submit</button>
           </div>
         </nb-accordion-item-body>
 

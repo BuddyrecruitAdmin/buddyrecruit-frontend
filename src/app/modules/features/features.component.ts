@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Devices } from '../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../shared/services/utilities.service';
+import { setPathName } from '../../shared/services';
+import { Router } from "@angular/router";
 @Component({
   selector: 'ngx-features',
   templateUrl: './features.component.html',
@@ -14,6 +16,7 @@ export class FeaturesComponent implements OnInit {
   devices: Devices;
   constructor(
     private utilitiesService: UtilitiesService,
+    private router: Router,
   ) {
     this.devices = this.utilitiesService.getDevice();
   }
@@ -102,6 +105,15 @@ export class FeaturesComponent implements OnInit {
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     this.item = this.features[index];
     this.itemIndex = index;
+  }
+
+  scrollToElement(element): void {
+    element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
+
+  changePath(name) {
+    setPathName(name);
+    this.router.navigate(['/index']);
   }
 
 }

@@ -31,7 +31,8 @@ import {
   examId,
   AppFormData,
   flagExam,
-  ExamData
+  ExamData,
+  PathName
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -339,4 +340,13 @@ export function setExamData(exam: string = null) {
 export function getExamData() {
   const exam = JSON.parse(localStorage.getItem(ExamData));
   return (!exam || exam === null) ? undefined : exam;
+}
+
+export function setPathName(path: string = null) {
+  localStorage.setItem(PathName, JSON.stringify(path));
+}
+
+export function getPathName() {
+  const path = JSON.parse(localStorage.getItem(PathName));
+  return (!path || path === null) ? undefined : path;
 }
