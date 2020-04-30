@@ -64,7 +64,10 @@
 :focus {
   outline: none;
 }
-
+/* width */
+::-webkit-scrollbar {
+  width: 1.25rem !important;
+}
 .nb-theme-default {
   nb-layout .layout,
   nb-card {
