@@ -15,31 +15,29 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav ml-md-auto">
-                <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;"
-                        (click)="scrollToElement(home)">หน้าเเรก<span class="sr-only">(current)</span></a>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                            class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item active" style="padding-right: 1.25rem;">
                     <a class="nav-link font-family" style="cursor: pointer;">เกี่ยวกับ</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item active" style="padding-right: 1.25rem;">
                     <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;">การใช้งาน</a>
-                </li>
-                <li class="nav-item active">
+                <li class="nav-item active" style="padding-right: 1.25rem;">
                     <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(package)">ราคา</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;">บทความ</a>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;">ติดต่อเรา</a>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="scrollToElement(contact)">ติดต่อเรา</a>
                 </li>
-                <!-- <button style="text-align: center;" nbButton outline status="success"
+                <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
                     [routerLink]="'/employer/login'">Sign
-                    In</button> -->
+                    In</button>
             </ul>
         </div>
     </nav>
@@ -101,7 +99,7 @@
                 <h2>แพ็คเกจของเรา</h2>
             </div>
             <div class="row">
-                <div class="col-md-2 col-lg-2"></div>
+                <div class="col-md-1 col-lg-1"></div>
                 <div class="col-md-4 col-lg-4">
                     <nb-card style="background-color: #132b57">
                         <nb-card-body>
@@ -115,6 +113,7 @@
 
                     </nb-card>
                 </div>
+                <div class="col-md-2 col-lg-2"></div>
                 <div class="col-md-4 col-lg-4">
                     <nb-card style="background-color: #132b57">
                         <nb-card-body>
@@ -127,7 +126,7 @@
                         </nb-card-body>
                     </nb-card>
                 </div>
-                <div class="col-md-2 col-lg-2"></div>
+                <div class="col-md-1 col-lg-1"></div>
             </div>
         </div>
     </section>
