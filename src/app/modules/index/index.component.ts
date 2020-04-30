@@ -6,7 +6,7 @@ import { IndexService } from './index.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslateService } from '../../translate.service';
-import { setLangPath, setLanguage, getLanguage } from '../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setPathName, getPathName } from '../../shared/services';
 export interface ContactUs {
   firstName: string;
   lastName: string;
@@ -138,7 +138,7 @@ export class IndexComponent implements OnInit {
       link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
     },
   ];
-
+  pathName: any;
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
@@ -164,15 +164,18 @@ export class IndexComponent implements OnInit {
     if (!this.lang) {
       this.lang = "en";
     }
+    this.pathName = getPathName();
+    setPathName();
+ 
   }
 
   ngOnInit() {
     this.contactUs = this.initialModel();
     this.errMsg = this.initialErrMsg();
-    // this.activatedRoute.fragment.subscribe((fragment: string) => {
-    //   window.location.hash = fragment;
-    // });
     this.setLang(this.lang);
+    if (this.pathName) {
+      this.scrollToElement(document.getElementById(this.pathName));
+    }
   }
 
   initialModel(): ContactUs {
@@ -306,5 +309,5 @@ export class IndexComponent implements OnInit {
   scrollToElement(element): void {
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
-  
+
 }

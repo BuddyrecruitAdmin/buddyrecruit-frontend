@@ -15,6 +15,7 @@
 // }
 .navbar-nav .nav-link {
   font-weight: 600;
+  font-family: kanit;
 }
 .nav-item.active > .nav-link {
   color: var(--color-green) !important;
@@ -92,6 +93,8 @@
       color: var(--color-black);
       font-weight: 700;
       margin-bottom: 10px;
+      font-family: kanit;
+      font-size: 16px;
     }
     a {
       color: var(--color-white) !important;
@@ -111,6 +114,8 @@
       color: var(--color-black);
       font-weight: 700;
       margin-bottom: 10px;
+      font-size: 16px;
+      font-family: kanit;
     }
     p {
       color: #e7e7e7;
