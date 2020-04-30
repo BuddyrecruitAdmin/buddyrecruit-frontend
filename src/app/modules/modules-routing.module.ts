@@ -7,7 +7,8 @@ import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { ApplicationFormComponent } from './application-form/application-form.component';
-
+import { HomeComponent } from './home/home.component';
+import { FeaturesComponent } from './features/features.component';
 const routes: Routes = [
   {
     path: '',
@@ -16,6 +17,14 @@ const routes: Routes = [
       {
         path: 'index',
         component: IndexComponent,
+      },
+      {
+        path: 'home',
+        component: HomeComponent,
+      },
+      {
+        path: 'features',
+        component: FeaturesComponent,
       },
       {
         path: 'appform/:id',
