@@ -26,13 +26,24 @@
 ::ng-deep .navbar-expand-lg .navbar-nav .nav-link {
     padding-right: 1.75rem;
 }
-.img-default {
+.img-show{
     padding: 3px;
     border: none;
     position: relative;
     margin: 10px auto 10px;
     width: 85px;
     height: 85px;
+    border-radius: 50%;
+    // background-color: var(--color-green);
+    cursor: pointer;
+  }
+.img-default {
+    padding: 3px;
+    border: none;
+    position: relative;
+    margin: 10px auto 10px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     // background-color: var(--color-green);
     cursor: pointer;
@@ -124,12 +135,15 @@
     }
   }
   video {
-    width: 60%;
+    width: 75%;
     height: auto;
+  }
+  .padd-top{
+    padding-top: 5rem
   }
 
   @media (max-width: 767px) {
-    .img-default-mobile{
+    .img-default{
       padding: 3px;
       border: none;
       position: relative;
@@ -137,7 +151,9 @@
       width: 45px;
       height: 45px;
       border-radius: 50%;
-      // background-color: var(--color-green);
       cursor: pointer;
+    }
+    .padd-top{
+      padding-top: 1rem;
     }
   }

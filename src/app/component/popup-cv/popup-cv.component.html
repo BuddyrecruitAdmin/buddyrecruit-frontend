@@ -71,7 +71,7 @@
           </div>
           <div *ngIf="item.refUser || item.date" class="m-l-20">
             <small>
-              ( {{ utilitiesService.setFullname(item.refUser) }},
+              ( {{ item.refCandidateFlows?.refJR.refJD.position }} - {{ utilitiesService.setFullname(item.refUser) }},
               {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
             </small>
           </div>
