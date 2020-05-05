@@ -98,25 +98,21 @@ export class IndexComponent implements OnInit {
 
   planOptions = [
     {
-      label: 'As soon as possible',
-      value: 'As soon as possible'
+      label: 'ตอนนี้',
+      value: 'now'
     },
     {
-      label: 'Dec 2019',
-      value: 'Dec 2019'
+      label: '3 เดือน',
+      value: '3months'
     },
     {
-      label: 'Jan 2020',
-      value: 'Jan 2020'
+      label: '6 เดือน',
+      value: '6months'
     },
     {
-      label: 'Feb 2020',
-      value: 'Feb 2020'
-    },
-    {
-      label: 'After Feb 2020',
-      value: 'After Feb 2020'
-    },
+      label: 'ปีถัดไป',
+      value: 'nextyeat'
+    }
   ];
   news = [
     {
@@ -138,6 +134,10 @@ export class IndexComponent implements OnInit {
       link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
     },
   ];
+  navHome: boolean;
+  navHowto: boolean;
+  navPackage: boolean;
+  navContact: boolean;
   pathName: any;
   constructor(
     private utilitiesService: UtilitiesService,
@@ -166,15 +166,19 @@ export class IndexComponent implements OnInit {
     }
     this.pathName = getPathName();
     setPathName();
- 
+
   }
 
   ngOnInit() {
     this.contactUs = this.initialModel();
     this.errMsg = this.initialErrMsg();
     this.setLang(this.lang);
+    this.navHome = true;
+    this.navHowto = false;
+    this.navPackage = false;
+    this.navContact = false;
     if (this.pathName) {
-      this.scrollToElement(document.getElementById(this.pathName));
+      this.scrollToElement(document.getElementById(this.pathName), this.pathName);
     }
   }
 
@@ -306,7 +310,27 @@ export class IndexComponent implements OnInit {
     this.translate.use(lang);
   }
 
-  scrollToElement(element): void {
+  scrollToElement(element, name): void {
+    this.navHome = false;
+    this.navHowto = false;
+    this.navPackage = false;
+    this.navContact = false;
+    switch (name) {
+      case 'home':
+        this.navHome = true;
+        break;
+      case 'howTo':
+        this.navHowto = true;
+        break;
+      case 'package':
+        this.navPackage = true;
+        break;
+      case 'contact':
+        this.navContact = true;
+        break;
+      default:
+        break;
+    }
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 

@@ -189,8 +189,8 @@
                                             </a>
                                         </small>
                                     </div>
-                                    <img *ngIf="option.src" class="img-default" [nbPopover]="selectAlign"
-                                        nbPopoverPlacement="top" (click)="setOption(option)" [src]="option.src">
+                                    <img *ngIf="option.src" class="img-default" (click)="setOption(option)"
+                                        [src]="option.src">
                                     <div *ngIf="!preview" class="input-group-addon">
                                         <a *ngIf="option.type === 'label'" style="cursor: pointer;"
                                             (click)="fileInput.click()">
