@@ -107,6 +107,7 @@ export class AppFormComponent implements OnInit {
   edtiable: boolean;
   isExitst: boolean;
   loading: boolean;
+  showSalary: boolean;
   constructor(
     private service: AppFormService,
     private utilitiesService: UtilitiesService,
@@ -134,7 +135,8 @@ export class AppFormComponent implements OnInit {
     this.isUser = false;
     this.loading = true;
     this.actionView = false;
-    this.innerHeight = window.innerHeight
+    this.innerHeight = window.innerHeight;
+    this.showSalary = true;
     this.activatedRoute.params.subscribe(params => {
       if (params.id) {
         this._id = params.id;
@@ -155,10 +157,11 @@ export class AppFormComponent implements OnInit {
   }
 
   getDetail() {
-    this.service.getDetail(this._id, this.isUser).subscribe(response => {
+    this.service.getDetail(this._id, this.isUser, this.role._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.loading = false;
         if (this.isUser) {
+          this.showSalary = response.data.showSalary;
           this.appforms = response.data;
           this.edtiable = false;
         } else {

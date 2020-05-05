@@ -60,7 +60,7 @@
             <small *ngIf="touched && positionApply.errors" class="text-red">{{ sErrorpositionApply }}</small>
           </div>
         </div>
-        <div class="col-md-4 col-lg-4">
+        <div *ngIf="showSalary" class="col-md-4 col-lg-4">
           <div class="form-control-group">
             <label class="label">{{'SALARY' | translate }}</label>
             <input type="number" [formControl]="salary" [(ngModel)]="appforms.salary" nbInput fullWidth>
