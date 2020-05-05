@@ -16,13 +16,6 @@
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
-                            <div class="row" *ngIf="option.src && option.type !== 'file' && option.type !=='getFile'"
-                                style="text-align:center">
-                                <div class="col-md-12 col-lg-12">
-                                    <img class="img-default" style="text-align:center" [src]="option.src"><br
-                                        *ngIf="option.src">
-                                </div>
-                            </div>
                             <label *ngIf="option.type === 'label'" [style.color]="option.color"> {{ option.value }}
                                 <span *ngIf="option.score" style="color: red;">{{ option.score }}</span>
                             </label>
@@ -68,6 +61,13 @@
                                 <div *ngIf="actionView">
                                     <img class="img-default" (click)="open(content,option.src)"
                                         [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="option.src && option.type !== 'file' && option.type !=='getFile'"
+                                style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img class="img-default" style="text-align:center" [src]="option.src"><br
+                                        *ngIf="option.src">
                                 </div>
                             </div>
                         </div>
