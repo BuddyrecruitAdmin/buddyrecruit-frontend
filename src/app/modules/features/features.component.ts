@@ -14,6 +14,8 @@ export class FeaturesComponent implements OnInit {
   itemIndex: any;
   showStart: boolean;
   devices: Devices;
+  navFeature: boolean;
+  navContact: boolean;
   constructor(
     private utilitiesService: UtilitiesService,
     private router: Router,
@@ -23,6 +25,8 @@ export class FeaturesComponent implements OnInit {
 
   ngOnInit() {
     this.item = {};
+    this.navContact = false;
+    this.navFeature = true;
     this.features = [
       {
         name: "AI (Artificial Intelligence) technique",
@@ -107,7 +111,19 @@ export class FeaturesComponent implements OnInit {
     this.itemIndex = index;
   }
 
-  scrollToElement(element): void {
+  scrollToElement(element, name): void {
+    this.navFeature = false;
+    this.navContact = false;
+    switch (name) {
+      case 'top':
+        this.navFeature = true;
+        break;
+      case 'contact':
+        this.navContact = true;
+        break;
+      default:
+        break;
+    }
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 

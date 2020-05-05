@@ -23,7 +23,8 @@
                     <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('howTo')">เกี่ยวกับ</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navFeature }" style="cursor: pointer;"
+                        (click)="scrollToElement(top,'top')">คุณสมบัติ</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('package')">ราคา</a>
@@ -32,8 +33,8 @@
                     <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
                 </li> -->
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;"
-                        (click)="scrollToElement(contact)">ติดต่อเรา</a>
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navContact }" style="cursor: pointer;"
+                        (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
                 </li>
                 <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
                     [routerLink]="'/employer/login'">Sign
@@ -46,6 +47,11 @@
         <nb-card-body style="margin-top: 5.5rem;padding-bottom: 5rem;">
             <div class="row">
                 <div class="col-md-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12" style="text-align: center;">
+                            <h2>คุณสมบัติของ Buddy Recruit</h2>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-2 col-lg-2"></div>
                         <div class="col-md-3 col-lg-3" style="text-align: center;">
@@ -72,7 +78,7 @@
                         <div *ngFor="let feat of features;let i = index;" class="col-6 col-sm-6 col-md-6 col-lg-6">
                             <div *ngIf="itemIndex !== i">
                                 <img class="img-default link" (click)="selectFeature(i,top)" [src]="feat.icon"><br>
-                                <label>{{ feat.name || '' }}</label>
+                                <label class="laShake link" (click)="selectFeature(i,top)">{{ feat.name || '' }}</label>
                             </div>
                         </div>
                     </div>
@@ -108,7 +114,7 @@
                         <a class="nav-link font-family" style="cursor: pointer;"
                             (click)="changePath('howTo')">เกี่ยวกับ</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
-                            (click)="scrollToElement(top)">คุณสมบัติ</a>
+                            (click)="scrollToElement(top,'top')">คุณสมบัติ</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
                             (click)="changePath('package')">ราคา</a>
                     </div>

@@ -20,11 +20,19 @@
   font-weight: 600;
   font-family: kanit;
 }
-.nav-item.active > .nav-link {
+// .nav-item.active > .nav-link {
+//   color: var(--color-green) !important;
+// }
+.nav-shadow{
   color: var(--color-green) !important;
 }
 .carousel {
   background-color: #222222;
+}
+video {
+  width: 75%;
+  height: auto;
+  padding-bottom: 3%;
 }
 .picsum-img-wrapper {
   opacity: 0.5;
@@ -142,7 +150,7 @@ section .header h3 {
     background-color: var(--color-white);
 }
 #home {
-  background: url(../../../assets/images/home.jpg) no-repeat center center; 
+  background: url(../../../assets/images/indexbg.png) no-repeat center center; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -161,10 +169,10 @@ section .header h3 {
   .image-text {
     position: absolute;
     top: calc(20%);
-    left: calc(15%);    
+    left: calc(41%);    
 
     h3 {
-      color: var(--color-white);
+      color: var(--color-green);
       text-transform: uppercase;
       margin-bottom: 1rem;
       font-family: kanit;
@@ -185,7 +193,7 @@ section .header h3 {
   position: relative;
   padding-bottom: 2rem;
   h2{
-    padding-top: 15%;
+    padding-top: 5%;
     // font-weight: bold;
     text-align: center;
   }
@@ -569,12 +577,13 @@ footer {
     }
     .image-text {
       position: absolute;
-      top: calc(10%);
-      left: calc(4%);
+      top: calc(20%);
+      left: calc(15%);  
       h2, h3 {
         font-size: 2.4rem;
         font-weight: 600;
         text-align: center;
+        width: max-content;
       }
       h5, h6 {
         font-size: 0.5rem;
