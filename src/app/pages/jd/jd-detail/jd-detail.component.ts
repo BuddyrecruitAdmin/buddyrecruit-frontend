@@ -170,7 +170,7 @@ export class JdDetailComponent implements OnInit {
       refPosition: undefined,
       departmentId: undefined,
       divisionId: undefined,
-      keywordSearch: [],
+      // keywordSearch: [],
       weightScore: {
         workExperience: {
           weight: [],
@@ -1009,14 +1009,14 @@ export class JdDetailComponent implements OnInit {
       this.sErrorrefCheck = MESSAGE[139];
       this.SErrorAll = this.SErrorAll || MESSAGE[139];
     }
-    if (this.role.refCompany.activeJobsDB) {
-      if (this.jd.keywordSearch.length === 0) {
-        this.touchedCV = true;
-        isValid = false;
-        this.sErrorKey = MESSAGE[138];
-        this.SErrorAll = this.SErrorAll || "Please press enter keyword to search in CV";
-      }
-    }
+    // if (this.role.refCompany.activeJobsDB) {
+    //   if (this.jd.keywordSearch.length === 0) {
+    //     this.touchedCV = true;
+    //     isValid = false;
+    //     this.sErrorKey = MESSAGE[138];
+    //     this.SErrorAll = this.SErrorAll || "Please press enter keyword to search in CV";
+    //   }
+    // }
     if (!this.jd.departmentId) {
       this.touchedDep = true;
       isValid = false;
@@ -1117,9 +1117,9 @@ export class JdDetailComponent implements OnInit {
         }
       });
     }
-    if (this.jd.keywordSearch.length > 0) {
-      this.jd.keywordSearch = this.convertArray(this.jd.keywordSearch);
-    }
+    // if (this.jd.keywordSearch.length > 0) {
+    //   this.jd.keywordSearch = this.convertArray(this.jd.keywordSearch);
+    // }
     if (this.state === State.Duplicate) {
       this.jd._id = undefined;
     }
