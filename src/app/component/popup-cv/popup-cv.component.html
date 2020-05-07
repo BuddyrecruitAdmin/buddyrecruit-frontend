@@ -87,7 +87,7 @@
     </div>
     <div *ngIf="showMulti" class="border-padbottom border-all-reject box-pad box-header with-border">
       <div *ngFor="let mul of multiJr;let i = index;" class="text-gray m-t-10">
-        <span>{{ i+1 }}. <strong>JR:</strong> {{ mul.refJR.refJD.position }} - <strong>Department:</strong>
+        <span>{{ i+1 }}. <strong>Position:</strong> {{ mul.refJR.refJD.position }} - <strong>Department:</strong>
           {{ mul.refJR.departmentName }} </span>
         <div>
           <small class="m-l-20">(stage: {{ mul.refStage.name }})</small>
