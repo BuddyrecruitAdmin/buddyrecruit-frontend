@@ -20,7 +20,10 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('howTo')">เกี่ยวกับ</a>
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('second')">เกี่ยวกับ</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('com')">บริษัทของเรา</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navFeature }" style="cursor: pointer;"
@@ -29,6 +32,9 @@
                 <li class="nav-item active">
                     <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('package')">ราคา</a>
                 </li>
+                <!-- <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
+                </li> -->
                 <!-- <li class="nav-item active">
                     <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
                 </li> -->
@@ -109,14 +115,17 @@
                 <div class="col-md-4 m-b-20">
                     <div class="sitemap">
                         <h6>Sitemap</h6>
-                        <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">Home<span
+                        <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
                                 class="sr-only">(current)</span></a>
                         <a class="nav-link font-family" style="cursor: pointer;"
-                            (click)="changePath('howTo')">เกี่ยวกับ</a>
+                            (click)="changePath('second')">เกี่ยวกับ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('com')">บริษัทของเรา</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
                             (click)="scrollToElement(top,'top')">คุณสมบัติ</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
                             (click)="changePath('package')">ราคา</a>
+                        <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
                     </div>
                 </div>
                 <div class="col-md-4 m-b-20">
