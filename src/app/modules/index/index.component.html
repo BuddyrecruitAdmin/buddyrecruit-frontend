@@ -14,38 +14,35 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">Home<span
-              class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(features)">Features</a>
-        </li>
-        <!-- <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a>
-        </li> -->
-        <li class="nav-item active">
-          <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">Contact us</a>
-        </li>
-      </ul>
       <ul class="navbar-nav ml-md-auto">
-        <!-- <li class="nav-item dropdown">
-          <a style="text-align: center;" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span *ngIf="lang === 'en'" class="flag-icon flag-icon-us flag-icon-squared"></span><span
-              *ngIf="lang === 'en'"> English</span>
-            <span *ngIf="lang === 'th'" class="flag-icon flag-icon-th flag-icon-squared"></span><span
-              *ngIf="lang === 'th'"> ภาษาไทย</span>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" style="text-align: center;cursor: pointer;margin-top: 3px"
-              (click)="setLang('en')"><span class="flag-icon flag-icon-us flag-icon-squared"></span> English</a>
-            <a class="dropdown-item" style="text-align: center;cursor: pointer;" (click)="setLang('th')"><span
-                class="flag-icon flag-icon-th flag-icon-squared"></span> ภาษาไทย</a>
-          </div>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navHome }" style="cursor: pointer;"
+            (click)="scrollToElement(home,'home')">หน้าเเรก<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navHowto }" style="cursor: pointer;"
+            (click)="scrollToElement(second,'second')">เกี่ยวกับ</a>
+        </li>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navCom }" style="cursor: pointer;"
+            (click)="scrollToElement(com,'com')">บริษัทของเรา</a>
+        </li>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+        </li>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navPackage }" style="cursor: pointer;"
+            (click)="scrollToElement(package,'package')">ราคา</a>
+        </li>
+        <!-- <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
         </li> -->
-        <button style="text-align: center;" nbButton outline status="success" [routerLink]="'/employer/login'">Sign
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navContact }" style="cursor: pointer;"
+            (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
+        </li>
+        <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
+          [routerLink]="'/employer/login'">Sign
           In</button>
       </ul>
     </div>
@@ -54,71 +51,264 @@
 
   <!-- Home -->
   <div #home id="home">
-    <!-- <img class="img-bg" src="../../../assets/images/ngIndex.jpg"> -->
     <div class="image-text" *ngIf="devices.isPC || devices.isNotebook || devices.other">
-      <div class="row">
-        <div class="col-3 col-sm-3 col-md-3 col-lg-3">
-          <h3 style="float: right">
+      <div class="row" style="text-align: center;">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+          <h3>
             <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
               alt="Buddy Recruit Logo" />
+            <br>
+            <h3 style="font-weight: 700;padding-top: 2rem;">
+              Buddy Recruit
+            </h3>
           </h3>
         </div>
-        <div class="col-9 col-sm-9 col-md-9 col-lg-9">
-          <h3>
-            Buddy Recruit
-          </h3>
-          <span style="color: white">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+
+          <!-- <span style="color: white">
             Your Buddy for Successful Recruitment
           </span>
           <br>
           <span style="color: white">
             AI automate hiring part of your workflow
-          </span>
+          </span> -->
         </div>
       </div>
     </div>
     <div class="image-text" *ngIf="devices.isMobile || devices.isTablet">
-      <div class="row" style="width: 100%">
-        <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+      <div class="row" style="width: 100%;text-align: center;">
+        <div class="col-12 col-sm-12">
           <h3>
             <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
               alt="Buddy Recruit Logo" />
+            <br>
+            <h3 style="font-weight: 700;padding-top: 2rem;">
+              Buddy Recruit
+            </h3>
           </h3>
-        </div>
-        <div class="col-12 col-sm-9 col-md-9 col-lg-9" style="text-align: center">
-          <br>
-          <h3>
-            Buddy Recruit
-          </h3>
-          <br>
-          <label style="color: white">
-            Your Buddy for Successful Recruitment
-          </label>
-          <br>
-          <span style="color: white;padding-top: 5px;">
-            AI automate hiring part of your workflow
-          </span>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Concept -->
+  <aside id="concept">
+    <div class="container">
+      <h2 class="text-white">Your Buddy for Successful Recruitment</h2>
+      <h5 class="text-white">Let <b>"BUDDY RECRUIT"</b> help you!</h5>
+    </div>
+  </aside>
+
   <!-- About -->
-  <div id="second" class="about-bg">
-    <div class="for-mobile">
+  <div id="second" #second class="about-bg">
+    <div style="padding-top: 2.75rem" class="for-mobile">
       <div class="row rwid">
-        <div class="col-12 col-sm-11 col-md-6 col-lg-6">
-          <img class="img-bg" src="../../../assets/images/about1.jpg">
-        </div>
-        <div class="col-12 col-sm-11 col-md-6 col-lg-6 text-center text-mob">
+        <div class="col-12 col-sm-11 col-md-5 col-lg-5">
           <h2 class="font-family ">Buddy Recruit คืออะไร?</h2>
           <hr class="line-color">
-          <p>แพลตฟอร์มเพื่อช่วยเพิ่มประสิทธิภาพ</p>
-          <p> ในการคัดสรรผู้สมัครในองค์กรโดยใช้ระบบ</p>
-          <p> AI (Artificial Intelligence)</p>
+          <!-- <p>แพลตฟอร์มเพื่อช่วยเพิ่มประสิทธิภาพ ในการคัดสรรผู้สมัครในองค์กร</p>
+          <p>โดยใช้ระบบ AI (Artificial Intelligence)</p> -->
+          <p style="padding-top: 5%;">A easy-to-use cloud-based HR platform for recruitment by automate screening &
+            Matching candidate .
+            Support resume language both Thai and English .So that your business can make the right hire, faster
+            and smarter until onboarding.
+          </p>
+          <p>ระบบ HR ที่ดูแลในส่วนการสรรหาบุคลากร ช่วยให้งานจัดการใบสมัครและการ screening เป็นระบบอัตโนมัติ
+            การใช้งานระบบง่าย ไม่ซับซ้อน
+            รองรับได้ทั้ง resume ภาษาไทยและอังกฤษ คุณจึงมั่นใจได้ว่า การสรรหาของคุณจะง่ายขึ้น ดีขึ้น และ
+            มีประสิทธิภาพมากขึ้นจนจบกระบวนการ
+            onboarding
+          </p>
+        </div>
+        <div class="col-12 col-sm-11 col-md-7 col-lg-7" style="text-align: center;">
+          <!-- <img class="img-bg" src="../../../assets/images/about1.jpg"> -->
+          <video style="padding-top: 15%;" width="500" src="../../../assets/video/intro.mp4" controls>
+            Your browser does not support HTML5 video.
+          </video>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- How TO -->
+  <section #howTo id="howTo">
+    <div class="container">
+      <div class="header">
+        <h2 style="font-size: 3rem;"><span style="font-weight: bold;
+          color: var(--color-green);">Buddy Recruit</span><br *ngIf="devices.isMobile"> ทำงานอย่างไร?</h2>
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-6 col-lg-6 text-mob">
+          <p>
+            Email Automation
+          </p>
+          <label class="sub-head">ดึงอีเมลเข้าระบบอัตโนมัติ</label><br>
+          <span class="sub-body">ระบบจะทำการอ่านอีเมลสมัครงาน รวมถึงแหล่งต่างๆ<br>
+            ดึงเข้าระบบแบบ Automation และมีการส่งอีเมลระหว่างขั้นตอน<br>
+            ทั้งภายในองค์กร ภายนอกไปยังผู้สมัครงานได้ง่ายโดยผ่านทางระบบโดยตรง
+          </span>
+        </div>
+        <div class="col-md-5 col-lg-5 text-mob-wide">
+          <img class="img-bg" src="../../../assets/images/emailPic.jpg">
+        </div>
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div *ngIf="!devices.isMobile" class="col-md-6 col-lg-6 pd1">
+          <img class="img-bg-wide" src="../../../assets/images/Scored.jpg">
+        </div>
+        <div *ngIf="!devices.isMobile" class="col-md-5 col-lg-5 text-mob-wide">
+          <p>
+            CV scoring qualification
+          </p>
+          <label class="sub-head">คิดคะแนนตามคุณสมบัติที่ต้องการได้จาก CV</label><br>
+          <span class="sub-body">ใช้เทคโนโลยีอัจฉริยะ AI ช่วยวิเคราะห์ใบสมัครงาน<br>
+            และสามารถคิดคะแนนได้ตรงตามเกณฑ์คุณสมบัติ<br>
+            ของงานที่กำหนดไว้ แสดงคะแนน CV เพื่อให้ได้<br>
+            ผู้สมัครที่เหมาะกับงาน
+          </span>
+        </div>
+        <div *ngIf="devices.isMobile" class="col-md-6 col-lg-6 text-mob-wide">
+          <p>
+            CV scoring qualification
+          </p>
+          <label class="sub-head">คิดคะแนนตามคุณสมบัติที่ต้องการได้จาก CV</label><br>
+          <span class="sub-body">ใช้เทคโนโลยีอัจฉริยะ AI ช่วยวิเคราะห์ใบสมัครงาน<br>
+            และสามารถคิดคะแนนได้ตรงตามเกณฑ์คุณสมบัติ<br>
+            ของงานที่กำหนดไว้ แสดงคะแนน CV เพื่อให้ได้<br>
+            ผู้สมัครที่เหมาะกับงาน
+          </span>
+        </div>
+        <div *ngIf="devices.isMobile" class="col-md-5 col-lg-5 pd1">
+          <img class="img-bg-wide" src="../../../assets/images/Scored.jpg">
+        </div>
+      </div>
+      <div class="row rwid text-mob">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-6 col-lg-6 txt-top">
+          <p>
+            Easy Process Flow
+          </p>
+          <label class="sub-head">ขั้นตอนไม่ซับซ้อนใช้งานง่าย</label><br>
+          <span class="sub-body">Buddy Recruit มีขั้นตอนที่ช่วยคัดกรองผู้สมัครไปตาม Stage ต่างๆ<br>
+            ตั้งแต่ Talent pool จนถึง Onboard
+            เพื่อให้มีการทำงานเป็นระบบ
+          </span>
+        </div>
+        <div class="col-md-5 col-lg-5 text-mob-wide">
+          <img class="img-bg-2" src="../../../assets/images/listMenu.jpg">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PDPA -->
+  <div id="pdpa" class="pdpa-bg">
+    <div class="row rwid">
+      <div class="col-md-6 col-lg-6 text-center text-mob">
+        <h2 class="font-family ">Security Services in "PDPA"</h2>
+        <p>PRIVACY of Personal Information</p>
+        <p>ระบบมีนโยบายตามกฎหมายปกป้องข้อมูลส่วนบุคคลตาม<p>
+            <p>พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</p>
+            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <img class="img-bg" src="../../../assets/images/PDPA.jpg">
+      </div>
+    </div>
+  </div>
+
+  <!-- Thai team -->
+  <div id="com" #com class="about-bg">
+    <div class="row rwid">
+      <div class="col-md-6 col-lg-6 text-center text-mob">
+        <h2 class="font-family ">Our Team Support</h2>
+        <p>ทีม Buddy Recruit เราคือนักพัฒนาคนไทยที่คอยดูแลระบบ Recruitment</p>
+        <p> ให้มีประสิทธิภาพ ตลอดจนขับเคลื่อนองค์กรให้ก้าวหน้าในอนาคตต่อไป</p>
+        <h3 class="font-family ">องค์กรของเรา</h3>
+        <p style="line-height: 2rem;">Buddy Recruit พัฒนาขึ้นโดยบริษัท ZyGen Company เราคือผู้เชี่ยวชาญทางด้าน IT
+          service&solution และ SAP professional consulting service firm <br>ก่อตั้งเมื่อ ปี 1999 โดยมี
+          ลูกค้าเป็นองค์กรชั้นนำของประเทศจำนวนมาก</p>
+        <img src="../../../assets/images/logozygen.png" class="d-inline-block align-middle img-logo"
+          alt="Buddy Recruit Logo" /><br>
+        <a href="https://www.zygencenter.com"><button style="font-family: kanit;color: black;margin-top: 3%;"
+            shape="round" nbButton outline status="success">More Detail</button></a>
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <img class="img-bg" src="../../../assets/images/thai.jpg">
+      </div>
+    </div>
+  </div>
+
+  <!-- News -->
+  <section id="news">
+    <div class="container">
+      <div class="header">
+        <h2>News and Promotion</h2>
+        <h3>News and promotion that we serve</h3>
+      </div>
+      <div class="row text-mob">
+        <div *ngFor="let new of news" class="col-md-6 col-lg-4">
+          <div class="card">
+            <div class="card-image" [style.backgroundImage]="'url('+ new.img +')'">
+            </div>
+            <div class="card-body text-left">
+              <h6 class="card-title text-dot">{{ new.title }}</h6>
+              <p class="card-text text-dot2">
+                {{ new.remark }}
+              </p>
+              <div class="text-right">
+                <a target="_blank" [href]="new.link" class="link text-orange">
+                  <small>
+                    Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
+                  </small>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section #package id="package" style="padding-bottom: 5rem;">
+    <div class="container">
+      <div class="header">
+        <h2>แพ็คเกจของเรา</h2>
+      </div>
+      <div class="row">
+        <div class="col-md-1 col-lg-1"></div>
+        <div class="col-md-4 col-lg-4">
+          <nb-card style="background-color: #132b57">
+            <nb-card-body>
+              <h3>Standard</h3>
+              <label>ตำแหน่งงาน <span>5</span></label>
+              <label>จำนวนผู้เข้าใช้ <span>10</span></label>
+              <label>คุณสมบัติ <span>ทั้งหมด</span></label>
+              <label>จำนวน CV ต่อวัน <span>100</span></label>
+              <button nbButton shape="round" size="giant" ghost class="btn-stand">เลือก</button>
+            </nb-card-body>
+
+          </nb-card>
+        </div>
+        <div class="col-md-2 col-lg-2"></div>
+        <div class="col-md-4 col-lg-4">
+          <nb-card style="background-color: #132b57">
+            <nb-card-body>
+              <h3>Pro</h3>
+              <label>ตำแหน่งงาน <span>ไม่จำกัด</span></label>
+              <label>จำนวนผู้เข้าใช้ <span>ไม่จำกัด</span></label>
+              <label>คุณสมบัติ <span>ทั้งหมด</span></label>
+              <label>จำนวน CV ต่อวัน <span>900</span></label>
+              <button nbButton shape="round" size="giant" ghost class="btn-pro">เลือก</button>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-md-1 col-lg-1"></div>
+      </div>
+    </div>
+  </section>
 
   <!-- Get Started -->
   <div id="contact-us" class="ready-bg">
@@ -135,7 +325,7 @@
   </div>
 
   <!-- Features -->
-  <section #features id="feature">
+  <!-- <section #features id="feature">
     <div class="container">
       <div class="header">
         <h2>OUR FEATURES</h2>
@@ -161,17 +351,6 @@
             </nb-card-body>
           </nb-card>
         </div>
-        <!-- <div class="col-md-3 col-lg-3">
-          <h1>
-            <img class="img-icon" src="../../../assets/images/simply.jpg">
-          </h1>
-        </div>
-        <div class="col-md-3 col-lg-3 tleft">
-          <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>imply Process</h5>
-          <p>
-            A modern, Intelligent <br>& friendly ATS
-          </p>
-        </div> -->
         <div class="col-md-5">
           <nb-card>
             <nb-card-body class="">
@@ -191,17 +370,6 @@
             </nb-card-body>
           </nb-card>
         </div>
-        <!-- <div class="col-md-2 col-lg-2">
-          <h1>
-            <img class="img-icon" src="../../../assets/images/smart.jpg">
-          </h1>
-        </div>
-        <div class="col-md-4 col-lg-4 tleft">
-          <h5 class="card-title text-cap"><span style="font-weight: 600;">S</span>mart Matching</h5>
-          <p>
-            Get qualified candidates <br>& Collaborate effectively
-          </p>
-        </div> -->
       </div>
       <div class="row rwid text-mob">
         <div class="col-md-1 col-lg-1"></div>
@@ -288,138 +456,10 @@
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Concept -->
-  <aside id="concept">
-    <div class="container">
-      <h2 class="text-white">Your Buddy for Successful Recruitment</h2>
-      <h5 class="text-gray">Let <b>"BUDDY RECRUIT"</b> help you!</h5>
-    </div>
-  </aside>
-
-  <!-- How TO -->
-  <section id="howTo">
-    <div class="container">
-      <div class="header">
-        <h2><span style="font-weight: bold;
-          color: var(--color-green)">Buddy Recruit</span><br *ngIf="devices.isMobile"> ทำงานอย่างไร?</h2>
-      </div>
-      <div class="row rwid text-mob">
-        <div class="col-md-1 col-lg-1"></div>
-        <div class="col-md-6 col-lg-6 text-mob">
-          <p>
-            Email Automation
-          </p>
-          <label class="sub-head">ดึงอีเมลเข้าระบบอัตโนมัติ</label><br>
-          <span class="sub-body">ระบบจะทำการอ่านอีเมลสมัครงาน รวมถึงแหล่งต่างๆ<br>
-            ดึงเข้าระบบแบบ Automation และมีการส่งอีเมลระหว่างขั้นตอน<br>
-            ทั้งภายในองค์กร ภายนอกไปยังผู้สมัครงานได้ง่ายโดยผ่านทางระบบโดยตรง
-          </span>
-        </div>
-        <div class="col-md-5 col-lg-5 text-mob-wide">
-          <img class="img-bg" src="../../../assets/images/emailPic.jpg">
-        </div>
-      </div>
-      <div class="row rwid text-mob">
-        <div class="col-md-1 col-lg-1"></div>
-        <div *ngIf="!devices.isMobile" class="col-md-6 col-lg-6 pd1">
-          <img class="img-bg-wide" src="../../../assets/images/Scored.jpg">
-        </div>
-        <div *ngIf="!devices.isMobile" class="col-md-5 col-lg-5 text-mob-wide">
-          <p>
-            CV scoring qualification
-          </p>
-          <label class="sub-head">คิดคะแนนตามคุณสมบัติที่ต้องการได้จาก CV</label><br>
-          <span class="sub-body">ใช้เทคโนโลยีอัจฉริยะ AI ช่วยวิเคราะห์ใบสมัครงาน<br>
-            และสามารถคิดคะแนนได้ตรงตามเกณฑ์คุณสมบัติ<br>
-            ของงานที่กำหนดไว้ แสดงคะแนน CV เพื่อให้ได้<br>
-            ผู้สมัครที่เหมาะกับงาน
-          </span>
-        </div>
-        <div *ngIf="devices.isMobile" class="col-md-6 col-lg-6 text-mob-wide">
-          <p>
-            CV scoring qualification
-          </p>
-          <label class="sub-head">คิดคะแนนตามคุณสมบัติที่ต้องการได้จาก CV</label><br>
-          <span class="sub-body">ใช้เทคโนโลยีอัจฉริยะ AI ช่วยวิเคราะห์ใบสมัครงาน<br>
-            และสามารถคิดคะแนนได้ตรงตามเกณฑ์คุณสมบัติ<br>
-            ของงานที่กำหนดไว้ แสดงคะแนน CV เพื่อให้ได้<br>
-            ผู้สมัครที่เหมาะกับงาน
-          </span>
-        </div>
-        <div *ngIf="devices.isMobile" class="col-md-5 col-lg-5 pd1">
-          <img class="img-bg-wide" src="../../../assets/images/Scored.jpg">
-        </div>
-      </div>
-      <div class="row rwid text-mob">
-        <div class="col-md-1 col-lg-1"></div>
-        <div class="col-md-6 col-lg-6 txt-top">
-          <p>
-            Easy Process Flow
-          </p>
-          <label class="sub-head">ขั้นตอนไม่ซับซ้อนใช้งานง่าย</label><br>
-          <span class="sub-body">Buddy Recruit มีขั้นตอนที่ช่วยคัดกรองผู้สมัครไปตาม Stage ต่างๆ<br>
-            ตั้งแต่ Talent pool จนถึง Onboard
-            เพื่อให้มีการทำงานเป็นระบบ
-          </span>
-        </div>
-        <div class="col-md-5 col-lg-5 text-mob-wide">
-          <img class="img-bg-2" src="../../../assets/images/listMenu.jpg">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PDPA -->
-  <div id="pdpa" class="pdpa-bg">
-    <div class="row rwid">
-      <div class="col-md-6 col-lg-6 text-center text-mob">
-        <h2 class="font-family ">Security Services in "PDPA"</h2>
-        <p>PRIVACY of Personal Information</p>
-        <p>ระบบมีนโยบายตามกฎหมายปกป้องข้อมูลส่วนบุคคลตาม<p>
-            <p>พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</p>
-            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
-      </div>
-      <div class="col-md-6 col-lg-6">
-        <img class="img-bg" src="../../../assets/images/PDPA.jpg">
-      </div>
-    </div>
-  </div>
-
-  <!-- News -->
-  <section id="news">
-    <div class="container">
-      <div class="header">
-        <h2>News and Promotion</h2>
-        <h3>News and promotion that we serve</h3>
-      </div>
-      <div class="row text-mob">
-        <div *ngFor="let new of news" class="col-md-6 col-lg-4">
-          <div class="card">
-            <div class="card-image" [style.backgroundImage]="'url('+ new.img +')'">
-            </div>
-            <div class="card-body text-left">
-              <h6 class="card-title text-dot">{{ new.title }}</h6>
-              <p class="card-text text-dot2">
-                {{ new.remark }}
-              </p>
-              <div class="text-right">
-                <a target="_blank" [href]="new.link" class="link text-orange">
-                  <small>
-                    Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                  </small>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  </section> -->
 
   <!-- Price -->
-  <section id="package">
+  <!-- <section id="package">
     <div class="container">
       <div class="header">
         <h2>PACKAGE</h2>
@@ -461,23 +501,7 @@
         <div class="col-md-2 col-lg-2"></div>
       </div>
     </div>
-  </section>
-
-  <!-- Thai team -->
-  <div id="thai" class="about-bg">
-    <div class="row rwid">
-      <div class="col-md-6 col-lg-6 text-center text-mob">
-        <h2 class="font-family ">Our Team Support</h2>
-        <p>ทีม Buddy Recruit เราคือนักพัฒนาคนไทย</p>
-        <p>ที่คอยดูแลระบบ Recruitment ให้มีประสิทธิภาพ<p>
-            <p>ตลอดจนขับเคลื่อนองค์กรให้ก้าวหน้าในอนาคตต่อไป</p>
-            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
-      </div>
-      <div class="col-md-6 col-lg-6">
-        <img class="img-bg" src="../../../assets/images/thai.jpg">
-      </div>
-    </div>
-  </div>
+  </section> -->
 
   <!-- FAQ -->
   <section id="faq">
@@ -565,11 +589,17 @@
         <div class="col-md-4 m-b-20">
           <div class="sitemap">
             <h6>Sitemap</h6>
-            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(home)">Home<span
-                class="sr-only">(current)</span></a>
-            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(features)">Features</a>
-            <!-- <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a> -->
-            <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">Contact us</a>
+            <a class="nav-link font-family" style="cursor: pointer;"
+              (click)="scrollToElement(home,'home')">หน้าเเรก<span class="sr-only">(current)</span></a>
+            <a class="nav-link font-family" style="cursor: pointer;"
+              (click)="scrollToElement(second,'second')">เกี่ยวกับ</a>
+            <a class="nav-link font-family" style="cursor: pointer;"
+              (click)="scrollToElement(com,'com')">บริษัทของเรา</a>
+            <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+            <a class="nav-link font-family" style="cursor: pointer;"
+              (click)="scrollToElement(package,'package')">ราคา</a>
+            <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
+            <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
           </div>
         </div>
         <div class="col-md-4 m-b-20">
@@ -604,16 +634,17 @@
       <nb-accordion-item [expanded]="expanded">
         <nb-accordion-item-header (click)="toggleRegister()">
           <div class="title">
-            <div *ngIf="!devices.isMobile">ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
-            <div *ngIf="devices.isMobile">รับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
+            <div *ngIf="!devices.isMobile" style="font-family: kanit;">
+              ลงทะเบียนเพื่อรับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
+            <div *ngIf="devices.isMobile" style="font-family: kanit;">รับสิทธิ์ทดลองการใช้งานฟรี(จำนวนจำกัด)</div>
           </div>
         </nb-accordion-item-header>
         <nb-accordion-item-body *ngIf="!isSubmitted" [style.max-height.px]="innerHeight">
           <div class="label text-center text-gray m-b-20">
-            <div class="m-b-5">
+            <div class="m-b-5" style="font-family: kanit;">
               Your <b class="text-black">BUDDY</b> for <span class="text-green">SUCCESSFUL</span> Recruitment.
             </div>
-            <div>
+            <div style="font-family: kanit;">
               Let Buddy Recruit help you make the <span class="text-black">RIGHT</span> hire, <span
                 class="text-black">FASTER</span>.
             </div>
@@ -668,10 +699,11 @@
             </small>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.planToUse }">
-            <label class="label">Plan To Use <span class="text-red">*</span></label>
+            <label class="label">วางแผนการใช้งาน <span class="text-red">*</span></label>
             <div class="m-l-15">
               <nb-radio-group [(ngModel)]="contactUs.planToUse">
-                <nb-radio *ngFor="let option of planOptions" [value]="option.value">{{ option.label }}</nb-radio>
+                <nb-radio *ngFor="let option of planOptions" [value]="option.value" style="font-family: kanit;">
+                  {{ option.label }}</nb-radio>
               </nb-radio-group>
               <small *ngIf="errMsg.planToUse" class="text-red">
                 <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -685,7 +717,8 @@
           </div>
           <hr>
           <div class="m-t-20">
-            <button nbButton status="success" size="small" class="pull-right" (click)="submit()">Submit</button>
+            <button nbButton status="success" size="small" class="pull-right" (click)="submit()"
+              style="font-family: kanit;">Submit</button>
           </div>
         </nb-accordion-item-body>
 

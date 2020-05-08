@@ -16,73 +16,95 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav ml-md-auto">
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;"
-                        (click)="scrollToElement(home)">หน้าเเรก<span class="sr-only">(current)</span></a>
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                            class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;"
-                        (click)="scrollToElement(features)">เกี่ยวกับ</a>
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('second')">เกี่ยวกับ</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('com')">บริษัทของเรา</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">การใช้งาน</a>
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navFeature }" style="cursor: pointer;"
+                        (click)="scrollToElement(top,'top')">คุณสมบัติ</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(contact)">ราคา</a>
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('package')">ราคา</a>
                 </li>
+                <!-- <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
+                </li> -->
+                <!-- <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
+                </li> -->
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;"
-                        (click)="scrollToElement(contact)">บทความ</a>
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navContact }" style="cursor: pointer;"
+                        (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;"
-                        (click)="scrollToElement(contact)">ติดต่อเรา</a>
-                </li>
-                <!-- <button style="text-align: center;" nbButton outline status="success"
+                <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
                     [routerLink]="'/employer/login'">Sign
-                    In</button> -->
+                    In</button>
             </ul>
         </div>
     </nav>
     <div #top id="top"></div>
     <nb-card style="margin-bottom: 0px;">
-        <nb-card-body style="margin-top: 8.5rem;padding-bottom: 5rem;">
+        <nb-card-body style="margin-top: 5.5rem;padding-bottom: 5rem;">
             <div class="row">
-                <div class="col-md-3 col-lg-3"></div>
-                <div class="col-md-2 col-lg-2" style="text-align: center;">
-                    <img class="img-default" style="cursor: none;" [src]="item.icon"><br>
-                    <label style="font-size: 1.25rem;">{{ item.name || '' }}</label>
+                <div class="col-md-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12" style="text-align: center;">
+                            <h2>คุณสมบัติของ Buddy Recruit</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-lg-2"></div>
+                        <div class="col-md-3 col-lg-3" style="text-align: center;">
+                            <img class="img-show" style="cursor: none;" [src]="item.icon"><br>
+                            <label style="font-size: 1.25rem;">{{ item.name || '' }}</label>
+                        </div>
+                        <div class="col-md-7 col-lg-7" style="padding-top: 1rem;">
+                            <label style="font-size: 1.5rem; line-height: 40px; color: gray;">
+                                {{ item.description || '' }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row padd-top">
+                        <div class="col-md-12 col-lg-12" style="text-align: center;">
+                            <video autoplay width="500" height="500" [src]="item.url" controls>
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4 col-lg-4" style="padding-top: 1rem;">
-                    <label style="font-size: 1.5rem; line-height: 40px; color: gray;">
-                        {{ item.description || '' }}
-                    </label>
+                <!-- list -->
+                <div class="col-md-4 col-lg-4">
+                    <div style="text-align: center;" class="row">
+                        <div *ngFor="let feat of features;let i = index;" class="col-6 col-sm-6 col-md-6 col-lg-6">
+                            <div *ngIf="itemIndex !== i">
+                                <img class="img-default link" (click)="selectFeature(i,top)" [src]="feat.icon"><br>
+                                <label class="laShake link" (click)="selectFeature(i,top)">{{ feat.name || '' }}</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <br>
-            <div class="row">
-                <div class="col-md-12 col-lg-12" style="text-align: center;">
-                    <video width="400" [src]="item.url" controls>
-                        Your browser does not support HTML5 video.
-                    </video>
-                </div>
-            </div>
             <!-- list -->
-            <div class="row" style="padding-top: 5rem;text-align: center;">
+            <!-- <div class="row" style="padding-top: 5rem;text-align: center;">
                 <div *ngFor="let feat of features;let i = index;" class="col-4 col-sm-4 col-md-3 col-lg-2">
                     <div *ngIf="itemIndex !== i && !devices.isMobile">
                         <img class="img-default link" (click)="selectFeature(i,top)" [src]="feat.icon"><br>
                         <label>{{ feat.name || '' }}</label>
-                    </div>
-                    <!-- mobile -->
-                    <div *ngIf="itemIndex !== i && devices.isMobile">
+                    </div> -->
+            <!-- mobile -->
+            <!-- <div *ngIf="itemIndex !== i && devices.isMobile">
                         <img class="img-default-mobile link" (click)="selectFeature(i,top)" [src]="feat.icon"><br>
                         <label>{{ feat.name || '' }}</label>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </nb-card-body>
     </nb-card>
 
@@ -93,13 +115,17 @@
                 <div class="col-md-4 m-b-20">
                     <div class="sitemap">
                         <h6>Sitemap</h6>
+                        <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                                class="sr-only">(current)</span></a>
                         <a class="nav-link font-family" style="cursor: pointer;"
-                            (click)="scrollToElement(home)">Home<span class="sr-only">(current)</span></a>
+                            (click)="changePath('second')">เกี่ยวกับ</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
-                            (click)="scrollToElement(features)">Features</a>
-                        <!-- <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a> -->
+                            (click)="changePath('com')">บริษัทของเรา</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
-                            (click)="scrollToElement(contact)">Contact us</a>
+                            (click)="scrollToElement(top,'top')">คุณสมบัติ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('package')">ราคา</a>
+                        <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
                     </div>
                 </div>
                 <div class="col-md-4 m-b-20">

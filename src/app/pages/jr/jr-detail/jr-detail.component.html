@@ -190,8 +190,8 @@
               </mat-checkbox>
             </div>
           </div>
-          <div class="col-sm-3 col-md-3">
-            <label *ngIf="jr.requiredExam" class="label">Have Attitude Test</label>
+          <div *ngIf="jr.requiredExam" class="col-sm-3 col-md-3">
+            <label class="label">Have Attitude Test</label>
             <div>
               <mat-checkbox class="label" [(ngModel)]="jr.requiredAttitude" [disabled]="checkPreview || !editExam">Yes
               </mat-checkbox>

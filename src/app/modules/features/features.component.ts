@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Devices } from '../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../shared/services/utilities.service';
+import { setPathName } from '../../shared/services';
+import { Router } from "@angular/router";
 @Component({
   selector: 'ngx-features',
   templateUrl: './features.component.html',
@@ -12,14 +14,19 @@ export class FeaturesComponent implements OnInit {
   itemIndex: any;
   showStart: boolean;
   devices: Devices;
+  navFeature: boolean;
+  navContact: boolean;
   constructor(
     private utilitiesService: UtilitiesService,
+    private router: Router,
   ) {
     this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
     this.item = {};
+    this.navContact = false;
+    this.navFeature = true;
     this.features = [
       {
         name: "AI (Artificial Intelligence) technique",
@@ -102,6 +109,27 @@ export class FeaturesComponent implements OnInit {
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     this.item = this.features[index];
     this.itemIndex = index;
+  }
+
+  scrollToElement(element, name): void {
+    this.navFeature = false;
+    this.navContact = false;
+    switch (name) {
+      case 'top':
+        this.navFeature = true;
+        break;
+      case 'contact':
+        this.navContact = true;
+        break;
+      default:
+        break;
+    }
+    element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
+
+  changePath(name) {
+    setPathName(name);
+    this.router.navigate(['/index']);
   }
 
 }
