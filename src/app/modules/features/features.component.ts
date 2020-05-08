@@ -95,7 +95,7 @@ export class FeaturesComponent implements OnInit {
         icon: "../../../assets/images/maill.png"
       },
       {
-        name: "Chatbot",
+        name: "Notification",
         description: "Process flow ราบรื่นและรวดเร็ว โดยแจ้งเตือนการทำงาน ให้การ Recruitment ไม่สะดุด ",
         url: "../../../assets/video/Notication.mp4",
         icon: "../../../assets/images/notification.png"
