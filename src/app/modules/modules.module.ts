@@ -100,6 +100,8 @@ import { CountdownTimerModule } from 'ngx-countdown-timer';
 import { ApplicationFormComponent } from './application-form/application-form.component';
 import { HomeComponent } from './home/home.component';
 import { FeaturesComponent } from './features/features.component';
+import { BlogListComponent } from './blog/blog-list/blog-list.component';
+import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 
 @NgModule({
   imports: [
@@ -109,7 +111,7 @@ import { FeaturesComponent } from './features/features.component';
     ReactiveFormsModule,
     ComponentsModule,
     ModulesRoutingModule,
-    
+
     ThemeModule,
     NbCardModule,
     NbCheckboxModule,
@@ -132,7 +134,7 @@ import { FeaturesComponent } from './features/features.component';
     NgxEchartsModule,
     NbDatepickerModule,
     NbLayoutModule,
-    
+
     A11yModule,
     CdkStepperModule,
     CdkTableModule,
@@ -196,6 +198,8 @@ import { FeaturesComponent } from './features/features.component';
     ApplicationFormComponent,
     HomeComponent,
     FeaturesComponent,
+    BlogDetailComponent,
+    BlogListComponent
   ],
   providers: [
     TranslateService,

@@ -9,6 +9,8 @@ import { ResumeComponent } from './resume/resume.component';
 import { ApplicationFormComponent } from './application-form/application-form.component';
 import { HomeComponent } from './home/home.component';
 import { FeaturesComponent } from './features/features.component';
+import { BlogListComponent } from './blog/blog-list/blog-list.component';
+import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 const routes: Routes = [
   {
     path: '',
@@ -53,6 +55,18 @@ const routes: Routes = [
       {
         path: 'resume',
         component: ResumeComponent,
+      },
+      {
+        path: 'blog',
+        component: BlogListComponent,
+      },
+      {
+        path: 'blog/:action',
+        component: BlogDetailComponent,
+      },
+      {
+        path: 'blog/:action/:id',
+        component: BlogDetailComponent,
       },
       {
         path: 'employer',
