@@ -650,7 +650,7 @@
             </div>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.firstName }">
-            <label class="label">First Name <span class="text-red">*</span></label>
+            <label class="label">ชื่อ <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="contactUs.firstName" nbInput fullWidth>
             <small *ngIf="errMsg.firstName" class="text-red">
               <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -658,7 +658,7 @@
             </small>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.lastName }">
-            <label class="label">Last Name <span class="text-red">*</span></label>
+            <label class="label">นามสกุล <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="contactUs.lastName" nbInput fullWidth>
             <small *ngIf="errMsg.lastName" class="text-red">
               <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -666,7 +666,7 @@
             </small>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.email }">
-            <label class="label">Work Email <span class="text-red">*</span></label>
+            <label class="label">อีเมลล์<span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="contactUs.email" nbInput fullWidth>
             <small *ngIf="errMsg.email" class="text-red">
               <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -674,7 +674,7 @@
             </small>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.phone }">
-            <label class="label">Phone Number <span class="text-red">*</span></label>
+            <label class="label">เบอร์โทรศัพท์ <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="contactUs.phone" nbInput fullWidth>
             <small *ngIf="errMsg.phone" class="text-red">
               <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -682,7 +682,7 @@
             </small>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.companyName }">
-            <label class="label">Company Name <span class="text-red">*</span></label>
+            <label class="label">ชื่อบริษัท <span class="text-red">*</span></label>
             <input type="text" [(ngModel)]="contactUs.companyName" nbInput fullWidth>
             <small *ngIf="errMsg.companyName" class="text-red">
               <nb-icon icon="alert-circle-outline"></nb-icon>
@@ -690,7 +690,7 @@
             </small>
           </div>
           <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.numberEmployees }">
-            <label class="label">Number of Employees <span class="text-red">*</span></label>
+            <label class="label">จำนวนพนักงาน <span class="text-red">*</span></label>
             <input type="text" pattern="/^\d*$/" maxlength="7" [(ngModel)]="contactUs.numberEmployees" nbInput
               fullWidth>
             <small *ngIf="errMsg.numberEmployees" class="text-red">
@@ -712,13 +712,13 @@
             </div>
           </div>
           <div class="form-control-group">
-            <label class="label">Message</label>
+            <label class="label">ข้อความ</label>
             <textarea type="text" nbInput fullWidth [(ngModel)]="contactUs.remark"></textarea>
           </div>
           <hr>
           <div class="m-t-20">
             <button nbButton status="success" size="small" class="pull-right" (click)="submit()"
-              style="font-family: kanit;">Submit</button>
+              style="font-family: kanit;">ส่ง</button>
           </div>
         </nb-accordion-item-body>
 
