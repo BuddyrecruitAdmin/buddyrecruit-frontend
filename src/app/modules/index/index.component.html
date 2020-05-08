@@ -21,7 +21,11 @@
         </li>
         <li class="nav-item active" style="padding-right: 1.25rem;">
           <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navHowto }" style="cursor: pointer;"
-            (click)="scrollToElement(howTo,'howTo')">เกี่ยวกับ</a>
+            (click)="scrollToElement(second,'second')">เกี่ยวกับ</a>
+        </li>
+        <li class="nav-item active" style="padding-right: 1.25rem;">
+          <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navCom }" style="cursor: pointer;"
+            (click)="scrollToElement(com,'com')">บริษัทของเรา</a>
         </li>
         <li class="nav-item active" style="padding-right: 1.25rem;">
           <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
@@ -96,18 +100,29 @@
   </aside>
 
   <!-- About -->
-  <div id="second" class="about-bg">
-    <div class="for-mobile">
+  <div id="second" #second class="about-bg">
+    <div style="padding-top: 2.75rem" class="for-mobile">
       <div class="row rwid">
-        <div class="col-12 col-sm-11 col-md-6 col-lg-6">
-          <img class="img-bg" src="../../../assets/images/about1.jpg">
-        </div>
-        <div class="col-12 col-sm-11 col-md-6 col-lg-6 text-center text-mob">
+        <div class="col-12 col-sm-11 col-md-5 col-lg-5 text-center">
           <h2 class="font-family ">Buddy Recruit คืออะไร?</h2>
           <hr class="line-color">
-          <p>แพลตฟอร์มเพื่อช่วยเพิ่มประสิทธิภาพ ในการคัดสรรผู้สมัครในองค์กร</p>
-          <p>โดยใช้ระบบ AI (Artificial Intelligence)</p>
-          <video width="500" src="../../../assets/video/intro.mp4" controls>
+          <!-- <p>แพลตฟอร์มเพื่อช่วยเพิ่มประสิทธิภาพ ในการคัดสรรผู้สมัครในองค์กร</p>
+          <p>โดยใช้ระบบ AI (Artificial Intelligence)</p> -->
+          <p style="padding-top: 5%;">A easy-to-use cloud-based HR platform for recruitment by automate screening &
+            Matching candidate .
+            Support resume language both Thai and English .So that your business can make the right hire, faster
+            and smarter until onboarding.
+          </p>
+          <p>ระบบ HR ที่ดูแลในส่วนการสรรหาบุคลากร ช่วยให้งานจัดการใบสมัครและการ screening เป็นระบบอัตโนมัติ
+            การใช้งานระบบง่าย ไม่ซับซ้อน
+            รองรับได้ทั้ง resume ภาษาไทยและอังกฤษ คุณจึงมั่นใจได้ว่า การสรรหาของคุณจะง่ายขึ้น ดีขึ้น และ
+            มีประสิทธิภาพมากขึ้นจนจบกระบวนการ
+            onboarding
+          </p>
+        </div>
+        <div class="col-12 col-sm-11 col-md-7 col-lg-7" style="text-align: center;">
+          <!-- <img class="img-bg" src="../../../assets/images/about1.jpg"> -->
+          <video style="padding-top: 5%;" width="500" src="../../../assets/video/intro.mp4" controls>
             Your browser does not support HTML5 video.
           </video>
         </div>
@@ -119,7 +134,7 @@
   <section #howTo id="howTo">
     <div class="container">
       <div class="header">
-        <h2 style="padding-top: 2.75rem;font-size: 3rem;"><span style="font-weight: bold;
+        <h2 style="font-size: 3rem;"><span style="font-weight: bold;
           color: var(--color-green);">Buddy Recruit</span><br *ngIf="devices.isMobile"> ทำงานอย่างไร?</h2>
       </div>
       <div class="row rwid text-mob">
@@ -205,14 +220,21 @@
   </div>
 
   <!-- Thai team -->
-  <div id="thai" class="about-bg">
+  <div id="com" #com class="about-bg">
     <div class="row rwid">
       <div class="col-md-6 col-lg-6 text-center text-mob">
         <h2 class="font-family ">Our Team Support</h2>
         <p>ทีม Buddy Recruit เราคือนักพัฒนาคนไทย</p>
-        <p>ที่คอยดูแลระบบ Recruitment ให้มีประสิทธิภาพ<p>
-            <p>ตลอดจนขับเคลื่อนองค์กรให้ก้าวหน้าในอนาคตต่อไป</p>
-            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
+        <p>ที่คอยดูแลระบบ Recruitment ให้มีประสิทธิภาพ</p>
+        <p>ตลอดจนขับเคลื่อนองค์กรให้ก้าวหน้าในอนาคตต่อไป</p>
+        <h3 class="font-family ">องค์กรของเรา</h3>
+        <p style="line-height: 2rem;">Buddy Recruit พัฒนาขึ้นโดยบริษัท Zygen Company เราคือผู้เชี่ยวชาญทางด้าน IT
+          service&solution และ SAP professional consulting service firm ก่อนตั้งเมื่อ ปี 1999 โดยมี
+          ลูกค้าเป็นองค์กรชั้นนำของประเทศจำนวนมาก</p>
+        <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+          alt="Buddy Recruit Logo" /><br>
+        <button style="font-family: kanit;color: black;margin-top: 3%;" shape="round" nbButton outline status="success"
+          [routerLink]="'https://www.zygencenter.com'">More Detail</button>
       </div>
       <div class="col-md-6 col-lg-6">
         <img class="img-bg" src="../../../assets/images/thai.jpg">
@@ -571,10 +593,13 @@
             <a class="nav-link font-family" style="cursor: pointer;"
               (click)="scrollToElement(home,'home')">หน้าเเรก<span class="sr-only">(current)</span></a>
             <a class="nav-link font-family" style="cursor: pointer;"
-              (click)="scrollToElement(howTo,'howTo')">เกี่ยวกับ</a>
+              (click)="scrollToElement(second,'second')">เกี่ยวกับ</a>
+            <a class="nav-link font-family" style="cursor: pointer;"
+              (click)="scrollToElement(com,'com')">บริษัทของเรา</a>
             <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
             <a class="nav-link font-family" style="cursor: pointer;"
               (click)="scrollToElement(package,'package')">ราคา</a>
+            <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
             <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
           </div>
         </div>

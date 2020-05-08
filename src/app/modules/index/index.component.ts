@@ -138,6 +138,7 @@ export class IndexComponent implements OnInit {
   navHowto: boolean;
   navPackage: boolean;
   navContact: boolean;
+  navCom: boolean;
   pathName: any;
   constructor(
     private utilitiesService: UtilitiesService,
@@ -177,6 +178,7 @@ export class IndexComponent implements OnInit {
     this.navHowto = false;
     this.navPackage = false;
     this.navContact = false;
+    this.navCom = false;
     if (this.pathName) {
       this.scrollToElement(document.getElementById(this.pathName), this.pathName);
     }
@@ -315,12 +317,16 @@ export class IndexComponent implements OnInit {
     this.navHowto = false;
     this.navPackage = false;
     this.navContact = false;
+    this.navCom = false;
     switch (name) {
       case 'home':
         this.navHome = true;
         break;
-      case 'howTo':
+      case 'second':
         this.navHowto = true;
+        break;
+      case 'com':
+        this.navCom = true;
         break;
       case 'package':
         this.navPackage = true;
