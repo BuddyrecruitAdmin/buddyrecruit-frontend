@@ -63,18 +63,27 @@
         </span>
       </div>
       <div *ngIf="showHistory" class="border-padbottom border-all-reject box-pad box-header with-border">
-        <div *ngFor="let item of history" class="text-gray m-t-10">
+        <div *ngFor="let item of history;let i = index;" class="text-gray m-t-10">
           <div *ngIf="item.refReject?.name || item.remark">
-            <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
+            <!-- <nb-icon icon="arrow-right-outline" class="text-light-gray"></nb-icon>
             <span>{{ item.refReject?.name }}</span>
-            <span *ngIf="item.remark">: {{ item.remark }}</span>
+            <span *ngIf="item.remark">: {{ item.remark }}</span> -->
+
+            <label><strong>{{ i+1 }}.Position:</strong>
+              {{ item.refCandidateFlows?.refJR.refJD.position || '' }} </label><br>
+            <label><strong>Rejected by</strong>:
+              {{ utilitiesService.setFullname(item.refUser) || '' }}</label><br>
+            <label><strong>Rejected Date</strong>:
+              {{ utilitiesService.convertDateTimeFromSystem(item.date) || '' }}</label><br>
+            <label><strong>Rejected reason:</strong>
+              {{ item.refReject?.name || '' }}<span *ngIf="item.remark">({{ item.remark || '' }})</span></label><br>
           </div>
-          <div *ngIf="item.refUser || item.date" class="m-l-20">
+          <!-- <div *ngIf="item.refUser || item.date" class="m-l-20">
             <small>
               ( {{ item.refCandidateFlows?.refJR.refJD.position }} - {{ utilitiesService.setFullname(item.refUser) }},
               {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
             </small>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
