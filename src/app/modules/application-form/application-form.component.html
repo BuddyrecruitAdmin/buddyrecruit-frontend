@@ -90,7 +90,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <div *ngIf="jobPosition && jobPosition.children">
+              <div *ngIf="jobPosition && jobPosition.children.length">
                 <div *ngIf="!jobPosition.isMultiAnswer">
                   <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>

@@ -560,6 +560,7 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   setRequest(): IApplicationForm {
+    debugger;
     const request = this.appForm;
     request.birth = new Date(request.birth);
     if (request.workExperience.work && request.workExperience.work.length) {
@@ -574,6 +575,8 @@ export class ApplicationFormComponent implements OnInit {
     }
     if (request.jobMultiChild && request.jobMultiChild.value) {
       request.jobMultiChild = request.jobMultiChild.value;
+    } else {
+      request.jobMultiChild = [];
     }
     // Calculate score
     if (request.questions && request.questions.length) {

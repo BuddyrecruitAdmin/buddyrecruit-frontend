@@ -166,10 +166,37 @@ nb-accordion {
       }
     }
 
-    .score {
-      border-top: 2px solid #edf1f7;
+    .answer {
       margin: 0;
       box-shadow: none;
+      border: 1px solid #edf1f7;
+      border-top: none;
+    }
+    .image-preview {
+      margin: 0.5rem 2rem 1rem;
+      position: relative;
+      display: inline-block;
+      padding: 5px;
+      border: 1px solid #eee;
+
+      .icon-remove {
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        background: #eee;
+        border-radius: 50%;
+      }
+    }
+    .score {
+      margin: 0;
+      box-shadow: none;
+      border: 1px solid #edf1f7;
+      border-top: none;
+
+      .toggle {
+        font-size: 1rem;
+        font-weight: 500;
+      }
 
       .score-body {
         padding: 1rem;

@@ -311,10 +311,12 @@ export class AppFormDetailComponent implements OnInit {
   duplicateQuestion(index: number) {
     const question = _.cloneDeep(this.appForm.questions[index]);
     this.appForm.questions.push(question);
+    this.calGrandScore();
   }
 
   deleteQuestion(index: number) {
     this.appForm.questions.splice(index, 1);
+    this.calGrandScore();
   }
 
   addOption(options: any): void {
@@ -384,7 +386,7 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.questions[iQuestion].grid.columns.splice(iGridCol, 1);
   }
 
-  onChangeMaxScore() {
+  calGrandScore() {
     this.totalScore = 0;
     this.appForm.questions.forEach(question => {
       this.totalScore += question.score.maxScore;
@@ -393,7 +395,7 @@ export class AppFormDetailComponent implements OnInit {
 
   oncChangeGridRowScore(question): void {
     question.score.maxScore = question.score.girdRowScore * question.grid.rows.length;
-    this.onChangeMaxScore();
+    this.calGrandScore();
   }
 
   getMaxScore(score): number {
@@ -603,7 +605,7 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
-          this.onChangeMaxScore();
+          this.calGrandScore();
         }
       } else {
         this.showToast('danger', response.message || 'Error!');
