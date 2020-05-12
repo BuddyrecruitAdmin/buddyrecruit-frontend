@@ -1,6 +1,6 @@
 .homepage {
     font-family: kanit !important;
-     h1,h2, p{
+     h1,h2,h3, p{
       font-family: kanit;
     }
 }
@@ -18,12 +18,21 @@
 // }
 .navbar-nav .nav-link {
   font-weight: 600;
+  font-family: kanit;
 }
-.nav-item.active > .nav-link {
+// .nav-item.active > .nav-link {
+//   color: var(--color-green) !important;
+// }
+.nav-shadow{
   color: var(--color-green) !important;
 }
 .carousel {
   background-color: #222222;
+}
+video {
+  width: 85%;
+  height: auto;
+  padding-bottom: 3%;
 }
 .picsum-img-wrapper {
   opacity: 0.5;
@@ -36,7 +45,13 @@
   bottom: 0;
   right: 10px;
   z-index: 1030;
-
+  font-family: kanit !important;
+  label {
+      font-family: kanit;
+  }
+  span{
+    font-family: kanit;
+  }
   nb-accordion-item {
     // width: 400px;
     border-bottom-right-radius: 0px !important;
@@ -121,10 +136,12 @@ section .header h3 {
     font-weight: 800;
     text-transform: uppercase;
     margin-bottom: 1rem;
+    font-family: kanit;
   }
   h5, h6, span {
     color: var(--color-gray);
     font-weight: 400;
+    font-family: kanit;
   }
 }
 
@@ -133,13 +150,13 @@ section .header h3 {
     background-color: var(--color-white);
 }
 #home {
-  background: url(../../../assets/images/ngIndex.jpg) no-repeat center center; 
+  background: url(../../../assets/images/indexbg.png) no-repeat center center; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   position: relative;
-  margin-top: 66px;
+
   height: 100vh;
   .img-logo{
     width: 100px;
@@ -152,10 +169,10 @@ section .header h3 {
   .image-text {
     position: absolute;
     top: calc(20%);
-    left: calc(15%);    
+    left: calc(41%);    
 
     h3 {
-      color: var(--color-white);
+      color: var(--color-green);
       text-transform: uppercase;
       margin-bottom: 1rem;
       font-family: kanit;
@@ -167,6 +184,7 @@ section .header h3 {
       font-weight: 400;
     }
     span {
+      font-size: 1.25rem;
       color: var(--color-white);
     }
   }
@@ -174,8 +192,16 @@ section .header h3 {
 #second{
   position: relative;
   padding-bottom: 2rem;
+  .rwid{
+    left: calc(4%);
+    position: relative; 
+  }
+  .text-mob{
+    padding-top: 0rem;
+    text-align: center;
+  }
   h2{
-    padding-top: 15%;
+    padding-top: 8%;
     // font-weight: bold;
     text-align: center;
   }
@@ -190,10 +216,14 @@ section .header h3 {
   }
   p{
     font-size: 1.15rem;
+    line-height: 2.5rem;
   }
 }
 #contact-us {
   position: relative;
+  h6{
+    font-family: kanit;
+  }
   h2{
     padding-top: 25%;
     // font-weight: bold;
@@ -332,13 +362,25 @@ section .header h3 {
   width: 100%;
   background-color: #382a5d;
 }
-#thai{
+#com{
   position: relative;
+  .btn-org{
+    border: 2px solid white;
+  }
+  .img-logo{
+    width: 65px;
+    height: 80px; 
+  }
   h2{
-    padding-top: 25%;
+    padding-top: 15%;
     padding-bottom: 5%;
     text-align: center;
     color: black;
+  }
+  h3{
+    padding-top: 5%;
+    padding-bottom: 5%;
+    font-size: 32px;
   }
   .img-bg{
     height: auto;
@@ -355,6 +397,33 @@ section .header h3 {
   }
 }
 #package{
+  // nb-card{
+  //   border-radius: 2rem;
+  //   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  //   nb-card-body{
+  //     padding: 1rem 0rem;
+  //   }
+  // }
+  // .btn-stand{
+  //   color: white;
+  //   background: rgb(113,245,106);
+  //   background: linear-gradient(90deg, rgba(113,245,106,1) 0%, rgba(121,156,232,1) 100%);
+  // }
+  // .btn-pro{
+  //   color: white;
+  //   background: rgb(245,217,106);
+  //   background: linear-gradient(90deg, rgba(245,217,106,1) 0%, rgba(247,47,186,1) 100%);
+  // }
+  // span{
+  //   float: right;
+  //   padding-right: 2.5rem;
+  // }
+  // label{
+  //   text-align: left;
+  //   width: 100%;
+  //   padding-left: 1.5rem;
+  //   color: var(--color-gray);
+  // }
   nb-card{
     border-radius: 2rem;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -363,24 +432,39 @@ section .header h3 {
     }
   }
   .btn-stand{
+    font-family: kanit;
     color: white;
-    background: rgb(113,245,106);
-    background: linear-gradient(90deg, rgba(113,245,106,1) 0%, rgba(121,156,232,1) 100%);
+    border: 2px solid white;
   }
   .btn-pro{
     color: white;
-    background: rgb(245,217,106);
-    background: linear-gradient(90deg, rgba(245,217,106,1) 0%, rgba(247,47,186,1) 100%);
+    font-family: kanit;
+    border: 2px solid white;
   }
   span{
+    font-family: kanit;
     float: right;
     padding-right: 2.5rem;
+    color: var(--color-white);
   }
   label{
+    font-family: kanit;
+    font-size: 1.3rem;
+    line-height: 35px;
     text-align: left;
     width: 100%;
     padding-left: 1.5rem;
-    color: var(--color-gray);
+    color: var(--color-white);
+  }
+  h2{
+    padding-top: 2.75rem;
+    padding-bottom: 2.75rem;
+    font-size: 3rem;
+  }
+  h3{
+    font-family: kanit;
+    font-size: 2.5rem;
+    color: var(--color-white);
   }
 }
 
@@ -458,6 +542,7 @@ footer {
     color: var(--color-black);
     font-weight: 700;
     margin-bottom: 10px;
+    font-family: kanit;
   }
   a {
     color: var(--color-white) !important;
@@ -477,6 +562,7 @@ footer {
     color: var(--color-black);
     font-weight: 700;
     margin-bottom: 10px;
+    font-family: kanit;
   }
   p {
     color: #e7e7e7;
@@ -512,12 +598,13 @@ footer {
     }
     .image-text {
       position: absolute;
-      top: calc(10%);
-      left: calc(4%);
+      top: calc(20%);
+      left: calc(15%);  
       h2, h3 {
         font-size: 2.4rem;
         font-weight: 600;
         text-align: center;
+        width: max-content;
       }
       h5, h6 {
         font-size: 0.5rem;
@@ -539,10 +626,6 @@ footer {
         left: calc(4%);
         position: relative;
         }
-      .text-mob{
-        left: calc(4%);
-        position: relative;
-      }
     }
     h2{
       padding-top: 1rem;
@@ -635,7 +718,7 @@ footer {
       position: relative;
     }
   }
-  #thai{
+  #com{
     h2{
       padding-top: 2rem;
     }

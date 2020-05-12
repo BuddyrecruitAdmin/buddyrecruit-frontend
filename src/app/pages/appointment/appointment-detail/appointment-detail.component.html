@@ -128,11 +128,11 @@
                         <label class="label">Exam Remark</label>
                         <span>{{ item.pendingExamScoreInfo?.examRemark || '-' }}</span>
                       </div>
-                      <div class="text-group">
+                      <div *ngIf="item.refJR.requiredAttitude" class="text-group">
                         <label class="label">Attitude Score</label>
                         <span>{{ item.pendingExamScoreInfo?.attitudeScore || '0' }}</span>
                       </div>
-                      <div class="text-group">
+                      <div *ngIf="item.refJR.requiredAttitude" class="text-group">
                         <label class="label">Attitude Remark</label>
                         <span>{{ item.pendingExamScoreInfo?.attitudeRemark || '-' }}</span>
                       </div>

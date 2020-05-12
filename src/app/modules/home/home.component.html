@@ -1,0 +1,175 @@
+<div class="homepage">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="navbar-brand d-flex align-items-center">
+            <img src="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
+            <strong class="pl-2 d-none d-sm-block">
+                <span class="text-green">B</span>uddy
+                <span class="text-green">R</span>ecruit
+            </strong>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;">เกี่ยวกับ</a>
+                </li>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+                </li>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(package)">ราคา</a>
+                </li>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
+                </li>
+                <li class="nav-item active" style="padding-right: 1.25rem;">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="scrollToElement(contact)">ติดต่อเรา</a>
+                </li>
+                <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
+                    [routerLink]="'/employer/login'">Sign
+                    In</button>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home -->
+    <div #home id="home">
+        <div class="image-text" style="margin-top: 66px;" *ngIf="devices.isPC || devices.isNotebook || devices.other">
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <h3 style="float: right">
+                        <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+                            alt="Buddy Recruit Logo" />
+                    </h3>
+                </div>
+                <div class="col-9 col-sm-9 col-md-9 col-lg-9">
+                    <h3>
+                        Buddy Recruit
+                    </h3>
+                    <span style="color: white">
+                        Your Buddy for Successful Recruitment
+                    </span>
+                    <br>
+                    <span style="color: white">
+                        AI automate hiring part of your workflow
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="image-text" style="margin-top: 66px;" *ngIf="devices.isMobile || devices.isTablet">
+            <div class="row" style="width: 100%">
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                    <h3>
+                        <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+                            alt="Buddy Recruit Logo" />
+                    </h3>
+                </div>
+                <div class="col-12 col-sm-9 col-md-9 col-lg-9" style="text-align: center">
+                    <br>
+                    <h3>
+                        Buddy Recruit
+                    </h3>
+                    <br>
+                    <label style="color: white">
+                        Your Buddy for Successful Recruitment
+                    </label>
+                    <br>
+                    <span style="color: white;padding-top: 5px;">
+                        AI automate hiring part of your workflow
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Price -->
+    <section #package id="package" style="padding-bottom: 5rem;">
+        <div class="container">
+            <div class="header">
+                <h2>แพ็คเกจของเรา</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-1 col-lg-1"></div>
+                <div class="col-md-4 col-lg-4">
+                    <nb-card style="background-color: #132b57">
+                        <nb-card-body>
+                            <h3>Standard</h3>
+                            <label>ตำแหน่งงาน <span>5</span></label>
+                            <label>จำนวนผู้เข้าใช้ <span>10</span></label>
+                            <label>คุณสมบัติ <span>ทั้งหมด</span></label>
+                            <label>จำนวน CV ต่อวัน <span>100</span></label>
+                            <button nbButton shape="round" size="giant" ghost class="btn-stand">เลือก</button>
+                        </nb-card-body>
+
+                    </nb-card>
+                </div>
+                <div class="col-md-2 col-lg-2"></div>
+                <div class="col-md-4 col-lg-4">
+                    <nb-card style="background-color: #132b57">
+                        <nb-card-body>
+                            <h3>Pro</h3>
+                            <label>ตำแหน่งงาน <span>ไม่จำกัด</span></label>
+                            <label>จำนวนผู้เข้าใช้ <span>ไม่จำกัด</span></label>
+                            <label>คุณสมบัติ <span>ทั้งหมด</span></label>
+                            <label>จำนวน CV ต่อวัน <span>900</span></label>
+                            <button nbButton shape="round" size="giant" ghost class="btn-pro">เลือก</button>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+                <div class="col-md-1 col-lg-1"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer #contact id="contact">
+        <div class="container">
+            <div class="row text-mob">
+                <div class="col-md-4 m-b-20">
+                    <div class="sitemap">
+                        <h6>Sitemap</h6>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="scrollToElement(home)">Home<span class="sr-only">(current)</span></a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="scrollToElement(features)">Features</a>
+                        <!-- <a class="nav-link font-family" style="cursor: pointer;" (click)="scrollToElement(faq)">FAQ</a> -->
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="scrollToElement(contact)">Contact us</a>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-20">
+                    <div class="footer-address">
+                        <h6>ZYGEN COMPANY LIMITED</h6>
+                        <p>65/60 Chamnan Phenjati Business Center Tower,</p>
+                        <p>6 th Floor, Rama 9 Road, Huay Kwang, Bangkok, 10310</p>
+                        <p>Tel : +662 643 8016, +662 612 2116-7</p>
+                        <p>Mail : center@zygencenter.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-20">
+                    <div class="section-title wow fadeInDown animated" style="visibility: visible;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.364182712334!2d100.56648731474904!3d13.756898200881906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e8b5f598f1b%3A0xa91f1d97bdb4cb81!2zWnlHZW4gQ29tcGFueSBMaW1pdGVkIHwg4Lia4Lij4Li04Lip4Lix4LiXIOC5hOC4i-C5gOC4iOC5h-C4mSDguIjguLPguIHguLHguJQ!5e0!3m2!1sen!2sth!4v1532082801978"
+                            width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+                    </div>
+                </div>
+            </div>
+            <div id="copyright">
+                <span class="created-by">Copyright &copy; 2018-2019
+                    <a class="text-green" target="_blank" href="http://www.zygencenter.com/">ZyGen Company Limited</a>.
+                    All rights reserved.
+                </span>
+            </div>
+        </div>
+    </footer>
+</div>

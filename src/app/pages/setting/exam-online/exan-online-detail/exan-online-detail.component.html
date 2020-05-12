@@ -115,8 +115,6 @@
                             <div *ngIf="topic.examOptions">
                                 <div *ngFor="let option of topic.examOptions;let j = index;"
                                     class="input-group form-control-group">
-                                    <img *ngIf="option.src" class="img-default" [nbPopover]="selectAlign"
-                                        nbPopoverPlacement="top" (click)="setOption(option)" [src]="option.src">
                                     <textarea *ngIf="option.type === 'label'" [style.color]="option.color"
                                         [nbPopover]="colorPicker" nbPopoverPlacement="top" (click)="setOption(option)"
                                         type="text" [(ngModel)]="option.value" nbInput fullWidth
@@ -191,6 +189,8 @@
                                             </a>
                                         </small>
                                     </div>
+                                    <img *ngIf="option.src" class="img-default" (click)="setOption(option)"
+                                        [src]="option.src">
                                     <div *ngIf="!preview" class="input-group-addon">
                                         <a *ngIf="option.type === 'label'" style="cursor: pointer;"
                                             (click)="fileInput.click()">
@@ -250,13 +250,6 @@
                     </div>
                     <div *ngIf="topic.examOptions">
                         <div *ngFor="let option of topic.examOptions;let j = index;">
-                            <div class="row" *ngIf="option.src && option.type !== 'file' && option.type !=='getFile'"
-                                style="text-align:center">
-                                <div class="col-md-12 col-lg-12">
-                                    <img class="img-default" style="text-align:center" [src]="option.src"><br
-                                        *ngIf="option.src">
-                                </div>
-                            </div>
                             <label *ngIf="option.type === 'label'" [style.color]="option.color"> {{ option.value }}
                                 <span *ngIf="option.score" style="color: red;">{{ option.score }}</span>
                             </label>
@@ -294,6 +287,13 @@
                                 </small>
                                 <p><small>Attach file (pdf, doc, docx, jpeg, png -
                                         Max 10 MB</small></p>
+                            </div>
+                            <div class="row" *ngIf="option.src && option.type !== 'file' && option.type !=='getFile'"
+                                style="text-align:center">
+                                <div class="col-md-12 col-lg-12">
+                                    <img class="img-default" style="text-align:center" [src]="option.src"><br
+                                        *ngIf="option.src">
+                                </div>
                             </div>
                         </div>
                     </div>

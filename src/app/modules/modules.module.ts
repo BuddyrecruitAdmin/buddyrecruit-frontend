@@ -98,6 +98,10 @@ import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
 import { ApplicationFormComponent } from './application-form/application-form.component';
+import { HomeComponent } from './home/home.component';
+import { FeaturesComponent } from './features/features.component';
+import { BlogListComponent } from './blog/blog-list/blog-list.component';
+import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 
 @NgModule({
   imports: [
@@ -107,7 +111,7 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     ReactiveFormsModule,
     ComponentsModule,
     ModulesRoutingModule,
-    
+
     ThemeModule,
     NbCardModule,
     NbCheckboxModule,
@@ -130,7 +134,7 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     NgxEchartsModule,
     NbDatepickerModule,
     NbLayoutModule,
-    
+
     A11yModule,
     CdkStepperModule,
     CdkTableModule,
@@ -192,6 +196,10 @@ import { ApplicationFormComponent } from './application-form/application-form.co
     ExamFormComponent,
     ResumeComponent,
     ApplicationFormComponent,
+    HomeComponent,
+    FeaturesComponent,
+    BlogDetailComponent,
+    BlogListComponent
   ],
   providers: [
     TranslateService,

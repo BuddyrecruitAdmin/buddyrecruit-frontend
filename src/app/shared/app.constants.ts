@@ -77,6 +77,7 @@ export const examId = 'examId';
 export const AppFormData = 'AppFormData';
 export const flagExam = 'flagExam';
 export const ExamData = 'ExamData';
+export const PathName = 'PathName';
 
 export enum DayOfWeek {
   Sunday = 0,

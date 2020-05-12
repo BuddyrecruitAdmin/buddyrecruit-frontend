@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Devices } from '../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -6,7 +6,7 @@ import { IndexService } from './index.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslateService } from '../../translate.service';
-import { setLangPath, setLanguage, getLanguage } from '../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setPathName, getPathName } from '../../shared/services';
 export interface ContactUs {
   firstName: string;
   lastName: string;
@@ -42,7 +42,7 @@ export interface ErrMsg {
     '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
   ]
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent implements OnInit,AfterViewInit {
   innerHeight: any;
   innerWidth: any;
   devices: Devices;
@@ -98,25 +98,21 @@ export class IndexComponent implements OnInit {
 
   planOptions = [
     {
-      label: 'As soon as possible',
-      value: 'As soon as possible'
+      label: 'ตอนนี้',
+      value: 'now'
     },
     {
-      label: 'Dec 2019',
-      value: 'Dec 2019'
+      label: '3 เดือน',
+      value: '3months'
     },
     {
-      label: 'Jan 2020',
-      value: 'Jan 2020'
+      label: '6 เดือน',
+      value: '6months'
     },
     {
-      label: 'Feb 2020',
-      value: 'Feb 2020'
-    },
-    {
-      label: 'After Feb 2020',
-      value: 'After Feb 2020'
-    },
+      label: 'ปีถัดไป',
+      value: 'nextyeat'
+    }
   ];
   news = [
     {
@@ -138,7 +134,12 @@ export class IndexComponent implements OnInit {
       link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
     },
   ];
-
+  navHome: boolean;
+  navHowto: boolean;
+  navPackage: boolean;
+  navContact: boolean;
+  navCom: boolean;
+  pathName: any;
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
@@ -164,16 +165,27 @@ export class IndexComponent implements OnInit {
     if (!this.lang) {
       this.lang = "en";
     }
+    this.pathName = getPathName();
+    setPathName();
+
   }
 
   ngOnInit() {
     this.contactUs = this.initialModel();
     this.errMsg = this.initialErrMsg();
-    // this.activatedRoute.fragment.subscribe((fragment: string) => {
-    //   window.location.hash = fragment;
-    // });
     this.setLang(this.lang);
+    this.navHome = true;
+    this.navHowto = false;
+    this.navPackage = false;
+    this.navContact = false;
+    this.navCom = false;
   }
+
+  ngAfterViewInit() {
+    if (this.pathName) {
+      this.scrollToElement(document.getElementById(this.pathName), this.pathName);
+    }
+}
 
   initialModel(): ContactUs {
     return {
@@ -303,8 +315,32 @@ export class IndexComponent implements OnInit {
     this.translate.use(lang);
   }
 
-  scrollToElement(element): void {
+  scrollToElement(element, name): void {
+    this.navHome = false;
+    this.navHowto = false;
+    this.navPackage = false;
+    this.navContact = false;
+    this.navCom = false;
+    switch (name) {
+      case 'home':
+        this.navHome = true;
+        break;
+      case 'second':
+        this.navHowto = true;
+        break;
+      case 'com':
+        this.navCom = true;
+        break;
+      case 'package':
+        this.navPackage = true;
+        break;
+      case 'contact':
+        this.navContact = true;
+        break;
+      default:
+        break;
+    }
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
-  
+
 }
