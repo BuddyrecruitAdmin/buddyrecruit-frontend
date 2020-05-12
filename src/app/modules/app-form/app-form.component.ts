@@ -157,18 +157,33 @@ export class AppFormComponent implements OnInit {
   }
 
   getDetail() {
-    this.service.getDetail(this._id, this.isUser, this.role._id).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.loading = false;
-        if (this.isUser) {
-          this.showSalary = response.data.showSalary;
-          this.appforms = response.data;
-          this.edtiable = false;
-        } else {
-          this.isExitst = response.data.isExist;
+    if (this.role) {
+      this.service.getDetail(this._id, this.isUser, this.role._id).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.loading = false;
+          if (this.isUser) {
+            this.showSalary = response.data.showSalary;
+            this.appforms = response.data;
+            this.edtiable = false;
+          } else {
+            this.isExitst = response.data.isExist;
+          }
         }
-      }
-    })
+      })
+    } else {
+      this.service.getDetail(this._id, this.isUser).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.loading = false;
+          if (this.isUser) {
+            this.showSalary = response.data.showSalary;
+            this.appforms = response.data;
+            this.edtiable = false;
+          } else {
+            this.isExitst = response.data.isExist;
+          }
+        }
+      })
+    }
   }
 
   initialModel(): any {
