@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 import { TranslateService } from '../../translate.service';
 import { setLangPath, getAppFormData, getRole } from '../../shared/services';
@@ -53,6 +54,7 @@ export class ApplicationFormComponent implements OnInit {
     required: false,
     duplication: false,
   };
+  jobPosition: any;
 
   loading = true;
   loadingUpload = false;
@@ -94,6 +96,7 @@ export class ApplicationFormComponent implements OnInit {
               this.appForm.refCompany = this.template.refCompany;
               this.appForm.refTemplate = this.template._id;
               this.appForm.questions = this.template.questions;
+              this.initialAnswer();
               this.getJR(this.role && this.role.refCompany ? this.role.refCompany : undefined);
             } else {
               this.onError();
@@ -189,7 +192,11 @@ export class ApplicationFormComponent implements OnInit {
       softSkill: [],
       certificate: [],
       attachment: this.initialAttahment(),
-      questions: []
+      questions: [],
+      refPosition: '',
+      jobSelected: '',
+      jobChildSelected: '',
+      jobMultiChild: new FormControl()
     };
   }
 
@@ -210,6 +217,7 @@ export class ApplicationFormComponent implements OnInit {
           this.appForm.refCompany = this.template.refCompany;
           this.appForm.refTemplate = this.template._id;
           this.appForm.questions = this.template.questions;
+          this.initialAnswer();
         }
         this.getJR(this.template.refCompany);
         this.uploader = new FileUploader({
@@ -224,6 +232,45 @@ export class ApplicationFormComponent implements OnInit {
         this.onError();
       }
     });
+  }
+
+  initialAnswer() {
+    if (this.appForm.questions) {
+      this.appForm.questions.map(question => {
+        switch (question.type) {
+          case InputType.RadioGrid:
+            question.answer.gridRadio = [];
+            question.grid.rows.forEach(row => {
+              question.answer.gridRadio.push({
+                rowName: row.label,
+                value: '',
+              });
+            });
+            break;
+
+          case InputType.ChcekBoxGrid:
+            question.answer.gridCheckbox = [];
+            let columns = [];
+            question.grid.columns.forEach(col => {
+              columns.push({
+                colName: col.label,
+                maxScore: col.maxScore,
+                checked: false,
+              })
+            });
+            question.grid.rows.forEach(row => {
+              question.answer.gridCheckbox.push({
+                rowName: row.label,
+                columns: JSON.parse(JSON.stringify(columns)),
+              });
+            });
+            break;
+
+          default:
+            break;
+        }
+      });
+    }
   }
 
   onChangeBirthday(value: any) {
@@ -437,6 +484,49 @@ export class ApplicationFormComponent implements OnInit {
               element.classList.add("has-error");
             }
             break;
+          case this.InputType.Upload:
+            if (!question.answer.attachment.uploadName) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Linear:
+            if (!(question.answer.linearValue >= 0)) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.RadioGrid:
+            question.answer.gridRadio.forEach(gridRadio => {
+              if (!gridRadio.value) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+            });
+            break;
+          case this.InputType.ChcekBoxGrid:
+            question.answer.gridCheckbox.forEach(gridCheckbox => {
+              const found = gridCheckbox.columns.find(column => {
+                return column.checked;
+              });
+              if (!found) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+            });
+            break;
+          case this.InputType.Date:
+            if (!question.answer.date) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Time:
+            if (!question.answer.time) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
         }
 
         if (!isQuestionValid && !qElement) {
@@ -470,7 +560,7 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   setRequest(): IApplicationForm {
-    const request = JSON.parse(JSON.stringify(this.appForm));
+    const request = this.appForm;
     request.birth = new Date(request.birth);
     if (request.workExperience.work && request.workExperience.work.length) {
       request.workExperience.work.map(element => {
@@ -479,6 +569,102 @@ export class ApplicationFormComponent implements OnInit {
           element.end = new Date(element.end);
         } else {
           element.end = null;
+        }
+      });
+    }
+    if (request.jobMultiChild && request.jobMultiChild.value) {
+      request.jobMultiChild = request.jobMultiChild.value;
+    }
+    // Calculate score
+    if (request.questions && request.questions.length) {
+      request.questions.map(question => {
+        if (question.score.isScore) {
+          switch (question.type) {
+
+            case InputType.Input:
+              if (question.score.keywords && question.score.keywords.length) {
+                question.score.keywords.forEach(keyword => {
+                  const index = question.answer.input.indexOf(keyword);
+                  if (index >= 0) {
+                    question.score.submitScore = question.score.maxScore;
+                  }
+                });
+              }
+              break;
+
+            case InputType.TextArea:
+              if (question.score.keywords && question.score.keywords.length) {
+                question.score.keywords.forEach(keyword => {
+                  const index = question.answer.textArea.indexOf(keyword);
+                  if (index >= 0) {
+                    question.score.submitScore = question.score.maxScore;
+                  }
+                });
+              }
+              break;
+
+            case InputType.Radio || InputType.Dropdown:
+              if (question.answer.selected >= 0) {
+                const option = question.answer.options[question.answer.selected];
+                if (option) {
+                  question.score.submitScore = option.maxScore;
+                } else {
+                  question.score.submitScore = question.answer.otherScore;
+                }
+              }
+              break;
+
+            case InputType.ChcekBox:
+              question.answer.options.forEach(option => {
+                if (option.checked) {
+                  question.score.submitScore += option.maxScore;
+                }
+              });
+              if (question.answer.otherChecked) {
+                question.score.submitScore += question.answer.otherScore;
+              }
+              break;
+
+            case InputType.Upload:
+              if (question.answer.attachment && question.answer.attachment.uploadName) {
+                question.score.submitScore = question.score.maxScore;
+              }
+              break;
+
+            case InputType.Linear:
+              const option = question.answer.linearOptions.find(option => {
+                return option.label === question.answer.linearValue;
+              });
+              if (option) {
+                question.score.submitScore = option.maxScore;
+              }
+              break;
+
+            case InputType.RadioGrid:
+              if (question.answer.gridRadio && question.answer.gridRadio.length) {
+                question.answer.gridRadio.forEach(gridRadio => {
+                  const column = question.grid.columns.find(column => {
+                    return column.label === gridRadio.value;
+                  });
+                  if (column) {
+                    question.score.submitScore += column.maxScore;
+                  }
+                });
+              }
+              break;
+
+            case InputType.ChcekBoxGrid:
+              if (question.answer.gridCheckbox && question.answer.gridCheckbox.length) {
+                question.answer.gridCheckbox.forEach(gridCheckbox => {
+                  gridCheckbox.columns.forEach(column => {
+                    if (column.checked) {
+                      question.score.submitScore += column.maxScore;
+                    }
+                  });
+                });
+              }
+              break;
+          }
         }
       });
     }
@@ -528,6 +714,14 @@ export class ApplicationFormComponent implements OnInit {
     target.originalName = '';
     target.type = '';
     target.size = 0;
+  }
+
+  onChangeJobPosition(value: string) {
+    this.appForm.jobChildSelected = '';
+    this.appForm.jobMultiChild = new FormControl();
+    this.jobPosition = this.template.jobPositions.find(element => {
+      return element.name === value;
+    });
   }
 
   showToast(type: NbComponentStatus, title: string, body: string = '') {

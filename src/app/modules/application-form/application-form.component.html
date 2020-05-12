@@ -42,7 +42,7 @@
     <form class="container" (ngSubmit)="save()">
 
       <!-- JR -->
-      <div class="card" *ngIf="jrs.length > 0">
+      <div class="card" *ngIf="jrs.length && !template.jobPositions.length">
         <div class="card-body">
           <div class="topic">
             <mat-icon>notifications_active</mat-icon>
@@ -67,6 +67,59 @@
                 <input matInput type="text" id="otherJob" name="otherJob" [(ngModel)]="appForm.otherJob"
                   [ngModelOptions]="{standalone: true}">
               </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Position -->
+      <div *ngIf="template.jobPositions.length" class="card">
+        <div class="card-body">
+          <div class="topic">
+            <mat-icon>notifications_active</mat-icon>
+            <p>{{ 'JOB_OPENINGS' | translate }}</p>
+          </div>
+          <div class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <mat-form-field appearance="outline" class="fit-content">
+                <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                <mat-select [(ngModel)]="appForm.refPosition" [ngModelOptions]="{standalone: true}"
+                  (selectionChange)="onChangeJobPosition($event.value)" required>
+                  <mat-option *ngFor="let option of template.jobPositions" [value]="option.name">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="jobPosition && jobPosition.children">
+                <div *ngIf="!jobPosition.isMultiAnswer">
+                  <mat-form-field appearance="outline" class="fit-content">
+                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="appForm.jobChildSelected" [ngModelOptions]="{standalone: true}"
+                      [required]="jobPosition.required">
+                      <mat-option *ngFor="let option of jobPosition.children" [value]="option.name">
+                        {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="jobPosition.isMultiAnswer">
+                  <mat-form-field appearance="outline" class="fit-content">
+                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                    <mat-select [formControl]="appForm.jobMultiChild" multiple>
+                      <mat-select-trigger>
+                        {{appForm.jobMultiChild.value ? appForm.jobMultiChild.value[0] : ''}}
+                        <span *ngIf="appForm.jobMultiChild.value?.length > 1" class="additional-selection">
+                          (+{{appForm.jobMultiChild.value.length - 1}}
+                          {{appForm.jobMultiChild.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let option of jobPosition.children" [value]="option.name">
+                        {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -105,10 +158,10 @@
                 <mat-datepicker #birthDate></mat-datepicker>
               </mat-form-field>
             </div>
-            <div class="col-md-2" *ngIf="template.personalDetail.age.visible">
+            <div class="col-md-2" *ngIf="template.personalDetail.birth.visible">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'AGE' | translate }}</mat-label>
-                <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age"
+                <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age" disabled
                   [required]="template.personalDetail.age.required" [ngModelOptions]="{standalone: true}">
               </mat-form-field>
             </div>
@@ -225,7 +278,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2 checkbox-margin" *ngIf="template.workExperience.start.visible">
-                <mat-checkbox [(ngModel)]="work.isPresent" [ngModelOptions]="{standalone: true}">
+                <mat-checkbox [(ngModel)]="work.isPresent" class="is-present" [ngModelOptions]="{standalone: true}">
                   {{ 'PRESENT' | translate }}</mat-checkbox>
               </div>
               <div *ngIf="template.workExperience.end.visible && !work.isPresent" class="col-md-4">
@@ -552,24 +605,22 @@
                     <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
                       [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
                       <div *ngIf="option.imgaeURL" class="answer-image"
-                        [ngClass]="{ 'active': question.answer.selected === i.toString() }"
-                        (click)="question.answer.selected = i.toString()">
+                        [ngClass]="{ 'active': question.answer.selected === i }" (click)="question.answer.selected = i">
                         <img [src]="option.imgaeURL">
                       </div>
-                      <mat-radio-button [value]="i.toString()">
+                      <mat-radio-button [value]="i">
                         {{ option.label }}
                       </mat-radio-button>
                     </div>
                     <div class="col-md-12">
-                      <mat-radio-button *ngIf="question.answer.hasOther"
-                        [value]="question.answer.options.length.toString()">
+                      <mat-radio-button *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
                         {{ question.answer.otherLabel }}
                       </mat-radio-button>
                     </div>
                   </div>
                 </mat-radio-group>
                 <mat-form-field appearance="outline"
-                  *ngIf="question.answer.selected === question.answer.options.length.toString()">
+                  *ngIf="question.answer.selected === question.answer.options.length">
                   <mat-label>{{ question.answer.otherLabel }}</mat-label>
                   <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
                     [ngModelOptions]="{standalone: true}">
@@ -612,20 +663,143 @@
                 <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                 <mat-select [(ngModel)]="question.answer.selected" [required]="question.required"
                   [ngModelOptions]="{standalone: true}">
-                  <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i.toString()">
+                  <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i">
                     {{ option.label }}
                   </mat-option>
-                  <mat-option *ngIf="question.answer.hasOther" [value]="question.answer.options.length.toString()">
+                  <mat-option *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
                     {{ question.answer.otherLabel }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="outline"
-                *ngIf="question.answer.selected === question.answer.options.length.toString()">
+              <mat-form-field appearance="outline" *ngIf="question.answer.selected === question.answer.options.length">
                 <mat-label>{{ question.answer.otherLabel }}</mat-label>
                 <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
                   [ngModelOptions]="{standalone: true}">
               </mat-form-field>
+            </div>
+          </div>
+
+          <div *ngIf="question.type === InputType.Upload">
+            <div class="upload-file box-dashed m-0">
+              <p class="file-preview">
+                <mat-icon>insert_drive_file</mat-icon>
+                <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
+                <span *ngIf="question.answer.attachment.originalName">{{ appForm.attachment.originalName }}</span>
+                <mat-icon *ngIf="question.answer.attachment.originalName" class="delete"
+                  (click)="clearFile(question.answer.attachment); fileInput.value = ''">
+                  cancel
+                </mat-icon>
+              </p>
+              <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
+              <button mat-flat-button type="button" color="primary" (click)="fileInput.click()"
+                [disabled]="loadingUpload">
+                <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
+                <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+                  (change)="uploadFile(question.answer.attachment, $event.target.files)" accept="*"
+                  style="display:none;" />
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="question.type === InputType.Linear" class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <mat-radio-group [(ngModel)]="question.answer.linearValue" [ngModelOptions]="{standalone: true}"
+                [required]="question.required">
+                <div class="linear">
+                  <div *ngIf="question.linear.fromLabel">{{ question.linear.fromLabel }}</div>
+                  <div *ngFor="let linearOption of question.answer.linearOptions">
+                    <p class="m-l-5">{{ linearOption.label }}</p>
+                    <mat-radio-button [value]="linearOption.label"></mat-radio-button>
+                  </div>
+                  <div *ngIf="question.linear.toLabel">{{ question.linear.toLabel }}</div>
+                </div>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div *ngIf="question.type === InputType.RadioGrid" class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <table class="grid">
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>
+                    <div class="grid-item">
+                      <div *ngFor="let col of question.grid.columns">
+                        {{ col.label }}
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+                <tbody>
+                  <tr *ngFor="let gridRadio of question.answer.gridRadio">
+                    <td>{{ gridRadio.rowName }}</td>
+                    <td>
+                      <mat-radio-group [(ngModel)]="gridRadio.value" [ngModelOptions]="{standalone: true}"
+                        [required]="question.required">
+                        <div class="grid-item">
+                          <div *ngFor="let col of question.grid.columns">
+                            <mat-radio-button [value]="col.label"></mat-radio-button>
+                          </div>
+                        </div>
+                      </mat-radio-group>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div *ngIf="question.type === InputType.ChcekBoxGrid" class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <table class="grid">
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>
+                    <div class="grid-item">
+                      <div *ngFor="let col of question.grid.columns">
+                        {{ col.label }}
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+                <tbody>
+                  <tr *ngFor="let gridCheckbox of question.answer.gridCheckbox">
+                    <td>{{ gridCheckbox.rowName }}</td>
+                    <td>
+                      <div class="grid-item">
+                        <div *ngFor="let col of gridCheckbox.columns">
+                          <mat-checkbox [(ngModel)]="col.checked" [ngModelOptions]="{standalone: true}"></mat-checkbox>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div *ngIf="question.type === InputType.Date" class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <div class="text-center">
+                <mat-form-field appearance="outline" style="width: 296px; display: inline-block !important;">
+                  <mat-label>Date</mat-label>
+                  <input matInput type="text" id="date_{{iQuestion}}" name="date" [matDatepicker]="picker"
+                    [(ngModel)]="question.answer.date" readonly (click)="picker.open()" [required]="question.required"
+                    [ngModelOptions]="{standalone: true}">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="question.type === InputType.Time" class="row">
+            <div class="offset-lg-2 col-lg-8">
+              <div class="text-center">
+                <ngb-timepicker id="time_{{iQuestion}}" [(ngModel)]="question.answer.time"
+                  [ngModelOptions]="{standalone: true}" [minuteStep]="minuteStep" [spinners]="false"
+                  [required]="question.required" style="display: inline-block;"></ngb-timepicker>
+              </div>
             </div>
           </div>
 

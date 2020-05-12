@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import * as _ from 'lodash';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material';
 
-import { IAppFormTemplate, IOption, IAction } from '../app-form.interface';
+import { IAppFormTemplate, IOption, IAction, ITreeNode } from '../app-form.interface';
 import { InputType, State, ResponseCode } from '../../../../shared/app.constants';
-import { setAppFormData } from '../../../../shared/services';
+import { setAppFormData, getRole } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
 
 @Component({
@@ -15,6 +17,9 @@ import { AppFormService } from '../app-form.service';
   styleUrls: ['./app-form-detail.component.scss']
 })
 export class AppFormDetailComponent implements OnInit {
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  role: any;
   InputType = InputType;
   State = State;
   bgColors = [
@@ -32,6 +37,12 @@ export class AppFormDetailComponent implements OnInit {
   state: string;
   appForm: IAppFormTemplate;
   loading = true;
+  loadingJob = false;
+
+  lenearFrom = [0, 1];
+  lenearTo = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+  totalScore = 0;
+  questionError: string;
 
   constructor(
     private router: Router,
@@ -39,7 +50,7 @@ export class AppFormDetailComponent implements OnInit {
     private service: AppFormService,
     private toastrService: NbToastrService,
   ) {
-
+    this.role = getRole();
   }
 
   ngOnInit() {
@@ -47,6 +58,7 @@ export class AppFormDetailComponent implements OnInit {
     this.setDefault();
     this.activatedRoute.params.subscribe(params => {
       if (params.action === State.Create) {
+        this.getJobPosition();
         this.state = State.Create;
         this.loading = false;
       } else if (params.action === State.Edit) {
@@ -62,10 +74,10 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm = {
       _id: '',
       refCompany: '',
-      formName: 'Application Form Name',
+      formName: 'Application Form #1',
       formRemark: '',
       title: 'Application Form',
-      subTitle: '(Buddy Recruit)',
+      subTitle: this.role.refCompany.name ? this.role.refCompany.name : '',
       bgColor: '#35c4b2',
       titleColor: '#ffffff',
       subTitleColor: '#ffffff',
@@ -115,7 +127,8 @@ export class AppFormDetailComponent implements OnInit {
       },
       uploadCV: {
         active: true,
-      }
+      },
+      jobPositions: [],
     };
   }
 
@@ -126,12 +139,16 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.personalDetail.lastname.disabled = true;
     this.appForm.personalDetail.birth.required = true;
     this.appForm.personalDetail.phone.required = true;
+    this.appForm.personalDetail.phone.disabled = true;
     this.appForm.personalDetail.email.required = true;
+    this.appForm.personalDetail.email.disabled = true;
 
     this.appForm.workExperience.position.required = true;
+    this.appForm.workExperience.position.disabled = true;
     this.appForm.workExperience.company.required = true;
 
     this.appForm.education.refDegree.required = true;
+    this.appForm.education.refDegree.disabled = true;
   }
 
   initialOption(): IOption {
@@ -139,6 +156,7 @@ export class AppFormDetailComponent implements OnInit {
       label: 'Option 1',
       imgaeURL: '',
       checked: false,
+      maxScore: 0
     };
   }
 
@@ -148,6 +166,16 @@ export class AppFormDetailComponent implements OnInit {
       editable: true,
       disabled: false,
       required: false,
+    };
+  }
+
+  initialTreeNode(): ITreeNode {
+    return {
+      refPosition: '',
+      name: '',
+      children: [],
+      required: false,
+      isMultiAnswer: false,
     };
   }
 
@@ -172,6 +200,24 @@ export class AppFormDetailComponent implements OnInit {
       case this.InputType.Dropdown:
         icon = 'arrow_drop_down_circle';
         break;
+      case this.InputType.Upload:
+        icon = 'cloud_upload';
+        break;
+      case this.InputType.Linear:
+        icon = 'linear_scale';
+        break;
+      case this.InputType.RadioGrid:
+        icon = 'drag_indicator';
+        break;
+      case this.InputType.ChcekBoxGrid:
+        icon = 'apps';
+        break;
+      case this.InputType.Date:
+        icon = 'event';
+        break;
+      case this.InputType.Time:
+        icon = 'access_time';
+        break;
     }
     return icon;
   }
@@ -188,6 +234,12 @@ export class AppFormDetailComponent implements OnInit {
       case this.InputType.Dropdown:
         icon = 'fiber_manual_record';
         break;
+      case this.InputType.RadioGrid:
+        icon = 'radio_button_unchecked';
+        break;
+      case this.InputType.ChcekBoxGrid:
+        icon = 'check_box_outline_blank';
+        break;
     }
     return icon;
   }
@@ -195,7 +247,7 @@ export class AppFormDetailComponent implements OnInit {
   addQuestion() {
     this.appForm.questions.push({
       type: this.InputType.Radio,
-      title: 'Question',
+      title: 'Untitled Question',
       subTitle: '',
       showSubTitle: false,
       required: false,
@@ -204,12 +256,55 @@ export class AppFormDetailComponent implements OnInit {
         input: '',
         textArea: '',
         options: [this.initialOption()],
-        selected: '',
+        selected: null,
         hasOther: false,
         otherLabel: 'Other',
         otherChecked: false,
-        otherInput: ''
+        otherInput: '',
+        otherScore: 0,
+        attachment: {
+          uploadName: '',
+          originalName: '',
+          type: '',
+          size: 0,
+        },
+        linearValue: null,
+        linearOptions: [],
+        gridRadio: [],
+        gridCheckbox: [],
+        date: null,
+        time: {
+          hour: null,
+          minute: null,
+        }
       },
+      linear: {
+        fromLabel: '',
+        fromValue: 1,
+        toLabel: '',
+        toValue: 5,
+      },
+      grid: {
+        rows: [
+          {
+            label: 'Row 1',
+            maxScore: 0
+          }
+        ],
+        columns: [
+          {
+            label: 'Column 1',
+            maxScore: 0
+          }
+        ],
+      },
+      score: {
+        isScore: false,
+        maxScore: 0,
+        keywords: [],
+        girdRowScore: 0,
+        submitScore: 0,
+      }
     });
   }
 
@@ -222,15 +317,178 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.questions.splice(index, 1);
   }
 
-  addOption(index: number) {
-    this.appForm.questions[index].answer.options.push({
-      label: `Option ${this.appForm.questions[index].answer.options.length + 1}`,
-      imgaeURL: '',
-    });
+  addOption(options: any): void {
+    if (options && options.length) {
+      options.push({
+        label: `Option ${options.length + 1}`,
+        imgaeURL: '',
+        maxScore: 0
+      });
+    }
   }
 
   deleteOption(iQuestion: number, iOption: number) {
     this.appForm.questions[iQuestion].answer.options.splice(iOption, 1);
+  }
+
+  addNode() {
+    this.appForm.jobPositions.push({
+      refPosition: '',
+      name: `Job Position ${this.appForm.jobPositions.length + 1}`,
+      required: false,
+      isMultiAnswer: false,
+      children: [],
+    });
+  }
+
+  deleteNode(iNode: number) {
+    this.appForm.jobPositions.splice(iNode, 1);
+  }
+
+  addNodeItem(iNode: number) {
+    this.appForm.jobPositions[iNode].children.push({
+      name: `Child ${this.appForm.jobPositions[iNode].children.length + 1}`,
+      required: false,
+      isMultiAnswer: false,
+      children: [],
+    });
+  }
+
+  deleteNodeItem(iNode: number, iNodeItem: number) {
+    this.appForm.jobPositions[iNode].children.splice(iNodeItem, 1);
+  }
+
+  addGridRow(rows: any): void {
+    if (rows) {
+      rows.push({
+        label: `Row ${rows.length + 1}`,
+        maxScore: 0
+      });
+    }
+  }
+
+  deleteGridRow(iQuestion: number, iGridRow: number) {
+    this.appForm.questions[iQuestion].grid.rows.splice(iGridRow, 1);
+  }
+
+  addGridColumn(columns: any): void {
+    if (columns) {
+      columns.push({
+        label: `Column ${columns.length + 1}`,
+        maxScore: 0
+      });
+    }
+  }
+
+  deleteGridColumn(iQuestion: number, iGridCol: number) {
+    this.appForm.questions[iQuestion].grid.columns.splice(iGridCol, 1);
+  }
+
+  onChangeMaxScore() {
+    this.totalScore = 0;
+    this.appForm.questions.forEach(question => {
+      this.totalScore += question.score.maxScore;
+    });
+  }
+
+  oncChangeGridRowScore(question): void {
+    question.score.maxScore = question.score.girdRowScore * question.grid.rows.length;
+    this.onChangeMaxScore();
+  }
+
+  getMaxScore(score): number {
+    return 100 - this.totalScore + score;
+  }
+
+  getTotalScore(question): number {
+    let score = 0;
+    if (question.type === InputType.ChcekBox) {
+      question.answer.options.forEach(option => {
+        score += option.maxScore;
+      });
+      if (question.answer.hasOther) {
+        score += question.answer.otherScore;
+      }
+    } else if (question.type === InputType.ChcekBoxGrid) {
+      question.grid.columns.forEach(col => {
+        score += col.maxScore;
+      });
+    }
+    return score;
+  }
+
+  autoCalScoreCheckbox(question): void {
+    let leng: number;
+    let maxScore: number;
+    if (question.type === InputType.ChcekBox) {
+      maxScore = question.score.maxScore;
+      leng = question.answer.options.length;
+      if (question.answer.hasOther) {
+        leng++;
+      }
+    } else if (question.type === InputType.ChcekBoxGrid) {
+      maxScore = question.score.girdRowScore;
+      leng = question.grid.columns.length;
+    }
+
+    const scoreAvg = Math.floor(maxScore / leng);
+    const scoreOver = maxScore - (scoreAvg * leng);
+
+    if (question.type === InputType.ChcekBox) {
+      question.answer.options.map(option => {
+        option.maxScore = scoreAvg;
+      });
+      if (question.answer.hasOther) {
+        question.answer.otherScore = scoreAvg;
+      }
+      if (scoreOver > 0) {
+        question.answer.options[0].maxScore += scoreOver;
+      }
+    } else if (question.type === InputType.ChcekBoxGrid) {
+      question.grid.columns.map(col => {
+        col.maxScore = scoreAvg;
+      });
+      if (scoreOver > 0) {
+        question.grid.columns[0].maxScore += scoreOver;
+      }
+    }
+  }
+
+  addKeyword(keywords, event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+    if (value) {
+      if (keywords.indexOf(value) === -1) {
+        keywords.push(value.trim());
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeKeyword(keywords, index): void {
+    keywords.splice(index, 1);
+  }
+
+  setLinearOptions(question): void {
+    if (question.type === InputType.Linear) {
+      let fromValue = question.linear.fromValue;
+      const toValue = question.linear.toValue;
+      let score = 0;
+      const maxScore = question.score.maxScore;
+      const stepScore = Math.round(maxScore / (toValue - fromValue));
+
+      question.answer.linearOptions = [];
+      while (fromValue <= toValue) {
+        question.answer.linearOptions.push({
+          label: fromValue,
+          maxScore: fromValue !== toValue ? score : maxScore,
+        })
+        score += stepScore;
+        fromValue++;
+      }
+    }
   }
 
   back() {
@@ -282,6 +540,7 @@ export class AppFormDetailComponent implements OnInit {
 
   validation(): boolean {
     let isValid = true;
+    this.questionError = '';
 
     const elements = document.getElementsByClassName('mat-input-element ng-invalid');
     if (elements.length > 0) {
@@ -289,6 +548,17 @@ export class AppFormDetailComponent implements OnInit {
       const id = elements.item(0).getAttribute('id');
       if (id) {
         document.getElementById(id).focus();
+      }
+    } else if (this.appForm.questions && this.appForm.questions.length) {
+      const found = this.appForm.questions.find(question => {
+        return question.score.isScore;
+      });
+      if (found) {
+        if (this.totalScore !== 100) {
+          document.getElementById('question').focus();
+          this.questionError = '* Total score not equal 100.';
+          isValid = false;
+        }
       }
     }
 
@@ -303,11 +573,37 @@ export class AppFormDetailComponent implements OnInit {
     return request;
   }
 
+  getJobPosition() {
+    this.loadingJob = true;
+    this.service.getJobPosition().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.forEach(data => {
+            const found = this.appForm.jobPositions.find(jobPosition => {
+              return jobPosition.refPosition === data._id;
+            });
+            if (!found) {
+              this.appForm.jobPositions.push({
+                refPosition: data._id,
+                name: data.name,
+                required: false,
+                isMultiAnswer: false,
+                children: [],
+              });
+            }
+          });
+        }
+      }
+      this.loadingJob = false;
+    });
+  }
+
   getDetail() {
     this.service.getDetail(this._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          this.onChangeMaxScore();
         }
       } else {
         this.showToast('danger', response.message || 'Error!');

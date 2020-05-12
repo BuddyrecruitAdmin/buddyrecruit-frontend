@@ -1,3 +1,5 @@
+import { IQuestion } from '../../pages/setting/app-form/app-form.interface';
+
 export interface IApplicationForm {
   _id?;
   refCompany?;
@@ -25,6 +27,11 @@ export interface IApplicationForm {
   softSkill: string[];
   certificate: string[];
   questions: IQuestion[];
+  
+  refPosition: any;
+  jobSelected: string;
+  jobChildSelected: string;
+  jobMultiChild: any;
 
   attachment: IAttachment;
 }
@@ -58,31 +65,4 @@ export interface IAttachment {
   originalName: string;
   type: string;
   size: number;
-}
-
-export interface IQuestion {
-  type: string;
-  title: string;
-  subTitle: string;
-  showSubTitle: boolean;
-  required: boolean;
-  imgaeURL: string;
-  answer: IAnswer;
-}
-
-export interface IAnswer {
-  input: string;
-  textArea: string;
-  options: IOption[];
-  selected: string;
-  hasOther: boolean;
-  otherLabel: string;
-  otherChecked: boolean;
-  otherInput: string;
-}
-
-export interface IOption {
-  label: string;
-  imgaeURL: string;
-  checked?: boolean;
 }

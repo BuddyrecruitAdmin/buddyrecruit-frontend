@@ -54,7 +54,8 @@ export interface IAppFormTemplate {
   };
   uploadCV: {
     active: boolean;
-  }
+  };
+  jobPositions: ITreeNode[];
 }
 
 export interface IQuestion {
@@ -65,23 +66,43 @@ export interface IQuestion {
   required: boolean;
   imgaeURL: string;
   answer: IAnswer;
+  linear: {
+    fromLabel: string;
+    fromValue: number;
+    toLabel: string;
+    toValue: number;
+  };
+  grid: {
+    rows: IGridOption[];
+    columns: IGridOption[];
+  },
+  score: IScore;
 }
 
 export interface IAnswer {
   input: string;
   textArea: string;
   options: IOption[];
-  selected: string;
+  selected: number;
   hasOther: boolean;
   otherLabel: string;
   otherChecked: boolean;
   otherInput: string;
+  otherScore: number;
+  attachment: IAttachment;
+  linearValue: number;
+  linearOptions: ILinearOption[];
+  gridRadio: IGridRadio[];
+  gridCheckbox: IGridCheckbox[];
+  date: Date;
+  time: ITime;
 }
 
 export interface IOption {
   label: string;
   imgaeURL: string;
   checked?: boolean;
+  maxScore: number;
 }
 
 export interface IAction {
@@ -89,4 +110,58 @@ export interface IAction {
   editable: boolean;
   disabled: boolean;
   required: boolean;
-} 
+}
+
+export interface ITreeNode {
+  refPosition?: any;
+  name: string;
+  required: boolean;
+  isMultiAnswer: boolean;
+  children?: ITreeNode[];
+}
+
+export interface IAttachment {
+  uploadName: string;
+  originalName: string;
+  type: string;
+  size: number;
+}
+
+export interface IGridOption {
+  label: string;
+  maxScore: number;
+}
+
+export interface IGridRadio {
+  rowName: string;
+  value: string;
+}
+
+export interface IGridCheckbox {
+  rowName: string;
+  columns: IColumn[];
+}
+
+export interface IColumn {
+  colName: string;
+  maxScore: number;
+  checked: boolean;
+}
+
+export interface ITime {
+  hour: number;
+  minute: number;
+}
+
+export interface IScore {
+  isScore: boolean;
+  maxScore: number;
+  keywords: string[];
+  girdRowScore: number;
+  submitScore: number;
+}
+
+export interface ILinearOption {
+  label: number;
+  maxScore: number;
+}
