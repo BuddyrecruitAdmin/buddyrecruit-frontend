@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Devices } from '../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -42,7 +42,7 @@ export interface ErrMsg {
     '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
   ]
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent implements OnInit,AfterViewInit {
   innerHeight: any;
   innerWidth: any;
   devices: Devices;
@@ -179,10 +179,13 @@ export class IndexComponent implements OnInit {
     this.navPackage = false;
     this.navContact = false;
     this.navCom = false;
+  }
+
+  ngAfterViewInit() {
     if (this.pathName) {
       this.scrollToElement(document.getElementById(this.pathName), this.pathName);
     }
-  }
+}
 
   initialModel(): ContactUs {
     return {
