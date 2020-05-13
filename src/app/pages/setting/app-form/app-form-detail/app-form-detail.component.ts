@@ -43,6 +43,7 @@ export class AppFormDetailComponent implements OnInit {
   lenearTo = [2, 3, 4, 5, 6, 7, 8, 9, 10];
   totalScore = 0;
   questionError: string;
+  isExpress = false;
 
   constructor(
     private router: Router,
@@ -51,6 +52,7 @@ export class AppFormDetailComponent implements OnInit {
     private toastrService: NbToastrService,
   ) {
     this.role = getRole();
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -81,6 +83,7 @@ export class AppFormDetailComponent implements OnInit {
       bgColor: '#35c4b2',
       titleColor: '#ffffff',
       subTitleColor: '#ffffff',
+      isExpress: false,
 
       questions: [],
       personalDetail: {
@@ -569,6 +572,7 @@ export class AppFormDetailComponent implements OnInit {
 
   setRequest(): IAppFormTemplate {
     const request = this.appForm;
+    request.isExpress = this.isExpress;
     if (this.state === State.Create) {
       delete request._id;
     }

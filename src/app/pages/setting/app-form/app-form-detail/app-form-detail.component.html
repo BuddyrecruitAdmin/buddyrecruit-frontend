@@ -431,7 +431,7 @@
   </nb-accordion>
 
   <!-- Job Position -->
-  <nb-accordion [nbSpinner]="loadingJob" nbSpinnerStatus="success" nbSpinnerMessage="Loading...">
+  <nb-accordion *ngIf="isExpress" [nbSpinner]="loadingJob" nbSpinnerStatus="success" nbSpinnerMessage="Loading...">
     <nb-accordion-item [expanded]="true">
       <nb-accordion-item-header>
         Job Position<small class="text-gray m-l-5">(Source from job position master)</small>
@@ -810,232 +810,234 @@
       </nb-accordion>
 
       <!-- Score -->
-      <nb-accordion class="score" *ngIf="question.type !== InputType.Label
+      <div *ngIf="isExpress">
+        <nb-accordion class="score" *ngIf="question.type !== InputType.Label
         && question.type !== InputType.Date && question.type !== InputType.Time">
-        <nb-accordion-item [expanded]="question.score?.isScore" [disabled]="!question.score?.isScore">
-          <nb-accordion-item-header style="background: #f9f9f9;">
-            <div class="row w-100">
-              <div class="col-6">
-                <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isScore" class="toggle">
-                  Score calculator:
-                </mat-slide-toggle>
-              </div>
-              <div *ngIf="question.score.isScore" class="col-6 text-right">
-                <span class="m-r-20">
-                  <span [ngClass]="{ 'text-red' : totalScore !== 100, 'text-green': totalScore === 100 }"
-                    style="font-size: 1.2rem;">
-                    {{ totalScore }}
+          <nb-accordion-item [expanded]="question.score?.isScore" [disabled]="!question.score?.isScore">
+            <nb-accordion-item-header style="background: #f9f9f9;">
+              <div class="row w-100">
+                <div class="col-6">
+                  <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isScore" class="toggle">
+                    Score calculator:
+                  </mat-slide-toggle>
+                </div>
+                <div *ngIf="question.score.isScore" class="col-6 text-right">
+                  <span class="m-r-20">
+                    <span [ngClass]="{ 'text-red' : totalScore !== 100, 'text-green': totalScore === 100 }"
+                      style="font-size: 1.2rem;">
+                      {{ totalScore }}
+                    </span>
+                    <span style="color: #999;">/100%</span>
                   </span>
-                  <span style="color: #999;">/100%</span>
+                </div>
+              </div>
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <div *ngIf="question.type !== InputType.RadioGrid && question.type !== InputType.ChcekBoxGrid">
+                <span style="padding-left: 8px;">
+                  <small class="m-r-5">Max Score <span class="text-red">*</span></small>
+                  ({{ question.score.maxScore }}%)
                 </span>
+                <mat-slider class="w-100" color="primary" [max]="getMaxScore(question.score.maxScore)" min="0" step="1"
+                  [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.score.maxScore"
+                  (change)="calGrandScore(); setLinearOptions(question)">
+                </mat-slider>
               </div>
-            </div>
-          </nb-accordion-item-header>
-          <nb-accordion-item-body>
-            <div *ngIf="question.type !== InputType.RadioGrid && question.type !== InputType.ChcekBoxGrid">
-              <span style="padding-left: 8px;">
-                <small class="m-r-5">Max Score <span class="text-red">*</span></small>
-                ({{ question.score.maxScore }}%)
-              </span>
-              <mat-slider class="w-100" color="primary" [max]="getMaxScore(question.score.maxScore)" min="0" step="1"
-                [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.score.maxScore"
-                (change)="calGrandScore(); setLinearOptions(question)">
-              </mat-slider>
-            </div>
 
-            <div *ngIf="question.type === InputType.Input || question.type === InputType.TextArea">
-              <mat-form-field appearance="outline">
-                <mat-label>Keyword</mat-label>
-                <mat-chip-list #chipList>
-                  <mat-chip *ngFor="let keyword of question.score.keywords; let iKeyword = index;" [selectable]="true"
-                    [removable]="true" (removed)="removeKeyword(question.score.keywords, iKeyword)">
-                    {{ keyword }}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip>
-                  <input placeholder="+ New" [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addKeyword(question.score.keywords, $event)" required>
-                </mat-chip-list>
-                <mat-hint>*Insert any keyword for matching with answer.</mat-hint>
-              </mat-form-field>
-            </div>
+              <div *ngIf="question.type === InputType.Input || question.type === InputType.TextArea">
+                <mat-form-field appearance="outline">
+                  <mat-label>Keyword</mat-label>
+                  <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let keyword of question.score.keywords; let iKeyword = index;" [selectable]="true"
+                      [removable]="true" (removed)="removeKeyword(question.score.keywords, iKeyword)">
+                      {{ keyword }}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="+ New" [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                      (matChipInputTokenEnd)="addKeyword(question.score.keywords, $event)" required>
+                  </mat-chip-list>
+                  <mat-hint>*Insert any keyword for matching with answer.</mat-hint>
+                </mat-form-field>
+              </div>
 
-            <div *ngIf="question.type === InputType.Radio || question.type === InputType.Dropdown">
-              <div class="score-body">
-                <div *ngFor="let option of question.answer.options; let iScore = index">
-                  <small class="score-scale-left">{{ option.label }}</small>
-                  <small class="score-scale-right">
-                    ({{ option.maxScore }}/{{ question.score.maxScore }})
-                  </small>
-                  <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
-                    [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore"
-                    [ngClass]="{ 'h-36': iScore === question.answer.options.length - 1 && !question.answer.hasOther }">
-                  </mat-slider>
-                </div>
-                <div *ngIf="question.answer.hasOther">
-                  <small class="score-scale-left">{{ question.answer.otherLabel }}</small>
-                  <small class="score-scale-right">
-                    ({{ question.answer.otherScore }}/{{ question.score.maxScore }})
-                  </small>
-                  <mat-slider class="w-100 h-36" color="primary" [max]="question.score.maxScore" min="0" step="1"
-                    [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.answer.otherScore">
-                  </mat-slider>
+              <div *ngIf="question.type === InputType.Radio || question.type === InputType.Dropdown">
+                <div class="score-body">
+                  <div *ngFor="let option of question.answer.options; let iScore = index">
+                    <small class="score-scale-left">{{ option.label }}</small>
+                    <small class="score-scale-right">
+                      ({{ option.maxScore }}/{{ question.score.maxScore }})
+                    </small>
+                    <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
+                      [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore"
+                      [ngClass]="{ 'h-36': iScore === question.answer.options.length - 1 && !question.answer.hasOther }">
+                    </mat-slider>
+                  </div>
+                  <div *ngIf="question.answer.hasOther">
+                    <small class="score-scale-left">{{ question.answer.otherLabel }}</small>
+                    <small class="score-scale-right">
+                      ({{ question.answer.otherScore }}/{{ question.score.maxScore }})
+                    </small>
+                    <mat-slider class="w-100 h-36" color="primary" [max]="question.score.maxScore" min="0" step="1"
+                      [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.answer.otherScore">
+                    </mat-slider>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div *ngIf="question.type === InputType.ChcekBox">
-              <div class="score-body">
-                <div class="text-center m-b-10">
-                  <small class="text-gray m-r-5">Total score :</small>
-                  <small [ngClass]="
+              <div *ngIf="question.type === InputType.ChcekBox">
+                <div class="score-body">
+                  <div class="text-center m-b-10">
+                    <small class="text-gray m-r-5">Total score :</small>
+                    <small [ngClass]="
                     { 'text-red' : getTotalScore(question) !== question.score.maxScore, 
                       'text-green': getTotalScore(question) === question.score.maxScore }">
-                    {{ getTotalScore(question) }}
-                  </small>
-                  <small style="color: #999;">/{{ question.score.maxScore }}</small>
-                </div>
-                <div *ngFor="let option of question.answer.options; let iScore = index">
-                  <small class="score-scale-left">{{ option.label }}</small>
-                  <small class="score-scale-right">
-                    ({{ option.maxScore }})
-                  </small>
-                  <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
-                    [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore">
-                  </mat-slider>
-                </div>
-                <div *ngIf="question.answer.hasOther">
-                  <small class="score-scale-left">{{ question.answer.otherLabel }}</small>
-                  <small class="score-scale-right">
-                    ({{ question.answer.otherScore }})
-                  </small>
-                  <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
-                    [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.answer.otherScore">
-                  </mat-slider>
-                </div>
-                <div class="text-center">
-                  <button mat-flat-button type="button" color="primary" (click)="autoCalScoreCheckbox(question)">
-                    <mat-icon class="text-white">refresh</mat-icon> Auto generate score
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="question.type === InputType.Upload">
-              <small style="color: #999;">*Have a score when file uploaded.</small>
-            </div>
-
-            <div *ngIf="question.type === InputType.Linear">
-              <div class="score-body">
-                <div *ngFor="let option of question.answer.linearOptions; let iLinear = index">
-                  <small class="score-scale-left">{{ option.label }}</small>
-                  <small class="score-scale-right">
-                    ({{ option.maxScore }}/{{ question.score.maxScore }})
-                  </small>
-                  <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
-                    [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore">
-                  </mat-slider>
-                </div>
-                <div class="text-center">
-                  <button mat-flat-button type="button" color="primary" (click)="setLinearOptions(question)">
-                    <mat-icon class="text-white">refresh</mat-icon> Auto generate score
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="question.type === InputType.RadioGrid">
-              <span style="padding-left: 8px;">
-                <small class="m-r-5">Total Score ({{ question.grid.rows.length }} rows) :</small>
-                {{ question.score.maxScore }}%
-              </span>
-              <mat-slider class="w-100" color="primary" max="100" min="0" step="1" [thumbLabel]="true"
-                [tickInterval]="10" [(ngModel)]="question.score.maxScore" disabled>
-              </mat-slider>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="score-body">
-                    <span style="padding-left: 8px;">
-                      <small class="text-gray m-r-5">Score per 1 row <span class="text-red">*</span></small>
-                      ({{ question.score.girdRowScore }}%)
-                    </span>
-                    <mat-slider class="w-100 h-36" color="primary" [max]="getMaxScore(question.score.maxScore)" min="0"
-                      step="1" [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.score.girdRowScore"
-                      (change)="oncChangeGridRowScore(question)">
+                      {{ getTotalScore(question) }}
+                    </small>
+                    <small style="color: #999;">/{{ question.score.maxScore }}</small>
+                  </div>
+                  <div *ngFor="let option of question.answer.options; let iScore = index">
+                    <small class="score-scale-left">{{ option.label }}</small>
+                    <small class="score-scale-right">
+                      ({{ option.maxScore }})
+                    </small>
+                    <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
+                      [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore">
                     </mat-slider>
                   </div>
+                  <div *ngIf="question.answer.hasOther">
+                    <small class="score-scale-left">{{ question.answer.otherLabel }}</small>
+                    <small class="score-scale-right">
+                      ({{ question.answer.otherScore }})
+                    </small>
+                    <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
+                      [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.answer.otherScore">
+                    </mat-slider>
+                  </div>
+                  <div class="text-center">
+                    <button mat-flat-button type="button" color="primary" (click)="autoCalScoreCheckbox(question)">
+                      <mat-icon class="text-white">refresh</mat-icon> Auto generate score
+                    </button>
+                  </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="score-body">
-                    <div *ngFor="let option of question.grid.columns; let iScore = index">
-                      <small class="score-scale-left">{{ option.label }}</small>
-                      <small class="score-scale-right">
-                        ({{ option.maxScore }}/{{ question.score.girdRowScore }})
-                      </small>
-                      <mat-slider class="w-100" color="primary" [max]="question.score.girdRowScore" min="0" step="1"
-                        [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore"
-                        [ngClass]="{ 'h-36': iScore === question.grid.columns.length - 1 }">
+              </div>
+
+              <div *ngIf="question.type === InputType.Upload">
+                <small style="color: #999;">*Have a score when file uploaded.</small>
+              </div>
+
+              <div *ngIf="question.type === InputType.Linear">
+                <div class="score-body">
+                  <div *ngFor="let option of question.answer.linearOptions; let iLinear = index">
+                    <small class="score-scale-left">{{ option.label }}</small>
+                    <small class="score-scale-right">
+                      ({{ option.maxScore }}/{{ question.score.maxScore }})
+                    </small>
+                    <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
+                      [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore">
+                    </mat-slider>
+                  </div>
+                  <div class="text-center">
+                    <button mat-flat-button type="button" color="primary" (click)="setLinearOptions(question)">
+                      <mat-icon class="text-white">refresh</mat-icon> Auto generate score
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.RadioGrid">
+                <span style="padding-left: 8px;">
+                  <small class="m-r-5">Total Score ({{ question.grid.rows.length }} rows) :</small>
+                  {{ question.score.maxScore }}%
+                </span>
+                <mat-slider class="w-100" color="primary" max="100" min="0" step="1" [thumbLabel]="true"
+                  [tickInterval]="10" [(ngModel)]="question.score.maxScore" disabled>
+                </mat-slider>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="score-body">
+                      <span style="padding-left: 8px;">
+                        <small class="text-gray m-r-5">Score per 1 row <span class="text-red">*</span></small>
+                        ({{ question.score.girdRowScore }}%)
+                      </span>
+                      <mat-slider class="w-100 h-36" color="primary" [max]="getMaxScore(question.score.maxScore)"
+                        min="0" step="1" [thumbLabel]="true" [tickInterval]="10"
+                        [(ngModel)]="question.score.girdRowScore" (change)="oncChangeGridRowScore(question)">
                       </mat-slider>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="score-body">
+                      <div *ngFor="let option of question.grid.columns; let iScore = index">
+                        <small class="score-scale-left">{{ option.label }}</small>
+                        <small class="score-scale-right">
+                          ({{ option.maxScore }}/{{ question.score.girdRowScore }})
+                        </small>
+                        <mat-slider class="w-100" color="primary" [max]="question.score.girdRowScore" min="0" step="1"
+                          [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore"
+                          [ngClass]="{ 'h-36': iScore === question.grid.columns.length - 1 }">
+                        </mat-slider>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div *ngIf="question.type === InputType.ChcekBoxGrid">
-              <span style="padding-left: 8px;">
-                <small class="m-r-5">Total Score ({{ question.grid.rows.length }} rows) :</small>
-                {{ question.score.maxScore }}%
-              </span>
-              <mat-slider class="w-100" color="primary" max="100" min="0" step="1" [thumbLabel]="true"
-                [tickInterval]="10" [(ngModel)]="question.score.maxScore" disabled>
-              </mat-slider>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="score-body">
-                    <span style="padding-left: 8px;">
-                      <small class="text-gray m-r-5">Score per 1 row <span class="text-red">*</span></small>
-                      ({{ question.score.girdRowScore }}%)
-                    </span>
-                    <mat-slider class="w-100 h-36" color="primary" [max]="getMaxScore(question.score.maxScore)" min="0"
-                      step="1" [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.score.girdRowScore"
-                      (change)="oncChangeGridRowScore(question)">
-                    </mat-slider>
+              <div *ngIf="question.type === InputType.ChcekBoxGrid">
+                <span style="padding-left: 8px;">
+                  <small class="m-r-5">Total Score ({{ question.grid.rows.length }} rows) :</small>
+                  {{ question.score.maxScore }}%
+                </span>
+                <mat-slider class="w-100" color="primary" max="100" min="0" step="1" [thumbLabel]="true"
+                  [tickInterval]="10" [(ngModel)]="question.score.maxScore" disabled>
+                </mat-slider>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="score-body">
+                      <span style="padding-left: 8px;">
+                        <small class="text-gray m-r-5">Score per 1 row <span class="text-red">*</span></small>
+                        ({{ question.score.girdRowScore }}%)
+                      </span>
+                      <mat-slider class="w-100 h-36" color="primary" [max]="getMaxScore(question.score.maxScore)"
+                        min="0" step="1" [thumbLabel]="true" [tickInterval]="10"
+                        [(ngModel)]="question.score.girdRowScore" (change)="oncChangeGridRowScore(question)">
+                      </mat-slider>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="score-body">
-                    <div class="text-center m-b-10">
-                      <small class="text-gray m-r-5">Total score :</small>
-                      <small [ngClass]="
+                  <div class="col-md-6">
+                    <div class="score-body">
+                      <div class="text-center m-b-10">
+                        <small class="text-gray m-r-5">Total score :</small>
+                        <small [ngClass]="
                         { 'text-red' : getTotalScore(question) !== question.score.girdRowScore, 
                           'text-green': getTotalScore(question) === question.score.girdRowScore }">
-                        {{ getTotalScore(question) }}
-                      </small>
-                      <small style="color: #999;">/{{ question.score.girdRowScore }}</small>
-                    </div>
-                    <div *ngFor="let option of question.grid.columns; let iScore = index">
-                      <small class="score-scale-left">{{ option.label }}</small>
-                      <small class="score-scale-right">
-                        ({{ option.maxScore }})
-                      </small>
-                      <mat-slider class="w-100" color="primary" [max]="question.score.girdRowScore" min="0" step="1"
-                        [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore">
-                      </mat-slider>
-                    </div>
-                    <div class="text-center">
-                      <button mat-flat-button type="button" color="primary" (click)="autoCalScoreCheckbox(question)">
-                        <mat-icon class="text-white">refresh</mat-icon> Auto generate score
-                      </button>
+                          {{ getTotalScore(question) }}
+                        </small>
+                        <small style="color: #999;">/{{ question.score.girdRowScore }}</small>
+                      </div>
+                      <div *ngFor="let option of question.grid.columns; let iScore = index">
+                        <small class="score-scale-left">{{ option.label }}</small>
+                        <small class="score-scale-right">
+                          ({{ option.maxScore }})
+                        </small>
+                        <mat-slider class="w-100" color="primary" [max]="question.score.girdRowScore" min="0" step="1"
+                          [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="option.maxScore">
+                        </mat-slider>
+                      </div>
+                      <div class="text-center">
+                        <button mat-flat-button type="button" color="primary" (click)="autoCalScoreCheckbox(question)">
+                          <mat-icon class="text-white">refresh</mat-icon> Auto generate score
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-          </nb-accordion-item-body>
-        </nb-accordion-item>
-      </nb-accordion>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+      </div>
 
       <!-- <nb-card-footer>
         <div *ngIf="question.type !== InputType.Label">

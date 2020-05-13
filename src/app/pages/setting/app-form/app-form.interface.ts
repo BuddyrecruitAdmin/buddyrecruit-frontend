@@ -3,6 +3,7 @@ export interface IAppFormTemplate {
   refCompany: any;
   formName: string;
   formRemark: string;
+  isExpress: boolean;
 
   title: string;
   subTitle: string;

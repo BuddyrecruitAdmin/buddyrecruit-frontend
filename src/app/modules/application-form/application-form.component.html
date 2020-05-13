@@ -85,7 +85,7 @@
                 <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                 <mat-select [(ngModel)]="appForm.refPosition" [ngModelOptions]="{standalone: true}"
                   (selectionChange)="onChangeJobPosition($event.value)" required>
-                  <mat-option *ngFor="let option of template.jobPositions" [value]="option.name">
+                  <mat-option *ngFor="let option of template.jobPositions" [value]="option.refPosition">
                     {{ option.name }}
                   </mat-option>
                 </mat-select>
@@ -547,7 +547,7 @@
               [disabled]="loadingUpload">
               <mat-icon>cloud_upload</mat-icon> {{ 'UPLOAD_RESUME' | translate }}
               <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-                (change)="uploadFile(appForm.attachment, $event.target.files)" accept="*" style="display:none;" />
+                (change)="uploadFile(appForm.attachment, $event.target.files, true)" accept="*" style="display:none;" />
             </button>
           </div>
         </div>

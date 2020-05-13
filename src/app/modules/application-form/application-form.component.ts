@@ -223,10 +223,20 @@ export class ApplicationFormComponent implements OnInit {
         this.uploader = new FileUploader({
           url: URL,
           itemAlias: 'data',
-          headers: [{
-            name: 'refCompany',
-            value: this.appForm.refCompany
-          }],
+          headers: [
+            {
+              name: 'refCompany',
+              value: this.appForm.refCompany
+            },
+            {
+              name: 'isCV',
+              value: false
+            },
+            {
+              name: 'isExpress',
+              value: this.template.isExpress
+            },
+          ],
         });
       } else {
         this.onError();
@@ -464,7 +474,7 @@ export class ApplicationFormComponent implements OnInit {
             }
             break;
           case this.InputType.Radio:
-            if (!question.answer.selected) {
+            if (question.answer.selected === null) {
               isQuestionValid = false;
               element.classList.add("has-error");
             }
@@ -479,7 +489,7 @@ export class ApplicationFormComponent implements OnInit {
             }
             break;
           case this.InputType.Dropdown:
-            if (!question.answer.selected) {
+            if (question.answer.selected === null) {
               isQuestionValid = false;
               element.classList.add("has-error");
             }
@@ -560,7 +570,6 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   setRequest(): IApplicationForm {
-    debugger;
     const request = this.appForm;
     request.birth = new Date(request.birth);
     if (request.workExperience.work && request.workExperience.work.length) {
@@ -674,7 +683,7 @@ export class ApplicationFormComponent implements OnInit {
     return request;
   }
 
-  uploadFile(target, files: FileList): void {
+  uploadFile(target, files: FileList, isCV = false): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 10) {
       this.showToast('danger', 'File size more than 10MB');
@@ -689,6 +698,11 @@ export class ApplicationFormComponent implements OnInit {
           && element.file.size === files[0].size;
       });
       if (queue) {
+        this.uploader.options.headers.map(element => {
+          if (element.name === 'isCV') {
+            element.value = isCV.toString();
+          }
+        });
         this.loadingUpload = true;
         this.uploader.uploadItem(queue);
         this.uploader.onSuccessItem = (item, response, status, headers) => {
@@ -723,7 +737,7 @@ export class ApplicationFormComponent implements OnInit {
     this.appForm.jobChildSelected = '';
     this.appForm.jobMultiChild = new FormControl();
     this.jobPosition = this.template.jobPositions.find(element => {
-      return element.name === value;
+      return element.refPosition === value;
     });
   }
 
