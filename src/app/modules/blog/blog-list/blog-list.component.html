@@ -24,6 +24,10 @@
                         (click)="changePath('second')">เกี่ยวกับ</a>
                 </li>
                 <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('com')">บริษัทของเรา</a>
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
                 </li>
                 <li class="nav-item active">
@@ -44,34 +48,14 @@
             </ul>
         </div>
     </nav>
-
     <!-- Home -->
     <div #home id="home">
-        <!-- <nb-card>
-            <nb-card-header>
-                <div class="row">
-                    <div class="col-xs-12 col-md-4">
-                    </div>
-                    <div class="col-xs-12 col-md-6">
-                        <div class="input-group">
-                            <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
-                                (keyup.enter)="paging.pageIndex = 0; search()">
-                            <div class="input-group-addon" nbTooltip="Search">
-                                <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()">
-                                </nb-icon>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="role" class="col-xs-12 col-md-2">
-                        <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/blog/create'">
-                            <nb-icon icon="plus-outline"></nb-icon>Create
-                        </button>
-                    </div>
-                </div>
-            </nb-card-header>
-        </nb-card> -->
     </div>
-    <section style="background: white;">
+    <nb-card *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+        nbSpinnerMessage="Loading...">
+        <nb-card-body></nb-card-body>
+    </nb-card>
+    <section *ngIf="!loading" style="background: white;">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-md-10">
@@ -90,7 +74,7 @@
                     <div class="card">
                         <div class="row">
                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                <div class="card-image" [style.backgroundImage]="'url('+ itemNew.src +')'">
+                                <div class="card-image-new" [style.backgroundImage]="'url('+ itemNew.src +')'">
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -146,6 +130,8 @@
                                 class="sr-only">(current)</span></a>
                         <a class="nav-link font-family" style="cursor: pointer;"
                             (click)="changePath('second')">เกี่ยวกับ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('com')">บริษัทของเรา</a>
                         <a class="nav-link font-family" style="cursor: pointer;"
                             [routerLink]="'/features'">คุณสมบัติ</a>
                         <a class="nav-link font-family" style="cursor: pointer;"

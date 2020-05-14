@@ -15,6 +15,7 @@ export class BlogListComponent implements OnInit {
   items: any;
   itemNew: any;
   adminCheck: any;
+  loading: boolean;
   constructor(
     private router: Router,
     public service: BlogService
@@ -24,6 +25,7 @@ export class BlogListComponent implements OnInit {
 
   ngOnInit() {
     this.navBlog = true;
+    this.loading = true;
     this.adminCheck = false;
     this.navContact = false;
     this.items = [];
@@ -39,8 +41,9 @@ export class BlogListComponent implements OnInit {
         this.items = response.data;
         this.items.reverse();
         this.itemNew = this.items[0];
-        this.items.splice(0, 1)
+        this.items.splice(0, 1);
       }
+      this.loading = false;
     })
   }
 

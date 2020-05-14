@@ -33,7 +33,7 @@
         ข้าพเจ้าขอรับรองความถูกต้องของข้อมูลทั้งหมดที่ปรากฏในแบบการให้ความยินยอมนี้ และยินยอม
         เปิดเผยข้อมูลดังกล่าวให้แก่บริษัท {{ companyName }} ผ่านระบบ Buddy Recruit ได้<br><br>
 
-        <nb-checkbox (checkedChange)="toggle($event)"><span
+        <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)"><span
                 style="font-family: kanit;">ข้าพเจ้าได้อ่านและยอมรับข้อตกลง</span></nb-checkbox>
         <div style="text-align: center;padding-top: 1.25rem">
             <button [ngClass]="{ 'btn-select': checked,'btn-disable': !checked }" ghost nbButton
