@@ -4,6 +4,7 @@ export interface IAppFormTemplate {
   formName: string;
   formRemark: string;
   isExpress: boolean;
+  active: boolean;
 
   title: string;
   subTitle: string;
@@ -77,6 +78,11 @@ export interface IQuestion {
     rows: IGridOption[];
     columns: IGridOption[];
   },
+  parentChild: IParent[];
+  parentSelected: number;
+  childSelected: number;
+  multiChilds: any;
+  isFilter: boolean;
   score: IScore;
 }
 
@@ -165,4 +171,16 @@ export interface IScore {
 export interface ILinearOption {
   label: number;
   maxScore: number;
+}
+
+export interface IParent {
+  name: string;
+  required: boolean;
+  isMultiAnswer: boolean;
+  children: IChild[];
+  maxScore: number;
+}
+
+export interface IChild {
+  name: string;
 }

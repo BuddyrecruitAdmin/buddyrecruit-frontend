@@ -28,7 +28,8 @@ export class DepartmentListComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
-  loading: any = false;
+  loading = false;
+
   constructor(
     private router: Router,
     private service: DepartmentService,
@@ -69,11 +70,13 @@ export class DepartmentListComponent implements OnInit {
       ]
     };
     this.items = [];
+    this.loading = true;
     this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
       }
+      this.loading = false;
     });
   }
 

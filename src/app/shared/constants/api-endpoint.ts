@@ -233,6 +233,7 @@ export const API_ENDPOINT = {
       DETAIL: "appFormTemplate/detail",
       EDIT: "appFormTemplate/edit",
       DELETE: "appFormTemplate/delete",
+      TOGGLE_ACTIVE: "appFormTemplate/toggleActive",
     }
   },
   CV: {

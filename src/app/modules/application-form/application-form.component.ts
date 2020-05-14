@@ -84,12 +84,13 @@ export class ApplicationFormComponent implements OnInit {
 
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
-      const templateId = params.templateId;
+      const refCompany = params.id;
+      const refTemplate = params.id;
 
       if (action) {
         if (action === State.Preview) {
-          if (templateId) {
-            this.getTemplate(templateId);
+          if (refTemplate) {
+            this.getTemplate(undefined, refTemplate);
           } else {
             this.template = getAppFormData();
             if (this.template) {
@@ -104,8 +105,8 @@ export class ApplicationFormComponent implements OnInit {
           }
           this.isPreview = true;
         } else if (action === State.Submit) {
-          if (templateId) {
-            this.getTemplate(templateId);
+          if (refCompany) {
+            this.getTemplate(refCompany, undefined);
           } else {
             this.onError();
           }
@@ -209,8 +210,8 @@ export class ApplicationFormComponent implements OnInit {
     };
   }
 
-  getTemplate(templateId: string) {
-    this.service.getTemplate(templateId).subscribe(response => {
+  getTemplate(refCompany: string, refTemplate: string) {
+    this.service.getTemplate(refCompany, refTemplate).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.template = response.data;
@@ -237,6 +238,20 @@ export class ApplicationFormComponent implements OnInit {
               value: this.template.isExpress
             },
           ],
+        });
+      } else if (response.code === ResponseCode.NoContent) {
+        let message = 'Sorry! At this time, there is no recruitment.';
+        if (this.language === 'th') {
+          message = 'ขออภัย ขณะนี้ยังไม่มีการรับสมัครพนักงาน';
+        }
+        const confirm = this.matDialog.open(PopupMessageComponent, {
+          width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+          data: { type: 'I', content: message }
+        });
+        confirm.afterClosed().subscribe(result => {
+          if (result) {
+            window.close();
+          }
         });
       } else {
         this.onError();
@@ -275,6 +290,9 @@ export class ApplicationFormComponent implements OnInit {
               });
             });
             break;
+
+          case InputType.ParentChild:
+            question.multiChilds = new FormControl();
 
           default:
             break;
@@ -587,9 +605,20 @@ export class ApplicationFormComponent implements OnInit {
     } else {
       request.jobMultiChild = [];
     }
-    // Calculate score
+
+    // Question
     if (request.questions && request.questions.length) {
       request.questions.map(question => {
+
+        if (question.type === InputType.ParentChild) {
+          if (question.multiChilds && question.multiChilds.value) {
+            question.multiChilds = question.multiChilds.value;
+          } else {
+            question.multiChilds = [];
+          }
+        }
+
+        // Calculate score
         if (question.score.isScore) {
           switch (question.type) {
 
@@ -634,6 +663,15 @@ export class ApplicationFormComponent implements OnInit {
               });
               if (question.answer.otherChecked) {
                 question.score.submitScore += question.answer.otherScore;
+              }
+              break;
+
+            case InputType.ParentChild:
+              if (question.parentSelected >= 0) {
+                const parent = question.parentChild[question.parentSelected];
+                if (parent) {
+                  question.score.submitScore = parent.maxScore;
+                }
               }
               break;
 
@@ -739,6 +777,14 @@ export class ApplicationFormComponent implements OnInit {
     this.jobPosition = this.template.jobPositions.find(element => {
       return element.refPosition === value;
     });
+  }
+
+  getChild(question): any {
+    let child;
+    if (question.parentChild.length && question.parentSelected >= 0) {
+      child = question.parentChild[question.parentSelected];
+    }
+    return child;
   }
 
   showToast(type: NbComponentStatus, title: string, body: string = '') {

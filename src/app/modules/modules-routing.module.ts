@@ -49,7 +49,7 @@ const routes: Routes = [
         component: ApplicationFormComponent,
       },
       {
-        path: 'application-form/:action/:templateId',
+        path: 'application-form/:action/:id',
         component: ApplicationFormComponent,
       },
       {

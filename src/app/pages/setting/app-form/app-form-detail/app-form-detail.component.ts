@@ -6,10 +6,11 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@n
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material';
 
-import { IAppFormTemplate, IOption, IAction, ITreeNode } from '../app-form.interface';
+import { IAppFormTemplate, IOption, IAction, ITreeNode, IParent } from '../app-form.interface';
 import { InputType, State, ResponseCode } from '../../../../shared/app.constants';
 import { setAppFormData, getRole } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'ngx-app-form-detail',
@@ -44,6 +45,7 @@ export class AppFormDetailComponent implements OnInit {
   totalScore = 0;
   questionError: string;
   isExpress = false;
+  refCompany: string;
 
   constructor(
     private router: Router,
@@ -53,6 +55,7 @@ export class AppFormDetailComponent implements OnInit {
   ) {
     this.role = getRole();
     this.isExpress = this.role.refCompany.isExpress;
+    this.refCompany = this.role.refCompany._id;
   }
 
   ngOnInit() {
@@ -65,7 +68,7 @@ export class AppFormDetailComponent implements OnInit {
         this.loading = false;
       } else if (params.action === State.Edit) {
         this._id = params.id;
-        this.url = window.location.origin + '/application-form/submit/' + this._id;
+        this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Edit;
         this.getDetail();
       }
@@ -75,7 +78,7 @@ export class AppFormDetailComponent implements OnInit {
   initialModel() {
     this.appForm = {
       _id: '',
-      refCompany: '',
+      refCompany: this.role.refCompany._id,
       formName: 'Application Form #1',
       formRemark: '',
       title: 'Application Form',
@@ -84,6 +87,7 @@ export class AppFormDetailComponent implements OnInit {
       titleColor: '#ffffff',
       subTitleColor: '#ffffff',
       isExpress: false,
+      active: false,
 
       questions: [],
       personalDetail: {
@@ -182,6 +186,16 @@ export class AppFormDetailComponent implements OnInit {
     };
   }
 
+  initialParentChild(): IParent {
+    return {
+      name: 'Parent 1',
+      required: false,
+      isMultiAnswer: false,
+      children: [],
+      maxScore: 0
+    };
+  }
+
   getSelectedType(InputType: string): string {
     let icon = '';
     switch (InputType) {
@@ -202,6 +216,9 @@ export class AppFormDetailComponent implements OnInit {
         break;
       case this.InputType.Dropdown:
         icon = 'arrow_drop_down_circle';
+        break;
+      case this.InputType.ParentChild:
+        icon = 'share';
         break;
       case this.InputType.Upload:
         icon = 'cloud_upload';
@@ -301,6 +318,11 @@ export class AppFormDetailComponent implements OnInit {
           }
         ],
       },
+      parentChild: [this.initialParentChild()],
+      parentSelected: null,
+      childSelected: null,
+      multiChilds: null,
+      isFilter: false,
       score: {
         isScore: false,
         maxScore: 0,
@@ -361,6 +383,30 @@ export class AppFormDetailComponent implements OnInit {
 
   deleteNodeItem(iNode: number, iNodeItem: number) {
     this.appForm.jobPositions[iNode].children.splice(iNodeItem, 1);
+  }
+
+  addParent(iQuestion: number): void {
+    this.appForm.questions[iQuestion].parentChild.push({
+      name: `Parent ${this.appForm.questions[iQuestion].parentChild.length + 1}`,
+      required: false,
+      isMultiAnswer: false,
+      children: [],
+      maxScore: 0
+    });
+  }
+
+  deleteParent(iQuestion: number, iParent: number): void {
+    this.appForm.questions[iQuestion].parentChild.splice(iParent, 1);
+  }
+
+  appChild(iQuestion: number, iParent: number): void {
+    this.appForm.questions[iQuestion].parentChild[iParent].children.push({
+      name: `Child ${this.appForm.questions[iQuestion].parentChild[iParent].children.length + 1}`
+    });
+  }
+
+  deleteChild(iQuestion: number, iParent: number, iChild: number): void {
+    this.appForm.questions[iQuestion].parentChild[iParent].children.splice(iChild, 1);
   }
 
   addGridRow(rows: any): void {
@@ -580,28 +626,28 @@ export class AppFormDetailComponent implements OnInit {
   }
 
   getJobPosition() {
-    this.loadingJob = true;
-    this.service.getJobPosition().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.forEach(data => {
-            const found = this.appForm.jobPositions.find(jobPosition => {
-              return jobPosition.refPosition === data._id;
-            });
-            if (!found) {
-              this.appForm.jobPositions.push({
-                refPosition: data._id,
-                name: data.name,
-                required: false,
-                isMultiAnswer: false,
-                children: [],
-              });
-            }
-          });
-        }
-      }
-      this.loadingJob = false;
-    });
+    // this.loadingJob = true;
+    // this.service.getJobPosition().subscribe(response => {
+    //   if (response.code === ResponseCode.Success) {
+    //     if (response.data) {
+    //       response.data.forEach(data => {
+    //         const found = this.appForm.jobPositions.find(jobPosition => {
+    //           return jobPosition.refPosition === data._id;
+    //         });
+    //         if (!found) {
+    //           this.appForm.jobPositions.push({
+    //             refPosition: data._id,
+    //             name: data.name,
+    //             required: false,
+    //             isMultiAnswer: false,
+    //             children: [],
+    //           });
+    //         }
+    //       });
+    //     }
+    //   }
+    //   this.loadingJob = false;
+    // });
   }
 
   getDetail() {

@@ -24,7 +24,7 @@
         <mat-label>Remark</mat-label>
         <input matInput type="text" id="formRemark" [(ngModel)]="appForm.formRemark">
       </mat-form-field>
-      <div *ngIf="state === State.Edit" class="url-line">
+      <div *ngIf="state === State.Edit && appForm.active" class="url-line">
         <div class="w-100">
           <input type="text" id="url" [(ngModel)]="url" nbInput fullWidth disabled style="color: #c5cee0;">
         </div>
@@ -431,7 +431,7 @@
   </nb-accordion>
 
   <!-- Job Position -->
-  <nb-accordion *ngIf="isExpress" [nbSpinner]="loadingJob" nbSpinnerStatus="success" nbSpinnerMessage="Loading...">
+  <!-- <nb-accordion *ngIf="isExpress" [nbSpinner]="loadingJob" nbSpinnerStatus="success" nbSpinnerMessage="Loading...">
     <nb-accordion-item [expanded]="true">
       <nb-accordion-item-header>
         Job Position<small class="text-gray m-l-5">(Source from job position master)</small>
@@ -486,10 +486,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="radio-line-add">
-          <mat-icon class="text-light-gray m-r-10">radio_button_unchecked</mat-icon>
-          <span class="link" (click)="addNode()">Add Job Position</span>
-        </div> -->
         <div class="text-center">
           <button mat-flat-button type="button" color="primary" (click)="getJobPosition()" [disabled]="loadingJob">
             <mat-icon class="text-white">refresh</mat-icon> Update job position
@@ -497,7 +493,7 @@
         </div>
       </nb-accordion-item-body>
     </nb-accordion-item>
-  </nb-accordion>
+  </nb-accordion> -->
 
   <!-- Question -->
   <nb-card id="question" class="m-0">
@@ -545,6 +541,9 @@
                 <mat-option [value]="InputType.Dropdown">
                   <mat-icon>arrow_drop_down_circle</mat-icon> {{ InputType.Dropdown }}
                 </mat-option>
+                <mat-option [value]="InputType.ParentChild">
+                  <mat-icon>share</mat-icon> {{ InputType.ParentChild }}
+                </mat-option>
                 <mat-divider></mat-divider>
                 <mat-option [value]="InputType.Upload">
                   <mat-icon>cloud_upload</mat-icon> {{ InputType.Upload }}
@@ -586,6 +585,14 @@
                   {{ question.required ? 'check_box' : 'check_box_outline_blank' }}
                 </mat-icon>
                 <span>Required</span>
+              </button>
+              <button *ngIf="question.type === InputType.Radio || question.type === InputType.ChcekBox
+                || question.type === InputType.Dropdown || question.type === InputType.ParentChild" mat-menu-item
+                type="button" (click)="question.isFilter = !question.isFilter">
+                <mat-icon [ngClass]="{ 'text-green' : question.isFilter }">
+                  {{ question.isFilter ? 'check_box' : 'check_box_outline_blank' }}
+                </mat-icon>
+                <span>Make a filter</span>
               </button>
               <mat-divider></mat-divider>
               <button mat-menu-item type="button" (click)="duplicateQuestion(iQuestion)">
@@ -705,6 +712,62 @@
                 <span *ngIf="!question.answer.hasOther" class="m-l-10 m-r-10">|</span>
                 <span *ngIf="!question.answer.hasOther" class="link" (click)="question.answer.hasOther = true">Add
                   Other</span>
+              </div>
+            </div>
+
+            <div *ngIf="question.type === InputType.ParentChild">
+              <div *ngFor="let parent of question.parentChild; let iParent = index" style="margin-bottom: 1.5rem;">
+                <div class="radio-line">
+                  <mat-icon>fiber_manual_record</mat-icon>
+                  <mat-form-field>
+                    <input matInput type="text" id="parent_{{iQuestion}}_{{iParent}}" [(ngModel)]="parent.name"
+                      (click)="$event.target.select()" required>
+                  </mat-form-field>
+                  <button *ngIf="parent.children.length" mat-icon-button type="button" [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item type="button" (click)="parent.required = !parent.required">
+                      <mat-icon [ngClass]="{ 'text-green' : parent.required }">
+                        {{ parent.required ? 'check_box' : 'check_box_outline_blank' }}
+                      </mat-icon>
+                      <span>Item Required</span>
+                    </button>
+                    <button mat-menu-item type="button" (click)="parent.isMultiAnswer = !parent.isMultiAnswer">
+                      <mat-icon [ngClass]="{ 'text-green' : parent.isMultiAnswer }">
+                        {{ parent.isMultiAnswer ? 'check_box' : 'check_box_outline_blank' }}
+                      </mat-icon>
+                      <span>Multiple Answer</span>
+                    </button>
+                  </mat-menu>
+                  <button mat-icon-button type="button" (click)="deleteParent(iQuestion, iParent)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <div style="padding-left: 2rem;">
+                  <div *ngFor="let child of parent.children; let iChild = index" class="radio-line">
+                    <mat-icon [ngClass]="{ 'text-red' : parent.required }">
+                      {{ parent.isMultiAnswer ? 'check_box_outline_blank' : 'fiber_manual_record' }}
+                    </mat-icon>
+                    <mat-form-field>
+                      <input matInput type="text" id="child_{{iQuestion}}_{{iParent}}_{{iChild}}"
+                        [(ngModel)]="child.name" (click)="$event.target.select()" required>
+                    </mat-form-field>
+                    <button mat-icon-button type="button" (click)="deleteChild(iQuestion, iParent, iChild)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                  <div class="radio-line-add">
+                    <mat-icon class="text-light-gray m-r-10">
+                      {{ parent.isMultiAnswer ? 'check_box_outline_blank' : 'fiber_manual_record' }}
+                    </mat-icon>
+                    <span class="link" (click)="appChild(iQuestion, iParent)">Add Child</span>
+                  </div>
+                </div>
+              </div>
+              <div class="radio-line-add" style="padding-top: 0.5rem;">
+                <mat-icon class="text-light-gray m-r-10">fiber_manual_record</mat-icon>
+                <span class="link" (click)="addParent(iQuestion)">Add Parent</span>
               </div>
             </div>
 
@@ -880,6 +943,21 @@
                     </small>
                     <mat-slider class="w-100 h-36" color="primary" [max]="question.score.maxScore" min="0" step="1"
                       [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.answer.otherScore">
+                    </mat-slider>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.ParentChild">
+                <div class="score-body">
+                  <div *ngFor="let parent of question.parentChild; let iScore = index">
+                    <small class="score-scale-left">{{ parent.name }}</small>
+                    <small class="score-scale-right">
+                      ({{ parent.maxScore }}/{{ question.score.maxScore }})
+                    </small>
+                    <mat-slider class="w-100" color="primary" [max]="question.score.maxScore" min="0" step="1"
+                      [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="parent.maxScore"
+                      [ngClass]="{ 'h-36': iScore === question.parentChild.length - 1 }">
                     </mat-slider>
                   </div>
                 </div>
