@@ -200,7 +200,6 @@ export class ReportComponent implements OnInit {
   }
 
   save() {
-    debugger;
     const request = this.setRequest();
     if (request._id) {
       this.service.edit(request).subscribe(response => {

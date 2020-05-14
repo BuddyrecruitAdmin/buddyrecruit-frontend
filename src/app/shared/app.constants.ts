@@ -78,6 +78,8 @@ export const AppFormData = 'AppFormData';
 export const flagExam = 'flagExam';
 export const ExamData = 'ExamData';
 export const PathName = 'PathName';
+export const consentFlag = 'consentFlag';
+export const companyName = 'companyName';
 
 export enum DayOfWeek {
   Sunday = 0,
@@ -118,10 +120,16 @@ export const InnerWidth = {
 };
 
 export const InputType = {
-  Label: 'Label',
-  Input: 'Input',
-  TextArea: 'Text Area',
-  Radio: 'Radio',
-  ChcekBox: 'Checkbox',
+  Label: 'Title',
+  Input: 'Short answer',
+  TextArea: 'Paragraph',
+  Radio: 'Multiple chioce',
+  ChcekBox: 'Checkboxs',
   Dropdown: 'Dropdown',
+  Upload: 'File upload',
+  Linear: 'Linear scale',
+  RadioGrid: 'Multiple chioce grid',
+  ChcekBoxGrid: 'Checkbox grid',
+  Date: 'Date',
+  Time: 'Time',
 };

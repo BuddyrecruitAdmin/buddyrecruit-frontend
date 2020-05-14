@@ -2,6 +2,7 @@ export const API_ENDPOINT = {
   USERS: {
     LOGIN: "login",
     LOGOUT: "logout",
+    CONSENT: "consentUser/action",
     ME: "me",
     FORGOTTEN: "forgotten",
     CONFIRMPASSWORD: "changePassword",
@@ -328,4 +329,9 @@ export const API_ENDPOINT = {
     JR_LIST: "generalAppForm/jrs",
     GET_TEMPLATE: "generalAppForm/getTemplate"
   },
+  BLOG:{
+    CREATE: "blog/create",
+    LIST: "blog/list",
+    DETAIL: "blog/detail",
+  }
 };

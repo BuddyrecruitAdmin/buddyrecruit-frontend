@@ -338,6 +338,11 @@ section .header h3 {
 #pdpa{
   position: relative;
   padding-bottom: 2rem;
+  .btn-stand{
+    font-family: kanit;
+    color: white;
+    border: 2px solid white;
+  }
   h2{
     padding-top: 25%;
     // font-weight: bold;

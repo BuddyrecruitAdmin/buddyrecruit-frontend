@@ -167,5 +167,7 @@ export const MESSAGE = {
   157: "Please enter evaluation name",
   158: "Please select division",
   159: "Do you want to Block?",
-  160: "Please enter exam form name"
+  160: "Please enter exam form name",
+  161: "Please enter topic name",
+  162: "Please enter description",
 };

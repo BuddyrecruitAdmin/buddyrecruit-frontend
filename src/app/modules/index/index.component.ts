@@ -6,7 +6,7 @@ import { IndexService } from './index.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslateService } from '../../translate.service';
-import { setLangPath, setLanguage, getLanguage, setPathName, getPathName } from '../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setPathName, getPathName, getRole } from '../../shared/services';
 export interface ContactUs {
   firstName: string;
   lastName: string;
@@ -140,6 +140,7 @@ export class IndexComponent implements OnInit,AfterViewInit {
   navContact: boolean;
   navCom: boolean;
   pathName: any;
+  role:any;
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
@@ -167,7 +168,7 @@ export class IndexComponent implements OnInit,AfterViewInit {
     }
     this.pathName = getPathName();
     setPathName();
-
+    this.role = getRole();
   }
 
   ngOnInit() {

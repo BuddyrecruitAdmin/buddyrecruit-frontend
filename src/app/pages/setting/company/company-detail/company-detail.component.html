@@ -209,6 +209,13 @@
               <nb-radio [value]="false">No</nb-radio>
             </nb-radio-group>
           </div>
+          <div class="form-control-group">
+            <label class="label">Express version</label>
+            <nb-radio-group [(ngModel)]="companyDetail.isExpress" name="isExpress" class="inline">
+              <nb-radio [value]="true">Yes</nb-radio>
+              <nb-radio [value]="false">No</nb-radio>
+            </nb-radio-group>
+          </div>
           <div *ngIf="!companyDetail.isSubCompany">
             <div class="form-control-group" [ngClass]="{ 'has-error': errMsg.maxJR }">
               <label class="label">Number of JR <span class="text-red">*</span></label>

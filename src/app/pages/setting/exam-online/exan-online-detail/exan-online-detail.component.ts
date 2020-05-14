@@ -459,7 +459,7 @@ export class ExanOnlineDetailComponent implements OnInit {
     this.touchedName = false;
     if (this.examName === undefined || this.examName === "") {
       this.touchedName = true;
-      this.sErrorName = MESSAGE[157];
+      this.sErrorName = MESSAGE[160];
       isValid = false;
     }
     if (!this.departmentId) {

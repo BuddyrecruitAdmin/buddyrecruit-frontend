@@ -107,6 +107,7 @@ import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppFormListComponent } from './app-form/app-form-list/app-form-list.component';
 import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [

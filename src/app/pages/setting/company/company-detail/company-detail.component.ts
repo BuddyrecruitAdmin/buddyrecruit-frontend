@@ -35,6 +35,7 @@ export interface CompanyDetail {
     manager: boolean;
   },
   isTrial: boolean;
+  isExpress: boolean;
   maxJR: number;
   maxUser: number;
   smtpHost: string;
@@ -200,6 +201,7 @@ export class CompanyDetailComponent implements OnInit {
         manager: false,
       },
       isTrial: false,
+      isExpress: false,
       maxJR: 0,
       maxUser: 0,
       smtpHost: '',

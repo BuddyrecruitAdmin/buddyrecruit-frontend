@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { setPathName } from '../../../shared/services';
+import { setPathName, getRole } from '../../../shared/services';
 import { Router } from "@angular/router";
+import { BlogService } from "../blog.service"
+import { ResponseCode } from '../../../shared/app.constants';
 @Component({
   selector: 'ngx-blog-list',
   templateUrl: './blog-list.component.html',
@@ -9,15 +11,40 @@ import { Router } from "@angular/router";
 export class BlogListComponent implements OnInit {
   navBlog: boolean;
   navContact: boolean;
-  news: any;
+  role: any;
+  items: any;
+  itemNew: any;
+  adminCheck: any;
+  loading: boolean;
   constructor(
     private router: Router,
-  ) { }
+    public service: BlogService
+  ) {
+    this.role = getRole();
+  }
 
   ngOnInit() {
-    this.news = '../../../assets/images/about1.jpg'
     this.navBlog = true;
+    this.loading = true;
+    this.adminCheck = false;
     this.navContact = false;
+    this.items = [];
+    if (this.role && this.role.refHero.isSuperAdmin) {
+      this.adminCheck = true;
+    }
+    this.getList();
+  }
+
+  getList() {
+    this.service.getList().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.items = response.data;
+        this.items.reverse();
+        this.itemNew = this.items[0];
+        this.items.splice(0, 1);
+      }
+      this.loading = false;
+    })
   }
 
   scrollToElement(element, name): void {

@@ -1,1 +1,155 @@
-<p>blog-detail works!</p>
+<div class="homepage">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="navbar-brand d-flex align-items-center">
+            <img src="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
+            <strong class="pl-2 d-none d-sm-block">
+                <span class="text-green">B</span>uddy
+                <span class="text-green">R</span>ecruit
+            </strong>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('second')">เกี่ยวกับ</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('com')">บริษัทของเรา</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('package')">ราคา</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navBlog }" style="cursor: pointer;"
+                        [routerLink]="'/blog'">บทความ</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navContact }" style="cursor: pointer;"
+                        (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
+                </li>
+                <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
+                    [routerLink]="'/employer/login'"><span *ngIf="!role">Sign In</span><span
+                        *ngIf="role">ย้อนกลับ</span>
+                </button>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home -->
+    <section *ngIf="!preview" #home id="home">
+        <h5 class="text-center text-green">Create Blog</h5>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <label class="text-black"><b>ชื่อเรื่อง</b> <span class="text-red">*</span></label>
+                    <div class="input-group" [ngClass]="{ 'has-error': touchedTopic }">
+                        <input type="text" placeholder="ใส่ชื่อเรื่องตรงนี้" [(ngModel)]="topic" name="name" nbInput
+                            fullWidth>
+                        <div class="input-group-addon">
+                            <a style="cursor: pointer;" (click)="fileInput.click()">
+                                <span class="fa fa-images"></span>
+                                <input #fileInput type="file" (change)="fileChangeEvent(option,$event.target.files)"
+                                    style="display:none;" accept="image/*" />
+                            </a>
+                        </div>
+                        <small *ngIf="touchedTopic" class="text-red">{{ sErrorTopic }}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12" style="text-align: center;">
+                    <img *ngIf="src" class="img-default" [src]="src">
+                    <div class="input-group" [ngClass]="{ 'has-error': touchedDescription }">
+                        <textarea style="margin-top: 1rem; height: 15rem;" [(ngModel)]="description" nbInput fullWidth
+                            placeholder="Description here"></textarea>
+                        <small style="text-align: left;" *ngIf="touchedDescription"
+                            class="text-red">{{ sErrorDesc }}</small>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12" style="text-align: right;padding-top:2rem">
+                    <button style="font-family: kanit;" nbButton outline status="success" (click)="save()"><span
+                            *ngIf="state === 'create'">Create</span><span *ngIf="state === 'edit'">Save</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- view -->
+    <section *ngIf="preview" #home id="home">
+        <div *ngIf="adminCheck" class="row">
+            <div style="text-align: right;" class="col-md-12 col-lg-12">
+                <button nbButton status="primary" size="tiny" nbTooltip="Edit" [routerLink]="'/blog/edit/'+_id">
+                    <nb-icon icon="edit-outline"></nb-icon>แก้ไข
+                </button>
+            </div>
+        </div>
+        <h2 class="text-center text-green">{{ topic }}</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-12" style="text-align: center;">
+                    <img *ngIf="src" class="img-default" [src]="src">
+                    <p style="text-align: left; font-size: 1.5rem;">{{ description }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer #contact id="contact">
+        <div class="container">
+            <div class="row text-mob">
+                <div class="col-md-4 m-b-20">
+                    <div class="sitemap">
+                        <h6>Sitemap</h6>
+                        <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าแรก<span
+                                class="sr-only">(current)</span></a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('second')">เกี่ยวกับ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('com')">บริษัทของเรา</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            [routerLink]="'/features'">คุณสมบัติ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('package')">ราคา</a>
+                        <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navBlog }" style="cursor: pointer;"
+                            [routerLink]="'/blog'">บทความ</a>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-20">
+                    <div class="footer-address">
+                        <h6>ZYGEN COMPANY LIMITED</h6>
+                        <p>65/60 Chamnan Phenjati Business Center Tower,</p>
+                        <p>6 th Floor, Rama 9 Road, Huay Kwang, Bangkok, 10310</p>
+                        <p>Tel : +662 643 8016, +662 612 2116-7</p>
+                        <p>Mail : center@zygencenter.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-20">
+                    <div class="section-title wow fadeInDown animated" style="visibility: visible;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.364182712334!2d100.56648731474904!3d13.756898200881906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e8b5f598f1b%3A0xa91f1d97bdb4cb81!2zWnlHZW4gQ29tcGFueSBMaW1pdGVkIHwg4Lia4Lij4Li04Lip4Lix4LiXIOC5hOC4i-C5gOC4iOC5h-C4mSDguIjguLPguIHguLHguJQ!5e0!3m2!1sen!2sth!4v1532082801978"
+                            width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+                    </div>
+                </div>
+            </div>
+            <div id="copyright">
+                <span class="created-by">Copyright &copy; 2018-2019
+                    <a class="text-green" target="_blank" href="http://www.zygencenter.com/">ZyGen Company Limited</a>.
+                    All rights reserved.
+                </span>
+            </div>
+        </div>
+    </footer>
+</div>

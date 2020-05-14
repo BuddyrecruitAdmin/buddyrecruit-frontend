@@ -34,16 +34,16 @@
           <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navPackage }" style="cursor: pointer;"
             (click)="scrollToElement(package,'package')">ราคา</a>
         </li>
-        <!-- <li class="nav-item active" style="padding-right: 1.25rem;">
+        <li class="nav-item active" style="padding-right: 1.25rem;">
           <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
-        </li> -->
+        </li>
         <li class="nav-item active" style="padding-right: 1.25rem;">
           <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navContact }" style="cursor: pointer;"
             (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
         </li>
         <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
-          [routerLink]="'/employer/login'">Sign
-          In</button>
+          [routerLink]="'/employer/login'"><span *ngIf="!role">Sign In</span><span *ngIf="role">ย้อนกลับ</span>
+        </button>
       </ul>
     </div>
   </nav>
@@ -209,9 +209,10 @@
       <div class="col-md-6 col-lg-6 text-center text-mob">
         <h2 class="font-family ">Security Services in "PDPA"</h2>
         <p>PRIVACY of Personal Information</p>
-        <p>ระบบมีนโยบายตามกฎหมายปกป้องข้อมูลส่วนบุคคลตาม<p>
-            <p>พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</p>
-            <!-- <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button> -->
+        <p>ระบบมีนโยบายตามกฎหมายปกป้องข้อมูลส่วนบุคคลตาม
+        <p>
+        <p>พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</p>
+        <button class="btn-stand" shape="round" nbButton ghost [routerLink]="'/pdpa'">More Detail</button>
       </div>
       <div class="col-md-6 col-lg-6">
         <img class="img-bg" src="../../../assets/images/PDPA.jpg">
@@ -598,7 +599,7 @@
             <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
             <a class="nav-link font-family" style="cursor: pointer;"
               (click)="scrollToElement(package,'package')">ราคา</a>
-            <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
+            <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a>
             <!-- <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/blog'">บทความ</a> -->
           </div>
         </div>
