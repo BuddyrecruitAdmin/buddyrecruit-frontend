@@ -78,6 +78,8 @@ export const AppFormData = 'AppFormData';
 export const flagExam = 'flagExam';
 export const ExamData = 'ExamData';
 export const PathName = 'PathName';
+export const consentFlag = 'consentFlag';
+export const companyName = 'companyName';
 
 export enum DayOfWeek {
   Sunday = 0,

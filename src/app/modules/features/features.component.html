@@ -20,10 +20,12 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('second')">เกี่ยวกับ</a>
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('second')">เกี่ยวกับ</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('com')">บริษัทของเรา</a>
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('com')">บริษัทของเรา</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navFeature }" style="cursor: pointer;"
@@ -43,8 +45,9 @@
                         (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
                 </li>
                 <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
-                    [routerLink]="'/employer/login'">Sign
-                    In</button>
+                    [routerLink]="'/employer/login'"><span *ngIf="!role">Sign In</span><span
+                        *ngIf="role">ย้อนกลับ</span>
+                </button>
             </ul>
         </div>
     </nav>

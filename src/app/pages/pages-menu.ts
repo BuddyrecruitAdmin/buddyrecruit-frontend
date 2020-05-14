@@ -231,4 +231,9 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     link: '/employer/setting/app-form',
     hidden: false,
   },
+  {
+    title: 'Blog',
+    link: '/blog',
+    hidden: false,
+  },
 ];

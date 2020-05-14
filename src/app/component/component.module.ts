@@ -107,6 +107,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-search-dropdown.component';
 import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { PopupConsentComponent } from './popup-consent/popup-consent.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -214,6 +215,7 @@ import { MatSelectFilterModule } from 'mat-select-filter';
     PopupTransferComponent,
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
+    PopupConsentComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -237,7 +239,8 @@ import { MatSelectFilterModule } from 'mat-select-filter';
     PopupOnboardDateComponent,
     PopupTransferComponent,
     PopupSearchDropdownComponent,
-    PopupExamFormComponent
+    PopupExamFormComponent,
+    PopupConsentComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -261,7 +264,8 @@ import { MatSelectFilterModule } from 'mat-select-filter';
     PopupOnboardDateComponent,
     PopupTransferComponent,
     PopupSearchDropdownComponent,
-    PopupExamFormComponent
+    PopupExamFormComponent,
+    PopupConsentComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

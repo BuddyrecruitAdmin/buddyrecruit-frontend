@@ -20,7 +20,8 @@
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('second')">เกี่ยวกับ</a>
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('second')">เกี่ยวกับ</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/features'">คุณสมบัติ</a>
@@ -37,15 +38,16 @@
                         (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
                 </li>
                 <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
-                    [routerLink]="'/employer/login'">Sign
-                    In</button>
+                    [routerLink]="'/employer/login'"><span *ngIf="!role">Sign In</span><span
+                        *ngIf="role">ย้อนกลับ</span>
+                </button>
             </ul>
         </div>
     </nav>
 
     <!-- Home -->
     <div #home id="home">
-        <nb-card>
+        <!-- <nb-card>
             <nb-card-header>
                 <div class="row">
                     <div class="col-xs-12 col-md-4">
@@ -60,103 +62,68 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-2">
+                    <div *ngIf="role" class="col-xs-12 col-md-2">
                         <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/blog/create'">
                             <nb-icon icon="plus-outline"></nb-icon>Create
                         </button>
                     </div>
                 </div>
             </nb-card-header>
-        </nb-card>
+        </nb-card> -->
     </div>
     <section style="background: white;">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12 col-md-1 col-lg-1"></div>
-                <div class="col-sm-12 col-md-10 col-lg-10">
-                    <div class="card">
-                        <div class="card-image" [style.backgroundImage]="'url('+ news +')'">
-                        </div>
-                        <div class="card-body text-left">
-                            <h6 class="card-title text-dot">CEBIT ASEAN Thailand 2019</h6>
-                            <p class="card-text text-dot2">
-                                พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน
-                                2562
-                                ณ บูท C2Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562
-                                ณ บูท C2
-                            </p>
-                            <div class="text-right">
-                                <a target="_blank" class="link text-orange">
-                                    <small>
-                                        Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                                    </small>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-xs-12 col-md-10">
                 </div>
-                <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                <div *ngIf="adminCheck" class="col-xs-12 col-md-2">
+                    <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/blog/create'">
+                        <nb-icon icon="plus-outline"></nb-icon>Create
+                    </button>
+                </div>
             </div>
+        </div>
+        <div class="container">
             <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                <div *ngIf="itemNew" class="col-sm-12 col-md-10 col-lg-10">
                     <div class="card">
-                        <div class="card-image" [style.backgroundImage]="'url('+ news +')'">
-                        </div>
-                        <div class="card-body text-left">
-                            <h6 class="card-title text-dot">CEBIT ASEAN Thailand 2019</h6>
-                            <p class="card-text text-dot2">
-                                พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน
-                                2562
-                                ณ บูท C2Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562
-                                ณ บูท C2
-                            </p>
-                            <div class="text-right">
-                                <a target="_blank" class="link text-orange">
-                                    <small>
-                                        Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                                    </small>
-                                </a>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <div class="card-image" [style.backgroundImage]="'url('+ itemNew.src +')'">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <div class="card-body text-left">
+                                    <h6 class="card-title text-dot">{{ itemNew.topic }}</h6>
+                                    <p class="card-text text-dot2">
+                                        {{ itemNew.description }}
+                                    </p>
+                                    <div class="text-right">
+                                        <a target="_blank" class="link text-orange">
+                                            <small [routerLink]="'/blog/detail/'+itemNew._id">
+                                                Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
+                                            </small>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                <div *ngFor="let item of items;let i = index;" class="col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
-                        <div class="card-image" [style.backgroundImage]="'url('+ news +')'">
+                        <div class="card-image" [style.backgroundImage]="'url('+ item.src +')'">
                         </div>
                         <div class="card-body text-left">
-                            <h6 class="card-title text-dot">CEBIT ASEAN Thailand 2019</h6>
+                            <h6 class="card-title text-dot">{{ item.topic }}</h6>
                             <p class="card-text text-dot2">
-                                พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน
-                                2562
-                                ณ บูท C2Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562
-                                ณ บูท C2
+                                {{ item.description }}
                             </p>
                             <div class="text-right">
                                 <a target="_blank" class="link text-orange">
-                                    <small>
-                                        Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                                    </small>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-4 col-lg-4">
-                    <div class="card">
-                        <div class="card-image" [style.backgroundImage]="'url('+ news +')'">
-                        </div>
-                        <div class="card-body text-left">
-                            <h6 class="card-title text-dot">CEBIT ASEAN Thailand 2019</h6>
-                            <p class="card-text text-dot2">
-                                พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน
-                                2562
-                                ณ บูท C2Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562
-                                ณ บูท C2
-                            </p>
-                            <div class="text-right">
-                                <a target="_blank" class="link text-orange">
-                                    <small>
+                                    <small [routerLink]="'/blog/detail/'+item._id">
                                         Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
                                     </small>
                                 </a>
