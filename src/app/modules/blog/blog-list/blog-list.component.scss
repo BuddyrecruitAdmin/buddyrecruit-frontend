@@ -87,6 +87,13 @@ section .header h3 {
   width: 100%;
   height: 200px;
 }
+.card-image-new {
+  background-position: center;
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 350px;
+}
 .card-text {
   height: 40px;
   font-size: .8rem;

@@ -53,6 +53,7 @@ export class ExamFormComponent implements OnInit {
   flagExam: any;
   examData: any;
   isExpired: any;
+  companyName: any;
   constructor(
     private service: ExamFormService,
     private utilitiesService: UtilitiesService,
@@ -111,7 +112,7 @@ export class ExamFormComponent implements OnInit {
         this.examName = response.data.name;
         this.topicOption = response.data.exams;
         this.done = response.done;
-        console.log()
+        this.companyName = response.data.companyName;
         if (!this.done) {
           if (!response.startAt) {
             this.checkStart = true;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Devices } from '../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import { setPathName } from '../../shared/services';
+import { setPathName, getRole } from '../../shared/services';
 import { Router } from "@angular/router";
 @Component({
   selector: 'ngx-features',
@@ -16,11 +16,13 @@ export class FeaturesComponent implements OnInit {
   devices: Devices;
   navFeature: boolean;
   navContact: boolean;
+  role: any;
   constructor(
     private utilitiesService: UtilitiesService,
     private router: Router,
   ) {
     this.devices = this.utilitiesService.getDevice();
+    this.role = getRole();
   }
 
   ngOnInit() {

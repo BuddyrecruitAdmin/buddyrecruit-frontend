@@ -102,6 +102,7 @@ import { HomeComponent } from './home/home.component';
 import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
+import { PdpaComponent } from './pdpa/pdpa.component';
 
 @NgModule({
   imports: [
@@ -199,7 +200,8 @@ import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
     HomeComponent,
     FeaturesComponent,
     BlogDetailComponent,
-    BlogListComponent
+    BlogListComponent,
+    PdpaComponent
   ],
   providers: [
     TranslateService,

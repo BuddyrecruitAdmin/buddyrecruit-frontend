@@ -209,6 +209,7 @@ export class PagesComponent {
             link: '/employer/setting/contact-list',
             hidden: false,
           });
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[17]);
         }
 
         menuSetting.forEach(element => {

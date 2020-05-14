@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `
     <ngx-full-columns-layout>
       <router-outlet></router-outlet>
-    <ngx-full-columns-layout>
+    </ngx-full-columns-layout>
   `,
 })
 export class EmployerComponent {

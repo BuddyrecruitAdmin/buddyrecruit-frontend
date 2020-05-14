@@ -88,7 +88,10 @@
     "CONTAGIOUS_NO": "No",
     "IF_YES": "If yes, explain fully",
     "REMARK": "Please provide any further information about yourself witch will allow our company to know you better",
-    "ACCEPT_TEXT": "I certify all statement given in this application from is true if any found to be untrue after engagement. The company has rigth to terminate my employment without any compensation or severance pay what soever."
+    "ACCEPT_TEXT": "I certify all statement given in this application from is true if any found to be untrue after engagement. The company has rigth to terminate my employment without any compensation or severance pay what soever.",
+    "CONSENT": "ฺBuddy Recruit will store the applicant's information and documents uploaded to use in the Buddy Recruit system in accordance with our Personal Statement specified in the following",
+    "CONSENT_LINK": " Personal Statement.",
+    "CONSENT_ACCEPT": "I have read and accept above Personal Statement."
   },
   "INDEX": {
     "TITLE": "NEW GENERATIONS"

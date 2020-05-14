@@ -1554,7 +1554,11 @@
     input,
     input:hover,
     input:focus,
-    input:active {
+    input:active,
+    textarea,
+    textarea:hover,
+    textarea:focus,
+    textarea:active {
       border-color: var(--color-red);
     }
   }
