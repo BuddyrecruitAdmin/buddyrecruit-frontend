@@ -23,11 +23,11 @@ export class PagesComponent {
     private router: Router,
     private reportService: ReportService,
   ) {
-    const token = getToken();
-    if (!token) {
-      setUrl(this.router.url);
-      this.router.navigate(['/employer/login']);
-    }
+    // const token = getToken();
+    // if (!token) {
+    //   setUrl(this.router.url);
+    //   this.router.navigate(['/employer/login']);
+    // }
 
     this.menu = [];
     const role = getRole();

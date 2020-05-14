@@ -397,7 +397,6 @@ export class CandidateDetailComponent implements OnInit {
               }
               break;
             case 601:
-              debugger
               this.condition.icon.onboard = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;

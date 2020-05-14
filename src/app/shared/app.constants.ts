@@ -120,10 +120,16 @@ export const InnerWidth = {
 };
 
 export const InputType = {
-  Label: 'Label',
-  Input: 'Input',
-  TextArea: 'Text Area',
-  Radio: 'Radio',
-  ChcekBox: 'Checkbox',
+  Label: 'Title',
+  Input: 'Short answer',
+  TextArea: 'Paragraph',
+  Radio: 'Multiple chioce',
+  ChcekBox: 'Checkboxs',
   Dropdown: 'Dropdown',
+  Upload: 'File upload',
+  Linear: 'Linear scale',
+  RadioGrid: 'Multiple chioce grid',
+  ChcekBoxGrid: 'Checkbox grid',
+  Date: 'Date',
+  Time: 'Time',
 };

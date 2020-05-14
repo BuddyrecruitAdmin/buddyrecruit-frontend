@@ -3,9 +3,10 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { GestureConfig } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
@@ -93,7 +94,8 @@ import { environment } from '../environments/environment';
       ],
       multi: true
     },
-    PusherService
+    PusherService,
+    { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
   ]
 })
 export class AppModule {

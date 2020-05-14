@@ -527,7 +527,7 @@
     background-color: #f7f9fc;
     border-color: #edf1f7;
     color: #000000;
-    cursor: not-allowed  !important;  
+    cursor: not-allowed !important;
   }
   .input-group {
     .input-group-addon {
@@ -921,7 +921,7 @@
   }
 
   nb-accordion nb-accordion-item-body .item-body {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   nb-icon.font-inherit {
@@ -1585,10 +1585,11 @@
         font-size: 1rem;
       }
     }
+    .card {
+      margin: 2rem 0;
+    }
     .card,
     nb-card {
-      margin: 2rem 0;
-
       .card-header {
         display: flex;
         align-items: center;
@@ -1702,6 +1703,7 @@
   }
   .mat-select-panel {
     padding: 8px 0;
+    max-height: 80vh;
   }
   .mat-divider {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -1892,7 +1894,10 @@
     // .card.has-error {
     //   border-color: var(--color-red);
     // }
-
+    .mat-radio-label,
+    .mat-checkbox-layout {
+      margin-bottom: 0;
+    }
     .checkbox-margin {
       margin-top: 15px;
     }
@@ -2051,8 +2056,8 @@
       margin-top: 7px;
     }
   }
-  .mat-checkbox-layout {
-    margin-top: 7px;
+  .is-present .mat-checkbox-layout {
+    margin-top: 0.75rem;
   }
   .mat-checkbox-layout::after {
     content: " " !important;

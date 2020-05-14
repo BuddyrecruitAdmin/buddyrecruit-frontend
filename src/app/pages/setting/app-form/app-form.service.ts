@@ -45,4 +45,8 @@ export class AppFormService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.DELETE, body);
   }
 
+  getJobPosition(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.DROPDOWN.JOBPOSITION, {});
+  }
+
 }
