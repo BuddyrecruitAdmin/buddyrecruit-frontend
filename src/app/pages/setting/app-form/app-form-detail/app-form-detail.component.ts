@@ -79,6 +79,7 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm = {
       _id: '',
       refCompany: this.role.refCompany._id,
+      companyName: this.role.refCompany.name,
       formName: 'Application Form #1',
       formRemark: '',
       title: 'Application Form',
@@ -655,6 +656,7 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          this.appForm.companyName = this.role.refCompany.name;
           this.calGrandScore();
         }
       } else {

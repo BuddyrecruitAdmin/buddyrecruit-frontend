@@ -851,18 +851,19 @@
       </div>
 
       <div class="row">
-        <div class="offset-lg-2 col-lg-8">
-          <div class="text-center text-gray m-b-20">
+        <div class="offset-lg-2 col-lg-8 text-center">
+          <div class="text-gray m-b-20">
             <small>{{ 'TERMS_DETAIL' | translate }}</small>
-            <small class="link underline m-l-5">{{ 'PERSONAL_STATEMENT' | translate }}</small>
+            <small class="link underline m-l-5"
+              (click)="openPopupConsent()">{{ 'PERSONAL_STATEMENT' | translate }}</small>
           </div>
-          <div class="terms">
-            <mat-checkbox [(ngModel)]="term" [ngModelOptions]="{standalone: true}">
+          <div class="terms" (click)="openPopupConsent()">
+            <mat-checkbox [(ngModel)]="isAgree" [ngModelOptions]="{standalone: true}" disabled>
               {{ 'TERMS' | translate }}
             </mat-checkbox>
-            <!-- <button mat-icon-button type="button">
+            <button mat-icon-button type="button">
               <mat-icon class="showPhoto">help_outline</mat-icon>
-            </button> -->
+            </button>
           </div>
         </div>
       </div>
@@ -871,7 +872,7 @@
         <button mat-flat-button type="button" (click)="closeWindow()">
           <mat-icon>close</mat-icon> {{ 'CLOSE' | translate }}
         </button>
-        <button mat-flat-button color="primary" type="submit" [disabled]="!term">
+        <button mat-flat-button color="primary" type="submit" [disabled]="!isAgree">
           <mat-icon>send</mat-icon> {{ 'SUBMIT' | translate }}
         </button>
       </div>

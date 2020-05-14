@@ -1,6 +1,7 @@
 export interface IAppFormTemplate {
   _id?;
   refCompany: any;
+  companyName: string;
   formName: string;
   formRemark: string;
   isExpress: boolean;

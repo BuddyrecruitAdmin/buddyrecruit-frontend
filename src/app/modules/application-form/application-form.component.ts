@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
 import { JdService } from '../../pages/jd/jd.service';
-import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition } from '@nebular/theme';
+import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition, NbDialogService } from '@nebular/theme';
 import { ResponseCode, InputType, State } from '../../shared/app.constants';
 import { IAppFormTemplate } from '../../pages/setting/app-form/app-form.interface';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -19,6 +19,7 @@ import { API_ENDPOINT } from '../../shared/constants';
 import { environment } from '../../../environments/environment';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_UPLOAD;
+import { PopupConsentComponent } from '../../component/popup-consent/popup-consent.component';
 
 @Component({
   selector: 'ngx-application-form',
@@ -60,6 +61,7 @@ export class ApplicationFormComponent implements OnInit {
   loadingUpload = false;
   submitted = false;
   isPreview = false;
+  isAgree = false;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
 
@@ -71,6 +73,7 @@ export class ApplicationFormComponent implements OnInit {
     private toastrService: NbToastrService,
     public matDialog: MatDialog,
     private utilitiesService: UtilitiesService,
+    private dialogService: NbDialogService,
   ) {
     this.role = getRole();
     setLangPath("RESUME");
@@ -785,6 +788,19 @@ export class ApplicationFormComponent implements OnInit {
       child = question.parentChild[question.parentSelected];
     }
     return child;
+  }
+
+  openPopupConsent() {
+    setCompanyName(this.template.companyName || '');
+    setFlagConsent(this.isAgree)
+    this.dialogService.open(PopupConsentComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.isAgree = result;
+    });
   }
 
   showToast(type: NbComponentStatus, title: string, body: string = '') {
