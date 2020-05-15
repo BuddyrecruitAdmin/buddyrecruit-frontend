@@ -126,6 +126,7 @@ export const InputType = {
   Radio: 'Multiple chioce',
   ChcekBox: 'Checkboxs',
   Dropdown: 'Dropdown',
+  ParentChild: 'Parent - Child',
   Upload: 'File upload',
   Linear: 'Linear scale',
   RadioGrid: 'Multiple chioce grid',

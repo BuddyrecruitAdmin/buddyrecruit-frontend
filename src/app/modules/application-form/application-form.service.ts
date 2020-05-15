@@ -43,8 +43,9 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.DELETE, { _id: _id });
   }
 
-  getTemplate(refTemplate): Observable<ApiResponse> {
+  getTemplate(refCompany, refTemplate): Observable<ApiResponse> {
     const body = {
+      refCompany: refCompany,
       refTemplate: refTemplate
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.GET_TEMPLATE, body);

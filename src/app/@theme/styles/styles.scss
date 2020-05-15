@@ -1902,13 +1902,11 @@
       margin-top: 15px;
     }
     .terms {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: inline-block;
       color: gray;
+      cursor: pointer;
 
       .mat-checkbox {
-        margin-right: 15px;
         label {
           margin-bottom: 0;
         }
