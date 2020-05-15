@@ -1,0 +1,14 @@
+.url-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+
+  input {
+    cursor: text !important;
+  }
+  button {
+    margin-left: 10px;
+    color: gray;
+  }
+}
