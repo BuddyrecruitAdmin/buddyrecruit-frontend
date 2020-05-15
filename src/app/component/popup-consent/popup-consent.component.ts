@@ -18,8 +18,9 @@ export class PopupConsentComponent implements OnInit {
   ) {
     this.companyName = getCompanyName();
     this.checked = getFlagConsent();
-    this.innerHeight = window.innerHeight;
-    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.innerHeight = window.innerHeight * 0.8;
+    // this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.innerWidth = window.innerWidth * 0.8;
   }
 
   ngOnInit() {

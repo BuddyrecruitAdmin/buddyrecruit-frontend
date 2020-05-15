@@ -28,6 +28,8 @@ export class AppFormListComponent implements OnInit {
   devices: Devices;
   isGridLayout: boolean;
   role: any;
+  haveActive = false;
+  url: string;
 
   constructor(
     private router: Router,
@@ -46,6 +48,7 @@ export class AppFormListComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
+    this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
   }
 
   ngOnInit() {
@@ -75,6 +78,12 @@ export class AppFormListComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
+
+        if (this.items.find(item => {
+          return item.active;
+        })) {
+          this.haveActive = true;
+        }
       }
       this.loading = false;
     });
@@ -84,6 +93,16 @@ export class AppFormListComponent implements OnInit {
     const url = `/application-form/preview/${item._id}`;
     this.router.navigate([]).then(result => { window.open(url, '_blank'); });
   }
+
+  copyToClipboardByCompany() {
+    const el = document.createElement('textarea');
+    el.value = this.url;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    this.showToast('success', 'Copied!', '');
+  };
 
   copyToClipboard(item: any) {
     const el = document.createElement('textarea');
@@ -111,6 +130,17 @@ export class AppFormListComponent implements OnInit {
             this.showToast('danger', 'Error Message', response.message);
           }
         });
+      }
+    });
+  }
+
+  toggleActive(item) {
+    this.service.toggleActive(item._id, item.active).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.search();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
       }
     });
   }

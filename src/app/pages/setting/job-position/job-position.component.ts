@@ -81,6 +81,7 @@ export class JobPositionComponent implements OnInit {
   }
 
   search() {
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),

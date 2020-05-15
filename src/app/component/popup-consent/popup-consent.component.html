@@ -1,6 +1,5 @@
 <!-- dialog -->
-<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" style="overflow-y: auto;"
-    style="background-color: white;text-align: left;font-family: kanit;">
+<nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
     <nb-card-body>
         <div style="text-align: center;">
             <img style="margin-bottom: 2rem;" src="../../../assets/images/logo.png"
@@ -35,11 +34,14 @@
 
         <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)"><span
                 style="font-family: kanit;">ข้าพเจ้าได้อ่านและยอมรับข้อตกลง</span></nb-checkbox>
-        <div style="text-align: center;padding-top: 1.25rem">
+        <!-- <div style="text-align: center;padding-top: 1.25rem">
             <button [ngClass]="{ 'btn-select': checked,'btn-disable': !checked }" ghost nbButton
                 (click)="sendStatus(true)" [disabled]="!checked">ยอมรับ</button>
-            <button class="btn-select" ghost style="margin-left: 2rem;" nbButton
-                (click)="sendStatus(false)">ยกเลิก</button>
+            <button style="margin-left: 2rem;" nbButton status="default" (click)="sendStatus(false)">ยกเลิก</button>
+        </div> -->
+        <div class="text-center">
+            <button nbButton status="success" (click)="sendStatus(true)" [disabled]="!checked">ยอมรับ</button>
+            <button nbButton status="default" class="m-l-20" (click)="sendStatus(false)">ยกเลิก</button>
         </div>
     </nb-card-body>
 </nb-card>
