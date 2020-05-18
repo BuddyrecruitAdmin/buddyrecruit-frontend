@@ -174,7 +174,7 @@ export class BlogDetailComponent implements OnInit {
             }
           });
         } else {
-          this.service.edit(this._id, this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
+          this.service.edit(this._id, this.topic, this.description, this.uploadName, this.originalName, this.src).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
               this.router.navigate(['/blog']);
