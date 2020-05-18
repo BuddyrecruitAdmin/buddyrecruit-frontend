@@ -42,7 +42,7 @@
                         (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
                 </li>
                 <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
-                    [routerLink]="'/employer/login'"><span *ngIf="!role">Sign In</span><span
+                    [routerLink]="'/employer/login'"><span *ngIf="!role">เข้าระบบ</span><span
                         *ngIf="role">ย้อนกลับ</span>
                 </button>
             </ul>
@@ -62,9 +62,9 @@
                         <div class="input-group-addon">
                             <a style="cursor: pointer;" (click)="fileInput.click()">
                                 <span class="fa fa-images"></span>
-                                <input #fileInput type="file" name="blog" (change)="onHandleFileInput($event.target.files)"
-                                ng2FileSelect [uploader]="uploader"
-                                    style="display:none;" accept="image/*" />
+                                <input #fileInput type="file" name="blog"
+                                    (change)="onHandleFileInput($event.target.files)" ng2FileSelect
+                                    [uploader]="uploader" style="display:none;" accept="image/*" />
                             </a>
                         </div>
                         <small *ngIf="touchedTopic" class="text-red">{{ sErrorTopic }}</small>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-md-12 col-lg-12" style="text-align: right;padding-top:2rem">
                     <button style="font-family: kanit;" nbButton outline status="success" (click)="save()"><span
-                            *ngIf="state === 'create'">Create</span><span *ngIf="state === 'edit'">Save</span></button>
+                            *ngIf="state === 'create'">สร้าง</span><span *ngIf="state === 'edit'">บันทึก</span></button>
                 </div>
             </div>
         </div>
@@ -89,11 +89,13 @@
 
     <!-- view -->
     <section *ngIf="preview" #home id="home">
-        <div *ngIf="adminCheck" class="row">
-            <div style="text-align: right;" class="col-md-12 col-lg-12">
-                <button nbButton status="primary" size="tiny" nbTooltip="Edit" [routerLink]="'/blog/edit/'+_id">
-                    <nb-icon icon="edit-outline"></nb-icon>แก้ไข
-                </button>
+        <div class="container" *ngIf="adminCheck">
+            <div class="row">
+                <div style="text-align: right;" class="col-md-12 col-lg-12">
+                    <button nbButton status="primary" size="tiny" nbTooltip="Edit" [routerLink]="'/blog/edit/'+_id">
+                        <nb-icon icon="edit-outline"></nb-icon>แก้ไข
+                    </button>
+                </div>
             </div>
         </div>
         <h2 class="text-center text-green">{{ topic }}</h2>

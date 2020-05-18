@@ -20,6 +20,8 @@ const URL = environment.API_URI + "/" + API_ENDPOINT.BLOG.UPLOAD;
 export class BlogDetailComponent implements OnInit {
   topic: any;
   src: any;
+  originalName: any;
+  uploadName: any;
   imgHeight: any;
   description: any;
   navBlog: boolean;
@@ -117,12 +119,16 @@ export class BlogDetailComponent implements OnInit {
     const FileSize = files.item(0).size / 1024 / 1024; // in MB
     if (FileSize > 10) {
       this.setAlertMessage("E", MESSAGE[121]);
+      this.originalName = "";
+      this.uploadName = "";
       this.bHasFile = false;
       this.fileToUpload = null;
       return;
     } else {
       this.bHasFile = true;
       this.fileToUpload = files.item(0);
+      this.originalName = files.item(0).name;
+      this.uploadName = "";
       this.alertMessage = null;
     }
   }
@@ -158,7 +164,7 @@ export class BlogDetailComponent implements OnInit {
     } else
       if (this.validation()) {
         if (this.state === 'create') {
-          this.service.create(this.topic, this.src, this.description).subscribe(response => {
+          this.service.create(this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               // this.showToast('success', 'Success Message', response.message);
               this.showToast('success', response.message, '');
@@ -168,7 +174,7 @@ export class BlogDetailComponent implements OnInit {
             }
           });
         } else {
-          this.service.edit(this._id, this.topic, this.src, this.description).subscribe(response => {
+          this.service.edit(this._id, this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
               this.router.navigate(['/blog']);
@@ -182,6 +188,7 @@ export class BlogDetailComponent implements OnInit {
 
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     let data = JSON.parse(response); //success server response
+    this.uploadName = data.uploadName;
     this.bHasFile = false;
     this.save();
   }
