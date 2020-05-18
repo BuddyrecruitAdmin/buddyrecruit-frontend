@@ -108,6 +108,16 @@ section .header h3 {
 .card-footer {
   text-align: right;;
 }
+.text-dot-New {
+  height: 3.5rem;
+  font-size: 0.9rem;
+  line-height: 1.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .header-border {
   background-color: var(--color-white);
   padding-bottom: 25px;

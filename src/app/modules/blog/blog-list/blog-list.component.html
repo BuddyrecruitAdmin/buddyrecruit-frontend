@@ -60,7 +60,7 @@
             <div class="row">
                 <div class="col-xs-12 col-md-10">
                 </div>
-                <div *ngIf="adminCheck" class="col-xs-12 col-md-2">
+                <div *ngIf="adminCheck" class="col-xs-12 col-md-2" style="padding-bottom: 1.5rem;">
                     <button nbButton fullWidth status="success" nbTooltip="Create" [routerLink]="'/blog/create'">
                         <nb-icon icon="plus-outline"></nb-icon>Create
                     </button>
@@ -80,14 +80,16 @@
                             <div class="col-sm-12 col-md-6 col-lg-6">
                                 <div class="card-body text-left">
                                     <h6 class="card-title text-dot">{{ itemNew.topic }}</h6>
-                                    <p class="card-text text-dot2">
+                                    <p class="card-text text-dot-New">
                                         {{ itemNew.description }}
                                     </p>
                                     <div class="text-right">
-                                        <a target="_blank" class="link text-orange">
-                                            <small [routerLink]="'/blog/detail/'+itemNew._id">
+                                        <a target="_blank" class="link">
+                                            <small class="text-orange" [routerLink]="'/blog/detail/'+itemNew._id">
                                                 Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                                            </small>
+                                            </small><br>
+                                            <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
+                                                {{ utilitiesService.convertDateTimeFromSystem(itemNew.lastChangedInfo.date) }}</small>
                                         </a>
                                     </div>
                                 </div>
@@ -106,10 +108,12 @@
                                 {{ item.description }}
                             </p>
                             <div class="text-right">
-                                <a target="_blank" class="link text-orange">
-                                    <small [routerLink]="'/blog/detail/'+item._id">
+                                <a target="_blank" class="link">
+                                    <small class="text-orange" [routerLink]="'/blog/detail/'+item._id">
                                         Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
-                                    </small>
+                                    </small><br>
+                                    <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
+                                        {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) }}</small>
                                 </a>
                             </div>
                         </div>
