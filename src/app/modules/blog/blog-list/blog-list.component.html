@@ -88,13 +88,12 @@
                                             <small class="text-orange" [routerLink]="'/blog/detail/'+itemNew._id">
                                                 Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
                                             </small><br>
-                                            <small style="color: #b3b3b3;cursor: default;"
-                                                class="text-left">แก้ไขล่าสุด:
-                                                {{ utilitiesService.convertDateTimeFromSystem(itemNew.lastChangedInfo.date) }}</small>
-                                            <nb-icon icon="trash-2-outline" class="link" nbTooltip="ลบ"
-                                                (click)="delete(itemNew._id)">
-                                            </nb-icon>
                                         </a>
+                                        <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
+                                            {{ utilitiesService.convertDateTimeFromSystem(itemNew.lastChangedInfo.date) }}</small><br>
+                                        <nb-icon icon="trash-2-outline" class="link text-red" nbTooltip="ลบ"
+                                            (click)="delete(itemNew._id)">
+                                        </nb-icon>
                                     </div>
                                 </div>
                             </div>
@@ -116,12 +115,12 @@
                                     <small class="text-orange" [routerLink]="'/blog/detail/'+item._id">
                                         Read More <nb-icon icon="arrow-forward-outline"></nb-icon>
                                     </small><br>
-                                    <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
-                                        {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) }}</small>
-                                    <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete"
-                                        (click)="delete(item._id)">
-                                    </nb-icon>
                                 </a>
+                                <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
+                                    {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) }}</small><br>
+                                <nb-icon icon="trash-2-outline" class="link text-red" nbTooltip="Delete"
+                                    (click)="delete(item._id)">
+                                </nb-icon>
                             </div>
                         </div>
                     </div>
