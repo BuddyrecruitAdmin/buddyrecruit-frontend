@@ -334,5 +334,6 @@ export const API_ENDPOINT = {
     CREATE: "blog/create",
     LIST: "blog/list",
     DETAIL: "blog/detail",
+    UPLOAD: "blog/upload"
   }
 };
