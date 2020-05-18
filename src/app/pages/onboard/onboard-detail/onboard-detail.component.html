@@ -25,18 +25,19 @@
         </nb-radio-group>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <label class="label">Sourcing</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 inline">
-        <div *ngFor="let sol of soList">
-          <nb-checkbox (checkedChange)="filterSource($event,sol._id)" [(ngModel)]="sol.active">{{ sol.name }}
-          </nb-checkbox>
+    <div *ngIf="!isExpress">
+      <label class="label">Sourcing</label>
+      <div class="row">
+        <div class="col-md-12 inline">
+          <div *ngFor="let sol of soList">
+            <nb-checkbox (checkedChange)="filterSource($event,sol._id)" [(ngModel)]="sol.active">{{ sol.name }}
+            </nb-checkbox>
+          </div>
         </div>
       </div>
+    </div>
+    <div *ngIf="isExpress">
+
     </div>
   </nb-card-body>
 </nb-card>
@@ -61,19 +62,27 @@
                     Status: <label class="label label-gray" style="word-wrap: break-word;
                     white-space: initial;">{{ item.refStage?.name || item.refStage }}</label>
                   </span><br *ngIf="devices.isMobile">
-                  <span>
+                  <span *ngIf="!isExpress">
                     <span *ngIf="!devices.isMobile">|</span> Source:
                     <label class="label"
                       [ngClass]="utilitiesService.sourcingColors(item.refSource?.key)">{{ item.refSource?.name || 'Email' }}</label>
                   </span>
                 </small>
               </div>
-              <div class="actions">
+              <div *ngIf="!isExpress" class="actions">
                 <div class="link" (mouseenter)="itemSelected = item" [nbPopover]="score" nbPopoverTrigger="hint"
                   nbPopoverPlacement="left">
                   <span class="fa fa-star text-orange">&nbsp;</span>
                   <span>{{ item.weightScore?.accumulativeScore || 0 }}</span>
                   <small>/{{ item.weightScore?.total || 0 }}</small>
+                </div>
+              </div>
+              <div *ngIf="isExpress" class="actions">
+                <div class="link" (mouseenter)="itemSelected = item" [nbPopover]="expressScore" nbPopoverTrigger="hint"
+                  nbPopoverPlacement="left">
+                  <span class="fa fa-star text-orange">&nbsp;</span>
+                  <span>{{ item.submitScore || 0 }}</span>
+                  <small>/{{ item.maxScore || 0 }}</small>
                 </div>
               </div>
             </nb-card-header>
@@ -96,9 +105,16 @@
                     <label class="label">Email</label>
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
-                  <div class="text-group">
+                  <div *ngIf="!isExpress" class="text-group">
                     <span class="link" (click)="info(item)">
                       <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
+                    </span>
+                  </div>
+                  <!-- isExpress -->
+                  <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                    <span class="link underline" (click)="openApplicationForm(item)">
+                      <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
+                      <span>Application Form</span>
                     </span>
                   </div>
                 </div>
@@ -310,6 +326,22 @@
     <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                 itemSelected.weightScore?.certificate?.accumulativeScore,
                 itemSelected.weightScore?.certificate?.total)" status="danger" size="tiny">
+    </nb-progress-bar>
+  </div>
+</ng-template>
+
+<ng-template #expressScore>
+  <div class="text-center m-b-10">
+    <label class="label text-top text-black">Application Form Score</label>
+  </div>
+  <div *ngFor="let score of itemSelected.scores" class="m-b-10">
+    <div class="label m-b-5">{{ score.title }}
+      <span class="pull-right m-l-20">
+        {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar status="primary" size="tiny"
+      [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
     </nb-progress-bar>
   </div>
 </ng-template>

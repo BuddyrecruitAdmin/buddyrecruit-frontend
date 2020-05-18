@@ -61,6 +61,7 @@ export class ApplicationFormComponent implements OnInit {
   loadingUpload = false;
   submitted = false;
   isPreview = false;
+  isDisabled = false;
   isAgree = false;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
@@ -89,6 +90,7 @@ export class ApplicationFormComponent implements OnInit {
       const action = params.action;
       const refCompany = params.id;
       const refTemplate = params.id;
+      const refAppform = params.id;
 
       if (action) {
         if (action === State.Preview) {
@@ -107,12 +109,11 @@ export class ApplicationFormComponent implements OnInit {
             }
           }
           this.isPreview = true;
-        } else if (action === State.Submit) {
-          if (refCompany) {
-            this.getTemplate(refCompany, undefined);
-          } else {
-            this.onError();
-          }
+        } else if (action === State.Submit && refCompany) {
+          this.getTemplate(refCompany, undefined);
+        } else if (action === State.Detail && refAppform) {
+          this.getDetail(refAppform);
+          this.isDisabled = true;
         } else {
           this.onError();
         }
@@ -258,6 +259,41 @@ export class ApplicationFormComponent implements OnInit {
         });
       } else {
         this.onError();
+      }
+    });
+  }
+
+  getDetail(refAppform: string) {
+    this.service.getDetail(refAppform).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          this.appForm = response.data;
+          this.template = response.data.refTemplate;
+          this.getJR(this.appForm.refCompany);
+
+          this.appForm.birth = new Date(this.appForm.birth);
+          if (this.appForm.workExperience.work && this.appForm.workExperience.work.length) {
+            this.appForm.workExperience.work.map(element => {
+              element.start = new Date(element.start);
+              if (!element.isPresent) {
+                element.end = new Date(element.end);
+              } else {
+                element.end = null;
+              }
+            });
+          }
+          const jobMultiChild = this.appForm.jobMultiChild || [];
+          this.appForm.jobMultiChild = new FormControl();
+          this.appForm.jobMultiChild.value = jobMultiChild;
+
+          this.appForm.questions.forEach(question => {
+            if (question.type === InputType.ParentChild) {
+              const multiChilds = question.multiChilds || [];
+              question.multiChilds = new FormControl();
+              question.multiChilds.value = multiChilds;
+            }
+          });
+        }
       }
     });
   }
@@ -647,7 +683,7 @@ export class ApplicationFormComponent implements OnInit {
               }
               break;
 
-            case InputType.Radio || InputType.Dropdown:
+            case InputType.Radio:
               if (question.answer.selected >= 0) {
                 const option = question.answer.options[question.answer.selected];
                 if (option) {
@@ -666,6 +702,17 @@ export class ApplicationFormComponent implements OnInit {
               });
               if (question.answer.otherChecked) {
                 question.score.submitScore += question.answer.otherScore;
+              }
+              break;
+
+            case InputType.Dropdown:
+              if (question.answer.selected >= 0) {
+                const option = question.answer.options[question.answer.selected];
+                if (option) {
+                  question.score.submitScore = option.maxScore;
+                } else {
+                  question.score.submitScore = question.answer.otherScore;
+                }
               }
               break;
 

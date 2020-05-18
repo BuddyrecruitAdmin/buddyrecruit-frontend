@@ -97,6 +97,7 @@ export enum State {
   Preview = 'preview',
   Duplicate = 'duplicate',
   Submit = 'submit',
+  Detail = 'detail',
 }
 
 export const Paging = {
