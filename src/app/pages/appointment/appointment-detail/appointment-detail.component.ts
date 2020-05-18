@@ -57,6 +57,10 @@ export class AppointmentDetailComponent implements OnInit {
   examUserId: any;
   listExamDialog: any;
   dialogRef: NbDialogRef<any>;
+  
+  isExpress = false;
+  questionFilter = [];
+
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -130,6 +134,7 @@ export class AppointmentDetailComponent implements OnInit {
         }
       }
     });
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -211,6 +216,10 @@ export class AppointmentDetailComponent implements OnInit {
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
+
+        if (this.isExpress) {
+          this.forExpressCompany();
+        }
       }
       this.loading = false;
     });
@@ -460,6 +469,43 @@ export class AppointmentDetailComponent implements OnInit {
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+  }
+
+  forExpressCompany() {
+    if (this.items && this.items.length) {
+      const questions = this.items[0].questions;
+      const filters = questions.filter(element => {
+        return element.isFilter;
+      });
+
+      this.items.map(item => {
+        let scores = [];
+        item.submitScore = 0;
+        item.maxScore = 0;
+        if (item.questions && item.questions.length) {
+          item.questions.forEach(question => {
+            if (question.score && question.score.isScore) {
+              scores.push({
+                title: question.title,
+                submitScore: question.score.submitScore,
+                maxScore: question.score.maxScore
+              });
+              item.submitScore += question.score.submitScore;
+              item.maxScore += question.score.maxScore;
+            }
+          });
+        }
+        item.scores = scores;
+      });
+    }
+  }
+
+  openApplicationForm(item: any) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      });
+    }
   }
 
   changePaging(event) {

@@ -611,7 +611,7 @@
           <div class="w-100">
             <mat-form-field>
               <mat-label>{{ question.type === InputType.Label ? 'Title' : 'Question' }}</mat-label>
-              <input matInput type="text" id="qTitle{{iQuestion}}" [(ngModel)]="question.title"
+              <input matInput type="text" id="qTitle_{{iQuestion}}" [(ngModel)]="question.title"
                 (click)="$event.target.select()" required>
             </mat-form-field>
           </div>
@@ -625,7 +625,7 @@
         <small>
           <mat-form-field *ngIf="question.showSubTitle">
             <mat-label>Description</mat-label>
-            <input matInput type="text" id="qSubTitle{{iQuestion}}" [(ngModel)]="question.subTitle"
+            <input matInput type="text" id="qSubTitle_{{iQuestion}}" [(ngModel)]="question.subTitle"
               (click)="$event.target.select()" required>
           </mat-form-field>
         </small>
@@ -651,17 +651,25 @@
             </div>
 
             <div *ngIf="question.type === InputType.Input">
-              <mat-form-field appearance="outline">
-                <mat-label>Answer</mat-label>
-                <input matInput type="text" [(ngModel)]="question.answer.input" disabled>
-              </mat-form-field>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <mat-form-field appearance="outline" style="margin-bottom: -20px;">
+                    <mat-label>Short Answer</mat-label>
+                    <input matInput type="text" [(ngModel)]="question.answer.input" disabled>
+                  </mat-form-field>
+                </div>
+              </div>
             </div>
 
             <div *ngIf="question.type === InputType.TextArea">
-              <mat-form-field appearance="outline">
-                <mat-label>Answer</mat-label>
-                <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3" disabled></textarea>
-              </mat-form-field>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <mat-form-field appearance="outline" style="margin-bottom: -20px;">
+                    <mat-label>Paragraph</mat-label>
+                    <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3" disabled></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
             </div>
 
             <div *ngIf="question.type === InputType.Radio 
@@ -671,7 +679,7 @@
                 <div class="radio-line">
                   <mat-icon>{{ getSelectedOption(question.type) }}</mat-icon>
                   <mat-form-field class="w-100 m-l-10">
-                    <input matInput type="text" id="qLabel{{iOption}}" [(ngModel)]="option.label"
+                    <input matInput type="text" id="qLabel_{{iQuestion}}_{{iOption}}" [(ngModel)]="option.label"
                       (click)="$event.target.select()" required>
                   </mat-form-field>
                   <button *ngIf="question.type === InputType.Radio || question.type === InputType.ChcekBox"
@@ -699,8 +707,8 @@
               <div *ngIf="question.answer.hasOther" class="radio-line">
                 <mat-icon>{{ getSelectedOption(question.type) }}</mat-icon>
                 <mat-form-field>
-                  <input matInput type="text" id="qOtherLabel{{iQuestion}}" [(ngModel)]="question.answer.otherLabel"
-                    disabled>
+                  <input matInput type="text" id="qOtherLabel_{{iQuestion}}_{{iQuestion}}"
+                    [(ngModel)]="question.answer.otherLabel" disabled>
                 </mat-form-field>
                 <button mat-icon-button type="button" (click)="question.answer.hasOther = false">
                   <mat-icon>close</mat-icon>
@@ -813,7 +821,7 @@
                 <div class="radio-line" *ngFor="let row of question.grid.rows; let iGridRow = index">
                   <span>{{ iGridRow + 1 }}.</span>
                   <mat-form-field>
-                    <input matInput type="text" id="gridRow_{{iGridRow}}" [(ngModel)]="row.label"
+                    <input matInput type="text" id="gridRow_{{iQuestion}}_{{iGridRow}}" [(ngModel)]="row.label"
                       (click)="$event.target.select()" required>
                   </mat-form-field>
                   <div class="button-close">
@@ -835,7 +843,7 @@
                 <div class="radio-line" *ngFor="let column of question.grid.columns; let iGridCol = index">
                   <mat-icon>{{ getSelectedOption(question.type) }}</mat-icon>
                   <mat-form-field class="w-100 m-l-10">
-                    <input matInput type="text" id="gridCol_{{iGridCol}}" [(ngModel)]="column.label"
+                    <input matInput type="text" id="gridCol_{{iQuestion}}_{{iGridCol}}" [(ngModel)]="column.label"
                       (click)="$event.target.select()" required>
                   </mat-form-field>
                   <div class="button-close">
@@ -852,16 +860,18 @@
               </div>
             </div>
 
-            <div *ngIf="question.type === InputType.Date">
-              <mat-form-field appearance="outline" style="width: 250px;">
+            <div *ngIf="question.type === InputType.Date" class="text-center">
+              <mat-form-field appearance="outline"
+                style="display: inline-block !important; width: 250px; margin-bottom: -20px;">
                 <mat-label>Date</mat-label>
                 <input matInput disabled>
                 <mat-icon matSuffix>event</mat-icon>
               </mat-form-field>
             </div>
 
-            <div *ngIf="question.type === InputType.Time">
-              <mat-form-field appearance="outline" style="width: 250px;">
+            <div *ngIf="question.type === InputType.Time" class="text-center">
+              <mat-form-field appearance="outline"
+                style="display: inline-block !important; width: 250px; margin-bottom: -20px;">
                 <mat-label>Time</mat-label>
                 <input matInput disabled>
                 <mat-icon matSuffix>access_time</mat-icon>

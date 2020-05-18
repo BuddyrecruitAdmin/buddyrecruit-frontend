@@ -59,6 +59,10 @@ export class TalentPoolDetailComponent implements OnInit {
   examUserId: any;
   dialogRef: NbDialogRef<any>;
   listExamDialog: any;
+
+  isExpress = false;
+  questionFilter = [];
+
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -115,6 +119,7 @@ export class TalentPoolDetailComponent implements OnInit {
       return step.refStage.refMain._id === this.role.refCompany.menu.talentPool.refStage._id && step.editable;
     });
     this.startFlag = true;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -206,6 +211,10 @@ export class TalentPoolDetailComponent implements OnInit {
           });
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
+
+          if (this.isExpress) {
+            this.forExpressCompany();
+          }
         }
         this.loading = false;
         resolve();
@@ -545,6 +554,43 @@ export class TalentPoolDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  forExpressCompany() {
+    if (this.items && this.items.length) {
+      const questions = this.items[0].questions;
+      const filters = questions.filter(element => {
+        return element.isFilter;
+      });
+
+      this.items.map(item => {
+        let scores = [];
+        item.submitScore = 0;
+        item.maxScore = 0;
+        if (item.questions && item.questions.length) {
+          item.questions.forEach(question => {
+            if (question.score && question.score.isScore) {
+              scores.push({
+                title: question.title,
+                submitScore: question.score.submitScore,
+                maxScore: question.score.maxScore
+              });
+              item.submitScore += question.score.submitScore;
+              item.maxScore += question.score.maxScore;
+            }
+          });
+        }
+        item.scores = scores;
+      });
+    }
+  }
+
+  openApplicationForm(item: any) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      });
+    }
   }
 
   changePaging(event) {
