@@ -57,7 +57,7 @@ export class BlogService extends NetworkService {
 
   deleteItem(item: any): Observable<ApiResponse> {
     const body = {
-      _id: item._id
+      _id: item
     }
     return this.post(API_ENDPOINT.BLOG.DELETE, body);
   }
