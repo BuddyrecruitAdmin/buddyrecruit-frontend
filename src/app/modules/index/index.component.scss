@@ -218,6 +218,22 @@ section .header h3 {
     font-size: 1.15rem;
     line-height: 2.5rem;
   }
+  .container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  }
+  .responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
 }
 #contact-us {
   position: relative;
