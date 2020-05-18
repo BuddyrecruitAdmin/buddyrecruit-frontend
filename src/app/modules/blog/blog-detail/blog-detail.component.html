@@ -51,7 +51,7 @@
 
     <!-- Home -->
     <section *ngIf="!preview" #home id="home">
-        <h5 class="text-center text-green">Create Blog</h5>
+        <h5 class="text-center text-green">สร้างบทความ</h5>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-lg-12">
@@ -62,7 +62,8 @@
                         <div class="input-group-addon">
                             <a style="cursor: pointer;" (click)="fileInput.click()">
                                 <span class="fa fa-images"></span>
-                                <input #fileInput type="file" (change)="fileChangeEvent(option,$event.target.files)"
+                                <input #fileInput type="file" name="blog" (change)="onHandleFileInput($event.target.files)"
+                                ng2FileSelect [uploader]="uploader"
                                     style="display:none;" accept="image/*" />
                             </a>
                         </div>
@@ -73,7 +74,7 @@
                     <img *ngIf="src" class="img-default" [src]="src">
                     <div class="input-group" [ngClass]="{ 'has-error': touchedDescription }">
                         <textarea style="margin-top: 1rem; height: 15rem;" [(ngModel)]="description" nbInput fullWidth
-                            placeholder="Description here"></textarea>
+                            placeholder="ใส่รายละเอียดตรงนี้"></textarea>
                         <small style="text-align: left;" *ngIf="touchedDescription"
                             class="text-red">{{ sErrorDesc }}</small>
                     </div>
@@ -99,8 +100,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-lg-12" style="text-align: center;">
-                    <img *ngIf="src" class="img-default" [src]="src">
-                    <p style="text-align: left; font-size: 1.5rem;">{{ description }}</p>
+                    <img *ngIf="src" class="img-default" [src]="src"><br>
+                    <label
+                        style="text-align: left; font-size: 1.25rem;line-height: 2rem;padding-top: 2rem;">{{ description }}</label>
+                </div>
+                <div class="col-md-12 col-lg-12" style="text-align: right;">
+                    <small>แก้ไขล่าสุด: {{ utilitiesService.convertDateTimeFromSystem(dob) }}</small>
                 </div>
             </div>
         </div>

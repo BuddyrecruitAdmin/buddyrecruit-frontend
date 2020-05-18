@@ -6,7 +6,12 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { BlogService } from "../blog.service"
 import { ResponseCode } from '../../../shared/app.constants';
 import { MESSAGE } from '../../../shared/constants/message';
-
+import { UtilitiesService } from '../../../shared/services/utilities.service';
+import { Subject } from 'rxjs/Subject';
+import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
+import { environment } from '../../../../environments/environment';
+import { API_ENDPOINT } from '../../../shared/constants';
+const URL = environment.API_URI + "/" + API_ENDPOINT.BLOG.UPLOAD;
 @Component({
   selector: 'ngx-blog-detail',
   templateUrl: './blog-detail.component.html',
@@ -30,11 +35,19 @@ export class BlogDetailComponent implements OnInit {
   preview: boolean;
   _id: any;
   adminCheck: boolean;
+  dob: any;
+  bHasFile: boolean;
+  alertType: string;
+  alertMessage: string;
+  private _alertMessage = new Subject<string>();
+  fileToUpload: File;
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'file' });
   constructor(
     private toastrService: NbToastrService,
     private router: Router,
     public service: BlogService,
     private activatedRoute: ActivatedRoute,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
   }
@@ -45,6 +58,7 @@ export class BlogDetailComponent implements OnInit {
     this.description = "";
     this.navBlog = true;
     this.navContact = false;
+    this.bHasFile = false;
     this.preview = false;
     this.activatedRoute.params.subscribe(params => {
       if (params.action === "create") {
@@ -74,11 +88,12 @@ export class BlogDetailComponent implements OnInit {
         this.topic = response.data.topic;
         this.src = response.data.src;
         this.description = response.data.description;
+        this.dob = response.data.lastChangedInfo.date;
       }
     })
   }
 
-  fileChangeEvent(option, files: FileList): void {
+  fileChangeEvent(files: FileList): void {
     var reader = new FileReader();
     reader.readAsDataURL(files[0]); // read file as data url
     reader.onload = (e) => {
@@ -97,28 +112,78 @@ export class BlogDetailComponent implements OnInit {
     };
   }
 
-  save() {
-    if (this.validation()) {
-      if (this.state === 'create') {
-        this.service.create(this.topic, this.src, this.description).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/blog']);
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
-      } else {
-        this.service.edit(this._id,this.topic, this.src, this.description).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.router.navigate(['/blog']);
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
+  onHandleFileInput(files: FileList) {
+    this.fileChangeEvent(files);
+    const FileSize = files.item(0).size / 1024 / 1024; // in MB
+    if (FileSize > 10) {
+      this.setAlertMessage("E", MESSAGE[121]);
+      this.bHasFile = false;
+      this.fileToUpload = null;
+      return;
+    } else {
+      this.bHasFile = true;
+      this.fileToUpload = files.item(0);
+      this.alertMessage = null;
+    }
+  }
+
+  setAlertMessage(type: string, message: string) {
+    this._alertMessage.next(message); // build message
+    switch (type) {
+      case "S": {
+        this.alertType = "success";
+        break;
+      }
+      case "E": {
+        this.alertType = "danger";
+        break;
+      }
+      case "W": {
+        this.alertType = "warning";
+        break;
+      }
+      case "I": {
+        this.alertType = "info";
+        break;
       }
     }
+  }
+
+  save() {
+    if (this.bHasFile) {
+      this.uploader.uploadItem(
+        this.uploader.queue[this.uploader.queue.length - 1]
+      );
+      this.uploader.onSuccessItem = (item, response, status, headers) => this.onSuccessItem(item, response, status, headers);
+    } else
+      if (this.validation()) {
+        if (this.state === 'create') {
+          this.service.create(this.topic, this.src, this.description).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              // this.showToast('success', 'Success Message', response.message);
+              this.showToast('success', response.message, '');
+              this.router.navigate(['/blog']);
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        } else {
+          this.service.edit(this._id, this.topic, this.src, this.description).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.router.navigate(['/blog']);
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
+      }
+  }
+
+  onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+    let data = JSON.parse(response); //success server response
+    this.bHasFile = false;
+    this.save();
   }
 
   validation(): boolean {
