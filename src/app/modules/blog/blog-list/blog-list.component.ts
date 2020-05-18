@@ -3,6 +3,7 @@ import { setPathName, getRole } from '../../../shared/services';
 import { Router } from "@angular/router";
 import { BlogService } from "../blog.service"
 import { ResponseCode } from '../../../shared/app.constants';
+import { UtilitiesService } from '../../../shared/services/utilities.service';
 @Component({
   selector: 'ngx-blog-list',
   templateUrl: './blog-list.component.html',
@@ -18,7 +19,8 @@ export class BlogListComponent implements OnInit {
   loading: boolean;
   constructor(
     private router: Router,
-    public service: BlogService
+    public service: BlogService,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
   }

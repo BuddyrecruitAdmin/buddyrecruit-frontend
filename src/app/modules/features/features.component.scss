@@ -108,6 +108,24 @@
       }
     }
   }
+  #main {
+    .container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+    .responsive-iframe {
+      position: absolute;
+      top: 0;
+      left: 5%;
+      bottom: 0;
+      right: 0;
+      width: 90%;
+      height: 80%;
+      border: none;
+    }
+  }
   footer {
     background: rgb(53,196,178);
     background: linear-gradient(180deg, rgba(53,196,178,1) 0%, rgba(30,128,116,1) 50%);
@@ -160,7 +178,7 @@
     height: auto;
   }
   .padd-top{
-    padding-top: 5rem
+    padding-top: 2rem
   }
 
   @media (max-width: 767px) {

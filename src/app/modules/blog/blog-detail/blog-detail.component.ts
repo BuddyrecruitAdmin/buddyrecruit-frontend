@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { BlogService } from "../blog.service"
 import { ResponseCode } from '../../../shared/app.constants';
 import { MESSAGE } from '../../../shared/constants/message';
-
+import { UtilitiesService } from '../../../shared/services/utilities.service';
 @Component({
   selector: 'ngx-blog-detail',
   templateUrl: './blog-detail.component.html',
@@ -30,11 +30,13 @@ export class BlogDetailComponent implements OnInit {
   preview: boolean;
   _id: any;
   adminCheck: boolean;
+  dob: any;
   constructor(
     private toastrService: NbToastrService,
     private router: Router,
     public service: BlogService,
     private activatedRoute: ActivatedRoute,
+    private utilitiesService: UtilitiesService,
   ) {
     this.role = getRole();
   }
@@ -74,6 +76,7 @@ export class BlogDetailComponent implements OnInit {
         this.topic = response.data.topic;
         this.src = response.data.src;
         this.description = response.data.description;
+        this.dob = response.data.lastChangedInfo.date;
       }
     })
   }
