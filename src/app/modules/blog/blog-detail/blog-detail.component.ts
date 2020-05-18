@@ -91,6 +91,8 @@ export class BlogDetailComponent implements OnInit {
         this.src = response.data.src;
         this.description = response.data.description;
         this.dob = response.data.lastChangedInfo.date;
+        this.originalName = response.data.file.fileName;
+        this.uploadName = response.data.file.uploadName;
       }
     })
   }
@@ -174,7 +176,7 @@ export class BlogDetailComponent implements OnInit {
             }
           });
         } else {
-          this.service.edit(this._id, this.topic, this.description, this.uploadName, this.originalName, this.src).subscribe(response => {
+          this.service.edit(this._id, this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
               this.router.navigate(['/blog']);

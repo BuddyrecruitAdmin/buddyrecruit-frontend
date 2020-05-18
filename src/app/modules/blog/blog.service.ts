@@ -28,7 +28,7 @@ export class BlogService extends NetworkService {
     return this.post(API_ENDPOINT.BLOG.CREATE, body);
   }
 
-  edit(_id: any, topic: any, description: any, uploadName: any, originalName: any, src: any): Observable<ApiResponse> {
+  edit(_id: any, topic: any, description: any, uploadName: any, originalName: any): Observable<ApiResponse> {
     const body = {
       _id,
       topic,
@@ -36,8 +36,7 @@ export class BlogService extends NetworkService {
       file: {
         fileName: originalName,
         uploadName: uploadName
-      },
-      src
+      }
     }
     return this.post(API_ENDPOINT.BLOG.EDIT, body);
   }
