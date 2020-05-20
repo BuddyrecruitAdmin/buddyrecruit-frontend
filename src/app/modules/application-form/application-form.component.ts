@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { TranslateService } from '../../translate.service';
 import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent } from '../../shared/services';
@@ -33,6 +33,7 @@ export class ApplicationFormComponent implements OnInit {
   role: any;
 
   appForm: IApplicationForm;
+  formGroup: FormGroup;
 
   degreesEN: DropDownValue[];
   degreesTH: DropDownValue[];
@@ -75,6 +76,7 @@ export class ApplicationFormComponent implements OnInit {
     public matDialog: MatDialog,
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
+    private formBuilder: FormBuilder,
   ) {
     this.role = getRole();
     setLangPath("RESUME");
@@ -85,6 +87,7 @@ export class ApplicationFormComponent implements OnInit {
   ngOnInit() {
     this.getDegrees();
     this.initialModel();
+    this.initialForm();
 
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
@@ -204,6 +207,16 @@ export class ApplicationFormComponent implements OnInit {
       jobMultiChild: new FormControl()
     };
   }
+
+  initialForm() {
+    this.formGroup = this.formBuilder.group({
+      email: ['', [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+      phone: ['', [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+      postcode: ['', [Validators.pattern('^[0-9]{5}$')]],
+      gpa: ['', [Validators.maxLength(4)]],
+    });
+  }
+  get f() { return this.formGroup.controls; }
 
   initialAttahment(): IAttachment {
     return {

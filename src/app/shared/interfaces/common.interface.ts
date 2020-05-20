@@ -68,6 +68,7 @@ export interface Criteria {
   limit?: number;
   filter?: string[];
   filters?: Filter[];
+  questionFilters?: Filter[];
 }
 
 export interface Paging {

@@ -172,17 +172,30 @@
             <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'PHONE' | translate }}</mat-label>
-                <input matInput type="text" id="phone" name="phone" [(ngModel)]="appForm.phone"
-                  [required]="template.personalDetail.phone.required" [ngModelOptions]="{standalone: true}"
+                <input matInput type="text" id="phone" name="phone" [formControl]="f.phone"
+                  [(ngModel)]="appForm.phone" [required]="template.personalDetail.phone.required"
                   [disabled]="isDisabled">
+                <mat-hint align="start" class="text-red">
+                  <div *ngIf="f.phone.invalid && (submitted || f.phone.touched)">
+                    <div *ngIf="f.phone.errors?.pattern">
+                      Please enter a valid phone.
+                    </div>
+                  </div>
+                </mat-hint>
               </mat-form-field>
             </div>
             <div class="col-md-6" *ngIf="template.personalDetail.email.visible">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'EMAIL' | translate }}</mat-label>
-                <input matInput type="text" id="email" name="email" [(ngModel)]="appForm.email"
-                  [required]="template.personalDetail.email.required" [ngModelOptions]="{standalone: true}"
-                  [disabled]="isDisabled">
+                <input matInput type="text" id="email" name="email" [formControl]="f.email" [(ngModel)]="appForm.email"
+                  [required]="template.personalDetail.email.required" [disabled]="isDisabled">
+                <mat-hint align="start" class="text-red">
+                  <div *ngIf="f.email.invalid && (submitted || f.email.touched)">
+                    <div *ngIf="f.email.errors?.pattern">
+                      Please enter a valid email address.
+                    </div>
+                  </div>
+                </mat-hint>
               </mat-form-field>
             </div>
           </div>
@@ -226,9 +239,16 @@
               <div class="col-md-6">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'POSTCODE' | translate }}</mat-label>
-                  <input matInput type="text" id="postcode" name="postcode" [(ngModel)]="appForm.postcode"
-                    [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                  <input matInput type="text" id="postcode" name="postcode" [formControl]="f.postcode"
+                    [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required"
                     [disabled]="isDisabled">
+                  <mat-hint align="start" class="text-red">
+                    <div *ngIf="f.postcode.invalid && (submitted || f.postcode.touched)">
+                      <div *ngIf="f.postcode.errors?.pattern">
+                        Please enter a valid postcode.
+                      </div>
+                    </div>
+                  </mat-hint>
                 </mat-form-field>
               </div>
             </div>
@@ -376,9 +396,15 @@
               <div class="col-md-3" *ngIf="template.education.gpa.visible">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'GPA' | translate }}</mat-label>
-                  <input matInput type="text" id="gpa{{i}}" [(ngModel)]="education.gpa"
-                    [ngModelOptions]="{standalone: true}" [required]="template.education.gpa.required"
-                    [disabled]="isDisabled">
+                  <input matInput type="text" id="gpa{{i}}" name="gpa" [formControl]="f.gpa" [(ngModel)]="education.gpa"
+                    [required]="template.education.gpa.required" [disabled]="isDisabled">
+                  <mat-hint align="start" class="text-red">
+                    <div *ngIf="f.gpa.invalid && (submitted || f.gpa.touched)">
+                      <div *ngIf="f.gpa.errors?.maxLength">
+                        Please enter a valid gpa.
+                      </div>
+                    </div>
+                  </mat-hint>
                 </mat-form-field>
               </div>
             </div>
