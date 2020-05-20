@@ -51,7 +51,8 @@
         border: none;
         position: relative;
         margin: 10px auto 10px;
-        width: 600px;
+        width: inherit;
+        max-width: fit-content;
         height: auto;
         cursor: pointer;
         overflow-x: auto;

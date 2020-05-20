@@ -3,7 +3,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="navbar-brand d-flex align-items-center">
-            <img src="https://s3-ap-southeast-1.amazonaws.com/img-in-th/55613ac85c767ce0c72fc9825f111d0e.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
+            <img src="https://s3-ap-southeast-1.amazonaws.com/img-in-th/55613ac85c767ce0c72fc9825f111d0e.png"
+                class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
             <strong class="pl-2 d-none d-sm-block">
                 <span class="text-green">B</span>uddy
                 <span class="text-green">R</span>ecruit
@@ -74,14 +75,18 @@
                     <div class="card">
                         <div class="row">
                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                <div class="card-image-new" [style.backgroundImage]="'url('+ itemNew.src +')'">
+                                <div *ngIf="itemNew.src" class="card-image-new"
+                                    [style.backgroundImage]="'url('+ itemNew.src +')'">
+                                </div>
+                                <div *ngIf="!itemNew.src" class="card-image-new"
+                                    [style.backgroundImage]="'url(https://s3-ap-southeast-1.amazonaws.com/img-in-th/55613ac85c767ce0c72fc9825f111d0e.png)'">
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6 col-lg-6">
                                 <div class="card-body text-left">
                                     <h6 class="card-title text-dot">{{ itemNew.topic }}</h6>
-                                    <p class="card-text text-dot-New">
-                                        {{ itemNew.description }}
+                                    <p class="card-text-new" [innerHtml]="itemNew.description">
+                                        <!-- {{ itemNew.description }} -->
                                     </p>
                                     <div class="text-right">
                                         <a target="_blank" class="link">
@@ -103,12 +108,15 @@
                 <div class="col-sm-12 col-md-1 col-lg-1"></div>
                 <div *ngFor="let item of items;let i = index;" class="col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
-                        <div class="card-image" [style.backgroundImage]="'url('+ item.src +')'">
+                        <div *ngIf="item.src" class="card-image" [style.backgroundImage]="'url('+ item.src +')'">
+                        </div>
+                        <div *ngIf="!item.src" class="card-image"
+                            [style.backgroundImage]="'url(https://s3-ap-southeast-1.amazonaws.com/img-in-th/55613ac85c767ce0c72fc9825f111d0e.png)'">
                         </div>
                         <div class="card-body text-left">
                             <h6 class="card-title text-dot">{{ item.topic }}</h6>
-                            <p class="card-text text-dot2">
-                                {{ item.description }}
+                            <p class="card-text" [innerHtml]="item.description">
+                                <!-- {{ item.description }} -->
                             </p>
                             <div class="text-right">
                                 <a target="_blank" class="link">
