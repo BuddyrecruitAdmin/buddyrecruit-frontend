@@ -332,8 +332,10 @@ export const API_ENDPOINT = {
   },
   BLOG:{
     CREATE: "blog/create",
+    EDIT: "blog/edit",
     LIST: "blog/list",
     DETAIL: "blog/detail",
-    UPLOAD: "blog/upload"
+    UPLOAD: "blog/upload",
+    DELETE: "blog/delete"
   }
 };

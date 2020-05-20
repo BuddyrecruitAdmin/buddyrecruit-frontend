@@ -4,6 +4,9 @@ import { Router } from "@angular/router";
 import { BlogService } from "../blog.service"
 import { ResponseCode } from '../../../shared/app.constants';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
+import { MatDialog } from '@angular/material';
+import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 @Component({
   selector: 'ngx-blog-list',
   templateUrl: './blog-list.component.html',
@@ -21,6 +24,8 @@ export class BlogListComponent implements OnInit {
     private router: Router,
     public service: BlogService,
     private utilitiesService: UtilitiesService,
+    public matDialog: MatDialog,
+    private toastrService: NbToastrService,
   ) {
     this.role = getRole();
   }
@@ -63,6 +68,37 @@ export class BlogListComponent implements OnInit {
         break;
     }
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
+
+  delete(item: any) {
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'D' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.deleteItem(item).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            this.getList();
+          } else {
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
+    });
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
   }
 
   changePath(name) {

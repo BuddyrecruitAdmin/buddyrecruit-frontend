@@ -54,28 +54,28 @@ export class IndexComponent implements OnInit,AfterViewInit {
   expanded: boolean = false;
   lang: any;
 
-  images = [
-    {
-      img: '../../../assets/images/sec_2_03.jpg',
-      title: 'Organize : Easy Application Tracking & effective onboarding',
-      remark: 'A modern , Intelligent & friendly applicant tracking system',
-    },
-    {
-      img: '../../../assets/images/sec_3_03.jpg',
-      title: 'Big Data : The hardest part of recruitment is screening & evaluating candidate from a large application pool',
-      remark: 'Candidate screening is a BIG CHALLENGE. Inability in using data effectively',
-    },
-    {
-      img: '../../../assets/images/sec_4_03.jpg',
-      title: 'Let "BUDDY RECRUIT" help you!',
-      remark: 'Your Buddy for Successful Recruitment',
-    },
-    {
-      img: '../../../assets/images/sec_1_03.jpg',
-      title: 'Match : Get qualified candidates & Collaborate effectively',
-      remark: 'Lack of understanding between the recruiters and hiring manager?',
-    },
-  ];
+  // images = [
+  //   {
+  //     img: '../../../assets/images/sec_2_03.jpg',
+  //     title: 'Organize : Easy Application Tracking & effective onboarding',
+  //     remark: 'A modern , Intelligent & friendly applicant tracking system',
+  //   },
+  //   {
+  //     img: '../../../assets/images/sec_3_03.jpg',
+  //     title: 'Big Data : The hardest part of recruitment is screening & evaluating candidate from a large application pool',
+  //     remark: 'Candidate screening is a BIG CHALLENGE. Inability in using data effectively',
+  //   },
+  //   {
+  //     img: '../../../assets/images/sec_4_03.jpg',
+  //     title: 'Let "BUDDY RECRUIT" help you!',
+  //     remark: 'Your Buddy for Successful Recruitment',
+  //   },
+  //   {
+  //     img: '../../../assets/images/sec_1_03.jpg',
+  //     title: 'Match : Get qualified candidates & Collaborate effectively',
+  //     remark: 'Lack of understanding between the recruiters and hiring manager?',
+  //   },
+  // ];
 
   roleOptions = [
     {
@@ -118,19 +118,19 @@ export class IndexComponent implements OnInit,AfterViewInit {
     {
       title: 'CEBIT ASEAN Thailand 2019',
       remark: 'พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562 ณ บูท C25 อาคาร 7 อิมแพ็ค เมืองทองธานี',
-      img: '../../../assets/images/news/news1.jpg',
+      img: 'https://s3-ap-southeast-1.amazonaws.com/img-in-th/460b612e7485a9505d5148571e3db815.jpg',
       link: 'https://cebitasean.com'
     },
     {
       title: 'Thailand HR TECH Conferenc',
       remark: 'Thailand HR TECH Conference & Exposition 2019 ขึ้น ในวันที่ 28–29 พฤษภาคม 2562',
-      img: '../../../assets/images/news/news4.jpg',
+      img: 'https://s3-ap-southeast-1.amazonaws.com/img-in-th/1fcfd5663356b5939a5604e1e50ce59f.jpg',
       link: 'http://hrtech.pmat.or.th/app/netattm/attendee/page/88567'
     },
     {
       title: 'ZyGen ครบรอบ 20 ปี',
       remark: 'ZyGen ครบรอบ 20 ปี จัดงาน Practical Innovations For Business Opportunities & Profits',
-      img: '../../../assets/images/news/news3.jpg',
+      img: 'https://s3-ap-southeast-1.amazonaws.com/img-in-th/06774ffa1ca994fbeadb3b11e2f1be8c.jpg',
       link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
     },
   ];
