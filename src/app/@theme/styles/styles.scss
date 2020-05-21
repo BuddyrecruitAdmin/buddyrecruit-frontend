@@ -621,6 +621,12 @@
     }
   }
 
+  .p-b-0.mat-form-field-appearance-outline {
+    .mat-form-field-wrapper {
+      padding-bottom: 0 !important;
+    }
+  }
+
   // .mat-form-field-appearance-outline .mat-form-field-flex {
   //   background-color: #F7F9FC !important;
   // }

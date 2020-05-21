@@ -6,6 +6,7 @@ export interface IApplicationForm {
   refTemplate?;
   refJR?;
   otherJob: string;
+  title: string;
   firstname: string;
   lastname: string;
   birth: Date;

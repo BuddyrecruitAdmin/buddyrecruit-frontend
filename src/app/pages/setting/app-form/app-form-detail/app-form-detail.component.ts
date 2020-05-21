@@ -80,7 +80,7 @@ export class AppFormDetailComponent implements OnInit {
       _id: '',
       refCompany: this.role.refCompany._id,
       companyName: this.role.refCompany.name,
-      formName: 'Application Form #1',
+      formName: 'Application Form',
       formRemark: '',
       title: 'Application Form',
       subTitle: this.role.refCompany.name ? this.role.refCompany.name : '',
@@ -467,6 +467,19 @@ export class AppFormDetailComponent implements OnInit {
       });
     }
     return score;
+  }
+
+  toggleScoreCalculator(question): void {
+    if (!question.score.isScore) {
+      question.score = {
+        isScore: false,
+        maxScore: 0,
+        keywords: [],
+        girdRowScore: 0,
+        submitScore: 0,
+      };
+      this.calGrandScore();
+    }
   }
 
   autoCalScoreCheckbox(question): void {

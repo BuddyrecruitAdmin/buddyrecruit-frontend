@@ -890,12 +890,14 @@
             <nb-accordion-item-header style="background: #f9f9f9;">
               <div class="row w-100">
                 <div class="col-6">
-                  <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isScore" class="toggle">
+                  <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isScore"
+                    (change)="toggleScoreCalculator(question)" class="toggle">
                     Score calculator:
                   </mat-slide-toggle>
                 </div>
                 <div *ngIf="question.score.isScore" class="col-6 text-right">
                   <span class="m-r-20">
+                    <span style="color: #999;">Grand Total : </span>
                     <span [ngClass]="{ 'text-red' : totalScore !== 100, 'text-green': totalScore === 100 }"
                       style="font-size: 1.2rem;">
                       {{ totalScore }}
@@ -913,7 +915,8 @@
                 </span>
                 <mat-slider class="w-100" color="primary" [max]="getMaxScore(question.score.maxScore)" min="0" step="1"
                   [thumbLabel]="true" [tickInterval]="10" [(ngModel)]="question.score.maxScore"
-                  (change)="calGrandScore(); setLinearOptions(question)">
+                  (change)="calGrandScore(); setLinearOptions(question)"
+                  [disabled]="question.score.maxScore === 0 && totalScore === 100">
                 </mat-slider>
               </div>
 
@@ -935,7 +938,7 @@
               </div>
 
               <div *ngIf="question.type === InputType.Radio || question.type === InputType.Dropdown">
-                <div class="score-body">
+                <div *ngIf="question.score.maxScore > 0" class="score-body">
                   <div *ngFor="let option of question.answer.options; let iScore = index">
                     <small class="score-scale-left">{{ option.label }}</small>
                     <small class="score-scale-right">
@@ -959,7 +962,7 @@
               </div>
 
               <div *ngIf="question.type === InputType.ParentChild">
-                <div class="score-body">
+                <div *ngIf="question.score.maxScore > 0" class="score-body">
                   <div *ngFor="let parent of question.parentChild; let iScore = index">
                     <small class="score-scale-left">{{ parent.name }}</small>
                     <small class="score-scale-right">
@@ -974,7 +977,7 @@
               </div>
 
               <div *ngIf="question.type === InputType.ChcekBox">
-                <div class="score-body">
+                <div *ngIf="question.score.maxScore > 0" class="score-body">
                   <div class="text-center m-b-10">
                     <small class="text-gray m-r-5">Total score :</small>
                     <small [ngClass]="
@@ -1015,7 +1018,7 @@
               </div>
 
               <div *ngIf="question.type === InputType.Linear">
-                <div class="score-body">
+                <div *ngIf="question.score.maxScore > 0" class="score-body">
                   <div *ngFor="let option of question.answer.linearOptions; let iLinear = index">
                     <small class="score-scale-left">{{ option.label }}</small>
                     <small class="score-scale-right">

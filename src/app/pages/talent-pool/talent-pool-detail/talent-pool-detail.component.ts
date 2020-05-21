@@ -628,6 +628,14 @@ export class TalentPoolDetailComponent implements OnInit {
     this.search();
   }
 
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
+  }
+
   changePaging(event) {
     this.paging = {
       length: event.length,
