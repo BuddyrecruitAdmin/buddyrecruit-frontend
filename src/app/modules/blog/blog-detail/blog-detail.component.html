@@ -51,7 +51,8 @@
     </nav>
 
     <!-- Home -->
-    <section *ngIf="!preview" #home id="home">
+    <section *ngIf="!preview" #home id="home" [nbSpinner]="loading" nbSpinnerStatus="primary"
+        nbSpinnerMessage="Loading">
         <h5 class="text-center text-green">สร้างบทความ</h5>
         <div class="container">
             <div class="row">
@@ -98,7 +99,7 @@
     </section>
 
     <!-- view -->
-    <section *ngIf="preview" #home id="home">
+    <section *ngIf="preview" #home id="home" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerMessage="Loading">
         <div class="container" *ngIf="adminCheck">
             <div class="row">
                 <div style="text-align: right;" class="col-md-12 col-lg-12">
