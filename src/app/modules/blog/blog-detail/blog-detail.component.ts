@@ -191,8 +191,7 @@ export class BlogDetailComponent implements OnInit {
         if (this.state === 'create') {
           this.service.create(this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
             if (response.code === ResponseCode.Success) {
-              // this.showToast('success', 'Success Message', response.message);
-              this.showToast('success', response.message, '');
+              this.showToast('success', 'Success Message', response.message);
               this.router.navigate(['/blog']);
             } else {
               this.showToast('danger', 'Error Message', response.message);
