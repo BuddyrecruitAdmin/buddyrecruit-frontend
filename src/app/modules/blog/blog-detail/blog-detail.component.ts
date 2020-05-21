@@ -12,6 +12,7 @@ import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedR
 import { environment } from '../../../../environments/environment';
 import { API_ENDPOINT } from '../../../shared/constants';
 const URL = environment.API_URI + "/" + API_ENDPOINT.BLOG.UPLOAD;
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
   selector: 'ngx-blog-detail',
   templateUrl: './blog-detail.component.html',
@@ -24,6 +25,7 @@ export class BlogDetailComponent implements OnInit {
   uploadName: any;
   imgHeight: any;
   description: any;
+  description23: any;
   navBlog: boolean;
   navContact: boolean;
   touchedTopic: boolean;
@@ -44,6 +46,27 @@ export class BlogDetailComponent implements OnInit {
   private _alertMessage = new Subject<string>();
   fileToUpload: File;
   public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'file' });
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'no',
+    sanitize: false,
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Enter text here...',
+    defaultParagraphSeparator: '',
+    defaultFontName: 'Kanit',
+    defaultFontSize: '',
+    fonts: [
+      { class: 'kanit', name: 'Kanit' },
+    ]
+  };
+  loading: boolean;
   constructor(
     private toastrService: NbToastrService,
     private router: Router,
@@ -62,9 +85,11 @@ export class BlogDetailComponent implements OnInit {
     this.navContact = false;
     this.bHasFile = false;
     this.preview = false;
+    this.loading = true;
     this.activatedRoute.params.subscribe(params => {
       if (params.action === "create") {
         this.state = "create";
+        this.loading = false;
       }
       if (params.action === "edit") {
         console.log("dc")
@@ -93,6 +118,9 @@ export class BlogDetailComponent implements OnInit {
         this.dob = response.data.lastChangedInfo.date;
         this.originalName = response.data.file.fileName;
         this.uploadName = response.data.file.uploadName;
+        this.loading = false;
+      } else {
+        this.loading = false;
       }
     })
   }
@@ -158,6 +186,7 @@ export class BlogDetailComponent implements OnInit {
   }
 
   save() {
+    this.loading = true;
     if (this.bHasFile) {
       this.uploader.uploadItem(
         this.uploader.queue[this.uploader.queue.length - 1]
@@ -168,24 +197,32 @@ export class BlogDetailComponent implements OnInit {
         if (this.state === 'create') {
           this.service.create(this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
             if (response.code === ResponseCode.Success) {
-              // this.showToast('success', 'Success Message', response.message);
-              this.showToast('success', response.message, '');
               this.router.navigate(['/blog']);
+              this.showToast('success', response.message || 'Create Success', '');
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
+            this.loading = false;
           });
         } else {
           this.service.edit(this._id, this.topic, this.description, this.uploadName, this.originalName).subscribe(response => {
             if (response.code === ResponseCode.Success) {
-              this.showToast('success', 'Success Message', response.message);
               this.router.navigate(['/blog']);
+              this.showToast('success', response.message || 'Edit Success', '');
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
+            this.loading = false;
           });
         }
       }
+      else{
+        this.loading = false;
+      }
+  }
+
+  deletePic() {
+    this.src = '';
   }
 
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
