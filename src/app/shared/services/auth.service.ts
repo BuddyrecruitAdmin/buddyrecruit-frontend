@@ -34,7 +34,8 @@ import {
   ExamData,
   PathName,
   consentFlag,
-  companyName
+  companyName,
+  companyId
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -366,5 +367,13 @@ export function setCompanyName(com: any = null) {
 
 export function getCompanyName() {
   const com = JSON.parse(localStorage.getItem(companyName));
+  return (!com || com === null) ? undefined : com;
+}
+export function setCompanyId(com: any = null) {
+  localStorage.setItem(companyId, JSON.stringify(com));
+}
+
+export function getCompanyId() {
+  const com = JSON.parse(localStorage.getItem(companyId));
   return (!com || com === null) ? undefined : com;
 }

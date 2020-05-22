@@ -16,12 +16,16 @@ export class ConsentListService extends NetworkService {
     super('ConsentListService', httpClient, errorHandler);
   }
 
-  getDetail(criteria: any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.CONSENT_DETAIL, { criteria });
+  getDetail(companyId: any = undefined): Observable<ApiResponse> {
+    const body = {
+      comId : companyId
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.CONSENT_DETAIL, body);
   }
 
-  edit(text: any): Observable<ApiResponse> {
+  edit(_id: any, text: any): Observable<ApiResponse> {
     const body = {
+      _id,
       text
     }
     return this.post(API_ENDPOINT.CONFIGURATION.CONSENT_EDIT, body);

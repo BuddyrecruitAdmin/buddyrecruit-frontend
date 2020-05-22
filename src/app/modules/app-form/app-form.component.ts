@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppFormService } from './app-form.service';
 import { ResponseCode, consentFlag } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, setLanguage, getLanguage, setLangPath, setCompanyName, setFlagConsent, getFlagConsent } from '../../shared/services/auth.service';
+import { getRole, setLanguage, getLanguage, setLangPath, setCompanyName, setFlagConsent, setCompanyId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
@@ -113,6 +113,7 @@ export class AppFormComponent implements OnInit {
   showSalary: boolean;
   checked: boolean;
   companyName: any;
+  companyId: any;
   constructor(
     private service: AppFormService,
     private utilitiesService: UtilitiesService,
@@ -173,6 +174,7 @@ export class AppFormComponent implements OnInit {
             this.edtiable = false;
           } else {
             this.companyName = response.data.companyName;
+            this.companyId = response.data.comId;
             this.isExitst = response.data.isExist;
           }
         }
@@ -188,6 +190,7 @@ export class AppFormComponent implements OnInit {
           } else {
             this.companyName = response.data.companyName;
             this.isExitst = response.data.isExist;
+            this.companyId = response.data.comId;
           }
         }
       })
@@ -614,8 +617,8 @@ export class AppFormComponent implements OnInit {
   }
 
   openConsent() {
-    console.log(this.companyName)
     setCompanyName(this.companyName);
+    setCompanyId(this.companyId);
     setFlagConsent(this.checked)
     this.dialogService.open(PopupConsentComponent,
       {

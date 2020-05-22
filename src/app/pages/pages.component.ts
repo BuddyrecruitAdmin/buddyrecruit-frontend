@@ -203,10 +203,9 @@ export class PagesComponent {
         if (configuration.blacklist && configuration.blacklist.visible && !role.refHero.isSuperAdmin) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
         }
-        // if (configuration.consent && configuration.consent.visible) {
-        //   menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[18]);
-        // }
-        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[18]);
+        if (configuration.consent && configuration.consent.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[18]);
+        }
         // is Super Admin
         if (role.refHero.isSuperAdmin) {
           menuSetting[1].children.push({

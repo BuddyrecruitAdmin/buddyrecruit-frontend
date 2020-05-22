@@ -80,6 +80,7 @@ export const ExamData = 'ExamData';
 export const PathName = 'PathName';
 export const consentFlag = 'consentFlag';
 export const companyName = 'companyName';
+export const companyId = 'companyId';
 
 export enum DayOfWeek {
   Sunday = 0,

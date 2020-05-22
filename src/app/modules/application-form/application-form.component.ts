@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -72,7 +72,7 @@ export class ApplicationFormComponent implements OnInit {
       'นาย',
       'นาง',
       'นางสาว',
-    ],    
+    ],
     en: [
       'Mr.',
       'Mrs.',
@@ -867,6 +867,7 @@ export class ApplicationFormComponent implements OnInit {
 
   openPopupConsent() {
     setCompanyName(this.template.companyName || '');
+    setCompanyId(this.template.refCompany);
     setFlagConsent(this.isAgree)
     this.dialogService.open(PopupConsentComponent,
       {

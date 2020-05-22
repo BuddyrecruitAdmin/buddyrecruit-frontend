@@ -237,8 +237,8 @@ export const API_ENDPOINT = {
       TOGGLE_ACTIVE: "appFormTemplate/toggleActive",
     },
 
-    CONSENT_DETAIL: "consent/detail",
-    CONSENT_EDIT: "consent/edit"
+    CONSENT_DETAIL: "userConsentText/detail",
+    CONSENT_EDIT: "userConsentText/edit"
   },
   CV: {
     DETAIL: "candidate/id",

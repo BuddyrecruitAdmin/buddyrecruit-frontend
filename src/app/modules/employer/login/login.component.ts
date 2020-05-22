@@ -4,7 +4,7 @@ import { MESSAGE } from '../../../shared/constants/message';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { LoginService } from './login.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getToken, setAuthentication, getUrl, setUrl, setCompanyName, setFlagConsent } from '../../../shared/services/auth.service';
+import { getToken, setAuthentication, getUrl, setUrl, setCompanyName, setFlagConsent, setCompanyId } from '../../../shared/services/auth.service';
 import {
   NbComponentStatus,
   NbGlobalLogicalPosition,
@@ -148,6 +148,7 @@ export class LoginComponent implements OnInit {
 
   openConsent(user: any) {
     setCompanyName(user.refCompany);
+    setCompanyId(user.comId);
     setFlagConsent(this.checked)
     this.dialogService.open(PopupConsentComponent,
       {
