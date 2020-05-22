@@ -99,6 +99,8 @@
   "RESUME": {
     "TITLE": "สร้างเรซูเม่",
     "PERSONAL_DETAILS": "ข้อมูลส่วนตัว",
+    "TITLE_NAME": "ชื่อนำหน้า",
+    "NO_TITLE": "ไม่ระบุ",
     "FIRST_NAME": "ชื่อ",
     "LAST_NAME": "นามสกุล",
     "BIRTHDAY": "วัน เดือน ปีเกิด",

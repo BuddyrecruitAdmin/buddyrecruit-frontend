@@ -102,6 +102,7 @@ export class JdDetailComponent implements OnInit {
   checkDivision: boolean;
   sErrorDivision: string;
   devices: Devices;
+  isExpress = false;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -116,6 +117,7 @@ export class JdDetailComponent implements OnInit {
     this.devices = this.utilitiesService.getDevice();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.8;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

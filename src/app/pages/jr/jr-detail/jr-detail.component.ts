@@ -66,6 +66,7 @@ export class JrDetailComponent implements OnInit {
   tempExam: any;
   innerWidth: any;
   innerHeight: any;
+  isExpress = false;
   constructor(
     private service: JrService,
     private dialogService: NbDialogService,
@@ -79,6 +80,7 @@ export class JrDetailComponent implements OnInit {
     this.role = getRole();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.6;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

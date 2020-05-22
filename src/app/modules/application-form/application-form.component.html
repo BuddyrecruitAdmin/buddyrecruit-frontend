@@ -134,7 +134,30 @@
             <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
           </div>
           <div class="row">
-            <div class="col-md-6" *ngIf="template.personalDetail.firstname.visible">
+            <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
+                <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                  <div *ngIf="language === 'en'">
+                    <mat-option *ngFor="let title of title.en" [value]="title">
+                      {{ title }}
+                    </mat-option>
+                    <mat-option [value]="undefined">
+                      {{ 'NO_TITLE' | translate }}
+                    </mat-option>
+                  </div>
+                  <div *ngIf="language === 'th'">
+                    <mat-option *ngFor="let title of title.th" [value]="title">
+                      {{ title }}
+                    </mat-option>
+                    <mat-option [value]="undefined">
+                      {{ 'NO_TITLE' | translate }}
+                    </mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-5" *ngIf="template.personalDetail.firstname.visible">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
                 <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
@@ -142,7 +165,7 @@
                   [disabled]="isDisabled">
               </mat-form-field>
             </div>
-            <div class="col-md-6" *ngIf="template.personalDetail.lastname.visible">
+            <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
                 <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
@@ -172,9 +195,8 @@
             <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'PHONE' | translate }}</mat-label>
-                <input matInput type="text" id="phone" name="phone" [formControl]="f.phone"
-                  [(ngModel)]="appForm.phone" [required]="template.personalDetail.phone.required"
-                  [disabled]="isDisabled">
+                <input matInput type="text" id="phone" name="phone" [formControl]="f.phone" [(ngModel)]="appForm.phone"
+                  [required]="template.personalDetail.phone.required">
                 <mat-hint align="start" class="text-red">
                   <div *ngIf="f.phone.invalid && (submitted || f.phone.touched)">
                     <div *ngIf="f.phone.errors?.pattern">
@@ -188,7 +210,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>{{ 'EMAIL' | translate }}</mat-label>
                 <input matInput type="text" id="email" name="email" [formControl]="f.email" [(ngModel)]="appForm.email"
-                  [required]="template.personalDetail.email.required" [disabled]="isDisabled">
+                  [required]="template.personalDetail.email.required">
                 <mat-hint align="start" class="text-red">
                   <div *ngIf="f.email.invalid && (submitted || f.email.touched)">
                     <div *ngIf="f.email.errors?.pattern">
@@ -240,8 +262,7 @@
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'POSTCODE' | translate }}</mat-label>
                   <input matInput type="text" id="postcode" name="postcode" [formControl]="f.postcode"
-                    [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required"
-                    [disabled]="isDisabled">
+                    [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required">
                   <mat-hint align="start" class="text-red">
                     <div *ngIf="f.postcode.invalid && (submitted || f.postcode.touched)">
                       <div *ngIf="f.postcode.errors?.pattern">
@@ -397,7 +418,7 @@
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'GPA' | translate }}</mat-label>
                   <input matInput type="text" id="gpa{{i}}" name="gpa" [formControl]="f.gpa" [(ngModel)]="education.gpa"
-                    [required]="template.education.gpa.required" [disabled]="isDisabled">
+                    [required]="template.education.gpa.required">
                   <mat-hint align="start" class="text-red">
                     <div *ngIf="f.gpa.invalid && (submitted || f.gpa.touched)">
                       <div *ngIf="f.gpa.errors?.maxLength">

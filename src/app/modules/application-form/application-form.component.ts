@@ -67,6 +67,19 @@ export class ApplicationFormComponent implements OnInit {
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
 
+  title = {
+    th: [
+      'นาย',
+      'นาง',
+      'นางสาว',
+    ],    
+    en: [
+      'Mr.',
+      'Mrs.',
+      'Miss',
+    ]
+  }
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -115,8 +128,9 @@ export class ApplicationFormComponent implements OnInit {
         } else if (action === State.Submit && refCompany) {
           this.getTemplate(refCompany, undefined);
         } else if (action === State.Detail && refAppform) {
-          this.getDetail(refAppform);
           this.isDisabled = true;
+          this.initialForm();
+          this.getDetail(refAppform);
         } else {
           this.onError();
         }
@@ -177,6 +191,7 @@ export class ApplicationFormComponent implements OnInit {
       refTemplate: undefined,
       refJR: undefined,
       otherJob: '',
+      title: '',
       firstname: '',
       lastname: '',
       birth: null,
@@ -210,10 +225,10 @@ export class ApplicationFormComponent implements OnInit {
 
   initialForm() {
     this.formGroup = this.formBuilder.group({
-      email: ['', [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
-      phone: ['', [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
-      postcode: ['', [Validators.pattern('^[0-9]{5}$')]],
-      gpa: ['', [Validators.maxLength(4)]],
+      email: [{ value: '', disabled: this.isDisabled }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+      phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+      postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
+      gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
     });
   }
   get f() { return this.formGroup.controls; }

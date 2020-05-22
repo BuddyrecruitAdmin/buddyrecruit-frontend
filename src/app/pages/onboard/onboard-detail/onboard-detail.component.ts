@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
-import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
+import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
+import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -53,6 +53,7 @@ export class OnboardDetailComponent implements OnInit {
 
   isExpress = false;
   questionFilter = [];
+  questionFilterSelected: Filter[] = [];
 
   constructor(
     private router: Router,
@@ -171,7 +172,8 @@ export class OnboardDetailComponent implements OnInit {
         'refStage.name',
         'refSource.name'
       ],
-      filters: this.sourceBy
+      filters: this.sourceBy,
+      questionFilters: this.questionFilterSelected
     };
     this.items = [];
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -426,10 +428,34 @@ export class OnboardDetailComponent implements OnInit {
 
   forExpressCompany() {
     if (this.items && this.items.length) {
-      const questions = this.items[0].questions;
-      const filters = questions.filter(element => {
-        return element.isFilter;
-      });
+      if (!this.questionFilter.length) {
+        const questions = this.items[0].questions ? this.items[0].questions : [];
+        const filters = questions.filter(element => {
+          return element.isFilter;
+        });
+        if (filters) {
+          filters.forEach(filter => {
+            switch (filter.type) {
+
+              case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
+                this.questionFilter.push({
+                  name: filter.title,
+                  value: filter.answer.options.map(option => { return option.label })
+                });
+                break;
+
+              case InputType.ParentChild:
+                this.questionFilter.push({
+                  name: filter.title,
+                  value: filter.parentChild.map(option => { return option.name })
+                });
+                break;
+            }
+          });
+
+          this.questionFilterSelected = JSON.parse(JSON.stringify(this.questionFilter));
+        }
+      }
 
       this.items.map(item => {
         let scores = [];
@@ -459,6 +485,23 @@ export class OnboardDetailComponent implements OnInit {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
+  }
+
+  changeQuestionFilter(name, filter) {
+    this.questionFilterSelected.forEach(element => {
+      if (element.name === name) {
+        element.value = filter.value;
+      }
+    });
+    this.search();
+  }
+
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
   }
 
   changePaging(event) {

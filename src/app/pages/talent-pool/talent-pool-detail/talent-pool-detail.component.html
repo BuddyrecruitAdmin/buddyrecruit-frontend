@@ -40,12 +40,14 @@
         </div>
       </div>
     </div>
-    <div *ngIf="isExpress">
+    <div *ngIf="isExpress && questionFilter.length">
+      <label class="label">Filter</label>
       <div class="row">
-        <div *ngFor="let filter of questionFilter" class="col-md-6 m-t-20">
-          <mat-form-field [color]="primary" appearance="outline">
+        <div *ngFor="let filter of questionFilter" class="col-md-6">
+          <mat-form-field [color]="primary" appearance="outline" class="p-b-0">
             <mat-label>{{ filter.name }}</mat-label>
-            <mat-select multiple (selectionChange)="changeQuestionFilter(filter.name, $event)">
+            <mat-select multiple (selectionChange)="changeQuestionFilter(filter.name, $event)"
+              placeholder="{{ filter.name }}">
               <mat-option *ngFor="let value of filter.value" [value]="value">{{ value }}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -178,13 +180,13 @@
 
                   <!-- isExpress -->
                   <div *ngIf="isExpress" class="col-md-5">
-                    <div *ngFor="let score of item.scores" class="m-b-10">
+                    <div *ngFor="let score of item.scores; let i = index;" class="m-b-10">
                       <div class="label m-b-5">{{ score.title }}
                         <span class="pull-right">
                           {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
                         </span>
                       </div>
-                      <nb-progress-bar status="primary" size="tiny"
+                      <nb-progress-bar [status]="getProgressBarColor(i)" size="tiny"
                         [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
                       </nb-progress-bar>
                     </div>
@@ -456,13 +458,13 @@
 
                   <!-- isExpress -->
                   <div *ngIf="isExpress" class="col-md-5">
-                    <div *ngFor="let score of item.scores" class="m-b-10">
+                    <div *ngFor="let score of item.scores; let i = index;" class="m-b-10">
                       <div class="label m-b-5">{{ score.title }}
                         <span class="pull-right">
                           {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
                         </span>
                       </div>
-                      <nb-progress-bar status="primary" size="tiny"
+                      <nb-progress-bar [status]="getProgressBarColor(i)" size="tiny"
                         [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
                       </nb-progress-bar>
                     </div>

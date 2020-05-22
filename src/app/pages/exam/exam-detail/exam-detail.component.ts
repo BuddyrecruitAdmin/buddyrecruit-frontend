@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
-import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
+import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
+import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, setFlagExam } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -60,6 +60,11 @@ export class ExamDetailComponent implements OnInit {
   exanTest: any;
   examUserId: any;
   listExamDialog: any;
+
+  isExpress = false;
+  questionFilter = [];
+  questionFilterSelected: Filter[] = [];
+
   constructor(
     private router: Router,
     private service: ExamService,
@@ -196,7 +201,8 @@ export class ExamDetailComponent implements OnInit {
         'refStage.name',
         'refSource.name'
       ],
-      filters: this.sourceBy
+      filters: this.sourceBy,
+      questionFilters: this.questionFilterSelected
     };
     this.items = [];
     this.ExamLists = [];
@@ -216,6 +222,10 @@ export class ExamDetailComponent implements OnInit {
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
+
+        if (this.isExpress) {
+          this.forExpressCompany();
+        }
       }
       this.loading = false;
     });
@@ -581,6 +591,83 @@ export class ExamDetailComponent implements OnInit {
     });
   }
 
+  forExpressCompany() {
+    if (this.items && this.items.length) {
+      if (!this.questionFilter.length) {
+        const questions = this.items[0].questions ? this.items[0].questions : [];
+        const filters = questions.filter(element => {
+          return element.isFilter;
+        });
+        if (filters) {
+          filters.forEach(filter => {
+            switch (filter.type) {
+
+              case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
+                this.questionFilter.push({
+                  name: filter.title,
+                  value: filter.answer.options.map(option => { return option.label })
+                });
+                break;
+
+              case InputType.ParentChild:
+                this.questionFilter.push({
+                  name: filter.title,
+                  value: filter.parentChild.map(option => { return option.name })
+                });
+                break;
+            }
+          });
+
+          this.questionFilterSelected = JSON.parse(JSON.stringify(this.questionFilter));
+        }
+      }
+
+      this.items.map(item => {
+        let scores = [];
+        item.submitScore = 0;
+        item.maxScore = 0;
+        if (item.questions && item.questions.length) {
+          item.questions.forEach(question => {
+            if (question.score && question.score.isScore) {
+              scores.push({
+                title: question.title,
+                submitScore: question.score.submitScore,
+                maxScore: question.score.maxScore
+              });
+              item.submitScore += question.score.submitScore;
+              item.maxScore += question.score.maxScore;
+            }
+          });
+        }
+        item.scores = scores;
+      });
+    }
+  }
+
+  openApplicationForm(item: any) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      });
+    }
+  }
+
+  changeQuestionFilter(name, filter) {
+    this.questionFilterSelected.forEach(element => {
+      if (element.name === name) {
+        element.value = filter.value;
+      }
+    });
+    this.search();
+  }
+
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
+  }
 
   changePaging(event) {
     this.paging = {

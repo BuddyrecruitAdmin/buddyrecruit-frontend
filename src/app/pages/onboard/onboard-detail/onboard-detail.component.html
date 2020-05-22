@@ -36,8 +36,19 @@
         </div>
       </div>
     </div>
-    <div *ngIf="isExpress">
-
+    <div *ngIf="isExpress && questionFilter.length">
+      <label class="label">Filter</label>
+      <div class="row">
+        <div *ngFor="let filter of questionFilter" class="col-md-6">
+          <mat-form-field [color]="primary" appearance="outline" class="p-b-0">
+            <mat-label>{{ filter.name }}</mat-label>
+            <mat-select multiple (selectionChange)="changeQuestionFilter(filter.name, $event)"
+              placeholder="{{ filter.name }}">
+              <mat-option *ngFor="let value of filter.value" [value]="value">{{ value }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>
@@ -334,13 +345,13 @@
   <div class="text-center m-b-10">
     <label class="label text-top text-black">Application Form Score</label>
   </div>
-  <div *ngFor="let score of itemSelected.scores" class="m-b-10">
+  <div *ngFor="let score of itemSelected.scores; let i = index;" class="m-b-10">
     <div class="label m-b-5">{{ score.title }}
       <span class="pull-right m-l-20">
         {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
       </span>
     </div>
-    <nb-progress-bar status="primary" size="tiny"
+    <nb-progress-bar [status]="getProgressBarColor(i)" size="tiny"
       [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
     </nb-progress-bar>
   </div>
