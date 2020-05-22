@@ -61,7 +61,7 @@ export const API_ENDPOINT = {
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",
-    SOURCE: "incomingsource/list"
+    SOURCE: "source/list"
   },
   PENDING_EXAM: {
     LIST: "pendingExam/list",
@@ -235,7 +235,10 @@ export const API_ENDPOINT = {
       EDIT: "appFormTemplate/edit",
       DELETE: "appFormTemplate/delete",
       TOGGLE_ACTIVE: "appFormTemplate/toggleActive",
-    }
+    },
+
+    CONSENT_DETAIL: "consent/detail",
+    CONSENT_EDIT: "consent/edit"
   },
   CV: {
     DETAIL: "candidate/id",
@@ -330,7 +333,7 @@ export const API_ENDPOINT = {
     JR_LIST: "generalAppForm/jrs",
     GET_TEMPLATE: "generalAppForm/getTemplate"
   },
-  BLOG:{
+  BLOG: {
     CREATE: "blog/create",
     EDIT: "blog/edit",
     LIST: "blog/list",

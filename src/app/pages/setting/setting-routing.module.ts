@@ -27,7 +27,7 @@ import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { AppFormListComponent } from './app-form/app-form-list/app-form-list.component';
 import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
-
+import { ConsentListComponent } from './consent/consent-list/consent-list.component';
 const routes: Routes = [
   {
     path: '',
@@ -164,6 +164,10 @@ const routes: Routes = [
       {
         path: 'contact-list',
         component: ContactUsComponent,
+      },
+      {
+        path: 'consent',
+        component: ConsentListComponent,
       },
       {
         path: '**',

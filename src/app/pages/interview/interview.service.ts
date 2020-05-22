@@ -36,8 +36,11 @@ export class InterviewService extends NetworkService {
     return this.post(API_ENDPOINT.PENDING_INTERVIEW.DETAIL, body);
   }
   
-  sourceList(): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  sourceList(jrId :any): Observable<ApiResponse> {
+    const body = {
+      jrId: jrId
+    };
+    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, body);
   }
 
 }

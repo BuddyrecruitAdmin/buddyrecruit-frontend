@@ -1,0 +1,59 @@
+<!-- dialog -->
+<div class="row justify-content-md-center justify-content-lg-center">
+    <div class="col-md-auto col-lg-auto">
+        <div style="text-align: right;">
+            <button nbButton status="success" (click)="editStatus()">แก้ไข</button>
+        </div><br>
+        <nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+            <nb-card-body *ngIf="preview">
+                <div style="text-align: center;">
+                    <img style="margin-bottom: 2rem;"
+                        src="https://www.img.in.th/images/a3747acc856bdf8f1b6b8cb9d34823db.png"
+                        class="d-inline-block align-middle" alt="Buddy Recruit Logo" /><br><br>
+                </div>
+                ความยินยอมในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคล<br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ผู้ใช้ระบบตกลงยินยอมให้ {{ companyName }} เก็บรวบรวม ใช้
+                หรือเปิดเผยข้อมูลส่วนบุคคลซึ่งทำการเก็บรวบรวมไว้ดังต่อไปนี้
+                ข้อมูลส่วนบุคคลซึ่งได้บันทึกและจัดเก็บอยู่ในระบบ
+                Buddy Recruit เช่น คำนำหน้าชื่อ,ชื่อ-นามสกุล,เพศ, อีเมล,หมายเลขโทรศัพท์เคลื่อนที่
+                ,วันเดือนปีเกิด,เงินเดือนและเงินเดือนที่คาดหวัง, การศึกษา, ประวัติการทำงาน, เอกสารต่าง
+                ๆของเจ้าของข้อมูลที่ได้แนบมากับการสมัครงาน และประวัติการใช้งานระบบ เป็นต้น
+                รวมถึงการให้ข้อมูลจากการสอบถามหรือมีปฏิสัมพันธ์ใด ๆ กับบริษัท เช่น การให้ข้อคิดเห็น ข้อเสนอแนะ
+                คำติชม
+                คำถาม
+                ของผู้ใช้ระบบ เพื่อดำเนินการประมวลผลข้อมูลเพื่อการพัฒนาประสิทธิภาพของระบบ
+                การจัดทำหรือนำเสนอรูปแบบการใช้งานหรือสินค้าหรือบริการที่เหมาะสมกับผู้ใช้ระบบ
+                รวมถึงเปิดเผยข้อมูลต่อพันธมิตรทางธุรกิจ องค์กร และนิติบุคคลที่เป็นคู่สัญญา
+                ที่เกี่ยวข้องกับการเชื่อมต่อและการเข้าใช้งานของระบบ Buddy Recruit
+                ซึ่งบริษัทจะใช้ข้อมูลดังกล่าวให้สอดคล้องกับวัตถุประสงค์และให้เกิดประโยชน์สูงสุดกับ ผู้ใช้ระบบ
+                โดยเป็นไปตามหลักเกณฑ์และนโยบายตามที่บริษัทกำหนด
+                และกฎหมายที่เกี่ยวข้องบัญญัติให้กระทำการดังกล่าวได้<br><br>
+
+                ทั้งนี้หากผู้ใช้ระบบต้องการสอบถามเพิ่มเติม หรือ หากผู้ใช้ระบบไม่ประสงค์ให้เปิดเผยข้อมูลส่วนบุคคล
+                สามารถแจ้งเพิกถอนคำยินยอมฉบับนี้เมื่อใดก็ได้
+                โดยสามารถติดต่อมายังบริษัทตามที่อยู่ติดต่อดังนี้<br><br>
+
+                65/60 ชั้น 6 อาคาร ชำนาญเพ็ญชาติบิสเนสเซ็นเตอร์ ถนน พระราม 9 ห้วยขวาง กรุงเทพมหานคร 10310
+                Email: <a href="mailto: br_support@zygencenter.com">br_support@zygencenter.com</a><br><br>
+
+                ข้าพเจ้าขอรับรองความถูกต้องของข้อมูลทั้งหมดที่ปรากฏในแบบการให้ความยินยอมนี้ และยินยอม
+                เปิดเผยข้อมูลดังกล่าวให้แก่บริษัท {{ companyName }} ผ่านระบบ Buddy Recruit ได้<br><br>
+
+                <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)"><span
+                        style="font-family: kanit;">ข้าพเจ้าได้อ่านและยอมรับข้อตกลง</span></nb-checkbox>
+                <div class="text-center">
+                    <button nbButton status="success" (click)="sendStatus(true)" [disabled]="!checked">ยอมรับ</button>
+                    <button nbButton status="default" class="m-l-20" (click)="sendStatus(false)">ยกเลิก</button>
+                </div>
+            </nb-card-body>
+            <nb-card-body *ngIf="!preview">
+                <angular-editor placeholder="'Enter text here...'" [(ngModel)]="text" [config]="editorConfig">
+                </angular-editor>
+            </nb-card-body>
+            <nb-card-footer *ngIf="!preview">
+                <button nbButton status="success" (click)="editText()">ยอมรับ</button>
+            </nb-card-footer>
+        </nb-card>
+    </div>
+</div>

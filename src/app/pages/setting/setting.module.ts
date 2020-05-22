@@ -108,6 +108,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppFormListComponent } from './app-form/app-form-list/app-form-list.component';
 import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConsentListComponent } from './consent/consent-list/consent-list.component';
+import { ConsentDetailComponent } from './consent/consent-detail/consent-detail.component';
 
 @NgModule({
   declarations: [
@@ -137,6 +139,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ExanOnlineDetailComponent,
     AppFormListComponent,
     AppFormDetailComponent,
+    ConsentListComponent,
+    ConsentDetailComponent,
   ],
   imports: [
     CommonModule,

@@ -36,8 +36,11 @@ export class ExamService extends NetworkService {
     return this.post(API_ENDPOINT.PENDING_EXAM.DETAIL, body);
   }
 
-  sourceList(): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  sourceList(jrId: any): Observable<ApiResponse> {
+    const body = {
+      jrId: jrId
+    };
+    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, body);
   }
 
   // getListExamOnline(criteria: any = undefined): Observable<ApiResponse> {

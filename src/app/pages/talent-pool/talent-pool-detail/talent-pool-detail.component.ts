@@ -146,7 +146,7 @@ export class TalentPoolDetailComponent implements OnInit {
 
   sourceList() {
     return new Promise((resolve) => {
-      this.service.sourceList().subscribe(response => {
+      this.service.sourceList(this.jrId).subscribe(response => {
         if (ResponseCode.Success && response.code) {
           this.soList = response.data;
           this.soList.map(element => {
