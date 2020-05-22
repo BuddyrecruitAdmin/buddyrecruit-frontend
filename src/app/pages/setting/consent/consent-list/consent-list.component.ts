@@ -5,6 +5,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { getRole } from '../../../../shared/services/auth.service';
 @Component({
   selector: 'ngx-consent-list',
   templateUrl: './consent-list.component.html',
@@ -16,6 +17,7 @@ export class ConsentListComponent implements OnInit {
   preview: boolean;
   text: SafeHtml;
   _id: any;
+  role: any;
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -44,6 +46,7 @@ export class ConsentListComponent implements OnInit {
   ) {
     this.innerHeight = window.innerHeight * 0.8;
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.role = getRole();
   }
 
 
@@ -53,7 +56,7 @@ export class ConsentListComponent implements OnInit {
   }
 
   getDetail() {
-    this.service.getDetail().subscribe(response => {
+    this.service.getDetail(this.role.refCompany._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.preview = true;
         this.text = this.sanitizer.bypassSecurityTrustHtml(response.data.text);
