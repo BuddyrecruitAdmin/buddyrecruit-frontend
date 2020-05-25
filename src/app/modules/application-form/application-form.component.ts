@@ -72,7 +72,7 @@ export class ApplicationFormComponent implements OnInit {
       'นาย',
       'นาง',
       'นางสาว',
-    ],    
+    ],
     en: [
       'Mr.',
       'Mrs.',
@@ -663,8 +663,9 @@ export class ApplicationFormComponent implements OnInit {
         if (!element.isPresent) {
           element.end = new Date(element.end);
         } else {
-          element.end = null;
+          element.end = new Date();
         }
+        request.workExperience.totalExpMonth += this.utilitiesService.getNumberOfMonth(element.start, element.end);
       });
     }
     if (request.jobMultiChild && request.jobMultiChild.value) {
