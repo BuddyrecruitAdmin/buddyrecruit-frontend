@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SecurityContext } from '@angular/core';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ConsentListService } from '../consent-list.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
@@ -18,6 +18,7 @@ export class ConsentListComponent implements OnInit {
   text: SafeHtml;
   _id: any;
   role: any;
+  loading: boolean;
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -52,14 +53,19 @@ export class ConsentListComponent implements OnInit {
 
   ngOnInit() {
     this.preview = true;
+    this.loading = true;
     this.getDetail();
   }
 
   getDetail() {
     this.service.getDetail(this.role.refCompany._id).subscribe(response => {
+      this.loading = false;
       if (response.code === ResponseCode.Success) {
-        this.preview = true;
-        this.text = this.sanitizer.bypassSecurityTrustHtml(response.data.text);
+        if (this.preview) {
+          this.text = this.sanitizer.bypassSecurityTrustHtml(response.data.text);
+        } else {
+          this.text = this.sanitizer.sanitize(SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(response.data.text));
+        }
         this._id = response.data._id;
       }
     })
@@ -67,12 +73,16 @@ export class ConsentListComponent implements OnInit {
 
   editStatus() {
     this.preview = false;
+    this.loading = true;
+    this.getDetail();
   }
 
   editText() {
     this.service.edit(this._id, this.text).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
+        this.preview = true;
+        this.loading = true;
         this.getDetail();
       } else {
         this.showToast('danger', 'Error Message', response.message);

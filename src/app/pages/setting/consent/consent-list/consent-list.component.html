@@ -4,7 +4,8 @@
         <div style="text-align: right;">
             <button nbButton status="success" (click)="editStatus()">แก้ไข</button>
         </div><br>
-        <nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+        <nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+            nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
             <nb-card-body *ngIf="preview">
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
