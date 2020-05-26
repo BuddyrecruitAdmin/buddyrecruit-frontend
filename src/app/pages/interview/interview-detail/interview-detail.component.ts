@@ -190,23 +190,22 @@ export class InterviewDetailComponent implements OnInit {
       this.appFormService.getActive().subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data.questions) {
-
             response.data.questions.forEach(filter => {
-              switch (filter.type) {
-
-                case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
-                  this.questionFilter.push({
-                    name: filter.title,
-                    value: filter.answer.options.map(option => { return option.label })
-                  });
-                  break;
-
-                case InputType.ParentChild:
-                  this.questionFilter.push({
-                    name: filter.title,
-                    value: filter.parentChild.map(option => { return option.name })
-                  });
-                  break;
+              if (filter.isFilter) {
+                switch (filter.type) {
+                  case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
+                    this.questionFilter.push({
+                      name: filter.title,
+                      value: filter.answer.options.map(option => { return option.label })
+                    });
+                    break;
+                  case InputType.ParentChild:
+                    this.questionFilter.push({
+                      name: filter.title,
+                      value: filter.parentChild.map(option => { return option.name })
+                    });
+                    break;
+                }
               }
             });
             this.questionFilterSelected = JSON.parse(JSON.stringify(this.questionFilter));
