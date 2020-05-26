@@ -90,61 +90,77 @@
         </div>
         <div class="col-md-6 m-b-20">
 
-          <label class="label topic" style="margin-top: 0;">CV Score</label>
-          <div class="m-l-15">
-            <div class="m-b-10">
-              <div class="label">Work Experience
-                <span class="pull-right">
-                  {{ item.candidateFlow?.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.workExperience?.total || 0 }}
-                </span>
-              </div>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+          <div *ngIf="!isExpress">
+            <label class="label topic" style="margin-top: 0;">CV Score</label>
+            <div class="m-l-15">
+              <div class="m-b-10">
+                <div class="label">Work Experience
+                  <span class="pull-right">
+                    {{ item.candidateFlow?.weightScore?.workExperience?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.workExperience?.total || 0 }}
+                  </span>
+                </div>
+                <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                         item.candidateFlow?.weightScore?.workExperience?.accumulativeScore,
                         item.candidateFlow?.weightScore?.workExperience?.total)" status="primary" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="m-b-10">
-              <div class="label">Education
-                <span class="pull-right">
-                  {{ item.candidateFlow?.weightScore?.education?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.education?.total || 0 }}
-                </span>
+                </nb-progress-bar>
               </div>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              <div class="m-b-10">
+                <div class="label">Education
+                  <span class="pull-right">
+                    {{ item.candidateFlow?.weightScore?.education?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.education?.total || 0 }}
+                  </span>
+                </div>
+                <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                         item.candidateFlow?.weightScore?.education?.accumulativeScore,
                         item.candidateFlow?.weightScore?.education?.total)" status="info" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="m-b-10">
-              <div class="label">Hard Skill
-                <span class="pull-right">
-                  {{ item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.hardSkill?.total || 0 }}
-                </span>
+                </nb-progress-bar>
               </div>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              <div class="m-b-10">
+                <div class="label">Hard Skill
+                  <span class="pull-right">
+                    {{ item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.hardSkill?.total || 0 }}
+                  </span>
+                </div>
+                <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                         item.candidateFlow?.weightScore?.hardSkill?.accumulativeScore,
                         item.candidateFlow?.weightScore?.hardSkill?.total)" status="success" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div class="m-b-10">
-              <div class="label">Soft Skill
-                <span class="pull-right">
-                  {{ item.candidateFlow?.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.softSkill?.total || 0 }}
-                </span>
+                </nb-progress-bar>
               </div>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              <div class="m-b-10">
+                <div class="label">Soft Skill
+                  <span class="pull-right">
+                    {{ item.candidateFlow?.weightScore?.softSkill?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.softSkill?.total || 0 }}
+                  </span>
+                </div>
+                <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                         item.candidateFlow?.weightScore?.softSkill?.accumulativeScore,
                         item.candidateFlow?.weightScore?.softSkill?.total)" status="warning" size="tiny">
-              </nb-progress-bar>
-            </div>
-            <div>
-              <div class="label">Certificate
-                <span class="pull-right">
-                  {{ item.candidateFlow?.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.certificate?.total || 0 }}
-                </span>
+                </nb-progress-bar>
               </div>
-              <nb-progress-bar [value]="utilitiesService.calculatePercentage(
+              <div>
+                <div class="label">Certificate
+                  <span class="pull-right">
+                    {{ item.candidateFlow?.weightScore?.certificate?.accumulativeScore || 0 }}/{{ item.candidateFlow?.weightScore?.certificate?.total || 0 }}
+                  </span>
+                </div>
+                <nb-progress-bar [value]="utilitiesService.calculatePercentage(
                         item.candidateFlow?.weightScore?.certificate?.accumulativeScore,
                         item.candidateFlow?.weightScore?.certificate?.total)" status="danger" size="tiny">
+                </nb-progress-bar>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="isExpress">
+            <label class="label topic" style="margin-top: 0;">Application Form Score</label>
+            <div *ngFor="let score of item.candidateFlow.scores; let i = index;" class="m-b-10">
+              <div class="label m-b-5">{{ score.title }}
+                <span class="pull-right m-l-20">
+                  {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
+                </span>
+              </div>
+              <nb-progress-bar [status]="getProgressBarColor(i)" size="tiny"
+                [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
               </nb-progress-bar>
             </div>
           </div>

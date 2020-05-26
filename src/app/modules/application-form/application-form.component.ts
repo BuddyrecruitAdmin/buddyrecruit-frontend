@@ -657,6 +657,11 @@ export class ApplicationFormComponent implements OnInit {
   setRequest(): IApplicationForm {
     const request = this.appForm;
     request.birth = new Date(request.birth);
+    request.address = request.addressNo + ' '
+                      request.road + ' '
+                      request.district + ' '
+                      request.province + ' '
+                      request.postcode;
     if (request.workExperience.work && request.workExperience.work.length) {
       request.workExperience.work.map(element => {
         element.start = new Date(element.start);

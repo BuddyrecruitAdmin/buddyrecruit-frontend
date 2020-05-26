@@ -12,6 +12,7 @@ import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component
 import 'style-loader!angular2-toaster/toaster.css';
 import { DepartmentService } from '../../setting/department/department.service';
 import { ExcelService } from '../excel.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'ngx-candidate',
   templateUrl: './candidate.component.html',
@@ -50,7 +51,9 @@ export class CandidateComponent implements OnInit {
   filteredList3: any;
   filteredList4: any;
   filteredList5: any;
+  isExpress = false;
   constructor(
+    private router: Router,
     private service: ReportService,
     private departService: DepartmentService,
     private utilitiesService: UtilitiesService,
@@ -65,6 +68,7 @@ export class CandidateComponent implements OnInit {
     } else {
       this.changeLayout(false);
     }
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -271,17 +275,21 @@ export class CandidateComponent implements OnInit {
   }
 
   info(item: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    this.dialogService.open(PopupCvComponent,
-      {
-        closeOnBackdropClick: false,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-    });
+    if (this.isExpress) {
+      this.openApplicationForm(item);
+    } else {
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      this.dialogService.open(PopupCvComponent,
+        {
+          closeOnBackdropClick: false,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+      });
+    }
   }
 
   filterToggle() {
@@ -333,6 +341,14 @@ export class CandidateComponent implements OnInit {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
+  }
+
+  openApplicationForm(item: any) {
+    if (item.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.refGeneralAppForm}`, '_blank');
+      });
+    }
   }
 
 }

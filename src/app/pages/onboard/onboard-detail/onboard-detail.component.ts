@@ -20,6 +20,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date/popup-onboard-date.component';
+import { AppFormService } from '../../setting/app-form/app-form.service';
 // import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 @Component({
   selector: 'ngx-onboard-detail',
@@ -63,6 +64,7 @@ export class OnboardDetailComponent implements OnInit {
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
+    public appFormService: AppFormService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -126,7 +128,11 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   async onModel() {
-    await this.sourceList();
+    if (!this.isExpress) {
+      await this.sourceList();
+    } else {
+      await this.getQuestionFilter();
+    }
     await this.search();
   }
 
@@ -144,6 +150,38 @@ export class OnboardDetailComponent implements OnInit {
         resolve();
       })
     })
+  }
+
+  getQuestionFilter() {
+    return new Promise((resolve) => {
+      this.appFormService.getActive().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data.questions) {
+
+            response.data.questions.forEach(filter => {
+              switch (filter.type) {
+
+                case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
+                  this.questionFilter.push({
+                    name: filter.title,
+                    value: filter.answer.options.map(option => { return option.label })
+                  });
+                  break;
+
+                case InputType.ParentChild:
+                  this.questionFilter.push({
+                    name: filter.title,
+                    value: filter.parentChild.map(option => { return option.name })
+                  });
+                  break;
+              }
+            });
+            this.questionFilterSelected = JSON.parse(JSON.stringify(this.questionFilter));
+          }
+        }
+        resolve();
+      });
+    });
   }
 
   onSelectTab(event: any) {
@@ -428,35 +466,6 @@ export class OnboardDetailComponent implements OnInit {
 
   forExpressCompany() {
     if (this.items && this.items.length) {
-      if (!this.questionFilter.length) {
-        const questions = this.items[0].questions ? this.items[0].questions : [];
-        const filters = questions.filter(element => {
-          return element.isFilter;
-        });
-        if (filters) {
-          filters.forEach(filter => {
-            switch (filter.type) {
-
-              case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
-                this.questionFilter.push({
-                  name: filter.title,
-                  value: filter.answer.options.map(option => { return option.label })
-                });
-                break;
-
-              case InputType.ParentChild:
-                this.questionFilter.push({
-                  name: filter.title,
-                  value: filter.parentChild.map(option => { return option.name })
-                });
-                break;
-            }
-          });
-
-          this.questionFilterSelected = JSON.parse(JSON.stringify(this.questionFilter));
-        }
-      }
-
       this.items.map(item => {
         let scores = [];
         item.submitScore = 0;

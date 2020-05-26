@@ -57,4 +57,8 @@ export class AppFormService extends NetworkService {
     return this.post(API_ENDPOINT.DROPDOWN.JOBPOSITION, {});
   }
 
+  getActive(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.GET_ACTIVE, {});
+  }
+
 }

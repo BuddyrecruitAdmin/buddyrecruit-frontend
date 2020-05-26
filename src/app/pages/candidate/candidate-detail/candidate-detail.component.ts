@@ -885,6 +885,14 @@ export class CandidateDetailComponent implements OnInit {
     }
   }
 
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
+  }
+
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {
       status: type,

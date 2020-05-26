@@ -235,6 +235,7 @@ export const API_ENDPOINT = {
       EDIT: "appFormTemplate/edit",
       DELETE: "appFormTemplate/delete",
       TOGGLE_ACTIVE: "appFormTemplate/toggleActive",
+      GET_ACTIVE: "appFormTemplate/getActive"
     },
 
     CONSENT_DETAIL: "userConsentText/detail",
