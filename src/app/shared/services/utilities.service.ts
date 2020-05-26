@@ -516,4 +516,15 @@ export class UtilitiesService {
     return consentColor;
   }
 
+  getNumberOfMonth(startDate, endDate): any {
+    var months;
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+
+    months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
+    months -= startDate.getMonth();
+    months += endDate.getMonth();
+    return months <= 0 ? 0 : months;
+  }
+
 }

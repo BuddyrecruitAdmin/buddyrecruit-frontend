@@ -136,24 +136,17 @@
           <div class="row">
             <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
               <mat-form-field appearance="outline">
-                <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
-                <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                  <div *ngIf="language === 'en'">
-                    <mat-option *ngFor="let title of title.en" [value]="title">
-                      {{ title }}
-                    </mat-option>
-                    <mat-option [value]="undefined">
-                      {{ 'NO_TITLE' | translate }}
-                    </mat-option>
-                  </div>
-                  <div *ngIf="language === 'th'">
-                    <mat-option *ngFor="let title of title.th" [value]="title">
-                      {{ title }}
-                    </mat-option>
-                    <mat-option [value]="undefined">
-                      {{ 'NO_TITLE' | translate }}
-                    </mat-option>
-                  </div>
+                <mat-label>{{ 'GENDER' | translate }}</mat-label>
+                <mat-select [(ngModel)]="appForm.gender" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                  <mat-option value="Male">
+                    {{ 'MALE' | translate }}
+                  </mat-option>
+                  <mat-option value="Female">
+                    {{ 'FEMALE' | translate }}
+                  </mat-option>
+                  <mat-option value="Not specified">
+                    {{ 'NOT_SPECIFY' | translate }}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
