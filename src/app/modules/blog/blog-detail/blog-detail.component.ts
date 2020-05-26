@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SecurityContext } from '@angular/core';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { ArgumentType } from '@angular/compiler/src/core';
 import { setPathName, getRole } from '../../../shared/services';
@@ -13,6 +13,7 @@ import { environment } from '../../../../environments/environment';
 import { API_ENDPOINT } from '../../../shared/constants';
 const URL = environment.API_URI + "/" + API_ENDPOINT.BLOG.UPLOAD;
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'ngx-blog-detail',
   templateUrl: './blog-detail.component.html',
@@ -24,8 +25,7 @@ export class BlogDetailComponent implements OnInit {
   originalName: any;
   uploadName: any;
   imgHeight: any;
-  description: any;
-  description23: any;
+  description: SafeHtml;
   navBlog: boolean;
   navContact: boolean;
   touchedTopic: boolean;
@@ -73,6 +73,7 @@ export class BlogDetailComponent implements OnInit {
     public service: BlogService,
     private activatedRoute: ActivatedRoute,
     private utilitiesService: UtilitiesService,
+    public sanitizer: DomSanitizer
   ) {
     this.role = getRole();
   }
@@ -111,16 +112,18 @@ export class BlogDetailComponent implements OnInit {
 
   getDetail() {
     this.service.getDetail(this._id).subscribe(response => {
+      this.loading = false;
       if (response.code === ResponseCode.Success) {
         this.topic = response.data.topic;
         this.src = response.data.src;
-        this.description = response.data.description;
+        if (this.state === 'edit') {
+          this.description = this.sanitizer.sanitize(SecurityContext.HTML, this.sanitizer.bypassSecurityTrustHtml(response.data.description));
+        } else {
+          this.description = this.sanitizer.bypassSecurityTrustHtml(response.data.description);
+        }
         this.dob = response.data.lastChangedInfo.date;
         this.originalName = response.data.file.fileName;
         this.uploadName = response.data.file.uploadName;
-        this.loading = false;
-      } else {
-        this.loading = false;
       }
     })
   }
@@ -216,7 +219,7 @@ export class BlogDetailComponent implements OnInit {
           });
         }
       }
-      else{
+      else {
         this.loading = false;
       }
   }

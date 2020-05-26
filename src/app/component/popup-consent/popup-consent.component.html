@@ -1,5 +1,6 @@
 <!-- dialog -->
-<nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+<nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
     <nb-card-body>
         <!-- <div style="text-align: center;">
             <img style="margin-bottom: 2rem;"

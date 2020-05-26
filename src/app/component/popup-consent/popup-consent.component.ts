@@ -17,6 +17,7 @@ export class PopupConsentComponent implements OnInit {
   innerHeight: any;
   innerWidth: any;
   text: SafeHtml;
+  loading: boolean;
   constructor(
     public ref: NbDialogRef<PopupConsentComponent>,
     private utilitiesService: UtilitiesService,
@@ -31,7 +32,9 @@ export class PopupConsentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.service.getDetail(this.companyId).subscribe(response => {
+      this.loading = false;
       if (response.code === ResponseCode.Success) {
         this.text = this.sanitizer.bypassSecurityTrustHtml(response.data.text);
       }
