@@ -133,7 +133,7 @@ export class OnboardDetailComponent implements OnInit {
     } else {
       await this.getQuestionFilter();
     }
-    await this.search();
+    // await this.search();
   }
 
   sourceList() {
@@ -175,7 +175,6 @@ export class OnboardDetailComponent implements OnInit {
                 }
               }
             });
-            this.questionFilterSelected = JSON.parse(JSON.stringify(this.questionFilter));
           }
         }
         resolve();
@@ -496,11 +495,21 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   changeQuestionFilter(name, filter) {
-    this.questionFilterSelected.forEach(element => {
-      if (element.name === name) {
-        element.value = filter.value;
-      }
+    const found = this.questionFilterSelected.find(element => {
+      return element.name === name;
     });
+    if (found) {
+      this.questionFilterSelected.forEach(element => {
+        if (element.name === name) {
+          element.value = filter.value;
+        }
+      });
+    } else {
+      this.questionFilterSelected.push({
+        name: name,
+        value: filter.value
+      });
+    }
     this.search();
   }
 
