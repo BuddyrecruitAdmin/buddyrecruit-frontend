@@ -21,6 +21,7 @@ export class PrintCandidateComponent implements OnInit {
   condition: any;
   innerWidth: any;
   innerHeight: any;
+  isExpress = false;
 
   constructor(
     private ref: NbDialogRef<PrintCandidateComponent>,
@@ -33,6 +34,7 @@ export class PrintCandidateComponent implements OnInit {
     this.candidateId = getCandidateId();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -104,14 +106,16 @@ export class PrintCandidateComponent implements OnInit {
           }
         }
         this.setCondition(this.item);
+
+        if (this.isExpress) {
+          this.forExpressCompany();
+        }
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
       this.loading = false;
     });
   }
-
-
 
   setCondition(item: any) {
     let step: any;
@@ -309,6 +313,36 @@ export class PrintCandidateComponent implements OnInit {
         }
       }
     }
+  }
+
+  forExpressCompany() {
+    if (this.item) {
+      let scores = [];
+      this.item.candidateFlow.submitScore = 0;
+      this.item.candidateFlow.maxScore = 0;
+      if (this.item.candidateFlow.questions && this.item.candidateFlow.questions.length) {
+        this.item.candidateFlow.questions.forEach(question => {
+          if (question.score && question.score.isScore) {
+            scores.push({
+              title: question.title,
+              submitScore: question.score.submitScore,
+              maxScore: question.score.maxScore
+            });
+            this.item.candidateFlow.submitScore += question.score.submitScore;
+            this.item.candidateFlow.maxScore += question.score.maxScore;
+          }
+        });
+      }
+      this.item.candidateFlow.scores = scores;
+    }
+  }
+
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
   }
 
   print() {

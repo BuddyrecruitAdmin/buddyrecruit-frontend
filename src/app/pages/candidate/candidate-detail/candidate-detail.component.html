@@ -467,13 +467,13 @@
   <div class="text-center m-b-10">
     <label class="label text-top text-black">Application Form Score</label>
   </div>
-  <div *ngFor="let score of item.candidateFlow.scores" class="m-b-10">
+  <div *ngFor="let score of item.candidateFlow.scores; let i = index;" class="m-b-10">
     <div class="label m-b-5">{{ score.title }}
       <span class="pull-right m-l-20">
         {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
       </span>
     </div>
-    <nb-progress-bar status="primary" size="tiny"
+    <nb-progress-bar [status]="getProgressBarColor(i)" size="tiny"
       [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
     </nb-progress-bar>
   </div>

@@ -42,7 +42,8 @@ export class PopupEvaluationComponent implements OnInit {
     this.candidateId = getCandidateId();
     setFlowId();
     setCandidateId();
-    this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    // this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
+    this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
     this.devices = this.utilitiesService.getDevice();
   }
