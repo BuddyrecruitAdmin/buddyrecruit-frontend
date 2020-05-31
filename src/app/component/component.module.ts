@@ -108,6 +108,7 @@ import { PopupSearchDropdownComponent } from './popup-search-dropdown/popup-sear
 import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { PopupConsentComponent } from './popup-consent/popup-consent.component';
+import { PopupExtractionComponent } from './popup-extraction/popup-extraction.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -216,6 +217,7 @@ import { PopupConsentComponent } from './popup-consent/popup-consent.component';
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
     PopupConsentComponent,
+    PopupExtractionComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -240,7 +242,8 @@ import { PopupConsentComponent } from './popup-consent/popup-consent.component';
     PopupTransferComponent,
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
-    PopupConsentComponent
+    PopupConsentComponent,
+    PopupExtractionComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -265,7 +268,8 @@ import { PopupConsentComponent } from './popup-consent/popup-consent.component';
     PopupTransferComponent,
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
-    PopupConsentComponent
+    PopupConsentComponent,
+    PopupExtractionComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

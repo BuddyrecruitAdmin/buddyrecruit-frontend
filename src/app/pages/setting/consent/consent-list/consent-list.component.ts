@@ -6,6 +6,7 @@ import { ResponseCode } from '../../../../shared/app.constants';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { getRole } from '../../../../shared/services/auth.service';
+import { MailTemplateService } from '../../mail-template/mail-template.service';
 @Component({
   selector: 'ngx-consent-list',
   templateUrl: './consent-list.component.html',
@@ -43,7 +44,8 @@ export class ConsentListComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     private service: ConsentListService,
     private toastrService: NbToastrService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private mail: MailTemplateService,
   ) {
     this.innerHeight = window.innerHeight * 0.8;
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
@@ -58,7 +60,7 @@ export class ConsentListComponent implements OnInit {
   }
 
   getDetail() {
-    this.service.getDetail(this.role.refCompany._id).subscribe(response => {
+    this.service.getDetail().subscribe(response => {
       this.loading = false;
       if (response.code === ResponseCode.Success) {
         if (this.preview) {

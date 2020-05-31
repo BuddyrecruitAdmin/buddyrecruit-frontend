@@ -127,6 +127,11 @@ export const MENU_REPORT_CHILD: NbMenuItem[] = [
     link: '/employer/report/detail',
     hidden: false,
   },
+  {
+    title: 'Extraction Report',
+    link: '/employer/report/extraction',
+    hidden: false,
+  },
 ];
 
 export const MENU_SETTING: NbMenuItem[] = [

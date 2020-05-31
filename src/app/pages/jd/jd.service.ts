@@ -33,10 +33,11 @@ export class JdService extends NetworkService {
   //   return this.post(API_ENDPOINT.CV.CANDIDATE_ORIGINAL, body);
   // }
 
-  originalCV(id: String, userId: string): Observable<any> {
+  originalCV(id: String, userId: string, stagingId: any = undefined): Observable<any> {
     const body = {
       _id: id,
-      userId: userId
+      userId: userId,
+      stagingId: stagingId
     };
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
