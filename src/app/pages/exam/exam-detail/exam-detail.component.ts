@@ -176,6 +176,7 @@ export class ExamDetailComponent implements OnInit {
             }
           })
         }
+        this.search();
         resolve();
       })
     })
