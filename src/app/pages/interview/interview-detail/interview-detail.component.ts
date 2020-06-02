@@ -180,6 +180,7 @@ export class InterviewDetailComponent implements OnInit {
             }
           })
         }
+        this.search();
         resolve();
       })
     })

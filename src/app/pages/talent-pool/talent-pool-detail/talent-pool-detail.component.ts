@@ -161,6 +161,7 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           })
         }
+        this.search();
         resolve();
       });
     });
