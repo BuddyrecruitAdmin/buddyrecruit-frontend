@@ -60,7 +60,7 @@ export class ConsentListComponent implements OnInit {
   }
 
   getDetail() {
-    this.service.getDetail().subscribe(response => {
+    this.service.getDetail(this.role.refCompany._id).subscribe(response => {
       this.loading = false;
       if (response.code === ResponseCode.Success) {
         if (this.preview) {
