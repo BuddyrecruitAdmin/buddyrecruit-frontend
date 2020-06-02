@@ -1,5 +1,18 @@
 <div class="content-header with-shadow">
-    <h3>Extraction Report</h3>
+    <div class="row">
+        <div class="col-sm-7">
+            <h3>Extraction Report</h3>
+        </div>
+        <div class="col-sm-5">
+            <div class="input-group">
+                <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+                    (keyup.enter)="paging.pageIndex = 0; search()">
+                <div class="input-group-addon" nbTooltip="Search">
+                    <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
@@ -35,12 +48,12 @@
                                 </span>
                             </td>
                             <td>
-                                <img src="https://image.flaticon.com/icons/svg/2666/2666421.svg" width="35"
-                                height="35"  (click)="checkCV(item._id)"  class="link">
+                                <img src="https://image.flaticon.com/icons/svg/2666/2666421.svg" width="35" height="35"
+                                    (click)="checkCV(item._id)" class="link">
                             </td>
                             <td>
-                                <img src="https://image.flaticon.com/icons/svg/2919/2919592.svg" width="35"
-                                height="35"  (click)="info(item)" class="link">
+                                <img src="https://image.flaticon.com/icons/svg/2919/2919592.svg" width="35" height="35"
+                                    (click)="info(item)" class="link">
                             </td>
                             <td style="text-align: left;">
                                 <span *ngFor="let pos of item.ref_jr;let i = index;">

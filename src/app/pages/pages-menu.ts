@@ -246,4 +246,9 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     link: '/employer/setting/consent',
     hidden: false,
   },
+  {
+    title: 'Hub',
+    link: '/employer/setting/hub',
+    hidden: false,
+  },
 ];

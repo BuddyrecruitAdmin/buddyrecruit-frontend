@@ -48,6 +48,40 @@ export class ExtractionComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.refresh();
+  }
+
+  refresh() {
+    this.keyword = '';
+    this.paging = {
+      length: 0,
+      pageIndex: 0,
+      pageSize: Paging.pageSizeOptions[0],
+      pageSizeOptions: Paging.pageSizeOptions
+    }
+    this.search();
+  }
+
+  changePaging(event) {
+    this.paging = {
+      length: event.length,
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize,
+      pageSizeOptions: Paging.pageSizeOptions
+    }
+    this.loading = true;
+    this.search();
+  }
+
+  search() {
+    this.criteria = {
+      keyword: this.keyword,
+      skip: (this.paging.pageIndex * this.paging.pageSize),
+      limit: this.paging.pageSize,
+      filter: [
+        'refJD.position',
+      ]
+    }
     this.getList();
   }
 
@@ -87,12 +121,12 @@ export class ExtractionComponent implements OnInit {
       const url = window.URL.createObjectURL(blob);
       saveAs(url, name + ".jpeg");
       window.open(url);
-    } else if(data.type === 'application/pdf') {
+    } else if (data.type === 'application/pdf') {
       const blob = new Blob([data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
       saveAs(url, name + ".pdf");
       window.open(url);
-    }else{
+    } else {
       const blob = new Blob([data], { type: "application/docx" });
       const url = window.URL.createObjectURL(blob);
       saveAs(url, name + ".docx");
