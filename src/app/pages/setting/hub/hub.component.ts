@@ -30,12 +30,22 @@ export class HubComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   loading: boolean;
+  loadingDialog: boolean;
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
   provinceList: DropDownValue[];
+  districtList: DropDownValue[];
+  subDistrictList: DropDownValue[];
   provinceSelect: any;
+  districtSelect: any;
+  subDistrictSelect: any;
   filteredList: any;
+  filteredList2: any;
+  filteredList3: any;
+  hubs: any;
+  noticeHeight: any;
+  _id: any;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -46,6 +56,7 @@ export class HubComponent implements OnInit {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();
+    this.noticeHeight = window.innerHeight * 0.85;
     if (!this.isGridLayout) {
       if (this.devices.isMobile || this.devices.isTablet) {
         this.isGridLayout = true;
@@ -112,50 +123,108 @@ export class HubComponent implements OnInit {
     });
   }
 
+  // เรียก popup
   edit(item: any, dialog: TemplateRef<any>) {
+    this.hubs = [];
     this.itemDialog = _.cloneDeep(item);
-    this.loading = true;
-    this.loadState().then((response) => {
-      this.callDialog(dialog);
+    this.service.getDetail(item._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.hubs = response.data.provinces;
+        this._id = response.data._id;
+      }
+    })
+    this.loadProvince();
+    this.callDialog(dialog);
+  }
+
+  addHubs() {
+    this.hubs.push({
+      refProvince: "",
+      isAllDistrict: false,
+      remark: "",
+      district: [],
     })
   }
 
-  async loadState() {
-    await this.loadProvince();
+  addDistrict(hub) {
+    hub.district.push({
+      refDistrict: "",
+      isAllSubDistrict: true,
+      remark: "",
+      subDisitricts: []
+    })
+  }
+
+  addSubDistrict(dis) {
+    dis.subDisitricts.push({
+      refSubDistrict: "",
+      remark: "",
+    })
   }
 
   loadProvince() {
-    return new Promise((resolve) => {
-      this.provinceList = [];
-      this.service.getProvince().subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          response.data.forEach(item => {
-            this.provinceList.push({
-              label: item.name,
-              value: item._id
-            });
+    this.loadingDialog = true;
+    this.provinceList = [];
+    this.service.getProvince().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(item => {
+          this.provinceList.push({
+            label: item.name.th,
+            value: item._id
           });
-          this.filteredList = this.provinceList.slice();
-        }
-        resolve();
-      });
+        });
+        this.filteredList = this.provinceList.slice();
+        this.loadingDialog = false;
+      }
     });
+  }
+
+  getDistrict(value) {
+    this.loadingDialog = true;
+    this.districtList = [];
+    this.service.getDistrict(value).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(item => {
+          this.districtList.push({
+            label: item.name.th,
+            value: item._id
+          });
+        });
+        this.filteredList2 = this.districtList.slice();
+        this.loadingDialog = false;
+      }
+    })
+  }
+
+  getSubDistrict(value) {
+    this.loadingDialog = true;
+    this.subDistrictList = [];
+    this.service.getSubDistrict(value).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(item => {
+          this.subDistrictList.push({
+            label: item.name.th,
+            value: item._id
+          });
+        });
+        this.filteredList3 = this.subDistrictList.slice();
+        this.loadingDialog = false;
+      }
+    })
   }
 
   save() {
     if (this.dialogRef) {
-      if (this.itemDialog._id) {
-        this.service.edit(this.itemDialog).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.dialogRef.close();
-            this.showToast('success', 'Success Message', response.message);
-            this.search();
-          } else {
-            this.dialogRef.close();
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
-      }
+      this.service.hubEdit(this.itemDialog._id, this.hubs).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.dialogRef.close();
+          this.showToast('success', 'Success Message', response.message);
+          this.search();
+        } else {
+          this.dialogRef.close();
+          this.showToast('danger', 'Error Message', response.message);
+        }
+      });
     }
   }
 

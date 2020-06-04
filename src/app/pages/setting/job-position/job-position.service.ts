@@ -48,4 +48,34 @@ export class JobPositionService extends NetworkService {
   getProvince(): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.PROVINCE, undefined);
   }
+
+  getDistrict(provinceId: any): Observable<ApiResponse> {
+    const body = {
+      provinceId: provinceId
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.DISTRICT, body);
+  }
+
+  getSubDistrict(districtId : any): Observable<ApiResponse> {
+    const body = {
+      districtId : districtId 
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.SUB_DISTRICT, body);
+  }
+
+  getDetail(positionId : any): Observable<ApiResponse> {
+    const body = {
+      positionId 
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.HUB_DETAIL, body);
+  }
+
+
+  hubEdit(_id : any, provinces: any): Observable<ApiResponse> {
+    const body = {
+      _id ,
+      provinces
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.HUB_EDIT, body);
+  }
 }

@@ -138,6 +138,10 @@ export const API_ENDPOINT = {
     POSITION_EDIT: "position/edit",
     POSITION_DELETE: "position/delete",
     PROVINCE: "province/list",
+    DISTRICT: "district/list",
+    SUB_DISTRICT: "subDistrict/list",
+    HUB_DETAIL: "hub/detail",
+    HUB_EDIT: "hub/edit",
 
     LOCATION_LIST: "location/list",
     LOCATION_EDIT: "location/edit",
