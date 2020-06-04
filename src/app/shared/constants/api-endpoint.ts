@@ -137,6 +137,7 @@ export const API_ENDPOINT = {
     POSITION_ACTION: "position/action",
     POSITION_EDIT: "position/edit",
     POSITION_DELETE: "position/delete",
+    PROVINCE: "province/list",
 
     LOCATION_LIST: "location/list",
     LOCATION_EDIT: "location/edit",
@@ -251,6 +252,7 @@ export const API_ENDPOINT = {
     CREATE: "candidate/accuracy/create",
     LIST: "candidate/accuracy/list",
     DELETE: "candidate/accuracy/delete",
+    GEN: "genCandidate"
   },
   FILE: {
     UPLOAD: "jd/upload",

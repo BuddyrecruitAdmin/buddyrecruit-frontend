@@ -54,7 +54,7 @@ export class PopupCVService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.DELETE, body);
   }
 
-  check(flowId: string,_id: string, fieldName: string, fieldLabel: string, feedbackType: any = undefined, bugComment: any = undefined): Observable<ApiResponse> {
+  check(flowId: string, _id: string, fieldName: string, fieldLabel: string, feedbackType: any = undefined, bugComment: any = undefined): Observable<ApiResponse> {
     const body = {
       refCandidateFlow: flowId,
       refCandidate: _id,
@@ -64,6 +64,14 @@ export class PopupCVService extends NetworkService {
       bugComment: bugComment
     };
     return this.post(API_ENDPOINT.CV.CREATE, body);
+  }
+
+  getListExtract(stagingId: any, companyId: any): Observable<ApiResponse> {
+    const body = {
+      stgID: stagingId,
+      company: companyId
+    }
+    return this.post(API_ENDPOINT.CV.GEN, body)
   }
 
 }

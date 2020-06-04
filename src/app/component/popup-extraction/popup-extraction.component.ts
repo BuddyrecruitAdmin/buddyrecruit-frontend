@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ResponseCode } from '../../shared/app.constants';
 import { JdService } from '../../pages/jd/jd.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, getCompanyId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -91,6 +91,11 @@ export class PopupExtractionComponent implements OnInit {
     this.degreeMaster = [];
     this.remark = '';
     this.allComments = [];
+    this.service.getListExtract(this.flowId, this.role.refCompany._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.items = response.data;
+      }
+    })
     this.service.getEducationList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
