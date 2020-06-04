@@ -44,4 +44,8 @@ export class JobPositionService extends NetworkService {
     }
     return this.post(API_ENDPOINT.CONFIGURATION.POSITION_DELETE, body);
   }
+
+  getProvince(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.PROVINCE, undefined);
+  }
 }

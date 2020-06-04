@@ -7,6 +7,9 @@ import { MatDialog } from '@angular/material';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import { getRole, getJdName, getJrId, setFlowId, getIsGridLayout, setIsGridLayout } from '../../../shared/services/auth.service';
 import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
+import * as _ from 'lodash';
+import { DropDownValue } from '../../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-hub',
   templateUrl: './hub.component.html',
@@ -30,6 +33,9 @@ export class HubComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
+  provinceList: DropDownValue[];
+  provinceSelect: any;
+  filteredList: any;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -106,15 +112,34 @@ export class HubComponent implements OnInit {
     });
   }
 
-  create(dialog: TemplateRef<any>) {
-    this.itemDialog = this.initialModel();
-    this.itemDialog.active = true;
-    this.callDialog(dialog);
-  }
-
   edit(item: any, dialog: TemplateRef<any>) {
     this.itemDialog = _.cloneDeep(item);
-    this.callDialog(dialog);
+    this.loading = true;
+    this.loadState().then((response) => {
+      this.callDialog(dialog);
+    })
+  }
+
+  async loadState() {
+    await this.loadProvince();
+  }
+
+  loadProvince() {
+    return new Promise((resolve) => {
+      this.provinceList = [];
+      this.service.getProvince().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          response.data.forEach(item => {
+            this.provinceList.push({
+              label: item.name,
+              value: item._id
+            });
+          });
+          this.filteredList = this.provinceList.slice();
+        }
+        resolve();
+      });
+    });
   }
 
   save() {
@@ -122,19 +147,6 @@ export class HubComponent implements OnInit {
       if (this.itemDialog._id) {
         this.service.edit(this.itemDialog).subscribe(response => {
           if (response.code === ResponseCode.Success) {
-            this.dialogRef.close();
-            this.showToast('success', 'Success Message', response.message);
-            this.search();
-          } else {
-            this.dialogRef.close();
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        });
-      } else {
-        this.service.create(this.itemDialog).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            const pageIndex = Math.ceil((this.paging.length + 1) / this.paging.pageSize);
-            this.paging.pageIndex = pageIndex - 1;
             this.dialogRef.close();
             this.showToast('success', 'Success Message', response.message);
             this.search();
