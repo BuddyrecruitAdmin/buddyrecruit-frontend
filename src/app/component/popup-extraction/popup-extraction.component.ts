@@ -91,7 +91,7 @@ export class PopupExtractionComponent implements OnInit {
     this.degreeMaster = [];
     this.remark = '';
     this.allComments = [];
-    this.service.getListExtract(this.flowId, this.role.refCompany._id).subscribe(response => {
+    this.service.getListExtract(this.flowId._id, this.role.refCompany._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
       }
