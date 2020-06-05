@@ -262,6 +262,7 @@
         </div>
     </nb-card-body>
     <nb-card-footer style="padding-left: 5px;padding-right: 20px;">
+        <small class="text-red">{{ sError }}</small>
         <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" (click)="save()"
             nbTooltip="Save">
             <nb-icon icon="save-outline"></nb-icon>

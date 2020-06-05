@@ -36,6 +36,7 @@ export class PopupExtractionComponent implements OnInit {
   devices: Devices;
   remark: any;
   allComments: any;
+  sError: string
   constructor(
     private service: PopupCVService,
     public ref: NbDialogRef<PopupExtractionComponent>,
@@ -91,11 +92,6 @@ export class PopupExtractionComponent implements OnInit {
     this.degreeMaster = [];
     this.remark = '';
     this.allComments = [];
-    this.service.getListExtract(this.flowId._id, this.role.refCompany._id).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.items = response.data;
-      }
-    })
     this.service.getEducationList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
@@ -131,24 +127,35 @@ export class PopupExtractionComponent implements OnInit {
   }
 
   save() {
-    const request = this.setRequest();
-    console.log(request)
-    const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-      data: { type: 'C' }
-    });
-    confirm.afterClosed().subscribe(result => {
-      if (result) {
-        this.service.edit(request).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.showToast('success', 'Success Message', response.message);
-            this.ref.close(true);
-          } else {
-            this.showToast('danger', 'Error Message', response.message);
-          }
-        })
-      }
-    });
+    if (this.validation()) {
+      const request = this.setRequest();
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C' }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          this.service.edit(request).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.ref.close(true);
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          })
+        }
+      });
+    }
+  }
+
+  validation(): boolean {
+    let isValid = true;
+    this.sError = "";
+    if(!this.items.phone || !this.items.email){
+      isValid = false;
+      this.sError = "โปรดใส่เบอร์โทรศัพท์หรืออีเมลล์"
+    }
+    return isValid;
   }
 
   setRequest(): any {

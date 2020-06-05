@@ -66,10 +66,11 @@ export class PopupCVService extends NetworkService {
     return this.post(API_ENDPOINT.CV.CREATE, body);
   }
 
-  getListExtract(stagingId: any, companyId: any): Observable<ApiResponse> {
+  saveExtract(stagingId: any, companyId: any,data): Observable<ApiResponse> {
     const body = {
       stgID: stagingId,
-      company: companyId
+      company: companyId,
+      data: data  
     }
     return this.post(API_ENDPOINT.CV.GEN, body)
   }
