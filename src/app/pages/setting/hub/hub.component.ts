@@ -9,7 +9,7 @@ import { getRole, getJdName, getJrId, setFlowId, getIsGridLayout, setIsGridLayou
 import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import * as _ from 'lodash';
-import { DropDownValue } from '../../../shared/interfaces/common.interface';
+import { DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-hub',
   templateUrl: './hub.component.html',
@@ -35,8 +35,11 @@ export class HubComponent implements OnInit {
   devices: Devices;
   isGridLayout: boolean;
   provinceList: DropDownValue[];
-  districtList: DropDownValue[];
+  districtList: DropDownGroup[];
+  provinceListArr: any;
+  districtListArr: any;
   subDistrictList: DropDownValue[];
+  subDistrictListArr: any;
   provinceSelect: any;
   districtSelect: any;
   subDistrictSelect: any;
@@ -46,6 +49,7 @@ export class HubComponent implements OnInit {
   hubs: any;
   noticeHeight: any;
   _id: any;
+  listAll: any;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -68,6 +72,13 @@ export class HubComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.provinceListArr = [];
+    this.filteredList = [];
+    this.districtListArr = [];
+    this.filteredList2 = []
+    this.subDistrictListArr = [];
+    this.filteredList3 = []
+    this.listAll = [];
     this.refresh();
   }
 
@@ -143,18 +154,27 @@ export class HubComponent implements OnInit {
       isAllDistrict: false,
       remark: "",
       district: [],
+      hubsFlag: true,
     })
+    this.listAll.push([]);
+    console.log(this.listAll)
+    this.provinceListArr[this.hubs.length - 1] = this.provinceList;
+    this.filteredList[this.hubs.length - 1] = this.provinceList.slice();
   }
-
-  addDistrict(hub) {
+  // เพิ่มอำเภอ
+  addDistrict(hub, index) {
     hub.district.push({
       refDistrict: "",
       isAllSubDistrict: true,
       remark: "",
       subDisitricts: []
     })
+    this.getDistrict(hub.refProvince, index);
+    console.log("เริ่ม")
+    console.log(this.filteredList2)
+    console.log(this.hubs)
   }
-
+  // เพิ่มตำบล
   addSubDistrict(dis) {
     dis.subDisitricts.push({
       refSubDistrict: "",
@@ -173,30 +193,46 @@ export class HubComponent implements OnInit {
             value: item._id
           });
         });
-        this.filteredList = this.provinceList.slice();
         this.loadingDialog = false;
       }
     });
   }
 
-  getDistrict(value) {
+  getDistrict(value, index) {
     this.loadingDialog = true;
     this.districtList = [];
     this.service.getDistrict(value).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        response.data.forEach(item => {
+        response.data.forEach((item, index) => {
           this.districtList.push({
             label: item.name.th,
-            value: item._id
+            value: item._id,  
+            group: index
           });
         });
-        this.filteredList2 = this.districtList.slice();
+        // start here
+        this.listAll[index].push([this.districtList]);
+        console.log(this.listAll);
+        // this.districtListArr[index] = this.districtList;
+        // this.districtListArr[index] = this.districtList;
+        // this.filteredList2[index] = this.districtListArr[index].slice();
+        // if (hub.hubsFlag) {
+        //   hub.hubsFlag = false;
+        //   this.filteredList2[index].map(element => {
+        //     if (!element.sub) {
+        //       element.sub = [];
+        //     }
+        //   })
+        //   console.log("หลัง")
+        //   console.log(this.filteredList2)
+        //   console.log(this.hubs)
+        // }
         this.loadingDialog = false;
       }
     })
   }
 
-  getSubDistrict(value) {
+  getSubDistrict(value, i, j) {
     this.loadingDialog = true;
     this.subDistrictList = [];
     this.service.getSubDistrict(value).subscribe(response => {
@@ -207,10 +243,16 @@ export class HubComponent implements OnInit {
             value: item._id
           });
         });
-        this.filteredList3 = this.subDistrictList.slice();
+        this.districtListArr[i][j].sub = this.subDistrictList;
+        this.filteredList2[i][j].sub = this.districtListArr[i][j].sub.slice();
         this.loadingDialog = false;
       }
     })
+  }
+
+  deleteProvince(index){
+    this.hubs.splice(index, 1);
+    this.listAll.splice(index ,1);
   }
 
   save() {
