@@ -164,82 +164,94 @@
             <!-- จังหวัด -->
             <div class="row">
                 <div *ngFor="let hub of hubs;let i = index;" class="col-md-12 col-lg-12">
-                    <nb-icon style="float: right;" icon="trash-2-outline" class="link text-red" nbTooltip="Delete"
-                        (click)="deleteProvince(i)"></nb-icon><br>
+                    <nb-icon *ngIf="i > 0" style="float: right;" icon="trash-2-outline" class="link text-red"
+                        nbTooltip="Delete" (click)="deleteProvince(i)"></nb-icon><br>
                     <div class="form-control-group">
                         <mat-form-field [color]="primary" appearance="outline">
                             <mat-select [(ngModel)]="hub.refProvince">
                                 <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
                                     [array]="provinceListArr[i]" (filteredReturn)="filteredList[i] =$event">
                                 </mat-select-filter>
-                                <mat-option *ngFor="let province of filteredList[i]" [value]="province.value">
-                                    <!-- (click)="getDistrict(province.value, i, hub)" -->
+                                <mat-option (click)="getDistrict(province.value, i, 'all', hub)"
+                                    *ngFor="let province of filteredList[i]" [value]="province.value">
                                     {{province.label}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <input *ngIf="hub.district.length === 0" type="text" [(ngModel)]="hub.remark" nbInput fullWidth
+                        <input *ngIf="hub.districts.length === 0" type="text" [(ngModel)]="hub.remark" nbInput fullWidth
                             placeholder="จุดสังเกตุ">
                         <!-- อำเภอ -->
-                        <div *ngFor="let dis of hub.district;let j = index;" class="row" style="padding-left: 1.25rem;">
+                        <div *ngFor="let dis of hub.districts;let j = index;" class="row" style="padding-left: 1.25rem;">
                             <div class="col-md-6 col-lg-6">
-                                <label>อำเภอ</label>
+                                <label>อำเภอ
+                                    <nb-icon style="float: right;" icon="trash-2-outline" class="link text-red"
+                                        nbTooltip="Delete" (click)="deleteDistrict(i, j)"></nb-icon>
+                                </label>
                                 <mat-form-field [color]="primary" appearance="outline">
                                     <mat-select [(ngModel)]="dis.refDistrict">
                                         <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
-                                            [array]="listAll[i][j]"
-                                            (filteredReturn)="listAll[i][j] =$event">
+                                            [array]="listAll[i][j].main"
+                                            (filteredReturn)="listFiltered[i][j].main =$event">
                                         </mat-select-filter>
-                                        <mat-option *ngFor="let district of listAll[i][j]"
-                                            [value]="district.value">
+                                        <mat-option *ngFor="let district of listFiltered[i][j].main"
+                                            [value]="district.value"
+                                            (click)="getSubDistrict(district.value, i, j, 'all',dis)">
                                             <!-- (click)="getSubDistrict(district.value,i, district.group,hub)" -->
                                             {{district.label}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                                 <input *ngIf="dis.subDisitricts.length === 0" type="text" [(ngModel)]="dis.remark"
-                                    nbInput fullWidth placeholder="จุดสังเกตุ">
+                                    nbInput fullWidth placeholder="จุดสังเกตุ"><br>
                             </div>
                             <div class="col-md-6 col-lg-6">
-                                <!-- <div *ngFor="let sub of dis.subDisitricts">
-                            <label>ตำบล</label>
-                            <mat-form-field [color]="primary" appearance="outline">
-                                <mat-select [(ngModel)]="sub.refSubDistrict">
-                                    <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
-                                        [array]="districtListArr[i][j]" (filteredReturn)="filteredList2[i][0].sub =$event">
-                                    </mat-select-filter>
-                                    <mat-option *ngFor="let subDistrict of filteredList2[i][j].sub" [value]="subDistrict.value">
-                                        {{subDistrict.label}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <input type="text" [(ngModel)]="sub.remark" nbInput fullWidth placeholder="จุดสังเกตุ">
-                        </div> -->
+                                <div *ngFor="let sub of dis.subDisitricts;let k = index;">
+                                    <label>ตำบล
+                                        <nb-icon style="float: right;" icon="trash-2-outline" class="link text-red"
+                                            nbTooltip="Delete" (click)="deleteSubDistrict(i, j, k)">
+                                        </nb-icon></label>
+                                    <mat-form-field [color]="primary" appearance="outline">
+                                        <mat-select [(ngModel)]="sub.refSubDistrict">
+                                            <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'"
+                                                [array]="listAll[i][j].sub[k]"
+                                                (filteredReturn)="listFiltered[i][j].sub[k] =$event">
+                                            </mat-select-filter>
+                                            <mat-option *ngFor="let subDistrict of listFiltered[i][j].sub[k]"
+                                                [value]="subDistrict.value">
+                                                {{subDistrict.label}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <input type="text" [(ngModel)]="sub.remark" nbInput fullWidth
+                                        placeholder="จุดสังเกตุ"><br>
+                                </div>
                                 <!-- button ตำบล -->
-                                <!-- <div style="text-align: center;">
-                            <button nbButton type="button" status="success" size="small" (click)="addSubDistrict(dis)">
-                                เพิ่ม ตำบล
-                            </button>
-                        </div> -->
+                                <div style="text-align: center;">
+                                    <button *ngIf="dis.refDistrict" nbButton type="button" status="success" size="small"
+                                        (click)="addSubDistrict(dis, i, j)">
+                                        เพิ่ม ตำบล
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <!-- button อำเภอ -->
                         <br>
-                        <div class="row" style="text-align: center;">
+                        <div class="row" style="text-align: center;padding-top: 1rem;">
                             <div class="col-md-6 col-lg-6" style="text-align: center;">
-                                <button nbButton type="button" status="success" size="small" (click)="addDistrict(hub,i)">
+                                <button nbButton type="button" status="success" size="small"
+                                    (click)="addDistrict(hub,i)">
                                     เพิ่ม อำเภอ
                                 </button>
                             </div>
                         </div>
                     </div>
+                    <!-- Button เพิ่มจังหวัด -->
+                    <div style="text-align: center;">
+                        <button nbButton type="button" status="success" size="small" (click)="addHubs()">
+                            เพิ่ม Hub
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <!-- Button เพิ่มจังหวัด -->
-            <div style="text-align: center;">
-                <button nbButton type="button" status="success" size="small" (click)="addHubs()">
-                    เพิ่ม Hub
-                </button>
             </div>
         </nb-card-body>
         <nb-card-footer>

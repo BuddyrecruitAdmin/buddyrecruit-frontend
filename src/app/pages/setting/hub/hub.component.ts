@@ -50,6 +50,7 @@ export class HubComponent implements OnInit {
   noticeHeight: any;
   _id: any;
   listAll: any;
+  listFiltered: any;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -72,13 +73,9 @@ export class HubComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+
     this.provinceListArr = [];
     this.filteredList = [];
-    this.districtListArr = [];
-    this.filteredList2 = []
-    this.subDistrictListArr = [];
-    this.filteredList3 = []
-    this.listAll = [];
     this.refresh();
   }
 
@@ -137,10 +134,17 @@ export class HubComponent implements OnInit {
   // เรียก popup
   edit(item: any, dialog: TemplateRef<any>) {
     this.hubs = [];
+    this.districtListArr = [];
+    this.subDistrictListArr = [];
+    this.listAll = [];
+    this.listFiltered = [];
     this.itemDialog = _.cloneDeep(item);
     this.service.getDetail(item._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.hubs = response.data.provinces;
+        if (this.hubs.length === 0) {
+          this.addHubs();
+        }
         this._id = response.data._id;
       }
     })
@@ -153,33 +157,37 @@ export class HubComponent implements OnInit {
       refProvince: "",
       isAllDistrict: false,
       remark: "",
-      district: [],
+      districts: [],
       hubsFlag: true,
     })
     this.listAll.push([]);
+    this.listFiltered.push([]);
     console.log(this.listAll)
     this.provinceListArr[this.hubs.length - 1] = this.provinceList;
     this.filteredList[this.hubs.length - 1] = this.provinceList.slice();
   }
   // เพิ่มอำเภอ
   addDistrict(hub, index) {
-    hub.district.push({
+    hub.districts.push({
       refDistrict: "",
       isAllSubDistrict: true,
       remark: "",
       subDisitricts: []
     })
-    this.getDistrict(hub.refProvince, index);
-    console.log("เริ่ม")
-    console.log(this.filteredList2)
-    console.log(this.hubs)
+    // start here index form province 
+    this.listAll[index].push({ main: [], sub: [] });
+    this.listFiltered[index].push({ main: [], sub: [] });
+    this.getDistrict(hub.refProvince, index, this.listAll[index].length - 1, hub);
   }
   // เพิ่มตำบล
-  addSubDistrict(dis) {
+  addSubDistrict(dis, index, jIndex) {
     dis.subDisitricts.push({
       refSubDistrict: "",
       remark: "",
     })
+    this.listAll[index][jIndex].sub.push();
+    this.listFiltered[index][jIndex].sub.push([]);
+    this.getSubDistrict(dis.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length, dis)
   }
 
   loadProvince() {
@@ -198,66 +206,87 @@ export class HubComponent implements OnInit {
     });
   }
 
-  getDistrict(value, index) {
-    this.loadingDialog = true;
-    this.districtList = [];
-    this.service.getDistrict(value).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        response.data.forEach((item, index) => {
-          this.districtList.push({
-            label: item.name.th,
-            value: item._id,  
-            group: index
+  getDistrict(value, index, jIndex, hub) {
+    if (hub.districts.length > 0) {
+      this.loadingDialog = true;
+      this.districtList = [];
+      this.service.getDistrict(value).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          response.data.forEach((item, index) => {
+            this.districtList.push({
+              label: item.name.th,
+              value: item._id,
+              group: index
+            });
           });
-        });
-        // start here
-        this.listAll[index].push([this.districtList]);
-        console.log(this.listAll);
-        // this.districtListArr[index] = this.districtList;
-        // this.districtListArr[index] = this.districtList;
-        // this.filteredList2[index] = this.districtListArr[index].slice();
-        // if (hub.hubsFlag) {
-        //   hub.hubsFlag = false;
-        //   this.filteredList2[index].map(element => {
-        //     if (!element.sub) {
-        //       element.sub = [];
-        //     }
-        //   })
-        //   console.log("หลัง")
-        //   console.log(this.filteredList2)
-        //   console.log(this.hubs)
-        // }
-        this.loadingDialog = false;
-      }
-    })
+          //start here
+          if (jIndex === 'all') {
+            this.listAll[index] = [];
+            hub.districts.length = 0;
+          } else {
+            this.listAll[index][jIndex].main = this.districtList;
+            this.listFiltered[index][jIndex].main = this.listAll[index][jIndex].main.slice();
+          }
+          // this.districtListArr[index] = this.districtList;
+          // this.filteredList2[index] = this.districtListArr[index].slice();
+          // if (hub.hubsFlag) {
+          //   hub.hubsFlag = false;
+          //   this.filteredList2[index].map(element => {
+          //     if (!element.sub) {
+          //       element.sub = [];
+          //     }
+          //   })
+          // }
+          this.loadingDialog = false;
+        }
+      })
+    }
   }
 
-  getSubDistrict(value, i, j) {
-    this.loadingDialog = true;
-    this.subDistrictList = [];
-    this.service.getSubDistrict(value).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        response.data.forEach(item => {
-          this.subDistrictList.push({
-            label: item.name.th,
-            value: item._id
+  getSubDistrict(value, index, j, jIndex, dis) {
+    if (dis.subDisitricts.length > 0) {
+      this.loadingDialog = true;
+      this.subDistrictList = [];
+      this.service.getSubDistrict(value).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          response.data.forEach(item => {
+            this.subDistrictList.push({
+              label: item.name.th,
+              value: item._id
+            });
           });
-        });
-        this.districtListArr[i][j].sub = this.subDistrictList;
-        this.filteredList2[i][j].sub = this.districtListArr[i][j].sub.slice();
-        this.loadingDialog = false;
-      }
-    })
+          if (jIndex === 'all') {
+            this.listAll[index][j].sub = [];
+            dis.subDisitricts.length = 0;
+          } else {
+            this.listAll[index][j].sub[jIndex] = this.subDistrictList;
+            this.listFiltered[index][j].sub[jIndex] = this.listAll[index][j].sub[jIndex].slice();
+          }
+          this.loadingDialog = false;
+        }
+      })
+    }
   }
 
-  deleteProvince(index){
+  deleteProvince(index) {
     this.hubs.splice(index, 1);
-    this.listAll.splice(index ,1);
+    this.listAll.splice(index, 1);
+  }
+
+  deleteDistrict(index, jIndex) {
+    this.hubs[index].districts.splice(jIndex, 1);
+    console.log(this.listAll)
+    this.listAll[index].splice(jIndex, 1);
+  }
+
+  deleteSubDistrict(index, jIndex, kIndex) {
+    this.hubs[index].districts[jIndex].subDisitricts.splice(kIndex, 1);
+    this.listAll[index][jIndex].sub.splice(index, 1);
   }
 
   save() {
     if (this.dialogRef) {
-      this.service.hubEdit(this.itemDialog._id, this.hubs).subscribe(response => {
+      this.service.hubEdit(this._id, this.hubs).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.dialogRef.close();
           this.showToast('success', 'Success Message', response.message);
