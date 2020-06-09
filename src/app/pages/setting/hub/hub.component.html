@@ -181,7 +181,8 @@
                         <input *ngIf="hub.districts.length === 0" type="text" [(ngModel)]="hub.remark" nbInput fullWidth
                             placeholder="จุดสังเกตุ">
                         <!-- อำเภอ -->
-                        <div *ngFor="let dis of hub.districts;let j = index;" class="row" style="padding-left: 1.25rem;">
+                        <div *ngFor="let dis of hub.districts;let j = index;" class="row"
+                            style="padding-left: 1.25rem;">
                             <div class="col-md-6 col-lg-6">
                                 <label>อำเภอ
                                     <nb-icon style="float: right;" icon="trash-2-outline" class="link text-red"
@@ -226,7 +227,7 @@
                                         placeholder="จุดสังเกตุ"><br>
                                 </div>
                                 <!-- button ตำบล -->
-                                <div style="text-align: center;">
+                                <div style="text-align: center;padding-top: 2rem;">
                                     <button *ngIf="dis.refDistrict" nbButton type="button" status="success" size="small"
                                         (click)="addSubDistrict(dis, i, j)">
                                         เพิ่ม ตำบล
@@ -254,6 +255,7 @@
                 </div>
             </div>
         </nb-card-body>
+        <small *ngIf="sError" class="text-red-right">{{ sError }}</small>
         <nb-card-footer>
             <button nbButton status="default" (click)="ref.close()">Cancel</button>
             <button nbButton status="success" (click)="save()">Save</button>

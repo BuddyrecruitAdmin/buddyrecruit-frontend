@@ -51,6 +51,7 @@ export class HubComponent implements OnInit {
   _id: any;
   listAll: any;
   listFiltered: any;
+  sError: string;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -139,17 +140,20 @@ export class HubComponent implements OnInit {
     this.listAll = [];
     this.listFiltered = [];
     this.itemDialog = _.cloneDeep(item);
-    this.service.getDetail(item._id).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.hubs = response.data.provinces;
-        if (this.hubs.length === 0) {
-          this.addHubs();
+    this.getProvince().then((response) => {
+      this.service.getDetail(item._id).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.hubs = response.data.provinces;
+          if (this.hubs.length === 0) {
+            this.addHubs();
+          } else {
+            this.addHublist();
+          }
+          this._id = response.data._id;
         }
-        this._id = response.data._id;
-      }
-    })
-    this.loadProvince();
-    this.callDialog(dialog);
+      })
+      this.callDialog(dialog);
+    });
   }
 
   addHubs() {
@@ -162,10 +166,36 @@ export class HubComponent implements OnInit {
     })
     this.listAll.push([]);
     this.listFiltered.push([]);
-    console.log(this.listAll)
     this.provinceListArr[this.hubs.length - 1] = this.provinceList;
     this.filteredList[this.hubs.length - 1] = this.provinceList.slice();
   }
+
+  addHublist() {
+    // detail list province
+    this.hubs.forEach((element, index) => {
+      this.listAll.push([]);
+      this.listFiltered.push([]);
+      this.provinceListArr[index] = this.provinceList;
+      this.filteredList[index] = this.provinceList.slice();
+      //list อำเภอ
+      if (element.districts) {
+        element.districts.forEach((element2, jIndex) => {
+          this.listAll[index].push({ main: [], sub: [] });
+          this.listFiltered[index].push({ main: [], sub: [] });
+          this.getDistrict(element.refProvince, index, this.listAll[index].length - 1, element);
+          // list ตำบล
+          if (element2.subDisitricts) {
+            element2.subDisitricts.forEach((element3, kIndex) => {
+              this.listAll[index][jIndex].sub.push([]);
+              this.listFiltered[index][jIndex].sub.push([]);
+              this.getSubDistrict(element2.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, element2)
+            })
+          }
+        });
+      }
+    })
+  }
+
   // เพิ่มอำเภอ
   addDistrict(hub, index) {
     hub.districts.push({
@@ -185,24 +215,31 @@ export class HubComponent implements OnInit {
       refSubDistrict: "",
       remark: "",
     })
-    this.listAll[index][jIndex].sub.push();
+    this.listAll[index][jIndex].sub.push([]);
     this.listFiltered[index][jIndex].sub.push([]);
-    this.getSubDistrict(dis.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length, dis)
+    this.getSubDistrict(dis.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, dis)
+  }
+
+  async getProvince() {
+    await this.loadProvince();
   }
 
   loadProvince() {
-    this.loadingDialog = true;
-    this.provinceList = [];
-    this.service.getProvince().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        response.data.forEach(item => {
-          this.provinceList.push({
-            label: item.name.th,
-            value: item._id
+    return new Promise((resolve) => {
+      this.loadingDialog = true;
+      this.provinceList = [];
+      this.service.getProvince().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          response.data.forEach(item => {
+            this.provinceList.push({
+              label: item.name.th,
+              value: item._id
+            });
           });
-        });
-        this.loadingDialog = false;
-      }
+          this.loadingDialog = false;
+        }
+      });
+      resolve();
     });
   }
 
@@ -227,16 +264,6 @@ export class HubComponent implements OnInit {
             this.listAll[index][jIndex].main = this.districtList;
             this.listFiltered[index][jIndex].main = this.listAll[index][jIndex].main.slice();
           }
-          // this.districtListArr[index] = this.districtList;
-          // this.filteredList2[index] = this.districtListArr[index].slice();
-          // if (hub.hubsFlag) {
-          //   hub.hubsFlag = false;
-          //   this.filteredList2[index].map(element => {
-          //     if (!element.sub) {
-          //       element.sub = [];
-          //     }
-          //   })
-          // }
           this.loadingDialog = false;
         }
       })
@@ -286,17 +313,67 @@ export class HubComponent implements OnInit {
 
   save() {
     if (this.dialogRef) {
-      this.service.hubEdit(this._id, this.hubs).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.dialogRef.close();
-          this.showToast('success', 'Success Message', response.message);
-          this.search();
-        } else {
-          this.dialogRef.close();
-          this.showToast('danger', 'Error Message', response.message);
-        }
-      });
+      if (this.validation()) {
+        const request = this.setRequest();
+        this.service.hubEdit(this._id, request).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.dialogRef.close();
+            this.showToast('success', 'Success Message', response.message);
+            this.search();
+          } else {
+            this.dialogRef.close();
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
+      }
     }
+  }
+
+  setRequest(): any {
+    this.hubs.map(element => {
+      if (element.districts.length === 0) {
+        element.isAllDistrict = true;
+      } else {
+        element.isAllDistrict = false;
+        element.districts.map(element2 => {
+          if (element2.subDisitricts.length === 0) {
+            element2.isAllSubDistrict = true;
+          } else {
+            element2.isAllSubDistrict = false;
+          }
+        })
+      }
+    })
+    const data = this.hubs;
+    return data;
+  }
+
+  validation(): boolean {
+    let isValid = true;
+    this.sError = '';
+    this.hubs.map(element => {
+      if (!element.refProvince) {
+        isValid = false;
+        this.sError = 'Please complete all fields.';
+      }
+      if (element.districts.length > 0) {
+        element.districts.map(element2 => {
+          if (!element2.refDistrict) {
+            isValid = false;
+            this.sError = 'Please complete all fields.';
+          }
+          if (element2.subDisitricts.length > 0) {
+            element2.subDisitricts.map(element3 => {
+              if (!element3.refSubDistrict) {
+                isValid = false;
+                this.sError = 'Please complete all fields.';
+              }
+            })
+          }
+        })
+      }
+    })
+    return isValid;
   }
 
   delete(item: any) {
