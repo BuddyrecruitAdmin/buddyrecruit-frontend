@@ -68,7 +68,7 @@ export class PopupCVService extends NetworkService {
 
   saveExtract(stagingId: any, companyId: any,data): Observable<ApiResponse> {
     const body = {
-      stgID: stagingId,
+      stgID: stagingId._id,
       company: companyId,
       data: data  
     }
