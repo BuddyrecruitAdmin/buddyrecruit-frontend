@@ -45,7 +45,8 @@
               <label class="label" for="name">Capacity <span class="text-red">*</span></label>
               <input type="number" name="capacity" [(ngModel)]="jr.capacity" min="0.00" max="100.00" step="1.00"
                 onKeyPress="if(this.value.length==2) return false;" nbInput fullWidth appNumberDirective
-                [disabled]="editCheck || checkPreview" pattern="[0-9]*" inputmode="numeric" digitOnly />
+                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview)" pattern="[0-9]*"
+                inputmode="numeric" digitOnly />
               <small *ngIf="touchedCap" class="text-red">{{ sErrorCap }}</small>
             </div>
           </div>
@@ -167,7 +168,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-2 col-md-2">
+          <div *ngIf="!isExpress" class="col-sm-2 col-md-2">
             <label class="label">Sourcing</label>
             <div>
               <mat-checkbox class="label" [(ngModel)]="emailCheck" disabled>Email</mat-checkbox>
@@ -186,11 +187,12 @@
               nbTooltip="Edit Exam Online" (click)="callExam(dialog)">
             </nb-icon>
             <div>
-              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam" [disabled]="checkPreview || !editExam">Yes
+              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam"
+                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview)">Yes
               </mat-checkbox>
             </div>
           </div>
-          <div *ngIf="jr.requiredExam" class="col-sm-3 col-md-3">
+          <div *ngIf="jr.requiredExam && !isExpress" class="col-sm-3 col-md-3">
             <label class="label">Have Attitude Test</label>
             <div>
               <mat-checkbox class="label" [(ngModel)]="jr.requiredAttitude" [disabled]="checkPreview || !editExam">Yes

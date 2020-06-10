@@ -218,9 +218,9 @@
   </nb-card-body>
 </nb-card>
 
-<!-- <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+<mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
   [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
-</mat-paginator> -->
+</mat-paginator>
 
 <!-- PreviewEmail -->
 <ng-template #PreviewEmail let-data let-ref="dialogRef">
@@ -231,7 +231,7 @@
         </h5>
       </div>
       <div class="user-block">
-        <img class="img-circle" src="../../../assets/images/logo.png" alt="user image">
+        <img class="img-circle" src="https://s3-ap-southeast-1.amazonaws.com/img-in-th/55613ac85c767ce0c72fc9825f111d0e.png" alt="user image">
         <span *ngIf="mailOptions.cc.length" class="description">
           <strong>cc:</strong> {{ mailOptions.cc }}
         </span>

@@ -88,7 +88,10 @@
     "CONTAGIOUS_NO": "No",
     "IF_YES": "If yes, explain fully",
     "REMARK": "Please provide any further information about yourself witch will allow our company to know you better",
-    "ACCEPT_TEXT": "I certify all statement given in this application from is true if any found to be untrue after engagement. The company has rigth to terminate my employment without any compensation or severance pay what soever."
+    "ACCEPT_TEXT": "I certify all statement given in this application from is true if any found to be untrue after engagement. The company has rigth to terminate my employment without any compensation or severance pay what soever.",
+    "CONSENT": "ฺBuddy Recruit will store the applicant's information and documents uploaded to use in the Buddy Recruit system in accordance with our Personal Statement specified in the following",
+    "CONSENT_LINK": " Personal Statement.",
+    "CONSENT_ACCEPT": "I have read and accept above Personal Statement."
   },
   "INDEX": {
     "TITLE": "NEW GENERATIONS"
@@ -96,6 +99,12 @@
   "RESUME": {
     "TITLE": "CREATE A RESUME",
     "PERSONAL_DETAILS": "Personal Details",
+    "TITLE_NAME": "Title",
+    "NO_TITLE": "Not specified",
+    "GENDER": "Gender",
+    "MALE": "Male",
+    "FEMALE": "Female",
+    "NOT_SPECIFY": "Not specified",
     "FIRST_NAME": "First name",
     "LAST_NAME": "Last name",
     "BIRTHDAY": "Birthday",
@@ -161,7 +170,9 @@
     "CLOSE_PREVIEW": "Close Preview",
     "SUBMIT": "Submit",
     "CLOSE": "Close",
-    "TERMS": "Terms and Conditions.",
+    "TERMS": "I agree to the Term and Condition.",
+    "TERMS_DETAIL": "Buddy Recruit will store the applicant's information and document uploaded to use in the Buddy Recruit system in accordance with our Personal Statement specified in the following",
+    "PERSONAL_STATEMENT": "Personal Statement.",
     "JOB_OPENINGS": "Job Openings",
     "JOB_OTHERS": "Others Job",
     "SELECT_ANSWER": "Select Answer",

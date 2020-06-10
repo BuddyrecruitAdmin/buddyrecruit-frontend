@@ -23,7 +23,7 @@ export class AppFormService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.LIST, body);
   }
 
-  getDetail(_id: any) {
+  getDetail(_id: any): Observable<ApiResponse> {
     const body = {
       _id: _id
     };
@@ -43,6 +43,22 @@ export class AppFormService extends NetworkService {
       _id: item._id
     }
     return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.DELETE, body);
+  }
+
+  toggleActive(_id: any, active: boolean) {
+    const body = {
+      _id: _id,
+      active: active
+    };
+    return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.TOGGLE_ACTIVE, body);
+  }
+
+  getJobPosition(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.DROPDOWN.JOBPOSITION, {});
+  }
+
+  getActive(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.GET_ACTIVE, {});
   }
 
 }

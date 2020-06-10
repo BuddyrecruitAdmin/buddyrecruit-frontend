@@ -71,11 +71,6 @@
 }
 
   #home {
-    // background: url(../../../assets/images/home.jpg) no-repeat center center; 
-    // -webkit-background-size: cover;
-    // -moz-background-size: cover;
-    // -o-background-size: cover;
-    // background-size: cover;
     position: relative;
     height: 100vh;
     .img-logo{
@@ -106,6 +101,24 @@
       span {
         color: var(--color-white);
       }
+    }
+  }
+  #main {
+    .container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+    .responsive-iframe {
+      position: absolute;
+      top: 0;
+      left: 5%;
+      bottom: 0;
+      right: 0;
+      width: 90%;
+      height: 80%;
+      border: none;
     }
   }
   footer {
@@ -160,7 +173,7 @@
     height: auto;
   }
   .padd-top{
-    padding-top: 5rem
+    padding-top: 2rem
   }
 
   @media (max-width: 767px) {

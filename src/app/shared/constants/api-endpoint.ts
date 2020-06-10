@@ -2,6 +2,7 @@ export const API_ENDPOINT = {
   USERS: {
     LOGIN: "login",
     LOGOUT: "logout",
+    CONSENT: "consentUser/action",
     ME: "me",
     FORGOTTEN: "forgotten",
     CONFIRMPASSWORD: "changePassword",
@@ -60,7 +61,7 @@ export const API_ENDPOINT = {
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",
-    SOURCE: "incomingsource/list"
+    SOURCE: "source/list"
   },
   PENDING_EXAM: {
     LIST: "pendingExam/list",
@@ -136,6 +137,11 @@ export const API_ENDPOINT = {
     POSITION_ACTION: "position/action",
     POSITION_EDIT: "position/edit",
     POSITION_DELETE: "position/delete",
+    PROVINCE: "province/list",
+    DISTRICT: "district/list",
+    SUB_DISTRICT: "subDistrict/list",
+    HUB_DETAIL: "hub/detail",
+    HUB_EDIT: "hub/edit",
 
     LOCATION_LIST: "location/list",
     LOCATION_EDIT: "location/edit",
@@ -233,7 +239,12 @@ export const API_ENDPOINT = {
       DETAIL: "appFormTemplate/detail",
       EDIT: "appFormTemplate/edit",
       DELETE: "appFormTemplate/delete",
-    }
+      TOGGLE_ACTIVE: "appFormTemplate/toggleActive",
+      GET_ACTIVE: "appFormTemplate/getActive"
+    },
+
+    CONSENT_DETAIL: "userConsentText/detail",
+    CONSENT_EDIT: "userConsentText/edit"
   },
   CV: {
     DETAIL: "candidate/id",
@@ -245,6 +256,7 @@ export const API_ENDPOINT = {
     CREATE: "candidate/accuracy/create",
     LIST: "candidate/accuracy/list",
     DELETE: "candidate/accuracy/delete",
+    GEN: "genCandidate"
   },
   FILE: {
     UPLOAD: "jd/upload",
@@ -267,7 +279,8 @@ export const API_ENDPOINT = {
     LISTFEEDBACK: "feedbackReport/list",
     EDIT: "feedbackReport/edit",
     DEPARTMENT: "dropdown/department",
-    ListCandidate: "candidateReport/list"
+    ListCandidate: "candidateReport/list",
+    STAGING: "stagingEmail/list"
   },
   HERO: {
     LIST: "hero/list"
@@ -328,4 +341,12 @@ export const API_ENDPOINT = {
     JR_LIST: "generalAppForm/jrs",
     GET_TEMPLATE: "generalAppForm/getTemplate"
   },
+  BLOG: {
+    CREATE: "blog/create",
+    EDIT: "blog/edit",
+    LIST: "blog/list",
+    DETAIL: "blog/detail",
+    UPLOAD: "blog/upload",
+    DELETE: "blog/delete"
+  }
 };

@@ -52,6 +52,10 @@ export class CandidateDetailComponent implements OnInit {
   ExamLists: DropDownValue[];
   filteredListExam: any;
   exanTest: any;
+
+  isExpress = false;
+  questionFilter = [];
+
   constructor(
     private router: Router,
     private location: Location,
@@ -67,6 +71,7 @@ export class CandidateDetailComponent implements OnInit {
     this.flowId = getFlowId() || '';
     this.steps = this.role.refAuthorize.processFlow.exam.steps;
     this.devices = this.utilitiesService.getDevice();
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -88,7 +93,6 @@ export class CandidateDetailComponent implements OnInit {
     this.service.getListExamOnline(this.item.candidateFlow.refJR._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data.exams) {
-          console.log(response.data.exams)
           response.data.exams.map(element => {
             this.ExamLists.push({
               label: element.refExam.name,
@@ -96,8 +100,6 @@ export class CandidateDetailComponent implements OnInit {
             });
           });
           this.filteredListExam = this.ExamLists.slice();
-          console.log(this.filteredListExam)
-          console.log(this.ExamLists)
         }
       }
     });
@@ -188,6 +190,10 @@ export class CandidateDetailComponent implements OnInit {
           }
         }
         this.setCondition(this.item);
+
+        if (this.isExpress) {
+          this.forExpressCompany();
+        }
       } else {
         const confirm = this.matDialog.open(PopupMessageComponent, {
           width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
@@ -397,7 +403,6 @@ export class CandidateDetailComponent implements OnInit {
               }
               break;
             case 601:
-              debugger
               this.condition.icon.onboard = true;
               if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
                 this.condition.button.disabled = true;
@@ -850,6 +855,43 @@ export class CandidateDetailComponent implements OnInit {
     this.router.navigate([path]);
   }
 
+  forExpressCompany() {
+    if (this.item) {
+      let scores = [];
+      this.item.candidateFlow.submitScore = 0;
+      this.item.candidateFlow.maxScore = 0;
+      if (this.item.candidateFlow.questions && this.item.candidateFlow.questions.length) {
+        this.item.candidateFlow.questions.forEach(question => {
+          if (question.score && question.score.isScore) {
+            scores.push({
+              title: question.title,
+              submitScore: question.score.submitScore,
+              maxScore: question.score.maxScore
+            });
+            this.item.candidateFlow.submitScore += question.score.submitScore;
+            this.item.candidateFlow.maxScore += question.score.maxScore;
+          }
+        });
+      }
+      this.item.candidateFlow.scores = scores;
+    }
+  }
+
+  openApplicationForm(item: any) {
+    if (item.candidateFlow.generalAppForm.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.candidateFlow.generalAppForm.refGeneralAppForm}`, '_blank');
+      });
+    }
+  }
+
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
+  }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {

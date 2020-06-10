@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
-import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
+import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
+import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setFlagExam, setUserCandidate, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -26,6 +26,7 @@ import { CandidateService } from '../../candidate/candidate.service';
 import { CalendarService } from '../../calendar/calendar.service';
 import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
+import { AppFormService } from '../../setting/app-form/app-form.service';
 @Component({
   selector: 'ngx-interview-detail',
   templateUrl: './interview-detail.component.html',
@@ -61,6 +62,11 @@ export class InterviewDetailComponent implements OnInit {
   soList: any;
   examUserId: any;
   listExamDialog: any;
+
+  isExpress = false;
+  questionFilter = [];
+  questionFilterSelected: Filter[] = [];
+
   constructor(
     private router: Router,
     private service: InterviewService,
@@ -70,6 +76,7 @@ export class InterviewDetailComponent implements OnInit {
     public matDialog: MatDialog,
     public candidateService: CandidateService,
     public calendarService: CalendarService,
+    public appFormService: AppFormService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -136,6 +143,7 @@ export class InterviewDetailComponent implements OnInit {
         }
       }
     });
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -153,13 +161,17 @@ export class InterviewDetailComponent implements OnInit {
   }
 
   async onModel() {
-    await this.sourceList();
-    await this.search();
+    if (!this.isExpress) {
+      await this.sourceList();
+    } else {
+      await this.getQuestionFilter();
+    }
+    // await this.search();
   }
 
   sourceList() {
     return new Promise((resolve) => {
-      this.service.sourceList().subscribe(response => {
+      this.service.sourceList(this.jrId).subscribe(response => {
         if (ResponseCode.Success && response.code) {
           this.soList = response.data;
           this.soList.map(element => {
@@ -168,9 +180,40 @@ export class InterviewDetailComponent implements OnInit {
             }
           })
         }
+        this.search();
         resolve();
       })
     })
+  }
+
+  getQuestionFilter() {
+    return new Promise((resolve) => {
+      this.appFormService.getActive().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data.questions) {
+            response.data.questions.forEach(filter => {
+              if (filter.isFilter) {
+                switch (filter.type) {
+                  case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
+                    this.questionFilter.push({
+                      name: filter.title,
+                      value: filter.answer.options.map(option => { return option.label })
+                    });
+                    break;
+                  case InputType.ParentChild:
+                    this.questionFilter.push({
+                      name: filter.title,
+                      value: filter.parentChild.map(option => { return option.name })
+                    });
+                    break;
+                }
+              }
+            });
+          }
+        }
+        resolve();
+      });
+    });
   }
 
   onSelectTab(event: any) {
@@ -199,7 +242,8 @@ export class InterviewDetailComponent implements OnInit {
         'refStage.name',
         'refSource.name'
       ],
-      filters: this.sourceBy
+      filters: this.sourceBy,
+      questionFilters: this.questionFilterSelected
     };
     this.items = [];
     this.score = [];
@@ -243,6 +287,10 @@ export class InterviewDetailComponent implements OnInit {
         });
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
+
+        if (this.isExpress) {
+          this.forExpressCompany();
+        }
       }
       this.loading = false;
     });
@@ -606,6 +654,65 @@ export class InterviewDetailComponent implements OnInit {
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+  }
+
+  forExpressCompany() {
+    if (this.items && this.items.length) {
+      this.items.map(item => {
+        let scores = [];
+        item.submitScore = 0;
+        item.maxScore = 0;
+        if (item.questions && item.questions.length) {
+          item.questions.forEach(question => {
+            if (question.score && question.score.isScore) {
+              scores.push({
+                title: question.title,
+                submitScore: question.score.submitScore,
+                maxScore: question.score.maxScore
+              });
+              item.submitScore += question.score.submitScore;
+              item.maxScore += question.score.maxScore;
+            }
+          });
+        }
+        item.scores = scores;
+      });
+    }
+  }
+
+  openApplicationForm(item: any) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      });
+    }
+  }
+
+  changeQuestionFilter(name, filter) {
+    const found = this.questionFilterSelected.find(element => {
+      return element.name === name;
+    });
+    if (found) {
+      this.questionFilterSelected.forEach(element => {
+        if (element.name === name) {
+          element.value = filter.value;
+        }
+      });
+    } else {
+      this.questionFilterSelected.push({
+        name: name,
+        value: filter.value
+      });
+    }
+    this.search();
+  }
+
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
   }
 
   changePaging(event) {

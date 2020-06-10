@@ -32,7 +32,10 @@ import {
   AppFormData,
   flagExam,
   ExamData,
-  PathName
+  PathName,
+  consentFlag,
+  companyName,
+  companyId
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -349,4 +352,28 @@ export function setPathName(path: string = null) {
 export function getPathName() {
   const path = JSON.parse(localStorage.getItem(PathName));
   return (!path || path === null) ? undefined : path;
+}
+export function setFlagConsent(flag: any = null) {
+  localStorage.setItem(consentFlag, JSON.stringify(flag));
+}
+
+export function getFlagConsent() {
+  const flag = JSON.parse(localStorage.getItem(consentFlag));
+  return (!flag || flag === null) ? undefined : flag;
+}
+export function setCompanyName(com: any = null) {
+  localStorage.setItem(companyName, JSON.stringify(com));
+}
+
+export function getCompanyName() {
+  const com = JSON.parse(localStorage.getItem(companyName));
+  return (!com || com === null) ? undefined : com;
+}
+export function setCompanyId(com: any = null) {
+  localStorage.setItem(companyId, JSON.stringify(com));
+}
+
+export function getCompanyId() {
+  const com = JSON.parse(localStorage.getItem(companyId));
+  return (!com || com === null) ? undefined : com;
 }

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
 import { JdService } from '../../pages/jd/jd.service';
-import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition } from '@nebular/theme';
+import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition, NbDialogService } from '@nebular/theme';
 import { ResponseCode, InputType, State } from '../../shared/app.constants';
 import { IAppFormTemplate } from '../../pages/setting/app-form/app-form.interface';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -18,6 +19,7 @@ import { API_ENDPOINT } from '../../shared/constants';
 import { environment } from '../../../environments/environment';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_UPLOAD;
+import { PopupConsentComponent } from '../../component/popup-consent/popup-consent.component';
 
 @Component({
   selector: 'ngx-application-form',
@@ -31,6 +33,7 @@ export class ApplicationFormComponent implements OnInit {
   role: any;
 
   appForm: IApplicationForm;
+  formGroup: FormGroup;
 
   degreesEN: DropDownValue[];
   degreesTH: DropDownValue[];
@@ -53,13 +56,29 @@ export class ApplicationFormComponent implements OnInit {
     required: false,
     duplication: false,
   };
+  jobPosition: any;
 
   loading = true;
   loadingUpload = false;
   submitted = false;
   isPreview = false;
+  isDisabled = false;
+  isAgree = false;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
+
+  title = {
+    th: [
+      'นาย',
+      'นาง',
+      'นางสาว',
+    ],
+    en: [
+      'Mr.',
+      'Mrs.',
+      'Miss',
+    ]
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -69,6 +88,8 @@ export class ApplicationFormComponent implements OnInit {
     private toastrService: NbToastrService,
     public matDialog: MatDialog,
     private utilitiesService: UtilitiesService,
+    private dialogService: NbDialogService,
+    private formBuilder: FormBuilder,
   ) {
     this.role = getRole();
     setLangPath("RESUME");
@@ -79,33 +100,37 @@ export class ApplicationFormComponent implements OnInit {
   ngOnInit() {
     this.getDegrees();
     this.initialModel();
+    this.initialForm();
 
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
-      const templateId = params.templateId;
+      const refCompany = params.id;
+      const refTemplate = params.id;
+      const refAppform = params.id;
 
       if (action) {
         if (action === State.Preview) {
-          if (templateId) {
-            this.getTemplate(templateId);
+          if (refTemplate) {
+            this.getTemplate(undefined, refTemplate);
           } else {
             this.template = getAppFormData();
             if (this.template) {
               this.appForm.refCompany = this.template.refCompany;
               this.appForm.refTemplate = this.template._id;
               this.appForm.questions = this.template.questions;
+              this.initialAnswer();
               this.getJR(this.role && this.role.refCompany ? this.role.refCompany : undefined);
             } else {
               this.onError();
             }
           }
           this.isPreview = true;
-        } else if (action === State.Submit) {
-          if (templateId) {
-            this.getTemplate(templateId);
-          } else {
-            this.onError();
-          }
+        } else if (action === State.Submit && refCompany) {
+          this.getTemplate(refCompany, undefined);
+        } else if (action === State.Detail && refAppform) {
+          this.isDisabled = true;
+          this.initialForm();
+          this.getDetail(refAppform);
         } else {
           this.onError();
         }
@@ -166,6 +191,7 @@ export class ApplicationFormComponent implements OnInit {
       refTemplate: undefined,
       refJR: undefined,
       otherJob: '',
+      title: '',
       firstname: '',
       lastname: '',
       birth: null,
@@ -189,9 +215,23 @@ export class ApplicationFormComponent implements OnInit {
       softSkill: [],
       certificate: [],
       attachment: this.initialAttahment(),
-      questions: []
+      questions: [],
+      refPosition: '',
+      jobSelected: '',
+      jobChildSelected: '',
+      jobMultiChild: new FormControl()
     };
   }
+
+  initialForm() {
+    this.formGroup = this.formBuilder.group({
+      email: [{ value: '', disabled: this.isDisabled }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+      phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+      postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
+      gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
+    });
+  }
+  get f() { return this.formGroup.controls; }
 
   initialAttahment(): IAttachment {
     return {
@@ -202,28 +242,130 @@ export class ApplicationFormComponent implements OnInit {
     };
   }
 
-  getTemplate(templateId: string) {
-    this.service.getTemplate(templateId).subscribe(response => {
+  getTemplate(refCompany: string, refTemplate: string) {
+    this.service.getTemplate(refCompany, refTemplate).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.template = response.data;
           this.appForm.refCompany = this.template.refCompany;
           this.appForm.refTemplate = this.template._id;
           this.appForm.questions = this.template.questions;
+          this.initialAnswer();
         }
         this.getJR(this.template.refCompany);
         this.uploader = new FileUploader({
           url: URL,
           itemAlias: 'data',
-          headers: [{
-            name: 'refCompany',
-            value: this.appForm.refCompany
-          }],
+          headers: [
+            {
+              name: 'refCompany',
+              value: this.appForm.refCompany
+            },
+            {
+              name: 'isCV',
+              value: false
+            },
+            {
+              name: 'isExpress',
+              value: this.template.isExpress
+            },
+          ],
+        });
+      } else if (response.code === ResponseCode.NoContent) {
+        let message = 'Sorry! At this time, there is no recruitment.';
+        if (this.language === 'th') {
+          message = 'ขออภัย ขณะนี้ยังไม่มีการรับสมัครพนักงาน';
+        }
+        const confirm = this.matDialog.open(PopupMessageComponent, {
+          width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+          data: { type: 'I', content: message }
+        });
+        confirm.afterClosed().subscribe(result => {
+          if (result) {
+            window.close();
+          }
         });
       } else {
         this.onError();
       }
     });
+  }
+
+  getDetail(refAppform: string) {
+    this.service.getDetail(refAppform).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          this.appForm = response.data;
+          this.template = response.data.refTemplate;
+          this.getJR(this.appForm.refCompany);
+
+          this.appForm.birth = new Date(this.appForm.birth);
+          if (this.appForm.workExperience.work && this.appForm.workExperience.work.length) {
+            this.appForm.workExperience.work.map(element => {
+              element.start = new Date(element.start);
+              if (!element.isPresent) {
+                element.end = new Date(element.end);
+              } else {
+                element.end = null;
+              }
+            });
+          }
+          const jobMultiChild = this.appForm.jobMultiChild || [];
+          this.appForm.jobMultiChild = new FormControl();
+          this.appForm.jobMultiChild.value = jobMultiChild;
+
+          this.appForm.questions.forEach(question => {
+            if (question.type === InputType.ParentChild) {
+              const multiChilds = question.multiChilds || [];
+              question.multiChilds = new FormControl();
+              question.multiChilds.value = multiChilds;
+            }
+          });
+        }
+      }
+    });
+  }
+
+  initialAnswer() {
+    if (this.appForm.questions) {
+      this.appForm.questions.map(question => {
+        switch (question.type) {
+          case InputType.RadioGrid:
+            question.answer.gridRadio = [];
+            question.grid.rows.forEach(row => {
+              question.answer.gridRadio.push({
+                rowName: row.label,
+                value: '',
+              });
+            });
+            break;
+
+          case InputType.ChcekBoxGrid:
+            question.answer.gridCheckbox = [];
+            let columns = [];
+            question.grid.columns.forEach(col => {
+              columns.push({
+                colName: col.label,
+                maxScore: col.maxScore,
+                checked: false,
+              })
+            });
+            question.grid.rows.forEach(row => {
+              question.answer.gridCheckbox.push({
+                rowName: row.label,
+                columns: JSON.parse(JSON.stringify(columns)),
+              });
+            });
+            break;
+
+          case InputType.ParentChild:
+            question.multiChilds = new FormControl();
+
+          default:
+            break;
+        }
+      });
+    }
   }
 
   onChangeBirthday(value: any) {
@@ -417,7 +559,7 @@ export class ApplicationFormComponent implements OnInit {
             }
             break;
           case this.InputType.Radio:
-            if (!question.answer.selected) {
+            if (question.answer.selected === null) {
               isQuestionValid = false;
               element.classList.add("has-error");
             }
@@ -432,7 +574,50 @@ export class ApplicationFormComponent implements OnInit {
             }
             break;
           case this.InputType.Dropdown:
-            if (!question.answer.selected) {
+            if (question.answer.selected === null) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Upload:
+            if (!question.answer.attachment.uploadName) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Linear:
+            if (!(question.answer.linearValue >= 0)) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.RadioGrid:
+            question.answer.gridRadio.forEach(gridRadio => {
+              if (!gridRadio.value) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+            });
+            break;
+          case this.InputType.ChcekBoxGrid:
+            question.answer.gridCheckbox.forEach(gridCheckbox => {
+              const found = gridCheckbox.columns.find(column => {
+                return column.checked;
+              });
+              if (!found) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+            });
+            break;
+          case this.InputType.Date:
+            if (!question.answer.date) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+            }
+            break;
+          case this.InputType.Time:
+            if (!question.answer.time) {
               isQuestionValid = false;
               element.classList.add("has-error");
             }
@@ -470,22 +655,157 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   setRequest(): IApplicationForm {
-    const request = JSON.parse(JSON.stringify(this.appForm));
+    const request = this.appForm;
     request.birth = new Date(request.birth);
+    request.address = request.addressNo + ' '
+                      request.road + ' '
+                      request.district + ' '
+                      request.province + ' '
+                      request.postcode;
     if (request.workExperience.work && request.workExperience.work.length) {
       request.workExperience.work.map(element => {
         element.start = new Date(element.start);
         if (!element.isPresent) {
           element.end = new Date(element.end);
         } else {
-          element.end = null;
+          element.end = new Date();
+        }
+        request.workExperience.totalExpMonth += this.utilitiesService.getNumberOfMonth(element.start, element.end);
+      });
+    }
+    if (request.jobMultiChild && request.jobMultiChild.value) {
+      request.jobMultiChild = request.jobMultiChild.value;
+    } else {
+      request.jobMultiChild = [];
+    }
+
+    // Question
+    if (request.questions && request.questions.length) {
+      request.questions.map(question => {
+
+        if (question.type === InputType.ParentChild) {
+          if (question.multiChilds && question.multiChilds.value) {
+            question.multiChilds = question.multiChilds.value;
+          } else {
+            question.multiChilds = [];
+          }
+        }
+
+        // Calculate score
+        if (question.score.isScore) {
+          switch (question.type) {
+
+            case InputType.Input:
+              if (question.score.keywords && question.score.keywords.length) {
+                question.score.keywords.forEach(keyword => {
+                  const index = question.answer.input.indexOf(keyword);
+                  if (index >= 0) {
+                    question.score.submitScore = question.score.maxScore;
+                  }
+                });
+              }
+              break;
+
+            case InputType.TextArea:
+              if (question.score.keywords && question.score.keywords.length) {
+                question.score.keywords.forEach(keyword => {
+                  const index = question.answer.textArea.indexOf(keyword);
+                  if (index >= 0) {
+                    question.score.submitScore = question.score.maxScore;
+                  }
+                });
+              }
+              break;
+
+            case InputType.Radio:
+              if (question.answer.selected >= 0) {
+                const option = question.answer.options[question.answer.selected];
+                if (option) {
+                  question.score.submitScore = option.maxScore;
+                } else {
+                  question.score.submitScore = question.answer.otherScore;
+                }
+              }
+              break;
+
+            case InputType.ChcekBox:
+              question.answer.options.forEach(option => {
+                if (option.checked) {
+                  question.score.submitScore += option.maxScore;
+                }
+              });
+              if (question.answer.otherChecked) {
+                question.score.submitScore += question.answer.otherScore;
+              }
+              break;
+
+            case InputType.Dropdown:
+              if (question.answer.selected >= 0) {
+                const option = question.answer.options[question.answer.selected];
+                if (option) {
+                  question.score.submitScore = option.maxScore;
+                } else {
+                  question.score.submitScore = question.answer.otherScore;
+                }
+              }
+              break;
+
+            case InputType.ParentChild:
+              if (question.parentSelected >= 0) {
+                const parent = question.parentChild[question.parentSelected];
+                if (parent) {
+                  question.score.submitScore = parent.maxScore;
+                }
+              }
+              break;
+
+            case InputType.Upload:
+              if (question.answer.attachment && question.answer.attachment.uploadName) {
+                question.score.submitScore = question.score.maxScore;
+              }
+              break;
+
+            case InputType.Linear:
+              const option = question.answer.linearOptions.find(option => {
+                return option.label === question.answer.linearValue;
+              });
+              if (option) {
+                question.score.submitScore = option.maxScore;
+              }
+              break;
+
+            case InputType.RadioGrid:
+              if (question.answer.gridRadio && question.answer.gridRadio.length) {
+                question.answer.gridRadio.forEach(gridRadio => {
+                  const column = question.grid.columns.find(column => {
+                    return column.label === gridRadio.value;
+                  });
+                  if (column) {
+                    question.score.submitScore += column.maxScore;
+                  }
+                });
+              }
+              break;
+
+            case InputType.ChcekBoxGrid:
+              if (question.answer.gridCheckbox && question.answer.gridCheckbox.length) {
+                question.answer.gridCheckbox.forEach(gridCheckbox => {
+                  gridCheckbox.columns.forEach(column => {
+                    if (column.checked) {
+                      question.score.submitScore += column.maxScore;
+                    }
+                  });
+                });
+              }
+              break;
+          }
         }
       });
     }
     return request;
   }
 
-  uploadFile(target, files: FileList): void {
+  uploadFile(target, files: FileList, isCV = false): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 10) {
       this.showToast('danger', 'File size more than 10MB');
@@ -500,6 +820,11 @@ export class ApplicationFormComponent implements OnInit {
           && element.file.size === files[0].size;
       });
       if (queue) {
+        this.uploader.options.headers.map(element => {
+          if (element.name === 'isCV') {
+            element.value = isCV.toString();
+          }
+        });
         this.loadingUpload = true;
         this.uploader.uploadItem(queue);
         this.uploader.onSuccessItem = (item, response, status, headers) => {
@@ -528,6 +853,36 @@ export class ApplicationFormComponent implements OnInit {
     target.originalName = '';
     target.type = '';
     target.size = 0;
+  }
+
+  onChangeJobPosition(value: string) {
+    this.appForm.jobChildSelected = '';
+    this.appForm.jobMultiChild = new FormControl();
+    this.jobPosition = this.template.jobPositions.find(element => {
+      return element.refPosition === value;
+    });
+  }
+
+  getChild(question): any {
+    let child;
+    if (question.parentChild.length && question.parentSelected >= 0) {
+      child = question.parentChild[question.parentSelected];
+    }
+    return child;
+  }
+
+  openPopupConsent() {
+    setCompanyName(this.template.companyName || '');
+    setCompanyId(this.template.refCompany);
+    setFlagConsent(this.isAgree)
+    this.dialogService.open(PopupConsentComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.isAgree = result;
+    });
   }
 
   showToast(type: NbComponentStatus, title: string, body: string = '') {

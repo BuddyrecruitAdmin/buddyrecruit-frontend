@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppFormService } from './app-form.service';
-import { ResponseCode } from '../../shared/app.constants';
+import { ResponseCode, consentFlag } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, setLanguage, getLanguage, setLangPath } from '../../shared/services/auth.service';
+import { getRole, setLanguage, getLanguage, setLangPath, setCompanyName, setFlagConsent, setCompanyId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
@@ -17,6 +17,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { MESSAGE } from "../../shared/constants/message";
 import { Router, ActivatedRoute } from "@angular/router";
+import { PopupConsentComponent } from '../../component/popup-consent/popup-consent.component';
 @Component({
   selector: 'ngx-app-form',
   templateUrl: './app-form.component.html',
@@ -65,6 +66,7 @@ export class AppFormComponent implements OnInit {
   emergencyTel: AbstractControl;
   sick: AbstractControl;
   aboutSelf: AbstractControl;
+  term: AbstractControl;
   sErrorFirstName: string;
   sErrorLastName: string;
   sErrorNickName: string;
@@ -101,6 +103,7 @@ export class AppFormComponent implements OnInit {
   sErrorSick: string;
   sErrorAboutSelf: string;
   sErrorAll: string;
+  sErrorTerm: string;
   isUser: boolean;
   _id: any;
   innerHeight: any;
@@ -108,6 +111,9 @@ export class AppFormComponent implements OnInit {
   isExitst: boolean;
   loading: boolean;
   showSalary: boolean;
+  checked: boolean;
+  companyName: any;
+  companyId: any;
   constructor(
     private service: AppFormService,
     private utilitiesService: UtilitiesService,
@@ -134,6 +140,7 @@ export class AppFormComponent implements OnInit {
     this.getList();
     this.isUser = false;
     this.loading = true;
+    this.checked = false;
     this.actionView = false;
     this.innerHeight = window.innerHeight;
     this.showSalary = true;
@@ -166,6 +173,8 @@ export class AppFormComponent implements OnInit {
             this.appforms = response.data;
             this.edtiable = false;
           } else {
+            this.companyName = response.data.companyName;
+            this.companyId = response.data.comId;
             this.isExitst = response.data.isExist;
           }
         }
@@ -179,11 +188,14 @@ export class AppFormComponent implements OnInit {
             this.appforms = response.data;
             this.edtiable = false;
           } else {
+            this.companyName = response.data.companyName;
             this.isExitst = response.data.isExist;
+            this.companyId = response.data.comId;
           }
         }
       })
     }
+    this.loading = false;
   }
 
   initialModel(): any {
@@ -343,6 +355,7 @@ export class AppFormComponent implements OnInit {
       emergencyTel: [null, [Validators.required, Validators.minLength(9)]],
       sick: [null, Validators.required],
       aboutSelf: [null, Validators.required],
+      term: [null, Validators.required],
     })
     this.firstname = this.applicationForm.controls["firstname"];
     this.lastname = this.applicationForm.controls["lastname"];
@@ -379,6 +392,7 @@ export class AppFormComponent implements OnInit {
     this.emergencyTel = this.applicationForm.controls["emergencyTel"];
     this.sick = this.applicationForm.controls["sick"];
     this.aboutSelf = this.applicationForm.controls["aboutSelf"];
+    this.term = this.applicationForm.controls["term"];
     this.sErrorFirstName = MESSAGE[97];
     this.sErrorLastName = MESSAGE[98];
     this.sErrorNickName = MESSAGE[143];
@@ -508,6 +522,10 @@ export class AppFormComponent implements OnInit {
     let isValid = true;
     this.sErrorAll = "";
     this.touched = true;
+    if (!this.checked) {
+      isValid = false;
+      this.sErrorTerm = "Please check this box if you want to proceed";
+    }
     if (this.sexGroup.value === "male") {
       if (this.appforms.personalInformation.militaryStatus === undefined
         || this.appforms.personalInformation.militaryStatus === null) {
@@ -594,6 +612,23 @@ export class AppFormComponent implements OnInit {
     this.location.back();
   }
 
+  toggle(checked: boolean) {
+    this.checked = checked;
+  }
+
+  openConsent() {
+    setCompanyName(this.companyName);
+    setCompanyId(this.companyId);
+    setFlagConsent(this.checked)
+    this.dialogService.open(PopupConsentComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      this.checked = result;
+    });
+  }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
     const config = {

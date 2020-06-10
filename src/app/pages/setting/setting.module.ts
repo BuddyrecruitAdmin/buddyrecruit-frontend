@@ -107,6 +107,10 @@ import { ExanOnlineDetailComponent } from './exam-online/exan-online-detail/exan
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppFormListComponent } from './app-form/app-form-list/app-form-list.component';
 import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConsentListComponent } from './consent/consent-list/consent-list.component';
+import { ConsentDetailComponent } from './consent/consent-detail/consent-detail.component';
+import { HubComponent } from './hub/hub.component';
 
 @NgModule({
   declarations: [
@@ -136,6 +140,9 @@ import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-deta
     ExanOnlineDetailComponent,
     AppFormListComponent,
     AppFormDetailComponent,
+    ConsentListComponent,
+    ConsentDetailComponent,
+    HubComponent,
   ],
   imports: [
     CommonModule,

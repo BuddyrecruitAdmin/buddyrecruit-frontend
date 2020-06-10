@@ -681,6 +681,18 @@
           <small *ngIf="touched && aboutSelf.errors" class="text-red">{{ sErrorAboutSelf }}</small>
         </div>
       </div>
+      <br>
+      <div class="row">
+        <div class="col-lg-12">
+          <label><span class="text-red">*</span>{{ 'CONSENT' | translate }} <span (click)="openConsent()" class="link"
+              style="text-decoration: underline">{{ 'CONSENT_LINK' | translate }}</span></label>
+        </div>
+        <div class="col-lg-12">
+          <nb-checkbox [formControl]="term" [(ngModel)]="checked" (checkedChange)="toggle($event)">
+            <span>{{ 'CONSENT_ACCEPT' | translate }}</span></nb-checkbox><br>
+          <small *ngIf="touched && term.errors" class="text-red">{{ sErrorTerm }}</small>
+        </div>
+      </div>
       <div class="pull-right">
         <small class="text-red">{{ sErrorAll }}</small>
       </div>

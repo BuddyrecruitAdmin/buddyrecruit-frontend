@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
+import { PdpaComponent } from './pdpa/pdpa.component';
 const routes: Routes = [
   {
     path: '',
@@ -49,7 +50,7 @@ const routes: Routes = [
         component: ApplicationFormComponent,
       },
       {
-        path: 'application-form/:action/:templateId',
+        path: 'application-form/:action/:id',
         component: ApplicationFormComponent,
       },
       {
@@ -67,6 +68,10 @@ const routes: Routes = [
       {
         path: 'blog/:action/:id',
         component: BlogDetailComponent,
+      },
+      {
+        path: 'pdpa',
+        component: PdpaComponent,
       },
       {
         path: 'employer',

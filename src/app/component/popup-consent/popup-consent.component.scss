@@ -1,0 +1,29 @@
+.btn-select {
+  background-color: #35c4b2 !important;
+  color: white !important;
+  cursor: pointer !important;
+  font-family: kanit;
+}
+.btn-disable {
+  cursor: default !important;
+  background-color: #eeeeee !important;
+  color: black !important;
+  font-family: kanit;
+}
+nb-card.consent {
+  overflow-y: auto;
+  background-color: white;
+  text-align: left;
+  font-family: kanit;
+
+  nb-card-body {
+    padding: 2rem;
+  }
+}
+.img-logo {
+  width: 80px;
+  height: 80px;
+}
+button {
+  font-family: kanit !important;
+}

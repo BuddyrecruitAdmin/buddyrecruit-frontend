@@ -150,7 +150,7 @@ section .header h3 {
     background-color: var(--color-white);
 }
 #home {
-  background: url(../../../assets/images/indexbg.png) no-repeat center center; 
+  background: url(https://s3-ap-southeast-1.amazonaws.com/img-in-th/0ce303549ff7fda953648d94288738c2.jpg) no-repeat center center; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -192,10 +192,6 @@ section .header h3 {
 #second{
   position: relative;
   padding-bottom: 2rem;
-  .rwid{
-    left: calc(4%);
-    position: relative; 
-  }
   .text-mob{
     padding-top: 0rem;
     text-align: center;
@@ -217,6 +213,22 @@ section .header h3 {
   p{
     font-size: 1.15rem;
     line-height: 2.5rem;
+  }
+  .container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  }
+  .responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 }
 #contact-us {
@@ -338,6 +350,11 @@ section .header h3 {
 #pdpa{
   position: relative;
   padding-bottom: 2rem;
+  .btn-stand{
+    font-family: kanit;
+    color: white;
+    border: 2px solid white;
+  }
   h2{
     padding-top: 25%;
     // font-weight: bold;

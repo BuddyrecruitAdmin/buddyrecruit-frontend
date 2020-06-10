@@ -23,4 +23,12 @@ export class LoginService extends NetworkService {
     }
     return this.post(API_ENDPOINT.USERS.LOGIN, body);
   }
+
+  consent(_id, status): Observable<ApiResponse> {
+    const body = {
+      userId: _id,
+      action: status
+    }
+    return this.post(API_ENDPOINT.USERS.CONSENT, body);
+  }
 }

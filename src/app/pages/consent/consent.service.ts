@@ -42,8 +42,11 @@ export class ConsentService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.BUY_CV, body);
   }
 
-  sourceList(): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, undefined);
+  sourceList(jrId: any): Observable<ApiResponse> {
+    const body = {
+      jrId: jrId
+    };
+    return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, body);
   }
 
 }

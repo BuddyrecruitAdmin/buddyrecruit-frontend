@@ -102,7 +102,9 @@ import { HomeComponent } from './home/home.component';
 import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
-
+import { PdpaComponent } from './pdpa/pdpa.component';
+import { HttpClientModule} from '@angular/common/http';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 @NgModule({
   imports: [
     CommonModule,
@@ -186,7 +188,9 @@ import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
     NgbDropdownModule,
     NgbButtonsModule,
     CountdownTimerModule.forRoot(),
-    FileUploadModule
+    FileUploadModule,
+    HttpClientModule,
+     AngularEditorModule
   ],
   declarations: [
     ModulesComponent,
@@ -199,7 +203,8 @@ import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
     HomeComponent,
     FeaturesComponent,
     BlogDetailComponent,
-    BlogListComponent
+    BlogListComponent,
+    PdpaComponent
   ],
   providers: [
     TranslateService,

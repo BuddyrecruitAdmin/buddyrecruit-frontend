@@ -127,6 +127,11 @@ export const MENU_REPORT_CHILD: NbMenuItem[] = [
     link: '/employer/report/detail',
     hidden: false,
   },
+  {
+    title: 'Extraction Report',
+    link: '/employer/report/extraction',
+    hidden: false,
+  },
 ];
 
 export const MENU_SETTING: NbMenuItem[] = [
@@ -229,6 +234,21 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
   {
     title: 'Application Form',
     link: '/employer/setting/app-form',
+    hidden: false,
+  },
+  {
+    title: 'Blog',
+    link: '/blog',
+    hidden: false,
+  },
+  {
+    title: 'Consent',
+    link: '/employer/setting/consent',
+    hidden: false,
+  },
+  {
+    title: 'Hub',
+    link: '/employer/setting/hub',
     hidden: false,
   },
 ];

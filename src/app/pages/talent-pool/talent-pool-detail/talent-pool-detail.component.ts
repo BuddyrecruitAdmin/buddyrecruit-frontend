@@ -1,8 +1,8 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
-import { ResponseCode, Paging } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
+import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
+import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -22,6 +22,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { resolve } from 'url';
+import { AppFormService } from '../../setting/app-form/app-form.service';
 
 @Component({
   selector: 'ngx-talent-pool-detail',
@@ -59,6 +60,11 @@ export class TalentPoolDetailComponent implements OnInit {
   examUserId: any;
   dialogRef: NbDialogRef<any>;
   listExamDialog: any;
+
+  isExpress = false;
+  questionFilter = [];
+  questionFilterSelected: Filter[] = [];
+
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -67,6 +73,7 @@ export class TalentPoolDetailComponent implements OnInit {
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
+    public appFormService: AppFormService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -115,6 +122,7 @@ export class TalentPoolDetailComponent implements OnInit {
       return step.refStage.refMain._id === this.role.refCompany.menu.talentPool.refStage._id && step.editable;
     });
     this.startFlag = true;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -134,13 +142,17 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   async onModel() {
-    await this.sourceList();
-    await this.search();
+    if (!this.isExpress) {
+      await this.sourceList();
+    } else {
+      await this.getQuestionFilter();
+    }
+    // await this.search();
   }
 
   sourceList() {
     return new Promise((resolve) => {
-      this.service.sourceList().subscribe(response => {
+      this.service.sourceList(this.jrId).subscribe(response => {
         if (ResponseCode.Success && response.code) {
           this.soList = response.data;
           this.soList.map(element => {
@@ -149,9 +161,40 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           })
         }
+        this.search();
         resolve();
-      })
-    })
+      });
+    });
+  }
+
+  getQuestionFilter() {
+    return new Promise((resolve) => {
+      this.appFormService.getActive().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data.questions) {
+            response.data.questions.forEach(filter => {
+              if (filter.isFilter) {
+                switch (filter.type) {
+                  case InputType.Radio || InputType.ChcekBox || InputType.Dropdown:
+                    this.questionFilter.push({
+                      name: filter.title,
+                      value: filter.answer.options.map(option => { return option.label })
+                    });
+                    break;
+                  case InputType.ParentChild:
+                    this.questionFilter.push({
+                      name: filter.title,
+                      value: filter.parentChild.map(option => { return option.name })
+                    });
+                    break;
+                }
+              }
+            });
+          }
+        }
+        resolve();
+      });
+    });
   }
 
   onSelectTab(event: any) {
@@ -186,7 +229,8 @@ export class TalentPoolDetailComponent implements OnInit {
           'refStage.name',
           'refSource.name'
         ],
-        filters: this.sourceBy
+        filters: this.sourceBy,
+        questionFilters: this.questionFilterSelected
       };
       this.items = [];
       this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -206,6 +250,10 @@ export class TalentPoolDetailComponent implements OnInit {
           });
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
+
+          if (this.isExpress) {
+            this.forExpressCompany();
+          }
         }
         this.loading = false;
         resolve();
@@ -545,6 +593,65 @@ export class TalentPoolDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  forExpressCompany() {
+    if (this.items && this.items.length) {
+      this.items.map(item => {
+        let scores = [];
+        item.submitScore = 0;
+        item.maxScore = 0;
+        if (item.questions && item.questions.length) {
+          item.questions.forEach(question => {
+            if (question.score && question.score.isScore) {
+              scores.push({
+                title: question.title,
+                submitScore: question.score.submitScore,
+                maxScore: question.score.maxScore
+              });
+              item.submitScore += question.score.submitScore;
+              item.maxScore += question.score.maxScore;
+            }
+          });
+        }
+        item.scores = scores;
+      });
+    }
+  }
+
+  openApplicationForm(item: any) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      this.router.navigate([]).then(result => {
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      });
+    }
+  }
+
+  changeQuestionFilter(name, filter) {
+    const found = this.questionFilterSelected.find(element => {
+      return element.name === name;
+    });
+    if (found) {
+      this.questionFilterSelected.forEach(element => {
+        if (element.name === name) {
+          element.value = filter.value;
+        }
+      });
+    } else {
+      this.questionFilterSelected.push({
+        name: name,
+        value: filter.value
+      });
+    }
+    this.search();
+  }
+
+  getProgressBarColor(index: number): string {
+    const colors = ['primary', 'info', 'success', 'warning', 'danger'];
+    let color = colors[0];
+    index = index % colors.length;
+    color = colors[index];
+    return color;
   }
 
   changePaging(event) {

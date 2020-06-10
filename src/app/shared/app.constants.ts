@@ -78,6 +78,9 @@ export const AppFormData = 'AppFormData';
 export const flagExam = 'flagExam';
 export const ExamData = 'ExamData';
 export const PathName = 'PathName';
+export const consentFlag = 'consentFlag';
+export const companyName = 'companyName';
+export const companyId = 'companyId';
 
 export enum DayOfWeek {
   Sunday = 0,
@@ -95,6 +98,7 @@ export enum State {
   Preview = 'preview',
   Duplicate = 'duplicate',
   Submit = 'submit',
+  Detail = 'detail',
 }
 
 export const Paging = {
@@ -118,10 +122,17 @@ export const InnerWidth = {
 };
 
 export const InputType = {
-  Label: 'Label',
-  Input: 'Input',
-  TextArea: 'Text Area',
-  Radio: 'Radio',
-  ChcekBox: 'Checkbox',
+  Label: 'Title',
+  Input: 'Short answer',
+  TextArea: 'Paragraph',
+  Radio: 'Multiple choice',
+  ChcekBox: 'Checkboxs',
   Dropdown: 'Dropdown',
+  ParentChild: 'Parent - Child',
+  Upload: 'File upload',
+  Linear: 'Linear scale',
+  RadioGrid: 'Multiple choice grid',
+  ChcekBoxGrid: 'Checkbox grid',
+  Date: 'Date',
+  Time: 'Time',
 };

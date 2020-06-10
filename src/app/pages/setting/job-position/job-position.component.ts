@@ -65,6 +65,8 @@ export class JobPositionComponent implements OnInit {
       remark: undefined,
       active: undefined,
       isUsed: undefined,
+      specification: undefined,
+      qualification: undefined
     }
     return itemDialog;
   }
@@ -81,6 +83,7 @@ export class JobPositionComponent implements OnInit {
   }
 
   search() {
+    this.loading = true;
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),

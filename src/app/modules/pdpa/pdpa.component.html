@@ -1,0 +1,161 @@
+<div class="homepage">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="navbar-brand d-flex align-items-center">
+            <img src="https://s3-ap-southeast-1.amazonaws.com/img-in-th/55613ac85c767ce0c72fc9825f111d0e.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
+            <strong class="pl-2 d-none d-sm-block">
+                <span class="text-green">B</span>uddy
+                <span class="text-green">R</span>ecruit
+            </strong>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-md-auto">
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('second')">เกี่ยวกับ</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;"
+                        (click)="changePath('com')">บริษัทของเรา</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navFeature }" style="cursor: pointer;"
+                        (click)="changePath('top')">คุณสมบัติ</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" style="cursor: pointer;" (click)="changePath('package')">ราคา</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-family" [ngClass]="{ 'nav-shadow': navContact }" style="cursor: pointer;"
+                        (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
+                </li>
+                <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
+                    [routerLink]="'/employer/login'"><span *ngIf="!role">Sign In</span><span
+                        *ngIf="role">ย้อนกลับ</span>
+                </button>
+            </ul>
+        </div>
+    </nav>
+    <div style="background-color: white;" #top id="top"></div>
+    <section style="margin-bottom: 0px;">
+        <div class="container" style="margin-top: 5.5rem;">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <nb-card>
+                        <nb-card-body>
+                            <div class="row">
+                                <div class="col-md-4 col-lg-4">
+                                    <img width="250" src="https://s3-ap-southeast-1.amazonaws.com/img-in-th/e6fb47284708e12acc9ae5b3da7d26be.jpg"
+                                        class="d-inline-block align-middle img-logo" alt="Buddy Recruit Logo" /><br>
+                                </div>
+                                <div class="col-md-8 col-lg-8 my-auto">
+                                    <h2>Security Services in "PDPA" PRIVACY of Personal Information </h2>
+                                    <h5>
+                                        ระบบมีนโยบายตามกฎหมายปกป้องข้อมูลส่วนบุคคลตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 ">
+                                    Buddy Recruit โดยบริษัท ไซเจ็น จำกัด ให้ความสำคัญกับการคุ้มครองข้อมูลส่วนบุคคล
+                                    จึงได้ทำการปรับปรุงข้อตกลงและเงื่อนไข ในการใช้งานระบบ Buddy Recruit สำหรับ
+                                    “การเก็บรวบรวม ใช้
+                                    และเปิดเผย” ข้อมูลส่วนบุคคลของผู้ใช้ระบบให้เป็นไปตามกฎหมาย
+                                    <br>
+                                    <br>
+                                    <strong>เก็บรวบรวม</strong><br>
+                                    การจัดเก็บรวบรวมข้อมูลที่สามารถระบุตัวตนบุคคลได้ทั้งทางตรงและทางอ้อม
+                                    โดยจัดเก็บข้อมูลที่เป็นประโยชน์ต่อ ผู้ใช้ระบบ ในระยะเวลาที่จำเป็นต่อการใช้ระบบ เช่น
+                                    คำนำหน้าชื่อ,ชื่อ-นามสกุล,เพศ, อีเมล,หมายเลขโทรศัพท์เคลื่อนที่
+                                    ,วันเดือนปีเกิด,เงินเดือนและเงินเดือนที่คาดหวัง, การศึกษา, ประวัติการทำงาน,
+                                    เอกสารต่าง
+                                    ๆของเจ้าของข้อมูลที่ได้แนบมากับการสมัครงาน และประวัติการใช้งานระบบ เป็นต้น ทั้งนี้
+                                    ผู้ใช้ระบบสามารถตรวจสอบ และแก้ไขข้อมูลส่วนบุคคลนี้ได้
+                                    <br>
+                                    <br>
+                                    <strong>ใช้</strong> <br>
+                                    การนำข้อมูลส่วนบุคคลมาใช้ประมวลผล วิเคราะห์ และแสดงผลให้กับผู้ใช้ระบบ
+                                    เพื่อให้สามารถใช้ระบบได้อย่างมีประสิทธิภาพมากยิ่งขึ้น รวมทั้งการนำข้อมูลไปวิเคราะห์
+                                    เพื่อพัฒนาระบบให้มีความสามารถสูงขึ้น และ
+                                    สามารถนำเสนอรูปแบบการใช้งานที่ตรงกับความต้องการของผู้ใช้งานได้อย่างเหมาะสม
+                                    <br>
+                                    <br>
+                                    <strong>เปิดเผย</strong><br>
+                                    การเปิดเผยข้อมูลส่วนบุคคลตามหลักเกณฑ์และเงื่อนไขการดูแลคุ้มครองผู้ใช้ระบบตามที่กฎหมายกำหนด
+                                    รวมทั้งเปิดเผยให้กับพันธมิตรทางธุรกิจ องค์กร และนิติบุคคลที่เป็นคู่สัญญา
+                                    ที่เกี่ยวข้องกับการเชื่อมต่อและการเข้าใช้งานของระบบ Buddy Recruit
+                                    <br>
+                                    <br>
+                                    ขอให้ผู้ใช้ระบบ
+                                    มั่นใจว่าบริษัทได้ให้ความสำคัญอย่างยิ่งยวดในการปฏิบัติตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล
+                                    พ.ศ.
+                                    2562 ทั้งนี้ผู้ใช้ระบบ สามารถขอให้หยุดการใช้ หรือการเปิดเผยข้อมูลส่วนบุคคลได้
+                                    หากข้อมูลนั้นถูกนำไปใช้เกินขอบเขต หรือไม่ได้รับความยินยอม
+                                    หรือไม่เป็นไปตามนโยบายการคุ้มครองข้อมูลส่วนบุคคลของบริษัทและตามที่กฎหมายกำหนด
+                                    ผู้ใช้ระบบ
+                                    สามารถสอบถามเพิ่มเติม หรือแจ้งปฏิเสธไม่ให้ใช้ข้อมูลหรือเพิกถอนคำยินยอมได้ที่
+                                    br_support@zygencenter.com
+                                </div>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer #contact id="contact">
+        <div class="container">
+            <div class="row text-mob">
+                <div class="col-md-4 m-b-20">
+                    <div class="sitemap">
+                        <h6>Sitemap</h6>
+                        <a class="nav-link font-family" style="cursor: pointer;" [routerLink]="'/index'">หน้าเเรก<span
+                                class="sr-only">(current)</span></a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('second')">เกี่ยวกับ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('com')">บริษัทของเรา</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('top')">คุณสมบัติ</a>
+                        <a class="nav-link font-family" style="cursor: pointer;"
+                            (click)="changePath('package')">ราคา</a>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-20">
+                    <div class="footer-address">
+                        <h6>ZYGEN COMPANY LIMITED</h6>
+                        <p>65/60 Chamnan Phenjati Business Center Tower,</p>
+                        <p>6 th Floor, Rama 9 Road, Huay Kwang, Bangkok, 10310</p>
+                        <p>Tel : +662 643 8016, +662 612 2116-7</p>
+                        <p>Mail : center@zygencenter.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-20">
+                    <div class="section-title wow fadeInDown animated" style="visibility: visible;">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.364182712334!2d100.56648731474904!3d13.756898200881906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e8b5f598f1b%3A0xa91f1d97bdb4cb81!2zWnlHZW4gQ29tcGFueSBMaW1pdGVkIHwg4Lia4Lij4Li04Lip4Lix4LiXIOC5hOC4i-C5gOC4iOC5h-C4mSDguIjguLPguIHguLHguJQ!5e0!3m2!1sen!2sth!4v1532082801978"
+                            width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+                    </div>
+                </div>
+            </div>
+            <div id="copyright">
+                <span class="created-by">Copyright &copy; 2018-2019
+                    <a class="text-green" target="_blank" href="http://www.zygencenter.com/">ZyGen Company Limited</a>.
+                    All rights reserved.
+                </span>
+            </div>
+        </div>
+    </footer>
+
+</div>

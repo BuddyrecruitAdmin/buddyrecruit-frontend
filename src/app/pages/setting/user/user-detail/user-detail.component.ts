@@ -113,7 +113,7 @@ export class UserDetailComponent implements OnInit {
       firstname: '',
       lastname: '',
       notifyEmail: '',
-      active: false
+      active: true
     }
   }
 

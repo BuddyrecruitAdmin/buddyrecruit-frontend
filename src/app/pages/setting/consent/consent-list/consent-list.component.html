@@ -1,0 +1,31 @@
+<!-- dialog -->
+<div class="row justify-content-md-center justify-content-lg-center">
+    <div class="col-md-auto col-lg-auto">
+        <div style="text-align: right;">
+            <button nbButton status="success" (click)="editStatus()">แก้ไข</button>
+        </div><br>
+        <nb-card class="consent" [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+            nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+            <nb-card-body *ngIf="preview">
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div style="font-family: kanit;" [innerHTML]="text"></div>
+                        <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)"><span
+                                style="font-family: kanit;">ข้าพเจ้าได้อ่านและยอมรับข้อตกลง</span></nb-checkbox>
+                        <div class="text-center">
+                            <button nbButton status="success" [disabled]="!checked">ยอมรับ</button>
+                            <button nbButton status="default" class="m-l-20">ยกเลิก</button>
+                        </div>
+                    </div>
+                </div>
+            </nb-card-body>
+            <nb-card-body *ngIf="!preview">
+                <angular-editor placeholder="'Enter text here...'" [(ngModel)]="text" [config]="editorConfig">
+                </angular-editor>
+            </nb-card-body>
+            <nb-card-footer *ngIf="!preview">
+                <button nbButton status="success" (click)="editText()">บันทึก</button>
+            </nb-card-footer>
+        </nb-card>
+    </div>
+</div>

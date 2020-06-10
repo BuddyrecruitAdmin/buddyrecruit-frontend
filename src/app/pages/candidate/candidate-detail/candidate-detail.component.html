@@ -19,18 +19,25 @@
         <span>
           Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
         </span><br *ngIf="devices.isMobile">
-        <span>
+        <span *ngIf="!isExpress">
           <span *ngIf="!devices.isMobile">|</span> Source:
           <label class="label"
             [ngClass]="utilitiesService.sourcingColors(item.candidateFlow?.refSource?.key)">{{ item.candidateFlow?.refSource?.name || 'Email' }}</label>
         </span>
       </small>
     </div>
-    <div class="actions">
+    <div *ngIf="!isExpress" class="actions">
       <div class="link" [nbPopover]="score" nbPopoverTrigger="hint" nbPopoverPlacement="left">
         <span class="fa fa-star text-orange">&nbsp;</span>
         <span>{{ item.candidateFlow?.weightScore?.accumulativeScore || 0 }}</span>
         <small>/{{ item.candidateFlow?.weightScore?.total || 0 }}</small>
+      </div>
+    </div>
+    <div *ngIf="isExpress" class="actions">
+      <div class="link" [nbPopover]="expressScore" nbPopoverTrigger="hint" nbPopoverPlacement="left">
+        <span class="fa fa-star text-orange">&nbsp;</span>
+        <span>{{ item.candidateFlow.submitScore || 0 }}</span>
+        <small>/{{ item.candidateFlow.maxScore || 0 }}</small>
       </div>
     </div>
   </nb-card-header>
@@ -146,7 +153,7 @@
               nbTooltip="See More Job Positon">{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
           </div>
         </div>
-        <div *ngIf="item.candidateFlow.exams.length > 0  && role.refAuthorize.checkAswer" class="text-group">
+        <div *ngIf="item.candidateFlow?.exams?.length > 0  && role.refAuthorize.checkAswer" class="text-group">
           <span class="link underline"
             (click)="checkExam(dialogExam, item.candidateFlow.exams, item.candidateFlow._id)">
             <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
@@ -347,8 +354,13 @@
   </nb-card-body>
   <nb-card-footer style="padding-left: 0px;padding-right: 6px;">
     <div class="float-left">
-      <button *ngIf="role.refAuthorize?.showOriginalCV" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-        status="default" (click)="checkCV(item._id, item)" nbTooltip="Original CV">
+      <button *ngIf="role.refAuthorize?.showOriginalCV && !isExpress" nbButton
+        [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default" (click)="checkCV(item._id, item)"
+        nbTooltip="Original CV">
+        <nb-icon icon="file-text-outline"></nb-icon>
+      </button>
+      <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default"
+        (click)="openApplicationForm(item)" nbTooltip="Application Form">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
       <button nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default"
@@ -451,6 +463,21 @@
   </div>
 </ng-template>
 
+<ng-template #expressScore>
+  <div class="text-center m-b-10">
+    <label class="label text-top text-black">Application Form Score</label>
+  </div>
+  <div *ngFor="let score of item.candidateFlow.scores; let i = index;" class="m-b-10">
+    <div class="label m-b-5">{{ score.title }}
+      <span class="pull-right m-l-20">
+        {{ score.submitScore || 0 }}/{{ score.maxScore || 0 }}
+      </span>
+    </div>
+    <nb-progress-bar [status]="getProgressBarColor(i)" size="tiny"
+      [value]="utilitiesService.calculatePercentage(score.submitScore,score.maxScore)">
+    </nb-progress-bar>
+  </div>
+</ng-template>
 
 <!-- dialogPopup -->
 <ng-template #dialog let-data let-ref="dialogRef">
