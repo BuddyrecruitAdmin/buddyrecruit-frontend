@@ -135,7 +135,7 @@ export class PopupExtractionComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.service.edit(request).subscribe(response => {
+          this.service.saveExtract(this.flowId, this.role.refCompany._id, request).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
               this.ref.close(true);
@@ -149,11 +149,11 @@ export class PopupExtractionComponent implements OnInit {
   }
 
   validation(): boolean {
-    let isValid = true;
-    this.sError = "";
-    if(!this.items.phone || !this.items.email){
-      isValid = false;
-      this.sError = "โปรดใส่เบอร์โทรศัพท์หรืออีเมลล์"
+    let isValid = false;
+    this.sError = "โปรดใส่เบอร์โทรศัพท์หรืออีเมลล์";
+    if (this.items.phone || this.items.email) {
+      isValid = true;
+      this.sError = ""
     }
     return isValid;
   }
@@ -193,35 +193,35 @@ export class PopupExtractionComponent implements OnInit {
     return arr;
   }
 
-  comment() {
-    if (this.totalYear != 0) {
-      this.items.workExperience.totalExpMonth = (this.totalYear * 12) + this.totalMonth;
-    } else {
-      this.items.workExperience.totalExpMonth = this.totalYear;
-    }
-    this.service.create(this.flowId, this.message).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.getList();
-        this.message = '';
-      }
-    });
-  }
+  // comment() {
+  //   if (this.totalYear != 0) {
+  //     this.items.workExperience.totalExpMonth = (this.totalYear * 12) + this.totalMonth;
+  //   } else {
+  //     this.items.workExperience.totalExpMonth = this.totalYear;
+  //   }
+  //   this.service.create(this.flowId, this.message).subscribe(response => {
+  //     if (response.code === ResponseCode.Success) {
+  //       this.getList();
+  //       this.message = '';
+  //     }
+  //   });
+  // }
 
-  delete(item: any) {
-    const confirm = this.matDialog.open(PopupMessageComponent, {
-      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-      data: { type: 'D' }
-    });
-    confirm.afterClosed().subscribe(result => {
-      if (result) {
-        this.service.deleteItem(this.flowId, item._id).subscribe(response => {
-          if (response.code === ResponseCode.Success) {
-            this.getList();
-          }
-        });
-      }
-    });
-  }
+  // delete(item: any) {
+  //   const confirm = this.matDialog.open(PopupMessageComponent, {
+  //     width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+  //     data: { type: 'D' }
+  //   });
+  //   confirm.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.service.deleteItem(this.flowId, item._id).subscribe(response => {
+  //         if (response.code === ResponseCode.Success) {
+  //           this.getList();
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   delRemark(index: any) {
     this.allComments.splice(index, 1);

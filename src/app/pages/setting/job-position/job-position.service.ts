@@ -23,7 +23,9 @@ export class JobPositionService extends NetworkService {
   create(item: any): Observable<ApiResponse> {
     const body = {
       name: item.name,
-      remark: item.remark
+      remark: item.remark,
+      specification: item.specification,
+      qualification: item.qualification
     }
     return this.post(API_ENDPOINT.CONFIGURATION.POSITION_CREATE, body);
   }
@@ -33,7 +35,9 @@ export class JobPositionService extends NetworkService {
       _id: item._id,
       name: item.name,
       active: item.active,
-      remark: item.remark
+      remark: item.remark,
+      specification: item.specification,
+      qualification: item.qualification
     }
     return this.post(API_ENDPOINT.CONFIGURATION.POSITION_EDIT, body);
   }

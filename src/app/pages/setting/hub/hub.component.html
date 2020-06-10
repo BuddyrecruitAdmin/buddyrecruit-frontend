@@ -226,21 +226,25 @@
                                     <input type="text" [(ngModel)]="sub.remark" nbInput fullWidth
                                         placeholder="จุดสังเกตุ"><br>
                                 </div>
+                                <br>
                                 <!-- button ตำบล -->
-                                <div style="text-align: center;padding-top: 2rem;">
+                                <div>
                                     <button *ngIf="dis.refDistrict" nbButton type="button" status="success" size="small"
                                         (click)="addSubDistrict(dis, i, j)">
+                                        <nb-icon icon="plus-outline">
+                                        </nb-icon>
                                         เพิ่ม ตำบล
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <!-- button อำเภอ -->
-                        <br>
-                        <div class="row" style="text-align: center;padding-top: 1rem;">
-                            <div class="col-md-6 col-lg-6" style="text-align: center;">
+                        <div class="row" style="padding-top: 1rem;padding-left: 1.25rem;">
+                            <div class="col-md-6 col-lg-6">
                                 <button nbButton type="button" status="success" size="small"
                                     (click)="addDistrict(hub,i)">
+                                    <nb-icon icon="plus-outline">
+                                    </nb-icon>
                                     เพิ่ม อำเภอ
                                 </button>
                             </div>
@@ -249,9 +253,12 @@
                     <!-- Button เพิ่มจังหวัด -->
                     <div style="text-align: center;">
                         <button nbButton type="button" status="success" size="small" (click)="addHubs()">
+                            <nb-icon icon="plus-outline">
+                            </nb-icon>
                             เพิ่ม Hub
                         </button>
                     </div>
+                    <br>
                 </div>
             </div>
         </nb-card-body>
