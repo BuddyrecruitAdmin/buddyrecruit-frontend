@@ -105,6 +105,7 @@
     "MALE": "Male",
     "FEMALE": "Female",
     "NOT_SPECIFY": "Not specified",
+    "ID_CARD": "ID Card",
     "FIRST_NAME": "First name",
     "LAST_NAME": "Last name",
     "BIRTHDAY": "Birthday",
@@ -178,6 +179,12 @@
     "SELECT_ANSWER": "Select Answer",
     "SUBMIT_SUCCESS": "Register Successfully",
     "SUBMIT_CONTENT": "We will reply to you as soon as possible.",
-    "SUBMIT_THANK": "Thank you"
+    "SUBMIT_THANK": "Thank you",
+    "CHECK_STATUS": "Registration Status",
+    "REGISTER": "Register",
+    "EDIT": "Edit",
+    "RESERVE": "Reserve",
+    "INTERVIEW_DATE": "Interview Date",
+    "STATUS": "Status"
   }
 }

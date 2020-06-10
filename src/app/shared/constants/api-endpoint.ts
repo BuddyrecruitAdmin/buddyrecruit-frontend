@@ -332,7 +332,8 @@ export const API_ENDPOINT = {
     EDIT: "generalAppForm/edit",
     DELETE: "generalAppForm/delete",
     JR_LIST: "generalAppForm/jrs",
-    GET_TEMPLATE: "generalAppForm/getTemplate"
+    GET_TEMPLATE: "generalAppForm/getTemplate",
+    GET_STATUS_LIST: "generalAppForm/getStatusList",
   },
   BLOG: {
     CREATE: "blog/create",

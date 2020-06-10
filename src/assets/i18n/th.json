@@ -105,6 +105,7 @@
     "MALE": "เพศชาย",
     "FEMALE": "เพศหญิง",
     "NOT_SPECIFY": "ไม่ระบุ",
+    "ID_CARD": "เลขบัตรประชาชน",
     "FIRST_NAME": "ชื่อ",
     "LAST_NAME": "นามสกุล",
     "BIRTHDAY": "วัน เดือน ปีเกิด",
@@ -178,6 +179,12 @@
     "SELECT_ANSWER": "กรุณาเลือกคำตอบ",
     "SUBMIT_SUCCESS": "ลงทะเบียนเรียบร้อยแล้ว",
     "SUBMIT_CONTENT": "ทางเราจะติดต่อกลับไปในภายหลัง",
-    "SUBMIT_THANK": "ขอขอบคุณ"
+    "SUBMIT_THANK": "ขอขอบคุณ",
+    "CHECK_STATUS": "สถานะการสมัคร",
+    "REGISTER": "สมัครงาน",
+    "EDIT": "แก้ไข",
+    "RESERVE": "จอง",
+    "INTERVIEW_DATE": "วันที่สัมภาษณ์",
+    "STATUS": "สถานะ"
   }
 }

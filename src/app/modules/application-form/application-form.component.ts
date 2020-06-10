@@ -191,6 +191,7 @@ export class ApplicationFormComponent implements OnInit {
       refTemplate: undefined,
       refJR: undefined,
       otherJob: '',
+      idCard: '',
       title: '',
       firstname: '',
       lastname: '',

@@ -103,8 +103,11 @@ import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ApplicationFormIndexComponent } from './application-form/application-form-index/application-form-index/application-form-index.component';
+import { ApplicationFormStatusComponent } from './application-form/application-form-status/application-form-status/application-form-status.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -190,7 +193,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     CountdownTimerModule.forRoot(),
     FileUploadModule,
     HttpClientModule,
-     AngularEditorModule
+    AngularEditorModule
   ],
   declarations: [
     ModulesComponent,
@@ -204,7 +207,9 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     FeaturesComponent,
     BlogDetailComponent,
     BlogListComponent,
-    PdpaComponent
+    PdpaComponent,
+    ApplicationFormIndexComponent,
+    ApplicationFormStatusComponent
   ],
   providers: [
     TranslateService,

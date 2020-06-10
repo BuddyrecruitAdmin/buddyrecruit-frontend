@@ -12,6 +12,9 @@ import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
+import { ApplicationFormIndexComponent } from './application-form/application-form-index/application-form-index/application-form-index.component';
+import { ApplicationFormStatusComponent } from './application-form/application-form-status/application-form-status/application-form-status.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -44,6 +47,14 @@ const routes: Routes = [
       {
         path: 'exam-form/:action/:examId/:id',
         component: ExamFormComponent,
+      },
+      {
+        path: 'application-form/index/:id',
+        component: ApplicationFormIndexComponent,
+      },
+      {
+        path: 'application-form/status',
+        component: ApplicationFormStatusComponent,
       },
       {
         path: 'application-form/:action',
