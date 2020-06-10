@@ -57,6 +57,8 @@ export interface CompanyDetail {
   },
   waitingPeriod: number;
   consentFlag: boolean;
+  channelID: any;
+  interviewPeriod: number;
 }
 
 export interface ErrMsg {
@@ -222,7 +224,9 @@ export class CompanyDetailComponent implements OnInit {
         imageUrl: '',
       },
       waitingPeriod: 0,
-      consentFlag: false
+      consentFlag: false,
+      channelID: '',
+      interviewPeriod: 30
     }
 
   }

@@ -184,8 +184,8 @@ export class HubComponent implements OnInit {
           this.listFiltered[index].push({ main: [], sub: [] });
           this.getDistrict(element.refProvince, index, this.listAll[index].length - 1, element);
           // list ตำบล
-          if (element2.subDisitricts) {
-            element2.subDisitricts.forEach((element3, kIndex) => {
+          if (element2.subDistricts) {
+            element2.subDistricts.forEach((element3, kIndex) => {
               this.listAll[index][jIndex].sub.push([]);
               this.listFiltered[index][jIndex].sub.push([]);
               this.getSubDistrict(element2.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, element2)
@@ -202,7 +202,7 @@ export class HubComponent implements OnInit {
       refDistrict: "",
       isAllSubDistrict: true,
       remark: "",
-      subDisitricts: []
+      subDistricts: []
     })
     // start here index form province 
     this.listAll[index].push({ main: [], sub: [] });
@@ -211,7 +211,7 @@ export class HubComponent implements OnInit {
   }
   // เพิ่มตำบล
   addSubDistrict(dis, index, jIndex) {
-    dis.subDisitricts.push({
+    dis.subDistricts.push({
       refSubDistrict: "",
       remark: "",
     })
@@ -271,7 +271,7 @@ export class HubComponent implements OnInit {
   }
 
   getSubDistrict(value, index, j, jIndex, dis) {
-    if (dis.subDisitricts.length > 0) {
+    if (dis.subDistricts.length > 0) {
       this.loadingDialog = true;
       this.subDistrictList = [];
       this.service.getSubDistrict(value).subscribe(response => {
@@ -284,7 +284,7 @@ export class HubComponent implements OnInit {
           });
           if (jIndex === 'all') {
             this.listAll[index][j].sub = [];
-            dis.subDisitricts.length = 0;
+            dis.subDistricts.length = 0;
           } else {
             this.listAll[index][j].sub[jIndex] = this.subDistrictList;
             this.listFiltered[index][j].sub[jIndex] = this.listAll[index][j].sub[jIndex].slice();
@@ -307,7 +307,7 @@ export class HubComponent implements OnInit {
   }
 
   deleteSubDistrict(index, jIndex, kIndex) {
-    this.hubs[index].districts[jIndex].subDisitricts.splice(kIndex, 1);
+    this.hubs[index].districts[jIndex].subDistricts.splice(kIndex, 1);
     this.listAll[index][jIndex].sub.splice(index, 1);
   }
 
@@ -336,7 +336,7 @@ export class HubComponent implements OnInit {
       } else {
         element.isAllDistrict = false;
         element.districts.map(element2 => {
-          if (element2.subDisitricts.length === 0) {
+          if (element2.subDistricts.length === 0) {
             element2.isAllSubDistrict = true;
           } else {
             element2.isAllSubDistrict = false;
@@ -362,8 +362,8 @@ export class HubComponent implements OnInit {
             isValid = false;
             this.sError = 'Please complete all fields.';
           }
-          if (element2.subDisitricts.length > 0) {
-            element2.subDisitricts.map(element3 => {
+          if (element2.subDistricts.length > 0) {
+            element2.subDistricts.map(element3 => {
               if (!element3.refSubDistrict) {
                 isValid = false;
                 this.sError = 'Please complete all fields.';
