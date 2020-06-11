@@ -70,7 +70,8 @@ export class AppointmentDetailComponent implements OnInit {
   location: any;
   loadingDialog: any;
   noticeHeight: any;
-  birth: any;
+  startDate: any;
+  endDate: any;
   staffNo: any;
   time: any;
   candNo: any;
@@ -521,24 +522,24 @@ export class AppointmentDetailComponent implements OnInit {
     this.router.navigate([path]);
   }
 
-  selectDate(dialog: TemplateRef<any>) {
-    this.loadingDialog = true;
-    this.locationService.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.map(element => {
-            this.locationList.push({
-              label: element.name,
-              value: element._id
-            });
-          });
-          this.filteredListLocation = this.locationList.slice();
-          this.callDialog(dialog);
-        }
-      }
-      this.loadingDialog = false;
-    })
-  }
+  // selectDate(dialog: TemplateRef<any>) {
+  //   this.loadingDialog = true;
+  //   this.locationService.getList().subscribe(response => {
+  //     if (response.code === ResponseCode.Success) {
+  //       if (response.data) {
+  //         response.data.map(element => {
+  //           this.locationList.push({
+  //             label: element.name,
+  //             value: element._id
+  //           });
+  //         });
+  //         this.filteredListLocation = this.locationList.slice();
+  //         this.callDialog(dialog);
+  //       }
+  //     }
+  //     this.loadingDialog = false;
+  //   })
+  // }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
