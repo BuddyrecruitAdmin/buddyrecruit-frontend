@@ -405,8 +405,9 @@
 
 <!-- Date -->
 <ng-template #dialogDate let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
-    <nb-card-body>
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card-body [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large"
+      nbSpinnerMessage="Loading...">
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="form-control-group">
@@ -422,8 +423,33 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <label>ระบุนัดสัมภาษณ์</label>
-          <label>จำนวนการรับสัมภาษณ์</label>
+          <div class="form-control-group">
+            <label>ระบุนัดสัมภาษณ์</label>
+            <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="startDate" [(ngModel)]="birth" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <label>เจ้าหน้าที่สัมภาษณ์</label>
+                <input [(ngModel)]="staffNo" nbInput> คน
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <label>ระยะเวลาที่ใช้สัมภาษณ์ต่อคน</label>
+                <ngb-timepicker [(ngModel)]="time" [minuteStep]="minuteStep" [spinners]="false" class="inline">
+                </ngb-timepicker>
+                ชั่วโมง
+              </div>
+            </div>
+          </div>
+          <div class="form-control-group">
+            <label>จำนวนการรับสัมภาษณ์</label>
+            <input [(ngModel)]="candNo" nbInput disabled> คน
+          </div>
         </div>
       </div>
     </nb-card-body>
