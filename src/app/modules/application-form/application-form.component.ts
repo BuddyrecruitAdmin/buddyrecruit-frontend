@@ -5,7 +5,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { TranslateService } from '../../translate.service';
 import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
-import { DropDownValue, DropDownLangValue } from '../../shared/interfaces';
+import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
 import { JdService } from '../../pages/jd/jd.service';
 import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition, NbDialogService, NbStepperComponent } from '@nebular/theme';
@@ -37,7 +37,7 @@ export class ApplicationFormComponent implements OnInit {
 
   degreesEN: DropDownValue[] = [];
   degreesTH: DropDownValue[] = [];
-  jrs: DropDownValue[] = [];
+  jrs: DropDownGroup[] = [];
   hubs: any[] = [];
   hub: any;
 
@@ -158,7 +158,8 @@ export class ApplicationFormComponent implements OnInit {
             if (element._id && element.refJD && element.refJD.position) {
               this.jrs.push({
                 label: element.refJD.position,
-                value: element.refJD.refPosition
+                group: element.refJD.refPosition,
+                value: element._id
               });
             }
           });
@@ -391,9 +392,14 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   onChangeJR(refJR: string) {
-    this.hub = this.hubs.find(element => {
-      return element.refPosition._id === refJR;
+    const refPosition = this.jrs.find(jr => {
+      return jr.value === refJR;
     });
+    if (refPosition) {
+      this.hub = this.hubs.find(element => {
+        return element.refPosition._id === refPosition.group;
+      });
+    }
   }
 
   onChangeProvince() {
