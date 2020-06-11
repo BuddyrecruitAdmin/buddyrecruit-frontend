@@ -4,8 +4,7 @@
       <h3>Job Position</h3>
     </div>
     <div class="col-sm-4 col-md-3 col-lg-2">
-      <button *ngIf="role.refAuthorize.configuration.jobPosition.editable" nbButton fullWidth status="success"
-        nbTooltip="Create" (click)="create(dialog)">
+      <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
     </div>
@@ -119,7 +118,8 @@
               </td>
               <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint" nbPopoverPlacement="top"
                 class="text-dot text-left" style="width: 300px;">
-                <div class="text-dot" style="width: 300px;" [ngClass]="{'text-center': !item.remark }">{{ item.remark || '-' }}
+                <div class="text-dot" style="width: 300px;" [ngClass]="{'text-center': !item.remark }">
+                  {{ item.remark || '-' }}
                 </div>
               </td>
               <td>
@@ -163,6 +163,14 @@
       <div class="form-control-group">
         <label class="label">Job Position<span style="color:red">*</span></label>
         <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Position">
+      </div>
+      <div class="form-control-group">
+        <label class="label">Qualification</label>
+        <textarea type="" [(ngModel)]="itemDialog.qualification" nbInput fullWidth placeholder="Remark"></textarea>
+      </div>
+      <div class="form-control-group">
+        <label class="label">Specification</label>
+        <textarea type="" [(ngModel)]="itemDialog.specification" nbInput fullWidth placeholder="Remark"></textarea>
       </div>
       <div class="form-control-group">
         <label class="label">Remark</label>

@@ -23,8 +23,8 @@ export class ApplicationFormIndexComponent implements OnInit {
   companyId: string;
   appformId: string;
 
-  phone: string = '0879546213';
-  birth: Date = new Date(2020, 4, 25);
+  phone: string;
+  birth: Date;
 
   constructor(
     private router: Router,
@@ -55,12 +55,13 @@ export class ApplicationFormIndexComponent implements OnInit {
   checkStatus() {
     if (this.phone && this.birth) {
       this.loading = true;
-      this.service.getStatusList(this.companyId, this.phone, this.birth).subscribe(response => {
+      const birth = new Date(this.birth.getFullYear(), this.birth.getMonth(), this.birth.getDate() + 1)
+      this.service.getStatusList(this.companyId, this.phone, birth).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           const appFormIndex = {
             companyId: this.companyId,
             phone: this.phone,
-            birth: this.birth,
+            birth: birth,
           };
           setAppformIndex(appFormIndex);
           this.router.navigate(['/application-form/status']);

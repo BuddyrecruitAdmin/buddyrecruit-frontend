@@ -65,6 +65,8 @@ export class JobPositionComponent implements OnInit {
       remark: undefined,
       active: undefined,
       isUsed: undefined,
+      specification: undefined,
+      qualification: undefined
     }
     return itemDialog;
   }

@@ -110,6 +110,7 @@ import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-deta
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConsentListComponent } from './consent/consent-list/consent-list.component';
 import { ConsentDetailComponent } from './consent/consent-detail/consent-detail.component';
+import { HubComponent } from './hub/hub.component';
 
 @NgModule({
   declarations: [
@@ -141,6 +142,7 @@ import { ConsentDetailComponent } from './consent/consent-detail/consent-detail.
     AppFormDetailComponent,
     ConsentListComponent,
     ConsentDetailComponent,
+    HubComponent,
   ],
   imports: [
     CommonModule,

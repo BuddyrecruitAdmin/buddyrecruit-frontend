@@ -4,7 +4,8 @@ export interface IApplicationForm {
   _id?;
   refCompany?;
   refTemplate?;
-  refJR?;
+  refJR?;  
+  hubs?: any;
   otherJob: string;
   title: string;
   idCard: string;

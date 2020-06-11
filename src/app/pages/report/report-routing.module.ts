@@ -5,7 +5,7 @@ import { ReportComponent } from './report.component';
 import { CandidateComponent } from './candidate/candidate.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { DetailCandidateComponent } from './detail-candidate/detail-candidate.component';
-
+import { ExtractionComponent } from './extraction/extraction.component';
 const routes: Routes = [
   {
     path: '',
@@ -22,6 +22,10 @@ const routes: Routes = [
       {
         path: 'detail',
         component: DetailCandidateComponent,
+      },
+      {
+        path: 'extraction',
+        component: ExtractionComponent,
       },
       {
         path: '**',

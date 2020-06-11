@@ -49,6 +49,10 @@ export class ReportService extends NetworkService {
     return this.post(API_ENDPOINT.REPORT.ListCandidate, { criteria })
   }
 
+  getStageList(criteria: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.REPORT.STAGING, { criteria })
+  }
+
   exportAsExcelFile(json: any[], excelFileName: string): void {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);

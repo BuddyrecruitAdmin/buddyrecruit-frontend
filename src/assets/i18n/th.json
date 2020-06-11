@@ -100,6 +100,9 @@
     "TITLE": "สร้างเรซูเม่",
     "PERSONAL_DETAILS": "ข้อมูลส่วนตัว",
     "TITLE_NAME": "ชื่อนำหน้า",
+    "TITLE_MR": "นาย",
+    "TITLE_MRS": "นาง",
+    "TITLE_MISS": "นางสาว",
     "NO_TITLE": "ไม่ระบุ",
     "GENDER": "เพศ",
     "MALE": "เพศชาย",
@@ -116,6 +119,7 @@
     "ADDRESS_NO": "บ้านเลขที่",
     "ROAD": "ถนน",
     "DISTRICT": "เขต/อำเภอ",
+    "SUB_DISTRICT": "แขวง/ตำบล",
     "PROVINCE": "จังหวัด",
     "POSTCODE": "รหัสไปรษณีย์",
     "WORK_EXP": "ประสบการณ์การทำงาน",
@@ -185,6 +189,11 @@
     "EDIT": "แก้ไข",
     "RESERVE": "จอง",
     "INTERVIEW_DATE": "วันที่สัมภาษณ์",
-    "STATUS": "สถานะ"
+    "STATUS": "สถานะ",
+    "QUESTION": "คำถาม",
+    "DONE": "สิ้นสุด",
+    "PREV": "กลับ",
+    "NEXT": "ถัดไป",
+    "STEP": "ขั้นที่"
   }
 }

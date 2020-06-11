@@ -137,6 +137,11 @@ export const API_ENDPOINT = {
     POSITION_ACTION: "position/action",
     POSITION_EDIT: "position/edit",
     POSITION_DELETE: "position/delete",
+    PROVINCE: "province/list",
+    DISTRICT: "district/list",
+    SUB_DISTRICT: "subDistrict/list",
+    HUB_DETAIL: "hub/detail",
+    HUB_EDIT: "hub/edit",
 
     LOCATION_LIST: "location/list",
     LOCATION_EDIT: "location/edit",
@@ -251,6 +256,7 @@ export const API_ENDPOINT = {
     CREATE: "candidate/accuracy/create",
     LIST: "candidate/accuracy/list",
     DELETE: "candidate/accuracy/delete",
+    GEN: "genCandidate"
   },
   FILE: {
     UPLOAD: "jd/upload",
@@ -273,7 +279,8 @@ export const API_ENDPOINT = {
     LISTFEEDBACK: "feedbackReport/list",
     EDIT: "feedbackReport/edit",
     DEPARTMENT: "dropdown/department",
-    ListCandidate: "candidateReport/list"
+    ListCandidate: "candidateReport/list",
+    STAGING: "stagingEmail/list"
   },
   HERO: {
     LIST: "hero/list"
@@ -332,6 +339,7 @@ export const API_ENDPOINT = {
     EDIT: "generalAppForm/edit",
     DELETE: "generalAppForm/delete",
     JR_LIST: "generalAppForm/jrs",
+    HUB_LIST: "generalAppForm/hubs",
     GET_TEMPLATE: "generalAppForm/getTemplate",
     GET_STATUS_LIST: "generalAppForm/getStatusList",
   },

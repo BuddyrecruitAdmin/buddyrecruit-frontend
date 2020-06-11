@@ -78,12 +78,14 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { DetailCandidateComponent } from './detail-candidate/detail-candidate.component';
 import { ExcelService } from './excel.service';
+import { ExtractionComponent } from './extraction/extraction.component';
 @NgModule({
   declarations: [
     ReportComponent,
     CandidateComponent,
     FeedbackComponent,
     DetailCandidateComponent,
+    ExtractionComponent,
   ],
   imports: [
     CommonModule,

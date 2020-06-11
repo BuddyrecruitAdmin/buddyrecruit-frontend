@@ -100,6 +100,9 @@
     "TITLE": "CREATE A RESUME",
     "PERSONAL_DETAILS": "Personal Details",
     "TITLE_NAME": "Title",
+    "TITLE_MR": "Mr.",
+    "TITLE_MRS": "Mrs.",
+    "TITLE_MISS": "Miss",
     "NO_TITLE": "Not specified",
     "GENDER": "Gender",
     "MALE": "Male",
@@ -116,6 +119,7 @@
     "ADDRESS_NO": "Address No.",
     "ROAD": "Road",
     "DISTRICT": "District",
+    "SUB_DISTRICT": "Sub District",
     "PROVINCE": "Province",
     "POSTCODE": "Postcode",
     "WORK_EXP": "Work Experience",
@@ -185,6 +189,11 @@
     "EDIT": "Edit",
     "RESERVE": "Reserve",
     "INTERVIEW_DATE": "Interview Date",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "QUESTION": "Question",
+    "DONE": "Done",
+    "PREV": "Prev",
+    "NEXT": "Next",
+    "STEP": "Step"
   }
 }

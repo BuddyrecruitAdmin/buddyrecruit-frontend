@@ -1,0 +1,82 @@
+<div class="content-header with-shadow">
+    <div class="row">
+        <div class="col-sm-7">
+            <h3>Extraction Report</h3>
+        </div>
+        <div class="col-sm-5">
+            <div class="input-group">
+                <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+                    (keyup.enter)="paging.pageIndex = 0; search()">
+                <div class="input-group-addon" nbTooltip="Search">
+                    <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+    nbSpinnerMessage="Loading...">
+    <nb-card-body>
+        <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+    </nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading && items.length">
+
+    <!-- Table layout -->
+    <nb-card>
+        <nb-card-body>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr style="font-size: 14px;">
+                            <th scope="col" style="width: 170px;">Candidate ID</th>
+                            <th scope="col" style="width: 100px;">CV</th>
+                            <th scope="col" style="width: 100px;">Edit</th>
+                            <th scope="col" style="width: 160px;">Position</th>
+                            <th scope="col" style="width: 120px;">Date</th>
+                            <th scope="col">Error Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- *ngFor="let item of items;" -->
+                        <tr *ngFor="let item of items;" style="font-size: 14px;">
+                            <td class="text-left">
+                                <span class="link text-cap" (click)="info(item)" [nbTooltip]="item._id">
+                                    {{ item._id }}
+                                </span>
+                            </td>
+                            <td>
+                                <img src="https://image.flaticon.com/icons/svg/2666/2666421.svg" width="35" height="35"
+                                    (click)="checkCV(item._id)" class="link">
+                            </td>
+                            <td>
+                                <img src="https://image.flaticon.com/icons/svg/2919/2919592.svg" width="35" height="35"
+                                    (click)="info(item)" class="link">
+                            </td>
+                            <td style="text-align: left;">
+                                <span *ngFor="let pos of item.ref_jr;let i = index;">
+                                    {{ i+1 }}.{{ pos.refJD.position || '-' }}<br>
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ item?.refSubStage?.name || '-' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ item.error_info.ref_message_code.message || '-' }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+                [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+            </mat-paginator>
+        </nb-card-body>
+    </nb-card>
+</div>

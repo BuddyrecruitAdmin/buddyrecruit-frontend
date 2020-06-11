@@ -23,7 +23,8 @@ import {
   NbTooltipModule,
   NbDatepickerModule,
   NbSpinnerModule,
-  NbLayoutModule
+  NbLayoutModule,
+  NbStepperModule
 } from '@nebular/theme';
 import { TranslateService } from '../translate.service';
 export function setupTranslateFactory(
@@ -139,6 +140,7 @@ import { ApplicationFormStatusComponent } from './application-form/application-f
     NgxEchartsModule,
     NbDatepickerModule,
     NbLayoutModule,
+    NbStepperModule,
 
     A11yModule,
     CdkStepperModule,

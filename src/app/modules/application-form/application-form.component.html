@@ -15,9 +15,9 @@
           <div>{{ 'SUBMIT_CONTENT' | translate }}</div>
           <div>{{ 'SUBMIT_THANK' | translate }}</div>
         </div>
-        <button mat-flat-button type="button" color="primary" (click)="closeWindow()">
+        <!-- <button mat-flat-button type="button" color="primary" (click)="closeWindow()">
           {{ 'CLOSE' | translate }}
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
@@ -39,696 +39,240 @@
       </div>
     </div>
 
-    <form class="container" (ngSubmit)="save()">
+    <form class="container" (ngSubmit)="save()" style="padding-top: 2rem;">
+      <nb-stepper #stepper disableStepNavigation="true">
 
-      <!-- JR -->
-      <div class="card" *ngIf="jrs.length && !template.jobPositions.length">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>notifications_active</mat-icon>
-            <p>{{ 'JOB_OPENINGS' | translate }} <span class="text-red">*</span></p>
-            <!-- <span>{{ 'JOB_OPENINGS' | translate }}</span> -->
-          </div>
-          <div class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <mat-form-field appearance="outline" class="fit-content">
-                <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}" required
-                  [disabled]="isDisabled">
-                  <mat-option *ngFor="let option of jrs" [value]="option.value">
-                    {{ option.label }}
-                  </mat-option>
-                  <mat-option [value]="'OTHERS'">
-                    {{ 'JOB_OTHERS' | translate }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline" *ngIf="appForm.refJR === 'OTHERS'">
-                <mat-label>{{ 'JOB_OTHERS' | translate }}</mat-label>
-                <input matInput type="text" id="otherJob" name="otherJob" [(ngModel)]="appForm.otherJob"
-                  [ngModelOptions]="{standalone: true}" required [readonly]="isDisabled">
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
+        <!-- --------------------------------------------------------------- -->
+        <!-- STEP 1 -->
+        <nb-step label="{{'STEP' | translate}} 1">
 
-      <!-- Job Position -->
-      <div *ngIf="template.jobPositions.length" class="card">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>notifications_active</mat-icon>
-            <p>{{ 'JOB_OPENINGS' | translate }}</p>
-          </div>
-          <div class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <mat-form-field appearance="outline" class="fit-content">
-                <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                <mat-select [(ngModel)]="appForm.refPosition" [ngModelOptions]="{standalone: true}"
-                  (selectionChange)="onChangeJobPosition($event.value)" required [disabled]="isDisabled">
-                  <mat-option *ngFor="let option of template.jobPositions" [value]="option.refPosition">
-                    {{ option.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <div *ngIf="jobPosition && jobPosition.children.length">
-                <div *ngIf="!jobPosition.isMultiAnswer">
+          <!-- JR -->
+          <div class="card" *ngIf="jrs.length && !template.jobPositions.length">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>notifications_active</mat-icon>
+                <p>{{ 'JOB_OPENINGS' | translate }} <span class="text-red">*</span></p>
+              </div>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
                   <mat-form-field appearance="outline" class="fit-content">
-                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="appForm.jobChildSelected" [ngModelOptions]="{standalone: true}"
-                      [required]="jobPosition.required" [disabled]="isDisabled">
-                      <mat-option *ngFor="let option of jobPosition.children" [value]="option.name">
-                        {{ option.name }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div *ngIf="jobPosition.isMultiAnswer">
-                  <mat-form-field appearance="outline" class="fit-content">
-                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                    <mat-select [formControl]="appForm.jobMultiChild" multiple [disabled]="isDisabled">
-                      <mat-select-trigger>
-                        {{appForm.jobMultiChild.value ? appForm.jobMultiChild.value[0] : ''}}
-                        <span *ngIf="appForm.jobMultiChild.value?.length > 1" class="additional-selection">
-                          (+{{appForm.jobMultiChild.value.length - 1}}
-                          {{appForm.jobMultiChild.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let option of jobPosition.children" [value]="option.name">
-                        {{ option.name }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Personal Details -->
-      <div class="card" *ngIf="template.personalDetail.active">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>account_circle</mat-icon>
-            <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
-          </div>
-          <div class="row">
-            <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'GENDER' | translate }}</mat-label>
-                <mat-select [(ngModel)]="appForm.gender" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                  <mat-option value="Male">
-                    {{ 'MALE' | translate }}
-                  </mat-option>
-                  <mat-option value="Female">
-                    {{ 'FEMALE' | translate }}
-                  </mat-option>
-                  <mat-option value="Not specified">
-                    {{ 'NOT_SPECIFY' | translate }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-md-5" *ngIf="template.personalDetail.firstname.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
-                <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
-                  [required]="template.personalDetail.firstname.required" [ngModelOptions]="{standalone: true}"
-                  [disabled]="isDisabled">
-              </mat-form-field>
-            </div>
-            <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
-                <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
-                  [required]="template.personalDetail.lastname.required" [ngModelOptions]="{standalone: true}"
-                  [disabled]="isDisabled">
-              </mat-form-field>
-            </div>
-            <div class="col-md-6" *ngIf="template.personalDetail.idCard?.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
-                <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="appForm.idCard"
-                  [required]="template.personalDetail.idCard.required" [ngModelOptions]="{standalone: true}"
-                  [disabled]="isDisabled">
-              </mat-form-field>
-            </div>
-            <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
-                <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate"
-                  [(ngModel)]="appForm.birth" readonly (click)="birthDate.open()"
-                  (dateInput)="onChangeBirthday($event.target.value)"
-                  [required]="template.personalDetail.birth.required" [ngModelOptions]="{standalone: true}"
-                  [disabled]="isDisabled">
-                <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
-                <mat-datepicker #birthDate></mat-datepicker>
-              </mat-form-field>
-            </div>
-            <div class="col-md-2" *ngIf="template.personalDetail.birth.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'AGE' | translate }}</mat-label>
-                <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age" disabled
-                  [required]="template.personalDetail.age.required" [ngModelOptions]="{standalone: true}">
-              </mat-form-field>
-            </div>
-            <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'PHONE' | translate }}</mat-label>
-                <input matInput type="text" id="phone" name="phone" [formControl]="f.phone" [(ngModel)]="appForm.phone"
-                  [required]="template.personalDetail.phone.required">
-                <mat-hint align="start" class="text-red">
-                  <div *ngIf="f.phone.invalid && (submitted || f.phone.touched)">
-                    <div *ngIf="f.phone.errors?.pattern">
-                      Please enter a valid phone.
-                    </div>
-                  </div>
-                </mat-hint>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6" *ngIf="template.personalDetail.email.visible">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'EMAIL' | translate }}</mat-label>
-                <input matInput type="text" id="email" name="email" [formControl]="f.email" [(ngModel)]="appForm.email"
-                  [required]="template.personalDetail.email.required">
-                <mat-hint align="start" class="text-red">
-                  <div *ngIf="f.email.invalid && (submitted || f.email.touched)">
-                    <div *ngIf="f.email.errors?.pattern">
-                      Please enter a valid email address.
-                    </div>
-                  </div>
-                </mat-hint>
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="box-dashed" *ngIf="template.personalDetail.address.visible" style="padding-bottom: 0;">
-            <p>{{ 'ADDRESS' | translate }}</p>
-            <div class="row">
-              <div class="col-md-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'ADDRESS_NO' | translate }}</mat-label>
-                  <input matInput type="text" id="addressNo" name="addressNo" [(ngModel)]="appForm.addressNo"
-                    [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'ROAD' | translate }}</mat-label>
-                  <input matInput type="text" id="road" name="road" [(ngModel)]="appForm.road"
-                    [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'DISTRICT' | translate }}</mat-label>
-                  <input matInput type="text" id="district" name="district" [(ngModel)]="appForm.district"
-                    [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
-                  <input matInput type="text" id="province" name="province" [(ngModel)]="appForm.province"
-                    [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-              <div class="col-md-6">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'POSTCODE' | translate }}</mat-label>
-                  <input matInput type="text" id="postcode" name="postcode" [formControl]="f.postcode"
-                    [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required">
-                  <mat-hint align="start" class="text-red">
-                    <div *ngIf="f.postcode.invalid && (submitted || f.postcode.touched)">
-                      <div *ngIf="f.postcode.errors?.pattern">
-                        Please enter a valid postcode.
-                      </div>
-                    </div>
-                  </mat-hint>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Work Experience -->
-      <div class="card" *ngIf="template.workExperience.active">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>work</mat-icon>
-            <p>{{ 'WORK_EXP' | translate }}</p>
-            <span *ngIf="!isDisabled">{{ 'WORK_EXP_SUB' | translate }}</span>
-          </div>
-          <div *ngFor="let work of appForm.workExperience.work; let i = index" class="box-dashed m-b-10">
-            <p>
-              {{ 'WORK_EXP' | translate }} ({{ i + 1 }})
-              <button *ngIf="!isDisabled" mat-icon-button type="button" class="text-gray" (click)="work.deletion = true"
-                [disabled]="work.deletion">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </p>
-            <div *ngIf="work.deletion" class="deletion">
-              <span>{{ 'DELETION' | translate }}</span>
-              <button mat-button type="button" color="warn" (click)="removeWorkExperience(i)">
-                {{ 'REMOVE' | translate }}
-              </button>
-              <button mat-stroked-button type="button" (click)="work.deletion = false">
-                {{ 'CANCEL' | translate }}
-              </button>
-            </div>
-            <div class="row">
-              <div class="col-md-6" *ngIf="template.workExperience.position.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'POSITION' | translate }}</mat-label>
-                  <input matInput type="text" id="position{{i}}" [(ngModel)]="work.position"
-                    [required]="template.workExperience.position.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-              <div class="col-md-6" *ngIf="template.workExperience.company.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'COMPANY' | translate }}</mat-label>
-                  <input matInput type="text" id="company{{i}}" [(ngModel)]="work.company"
-                    [required]="template.workExperience.company.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4" *ngIf="template.workExperience.start.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
-                  <input matInput type="text" id="start{{i}}" name="start" [matDatepicker]="startDate"
-                    [(ngModel)]="work.start" readonly (click)="startDate.open()"
-                    [required]="template.workExperience.start.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled">
-                  <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                  <mat-datepicker #startDate></mat-datepicker>
-                </mat-form-field>
-              </div>
-              <div class="col-md-2 checkbox-margin" *ngIf="template.workExperience.start.visible">
-                <mat-checkbox [(ngModel)]="work.isPresent" class="is-present" [ngModelOptions]="{standalone: true}"
-                  [disabled]="isDisabled">
-                  {{ 'PRESENT' | translate }}</mat-checkbox>
-              </div>
-              <div *ngIf="template.workExperience.end.visible && !work.isPresent" class="col-md-4">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PERIOD_TO' | translate }}</mat-label>
-                  <input matInput type="text" id="end{{i}}" name="end" [matDatepicker]="endDate" [(ngModel)]="work.end"
-                    readonly (click)="endDate.open()" [required]="template.workExperience.end.required"
-                    [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                  <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                  <mat-datepicker #endDate></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12" *ngIf="template.workExperience.duty.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'RESPONSIBILITY' | translate }}</mat-label>
-                  <textarea matInput type="text" id="duty{{i}}" rows="3" [(ngModel)]="work.duty"
-                    [required]="template.workExperience.duty.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled"></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="!isDisabled" class="add-more">
-            <button mat-flat-button type="button" color="primary" (click)="addWorkExperience()">
-              <mat-icon>add</mat-icon>
-              {{ 'ADD_WORK_EXP' | translate }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Education -->
-      <div class="card" *ngIf="template.education.active">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>school</mat-icon>
-            <p>{{ 'EDUCATION' | translate }}</p>
-            <span *ngIf="!isDisabled">{{ 'EDUCATION_SUB' | translate }}</span>
-          </div>
-          <div *ngFor="let education of appForm.education; let i = index" class="box-dashed m-b-10">
-            <p>
-              {{ 'EDUCATION' | translate }} ({{ i + 1 }})
-              <button *ngIf="!isDisabled" mat-icon-button type="button" class="text-gray"
-                (click)="education.deletion = true" [disabled]="education.deletion">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </p>
-            <div *ngIf="education.deletion" class="deletion">
-              <span>{{ 'DELETION' | translate }}</span>
-              <button mat-button type="button" color="warn" (click)="removeEducation(i)">
-                {{ 'REMOVE' | translate }}
-              </button>
-              <button mat-stroked-button type="button" (click)="education.deletion = false">
-                {{ 'CANCEL' | translate }}
-              </button>
-            </div>
-            <div class="row">
-              <div class="col-md-6" *ngIf="template.education.refDegree.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'DEGREE' | translate }}</mat-label>
-                  <mat-select *ngIf="language === 'en'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
-                    [ngModelOptions]="{ standalone: true }" [required]="template.education.refDegree.required"
-                    [disabled]="isDisabled">
-                    <mat-option *ngFor="let degree of degreesEN" [value]="degree.value">
-                      {{ degree.label }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-select *ngIf="language === 'th'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
-                    [ngModelOptions]="{ standalone: true }" [required]="template.education.refDegree.required"
-                    [disabled]="isDisabled">
-                    <mat-option *ngFor="let degree of degreesTH" [value]="degree.value">
-                      {{ degree.label }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-md-3" *ngIf="template.education.gpa.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'GPA' | translate }}</mat-label>
-                  <input matInput type="text" id="gpa{{i}}" name="gpa" [formControl]="f.gpa" [(ngModel)]="education.gpa"
-                    [required]="template.education.gpa.required">
-                  <mat-hint align="start" class="text-red">
-                    <div *ngIf="f.gpa.invalid && (submitted || f.gpa.touched)">
-                      <div *ngIf="f.gpa.errors?.maxLength">
-                        Please enter a valid gpa.
-                      </div>
-                    </div>
-                  </mat-hint>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6" *ngIf="template.education.university.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'UNIVERSITY' | translate }}</mat-label>
-                  <input matInput type="text" id="university{{i}}" [(ngModel)]="education.university"
-                    [ngModelOptions]="{standalone: true}" [required]="template.education.university.required"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-              <div class="col-md-6" *ngIf="template.education.major.visible">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'MAJOR' | translate }}</mat-label>
-                  <input matInput type="text" id="major{{i}}" [(ngModel)]="education.major"
-                    [ngModelOptions]="{standalone: true}" [required]="template.education.major.required"
-                    [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="!isDisabled" class="add-more">
-            <button mat-flat-button type="button" color="primary" (click)="addEducation()">
-              <mat-icon>add</mat-icon>
-              {{ 'ADD_EDUCATION' | translate }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Hard Skills -->
-      <div class="card" *ngIf="template.hardSkill.active">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>highlight</mat-icon>
-            <p>{{ 'HARD_SKILLS' | translate }}</p>
-            <span *ngIf="!isDisabled">{{ 'HARD_SKILLS_SUB' | translate }}</span>
-          </div>
-          <div *ngIf="!isDisabled">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'HARD_SKILL' | translate }}</mat-label>
-                  <input matInput (keyup.enter)="addHardSkill()" [(ngModel)]="hardSkill.keyword"
-                    [ngModelOptions]="{standalone: true}" [disabled]="appForm.hardSkill.length === 20 || isDisabled">
-                  <mat-hint align="end">{{ 'MAX_HARD_SKILLS' | translate }}</mat-hint>
-                  <mat-hint align="start" class="text-red">
-                    <span *ngIf="hardSkill.required">{{ 'HARD_SKILLS_REQUIRED' | translate }}</span>
-                    <span *ngIf="hardSkill.duplication">{{ 'HARD_SKILLS_DUPLICATE' | translate }}</span>
-                  </mat-hint>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="add-more">
-              <button mat-flat-button type="button" color="primary" (click)="addHardSkill()"
-                [disabled]="appForm.hardSkill.length === 20 || isDisabled">
-                <mat-icon>add</mat-icon>
-                {{ 'ADD_HARD_SKILL' | translate }}
-              </button>
-            </div>
-            <div class="text-right text-gray">
-              <span>{{ appForm.hardSkill.length }}/20</span>
-            </div>
-          </div>
-          <div class="box-dashed">
-            <mat-chip-list>
-              <mat-chip color="primary" selected>{{ 'HARD_SKILLS' | translate }}</mat-chip> :
-              <mat-chip *ngFor="let value of appForm.hardSkill; let i = index">
-                {{ value }}
-                <mat-icon *ngIf="!isDisabled" matChipRemove (click)="removeHardSkill(i)">cancel</mat-icon>
-              </mat-chip>
-            </mat-chip-list>
-          </div>
-        </div>
-      </div>
-
-      <!-- Soft Skills -->
-      <div class="card" *ngIf="template.softSkill.active">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>highlight</mat-icon>
-            <p>{{ 'SOFT_SKILLS' | translate }}</p>
-            <span *ngIf="!isDisabled">{{ 'SOFT_SKILLS_SUB' | translate }}</span>
-          </div>
-          <div *ngIf="!isDisabled">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'SOFT_SKILL' | translate }}</mat-label>
-                  <input matInput (keyup.enter)="addSoftSkill()" [(ngModel)]="softSkill.keyword"
-                    [ngModelOptions]="{standalone: true}" [disabled]="appForm.softSkill.length === 20">
-                  <mat-hint align="end">{{ 'MAX_SOFT_SKILLS' | translate }}</mat-hint>
-                  <mat-hint align="start" class="text-red">
-                    <span *ngIf="softSkill.required">{{ 'SOFT_SKILLS_REQUIRED' | translate }}</span>
-                    <span *ngIf="softSkill.duplication">{{ 'SOFT_SKILLS_DUPLICATE' | translate }}</span>
-                  </mat-hint>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="add-more">
-              <button mat-flat-button type="button" color="primary" (click)="addSoftSkill()"
-                [disabled]="appForm.softSkill.length === 20">
-                <mat-icon>add</mat-icon>
-                {{ 'ADD_SOFT_SKILL' | translate }}
-              </button>
-            </div>
-            <div class="text-right text-gray">
-              <span>{{ appForm.softSkill.length }}/20</span>
-            </div>
-          </div>
-          <div class="box-dashed">
-            <mat-chip-list>
-              <mat-chip color="primary" selected>{{ 'SOFT_SKILLS' | translate }}</mat-chip> :
-              <mat-chip *ngFor="let value of appForm.softSkill; let i = index">
-                {{ value }}
-                <mat-icon *ngIf="!isDisabled" matChipRemove (click)="removeSoftSkill(i)">cancel</mat-icon>
-              </mat-chip>
-            </mat-chip-list>
-          </div>
-        </div>
-      </div>
-
-      <!-- Certifications -->
-      <div class="card" *ngIf="template.certificate.active">
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>turned_in</mat-icon>
-            <p>{{ 'CERTIFICATIONS' | translate }}</p>
-            <span *ngIf="!isDisabled">{{ 'CERTIFICATIONS_SUB' | translate }}</span>
-          </div>
-          <div *ngIf="!isDisabled">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'CERTIFICATION' | translate }}</mat-label>
-                  <input matInput (keyup.enter)="addCertificate()" [(ngModel)]="certificate.keyword"
-                    [ngModelOptions]="{standalone: true}" [disabled]="appForm.certificate.length === 5">
-                  <mat-hint align="end">{{ 'MAX_CERT' | translate }}</mat-hint>
-                  <mat-hint align="start" class="text-red">
-                    <span *ngIf="certificate.required">{{ 'CERT_REQUIRED' | translate }}</span>
-                    <span *ngIf="certificate.duplication">{{ 'CERT_DUPLICATE' | translate }}</span>
-                  </mat-hint>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="add-more">
-              <button mat-flat-button type="button" color="primary" (click)="addCertificate()"
-                [disabled]="appForm.certificate.length === 5">
-                <mat-icon>add</mat-icon>
-                {{ 'ADD_CERT' | translate }}
-              </button>
-            </div>
-            <div class="text-right text-gray">
-              <span>{{ appForm.certificate.length }}/5</span>
-            </div>
-          </div>
-          <div class="box-dashed">
-            <mat-chip-list>
-              <mat-chip color="primary" selected>{{ 'CERTIFICATIONS' | translate }}</mat-chip> :
-              <mat-chip *ngFor="let value of appForm.certificate; let i = index">
-                {{ value }}
-                <mat-icon *ngIf="!isDisabled" matChipRemove (click)="removeCertificate(i)">cancel</mat-icon>
-              </mat-chip>
-            </mat-chip-list>
-          </div>
-        </div>
-      </div>
-
-      <!-- Resume -->
-      <div class="card" *ngIf="template.uploadCV.active">
-        <mat-progress-bar *ngIf="loadingUpload" mode="indeterminate"></mat-progress-bar>
-        <div class="card-body">
-          <div class="topic">
-            <mat-icon>account_box</mat-icon>
-            <p>{{ 'RESUME' | translate }}</p>
-            <span *ngIf="!isDisabled">{{ 'RESUME_SUB' | translate }}</span>
-          </div>
-          <div class="upload-file box-dashed">
-            <p class="file-preview">
-              <mat-icon>insert_drive_file</mat-icon>
-              <span *ngIf="!appForm.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
-              <span *ngIf="appForm.attachment.originalName">{{ appForm.attachment.originalName }}</span>
-              <mat-icon *ngIf="appForm.attachment.originalName && !isDisabled" class="delete"
-                (click)="clearFile(appForm.attachment); fileInput.value = ''">
-                cancel
-              </mat-icon>
-            </p>
-            <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -
-                {{ 'MAX_UPLOAD' | translate }})</small></p>
-            <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
-              [disabled]="loadingUpload">
-              <mat-icon>cloud_upload</mat-icon> {{ 'UPLOAD_RESUME' | translate }}
-              <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-                (change)="uploadFile(appForm.attachment, $event.target.files, true)" accept="*" style="display:none;" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Questions -->
-      <div id="question{{iQuestion}}" class="card" *ngFor="let question of appForm.questions; let iQuestion = index;">
-        <div class="card-body">
-
-          <div class="topic" *ngIf="question.type === InputType.Label" style="margin-bottom: 1rem;">
-            <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
-            <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
-          </div>
-          <div class="topic" *ngIf="question.type !== InputType.Label">
-            <mat-icon>help_outline</mat-icon>
-            <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
-            <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
-          </div>
-          <div class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <div *ngIf="question.imgaeURL" class="question-image">
-                <img [src]="question.imgaeURL" class="w-100">
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="question.type === InputType.Input">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
-                <mat-form-field appearance="outline">
-                  <input matInput type="text" [(ngModel)]="question.answer.input" [required]="question.required"
-                    [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="question.type === InputType.TextArea">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
-                <mat-form-field appearance="outline">
-                  <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3"
-                    [required]="question.required" [ngModelOptions]="{standalone: true}"
-                    [disabled]="isDisabled"></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="question.type === InputType.Radio">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
-                <mat-radio-group [(ngModel)]="question.answer.selected" [required]="question.required"
-                  [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                  <div class="row">
-                    <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
-                      [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
-                      <div *ngIf="option.imgaeURL" class="answer-image"
-                        [ngClass]="{ 'active': question.answer.selected === i }" (click)="question.answer.selected = i">
-                        <img [src]="option.imgaeURL">
-                      </div>
-                      <mat-radio-button [value]="i">
+                    <mat-label>{{ 'POSITION' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}"
+                      (selectionChange)="onChangeJR($event.value)" required [disabled]="isDisabled">
+                      <mat-option *ngFor="let option of jrs" [value]="option.value">
                         {{ option.label }}
-                      </mat-radio-button>
-                    </div>
-                    <div class="col-md-12">
-                      <mat-radio-button *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
-                        {{ question.answer.otherLabel }}
-                      </mat-radio-button>
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Hubs -->
+              <div *ngIf="appForm.refJR && hubs.length" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div class="text-gray">{{ 'PROVINCE' | translate }}</div>
+                  <div *ngFor="let province of hub.provinces">
+                    <mat-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
+                      (click)="onChangeProvince()" [disabled]="isDisabled">
+                      {{ language === 'en' ? province.refProvince.name.en :province.refProvince.name.th }}
+                    </mat-checkbox>
+
+                    <div *ngIf="province.checked" style="margin-left: 1.5rem;">
+                      <div class="m-t-5 text-gray">{{ 'DISTRICT' | translate }}</div>
+                      <div *ngFor="let district of province.districts">
+                        <mat-checkbox [(ngModel)]="district.checked" [ngModelOptions]="{standalone: true}"
+                          (click)="onChangeDistrict()" [disabled]="isDisabled">
+                          {{ language === 'en' ? district.refDistrict.name.en :district.refDistrict.name.th }}
+                        </mat-checkbox>
+
+                        <div *ngIf="district.checked" style="margin-left: 1.5rem;">
+                          <div class="m-t-5 text-gray">{{ 'SUB_DISTRICT' | translate }}</div>
+                          <div *ngFor="let subDistrict of district.subDistricts">
+                            <mat-checkbox [(ngModel)]="subDistrict.checked" [ngModelOptions]="{standalone: true}"
+                              [disabled]="isDisabled">
+                              {{ language === 'en' ? subDistrict.refSubDistrict.name.en : subDistrict.refSubDistrict.name.th }}
+                            </mat-checkbox>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </mat-radio-group>
-                <mat-form-field appearance="outline"
-                  *ngIf="question.answer.selected === question.answer.options.length">
-                  <mat-label>{{ question.answer.otherLabel }}</mat-label>
-                  <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                    [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                </mat-form-field>
+                </div>
               </div>
             </div>
           </div>
+          <div class="footer-right">
+            <button nbButton type="button" nbStepperNext [disabled]="!appForm.refJR">
+              {{ 'NEXT' | translate }}
+            </button>
+          </div>
+        </nb-step>
 
-          <div *ngIf="question.type === InputType.ChcekBox">
-            <div class="row">
-              <div class="offset-lg-2 col-lg-8">
+        <!-- --------------------------------------------------------------- -->
+        <!-- STEP 2 -->
+        <nb-step label="{{'STEP' | translate}} 2">
+
+          <!-- Personal Details -->
+          <div class="card" *ngIf="template.personalDetail.active">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>account_circle</mat-icon>
+                <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
+              </div>
+              <div class="row">
+                <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
+                  <!-- <mat-form-field appearance="outline">
+                    <mat-label>{{ 'GENDER' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="appForm.gender" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                      <mat-option value="Male">
+                        {{ 'MALE' | translate }}
+                      </mat-option>
+                      <mat-option value="Female">
+                        {{ 'FEMALE' | translate }}
+                      </mat-option>
+                      <mat-option value="Not specified">
+                        {{ 'NOT_SPECIFY' | translate }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field> -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                      <mat-option value="Mr.">
+                        {{ 'TITLE_MR' | translate }}
+                      </mat-option>
+                      <mat-option value="Mrs.">
+                        {{ 'TITLE_MRS' | translate }}
+                      </mat-option>
+                      <mat-option value="Miss">
+                        {{ 'TITLE_MISS' | translate }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5" *ngIf="template.personalDetail.firstname.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
+                    <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
+                      [required]="template.personalDetail.firstname.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
+                    <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
+                      [required]="template.personalDetail.lastname.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6" *ngIf="template.personalDetail.idCard?.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
+                    <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="appForm.idCard"
+                      [required]="template.personalDetail.idCard.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
+                    <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate"
+                      [(ngModel)]="appForm.birth" readonly (click)="birthDate.open()"
+                      (dateInput)="onChangeBirthday($event.target.value)"
+                      [required]="template.personalDetail.birth.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                    <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
+                    <mat-datepicker #birthDate></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-2" *ngIf="template.personalDetail.birth.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'AGE' | translate }}</mat-label>
+                    <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age" disabled
+                      [required]="template.personalDetail.age.required" [ngModelOptions]="{standalone: true}">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'PHONE' | translate }}</mat-label>
+                    <input matInput type="text" id="phone" name="phone" [formControl]="f.phone"
+                      [(ngModel)]="appForm.phone" [required]="template.personalDetail.phone.required">
+                    <mat-hint align="start" class="text-red">
+                      <div *ngIf="f.phone.invalid && (submitted || f.phone.touched)">
+                        <div *ngIf="f.phone.errors?.pattern">
+                          Please enter a valid phone.
+                        </div>
+                      </div>
+                    </mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6" *ngIf="template.personalDetail.email.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'EMAIL' | translate }}</mat-label>
+                    <input matInput type="text" id="email" name="email" [formControl]="f.email"
+                      [(ngModel)]="appForm.email" [required]="template.personalDetail.email.required">
+                    <mat-hint align="start" class="text-red">
+                      <div *ngIf="f.email.invalid && (submitted || f.email.touched)">
+                        <div *ngIf="f.email.errors?.pattern">
+                          Please enter a valid email address.
+                        </div>
+                      </div>
+                    </mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="box-dashed" *ngIf="template.personalDetail.address.visible" style="padding-bottom: 0;">
+                <p>{{ 'ADDRESS' | translate }}</p>
                 <div class="row">
-                  <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
-                    [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
-                    <div *ngIf="option.imgaeURL" class="answer-image" [ngClass]="{ 'active': option.checked }"
-                      (click)="option.checked = !option.checked">
-                      <img [src]="option.imgaeURL">
-                    </div>
-                    <mat-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
-                      {{ option.label }}
-                    </mat-checkbox>
+                  <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'ADDRESS_NO' | translate }}</mat-label>
+                      <input matInput type="text" id="addressNo" name="addressNo" [(ngModel)]="appForm.addressNo"
+                        [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
                   </div>
-                  <div *ngIf="question.answer.hasOther" class="col-md-12">
-                    <mat-checkbox [(ngModel)]="question.answer.otherChecked" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
-                      {{ question.answer.otherLabel }}
-                    </mat-checkbox>
-                    <mat-form-field appearance="outline" *ngIf="question.answer.otherChecked">
-                      <mat-label>{{ question.answer.otherLabel }}</mat-label>
-                      <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                  <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'ROAD' | translate }}</mat-label>
+                      <input matInput type="text" id="road" name="road" [(ngModel)]="appForm.road"
+                        [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'DISTRICT' | translate }}</mat-label>
+                      <input matInput type="text" id="district" name="district" [(ngModel)]="appForm.district"
+                        [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
+                      <input matInput type="text" id="province" name="province" [(ngModel)]="appForm.province"
+                        [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'POSTCODE' | translate }}</mat-label>
+                      <input matInput type="text" id="postcode" name="postcode" [formControl]="f.postcode"
+                        [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required">
+                      <mat-hint align="start" class="text-red">
+                        <div *ngIf="f.postcode.invalid && (submitted || f.postcode.touched)">
+                          <div *ngIf="f.postcode.errors?.pattern">
+                            Please enter a valid postcode.
+                          </div>
+                        </div>
+                      </mat-hint>
                     </mat-form-field>
                   </div>
                 </div>
@@ -736,236 +280,735 @@
             </div>
           </div>
 
-          <div *ngIf="question.type === InputType.Dropdown" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <mat-form-field appearance="outline" class="fit-content">
-                <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                <mat-select [(ngModel)]="question.answer.selected" [required]="question.required"
-                  [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                  <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i">
-                    {{ option.label }}
-                  </mat-option>
-                  <mat-option *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
-                    {{ question.answer.otherLabel }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field appearance="outline" *ngIf="question.answer.selected === question.answer.options.length">
-                <mat-label>{{ question.answer.otherLabel }}</mat-label>
-                <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                  [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-              </mat-form-field>
-            </div>
-          </div>
-
-          <div *ngIf="question.type === InputType.ParentChild" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <mat-form-field appearance="outline" class="fit-content">
-                <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                <mat-select [(ngModel)]="question.parentSelected" [ngModelOptions]="{standalone: true}"
-                  [required]="question.required" [disabled]="isDisabled">
-                  <mat-option *ngFor="let option of question.parentChild; let i = index;" [value]="i">
-                    {{ option.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <div *ngIf="getChild(question)">
-                <div *ngIf="!getChild(question).isMultiAnswer">
-                  <mat-form-field appearance="outline" class="fit-content">
-                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="question.childSelected" [ngModelOptions]="{standalone: true}"
-                      [required]="getChild(question).required" [disabled]="isDisabled">
-                      <mat-option *ngFor="let option of getChild(question).children; let i = index;" [value]="i">
-                        {{ option.name }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+          <!-- Work Experience -->
+          <div class="card" *ngIf="template.workExperience.active">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>work</mat-icon>
+                <p>{{ 'WORK_EXP' | translate }}</p>
+                <span *ngIf="!isDisabled">{{ 'WORK_EXP_SUB' | translate }}</span>
+              </div>
+              <div *ngFor="let work of appForm.workExperience.work; let i = index" class="box-dashed m-b-10">
+                <p>
+                  {{ 'WORK_EXP' | translate }} ({{ i + 1 }})
+                  <button *ngIf="!isDisabled" mat-icon-button type="button" class="text-gray"
+                    (click)="work.deletion = true" [disabled]="work.deletion">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </p>
+                <div *ngIf="work.deletion" class="deletion">
+                  <span>{{ 'DELETION' | translate }}</span>
+                  <button mat-button type="button" color="warn" (click)="removeWorkExperience(i)">
+                    {{ 'REMOVE' | translate }}
+                  </button>
+                  <button mat-stroked-button type="button" (click)="work.deletion = false">
+                    {{ 'CANCEL' | translate }}
+                  </button>
                 </div>
-                <div *ngIf="getChild(question).isMultiAnswer">
-                  <mat-form-field appearance="outline" class="fit-content">
-                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
-                    <mat-select [formControl]="question.multiChilds" multiple>
-                      <mat-select-trigger>
-                        {{question.multiChilds.value ? question.multiChilds.value[0] : ''}}
-                        <span *ngIf="question.multiChilds.value?.length > 1" class="additional-selection">
-                          (+{{question.multiChilds.value.length - 1}}
-                          {{question.multiChilds.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let option of getChild(question).children" [value]="option.name"
+                <div class="row">
+                  <div class="col-md-6" *ngIf="template.workExperience.position.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'POSITION' | translate }}</mat-label>
+                      <input matInput type="text" id="position{{i}}" [(ngModel)]="work.position"
+                        [required]="template.workExperience.position.required" [ngModelOptions]="{standalone: true}"
                         [disabled]="isDisabled">
-                        {{ option.name }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6" *ngIf="template.workExperience.company.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'COMPANY' | translate }}</mat-label>
+                      <input matInput type="text" id="company{{i}}" [(ngModel)]="work.company"
+                        [required]="template.workExperience.company.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-4" *ngIf="template.workExperience.start.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'PERIOD_FROM' | translate }}</mat-label>
+                      <input matInput type="text" id="start{{i}}" name="start" [matDatepicker]="startDate"
+                        [(ngModel)]="work.start" readonly (click)="startDate.open()"
+                        [required]="template.workExperience.start.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                      <mat-datepicker #startDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-2 checkbox-margin" *ngIf="template.workExperience.start.visible">
+                    <mat-checkbox [(ngModel)]="work.isPresent" class="is-present" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                      {{ 'PRESENT' | translate }}</mat-checkbox>
+                  </div>
+                  <div *ngIf="template.workExperience.end.visible && !work.isPresent" class="col-md-4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'PERIOD_TO' | translate }}</mat-label>
+                      <input matInput type="text" id="end{{i}}" name="end" [matDatepicker]="endDate"
+                        [(ngModel)]="work.end" readonly (click)="endDate.open()"
+                        [required]="template.workExperience.end.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled">
+                      <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                      <mat-datepicker #endDate></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12" *ngIf="template.workExperience.duty.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'RESPONSIBILITY' | translate }}</mat-label>
+                      <textarea matInput type="text" id="duty{{i}}" rows="3" [(ngModel)]="work.duty"
+                        [required]="template.workExperience.duty.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!isDisabled" class="add-more">
+                <button mat-flat-button type="button" color="primary" (click)="addWorkExperience()">
+                  <mat-icon>add</mat-icon>
+                  {{ 'ADD_WORK_EXP' | translate }}
+                </button>
               </div>
             </div>
           </div>
 
-          <div *ngIf="question.type === InputType.Upload">
-            <div class="upload-file box-dashed m-0">
-              <p class="file-preview">
-                <mat-icon>insert_drive_file</mat-icon>
-                <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
-                <span *ngIf="question.answer.attachment.originalName">{{ appForm.attachment.originalName }}</span>
-                <mat-icon *ngIf="question.answer.attachment.originalName" class="delete"
-                  (click)="clearFile(question.answer.attachment); fileInput.value = ''">
-                  cancel
-                </mat-icon>
-              </p>
-              <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
-              <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
-                [disabled]="loadingUpload">
-                <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
-                <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-                  (change)="uploadFile(question.answer.attachment, $event.target.files)" accept="*"
-                  style="display:none;" />
-              </button>
-            </div>
-          </div>
-
-          <div *ngIf="question.type === InputType.Linear" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <mat-radio-group [(ngModel)]="question.answer.linearValue" [ngModelOptions]="{standalone: true}"
-                [required]="question.required" [disabled]="isDisabled">
-                <div class="linear">
-                  <div *ngIf="question.linear.fromLabel">{{ question.linear.fromLabel }}</div>
-                  <div *ngFor="let linearOption of question.answer.linearOptions">
-                    <p class="m-l-5">{{ linearOption.label }}</p>
-                    <mat-radio-button [value]="linearOption.label"></mat-radio-button>
-                  </div>
-                  <div *ngIf="question.linear.toLabel">{{ question.linear.toLabel }}</div>
+          <!-- Education -->
+          <div class="card" *ngIf="template.education.active">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>school</mat-icon>
+                <p>{{ 'EDUCATION' | translate }}</p>
+                <span *ngIf="!isDisabled">{{ 'EDUCATION_SUB' | translate }}</span>
+              </div>
+              <div *ngFor="let education of appForm.education; let i = index" class="box-dashed m-b-10">
+                <p>
+                  {{ 'EDUCATION' | translate }} ({{ i + 1 }})
+                  <button *ngIf="!isDisabled" mat-icon-button type="button" class="text-gray"
+                    (click)="education.deletion = true" [disabled]="education.deletion">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </p>
+                <div *ngIf="education.deletion" class="deletion">
+                  <span>{{ 'DELETION' | translate }}</span>
+                  <button mat-button type="button" color="warn" (click)="removeEducation(i)">
+                    {{ 'REMOVE' | translate }}
+                  </button>
+                  <button mat-stroked-button type="button" (click)="education.deletion = false">
+                    {{ 'CANCEL' | translate }}
+                  </button>
                 </div>
-              </mat-radio-group>
-            </div>
-          </div>
-
-          <div *ngIf="question.type === InputType.RadioGrid" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <table class="grid">
-                <tr>
-                  <th>&nbsp;</th>
-                  <th>
-                    <div class="grid-item">
-                      <div *ngFor="let col of question.grid.columns">
-                        {{ col.label }}
-                      </div>
-                    </div>
-                  </th>
-                </tr>
-                <tbody>
-                  <tr *ngFor="let gridRadio of question.answer.gridRadio">
-                    <td>{{ gridRadio.rowName }}</td>
-                    <td>
-                      <mat-radio-group [(ngModel)]="gridRadio.value" [ngModelOptions]="{standalone: true}"
-                        [required]="question.required" [disabled]="isDisabled">
-                        <div class="grid-item">
-                          <div *ngFor="let col of question.grid.columns">
-                            <mat-radio-button [value]="col.label"></mat-radio-button>
+                <div class="row">
+                  <div class="col-md-6" *ngIf="template.education.refDegree.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'DEGREE' | translate }}</mat-label>
+                      <mat-select *ngIf="language === 'en'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
+                        [ngModelOptions]="{ standalone: true }" [required]="template.education.refDegree.required"
+                        [disabled]="isDisabled">
+                        <mat-option *ngFor="let degree of degreesEN" [value]="degree.value">
+                          {{ degree.label }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-select *ngIf="language === 'th'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
+                        [ngModelOptions]="{ standalone: true }" [required]="template.education.refDegree.required"
+                        [disabled]="isDisabled">
+                        <mat-option *ngFor="let degree of degreesTH" [value]="degree.value">
+                          {{ degree.label }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3" *ngIf="template.education.gpa.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'GPA' | translate }}</mat-label>
+                      <input matInput type="text" id="gpa{{i}}" name="gpa" [formControl]="f.gpa"
+                        [(ngModel)]="education.gpa" [required]="template.education.gpa.required">
+                      <mat-hint align="start" class="text-red">
+                        <div *ngIf="f.gpa.invalid && (submitted || f.gpa.touched)">
+                          <div *ngIf="f.gpa.errors?.maxLength">
+                            Please enter a valid gpa.
                           </div>
                         </div>
-                      </mat-radio-group>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6" *ngIf="template.education.university.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'UNIVERSITY' | translate }}</mat-label>
+                      <input matInput type="text" id="university{{i}}" [(ngModel)]="education.university"
+                        [ngModelOptions]="{standalone: true}" [required]="template.education.university.required"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6" *ngIf="template.education.major.visible">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'MAJOR' | translate }}</mat-label>
+                      <input matInput type="text" id="major{{i}}" [(ngModel)]="education.major"
+                        [ngModelOptions]="{standalone: true}" [required]="template.education.major.required"
+                        [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!isDisabled" class="add-more">
+                <button mat-flat-button type="button" color="primary" (click)="addEducation()">
+                  <mat-icon>add</mat-icon>
+                  {{ 'ADD_EDUCATION' | translate }}
+                </button>
+              </div>
             </div>
           </div>
 
-          <div *ngIf="question.type === InputType.ChcekBoxGrid" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <table class="grid">
-                <tr>
-                  <th>&nbsp;</th>
-                  <th>
-                    <div class="grid-item">
-                      <div *ngFor="let col of question.grid.columns">
-                        {{ col.label }}
-                      </div>
-                    </div>
-                  </th>
-                </tr>
-                <tbody>
-                  <tr *ngFor="let gridCheckbox of question.answer.gridCheckbox">
-                    <td>{{ gridCheckbox.rowName }}</td>
-                    <td>
-                      <div class="grid-item">
-                        <div *ngFor="let col of gridCheckbox.columns">
-                          <mat-checkbox [(ngModel)]="col.checked" [ngModelOptions]="{standalone: true}"
-                            [disabled]="isDisabled"></mat-checkbox>
+          <!-- Hard Skills -->
+          <div class="card" *ngIf="template.hardSkill.active">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>highlight</mat-icon>
+                <p>{{ 'HARD_SKILLS' | translate }}</p>
+                <span *ngIf="!isDisabled">{{ 'HARD_SKILLS_SUB' | translate }}</span>
+              </div>
+              <div *ngIf="!isDisabled">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'HARD_SKILL' | translate }}</mat-label>
+                      <input matInput (keyup.enter)="addHardSkill()" [(ngModel)]="hardSkill.keyword"
+                        [ngModelOptions]="{standalone: true}"
+                        [disabled]="appForm.hardSkill.length === 20 || isDisabled">
+                      <mat-hint align="end">{{ 'MAX_HARD_SKILLS' | translate }}</mat-hint>
+                      <mat-hint align="start" class="text-red">
+                        <span *ngIf="hardSkill.required">{{ 'HARD_SKILLS_REQUIRED' | translate }}</span>
+                        <span *ngIf="hardSkill.duplication">{{ 'HARD_SKILLS_DUPLICATE' | translate }}</span>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="add-more">
+                  <button mat-flat-button type="button" color="primary" (click)="addHardSkill()"
+                    [disabled]="appForm.hardSkill.length === 20 || isDisabled">
+                    <mat-icon>add</mat-icon>
+                    {{ 'ADD_HARD_SKILL' | translate }}
+                  </button>
+                </div>
+                <div class="text-right text-gray">
+                  <span>{{ appForm.hardSkill.length }}/20</span>
+                </div>
+              </div>
+              <div class="box-dashed">
+                <mat-chip-list>
+                  <mat-chip color="primary" selected>{{ 'HARD_SKILLS' | translate }}</mat-chip> :
+                  <mat-chip *ngFor="let value of appForm.hardSkill; let i = index">
+                    {{ value }}
+                    <mat-icon *ngIf="!isDisabled" matChipRemove (click)="removeHardSkill(i)">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+            </div>
+          </div>
+
+          <!-- Soft Skills -->
+          <div class="card" *ngIf="template.softSkill.active">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>highlight</mat-icon>
+                <p>{{ 'SOFT_SKILLS' | translate }}</p>
+                <span *ngIf="!isDisabled">{{ 'SOFT_SKILLS_SUB' | translate }}</span>
+              </div>
+              <div *ngIf="!isDisabled">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'SOFT_SKILL' | translate }}</mat-label>
+                      <input matInput (keyup.enter)="addSoftSkill()" [(ngModel)]="softSkill.keyword"
+                        [ngModelOptions]="{standalone: true}" [disabled]="appForm.softSkill.length === 20">
+                      <mat-hint align="end">{{ 'MAX_SOFT_SKILLS' | translate }}</mat-hint>
+                      <mat-hint align="start" class="text-red">
+                        <span *ngIf="softSkill.required">{{ 'SOFT_SKILLS_REQUIRED' | translate }}</span>
+                        <span *ngIf="softSkill.duplication">{{ 'SOFT_SKILLS_DUPLICATE' | translate }}</span>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="add-more">
+                  <button mat-flat-button type="button" color="primary" (click)="addSoftSkill()"
+                    [disabled]="appForm.softSkill.length === 20">
+                    <mat-icon>add</mat-icon>
+                    {{ 'ADD_SOFT_SKILL' | translate }}
+                  </button>
+                </div>
+                <div class="text-right text-gray">
+                  <span>{{ appForm.softSkill.length }}/20</span>
+                </div>
+              </div>
+              <div class="box-dashed">
+                <mat-chip-list>
+                  <mat-chip color="primary" selected>{{ 'SOFT_SKILLS' | translate }}</mat-chip> :
+                  <mat-chip *ngFor="let value of appForm.softSkill; let i = index">
+                    {{ value }}
+                    <mat-icon *ngIf="!isDisabled" matChipRemove (click)="removeSoftSkill(i)">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+            </div>
+          </div>
+
+          <!-- Certifications -->
+          <div class="card" *ngIf="template.certificate.active">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>turned_in</mat-icon>
+                <p>{{ 'CERTIFICATIONS' | translate }}</p>
+                <span *ngIf="!isDisabled">{{ 'CERTIFICATIONS_SUB' | translate }}</span>
+              </div>
+              <div *ngIf="!isDisabled">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{ 'CERTIFICATION' | translate }}</mat-label>
+                      <input matInput (keyup.enter)="addCertificate()" [(ngModel)]="certificate.keyword"
+                        [ngModelOptions]="{standalone: true}" [disabled]="appForm.certificate.length === 5">
+                      <mat-hint align="end">{{ 'MAX_CERT' | translate }}</mat-hint>
+                      <mat-hint align="start" class="text-red">
+                        <span *ngIf="certificate.required">{{ 'CERT_REQUIRED' | translate }}</span>
+                        <span *ngIf="certificate.duplication">{{ 'CERT_DUPLICATE' | translate }}</span>
+                      </mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="add-more">
+                  <button mat-flat-button type="button" color="primary" (click)="addCertificate()"
+                    [disabled]="appForm.certificate.length === 5">
+                    <mat-icon>add</mat-icon>
+                    {{ 'ADD_CERT' | translate }}
+                  </button>
+                </div>
+                <div class="text-right text-gray">
+                  <span>{{ appForm.certificate.length }}/5</span>
+                </div>
+              </div>
+              <div class="box-dashed">
+                <mat-chip-list>
+                  <mat-chip color="primary" selected>{{ 'CERTIFICATIONS' | translate }}</mat-chip> :
+                  <mat-chip *ngFor="let value of appForm.certificate; let i = index">
+                    {{ value }}
+                    <mat-icon *ngIf="!isDisabled" matChipRemove (click)="removeCertificate(i)">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resume -->
+          <div class="card" *ngIf="template.uploadCV.active">
+            <mat-progress-bar *ngIf="loadingUpload" mode="indeterminate"></mat-progress-bar>
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>account_box</mat-icon>
+                <p>{{ 'RESUME' | translate }}</p>
+                <span *ngIf="!isDisabled">{{ 'RESUME_SUB' | translate }}</span>
+              </div>
+              <div class="upload-file box-dashed">
+                <p class="file-preview">
+                  <mat-icon>insert_drive_file</mat-icon>
+                  <span *ngIf="!appForm.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
+                  <span *ngIf="appForm.attachment.originalName">{{ appForm.attachment.originalName }}</span>
+                  <mat-icon *ngIf="appForm.attachment.originalName && !isDisabled" class="delete"
+                    (click)="clearFile(appForm.attachment); fileInput.value = ''">
+                    cancel
+                  </mat-icon>
+                </p>
+                <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -
+                    {{ 'MAX_UPLOAD' | translate }})</small></p>
+                <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
+                  [disabled]="loadingUpload">
+                  <mat-icon>cloud_upload</mat-icon> {{ 'UPLOAD_RESUME' | translate }}
+                  <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+                    (change)="uploadFile(appForm.attachment, $event.target.files, true)" accept="*"
+                    style="display:none;" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
+            <button nbButton type="button" (click)="validation() ? stepper.next() : false">
+              {{ 'NEXT' | translate }}
+            </button>
+          </div>
+        </nb-step>
+
+        <!-- --------------------------------------------------------------- -->
+        <!-- STEP 3 -->
+        <nb-step label="{{'STEP' | translate}} 3">
+
+          <!-- Questions -->
+          <div id="question{{iQuestion}}" class="card"
+            *ngFor="let question of appForm.questions; let iQuestion = index;">
+            <div class="card-body">
+
+              <div class="topic" *ngIf="question.type === InputType.Label" style="margin-bottom: 1rem;">
+                <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
+                <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
+              </div>
+              <div class="topic" *ngIf="question.type !== InputType.Label">
+                <mat-icon>help_outline</mat-icon>
+                <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
+                <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
+              </div>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div *ngIf="question.imgaeURL" class="question-image">
+                    <img [src]="question.imgaeURL" class="w-100">
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Input">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <mat-form-field appearance="outline">
+                      <input matInput type="text" [(ngModel)]="question.answer.input" [required]="question.required"
+                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.TextArea">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <mat-form-field appearance="outline">
+                      <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3"
+                        [required]="question.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Radio">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <mat-radio-group [(ngModel)]="question.answer.selected" [required]="question.required"
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                      <div class="row">
+                        <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
+                          [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
+                          <div *ngIf="option.imgaeURL" class="answer-image"
+                            [ngClass]="{ 'active': question.answer.selected === i }"
+                            (click)="question.answer.selected = i">
+                            <img [src]="option.imgaeURL">
+                          </div>
+                          <mat-radio-button [value]="i">
+                            {{ option.label }}
+                          </mat-radio-button>
+                        </div>
+                        <div class="col-md-12">
+                          <mat-radio-button *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
+                            {{ question.answer.otherLabel }}
+                          </mat-radio-button>
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </mat-radio-group>
+                    <mat-form-field appearance="outline"
+                      *ngIf="question.answer.selected === question.answer.options.length">
+                      <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                      <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
+                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.ChcekBox">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8">
+                    <div class="row">
+                      <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
+                        [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
+                        <div *ngIf="option.imgaeURL" class="answer-image" [ngClass]="{ 'active': option.checked }"
+                          (click)="option.checked = !option.checked">
+                          <img [src]="option.imgaeURL">
+                        </div>
+                        <mat-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
+                          [disabled]="isDisabled">
+                          {{ option.label }}
+                        </mat-checkbox>
+                      </div>
+                      <div *ngIf="question.answer.hasOther" class="col-md-12">
+                        <mat-checkbox [(ngModel)]="question.answer.otherChecked" [ngModelOptions]="{standalone: true}"
+                          [disabled]="isDisabled">
+                          {{ question.answer.otherLabel }}
+                        </mat-checkbox>
+                        <mat-form-field appearance="outline" *ngIf="question.answer.otherChecked">
+                          <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                          <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
+                            [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Dropdown" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <mat-form-field appearance="outline" class="fit-content">
+                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="question.answer.selected" [required]="question.required"
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                      <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i">
+                        {{ option.label }}
+                      </mat-option>
+                      <mat-option *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
+                        {{ question.answer.otherLabel }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline"
+                    *ngIf="question.answer.selected === question.answer.options.length">
+                    <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                    <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.ParentChild" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <mat-form-field appearance="outline" class="fit-content">
+                    <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="question.parentSelected" [ngModelOptions]="{standalone: true}"
+                      [required]="question.required" [disabled]="isDisabled">
+                      <mat-option *ngFor="let option of question.parentChild; let i = index;" [value]="i">
+                        {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <div *ngIf="getChild(question)">
+                    <div *ngIf="!getChild(question).isMultiAnswer">
+                      <mat-form-field appearance="outline" class="fit-content">
+                        <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                        <mat-select [(ngModel)]="question.childSelected" [ngModelOptions]="{standalone: true}"
+                          [required]="getChild(question).required" [disabled]="isDisabled">
+                          <mat-option *ngFor="let option of getChild(question).children; let i = index;" [value]="i">
+                            {{ option.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="getChild(question).isMultiAnswer">
+                      <mat-form-field appearance="outline" class="fit-content">
+                        <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+                        <mat-select [formControl]="question.multiChilds" multiple>
+                          <mat-select-trigger>
+                            {{question.multiChilds.value ? question.multiChilds.value[0] : ''}}
+                            <span *ngIf="question.multiChilds.value?.length > 1" class="additional-selection">
+                              (+{{question.multiChilds.value.length - 1}}
+                              {{question.multiChilds.value?.length === 2 ? 'other' : 'others'}})
+                            </span>
+                          </mat-select-trigger>
+                          <mat-option *ngFor="let option of getChild(question).children" [value]="option.name"
+                            [disabled]="isDisabled">
+                            {{ option.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Upload">
+                <div class="upload-file box-dashed m-0">
+                  <p class="file-preview">
+                    <mat-icon>insert_drive_file</mat-icon>
+                    <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
+                    <span *ngIf="question.answer.attachment.originalName">{{ appForm.attachment.originalName }}</span>
+                    <mat-icon *ngIf="question.answer.attachment.originalName" class="delete"
+                      (click)="clearFile(question.answer.attachment); fileInput.value = ''">
+                      cancel
+                    </mat-icon>
+                  </p>
+                  <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
+                  <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
+                    [disabled]="loadingUpload">
+                    <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
+                    <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+                      (change)="uploadFile(question.answer.attachment, $event.target.files)" accept="*"
+                      style="display:none;" />
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Linear" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <mat-radio-group [(ngModel)]="question.answer.linearValue" [ngModelOptions]="{standalone: true}"
+                    [required]="question.required" [disabled]="isDisabled">
+                    <div class="linear">
+                      <div *ngIf="question.linear.fromLabel">{{ question.linear.fromLabel }}</div>
+                      <div *ngFor="let linearOption of question.answer.linearOptions">
+                        <p class="m-l-5">{{ linearOption.label }}</p>
+                        <mat-radio-button [value]="linearOption.label"></mat-radio-button>
+                      </div>
+                      <div *ngIf="question.linear.toLabel">{{ question.linear.toLabel }}</div>
+                    </div>
+                  </mat-radio-group>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.RadioGrid" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <table class="grid">
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>
+                        <div class="grid-item">
+                          <div *ngFor="let col of question.grid.columns">
+                            {{ col.label }}
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                    <tbody>
+                      <tr *ngFor="let gridRadio of question.answer.gridRadio">
+                        <td>{{ gridRadio.rowName }}</td>
+                        <td>
+                          <mat-radio-group [(ngModel)]="gridRadio.value" [ngModelOptions]="{standalone: true}"
+                            [required]="question.required" [disabled]="isDisabled">
+                            <div class="grid-item">
+                              <div *ngFor="let col of question.grid.columns">
+                                <mat-radio-button [value]="col.label"></mat-radio-button>
+                              </div>
+                            </div>
+                          </mat-radio-group>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.ChcekBoxGrid" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <table class="grid">
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>
+                        <div class="grid-item">
+                          <div *ngFor="let col of question.grid.columns">
+                            {{ col.label }}
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                    <tbody>
+                      <tr *ngFor="let gridCheckbox of question.answer.gridCheckbox">
+                        <td>{{ gridCheckbox.rowName }}</td>
+                        <td>
+                          <div class="grid-item">
+                            <div *ngFor="let col of gridCheckbox.columns">
+                              <mat-checkbox [(ngModel)]="col.checked" [ngModelOptions]="{standalone: true}"
+                                [disabled]="isDisabled"></mat-checkbox>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Date" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div class="text-center">
+                    <mat-form-field appearance="outline" style="width: 296px; display: inline-block !important;">
+                      <mat-label>Date</mat-label>
+                      <input matInput type="text" id="date_{{iQuestion}}" name="date" [matDatepicker]="picker"
+                        [(ngModel)]="question.answer.date" readonly (click)="picker.open()"
+                        [required]="question.required" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="question.type === InputType.Time" class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div class="text-center">
+                    <ngb-timepicker id="time_{{iQuestion}}" [(ngModel)]="question.answer.time"
+                      [ngModelOptions]="{standalone: true}" [minuteStep]="minuteStep" [spinners]="false"
+                      [required]="question.required" [disabled]="isDisabled" style="display: inline-block;">
+                    </ngb-timepicker>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
+          <div class="footer">
+            <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
+            <button nbButton type="button" (click)="validation() ? stepper.next() : false">
+              {{ 'NEXT' | translate }}
+            </button>
+          </div>
+        </nb-step>
 
-          <div *ngIf="question.type === InputType.Date" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <div class="text-center">
-                <mat-form-field appearance="outline" style="width: 296px; display: inline-block !important;">
-                  <mat-label>Date</mat-label>
-                  <input matInput type="text" id="date_{{iQuestion}}" name="date" [matDatepicker]="picker"
-                    [(ngModel)]="question.answer.date" readonly (click)="picker.open()" [required]="question.required"
-                    [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
+        <!-- --------------------------------------------------------------- -->
+        <!-- STEP 4 -->
+        <nb-step label="{{'DONE' | translate}}">
+          <div class="card">
+            <div class="card-body">
+              <div class="topic">
+                <mat-icon>check_circle_outline</mat-icon>
+              </div>
+              <div *ngIf="!isDisabled">
+                <div class="row">
+                  <div class="offset-lg-2 col-lg-8 text-center">
+                    <div class="text-gray m-b-20">
+                      <span>{{ 'TERMS_DETAIL' | translate }}</span>
+                      <span class="link underline m-l-5" (click)="openPopupConsent()">
+                        {{ 'PERSONAL_STATEMENT' | translate }}
+                      </span>
+                    </div>
+                    <div class="terms" (click)="openPopupConsent()">
+                      <mat-checkbox [(ngModel)]="isAgree" [ngModelOptions]="{standalone: true}" disabled>
+                        {{ 'TERMS' | translate }}
+                      </mat-checkbox>
+                      <button mat-icon-button type="button">
+                        <mat-icon class="showPhoto">help_outline</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div *ngIf="!isPreview" class="footer">
+            <!-- <button mat-flat-button type="button" (click)="closeWindow()">
+                <mat-icon>close</mat-icon> {{ 'CLOSE' | translate }}
+              </button> -->
+            <!-- <button mat-flat-button color="primary" type="submit" [disabled]="!isAgree">
+              <mat-icon>send</mat-icon> {{ 'SUBMIT' | translate }}
+            </button> -->
 
-          <div *ngIf="question.type === InputType.Time" class="row">
-            <div class="offset-lg-2 col-lg-8">
-              <div class="text-center">
-                <ngb-timepicker id="time_{{iQuestion}}" [(ngModel)]="question.answer.time"
-                  [ngModelOptions]="{standalone: true}" [minuteStep]="minuteStep" [spinners]="false"
-                  [required]="question.required" [disabled]="isDisabled" style="display: inline-block;">
-                </ngb-timepicker>
-              </div>
-            </div>
+            <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
+            <button nbButton status="primary" type="submit" nbStepperNext [disabled]="!isAgree">
+              {{ 'SUBMIT' | translate }}
+            </button>
           </div>
-
-        </div>
-      </div>
-
-      <div *ngIf="!isDisabled">
-        <div class="row">
-          <div class="offset-lg-2 col-lg-8 text-center">
-            <div class="text-gray m-b-20">
-              <small>{{ 'TERMS_DETAIL' | translate }}</small>
-              <small class="link underline m-l-5"
-                (click)="openPopupConsent()">{{ 'PERSONAL_STATEMENT' | translate }}</small>
-            </div>
-            <div class="terms" (click)="openPopupConsent()">
-              <mat-checkbox [(ngModel)]="isAgree" [ngModelOptions]="{standalone: true}" disabled>
-                {{ 'TERMS' | translate }}
-              </mat-checkbox>
-              <button mat-icon-button type="button">
-                <mat-icon class="showPhoto">help_outline</mat-icon>
-              </button>
-            </div>
+          <div *ngIf="isPreview" class="footer">
+            <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
+            <button mat-flat-button type="button" color="primary" (click)="closeWindow()">
+              <mat-icon>close</mat-icon> {{ 'CLOSE_PREVIEW' | translate }}
+            </button>
           </div>
-        </div>
-
-        <div *ngIf="!isPreview" class="footer">
-          <button mat-flat-button type="button" (click)="closeWindow()">
-            <mat-icon>close</mat-icon> {{ 'CLOSE' | translate }}
-          </button>
-          <button mat-flat-button color="primary" type="submit" [disabled]="!isAgree">
-            <mat-icon>send</mat-icon> {{ 'SUBMIT' | translate }}
-          </button>
-        </div>
-        <div *ngIf="isPreview" class="footer-right">
-          <button mat-flat-button type="button" color="primary" (click)="closeWindow()">
-            <mat-icon>close</mat-icon> {{ 'CLOSE_PREVIEW' | translate }}
-          </button>
-        </div>
-      </div>
-
+        </nb-step>
+      </nb-stepper>
     </form>
   </div>
 

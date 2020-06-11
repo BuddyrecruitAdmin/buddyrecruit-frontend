@@ -28,6 +28,7 @@ import { ContactUsComponent } from './contact-us/contact-us.component';
 import { AppFormListComponent } from './app-form/app-form-list/app-form-list.component';
 import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
 import { ConsentListComponent } from './consent/consent-list/consent-list.component';
+import { HubComponent } from './hub/hub.component';
 const routes: Routes = [
   {
     path: '',
@@ -64,6 +65,10 @@ const routes: Routes = [
       {
         path: 'job-position',
         component: JobPositionComponent,
+      },
+      {
+        path: 'hub',
+        component: HubComponent,
       },
       {
         path: 'location',
