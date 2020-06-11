@@ -159,6 +159,10 @@
             <input type="text" [(ngModel)]="address.postalCode" pattern="[0-9]*" inputmode="numeric" digitOnly nbInput>
           </div>
         </div>
+        <div class="form-control-group">
+          <label class="label">Channel ID</label>
+          <input type="text" [(ngModel)]="companyDetail.channelID" nbInput>
+        </div>
       </div>
       <div class="col-md-6">
         <div class="form-control-group">
@@ -438,15 +442,21 @@
       </div>
       <div class="row" *ngIf="role.refHero.isAdmin">
         <div class="col-md-6">
+          <div class="form-control-group">
+            <label class="label">Interview Period Time</label>
+            <input type="text" [(ngModel)]="companyDetail.interviewPeriod" pattern="[0-9]*" inputmode="numeric"
+              digitOnly onKeyPress="if(this.value.length==3) return false;" placeholder="minute" nbInput>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="role.refHero.isAdmin">
+        <div class="col-md-6">
           <label style="font-weight: bold;">Consent Settings</label><br>
           <div class="form-control-group">
             <label class="label">Waiting Period</label>
             <input type="text" [(ngModel)]="companyDetail.waitingPeriod" pattern="[0-9]*" inputmode="numeric" digitOnly
               onKeyPress="if(this.value.length==3) return false;" nbInput>
           </div>
-          <!-- <div>
-            <small *ngIf="errMsg.waitinPeriod" class="text-red">{{ errMsg.waitinPeriod }}</small>
-          </div> -->
         </div>
       </div>
     </div>
