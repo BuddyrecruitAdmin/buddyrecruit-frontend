@@ -1927,6 +1927,14 @@
       text-align: right;
       margin: 1rem 0;
     }
+
+    nb-stepper .header .step.selected,
+    nb-stepper .header .step.selected .label span {
+      color: #274bdb;
+    }
+    nb-stepper .header .step.selected .label-index {
+      border-color: #274bdb;
+    }  
   }
 
   /* Thank you for your information */

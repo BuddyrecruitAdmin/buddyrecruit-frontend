@@ -48,7 +48,7 @@ export class AppFormListComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
-    this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
+    this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
   }
 
   ngOnInit() {
@@ -106,7 +106,7 @@ export class AppFormListComponent implements OnInit {
 
   copyToClipboard(item: any) {
     const el = document.createElement('textarea');
-    el.value = window.location.origin + '/application-form/submit/' + item._id;
+    el.value = window.location.origin + '/application-form/index/' + item._id;
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');

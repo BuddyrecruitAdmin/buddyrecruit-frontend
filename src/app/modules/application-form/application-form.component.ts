@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
-import { DropDownValue } from '../../shared/interfaces';
+import { DropDownValue, DropDownLangValue } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
 import { JdService } from '../../pages/jd/jd.service';
-import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition, NbDialogService } from '@nebular/theme';
+import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition, NbDialogService, NbStepperComponent } from '@nebular/theme';
 import { ResponseCode, InputType, State } from '../../shared/app.constants';
 import { IAppFormTemplate } from '../../pages/setting/app-form/app-form.interface';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -35,9 +35,11 @@ export class ApplicationFormComponent implements OnInit {
   appForm: IApplicationForm;
   formGroup: FormGroup;
 
-  degreesEN: DropDownValue[];
-  degreesTH: DropDownValue[];
-  jrs: DropDownValue[];
+  degreesEN: DropDownValue[] = [];
+  degreesTH: DropDownValue[] = [];
+  jrs: DropDownValue[] = [];
+  hubs: any[] = [];
+  hub: any;
 
   selectedItem = '2';
 
@@ -78,7 +80,9 @@ export class ApplicationFormComponent implements OnInit {
       'Mrs.',
       'Miss',
     ]
-  }
+  };
+
+  stepper: NbStepperComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -92,9 +96,9 @@ export class ApplicationFormComponent implements OnInit {
     private formBuilder: FormBuilder,
   ) {
     this.role = getRole();
-    setLangPath("RESUME");
-    this.language = 'en';
+    this.language = getLanguage() || 'en';
     this.setLang(this.language);
+    setLangPath("RESUME");
   }
 
   ngOnInit() {
@@ -154,13 +158,29 @@ export class ApplicationFormComponent implements OnInit {
             if (element._id && element.refJD && element.refJD.position) {
               this.jrs.push({
                 label: element.refJD.position,
-                value: element._id
+                value: element.refJD.refPosition
               });
             }
           });
         }
       }
-      this.loading = false;
+      this.service.getHub(refCompany).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.hubs = response.data;
+          this.hubs.map(hub => {
+            hub.provinces.map(province => {
+              province.checked = false;
+              province.districts.map(district => {
+                district.checked = false;
+                district.subDistricts.map(subDistrict => {
+                  subDistrict.checked = false;
+                });
+              });
+            });
+          });
+        }
+        this.loading = false;
+      });
     });
   }
 
@@ -190,7 +210,9 @@ export class ApplicationFormComponent implements OnInit {
       refCompany: undefined,
       refTemplate: undefined,
       refJR: undefined,
+      hubs: [],
       otherJob: '',
+      idCard: '',
       title: '',
       firstname: '',
       lastname: '',
@@ -368,6 +390,37 @@ export class ApplicationFormComponent implements OnInit {
     }
   }
 
+  onChangeJR(refJR: string) {
+    this.hub = this.hubs.find(element => {
+      return element.refPosition._id === refJR;
+    });
+  }
+
+  onChangeProvince() {
+    this.hub.provinces.forEach(province => {
+      if (!province.checked) {
+        province.districts.map(district => {
+          district.checked = false;
+          district.subDistricts.forEach(subDistrict => {
+            subDistrict.checked = false;
+          });
+        });
+      }
+    });
+  }
+
+  onChangeDistrict() {
+    this.hub.provinces.forEach(province => {
+      province.districts.map(district => {
+        if (!district.checked) {
+          district.subDistricts.forEach(subDistrict => {
+            subDistrict.checked = false;
+          });
+        }
+      });
+    });
+  }
+
   onChangeBirthday(value: any) {
     const birthDay = new Date(value);
     const ageDifMs = Date.now() - birthDay.getTime();
@@ -542,90 +595,91 @@ export class ApplicationFormComponent implements OnInit {
     this.appForm.questions.forEach((question, index) => {
 
       const element = document.getElementById('question' + index);
-      element.classList.remove("has-error");
-
-      if (question.required) {
-        switch (question.type) {
-          case this.InputType.Input:
-            if (!question.answer.input) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.TextArea:
-            if (!question.answer.textArea) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.Radio:
-            if (question.answer.selected === null) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.ChcekBox:
-            const found = question.answer.options.find(element => {
-              return element.checked;
-            });
-            if (!found && !question.answer.otherChecked) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.Dropdown:
-            if (question.answer.selected === null) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.Upload:
-            if (!question.answer.attachment.uploadName) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.Linear:
-            if (!(question.answer.linearValue >= 0)) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.RadioGrid:
-            question.answer.gridRadio.forEach(gridRadio => {
-              if (!gridRadio.value) {
+      if (element) {
+        element.classList.remove("has-error");
+        if (question.required) {
+          switch (question.type) {
+            case this.InputType.Input:
+              if (!question.answer.input) {
                 isQuestionValid = false;
                 element.classList.add("has-error");
               }
-            });
-            break;
-          case this.InputType.ChcekBoxGrid:
-            question.answer.gridCheckbox.forEach(gridCheckbox => {
-              const found = gridCheckbox.columns.find(column => {
-                return column.checked;
+              break;
+            case this.InputType.TextArea:
+              if (!question.answer.textArea) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+            case this.InputType.Radio:
+              if (question.answer.selected === null) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+            case this.InputType.ChcekBox:
+              const found = question.answer.options.find(element => {
+                return element.checked;
               });
-              if (!found) {
+              if (!found && !question.answer.otherChecked) {
                 isQuestionValid = false;
                 element.classList.add("has-error");
               }
-            });
-            break;
-          case this.InputType.Date:
-            if (!question.answer.date) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-          case this.InputType.Time:
-            if (!question.answer.time) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-            }
-            break;
-        }
+              break;
+            case this.InputType.Dropdown:
+              if (question.answer.selected === null) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+            case this.InputType.Upload:
+              if (!question.answer.attachment.uploadName) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+            case this.InputType.Linear:
+              if (!(question.answer.linearValue >= 0)) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+            case this.InputType.RadioGrid:
+              question.answer.gridRadio.forEach(gridRadio => {
+                if (!gridRadio.value) {
+                  isQuestionValid = false;
+                  element.classList.add("has-error");
+                }
+              });
+              break;
+            case this.InputType.ChcekBoxGrid:
+              question.answer.gridCheckbox.forEach(gridCheckbox => {
+                const found = gridCheckbox.columns.find(column => {
+                  return column.checked;
+                });
+                if (!found) {
+                  isQuestionValid = false;
+                  element.classList.add("has-error");
+                }
+              });
+              break;
+            case this.InputType.Date:
+              if (!question.answer.date) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+            case this.InputType.Time:
+              if (!question.answer.time) {
+                isQuestionValid = false;
+                element.classList.add("has-error");
+              }
+              break;
+          }
 
-        if (!isQuestionValid && !qElement) {
-          qElement = element;
+          if (!isQuestionValid && !qElement) {
+            qElement = element;
+          }
         }
       }
     });
@@ -656,12 +710,40 @@ export class ApplicationFormComponent implements OnInit {
 
   setRequest(): IApplicationForm {
     const request = this.appForm;
+
+    request.hubs = [];
+    this.hub.provinces.forEach(province => {
+      let districts = [];
+      if (province.checked) {
+        province.districts.forEach(district => {
+          let subDistricts = [];
+          if (district.checked) {
+            district.subDistricts.forEach(subDistrict => {
+              if (subDistrict.checked) {
+                subDistricts.push({
+                  subDistrict: subDistrict.refSubDistrict._id
+                });
+              }
+            });
+            districts.push({
+              district: district.refDistrict._id,
+              subDistricts: subDistricts,
+            });
+          }
+        });
+        request.hubs.push({
+          refProvince: province.refProvince._id,
+          districts: districts
+        });
+      }
+    });
+
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
-                      request.road + ' '
-                      request.district + ' '
-                      request.province + ' '
-                      request.postcode;
+    request.road + ' '
+    request.district + ' '
+    request.province + ' '
+    request.postcode;
     if (request.workExperience.work && request.workExperience.work.length) {
       request.workExperience.work.map(element => {
         element.start = new Date(element.start);
