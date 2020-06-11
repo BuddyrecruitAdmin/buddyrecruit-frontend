@@ -37,6 +37,12 @@ export interface DropDownValue {
   value: any;
 }
 
+export interface DropDownLangValue {
+  label: Language;
+  value: any;
+  remark?: string;
+}
+
 export interface DropDownGroup {
   group: string;
   label: string;

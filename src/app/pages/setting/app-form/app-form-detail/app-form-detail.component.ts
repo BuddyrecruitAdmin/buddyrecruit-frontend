@@ -93,6 +93,7 @@ export class AppFormDetailComponent implements OnInit {
       questions: [],
       personalDetail: {
         active: true,
+        idCard: this.initialAction(),
         firstname: this.initialAction(),
         lastname: this.initialAction(),
         birth: this.initialAction(),

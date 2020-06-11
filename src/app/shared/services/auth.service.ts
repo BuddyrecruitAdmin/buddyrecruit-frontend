@@ -35,7 +35,8 @@ import {
   PathName,
   consentFlag,
   companyName,
-  companyId
+  companyId,
+  AppFormIndex
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -290,7 +291,7 @@ export function setLanguage(language: any = null) {
 
 export function getLanguage() {
   const language = JSON.parse(localStorage.getItem(Language));
-  return (!language || language === null) ? undefined : language;
+  return (!language || language === null) ? 'en' : language;
 }
 export function setAllList(all: any = null) {
   localStorage.setItem(allList, JSON.stringify(all));
@@ -369,6 +370,7 @@ export function getCompanyName() {
   const com = JSON.parse(localStorage.getItem(companyName));
   return (!com || com === null) ? undefined : com;
 }
+
 export function setCompanyId(com: any = null) {
   localStorage.setItem(companyId, JSON.stringify(com));
 }
@@ -376,4 +378,13 @@ export function setCompanyId(com: any = null) {
 export function getCompanyId() {
   const com = JSON.parse(localStorage.getItem(companyId));
   return (!com || com === null) ? undefined : com;
+}
+
+export function setAppformIndex(data: any = null) {
+  localStorage.setItem(AppFormIndex, JSON.stringify(data));
+}
+
+export function getAppformIndex() {
+  const data = JSON.parse(localStorage.getItem(AppFormIndex));
+  return (!data || data === null) ? undefined : data;
 }

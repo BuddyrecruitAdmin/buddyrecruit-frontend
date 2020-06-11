@@ -81,6 +81,7 @@ export const PathName = 'PathName';
 export const consentFlag = 'consentFlag';
 export const companyName = 'companyName';
 export const companyId = 'companyId';
+export const AppFormIndex = 'AppFormIndex';
 
 export enum DayOfWeek {
   Sunday = 0,

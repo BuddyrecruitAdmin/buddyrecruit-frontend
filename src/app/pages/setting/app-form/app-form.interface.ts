@@ -15,6 +15,7 @@ export interface IAppFormTemplate {
   questions: IQuestion[];
   personalDetail: {
     active: boolean;
+    idCard: IAction;
     firstname: IAction;
     lastname: IAction;
     birth: IAction;
