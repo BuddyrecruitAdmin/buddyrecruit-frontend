@@ -331,7 +331,8 @@ export class AppFormDetailComponent implements OnInit {
         keywords: [],
         girdRowScore: 0,
         submitScore: 0,
-      }
+      },
+      isLoading: false,
     });
   }
 

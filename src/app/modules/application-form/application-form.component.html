@@ -647,6 +647,7 @@
           <!-- Questions -->
           <div id="question{{iQuestion}}" class="card"
             *ngFor="let question of appForm.questions; let iQuestion = index;">
+            <mat-progress-bar *ngIf="question.isLoading" mode="indeterminate"></mat-progress-bar>
             <div class="card-body">
 
               <div class="topic" *ngIf="question.type === InputType.Label" style="margin-bottom: 1rem;">
@@ -827,7 +828,7 @@
                   <p class="file-preview">
                     <mat-icon>insert_drive_file</mat-icon>
                     <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
-                    <span *ngIf="question.answer.attachment.originalName">{{ appForm.attachment.originalName }}</span>
+                    <span *ngIf="question.answer.attachment.originalName">{{ question.answer.attachment.originalName }}</span>
                     <mat-icon *ngIf="question.answer.attachment.originalName" class="delete"
                       (click)="clearFile(question.answer.attachment); fileInput.value = ''">
                       cancel
@@ -835,10 +836,10 @@
                   </p>
                   <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
                   <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
-                    [disabled]="loadingUpload">
+                    [disabled]="question.isLoading">
                     <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
                     <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-                      (change)="uploadFile(question.answer.attachment, $event.target.files)" accept="*"
+                      (change)="uploadFile(question.answer.attachment, $event.target.files, false, question)" accept="*"
                       style="display:none;" />
                   </button>
                 </div>

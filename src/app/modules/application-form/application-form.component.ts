@@ -352,6 +352,7 @@ export class ApplicationFormComponent implements OnInit {
   initialAnswer() {
     if (this.appForm.questions) {
       this.appForm.questions.map(question => {
+        question.isLoading = false;
         switch (question.type) {
           case InputType.RadioGrid:
             question.answer.gridRadio = [];
@@ -893,7 +894,7 @@ export class ApplicationFormComponent implements OnInit {
     return request;
   }
 
-  uploadFile(target, files: FileList, isCV = false): void {
+  uploadFile(target, files: FileList, isCV = false, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 10) {
       this.showToast('danger', 'File size more than 10MB');
@@ -914,14 +915,20 @@ export class ApplicationFormComponent implements OnInit {
           }
         });
         this.loadingUpload = true;
+        if (question) {
+          question.isLoading = true;
+        }
         this.uploader.uploadItem(queue);
         this.uploader.onSuccessItem = (item, response, status, headers) => {
           const responseData = JSON.parse(response);
           target.uploadName = responseData.uploadName;
-          target.originalName = files[0].name;
+          target.originalName = responseData.originalName;
           target.type = files[0].type;
           target.size = files[0].size;
           this.loadingUpload = false;
+          if (question) {
+            question.isLoading = false;
+          }
         };
       }
     }

@@ -86,6 +86,7 @@ export interface IQuestion {
   multiChilds: any;
   isFilter: boolean;
   score: IScore;
+  isLoading: boolean;
 }
 
 export interface IAnswer {
