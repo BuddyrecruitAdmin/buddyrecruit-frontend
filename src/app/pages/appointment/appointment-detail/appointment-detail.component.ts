@@ -20,9 +20,11 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogR
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from '../../../shared/constants/message';
 import { CandidateService } from '../../candidate/candidate.service';
+import { LocationService } from '../../setting/location/location.service';
 import { CalendarService } from '../../calendar/calendar.service';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
+import { DropDownValue } from '../../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-appointment-detail',
   templateUrl: './appointment-detail.component.html',
@@ -63,6 +65,16 @@ export class AppointmentDetailComponent implements OnInit {
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  locationList: DropDownValue[];
+  filteredListLocation: any;
+  location: any;
+  loadingDialog: any;
+  noticeHeight: any;
+  startDate: any;
+  endDate: any;
+  staffNo: any;
+  time: any;
+  candNo: any;
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -73,11 +85,13 @@ export class AppointmentDetailComponent implements OnInit {
     public candidateService: CandidateService,
     public calendarService: CalendarService,
     public appFormService: AppFormService,
+    private locationService: LocationService
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
       this.router.navigate(['/employer/appointment/list']);
     }
+    this.noticeHeight = window.innerHeight * 0.85;
     this.role = getRole();
     this.jrName = getJdName();
     this.collapseAll = getCollapse();
@@ -146,6 +160,8 @@ export class AppointmentDetailComponent implements OnInit {
     this.keyword = '';
     this.soList = [];
     this.sourceBy = [];
+    this.locationList = [];
+    this.location = '';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -505,6 +521,25 @@ export class AppointmentDetailComponent implements OnInit {
     const path = '/exam-form/view/' + examId + '/' + this.examUserId;
     this.router.navigate([path]);
   }
+
+  // selectDate(dialog: TemplateRef<any>) {
+  //   this.loadingDialog = true;
+  //   this.locationService.getList().subscribe(response => {
+  //     if (response.code === ResponseCode.Success) {
+  //       if (response.data) {
+  //         response.data.map(element => {
+  //           this.locationList.push({
+  //             label: element.name,
+  //             value: element._id
+  //           });
+  //         });
+  //         this.filteredListLocation = this.locationList.slice();
+  //         this.callDialog(dialog);
+  //       }
+  //     }
+  //     this.loadingDialog = false;
+  //   })
+  // }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });

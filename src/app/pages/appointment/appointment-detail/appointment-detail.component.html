@@ -43,6 +43,11 @@
             <nb-checkbox (checkedChange)="filterSource($event,sol._id)" [(ngModel)]="sol.active">{{ sol.name }}
             </nb-checkbox>
           </div>
+          <!-- <button nbButton type="button" status="success" (click)="selectDate(dialogDate)">
+            <nb-icon icon="calendar-outline">
+            </nb-icon>
+            ระบุนัดสัมภาษณ์
+          </button> -->
         </div>
       </div>
     </div>
@@ -397,3 +402,67 @@
     </nb-card-footer>
   </nb-card>
 </ng-template>
+
+<!-- Date -->
+<!-- <ng-template #dialogDate let-data let-ref="dialogRef">
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card-body [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large"
+      nbSpinnerMessage="Loading...">
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="form-control-group">
+            <label>สถานที่</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="location">
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="ExamLists"
+                  (filteredReturn)="filteredListLocation =$event">
+                </mat-select-filter>
+                <mat-option *ngFor="let location of filteredListLocation" [value]="location.value">
+                  {{location.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-control-group">
+            <label>ระบุนัดสัมภาษณ์</label>
+            <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="startDate" [(ngModel)]="startDate" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+            <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="endDate" [(ngModel)]="endDate" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <label>เจ้าหน้าที่สัมภาษณ์</label>
+                <input [(ngModel)]="staffNo" nbInput> คน
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <label>ระยะเวลาที่ใช้สัมภาษณ์ต่อคน</label>
+                <ngb-timepicker [(ngModel)]="time" [minuteStep]="minuteStep" [spinners]="false" class="inline">
+                </ngb-timepicker>
+                ชั่วโมง
+              </div>
+            </div>
+          </div>
+          <div class="form-control-group">
+            <label>จำนวนการรับสัมภาษณ์</label>
+            <input [(ngModel)]="candNo" nbInput disabled> คน
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template> -->
