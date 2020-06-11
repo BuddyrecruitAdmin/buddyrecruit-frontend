@@ -68,6 +68,13 @@ export class AppointmentDetailComponent implements OnInit {
   locationList: DropDownValue[];
   filteredListLocation: any;
   location: any;
+  loadingDialog: any;
+  noticeHeight: any;
+  startDate: any;
+  endDate: any;
+  staffNo: any;
+  time: any;
+  candNo: any;
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -84,6 +91,7 @@ export class AppointmentDetailComponent implements OnInit {
     if (!this.jrId) {
       this.router.navigate(['/employer/appointment/list']);
     }
+    this.noticeHeight = window.innerHeight * 0.85;
     this.role = getRole();
     this.jrName = getJdName();
     this.collapseAll = getCollapse();
@@ -514,22 +522,24 @@ export class AppointmentDetailComponent implements OnInit {
     this.router.navigate([path]);
   }
 
-  selectDate(dialog: TemplateRef<any>) {
-    this.locationService.getList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.map(element => {
-            this.locationList.push({
-              label: element.name,
-              value: element._id
-            });
-          });
-          this.filteredListLocation = this.locationList.slice();
-        }
-      }
-    })
-    this.callDialog(dialog);
-  }
+  // selectDate(dialog: TemplateRef<any>) {
+  //   this.loadingDialog = true;
+  //   this.locationService.getList().subscribe(response => {
+  //     if (response.code === ResponseCode.Success) {
+  //       if (response.data) {
+  //         response.data.map(element => {
+  //           this.locationList.push({
+  //             label: element.name,
+  //             value: element._id
+  //           });
+  //         });
+  //         this.filteredListLocation = this.locationList.slice();
+  //         this.callDialog(dialog);
+  //       }
+  //     }
+  //     this.loadingDialog = false;
+  //   })
+  // }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
