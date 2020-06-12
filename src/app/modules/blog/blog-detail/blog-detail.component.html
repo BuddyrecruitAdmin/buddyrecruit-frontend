@@ -42,8 +42,8 @@
                         (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
                 </li>
                 <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
-                    [routerLink]="'/employer/login'"><span *ngIf="!role">เข้าระบบ</span><span
-                        *ngIf="role">ย้อนกลับ</span>
+                    [routerLink]="'/employer/login'"><span *ngIf="!adminCheck">เข้าระบบ</span><span
+                        *ngIf="adminCheck">ย้อนกลับ</span>
                 </button>
             </ul>
         </div>

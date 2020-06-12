@@ -264,8 +264,8 @@ export class HubComponent implements OnInit {
             this.listAll[index][jIndex].main = this.districtList;
             this.listFiltered[index][jIndex].main = this.listAll[index][jIndex].main.slice();
           }
-          this.loadingDialog = false;
         }
+        this.loadingDialog = false;
       })
     }
   }
@@ -289,8 +289,8 @@ export class HubComponent implements OnInit {
             this.listAll[index][j].sub[jIndex] = this.subDistrictList;
             this.listFiltered[index][j].sub[jIndex] = this.listAll[index][j].sub[jIndex].slice();
           }
-          this.loadingDialog = false;
         }
+        this.loadingDialog = false;
       })
     }
   }
