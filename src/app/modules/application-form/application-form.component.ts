@@ -736,31 +736,33 @@ export class ApplicationFormComponent implements OnInit {
     const request = this.appForm;
 
     request.hubs = [];
-    this.hub.provinces.forEach(province => {
-      let districts = [];
-      if (province.checked) {
-        province.districts.forEach(district => {
-          let subDistricts = [];
-          if (district.checked) {
-            district.subDistricts.forEach(subDistrict => {
-              if (subDistrict.checked) {
-                subDistricts.push({
-                  refSubDistrict: subDistrict.refSubDistrict._id
-                });
-              }
-            });
-            districts.push({
-              refDistrict: district.refDistrict._id,
-              subDistricts: subDistricts,
-            });
-          }
-        });
-        request.hubs.push({
-          refProvince: province.refProvince._id,
-          districts: districts
-        });
-      }
-    });
+    if (this.hub && this.hub.provinces && this.hub.provinces.length) {
+      this.hub.provinces.forEach(province => {
+        let districts = [];
+        if (province.checked) {
+          province.districts.forEach(district => {
+            let subDistricts = [];
+            if (district.checked) {
+              district.subDistricts.forEach(subDistrict => {
+                if (subDistrict.checked) {
+                  subDistricts.push({
+                    refSubDistrict: subDistrict.refSubDistrict._id
+                  });
+                }
+              });
+              districts.push({
+                refDistrict: district.refDistrict._id,
+                subDistricts: subDistricts,
+              });
+            }
+          });
+          request.hubs.push({
+            refProvince: province.refProvince._id,
+            districts: districts
+          });
+        }
+      });
+    }
 
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
