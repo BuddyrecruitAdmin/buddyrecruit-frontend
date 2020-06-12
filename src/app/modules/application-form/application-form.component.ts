@@ -745,12 +745,12 @@ export class ApplicationFormComponent implements OnInit {
             district.subDistricts.forEach(subDistrict => {
               if (subDistrict.checked) {
                 subDistricts.push({
-                  subDistrict: subDistrict.refSubDistrict._id
+                  refSubDistrict: subDistrict.refSubDistrict._id
                 });
               }
             });
             districts.push({
-              district: district.refDistrict._id,
+              refDistrict: district.refDistrict._id,
               subDistricts: subDistricts,
             });
           }
