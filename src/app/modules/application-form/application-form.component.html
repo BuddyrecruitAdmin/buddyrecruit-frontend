@@ -831,7 +831,7 @@
                     <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
                     <span
                       *ngIf="question.answer.attachment.originalName">{{ question.answer.attachment.originalName }}</span>
-                    <mat-icon *ngIf="question.answer.attachment.originalName || !isDisabled" class="delete"
+                    <mat-icon *ngIf="question.answer.attachment.originalName && !isDisabled" class="delete"
                       (click)="clearFile(question.answer.attachment); fileInput.value = ''">
                       cancel
                     </mat-icon>

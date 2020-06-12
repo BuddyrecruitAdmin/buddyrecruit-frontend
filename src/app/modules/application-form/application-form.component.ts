@@ -321,6 +321,21 @@ export class ApplicationFormComponent implements OnInit {
           this.appForm = response.data;
           this.template = response.data.refTemplate;
           this.hub.provinces = this.appForm.hubs || [];
+          if (this.hub.provinces && this.hub.provinces.length) {
+            this.hub.provinces.map(province => {
+              province.checked = true;
+              if (province.districts && province.districts.length) {
+                province.districts.map(district => {
+                  district.checked = true;
+                  if (district.subDistricts && district.subDistricts.length) {
+                    district.subDistricts.map(subDistrict => {
+                      subDistrict.checked = true;
+                    });
+                  }
+                });
+              }
+            });
+          }
 
           this.getJR(this.appForm.refCompany);
 
