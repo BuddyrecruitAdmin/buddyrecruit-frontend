@@ -163,12 +163,12 @@
                                     </div>
                                     <div class="row" *ngIf="option.type === 'file'" style="text-align:center">
                                         <div class="col-md-12 col-lg-12">
-                                            <img *ngIf="!preview" class="img-default" (click)="fileInput.click()"
-                                                [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                             <img *ngIf="preview" class="img-default"
                                                 [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                             <br>
                                             <small *ngIf="!preview" class="text-gray">
+                                                <img *ngIf="!preview" class="img-default" (click)="fileInput.click()"
+                                                    [src]="option.src ? option.src : 'https://image.flaticon.com/icons/svg/2521/2521909.svg'">
                                                 <a style="cursor: pointer;" (click)="fileInput.click()">
                                                     <span class="fa fa-images"></span>
                                                     <input #fileInput type="file"
