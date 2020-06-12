@@ -47,7 +47,8 @@
         <nb-step label="{{'STEP' | translate}} 1">
 
           <!-- JR -->
-          <div class="card" *ngIf="jrs.length && !template.jobPositions.length">
+          <!-- <div class="card" *ngIf="jrs.length && !template.jobPositions.length"> -->
+            <div class="card" *ngIf="jrs.length">
             <div class="card-body">
               <div class="topic">
                 <mat-icon>notifications_active</mat-icon>
