@@ -143,8 +143,7 @@ export class ExtractionComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
-      if (result) {
-      }
+      this.search();
     });
   }
 

@@ -68,10 +68,10 @@ export class AppointmentDetailComponent implements OnInit {
   locationList: DropDownValue[];
   filteredListLocation: any;
   location: any;
-  loadingDialog: any;
+  loadingDialog: boolean;
   noticeHeight: any;
-  startDate: any;
-  endDate: any;
+  sDate: Date;
+  eDate: Date;
   staffNo: any;
   time: any;
   candNo: any;
@@ -162,6 +162,8 @@ export class AppointmentDetailComponent implements OnInit {
     this.sourceBy = [];
     this.locationList = [];
     this.location = '';
+    this.sDate = null;
+    this.eDate = null;
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -522,24 +524,24 @@ export class AppointmentDetailComponent implements OnInit {
     this.router.navigate([path]);
   }
 
-  // selectDate(dialog: TemplateRef<any>) {
-  //   this.loadingDialog = true;
-  //   this.locationService.getList().subscribe(response => {
-  //     if (response.code === ResponseCode.Success) {
-  //       if (response.data) {
-  //         response.data.map(element => {
-  //           this.locationList.push({
-  //             label: element.name,
-  //             value: element._id
-  //           });
-  //         });
-  //         this.filteredListLocation = this.locationList.slice();
-  //         this.callDialog(dialog);
-  //       }
-  //     }
-  //     this.loadingDialog = false;
-  //   })
-  // }
+  selectDate(dialog: TemplateRef<any>) {
+    this.loadingDialog = true;
+    this.locationService.getList().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.map(element => {
+            this.locationList.push({
+              label: element.name,
+              value: element._id
+            });
+          });
+          this.filteredListLocation = this.locationList.slice();
+          this.callDialog(dialog);
+        }
+      }
+      this.loadingDialog = false;
+    })
+  }
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });

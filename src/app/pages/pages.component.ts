@@ -180,7 +180,9 @@ export class PagesComponent {
         if (configuration.jobPosition && configuration.jobPosition.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
-        menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[19]);
+        if (role.refCompany.isExpress) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[19]);
+        }
         if (configuration.examOnline && configuration.examOnline.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[16]);
         }

@@ -225,10 +225,18 @@
                                 </mat-form-field>
                                 <input type="text" [(ngModel)]="sub.remark" nbInput fullWidth
                                     placeholder="จุดสังเกต"><br>
+                                <div class="paddTop1">
+                                    <button *ngIf="dis.refDistrict" nbButton type="button" status="success" size="small"
+                                        (click)="addSubDistrict(dis, i, j)">
+                                        <nb-icon icon="plus-outline">
+                                        </nb-icon>
+                                        เพิ่ม ตำบล
+                                    </button>
+                                </div>
                             </div>
-                            <br>
+                            <!-- <br> -->
                             <!-- button ตำบล -->
-                            <div>
+                            <div *ngIf="dis.subDistricts.length === 0" class="paddTop0">
                                 <button *ngIf="dis.refDistrict" nbButton type="button" status="success" size="small"
                                     (click)="addSubDistrict(dis, i, j)">
                                     <nb-icon icon="plus-outline">

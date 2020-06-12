@@ -43,11 +43,6 @@
             <nb-checkbox (checkedChange)="filterSource($event,sol._id)" [(ngModel)]="sol.active">{{ sol.name }}
             </nb-checkbox>
           </div>
-          <!-- <button nbButton type="button" status="success" (click)="selectDate(dialogDate)">
-            <nb-icon icon="calendar-outline">
-            </nb-icon>
-            ระบุนัดสัมภาษณ์
-          </button> -->
         </div>
       </div>
     </div>
@@ -65,6 +60,13 @@
         </div>
       </div>
     </div>
+    <!-- <div *ngIf="isExpress">
+      <button nbButton type="button" status="success" (click)="selectDate(dialogDate)">
+        <nb-icon icon="calendar-outline">
+        </nb-icon>
+        ระบุนัดสัมภาษณ์
+      </button>
+    </div> -->
   </nb-card-body>
 </nb-card>
 
@@ -405,16 +407,16 @@
 
 <!-- Date -->
 <!-- <ng-template #dialogDate let-data let-ref="dialogRef">
-  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
-    <nb-card-body [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large"
-      nbSpinnerMessage="Loading...">
+  <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
+    [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card-body>
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <div class="form-control-group">
             <label>สถานที่</label>
             <mat-form-field [color]="primary" appearance="outline">
               <mat-select [(ngModel)]="location">
-                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="ExamLists"
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="locationList"
                   (filteredReturn)="filteredListLocation =$event">
                 </mat-select-filter>
                 <mat-option *ngFor="let location of filteredListLocation" [value]="location.value">
@@ -427,7 +429,7 @@
             <label>ระบุนัดสัมภาษณ์</label>
             <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
             <div class="input-group">
-              <input [nbDatepicker]="startDate" [(ngModel)]="startDate" nbInput fullWidth style="cursor: pointer;">
+              <input [nbDatepicker]="startDate" [(ngModel)]="sDate" nbInput fullWidth style="cursor: pointer;">
               <div class="input-group-addon" style="pointer-events: none;">
                 <nb-icon icon="calendar-outline" class="text-green">
                 </nb-icon>
@@ -435,7 +437,7 @@
             </div>
             <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
             <div class="input-group">
-              <input [nbDatepicker]="endDate" [(ngModel)]="endDate" nbInput fullWidth style="cursor: pointer;">
+              <input [nbDatepicker]="endDate" [(ngModel)]="eDate" nbInput fullWidth style="cursor: pointer;">
               <div class="input-group-addon" style="pointer-events: none;">
                 <nb-icon icon="calendar-outline" class="text-green">
                 </nb-icon>
