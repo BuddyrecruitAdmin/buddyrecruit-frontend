@@ -39,7 +39,7 @@ export class ApplicationFormComponent implements OnInit {
   degreesTH: DropDownValue[] = [];
   jrs: DropDownGroup[] = [];
   hubs: any[] = [];
-  hub: any;
+  hub: any = {};
 
   selectedItem = '2';
 
@@ -320,6 +320,8 @@ export class ApplicationFormComponent implements OnInit {
         if (response.data) {
           this.appForm = response.data;
           this.template = response.data.refTemplate;
+          this.hub.provinces = this.appForm.hubs || [];
+
           this.getJR(this.appForm.refCompany);
 
           this.appForm.birth = new Date(this.appForm.birth);

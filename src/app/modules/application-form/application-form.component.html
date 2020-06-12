@@ -70,7 +70,7 @@
               <!-- Hubs -->
               <div *ngIf="appForm.refJR && hubs.length" class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <div class="text-gray">{{ 'PROVINCE' | translate }}</div>
+                  <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div>
                   <div *ngFor="let province of hub.provinces">
                     <mat-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                       (click)="onChangeProvince()" [disabled]="isDisabled">
@@ -78,7 +78,7 @@
                     </mat-checkbox>
 
                     <div *ngIf="province.checked" style="margin-left: 1.5rem;">
-                      <div class="m-t-5 text-gray">{{ 'DISTRICT' | translate }}</div>
+                      <div *ngIf="province.districts.length" class="m-t-5 text-gray">{{ 'DISTRICT' | translate }}</div>
                       <div *ngFor="let district of province.districts">
                         <mat-checkbox [(ngModel)]="district.checked" [ngModelOptions]="{standalone: true}"
                           (click)="onChangeDistrict()" [disabled]="isDisabled">
@@ -86,7 +86,8 @@
                         </mat-checkbox>
 
                         <div *ngIf="district.checked" style="margin-left: 1.5rem;">
-                          <div class="m-t-5 text-gray">{{ 'SUB_DISTRICT' | translate }}</div>
+                          <div *ngIf="district.subDistricts.length" class="m-t-5 text-gray">
+                            {{ 'SUB_DISTRICT' | translate }}</div>
                           <div *ngFor="let subDistrict of district.subDistricts">
                             <mat-checkbox [(ngModel)]="subDistrict.checked" [ngModelOptions]="{standalone: true}"
                               [disabled]="isDisabled">
@@ -828,8 +829,9 @@
                   <p class="file-preview">
                     <mat-icon>insert_drive_file</mat-icon>
                     <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
-                    <span *ngIf="question.answer.attachment.originalName">{{ question.answer.attachment.originalName }}</span>
-                    <mat-icon *ngIf="question.answer.attachment.originalName" class="delete"
+                    <span
+                      *ngIf="question.answer.attachment.originalName">{{ question.answer.attachment.originalName }}</span>
+                    <mat-icon *ngIf="question.answer.attachment.originalName || !isDisabled" class="delete"
                       (click)="clearFile(question.answer.attachment); fileInput.value = ''">
                       cancel
                     </mat-icon>
@@ -953,7 +955,7 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button nbButton type="button" (click)="validation() ? stepper.next() : false">
+            <button *ngIf="!isDisabled" nbButton type="button" (click)="validation() ? stepper.next() : false">
               {{ 'NEXT' | translate }}
             </button>
           </div>
@@ -961,7 +963,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 4 -->
-        <nb-step label="{{'DONE' | translate}}">
+        <nb-step label="{{'DONE' | translate}}" [hidden]="isDisabled">
           <div class="card">
             <div class="card-body">
               <div class="topic">
