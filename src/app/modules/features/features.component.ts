@@ -19,13 +19,18 @@ export class FeaturesComponent implements OnInit {
   navContact: boolean;
   role: any;
   urlSafe: SafeResourceUrl;
+  adminCheck: boolean;
   constructor(
     private utilitiesService: UtilitiesService,
     private router: Router,
     public sanitizer: DomSanitizer
   ) {
     this.devices = this.utilitiesService.getDevice();
+    this.adminCheck = false;
     this.role = getRole();
+    if (this.role && this.role.refHero.isSuperAdmin) {
+      this.adminCheck = true;
+    }
   }
 
   ngOnInit() {

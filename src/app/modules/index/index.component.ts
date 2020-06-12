@@ -141,6 +141,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
   navCom: boolean;
   pathName: any;
   role: any;
+  adminCheck: boolean;
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
@@ -168,7 +169,11 @@ export class IndexComponent implements OnInit, AfterViewInit {
     }
     this.pathName = getPathName();
     setPathName();
+    this.adminCheck = false;
     this.role = getRole();
+    if(this.role && this.role.refHero.isSuperAdmin){
+      this.adminCheck = true;
+    }
   }
 
   ngOnInit() {

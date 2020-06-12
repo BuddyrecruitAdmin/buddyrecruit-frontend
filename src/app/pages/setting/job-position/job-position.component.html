@@ -155,7 +155,7 @@
 </div>
 
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-header>
       Job Position
     </nb-card-header>
