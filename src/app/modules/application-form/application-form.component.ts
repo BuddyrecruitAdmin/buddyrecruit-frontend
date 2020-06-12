@@ -736,7 +736,7 @@ export class ApplicationFormComponent implements OnInit {
     const request = this.appForm;
 
     request.hubs = [];
-    if (this.hub.provinces && this.hub.provinces.length) {
+    if (this.hub && this.hub.provinces && this.hub.provinces.length) {
       this.hub.provinces.forEach(province => {
         let districts = [];
         if (province.checked) {
