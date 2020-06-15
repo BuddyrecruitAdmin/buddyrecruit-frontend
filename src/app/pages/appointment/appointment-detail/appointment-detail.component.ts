@@ -75,6 +75,8 @@ export class AppointmentDetailComponent implements OnInit {
   staffNo: any;
   time: any;
   candNo: any;
+  periodTime: any;
+  diffDay: any;
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -164,6 +166,7 @@ export class AppointmentDetailComponent implements OnInit {
     this.location = '';
     this.sDate = null;
     this.eDate = null;
+    this.periodTime = [];
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -526,6 +529,10 @@ export class AppointmentDetailComponent implements OnInit {
 
   selectDate(dialog: TemplateRef<any>) {
     this.loadingDialog = true;
+    this.periodTime = [];
+    this.periodTime.push({})
+    this.time = 0;
+    this.callDialog(dialog);
     this.locationService.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
@@ -536,11 +543,107 @@ export class AppointmentDetailComponent implements OnInit {
             });
           });
           this.filteredListLocation = this.locationList.slice();
-          this.callDialog(dialog);
         }
       }
       this.loadingDialog = false;
     })
+  }
+
+  checkDate(dialog: TemplateRef<any>) {
+    this.loadingDialog = true;
+    this.callDialog(dialog);
+    this.locationService.getList().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.map(element => {
+            this.locationList.push({
+              label: element.name,
+              value: element._id
+            });
+          });
+          this.filteredListLocation = this.locationList.slice();
+        }
+      }
+      this.loadingDialog = false;
+    })
+  }
+
+  saveDate() {
+    if (this.validation()) {
+      const request = this.setRequest();
+      this.service.saveDate(request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+          this.dialogRef.close();
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+      })
+    }
+  }
+
+  addPeriod() {
+    this.periodTime.push({
+      start: {},
+      end: {}
+    })
+  }
+
+  validation(): boolean {
+    let isValid = true;
+    this.diffDay = this.utilitiesService.calculateDuration2Date(this.sDate, this.eDate);
+    if (!this.location) {
+      isValid = false;
+    }
+    if (!this.sDate) {
+      isValid = false;
+    }
+    if (!this.eDate) {
+      isValid = false;
+    }
+    if (this.sDate > this.eDate) {
+      isValid = false;
+    }
+    this.periodTime.forEach((element, index) => {
+      if (index === 0) {
+        if (!element || !element.start || !element.end) {
+          isValid = false;
+          console.log("check")
+        } else if (element.start.hour > element.end.hour) {
+          isValid = false;
+        }
+      }
+    });
+    if (!this.time) {
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  setRequest(): any {
+    this.setCandidate();
+    const data = {
+      location: this.location,
+      startDate: this.sDate,
+      endDate: this.eDate,
+      periodTime: this.periodTime,
+      staffTotal: this.staffNo,
+      timePerNo: this.time,
+      candidateTotal: this.candNo,
+      refJR: this.jrId
+    }
+    return data;
+  }
+
+  setCandidate() {
+    this.candNo = 0;
+    let diffMIn = 0;
+    debugger
+    this.periodTime.map(element => {
+      diffMIn = ((element.end.hour * 60) + element.end.minute) - ((element.start.hour * 60) + element.start.minute);
+      this.candNo = this.candNo + Math.floor(diffMIn / this.time);
+    })
+    this.candNo = this.candNo * (this.diffDay + 1);
   }
 
   callDialog(dialog: TemplateRef<any>) {

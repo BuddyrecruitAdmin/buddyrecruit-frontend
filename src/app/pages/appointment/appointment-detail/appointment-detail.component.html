@@ -60,13 +60,20 @@
         </div>
       </div>
     </div>
-    <!-- <div *ngIf="isExpress">
-      <button nbButton type="button" status="success" (click)="selectDate(dialogDate)">
-        <nb-icon icon="calendar-outline">
-        </nb-icon>
-        ระบุนัดสัมภาษณ์
-      </button>
-    </div> -->
+    <div *ngIf="isExpress" class="row">
+      <div class="col-md-12 col-lg-12">
+        <button nbButton type="button" status="success" (click)="checkDate(dialogCheck)">
+          <nb-icon icon="calendar-outline">
+          </nb-icon>
+          ดูวันสัมภาษณ์
+        </button>
+        <button nbButton type="button" status="success" (click)="selectDate(dialogDate)">
+          <nb-icon icon="calendar-outline">
+          </nb-icon>
+          ระบุนัดสัมภาษณ์
+        </button>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
 
@@ -406,7 +413,7 @@
 </ng-template>
 
 <!-- Date -->
-<!-- <ng-template #dialogDate let-data let-ref="dialogRef">
+<ng-template #dialogDate let-data let-ref="dialogRef">
   <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
     [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
@@ -427,32 +434,55 @@
           </div>
           <div class="form-control-group">
             <label>ระบุนัดสัมภาษณ์</label>
-            <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
-            <div class="input-group">
-              <input [nbDatepicker]="startDate" [(ngModel)]="sDate" nbInput fullWidth style="cursor: pointer;">
-              <div class="input-group-addon" style="pointer-events: none;">
-                <nb-icon icon="calendar-outline" class="text-green">
-                </nb-icon>
+            <div class="row justify-content-center">
+              <div class="col-md-5 col-lg-5">
+                <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
+                <div class="input-group">
+                  <input [nbDatepicker]="startDate" [(ngModel)]="sDate" nbInput fullWidth style="cursor: pointer;">
+                  <div class="input-group-addon" style="pointer-events: none;">
+                    <nb-icon icon="calendar-outline" class="text-green">
+                    </nb-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1 col-lg-1">
+                <i style="padding-top:14px" class="fas fa-minus"></i>
+              </div>
+              <div class="col-md-5 col-lg-5">
+                <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
+                <div class="input-group">
+                  <input [nbDatepicker]="endDate" [(ngModel)]="eDate" nbInput fullWidth style="cursor: pointer;">
+                  <div class="input-group-addon" style="pointer-events: none;">
+                    <nb-icon icon="calendar-outline" class="text-green">
+                    </nb-icon>
+                  </div>
+                </div>
               </div>
             </div>
-            <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
-            <div class="input-group">
-              <input [nbDatepicker]="endDate" [(ngModel)]="eDate" nbInput fullWidth style="cursor: pointer;">
-              <div class="input-group-addon" style="pointer-events: none;">
-                <nb-icon icon="calendar-outline" class="text-green">
-                </nb-icon>
+            <div class="row">
+              <div style="text-align: center;" class="col-md-12 col-lg-12">
+                <label style="padding-top: 1rem;">ช่วงเวลา</label>
+                <div *ngFor="let pTime of periodTime;" class="form-control-group">
+                  <ngb-timepicker [(ngModel)]="pTime.start" [minuteStep]="minuteStep" [spinners]="false" class="inline">
+                  </ngb-timepicker> -
+                  <ngb-timepicker [(ngModel)]="pTime.end" [minuteStep]="minuteStep" [spinners]="false" class="inline">
+                  </ngb-timepicker>
+                </div>
+                <button nbButton type="button" status="success" size="small" (click)="addPeriod()">
+                  <nb-icon icon="plus-outline">
+                  </nb-icon>
+                  เพิ่มช่วงเวลา
+                </button>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 col-lg-6">
-                <label>เจ้าหน้าที่สัมภาษณ์</label>
-                <input [(ngModel)]="staffNo" nbInput> คน
+                <label>เจ้าหน้าที่สัมภาษณ์(คน)</label>
+                <input [(ngModel)]="staffNo" nbInput>
               </div>
               <div class="col-md-6 col-lg-6">
-                <label>ระยะเวลาที่ใช้สัมภาษณ์ต่อคน</label>
-                <ngb-timepicker [(ngModel)]="time" [minuteStep]="minuteStep" [spinners]="false" class="inline">
-                </ngb-timepicker>
-                ชั่วโมง
+                <label>ระยะเวลาสัมภาษณ์ต่อคน(นาที)</label>
+                <input [(ngModel)]="time" type="number" nbInput>
               </div>
             </div>
           </div>
@@ -464,7 +494,22 @@
       </div>
     </nb-card-body>
     <nb-card-footer>
+      <button nbButton status="success" (click)="saveDate()">Save</button>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
     </nb-card-footer>
   </nb-card>
-</ng-template> -->
+</ng-template>
+
+<!-- checkDate -->
+<ng-template #dialogCheck let-data let-ref="dialogRef">
+  <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
+    [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card-body>
+      sss
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="success" (click)="saveDate()">Save</button>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

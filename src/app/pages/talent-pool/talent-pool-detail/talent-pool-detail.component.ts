@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
+import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -65,6 +65,27 @@ export class TalentPoolDetailComponent implements OnInit {
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  filter: {
+    isFilter: boolean,
+    data: {
+      province: DropDownValue[],
+      district: DropDownValue[]
+      subDistrict: DropDownValue[]
+    },
+    temp: {
+      province: DropDownValue[],
+      district: DropDownValue[],
+      subDistrict: DropDownValue[]
+    },
+    selected: {
+      province: any,
+      district: any,
+      subDistrict: any;
+    }
+  };
+  filteredProvince: any;
+  filteredDistrict: any;
+  filteredSubDistrict: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -137,6 +158,24 @@ export class TalentPoolDetailComponent implements OnInit {
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
+    }
+    this.filter = {
+      isFilter: true,
+      data: {
+        province: [],
+        district: [],
+        subDistrict: [],
+      },
+      temp: {
+        province: [],
+        district: [],
+        subDistrict: [],
+      },
+      selected: {
+        province: [],
+        district: [],
+        subDistrict: [],
+      }
     }
     this.onModel();
   }
@@ -248,6 +287,8 @@ export class TalentPoolDetailComponent implements OnInit {
               }
             }
           });
+          // filter hub
+
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
 

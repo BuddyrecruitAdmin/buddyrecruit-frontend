@@ -109,6 +109,7 @@ import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.compon
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { PopupConsentComponent } from './popup-consent/popup-consent.component';
 import { PopupExtractionComponent } from './popup-extraction/popup-extraction.component';
+import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-appointment-date.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -218,6 +219,7 @@ import { PopupExtractionComponent } from './popup-extraction/popup-extraction.co
     PopupExamFormComponent,
     PopupConsentComponent,
     PopupExtractionComponent,
+    PopupAppointmentDateComponent,
   ],
   exports: [
     PopupMessageComponent,

@@ -70,6 +70,8 @@ export const API_ENDPOINT = {
   PENDING_APPOINTMENT: {
     LIST: "pendingAppointment/list",
     DETAIL: "pendingAppointment/detail",
+    DATE_CREATE: "appointmentDate/create",
+    DATE_LIST: "appontmentDate/list"
   },
   PENDING_INTERVIEW: {
     LIST: "pendingInterview/list",

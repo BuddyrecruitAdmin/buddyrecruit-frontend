@@ -42,5 +42,19 @@ export class AppointmentService extends NetworkService {
     };
     return this.post(API_ENDPOINT.TALENT_POOL.SOURCE, body);
   }
-  
+
+  saveDate(item: any): Observable<ApiResponse> {
+    const body = {
+      item
+    };
+    return this.post(API_ENDPOINT.PENDING_APPOINTMENT.DATE_CREATE, body);
+  }
+
+  listDate(jrId: string): Observable<ApiResponse> {
+    const body = {
+      jrId
+    };
+    return this.post(API_ENDPOINT.PENDING_APPOINTMENT.DATE_LIST, body);
+  }
+
 }
