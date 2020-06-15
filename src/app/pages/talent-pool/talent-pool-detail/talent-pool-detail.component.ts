@@ -385,19 +385,19 @@ export class TalentPoolDetailComponent implements OnInit {
       this.tabs.map(element => {
         switch (element.name) {
           case 'NOT BUY':
-            element.badgeText = count.notBuy;
+            element.badgeText = count.data;
             element.badgeStatus = 'default';
             break;
           case 'PENDING':
-            element.badgeText = count.pending;
+            element.badgeText = count.data;
             element.badgeStatus = 'danger';
             break;
           case 'SELECTED':
-            element.badgeText = count.selected;
+            element.badgeText = count.data;
             element.badgeStatus = 'default';
             break;
           case 'REJECTED':
-            element.badgeText = count.rejected;
+            element.badgeText = count.data;
             element.badgeStatus = 'default';
             break;
           default:
