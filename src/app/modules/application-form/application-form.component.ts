@@ -1,9 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -12,7 +18,6 @@ import { NbToastrService, NbComponentStatus, NbGlobalPhysicalPosition, NbDialogS
 import { ResponseCode, InputType, State } from '../../shared/app.constants';
 import { IAppFormTemplate } from '../../pages/setting/app-form/app-form.interface';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
-import { MatDialog } from '@angular/material';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 
 import { API_ENDPOINT } from '../../shared/constants';
@@ -24,8 +29,18 @@ import { PopupConsentComponent } from '../../component/popup-consent/popup-conse
 @Component({
   selector: 'ngx-application-form',
   templateUrl: './application-form.component.html',
-  styleUrls: ['./application-form.component.scss']
+  styleUrls: ['./application-form.component.scss'],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ],
 })
+
 export class ApplicationFormComponent implements OnInit {
   InputType = InputType;
   language: string;
@@ -68,21 +83,10 @@ export class ApplicationFormComponent implements OnInit {
   isAgree = false;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
-
-  title = {
-    th: [
-      'นาย',
-      'นาง',
-      'นางสาว',
-    ],
-    en: [
-      'Mr.',
-      'Mrs.',
-      'Miss',
-    ]
-  };
-
   stepper: NbStepperComponent;
+
+  refCompany = '';
+  refPosition = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -94,6 +98,7 @@ export class ApplicationFormComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     private dialogService: NbDialogService,
     private formBuilder: FormBuilder,
+    private _adapter: DateAdapter<any>
   ) {
     this.role = getRole();
     this.language = getLanguage() || 'en';
@@ -111,6 +116,8 @@ export class ApplicationFormComponent implements OnInit {
       const refCompany = params.id;
       const refTemplate = params.id;
       const refAppform = params.id;
+
+      this.refCompany = refCompany;
 
       if (action) {
         if (action === State.Preview) {
@@ -147,6 +154,8 @@ export class ApplicationFormComponent implements OnInit {
   setLang(lang) {
     this.language = lang;
     this.translate.use(lang);
+    this._adapter.setLocale(lang === 'en' ? 'en-GB' : 'th-TH');
+    setLanguage(this.language);
   }
 
   getJR(refCompany: string) {
@@ -249,7 +258,8 @@ export class ApplicationFormComponent implements OnInit {
   initialForm() {
     this.formGroup = this.formBuilder.group({
       email: [{ value: '', disabled: this.isDisabled }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
-      phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+      // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+      phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{10}$')]],
       postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
       gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
     });
@@ -265,8 +275,8 @@ export class ApplicationFormComponent implements OnInit {
     };
   }
 
-  getTemplate(refCompany: string, refTemplate: string) {
-    this.service.getTemplate(refCompany, refTemplate).subscribe(response => {
+  getTemplate(refCompany: string, refTemplate: string, refPosition = undefined) {
+    this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.template = response.data;
@@ -418,6 +428,7 @@ export class ApplicationFormComponent implements OnInit {
         return element.refPosition._id === refPosition.group;
       });
     }
+    this.refPosition = refPosition.group;
   }
 
   onChangeProvince() {

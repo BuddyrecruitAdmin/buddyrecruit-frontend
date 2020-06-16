@@ -291,7 +291,7 @@ export function setLanguage(language: any = null) {
 
 export function getLanguage() {
   const language = JSON.parse(localStorage.getItem(Language));
-  return (!language || language === null) ? 'en' : language;
+  return (!language || language === null) ? undefined : language;
 }
 export function setAllList(all: any = null) {
   localStorage.setItem(allList, JSON.stringify(all));

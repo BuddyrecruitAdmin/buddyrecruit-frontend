@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import {
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, setAppformIndex } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -13,9 +18,19 @@ import { ApplicationFormService } from '../../application-form.service';
 @Component({
   selector: 'ngx-application-form-index',
   templateUrl: './application-form-index.component.html',
-  styleUrls: ['./application-form-index.component.scss']
+  styleUrls: ['./application-form-index.component.scss'],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  ],
 })
 export class ApplicationFormIndexComponent implements OnInit {
+  role: any;
   innerHeight: any;
   language = 'en';
   loading = false;
@@ -33,7 +48,10 @@ export class ApplicationFormIndexComponent implements OnInit {
     public matDialog: MatDialog,
     private utilitiesService: UtilitiesService,
     private service: ApplicationFormService,
+    private _adapter: DateAdapter<any>
   ) {
+    this.role = getRole();
+    console.log(this.role);
     this.innerHeight = window.innerHeight;
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
@@ -49,6 +67,7 @@ export class ApplicationFormIndexComponent implements OnInit {
   setLang(lang) {
     this.language = lang;
     this.translate.use(lang);
+    this._adapter.setLocale(lang === 'en' ? 'en-GB' : 'th-TH');
     setLanguage(this.language);
   }
 

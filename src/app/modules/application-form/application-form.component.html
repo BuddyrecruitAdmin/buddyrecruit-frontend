@@ -48,7 +48,7 @@
 
           <!-- JR -->
           <!-- <div class="card" *ngIf="jrs.length && !template.jobPositions.length"> -->
-            <div class="card" *ngIf="jrs.length">
+          <div class="card" *ngIf="jrs.length">
             <div class="card-body">
               <div class="topic">
                 <mat-icon>notifications_active</mat-icon>
@@ -104,7 +104,8 @@
             </div>
           </div>
           <div class="footer-right">
-            <button nbButton type="button" nbStepperNext [disabled]="!appForm.refJR">
+            <button nbButton type="button" nbStepperNext (click)="getTemplate(refCompany, undefined, refPosition)"
+              [disabled]="!appForm.refJR">
               {{ 'NEXT' | translate }}
             </button>
           </div>
@@ -178,7 +179,7 @@
                       [disabled]="isDisabled">
                   </mat-form-field>
                 </div>
-                <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
+                <div class="col-md-6" *ngIf="template.personalDetail.birth.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
                     <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate"
@@ -190,18 +191,19 @@
                     <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
                 </div>
-                <div class="col-md-2" *ngIf="template.personalDetail.birth.visible">
+                <!-- <div class="col-md-2" *ngIf="template.personalDetail.birth.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'AGE' | translate }}</mat-label>
                     <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age" disabled
                       [required]="template.personalDetail.age.required" [ngModelOptions]="{standalone: true}">
                   </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'PHONE' | translate }}</mat-label>
                     <input matInput type="text" id="phone" name="phone" [formControl]="f.phone"
-                      [(ngModel)]="appForm.phone" [required]="template.personalDetail.phone.required">
+                      [(ngModel)]="appForm.phone" [required]="template.personalDetail.phone.required" digitOnly
+                      onKeyPress="if(this.value.length === 10) return false;">
                     <mat-hint align="start" class="text-red">
                       <div *ngIf="f.phone.invalid && (submitted || f.phone.touched)">
                         <div *ngIf="f.phone.errors?.pattern">
@@ -267,7 +269,8 @@
                     <mat-form-field appearance="outline">
                       <mat-label>{{ 'POSTCODE' | translate }}</mat-label>
                       <input matInput type="text" id="postcode" name="postcode" [formControl]="f.postcode"
-                        [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required">
+                        [(ngModel)]="appForm.postcode" [required]="template.personalDetail.address.required" digitOnly
+                        onKeyPress="if(this.value.length === 5) return false;">
                       <mat-hint align="start" class="text-red">
                         <div *ngIf="f.postcode.invalid && (submitted || f.postcode.touched)">
                           <div *ngIf="f.postcode.errors?.pattern">

@@ -12,6 +12,12 @@ import { setAppFormData, getRole } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
 import { FormControl } from '@angular/forms';
 
+export interface IPosition {
+  id: string;
+  name: string;
+  active: boolean;
+}
+
 @Component({
   selector: 'ngx-app-form-detail',
   templateUrl: './app-form-detail.component.html',
@@ -44,8 +50,10 @@ export class AppFormDetailComponent implements OnInit {
   lenearTo = [2, 3, 4, 5, 6, 7, 8, 9, 10];
   totalScore = 0;
   questionError: string;
+  jobPositionError: string;
   isExpress = false;
   refCompany: string;
+  jobPositions: IPosition[] = [];
 
   constructor(
     private router: Router,
@@ -77,7 +85,7 @@ export class AppFormDetailComponent implements OnInit {
 
   initialModel() {
     this.appForm = {
-      _id: '',
+      _id: undefined,
       refCompany: this.role.refCompany._id,
       companyName: this.role.refCompany.name,
       formName: 'Application Form',
@@ -361,32 +369,32 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.questions[iQuestion].answer.options.splice(iOption, 1);
   }
 
-  addNode() {
-    this.appForm.jobPositions.push({
-      refPosition: '',
-      name: `Job Position ${this.appForm.jobPositions.length + 1}`,
-      required: false,
-      isMultiAnswer: false,
-      children: [],
-    });
-  }
+  // addNode() {
+  //   this.appForm.jobPositions.push({
+  //     refPosition: '',
+  //     name: `Job Position ${this.appForm.jobPositions.length + 1}`,
+  //     required: false,
+  //     isMultiAnswer: false,
+  //     children: [],
+  //   });
+  // }
 
-  deleteNode(iNode: number) {
-    this.appForm.jobPositions.splice(iNode, 1);
-  }
+  // deleteNode(iNode: number) {
+  //   this.appForm.jobPositions.splice(iNode, 1);
+  // }
 
-  addNodeItem(iNode: number) {
-    this.appForm.jobPositions[iNode].children.push({
-      name: `Child ${this.appForm.jobPositions[iNode].children.length + 1}`,
-      required: false,
-      isMultiAnswer: false,
-      children: [],
-    });
-  }
+  // addNodeItem(iNode: number) {
+  //   this.appForm.jobPositions[iNode].children.push({
+  //     name: `Child ${this.appForm.jobPositions[iNode].children.length + 1}`,
+  //     required: false,
+  //     isMultiAnswer: false,
+  //     children: [],
+  //   });
+  // }
 
-  deleteNodeItem(iNode: number, iNodeItem: number) {
-    this.appForm.jobPositions[iNode].children.splice(iNodeItem, 1);
-  }
+  // deleteNodeItem(iNode: number, iNodeItem: number) {
+  //   this.appForm.jobPositions[iNode].children.splice(iNodeItem, 1);
+  // }
 
   addParent(iQuestion: number): void {
     this.appForm.questions[iQuestion].parentChild.push({
@@ -608,6 +616,7 @@ export class AppFormDetailComponent implements OnInit {
   validation(): boolean {
     let isValid = true;
     this.questionError = '';
+    this.jobPositionError = '';
 
     const elements = document.getElementsByClassName('mat-input-element ng-invalid');
     if (elements.length > 0) {
@@ -629,6 +638,13 @@ export class AppFormDetailComponent implements OnInit {
       }
     }
 
+    if (this.isExpress) {
+      if (!this.jobPositions.find(jobPosition => jobPosition.active)) {
+        this.jobPositionError = '* Please select at least job position.';
+        isValid = false;
+      }
+    }
+
     return isValid;
   }
 
@@ -638,32 +654,33 @@ export class AppFormDetailComponent implements OnInit {
     if (this.state === State.Create) {
       delete request._id;
     }
+    this.jobPositions.forEach(jobPosition => {
+      request.jobPositions.push(jobPosition.id);
+    });
     return request;
   }
 
   getJobPosition() {
-    // this.loadingJob = true;
-    // this.service.getJobPosition().subscribe(response => {
-    //   if (response.code === ResponseCode.Success) {
-    //     if (response.data) {
-    //       response.data.forEach(data => {
-    //         const found = this.appForm.jobPositions.find(jobPosition => {
-    //           return jobPosition.refPosition === data._id;
-    //         });
-    //         if (!found) {
-    //           this.appForm.jobPositions.push({
-    //             refPosition: data._id,
-    //             name: data.name,
-    //             required: false,
-    //             isMultiAnswer: false,
-    //             children: [],
-    //           });
-    //         }
-    //       });
-    //     }
-    //   }
-    //   this.loadingJob = false;
-    // });
+    this.jobPositions = [];
+    this.loadingJob = true;
+    this.service.getJobPosition(this.appForm._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.forEach(data => {
+            let active = false;
+            if (this.appForm.jobPositions.find((jobPosition) => jobPosition === data._id)) {
+              active = true;
+            }
+            this.jobPositions.push({
+              id: data._id,
+              name: data.name,
+              active: active
+            });
+          });
+        }
+      }
+      this.loadingJob = false;
+    });
   }
 
   getDetail() {
@@ -673,6 +690,7 @@ export class AppFormDetailComponent implements OnInit {
           this.appForm = response.data;
           this.appForm.companyName = this.role.refCompany.name;
           this.calGrandScore();
+          this.getJobPosition();
         }
       } else {
         this.showToast('danger', response.message || 'Error!');

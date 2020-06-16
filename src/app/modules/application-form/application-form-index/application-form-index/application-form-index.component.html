@@ -10,10 +10,12 @@
             <span class="cursor" [ngClass]="{ 'text-green' : language === 'th' }" (click)="setLang('th')">ไทย</span>
           </div>
           <div class="title">{{ 'APP_FROM' | translate }}</div>
+          <div *ngIf="role?.refCompany?.name" class="sub-title">{{ role?.refCompany?.name }}</div>
           <mat-form-field appearance="outline">
             <mat-label>{{ 'PHONE' | translate }}</mat-label>
             <input matInput type="text" id="phone" name="phone" [(ngModel)]="phone"
-              [ngModelOptions]="{standalone: true}" required>
+              [ngModelOptions]="{standalone: true}" required digitOnly
+              onKeyPress="if(this.value.length === 10) return false;">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
