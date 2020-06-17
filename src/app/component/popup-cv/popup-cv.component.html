@@ -248,7 +248,7 @@
     <!-- <div class="border-all"></div> -->
 
     <!-- CV Score -->
-    <div class="border-padtop">
+    <div *ngIf="!isExpress" class="border-padtop">
       <div class="title">
         <label class="label">CV Score
           <span class="fas fa-check" (click)="toggleCheck('CV Score', 'CV Score')" [matTooltip]="Checked"
@@ -378,7 +378,7 @@
       </div> -->
     </div>
     <!-- Work Experience -->
-    <div class="border-padtop">
+    <div *ngIf="!isExpress" class="border-padtop">
       <div class="title">
         <label class="label">Work Experience
           <span class="fas fa-check" (click)="toggleCheck('Work Experience', 'Work Experience')" [matTooltip]="Checked"
@@ -420,7 +420,7 @@
     </div>
 
     <!-- Education -->
-    <div class="border-padtop">
+    <div *ngIf="!isExpress" class="border-padtop">
       <div class="title">
         <label class="label">Education
           <span class="fas fa-check" (click)="toggleCheck('Education', 'Education')" [matTooltip]="Checked"
@@ -489,7 +489,7 @@
       </div>
     </div>
     <!-- Hard Skill -->
-    <div class="border-padtop">
+    <div *ngIf="!isExpress" class="border-padtop">
       <div class="title">
         <label class="label">Hard Skill
           <span class="fas fa-check" (click)="toggleCheck('Hard Skill', 'Hard Skill')" [matTooltip]="Checked"
@@ -528,7 +528,7 @@
     </div>
 
     <!-- Soft Skill -->
-    <div class="border-padtop">
+    <div *ngIf="!isExpress" class="border-padtop">
       <div class="title">
         <label class="label">Soft Skill
           <span class="fas fa-check" (click)="toggleCheck('Soft Skill', 'Soft Skill')" [matTooltip]="Checked"
@@ -569,7 +569,7 @@
     </div>
 
     <!-- Certificate -->
-    <div class="border-padtop">
+    <div *ngIf="!isExpress" class="border-padtop">
       <div class="title">
         <label class="label">Certificate
           <span class="fas fa-check" (click)="toggleCheck('Certificate', 'Certificate')" [matTooltip]="Checked"
