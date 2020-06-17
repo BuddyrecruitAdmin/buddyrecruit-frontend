@@ -72,11 +72,13 @@ export class AppointmentDetailComponent implements OnInit {
   noticeHeight: any;
   sDate: Date;
   eDate: Date;
-  staffNo: any;
-  time: any;
-  candNo: any;
+  staffTotal: any;
+  timePerNo: any;
+  candidateTotal: any;
   periodTime: any;
   diffDay: any;
+  sError: string;
+  listTime: any;
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -531,7 +533,7 @@ export class AppointmentDetailComponent implements OnInit {
     this.loadingDialog = true;
     this.periodTime = [];
     this.periodTime.push({})
-    this.time = 0;
+    this.timePerNo = 0;
     this.callDialog(dialog);
     this.locationService.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -550,19 +552,12 @@ export class AppointmentDetailComponent implements OnInit {
   }
 
   checkDate(dialog: TemplateRef<any>) {
+    this.listTime = [];
     this.loadingDialog = true;
     this.callDialog(dialog);
-    this.locationService.getList().subscribe(response => {
+    this.service.listDate(this.jrId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          response.data.map(element => {
-            this.locationList.push({
-              label: element.name,
-              value: element._id
-            });
-          });
-          this.filteredListLocation = this.locationList.slice();
-        }
+        this.listTime = response.data;
       }
       this.loadingDialog = false;
     })
@@ -590,32 +585,56 @@ export class AppointmentDetailComponent implements OnInit {
   }
 
   validation(): boolean {
+    this.sError = '';
     let isValid = true;
     this.diffDay = this.utilitiesService.calculateDuration2Date(this.sDate, this.eDate);
     if (!this.location) {
       isValid = false;
+      this.sError = this.sError || MESSAGE[107];
     }
     if (!this.sDate) {
       isValid = false;
+      this.sError = this.sError || MESSAGE[33];
     }
     if (!this.eDate) {
       isValid = false;
+      this.sError = this.sError || MESSAGE[33];
     }
     if (this.sDate > this.eDate) {
       isValid = false;
+      this.sError = this.sError || MESSAGE[32];
     }
     this.periodTime.forEach((element, index) => {
-      if (index === 0) {
-        if (!element || !element.start || !element.end) {
+      if (!element || !element.start || !element.end || !element.start.hour || !element.end.hour) {
+        isValid = false;
+        this.sError = this.sError || 'Please complete all period time fields.';
+      } else if (element.start.hour > element.end.hour) {
+        isValid = false;//เวลาเริ่มมากกว่าเวลาจบ
+        this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+      } else if (element.start.hour === element.end.hour) {
+        if (element.start.minute > element.end.minute) {
           isValid = false;
-          console.log("check")
-        } else if (element.start.hour > element.end.hour) {
+          //เวลาเริ่มนาทีมากกว่า เวลาจบ
+          this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+        }
+      }
+      if (index > 0) {
+        if (this.periodTime[index - 1].end.hour > element.start.hour) {
           isValid = false;
+          this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+        }
+        if (this.periodTime[index - 1].end.hour === element.start.hour) {
+          if (this.periodTime[index - 1].end.minute > element.start.minute) {
+            isValid = false;
+            //เวลาเริ่มนาทีมากกว่า เวลาจบ
+            this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+          }
         }
       }
     });
-    if (!this.time) {
+    if (!this.timePerNo) {
       isValid = false;
+      this.sError = this.sError || 'โปรดใส่ระยะเวลาสัมภาษณ์ต่อคน';
     }
     return isValid;
   }
@@ -627,23 +646,26 @@ export class AppointmentDetailComponent implements OnInit {
       startDate: this.sDate,
       endDate: this.eDate,
       periodTime: this.periodTime,
-      staffTotal: this.staffNo,
-      timePerNo: this.time,
-      candidateTotal: this.candNo,
+      staffTotal: this.staffTotal,
+      timePerNo: this.timePerNo,
+      candidateTotal: this.candidateTotal,
       refJR: this.jrId
     }
     return data;
   }
 
   setCandidate() {
-    this.candNo = 0;
+    this.candidateTotal = 0;
     let diffMIn = 0;
-    debugger
     this.periodTime.map(element => {
       diffMIn = ((element.end.hour * 60) + element.end.minute) - ((element.start.hour * 60) + element.start.minute);
-      this.candNo = this.candNo + Math.floor(diffMIn / this.time);
+      this.candidateTotal = this.candidateTotal + Math.floor(diffMIn / this.timePerNo);
     })
-    this.candNo = this.candNo * (this.diffDay + 1);
+    this.candidateTotal = this.candidateTotal * (this.diffDay + 1);
+  }
+
+  deleteTime(index) {
+    this.periodTime.splice(index, 1);
   }
 
   callDialog(dialog: TemplateRef<any>) {

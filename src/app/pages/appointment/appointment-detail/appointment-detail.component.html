@@ -60,20 +60,20 @@
         </div>
       </div>
     </div>
-    <div *ngIf="isExpress" class="row">
+    <!-- <div *ngIf="isExpress" style="padding-top:1rem;" class="row">
       <div class="col-md-12 col-lg-12">
         <button nbButton type="button" status="success" (click)="checkDate(dialogCheck)">
           <nb-icon icon="calendar-outline">
           </nb-icon>
           ดูวันสัมภาษณ์
         </button>
-        <button nbButton type="button" status="success" (click)="selectDate(dialogDate)">
+        <button style="margin-left: 1rem;" nbButton type="button" status="success" (click)="selectDate(dialogDate)">
           <nb-icon icon="calendar-outline">
           </nb-icon>
           ระบุนัดสัมภาษณ์
         </button>
       </div>
-    </div>
+    </div> -->
   </nb-card-body>
 </nb-card>
 
@@ -413,7 +413,7 @@
 </ng-template>
 
 <!-- Date -->
-<ng-template #dialogDate let-data let-ref="dialogRef">
+<!-- <ng-template #dialogDate let-data let-ref="dialogRef">
   <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
     [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
@@ -445,8 +445,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 col-lg-1">
-                <i style="padding-top:14px" class="fas fa-minus"></i>
+              <div style="padding-top: 0.55rem" class="col-md-1 col-lg-1">
+                <nb-icon icon="minus-outline"></nb-icon>
               </div>
               <div class="col-md-5 col-lg-5">
                 <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
@@ -462,11 +462,17 @@
             <div class="row">
               <div style="text-align: center;" class="col-md-12 col-lg-12">
                 <label style="padding-top: 1rem;">ช่วงเวลา</label>
-                <div *ngFor="let pTime of periodTime;" class="form-control-group">
+                <div *ngFor="let pTime of periodTime;let j = index;" class="form-control-group">
                   <ngb-timepicker [(ngModel)]="pTime.start" [minuteStep]="minuteStep" [spinners]="false" class="inline">
-                  </ngb-timepicker> -
+                  </ngb-timepicker>
+                  <nb-icon icon="minus-outline">
+                  </nb-icon>
                   <ngb-timepicker [(ngModel)]="pTime.end" [minuteStep]="minuteStep" [spinners]="false" class="inline">
                   </ngb-timepicker>
+                  <button *ngIf="j > 0" nbButton ghost status="danger" size="tiny" nbTooltip="Delete"
+                    (click)="deleteTime(j)">
+                    <nb-icon icon="trash-2-outline"></nb-icon>
+                  </button>
                 </div>
                 <button nbButton type="button" status="success" size="small" (click)="addPeriod()">
                   <nb-icon icon="plus-outline">
@@ -478,38 +484,60 @@
             <div class="row">
               <div class="col-md-6 col-lg-6">
                 <label>เจ้าหน้าที่สัมภาษณ์(คน)</label>
-                <input [(ngModel)]="staffNo" nbInput>
+                <input [(ngModel)]="staffTotal" nbInput>
               </div>
               <div class="col-md-6 col-lg-6">
                 <label>ระยะเวลาสัมภาษณ์ต่อคน(นาที)</label>
-                <input [(ngModel)]="time" type="number" nbInput>
+                <input [(ngModel)]="timePerNo" type="number" nbInput>
               </div>
             </div>
           </div>
           <div class="form-control-group">
             <label>จำนวนการรับสัมภาษณ์</label>
-            <input [(ngModel)]="candNo" nbInput disabled> คน
+            <input [(ngModel)]="candidateTotal" nbInput disabled> คน
           </div>
         </div>
       </div>
     </nb-card-body>
+    <small *ngIf="sError" class="text-red-right">{{ sError }}</small>
     <nb-card-footer>
       <button nbButton status="success" (click)="saveDate()">Save</button>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
     </nb-card-footer>
   </nb-card>
-</ng-template>
+</ng-template> -->
 
 <!-- checkDate -->
-<ng-template #dialogCheck let-data let-ref="dialogRef">
+<!-- <ng-template #dialogCheck let-data let-ref="dialogRef">
   <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
     [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
-      sss
+      <div *ngIf="!listTime.length && !loadingDialog" class="text-center text-gray">No data found !</div>
+
+      <div *ngIf="listTime.length">
+        <nb-accordion>
+          <nb-accordion-item *ngFor="let time of listTime;let i = index;">
+            <nb-accordion-item-header>รายการสัมภาษณ์ครั้งที่ {{ i+1 }}</nb-accordion-item-header>
+            <nb-accordion-item-body>
+              <label class="label">สถานที่:</label><label>&nbsp;{{ time.location || '-' }}</label><br>
+              <label
+                class="label">ระบุนัดสัมภาษณ์:</label><label>&nbsp;{{ utilitiesService.convertDateTimeFromSystem(time.startDate) || '' }}
+                ถึงวันที่
+                {{ utilitiesService.convertDateTimeFromSystem(time.endDate) || '' }}</label><br>
+              <label class="label">ช่วงเวลา:</label><label *ngFor="let t of time.periodTime;let j = index;">&nbsp;
+                {{ j + 1 }}. {{ t.start.hour }}:{{ t.start.minute }} - {{ t.end.hour }}:{{ t.end.minute }}<br></label>
+              <label class="label">เจ้าหน้าที่สัมภาษณ์:</label><label>&nbsp; {{ time.staffTotal || '-' }} คน</label><br>
+              <label class="label">ระยะเวลาสัมภาษณ์ต่อคน:</label><label>&nbsp; {{ time.timePerNo || '-' }}
+                นาที</label><br>
+              <label class="label">จำนวนการรับสัมภาษณ์:</label><label>&nbsp; {{ time.candidateTotal || '-' }}
+                คน</label><br>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+      </div>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton status="success" (click)="saveDate()">Save</button>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
     </nb-card-footer>
   </nb-card>
-</ng-template>
+</ng-template> -->

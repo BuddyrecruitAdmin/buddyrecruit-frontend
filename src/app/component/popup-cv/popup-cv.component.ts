@@ -79,6 +79,7 @@ export class PopupCvComponent implements OnInit {
   remark: any;
   allComments: any;
   editRemark: boolean;
+  isExpress: boolean;
   constructor(
     private service: PopupCVService,
     public ref: NbDialogRef<PopupCvComponent>,
@@ -94,6 +95,7 @@ export class PopupCvComponent implements OnInit {
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
     this.devices = this.utilitiesService.getDevice();
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

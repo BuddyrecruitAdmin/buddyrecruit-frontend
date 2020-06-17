@@ -61,7 +61,7 @@ export class TalentPoolDetailComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   listExamDialog: any;
 
-  isExpress = false;
+  isExpress: boolean = false;
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
@@ -268,7 +268,24 @@ export class TalentPoolDetailComponent implements OnInit {
           'refStage.name',
           'refSource.name'
         ],
-        filters: this.sourceBy,
+        filters: [
+          {
+            name: 'sourceBy',
+            value: this.sourceBy
+          },
+          {
+            name: 'province',
+            value: this.filter.selected.province
+          },
+          {
+            name: 'district',
+            value: this.filter.selected.district
+          },
+          {
+            name: 'subDistrict',
+            value: this.filter.selected.subDistrict
+          },
+        ],
         questionFilters: this.questionFilterSelected
       };
       this.items = [];
@@ -288,6 +305,30 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           });
           // filter hub
+          // response.filter.province.forEach(element => {
+          //   this.filter.data.province.push({
+          //     label: element.name,
+          //     value: element._id
+          //   })
+          // });
+          // response.filter.district.forEach(element => {
+          //   this.filter.data.district.push({
+          //     label: element.name,
+          //     value: element._id
+          //   })
+          // });
+          // response.filter.subDistrict.forEach(element => {
+          //   this.filter.data.subDistrict.push({
+          //     label: element.name,
+          //     value: element._id
+          //   })
+          // });
+          // this.filter.data.province = this.removeDuplicates(this.filter.data.province, "value")
+          // this.filter.data.district = this.removeDuplicates(this.filter.data.district, "value")
+          // this.filter.data.subDistrict = this.removeDuplicates(this.filter.data.subDistrict, "value")
+          // this.filteredProvince = this.filter.data.province.slice();
+          // this.filteredDistrict = this.filter.data.district.slice();
+          // this.filteredSubDistrict = this.filter.data.subDistrict.slice();
 
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
@@ -301,6 +342,13 @@ export class TalentPoolDetailComponent implements OnInit {
       });
     })
   }
+
+  removeDuplicates(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  }
+
 
   filterSource(event, _id) {
     this.sourceBy = [];
