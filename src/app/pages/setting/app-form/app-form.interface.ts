@@ -59,7 +59,7 @@ export interface IAppFormTemplate {
   uploadCV: {
     active: boolean;
   };
-  jobPositions: string[];
+  refPositions: string[];
 }
 
 export interface IQuestion {

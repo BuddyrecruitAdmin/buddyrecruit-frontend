@@ -145,7 +145,7 @@ export class AppFormDetailComponent implements OnInit {
       uploadCV: {
         active: true,
       },
-      jobPositions: [],
+      refPositions: [],
     };
   }
 
@@ -655,7 +655,9 @@ export class AppFormDetailComponent implements OnInit {
       delete request._id;
     }
     this.jobPositions.forEach(jobPosition => {
-      request.jobPositions.push(jobPosition.id);
+      if (jobPosition.active) {
+        request.refPositions.push(jobPosition.id);
+      }
     });
     return request;
   }
@@ -668,7 +670,7 @@ export class AppFormDetailComponent implements OnInit {
         if (response.data) {
           response.data.forEach(data => {
             let active = false;
-            if (this.appForm.jobPositions.find((jobPosition) => jobPosition === data._id)) {
+            if (this.appForm.refPositions.find((jobPosition) => jobPosition === data._id)) {
               active = true;
             }
             this.jobPositions.push({
