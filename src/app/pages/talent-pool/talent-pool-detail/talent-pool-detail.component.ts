@@ -308,7 +308,7 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           });
           // filter hub
-          if (response.filter) {
+          if (response.filter && this.isExpress) {
             this.filter.isFilter = true;
             response.filter.province.forEach(element => {
               this.filter.data.province.push({
