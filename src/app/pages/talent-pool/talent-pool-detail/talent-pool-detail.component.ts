@@ -160,7 +160,7 @@ export class TalentPoolDetailComponent implements OnInit {
       pageSizeOptions: Paging.pageSizeOptions
     }
     this.filter = {
-      isFilter: true,
+      isFilter: false,
       data: {
         province: [],
         district: [],
@@ -305,31 +305,33 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           });
           // filter hub
-          // response.filter.province.forEach(element => {
-          //   this.filter.data.province.push({
-          //     label: element.name,
-          //     value: element._id
-          //   })
-          // });
-          // response.filter.district.forEach(element => {
-          //   this.filter.data.district.push({
-          //     label: element.name,
-          //     value: element._id
-          //   })
-          // });
-          // response.filter.subDistrict.forEach(element => {
-          //   this.filter.data.subDistrict.push({
-          //     label: element.name,
-          //     value: element._id
-          //   })
-          // });
-          // this.filter.data.province = this.removeDuplicates(this.filter.data.province, "value")
-          // this.filter.data.district = this.removeDuplicates(this.filter.data.district, "value")
-          // this.filter.data.subDistrict = this.removeDuplicates(this.filter.data.subDistrict, "value")
-          // this.filteredProvince = this.filter.data.province.slice();
-          // this.filteredDistrict = this.filter.data.district.slice();
-          // this.filteredSubDistrict = this.filter.data.subDistrict.slice();
-
+          if (response.filter) {
+            this.filter.isFilter = true;
+            response.filter.province.forEach(element => {
+              this.filter.data.province.push({
+                label: element.name,
+                value: element._id
+              })
+            });
+            response.filter.district.forEach(element => {
+              this.filter.data.district.push({
+                label: element.name,
+                value: element._id
+              })
+            });
+            response.filter.subDistrict.forEach(element => {
+              this.filter.data.subDistrict.push({
+                label: element.name,
+                value: element._id
+              })
+            });
+            this.filter.data.province = this.removeDuplicates(this.filter.data.province, "value")
+            this.filter.data.district = this.removeDuplicates(this.filter.data.district, "value")
+            this.filter.data.subDistrict = this.removeDuplicates(this.filter.data.subDistrict, "value")
+            this.filteredProvince = this.filter.data.province.slice();
+            this.filteredDistrict = this.filter.data.district.slice();
+            this.filteredSubDistrict = this.filter.data.subDistrict.slice();
+          }
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
 
