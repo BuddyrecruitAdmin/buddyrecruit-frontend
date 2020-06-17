@@ -86,6 +86,7 @@ export class TalentPoolDetailComponent implements OnInit {
   filteredProvince: any;
   filteredDistrict: any;
   filteredSubDistrict: any;
+  filterBy: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -151,6 +152,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.comments = [];
     this.soList = [];
     this.sourceBy = [];
+    this.filterBy = [];
     this.keyword = '';
     this.showTips = false;
     this.paging = {
@@ -177,6 +179,29 @@ export class TalentPoolDetailComponent implements OnInit {
         subDistrict: [],
       }
     }
+    if (!this.isExpress) {
+      this.filterBy = [
+        {
+          name: 'sourceBy',
+          value: this.sourceBy
+        }
+      ];
+    } else {
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.province
+        },
+        {
+          name: 'district',
+          value: this.filter.selected.district
+        },
+        {
+          name: 'subDistrict',
+          value: this.filter.selected.subDistrict
+        }
+      ]
+    };
     this.onModel();
   }
 
@@ -268,24 +293,7 @@ export class TalentPoolDetailComponent implements OnInit {
           'refStage.name',
           'refSource.name'
         ],
-        filters: [
-          {
-            name: 'sourceBy',
-            value: this.sourceBy
-          },
-          {
-            name: 'province',
-            value: this.filter.selected.province
-          },
-          {
-            name: 'district',
-            value: this.filter.selected.district
-          },
-          {
-            name: 'subDistrict',
-            value: this.filter.selected.subDistrict
-          },
-        ],
+        filters: this.filterBy,
         questionFilters: this.questionFilterSelected
       };
       this.items = [];
