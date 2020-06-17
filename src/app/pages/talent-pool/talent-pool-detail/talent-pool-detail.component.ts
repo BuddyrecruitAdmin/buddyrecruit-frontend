@@ -180,12 +180,7 @@ export class TalentPoolDetailComponent implements OnInit {
       }
     }
     if (!this.isExpress) {
-      this.filterBy = [
-        {
-          name: 'sourceBy',
-          value: this.sourceBy
-        }
-      ];
+      this.filterBy = this.sourceBy;
     } else {
       this.filterBy = [
         {
