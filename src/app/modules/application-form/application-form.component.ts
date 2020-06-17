@@ -980,13 +980,13 @@ export class ApplicationFormComponent implements OnInit {
     target.size = 0;
   }
 
-  onChangeJobPosition(value: string) {
-    this.appForm.jobChildSelected = '';
-    this.appForm.jobMultiChild = new FormControl();
-    this.jobPosition = this.template.jobPositions.find(element => {
-      return element.refPosition === value;
-    });
-  }
+  // onChangeJobPosition(value: string) {
+  //   this.appForm.jobChildSelected = '';
+  //   this.appForm.jobMultiChild = new FormControl();
+  //   this.jobPosition = this.template.jobPositions.find(element => {
+  //     return element.refPosition === value;
+  //   });
+  // }
 
   getChild(question): any {
     let child;
