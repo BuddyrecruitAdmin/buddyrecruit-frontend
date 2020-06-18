@@ -179,24 +179,24 @@ export class TalentPoolDetailComponent implements OnInit {
         subDistricts: [],
       }
     }
-    // if (!this.isExpress) {
-    //   this.filterBy = this.sourceBy;
-    // } else {
-    //   this.filterBy = [
-    //     {
-    //       name: 'provinces',
-    //       value: this.filter.selected.provinces
-    //     },
-    //     {
-    //       name: 'districts',
-    //       value: this.filter.selected.districts
-    //     },
-    //     {
-    //       name: 'subDistricts',
-    //       value: this.filter.selected.subDistricts
-    //     }
-    //   ]
-    // };
+    if (!this.isExpress) {
+      this.filterBy = this.sourceBy;
+    } else {
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.provinces
+        },
+        {
+          name: 'district',
+          value: this.filter.selected.districts
+        },
+        {
+          name: 'subDistrict',
+          value: this.filter.selected.subDistricts
+        }
+      ]
+    };
     this.onModel();
   }
 
@@ -275,53 +275,21 @@ export class TalentPoolDetailComponent implements OnInit {
   search() {
     return new Promise((resolve) => {
       this.loading = true;
-      if (!this.isExpress) {
-        this.criteria = {
-          keyword: this.keyword.trim(),
-          skip: (this.paging.pageIndex * this.paging.pageSize),
-          limit: this.paging.pageSize,
-          filter: [
-            'refCandidate.firstname',
-            'refCandidate.lastname',
-            'refCandidate.age',
-            'refCandidate.phone',
-            'refCandidate.email',
-            'refStage.name',
-            'refSource.name'
-          ],
-          filters: this.sourceBy,
-          questionFilters: this.questionFilterSelected
-        };
-      } else {
-        this.criteria = {
-          keyword: this.keyword.trim(),
-          skip: (this.paging.pageIndex * this.paging.pageSize),
-          limit: this.paging.pageSize,
-          filter: [
-            'refCandidate.firstname',
-            'refCandidate.lastname',
-            'refCandidate.age',
-            'refCandidate.phone',
-            'refCandidate.email',
-            'refStage.name',
-            'refSource.name'
-          ],
-          filters: [
-            {
-              name: 'province',
-              value: this.filter.selected.provinces
-            },
-            {
-              name: 'district',
-              value: this.filter.selected.districts
-            },
-            {
-              name: 'subDistrict',
-              value: this.filter.selected.subDistricts
-            }
-          ],
-          questionFilters: this.questionFilterSelected
-        };
+      this.criteria = {
+        keyword: this.keyword.trim(),
+        skip: (this.paging.pageIndex * this.paging.pageSize),
+        limit: this.paging.pageSize,
+        filter: [
+          'refCandidate.firstname',
+          'refCandidate.lastname',
+          'refCandidate.age',
+          'refCandidate.phone',
+          'refCandidate.email',
+          'refStage.name',
+          'refSource.name'
+        ],
+        filters: this.filterBy,
+        questionFilters: this.questionFilterSelected
       };
       this.items = [];
       this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -377,11 +345,7 @@ export class TalentPoolDetailComponent implements OnInit {
               })
             });
             this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
-            // this.filter.data.districts = this.removeDuplicates(this.filter.data.districts, "value")
-            // this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
             this.filteredProvince = this.filter.data.provinces.slice();
-            // this.filteredDistrict = this.filter.data.districts.slice();
-            // this.filteredSubDistrict = this.filter.data.subDistricts.slice();
           }
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
@@ -424,6 +388,7 @@ export class TalentPoolDetailComponent implements OnInit {
           }
         });
       }
+      this.filter.data.districts = this.removeDuplicates(this.filter.data.districts, "value")
       this.filteredDistrict = this.filter.data.districts.slice();
       // subDistrict
       this.filter.selected.districts.forEach(district => {
@@ -450,8 +415,23 @@ export class TalentPoolDetailComponent implements OnInit {
           }
         });
       }
+      this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
       this.filteredSubDistrict = this.filter.data.subDistricts.slice();
     }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'district',
+        value: this.filter.selected.districts
+      },
+      {
+        name: 'subDistrict',
+        value: this.filter.selected.subDistricts
+      }
+    ]
     this.search();
   }
 
