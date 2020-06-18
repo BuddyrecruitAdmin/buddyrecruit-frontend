@@ -58,7 +58,7 @@ export class ApplicationFormService extends NetworkService {
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.JR_LIST, body);
   }
-  
+
   getHub(refCompany = undefined): Observable<ApiResponse> {
     const body = {
       refCompany: refCompany
@@ -73,6 +73,15 @@ export class ApplicationFormService extends NetworkService {
       birth: birth
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.GET_STATUS_LIST, body);
+  }
+
+  fileDownload(refCompany: string, uploadName = ''): Observable<ApiResponse> {
+    const body = {
+      refCompany: refCompany,
+      uploadName: uploadName,
+      isCV: false
+    }
+    return this.post(API_ENDPOINT.FILE.FILE_DOWNLOAD, body);
   }
 
 }

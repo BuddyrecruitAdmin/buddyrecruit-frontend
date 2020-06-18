@@ -833,12 +833,17 @@
                   <p class="file-preview">
                     <mat-icon>insert_drive_file</mat-icon>
                     <span *ngIf="!question.answer.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
-                    <span
-                      *ngIf="question.answer.attachment.originalName">{{ question.answer.attachment.originalName }}</span>
+                    <span *ngIf="question.answer.attachment.originalName && !isDisabled">
+                      {{ question.answer.attachment.originalName }}
+                    </span>
                     <mat-icon *ngIf="question.answer.attachment.originalName && !isDisabled" class="delete"
                       (click)="clearFile(question.answer.attachment); fileInput.value = ''">
                       cancel
                     </mat-icon>
+                    <span *ngIf="question.answer.attachment.originalName && isDisabled" class="link underline text-gray"
+                      (click)="fileDownload(dialog, question.answer.attachment)">
+                      {{ question.answer.attachment.originalName }}
+                    </span>
                   </p>
                   <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
                   <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
@@ -1018,5 +1023,25 @@
       </nb-stepper>
     </form>
   </div>
+
+  <ng-template #dialog let-data let-ref="dialogRef">
+    <div class="card" [nbSpinner]="image.loading" nbSpinnerStatus="primary" nbSpinnerMessage="Loading ...">
+      <div class="card-header">
+        <div class="title">
+          {{ image.originalName }}
+          <div class="float-right">
+            <button mat-icon-button type="button" (click)="ref.close()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body img-preview" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+        <div *ngIf="!image.loading">
+          <img *ngIf="image.url" [src]="image.url" alt="" class="w-100">
+        </div>
+      </div>
+    </div>
+  </ng-template>
 
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -87,6 +87,12 @@ export class ApplicationFormComponent implements OnInit {
 
   refCompany = '';
   refPosition = '';
+  image = {
+    originalName: '',
+    uploadName: '',
+    url: '',
+    loading: false
+  };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -980,6 +986,24 @@ export class ApplicationFormComponent implements OnInit {
     target.originalName = '';
     target.type = '';
     target.size = 0;
+  }
+
+  fileDownload(dialog: TemplateRef<any>, attachment: any): void {
+    this.image = {
+      originalName: '',
+      uploadName: '',
+      url: '',
+      loading: true
+    };
+    this.dialogService.open(dialog);
+    this.service.fileDownload(this.appForm.refCompany, attachment.uploadName).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.image.originalName = attachment.originalName;
+        this.image.uploadName = attachment.uploadName;
+        this.image.url = response.data.url;
+        this.image.loading = false;
+      }
+    });
   }
 
   // onChangeJobPosition(value: string) {

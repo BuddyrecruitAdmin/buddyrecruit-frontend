@@ -45,3 +45,8 @@
   opacity: 0.75;
   font-size: 0.75em;
 }
+.card-body.img-preview {
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
