@@ -996,7 +996,7 @@ export class ApplicationFormComponent implements OnInit {
       loading: true
     };
     this.dialogService.open(dialog);
-    this.service.fileDownload(this.refCompany, attachment.uploadName).subscribe(response => {
+    this.service.fileDownload(this.appForm.refCompany, attachment.uploadName).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.image.originalName = attachment.originalName;
         this.image.uploadName = attachment.uploadName;
