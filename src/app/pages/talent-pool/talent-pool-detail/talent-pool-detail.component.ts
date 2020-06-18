@@ -68,19 +68,19 @@ export class TalentPoolDetailComponent implements OnInit {
   filter: {
     isFilter: boolean,
     data: {
-      province: DropDownValue[],
-      district: DropDownValue[]
-      subDistrict: DropDownValue[]
+      provinces: DropDownValue[],
+      districts: DropDownGroup[]
+      subDistricts: DropDownGroup[]
     },
     temp: {
-      province: DropDownValue[],
-      district: DropDownValue[],
-      subDistrict: DropDownValue[]
+      provinces: DropDownValue[],
+      districts: DropDownGroup[],
+      subDistricts: DropDownGroup[]
     },
     selected: {
-      province: any,
-      district: any,
-      subDistrict: any;
+      provinces: any,
+      districts: any,
+      subDistricts: any;
     }
   };
   filteredProvince: any;
@@ -164,39 +164,39 @@ export class TalentPoolDetailComponent implements OnInit {
     this.filter = {
       isFilter: false,
       data: {
-        province: [],
-        district: [],
-        subDistrict: [],
+        provinces: [],
+        districts: [],
+        subDistricts: [],
       },
       temp: {
-        province: [],
-        district: [],
-        subDistrict: [],
+        provinces: [],
+        districts: [],
+        subDistricts: [],
       },
       selected: {
-        province: [],
-        district: [],
-        subDistrict: [],
+        provinces: [],
+        districts: [],
+        subDistricts: [],
       }
     }
-    if (!this.isExpress) {
-      this.filterBy = this.sourceBy;
-    } else {
-      this.filterBy = [
-        {
-          name: 'province',
-          value: this.filter.selected.province
-        },
-        {
-          name: 'district',
-          value: this.filter.selected.district
-        },
-        {
-          name: 'subDistrict',
-          value: this.filter.selected.subDistrict
-        }
-      ]
-    };
+    // if (!this.isExpress) {
+    //   this.filterBy = this.sourceBy;
+    // } else {
+    //   this.filterBy = [
+    //     {
+    //       name: 'provinces',
+    //       value: this.filter.selected.provinces
+    //     },
+    //     {
+    //       name: 'districts',
+    //       value: this.filter.selected.districts
+    //     },
+    //     {
+    //       name: 'subDistricts',
+    //       value: this.filter.selected.subDistricts
+    //     }
+    //   ]
+    // };
     this.onModel();
   }
 
@@ -275,21 +275,53 @@ export class TalentPoolDetailComponent implements OnInit {
   search() {
     return new Promise((resolve) => {
       this.loading = true;
-      this.criteria = {
-        keyword: this.keyword.trim(),
-        skip: (this.paging.pageIndex * this.paging.pageSize),
-        limit: this.paging.pageSize,
-        filter: [
-          'refCandidate.firstname',
-          'refCandidate.lastname',
-          'refCandidate.age',
-          'refCandidate.phone',
-          'refCandidate.email',
-          'refStage.name',
-          'refSource.name'
-        ],
-        filters: this.filterBy,
-        questionFilters: this.questionFilterSelected
+      if (!this.isExpress) {
+        this.criteria = {
+          keyword: this.keyword.trim(),
+          skip: (this.paging.pageIndex * this.paging.pageSize),
+          limit: this.paging.pageSize,
+          filter: [
+            'refCandidate.firstname',
+            'refCandidate.lastname',
+            'refCandidate.age',
+            'refCandidate.phone',
+            'refCandidate.email',
+            'refStage.name',
+            'refSource.name'
+          ],
+          filters: this.sourceBy,
+          questionFilters: this.questionFilterSelected
+        };
+      } else {
+        this.criteria = {
+          keyword: this.keyword.trim(),
+          skip: (this.paging.pageIndex * this.paging.pageSize),
+          limit: this.paging.pageSize,
+          filter: [
+            'refCandidate.firstname',
+            'refCandidate.lastname',
+            'refCandidate.age',
+            'refCandidate.phone',
+            'refCandidate.email',
+            'refStage.name',
+            'refSource.name'
+          ],
+          filters: [
+            {
+              name: 'province',
+              value: this.filter.selected.provinces
+            },
+            {
+              name: 'district',
+              value: this.filter.selected.districts
+            },
+            {
+              name: 'subDistrict',
+              value: this.filter.selected.subDistricts
+            }
+          ],
+          questionFilters: this.questionFilterSelected
+        };
       };
       this.items = [];
       this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -308,32 +340,48 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           });
           // filter hub
-          if (response.filter && this.isExpress) {
+          if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
             this.filter.isFilter = true;
-            response.filter.province.forEach(element => {
-              this.filter.data.province.push({
-                label: element.name,
+            response.filter.provinces.forEach(element => {
+              this.filter.data.provinces.push({
+                label: element.name.th,
+                value: element._id
+              })
+              this.filter.temp.provinces.push({
+                label: element.name.th,
                 value: element._id
               })
             });
-            response.filter.district.forEach(element => {
-              this.filter.data.district.push({
-                label: element.name,
-                value: element._id
+            response.filter.districts.forEach(element => {
+              this.filter.data.districts.push({
+                label: element.name.th,
+                value: element._id,
+                group: element.refProvince
+              })
+              this.filter.temp.districts.push({
+                label: element.name.th,
+                value: element._id,
+                group: element.refProvince
               })
             });
-            response.filter.subDistrict.forEach(element => {
-              this.filter.data.subDistrict.push({
-                label: element.name,
-                value: element._id
+            response.filter.subDistricts.forEach(element => {
+              this.filter.data.subDistricts.push({
+                label: element.name.th,
+                value: element._id,
+                group: element.refDistrict
+              })
+              this.filter.temp.subDistricts.push({
+                label: element.name.th,
+                value: element._id,
+                group: element.refDistrict
               })
             });
-            this.filter.data.province = this.removeDuplicates(this.filter.data.province, "value")
-            this.filter.data.district = this.removeDuplicates(this.filter.data.district, "value")
-            this.filter.data.subDistrict = this.removeDuplicates(this.filter.data.subDistrict, "value")
-            this.filteredProvince = this.filter.data.province.slice();
-            this.filteredDistrict = this.filter.data.district.slice();
-            this.filteredSubDistrict = this.filter.data.subDistrict.slice();
+            this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+            // this.filter.data.districts = this.removeDuplicates(this.filter.data.districts, "value")
+            // this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
+            this.filteredProvince = this.filter.data.provinces.slice();
+            // this.filteredDistrict = this.filter.data.districts.slice();
+            // this.filteredSubDistrict = this.filter.data.subDistricts.slice();
           }
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
@@ -346,6 +394,65 @@ export class TalentPoolDetailComponent implements OnInit {
         resolve();
       });
     })
+  }
+
+  changeFilter(calculate: boolean = true) {
+    if (calculate) {
+      this.filter.data.districts = [];
+      this.filter.data.subDistricts = [];
+      this.filter.selected.provinces.forEach(province => {
+        const districts = this.filter.temp.districts.filter(district => {
+          return district.group === province;
+        });
+        districts.forEach(district => {
+          this.filter.data.districts.push({
+            label: district.label,
+            value: district.value,
+            group: province
+          });
+        });
+      });
+      const districtSelected = _.cloneDeep(this.filter.selected.districts);
+      this.filter.selected.districts = [];
+      if (districtSelected.length) {
+        districtSelected.forEach(district => {
+          const found = this.filter.data.districts.find(element => {
+            return element.value === district;
+          });
+          if (found) {
+            this.filter.selected.districts.push(found.value);
+          }
+        });
+      }
+      this.filteredDistrict = this.filter.data.districts.slice();
+      // subDistrict
+      this.filter.selected.districts.forEach(district => {
+        const subDistricts = this.filter.temp.subDistricts.filter(sub => {
+          return sub.group === district;
+        });
+        subDistricts.forEach(sub => {
+          this.filter.data.subDistricts.push({
+            label: sub.label,
+            value: sub.value,
+            group: district
+          });
+        });
+      });
+      const subDistrictSelected = _.cloneDeep(this.filter.selected.subDistricts);
+      this.filter.selected.subDistricts = [];
+      if (subDistrictSelected.length) {
+        subDistrictSelected.forEach(sub => {
+          const found = this.filter.data.subDistricts.find(element => {
+            return element.value === sub;
+          });
+          if (found) {
+            this.filter.selected.subDistricts.push(found.value);
+          }
+        });
+      }
+      this.filteredSubDistrict = this.filter.data.subDistricts.slice();
+    }
+    this.search();
   }
 
   removeDuplicates(myArr, prop) {
