@@ -445,6 +445,20 @@ export class TalentPoolDetailComponent implements OnInit {
     this.filter.selected.provinces = [];
     this.filter.selected.districts = [];
     this.filter.selected.subDistricts = [];
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'district',
+        value: this.filter.selected.districts
+      },
+      {
+        name: 'subDistrict',
+        value: this.filter.selected.subDistricts
+      }
+    ]
     this.search();
   }
 
