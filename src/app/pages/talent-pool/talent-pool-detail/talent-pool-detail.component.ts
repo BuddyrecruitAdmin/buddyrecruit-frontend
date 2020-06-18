@@ -441,6 +441,12 @@ export class TalentPoolDetailComponent implements OnInit {
     });
   }
 
+  clearFilter() {
+    this.filter.selected.provinces = [];
+    this.filter.selected.districts = [];
+    this.filter.selected.subDistricts = [];
+    this.search();
+  }
 
   filterSource(event, _id) {
     this.sourceBy = [];
@@ -566,19 +572,19 @@ export class TalentPoolDetailComponent implements OnInit {
       this.tabs.map(element => {
         switch (element.name) {
           case 'NOT BUY':
-            element.badgeText = count.data;
+            element.badgeText = count.notBuy;
             element.badgeStatus = 'default';
             break;
           case 'PENDING':
-            element.badgeText = count.data;
+            element.badgeText = count.pending;
             element.badgeStatus = 'danger';
             break;
           case 'SELECTED':
-            element.badgeText = count.data;
+            element.badgeText = count.selected;
             element.badgeStatus = 'default';
             break;
           case 'REJECTED':
-            element.badgeText = count.data;
+            element.badgeText = count.rejected;
             element.badgeStatus = 'default';
             break;
           default:

@@ -101,6 +101,13 @@
           </div>
         </div>
       </div>
+    </div><br>
+    <div *ngIf="filter.isFilter" class="row" style="text-align: center;">
+      <div class="col-md-12">
+        <button nbButton status="default" (click)="clearFilter()">
+          Clear Filter
+        </button>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>
