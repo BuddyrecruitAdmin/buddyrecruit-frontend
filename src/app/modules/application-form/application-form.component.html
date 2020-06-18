@@ -179,7 +179,7 @@
                       [disabled]="isDisabled">
                   </mat-form-field>
                 </div>
-                <div class="col-md-6" *ngIf="template.personalDetail.birth.visible">
+                <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
                     <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate"
@@ -191,13 +191,13 @@
                     <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
                 </div>
-                <!-- <div class="col-md-2" *ngIf="template.personalDetail.birth.visible">
+                <div class="col-md-2" *ngIf="template.personalDetail.birth.visible && !template.isExpress">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'AGE' | translate }}</mat-label>
                     <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age" disabled
                       [required]="template.personalDetail.age.required" [ngModelOptions]="{standalone: true}">
                   </mat-form-field>
-                </div> -->
+                </div>
                 <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'PHONE' | translate }}</mat-label>

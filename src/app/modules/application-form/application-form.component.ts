@@ -276,52 +276,54 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getTemplate(refCompany: string, refTemplate: string, refPosition = undefined) {
-    this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        if (response.data) {
-          this.template = response.data;
-          this.appForm.refCompany = this.template.refCompany;
-          this.appForm.refTemplate = this.template._id;
-          this.appForm.questions = this.template.questions;
-          this.initialAnswer();
-        }
-        this.getJR(this.template.refCompany);
-        this.uploader = new FileUploader({
-          url: URL,
-          itemAlias: 'data',
-          headers: [
-            {
-              name: 'refCompany',
-              value: this.appForm.refCompany
-            },
-            {
-              name: 'isCV',
-              value: false
-            },
-            {
-              name: 'isExpress',
-              value: this.template.isExpress
-            },
-          ],
-        });
-      } else if (response.code === ResponseCode.NoContent) {
-        let message = 'Sorry! At this time, there is no recruitment.';
-        if (this.language === 'th') {
-          message = 'ขออภัย ขณะนี้ยังไม่มีการรับสมัครพนักงาน';
-        }
-        const confirm = this.matDialog.open(PopupMessageComponent, {
-          width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-          data: { type: 'I', content: message }
-        });
-        confirm.afterClosed().subscribe(result => {
-          if (result) {
-            window.close();
+    if (!this.isDisabled) {
+      this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            this.template = response.data;
+            this.appForm.refCompany = this.template.refCompany;
+            this.appForm.refTemplate = this.template._id;
+            this.appForm.questions = this.template.questions;
+            this.initialAnswer();
           }
-        });
-      } else {
-        this.onError();
-      }
-    });
+          this.getJR(this.template.refCompany);
+          this.uploader = new FileUploader({
+            url: URL,
+            itemAlias: 'data',
+            headers: [
+              {
+                name: 'refCompany',
+                value: this.appForm.refCompany
+              },
+              {
+                name: 'isCV',
+                value: false
+              },
+              {
+                name: 'isExpress',
+                value: this.template.isExpress
+              },
+            ],
+          });
+        } else if (response.code === ResponseCode.NoContent) {
+          let message = 'Sorry! At this time, there is no recruitment.';
+          if (this.language === 'th') {
+            message = 'ขออภัย ขณะนี้ยังไม่มีการรับสมัครพนักงาน';
+          }
+          const confirm = this.matDialog.open(PopupMessageComponent, {
+            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+            data: { type: 'I', content: message }
+          });
+          confirm.afterClosed().subscribe(result => {
+            if (result) {
+              window.close();
+            }
+          });
+        } else {
+          this.onError();
+        }
+      });
+    }
   }
 
   getDetail(refAppform: string) {
