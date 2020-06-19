@@ -40,9 +40,9 @@ export class ApplicationFormStatusComponent implements OnInit {
     private service: ApplicationFormService,
     private dialogService: NbDialogService
   ) {
+    setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
-    setLangPath("RESUME");
   }
 
   ngOnInit() {

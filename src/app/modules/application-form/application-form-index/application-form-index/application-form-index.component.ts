@@ -51,11 +51,10 @@ export class ApplicationFormIndexComponent implements OnInit {
     private _adapter: DateAdapter<any>
   ) {
     this.role = getRole();
-    console.log(this.role);
     this.innerHeight = window.innerHeight;
+    setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
-    setLangPath("RESUME");
   }
 
   ngOnInit() {
@@ -74,7 +73,8 @@ export class ApplicationFormIndexComponent implements OnInit {
   checkStatus() {
     if (this.phone && this.birth) {
       this.loading = true;
-      const birth = new Date(this.birth.getFullYear(), this.birth.getMonth(), this.birth.getDate() + 1)
+      let birth = new Date(this.birth);
+      birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
       this.service.getStatusList(this.companyId, this.phone, birth).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           const appFormIndex = {
