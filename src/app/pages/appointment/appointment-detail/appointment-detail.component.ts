@@ -165,17 +165,25 @@ export class AppointmentDetailComponent implements OnInit {
     this.soList = [];
     this.sourceBy = [];
     this.locationList = [];
-    this.location = '';
-    this.sDate = null;
-    this.eDate = null;
-    this.periodTime = [];
     this.paging = {
       length: 0,
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     };
+    this.initialModel();
     this.onModel();
+  }
+
+  initialModel(): any {
+    this.location = '';
+    this.sDate = null;
+    this.eDate = null;
+    this.periodTime = [];
+    this.periodTime.push({});
+    this.staffTotal = 0;
+    this.timePerNo = 0;
+    this.candidateTotal = 0;
   }
 
   async onModel() {
@@ -531,9 +539,8 @@ export class AppointmentDetailComponent implements OnInit {
 
   selectDate(dialog: TemplateRef<any>) {
     this.loadingDialog = true;
-    this.periodTime = [];
-    this.periodTime.push({})
-    this.timePerNo = 0;
+    this.initialModel();
+    this.sError = '';
     this.callDialog(dialog);
     this.locationService.getList().subscribe(response => {
       if (response.code === ResponseCode.Success) {
@@ -587,7 +594,7 @@ export class AppointmentDetailComponent implements OnInit {
   validation(): boolean {
     this.sError = '';
     let isValid = true;
-    this.diffDay = this.utilitiesService.calculateDuration2Date(this.sDate, this.eDate);
+    this.setCandidateTotal();
     if (!this.location) {
       isValid = false;
       this.sError = this.sError || MESSAGE[107];
@@ -640,7 +647,7 @@ export class AppointmentDetailComponent implements OnInit {
   }
 
   setRequest(): any {
-    this.setCandidate();
+    this.setCandidateTotal();
     const data = {
       location: this.location,
       startDate: this.sDate,
@@ -654,12 +661,15 @@ export class AppointmentDetailComponent implements OnInit {
     return data;
   }
 
-  setCandidate() {
+  setCandidateTotal() {
+    this.diffDay = this.utilitiesService.calculateDuration2Date(this.sDate, this.eDate);
     this.candidateTotal = 0;
     let diffMIn = 0;
     this.periodTime.map(element => {
-      diffMIn = ((element.end.hour * 60) + element.end.minute) - ((element.start.hour * 60) + element.start.minute);
-      this.candidateTotal = this.candidateTotal + Math.floor(diffMIn / this.timePerNo);
+      if (element.start.hour) {
+        diffMIn = ((element.end.hour * 60) + element.end.minute) - ((element.start.hour * 60) + element.start.minute);
+        this.candidateTotal = this.candidateTotal + Math.floor(diffMIn / this.timePerNo);
+      }
     })
     this.candidateTotal = this.candidateTotal * (this.diffDay + 1);
   }

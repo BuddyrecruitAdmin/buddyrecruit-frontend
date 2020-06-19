@@ -30,6 +30,7 @@ export interface IAppFormTemplate {
     postcode: IAction;
     gender: IAction;
     expectedSalary: IAction;
+    facebook: IAction;
   };
   workExperience: {
     active: boolean;
@@ -94,6 +95,7 @@ export interface IAnswer {
   textArea: string;
   options: IOption[];
   selected: number;
+  expected: number;
   hasOther: boolean;
   otherLabel: string;
   otherChecked: boolean;
@@ -164,6 +166,7 @@ export interface ITime {
 }
 
 export interface IScore {
+  isAnswer: boolean;
   isScore: boolean;
   maxScore: number;
   keywords: string[];

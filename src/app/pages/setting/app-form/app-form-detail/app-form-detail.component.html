@@ -868,7 +868,7 @@
               <div class="row w-100">
                 <div class="col-6">
                   <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isScore"
-                    (change)="toggleScoreCalculator(question)" class="toggle">
+                    (change)="toggleScoreCalculator(question,'score')" class="toggle">
                     Score calculator:
                   </mat-slide-toggle>
                 </div>
@@ -1101,6 +1101,52 @@
                   </div>
                 </div>
               </div>
+
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+      </div>
+      <!-- Condition -->
+      <div *ngIf="isExpress">
+        <nb-accordion class="score" *ngIf="question.type === InputType.Radio">
+          <nb-accordion-item [expanded]="question.score?.isAnswer" [disabled]="!question.score?.isAnswer">
+            <nb-accordion-item-header style="background: #f9f9f9;">
+              <div class="row w-100">
+                <div class="col-6">
+                  <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isAnswer"
+                    (change)="toggleScoreCalculator(question,'answer')" class="toggle">
+                    Expect Answer
+                  </mat-slide-toggle>
+                </div>
+              </div>
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+
+              <mat-radio-group [(ngModel)]="question.answer.expected" [required]="question.required"
+                [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+
+                <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
+                  [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
+                  <div *ngIf="option.imgaeURL" class="answer-image"
+                    [ngClass]="{ 'active': question.answer.expected === i }" (click)="question.answer.expected = i">
+                    <img [src]="option.imgaeURL">
+                  </div>
+                  <mat-radio-button [value]="i">
+                    {{ option.label }}
+                  </mat-radio-button>
+                </div>
+                <div class="col-md-12">
+                  <mat-radio-button *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
+                    {{ question.answer.otherLabel }}
+                  </mat-radio-button>
+                </div>
+
+              </mat-radio-group>
+              <mat-form-field appearance="outline" *ngIf="question.answer.selected === question.answer.options.length">
+                <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
+                  [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+              </mat-form-field>
 
             </nb-accordion-item-body>
           </nb-accordion-item>

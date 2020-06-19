@@ -11,6 +11,7 @@ import { InputType, State, ResponseCode } from '../../../../shared/app.constants
 import { setAppFormData, getRole } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
 import { FormControl } from '@angular/forms';
+import { debug } from 'util';
 
 export interface IPosition {
   id: string;
@@ -116,6 +117,7 @@ export class AppFormDetailComponent implements OnInit {
         postcode: this.initialAction(),
         gender: this.initialAction(),
         expectedSalary: this.initialAction(),
+        facebook: this.initialAction(),
       },
       workExperience: {
         active: true,
@@ -287,6 +289,7 @@ export class AppFormDetailComponent implements OnInit {
         textArea: '',
         options: [this.initialOption()],
         selected: null,
+        expected: null,
         hasOther: false,
         otherLabel: 'Other',
         otherChecked: false,
@@ -335,6 +338,7 @@ export class AppFormDetailComponent implements OnInit {
       isFilter: false,
       score: {
         isScore: false,
+        isAnswer: false,
         maxScore: 0,
         keywords: [],
         girdRowScore: 0,
@@ -479,10 +483,22 @@ export class AppFormDetailComponent implements OnInit {
     return score;
   }
 
-  toggleScoreCalculator(question): void {
+  toggleScoreCalculator(question, type): void {
+    if (question.type === InputType.Radio) {
+      if (type === 'score' && question.score.isAnswer && question.score.isScore) {
+        question.score.isAnswer = false;
+      }
+      if (type === 'answer' && question.score.isAnswer && question.score.isScore) {
+        question.score.isScore = false;
+      }
+    }
+    if (!question.score.isAnswer) {
+      question.answer.expected = null;
+    }
     if (!question.score.isScore) {
       question.score = {
         isScore: false,
+        isAnswer: question.score.isAnswer,
         maxScore: 0,
         keywords: [],
         girdRowScore: 0,
