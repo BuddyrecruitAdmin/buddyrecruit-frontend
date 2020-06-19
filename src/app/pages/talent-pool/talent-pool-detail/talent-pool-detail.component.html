@@ -63,7 +63,7 @@
             <label class="label">Province</label>
             <mat-form-field [color]="primary" appearance="outline">
               <mat-select [(ngModel)]="filter.selected.provinces" (ngModelChange)="changeFilter(true)" multiple>
-                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.province"
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.provinces"
                   (filteredReturn)="filteredProvince =$event"></mat-select-filter>
                 <mat-option *ngFor="let option of filteredProvince" [value]="option.value">
                   {{option.label}}
@@ -77,7 +77,7 @@
             <label class="label">District</label>
             <mat-form-field [color]="primary" appearance="outline">
               <mat-select [(ngModel)]="filter.selected.districts" (ngModelChange)="changeFilter(true)" multiple>
-                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.district"
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.districts"
                   (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
                 <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
                   {{option.label}}
@@ -91,7 +91,7 @@
             <label class="label">SubDistrict</label>
             <mat-form-field [color]="primary" appearance="outline">
               <mat-select [(ngModel)]="filter.selected.subDistricts" (ngModelChange)="changeFilter(true)" multiple>
-                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.subDistrict"
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.subDistricts"
                   (filteredReturn)="filteredSubDistrict =$event"></mat-select-filter>
                 <mat-option *ngFor="let option of filteredSubDistrict" [value]="option.value">
                   {{option.label}}

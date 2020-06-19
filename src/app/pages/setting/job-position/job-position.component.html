@@ -178,7 +178,8 @@
       </div>
       <div>
         <label class="label">Status</label>
-        <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id || itemDialog.isUsed">
+        <nb-radio-group [(ngModel)]="itemDialog.active"
+          [disabled]="!itemDialog._id || (itemDialog.isUsed && !isExpress) ">
           <nb-radio *ngFor="let status of statusList" [value]="status.value">
             {{ status.label }}
           </nb-radio>
