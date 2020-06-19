@@ -107,9 +107,9 @@ export class ApplicationFormComponent implements OnInit {
     private _adapter: DateAdapter<any>
   ) {
     this.role = getRole();
+    setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
-    setLangPath("RESUME");
   }
 
   ngOnInit() {
