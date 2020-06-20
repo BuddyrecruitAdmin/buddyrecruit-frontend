@@ -345,6 +345,7 @@ export const API_ENDPOINT = {
     HUB_LIST: "generalAppForm/hubs",
     GET_TEMPLATE: "generalAppForm/getTemplate",
     GET_STATUS_LIST: "generalAppForm/getStatusList",
+    COMPANY: "generalAppForm/getComName"
   },
   BLOG: {
     CREATE: "blog/create",

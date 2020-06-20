@@ -46,6 +46,28 @@
   </div>
 </div>
 
+<!-- Expect -->
+<div [style.max-height.px]="innerHeight" id="expect-popup" *ngIf="data.type === 'E'">
+  <div mat-dialog-title>
+    <div class="icon">
+      <span class="fa fa-exclamation"></span>
+    </div>
+  </div>
+  <div mat-dialog-content class="m-0">
+    <div *ngIf="data.content" class="message">{{ data.content }}</div>
+    <ul>
+      <li *ngFor="let content of data.contents" class="message" style="text-align: left;">
+        {{ content }}
+      </li>
+    </ul>
+  </div>
+  <div mat-dialog-actions align="center">
+    <button nbButton status="primary" tabindex="-1" style="padding-left: 2.75rem;padding-right: 2.75rem;"
+      [mat-dialog-close]="false">{{ data.btnText.toUpperCase() }}</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button nbButton status="basic" tabindex="-1" [mat-dialog-close]="true">{{ data.btnText2.toUpperCase() }}</button>
+  </div>
+</div>
+
 <!-- Warning -->
 <div id="warning-popup" *ngIf="data.type === 'W'">
   <div mat-dialog-title>

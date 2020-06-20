@@ -40,7 +40,7 @@ export class ApplicationFormIndexComponent implements OnInit {
 
   phone: string;
   birth: Date;
-
+  companyName: string;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -60,6 +60,11 @@ export class ApplicationFormIndexComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       this.companyId = params.id;
+      this.service.getCompany(this.companyId).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.companyName = response.data.name;
+        }
+      })
     });
   }
 
@@ -85,21 +90,22 @@ export class ApplicationFormIndexComponent implements OnInit {
           setAppformIndex(appFormIndex);
           this.router.navigate(['/application-form/status']);
         } else {
-          this.matDialog.open(PopupMessageComponent, {
-            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-            data: {
-              type: 'I',
-              content: this.language === 'en' ? 'No registered.' : 'ไม่พบข้อมูลการสมัครงาน',
-            }
-          });
+          this.router.navigate([`/application-form/submit/${this.companyId}`]);
+          // this.matDialog.open(PopupMessageComponent, {
+          //   width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+          //   data: {
+          //     type: 'I',
+          //     content: this.language === 'en' ? 'No registered.' : 'ไม่พบข้อมูลการสมัครงาน',
+          //   }
+          // });
         }
         this.loading = false;
       });
     }
   }
-
-  register() {
-    this.router.navigate([`/application-form/submit/${this.companyId}`]);
-  }
+  // ยุบปุ่มรวมกันเเยกcase ข้างบน
+  // register() {
+  //   this.router.navigate([`/application-form/submit/${this.companyId}`]);
+  // }
 
 }

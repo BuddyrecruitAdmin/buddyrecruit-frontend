@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -93,7 +93,7 @@ export class ApplicationFormComponent implements OnInit {
     url: '',
     loading: false
   };
-
+  @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -582,6 +582,25 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
+  noExpect(qExpect) {
+    let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+    // if (this.language === 'th') {
+    //   message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+    // }
+
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'E', content: message, contents: qExpect, btnText: 'แก้ไข', btnText2: 'ออกจากหน้านี้' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        // window.close();
+        this.stepperComponent.previous();
+        this.stepperComponent.previous();
+      }
+    });
+  }
+
   closeWindow() {
     let message = 'Are you sure you want to close this window?';
     if (this.language === 'th') {
@@ -634,7 +653,7 @@ export class ApplicationFormComponent implements OnInit {
   getQuestionElementError(): any {
     let isQuestionValid = true;
     let qElement: any;
-
+    let qExpect: any = [];
     this.appForm.questions.forEach((question, index) => {
 
       const element = document.getElementById('question' + index);
@@ -718,6 +737,18 @@ export class ApplicationFormComponent implements OnInit {
                 element.classList.add("has-error");
               }
               break;
+          }
+
+          if (!isQuestionValid && !qElement) {
+            qElement = element;
+          }
+        }
+        if (question.answer.expected && (question.type === this.InputType.Radio)) {
+          if (question.answer.expected !== question.answer.selected) {
+            isQuestionValid = false;
+            element.classList.add("has-error");
+            qExpect.push(question.title)
+            this.noExpect(qExpect);
           }
 
           if (!isQuestionValid && !qElement) {

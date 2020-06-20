@@ -84,4 +84,12 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.FILE.FILE_DOWNLOAD, body);
   }
 
+  getCompany(_id ): Observable<ApiResponse> {
+    const body = {
+      _id ,
+    }
+    return this.post(API_ENDPOINT.APPLICATION_FORM.COMPANY, body);
+  }
+
+
 }

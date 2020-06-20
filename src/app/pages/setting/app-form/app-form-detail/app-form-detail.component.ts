@@ -670,11 +670,13 @@ export class AppFormDetailComponent implements OnInit {
     if (this.state === State.Create) {
       delete request._id;
     }
+    let unique = [];
     this.jobPositions.forEach(jobPosition => {
       if (jobPosition.active) {
-        request.refPositions.push(jobPosition.id);
+        unique.push(jobPosition.id);
       }
     });
+    request.refPositions = [...new Set(unique)];
     return request;
   }
 
@@ -739,6 +741,9 @@ export class AppFormDetailComponent implements OnInit {
     }
     if (!this.appForm.personalDetail.address.visible) {
       this.appForm.personalDetail.address.required = false;
+    }
+    if (!this.appForm.personalDetail.facebook.visible) {
+      this.appForm.personalDetail.facebook.required = false;
     }
   }
 
