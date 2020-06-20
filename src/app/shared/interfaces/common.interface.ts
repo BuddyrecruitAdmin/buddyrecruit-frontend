@@ -13,6 +13,7 @@ export interface ApiResponse {
   otherJR?;
   usedTime?;
   isExpired?;
+  token?: string;
 }
 
 export interface Count {

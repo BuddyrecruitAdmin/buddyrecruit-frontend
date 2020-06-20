@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -93,6 +93,7 @@ export class ApplicationFormComponent implements OnInit {
     url: '',
     loading: false
   };
+  userToken: any;
   @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -148,6 +149,11 @@ export class ApplicationFormComponent implements OnInit {
           this.isDisabled = true;
           this.initialForm();
           this.getDetail(refAppform);
+        } else if (action === State.Edit && refAppform) {
+          this.isDisabled = true;
+          this.userToken = getUserToken();
+          this.initialForm();
+          this.getDetail(this.userToken);
         } else {
           this.onError();
         }

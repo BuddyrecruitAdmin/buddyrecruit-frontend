@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex,setUserToken } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -17,6 +17,7 @@ export interface TableElement {
   position: string;
   date: string;
   status: any;
+  isSuccess : boolean;
 }
 
 @Component({
@@ -30,7 +31,7 @@ export class ApplicationFormStatusComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'date', 'status', 'action'];
   dataSource: TableElement[] = [];
-
+  tokenId: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -61,13 +62,15 @@ export class ApplicationFormStatusComponent implements OnInit {
       this.service.getStatusList(data.companyId, data.phone, data.birth).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
+          this.tokenId = response.data.token;
           response.data.data.forEach(element => {
             this.dataSource.push({
-              appFormId: element.generalAppForm.refGeneralAppForm._id,
+              appFormId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
               position: element.refJR.refJD.position,
               date: this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate) || '-',
               status: this.setStatus(element),
+              isSuccess : element.isSuccess 
             });
           });
         }
@@ -130,7 +133,8 @@ export class ApplicationFormStatusComponent implements OnInit {
   }
 
   editAppForm(appFormId: string) {
-
+    setUserToken(this.tokenId);
+    this.router.navigate([`/application-form/edit/${appFormId}`]);
   }
 
   reserveDate(dialog: TemplateRef<any>, flowId: string) {
