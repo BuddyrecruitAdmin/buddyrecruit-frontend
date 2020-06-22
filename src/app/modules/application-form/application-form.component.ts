@@ -297,17 +297,20 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getTemplate(refCompany: string, refTemplate: string, refPosition = undefined) {
-    if (!this.isDisabled) {
+    if (!this.isDisabled && refPosition !== this.appForm.refPosition) {
       this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
             this.template = response.data;
             this.appForm.refCompany = this.template.refCompany;
             this.appForm.refTemplate = this.template._id;
+            this.appForm.refPosition = this.refPosition;
             this.appForm.questions = this.template.questions;
             this.initialAnswer();
           }
-          this.getJR(this.template.refCompany);
+          if (!refPosition) {
+            this.getJR(this.template.refCompany);
+          }
           this.uploader = new FileUploader({
             url: URL,
             itemAlias: 'data',
