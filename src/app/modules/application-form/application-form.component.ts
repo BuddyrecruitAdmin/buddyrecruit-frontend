@@ -154,7 +154,7 @@ export class ApplicationFormComponent implements OnInit {
           this.initialForm();
           this.getDetail(undefined, refAppform);
         } else if (action === State.Edit && refAppform) {
-          this.isDisabled = true;
+          // this.isDisabled = true;
           this.userToken = getUserToken();
           const appformId = getAppFormData();
           this.initialForm();
