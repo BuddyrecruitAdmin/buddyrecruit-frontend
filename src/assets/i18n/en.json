@@ -194,6 +194,7 @@
     "DONE": "Done",
     "PREV": "Prev",
     "NEXT": "Next",
-    "STEP": "Step"
+    "STEP": "Step",
+    "NAME": "Name"
   }
 }

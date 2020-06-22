@@ -17,7 +17,6 @@ export interface TableElement {
   position: string;
   date: string;
   status: any;
-  isSuccess: boolean;
   comId: string;
 }
 
@@ -33,6 +32,8 @@ export class ApplicationFormStatusComponent implements OnInit {
   displayedColumns: string[] = ['position', 'date', 'status', 'action'];
   dataSource: TableElement[] = [];
   tokenId: any;
+  fullName: string;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -65,13 +66,14 @@ export class ApplicationFormStatusComponent implements OnInit {
           this.dataSource = [];
           this.tokenId = response.data.token;
           response.data.data.forEach(element => {
+            this.fullName = element.refCandidate ?
+              `${element.refCandidate.title} ${element.refCandidate.firstname} ${element.refCandidate.lastname}` : 'Unknown';
             this.dataSource.push({
               comId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
               position: element.refJR.refJD.position,
               date: this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate) || '-',
               status: this.setStatus(element),
-              isSuccess: element.isSuccessed,
               appFormId: element.generalAppForm
             });
           });
@@ -93,8 +95,6 @@ export class ApplicationFormStatusComponent implements OnInit {
     };
 
     if (element.reject.flag) {
-      status.nameEN = 'Rejected';
-      status.nameTH = 'ไม่ผ่านการพิจารณา';
       status.color = 'label-gray';
     } else {
       switch (element.refStage.order.toString().substring(0, 1)) {
@@ -130,6 +130,10 @@ export class ApplicationFormStatusComponent implements OnInit {
           status.color = 'label-warning';
           break;
 
+        case '7':
+          status.color = 'label-warning';
+          break;
+
         default:
           status.nameEN = 'Approved';
           status.nameTH = 'ผ่านการพิจารณา';
@@ -137,6 +141,13 @@ export class ApplicationFormStatusComponent implements OnInit {
           break;
       }
     }
+
+    // Replace from backend
+    status.nameEN = (element.refStage.text && element.refStage.text.en) || status.nameEN;
+    status.nameTH = (element.refStage.text && element.refStage.text.th) || status.nameTH;
+    status.editable = !element.isSuccessed;
+    status.reserve = element.isReserve;
+
     return status;
   }
 
