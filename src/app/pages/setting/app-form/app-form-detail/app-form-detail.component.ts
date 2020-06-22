@@ -499,9 +499,9 @@ export class AppFormDetailComponent implements OnInit {
       question.score = {
         isScore: false,
         isAnswer: question.score.isAnswer,
-        maxScore: 0,
-        keywords: [],
-        girdRowScore: 0,
+        maxScore: question.score.maxScore,
+        keywords: question.score.keywords,
+        girdRowScore: question.score.girdRowScore,
         submitScore: 0,
       };
       this.calGrandScore();
