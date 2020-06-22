@@ -646,7 +646,8 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button nbButton type="button" (click)="validation() ? stepper.next() : false">
+            <button nbButton type="button" (click)="validation() ? stepper.next() : false"
+              [nbSpinner]="loadingButton">
               {{ 'NEXT' | translate }}
             </button>
           </div>

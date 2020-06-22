@@ -77,6 +77,7 @@ export class ApplicationFormComponent implements OnInit {
 
   loading = true;
   loadingUpload = false;
+  loadingButton = false;
   submitted = false;
   isPreview = false;
   isDisabled = false;
