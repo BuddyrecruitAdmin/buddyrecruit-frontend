@@ -1061,27 +1061,6 @@ export class ApplicationFormComponent implements OnInit {
     return child;
   }
 
-  checkResgisted() {
-    this.loadingButton = true;
-    return new Promise((resolve) => {
-      this.service.getStatusList(this.refCompany, this.appForm.phone, this.appForm.birth).subscribe(response => {
-        this.loadingButton = false;
-        if (response.code === ResponseCode.Success) {
-          this.matDialog.open(PopupMessageComponent, {
-            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-            data: {
-              type: 'I',
-              content: this.language === 'en' ? 'This position has registered.' : 'คุณได้สมัครงานตำแหน่งนี้ไปแล้ว',
-            }
-          });
-          resolve(false);
-        } else {          
-          resolve(true);
-        }
-      });
-    });
-  }
-
   openPopupConsent() {
     setCompanyName(this.template.companyName || '');
     setCompanyId(this.template.refCompany);
