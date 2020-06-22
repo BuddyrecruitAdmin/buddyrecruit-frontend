@@ -81,6 +81,7 @@ export class ApplicationFormComponent implements OnInit {
   submitted = false;
   isPreview = false;
   isDisabled = false;
+  isDisableJob = false;
   isAgree = false;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
@@ -154,7 +155,7 @@ export class ApplicationFormComponent implements OnInit {
           this.initialForm();
           this.getDetail(undefined, refAppform);
         } else if (action === State.Edit && refAppform) {
-          // this.isDisabled = true;
+          this.isDisableJob = true;
           this.userToken = getUserToken();
           const appformId = getAppFormData();
           this.initialForm();
@@ -205,6 +206,9 @@ export class ApplicationFormComponent implements OnInit {
               });
             });
           });
+        }
+        if (this.appForm.refJR) {
+          this.onChangeJR(this.appForm.refJR);
         }
         this.loading = false;
       });
