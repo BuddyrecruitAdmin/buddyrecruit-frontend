@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -94,7 +94,8 @@ export class ApplicationFormComponent implements OnInit {
     url: '',
     loading: false
   };
-
+  userToken: any;
+  @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -149,6 +150,12 @@ export class ApplicationFormComponent implements OnInit {
           this.isDisabled = true;
           this.initialForm();
           this.getDetail(refAppform);
+        } else if (action === State.Edit && refAppform) {
+          this.isDisabled = true;
+          this.userToken = getUserToken();
+          const appformId = getAppFormData();
+          this.initialForm();
+          this.getDetail(this.userToken, appformId.refGeneralAppForm._id);
         } else {
           this.onError();
         }
@@ -333,8 +340,8 @@ export class ApplicationFormComponent implements OnInit {
     }
   }
 
-  getDetail(refAppform: string) {
-    this.service.getDetail(refAppform).subscribe(response => {
+  getDetail(refAppform: string, appFormId: string = undefined) {
+    this.service.getDetail(refAppform, appFormId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
@@ -583,6 +590,25 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
+  noExpect(qExpect) {
+    let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+    // if (this.language === 'th') {
+    //   message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+    // }
+
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'E', content: message, contents: qExpect, btnText: 'แก้ไข', btnText2: 'ออกจากหน้านี้' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        // window.close();
+        this.stepperComponent.previous();
+        this.stepperComponent.previous();
+      }
+    });
+  }
+
   closeWindow() {
     let message = 'Are you sure you want to close this window?';
     if (this.language === 'th') {
@@ -635,7 +661,7 @@ export class ApplicationFormComponent implements OnInit {
   getQuestionElementError(): any {
     let isQuestionValid = true;
     let qElement: any;
-
+    let qExpect: any = [];
     this.appForm.questions.forEach((question, index) => {
 
       const element = document.getElementById('question' + index);
@@ -719,6 +745,18 @@ export class ApplicationFormComponent implements OnInit {
                 element.classList.add("has-error");
               }
               break;
+          }
+
+          if (!isQuestionValid && !qElement) {
+            qElement = element;
+          }
+        }
+        if (question.answer.expected && (question.type === this.InputType.Radio)) {
+          if (question.answer.expected !== question.answer.selected) {
+            isQuestionValid = false;
+            element.classList.add("has-error");
+            qExpect.push(question.title)
+            this.noExpect(qExpect);
           }
 
           if (!isQuestionValid && !qElement) {

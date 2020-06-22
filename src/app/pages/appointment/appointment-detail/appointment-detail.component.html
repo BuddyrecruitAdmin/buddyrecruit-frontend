@@ -488,7 +488,7 @@
               </div>
               <div class="col-md-6 col-lg-6">
                 <label>ระยะเวลาสัมภาษณ์ต่อคน(นาที)</label>
-                <input [(ngModel)]="timePerNo" type="number" nbInput>
+                <input [(ngModel)]="timePerNo" (input)="setCandidateTotal()" type="number" nbInput>
               </div>
             </div>
           </div>

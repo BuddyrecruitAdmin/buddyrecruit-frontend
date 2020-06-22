@@ -227,6 +227,13 @@
                     </mat-hint>
                   </mat-form-field>
                 </div>
+                <!-- <div class="col-md-6" *ngIf="template.personalDetail.facebook.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'FACEBOOK' | translate }}</mat-label>
+                    <input matInput placeholder="https://www.facebook.com/bank.shocky" type="text" id="facebook" name="facebook" [(ngModel)]="appForm.facebook"
+                      [required]="template.personalDetail.facebook.required">
+                  </mat-form-field>
+                </div> -->
               </div>
               <div class="box-dashed" *ngIf="template.personalDetail.address.visible" style="padding-bottom: 0;">
                 <p>{{ 'ADDRESS' | translate }}</p>

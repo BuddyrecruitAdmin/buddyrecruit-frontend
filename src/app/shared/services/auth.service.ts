@@ -36,7 +36,8 @@ import {
   consentFlag,
   companyName,
   companyId,
-  AppFormIndex
+  AppFormIndex,
+  UserToken
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -387,4 +388,13 @@ export function setAppformIndex(data: any = null) {
 export function getAppformIndex() {
   const data = JSON.parse(localStorage.getItem(AppFormIndex));
   return (!data || data === null) ? undefined : data;
+}
+
+export function setUserToken(userToken: string = null) {
+  localStorage.setItem(UserToken, JSON.stringify(userToken));
+}
+
+export function getUserToken() {
+  const userToken = JSON.parse(localStorage.getItem(UserToken));
+  return (!userToken || userToken === null) ? undefined : userToken;
 }

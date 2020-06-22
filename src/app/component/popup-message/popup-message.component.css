@@ -66,6 +66,30 @@
 }
 
 /* -------------------------------------------------------------------- */
+/* EXPECT POPUP */
+
+#expect-popup {
+  text-align: center;
+}
+#expect-popup .icon {
+  height: 48px;
+  width: 48px;
+  margin: auto;
+  border-radius: 50%;
+  color: var(--color-white);
+  background-color: var(--color-orange);
+}
+#expect-popup .icon span {
+  font-size: 32px;
+  margin: 8px;
+}
+#expect-popup .message {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-gray);
+}
+
+/* -------------------------------------------------------------------- */
 /* WARNING POPUP */
 
 #warning-popup {
