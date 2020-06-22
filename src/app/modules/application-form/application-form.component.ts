@@ -207,7 +207,7 @@ export class ApplicationFormComponent implements OnInit {
             });
           });
         }
-        if (this.appForm.refJR) {
+        if (this.isDisableJob) {
           this.onChangeJR(this.appForm.refJR);
         }
         this.loading = false;
