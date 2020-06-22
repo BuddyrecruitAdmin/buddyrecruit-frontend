@@ -2,6 +2,10 @@
   margin: 2rem 0;
   height: 5rem;
 }
+.fullname {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
 .mat-table {
   font-family: kanit !important;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -24,6 +28,6 @@ td.mat-cell {
     margin: 5px;
   }
 }
-.bg-green{
+.bg-green {
   background: var(--color-green);
 }
