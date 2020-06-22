@@ -74,7 +74,7 @@ export class ApplicationFormIndexComponent implements OnInit {
     if (this.phone && this.birth) {
       this.loading = true;
       let birth = new Date(this.birth);
-      birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
+      // birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
       this.service.getStatusList(this.companyId, this.phone, birth).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           const appFormIndex = {

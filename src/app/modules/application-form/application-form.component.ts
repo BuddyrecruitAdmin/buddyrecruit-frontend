@@ -77,6 +77,7 @@ export class ApplicationFormComponent implements OnInit {
 
   loading = true;
   loadingUpload = false;
+  loadingButton = false;
   submitted = false;
   isPreview = false;
   isDisabled = false;
@@ -1020,6 +1021,27 @@ export class ApplicationFormComponent implements OnInit {
       child = question.parentChild[question.parentSelected];
     }
     return child;
+  }
+
+  checkResgisted() {
+    this.loadingButton = true;
+    return new Promise((resolve) => {
+      this.service.getStatusList(this.refCompany, this.appForm.phone, this.appForm.birth).subscribe(response => {
+        this.loadingButton = false;
+        if (response.code === ResponseCode.Success) {
+          this.matDialog.open(PopupMessageComponent, {
+            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+            data: {
+              type: 'I',
+              content: this.language === 'en' ? 'This position has registered.' : 'คุณได้สมัครงานตำแหน่งนี้ไปแล้ว',
+            }
+          });
+          resolve(false);
+        } else {          
+          resolve(true);
+        }
+      });
+    });
   }
 
   openPopupConsent() {
