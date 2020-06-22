@@ -21,10 +21,11 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.LIST, {});
   }
 
-  getDetail(token, appFormID): Observable<ApiResponse> {
+  getDetail(token: string, appFormID: string, flowId: string): Observable<ApiResponse> {
     const body = {
       token,
-      appFormID
+      appFormID,
+      flowId
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.DETAIL, body);
   }

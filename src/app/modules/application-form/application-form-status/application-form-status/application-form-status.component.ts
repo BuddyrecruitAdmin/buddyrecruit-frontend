@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -71,7 +71,7 @@ export class ApplicationFormStatusComponent implements OnInit {
               position: element.refJR.refJD.position,
               date: this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate) || '-',
               status: this.setStatus(element),
-              isSuccess: element.isSuccess,
+              isSuccess: element.isSuccessed,
               appFormId: element.generalAppForm
             });
           });
@@ -99,10 +99,16 @@ export class ApplicationFormStatusComponent implements OnInit {
     } else {
       switch (element.refStage.order.toString().substring(0, 1)) {
         case '1' || '2':
-          status.nameEN = 'Registered';
-          status.nameTH = 'ยื่นสมัครแล้ว';
           status.color = 'label-info';
           status.editable = true;
+          if (element.isSuccessed) {
+            status.nameEN = 'Registered';
+            status.nameTH = 'ยื่นสมัครแล้ว';
+          } else {
+            status.nameEN = 'Waiting more information';
+            status.nameTH = 'รอการเพิ่มข้อมูล';
+            status.color = 'label-warning';
+          }
           break;
 
         case '3':
@@ -134,9 +140,10 @@ export class ApplicationFormStatusComponent implements OnInit {
     return status;
   }
 
-  editAppForm(comId: string,appFormId: string) {
+  editAppForm(comId: string, appFormId: string, flowId: string) {
     setUserToken(this.tokenId);
     setAppFormData(appFormId);
+    setFlowId(flowId);
     this.router.navigate([`/application-form/edit/${comId}`]);
   }
 

@@ -172,34 +172,29 @@ export class HubComponent implements OnInit {
 
   addHublist() {
     // detail list province
-    if (this.provinceList.length > 0) {
-      this.hubs.forEach((element, index) => {
-        this.listAll.push([]);
-        this.listFiltered.push([]);
-        this.provinceListArr[index] = this.provinceList;
-        this.filteredList[index] = this.provinceList.slice();
-        //list อำเภอ
-        if (element.districts) {
-          element.districts.forEach((element2, jIndex) => {
-            this.listAll[index].push({ main: [], sub: [] });
-            this.listFiltered[index].push({ main: [], sub: [] });
-            this.getDistrict(element.refProvince, index, this.listAll[index].length - 1, element);
-            // list ตำบล
-            if (element2.subDistricts) {
-              element2.subDistricts.forEach((element3, kIndex) => {
-                this.listAll[index][jIndex].sub.push([]);
-                this.listFiltered[index][jIndex].sub.push([]);
-                this.getSubDistrict(element2.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, element2)
-              })
-            }
-          });
-        }
-      })
-    } else {
-      this.getProvince().then((response) => {
-        this.addHublist()
-      })
-    }
+
+    this.hubs.forEach((element, index) => {
+      this.listAll.push([]);
+      this.listFiltered.push([]);
+      this.provinceListArr[index] = this.provinceList;
+      this.filteredList[index] = this.provinceList.slice();
+      //list อำเภอ
+      if (element.districts) {
+        element.districts.forEach((element2, jIndex) => {
+          this.listAll[index].push({ main: [], sub: [] });
+          this.listFiltered[index].push({ main: [], sub: [] });
+          this.getDistrict(element.refProvince, index, this.listAll[index].length - 1, element);
+          // list ตำบล
+          if (element2.subDistricts) {
+            element2.subDistricts.forEach((element3, kIndex) => {
+              this.listAll[index][jIndex].sub.push([]);
+              this.listFiltered[index][jIndex].sub.push([]);
+              this.getSubDistrict(element2.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, element2)
+            })
+          }
+        });
+      }
+    })
   }
 
   // เพิ่มอำเภอ
@@ -243,9 +238,11 @@ export class HubComponent implements OnInit {
             });
           });
           this.loadingDialog = false;
+          resolve();
+        } else {
+          resolve();
         }
       });
-      resolve();
     });
   }
 

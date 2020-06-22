@@ -42,8 +42,8 @@
           <ng-container matColumnDef="action">
             <th class="bg-green" mat-header-cell *matHeaderCellDef style="max-width: 250px;"></th>
             <td mat-cell *matCellDef="let element">
-              <button *ngIf="!element.isSuccess" mat-flat-button type="button" color="primary"
-                (click)="editAppForm(element.comId, element.appFormId)" [disabled]="!element.status.editable">
+              <button mat-flat-button type="button" color="primary"
+                (click)="editAppForm(element.comId, element.appFormId, element.flowId)" [disabled]="element.isSuccess">
                 {{ 'EDIT' | translate }}
               </button>
               <button mat-flat-button type="button" color="primary" (click)="reserveDate(dialog, element.flowId)"

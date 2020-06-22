@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -94,6 +94,7 @@ export class ApplicationFormComponent implements OnInit {
     loading: false
   };
   userToken: any;
+  flowId: string;
   @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -111,6 +112,7 @@ export class ApplicationFormComponent implements OnInit {
     setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
+    this.flowId = getFlowId()
   }
 
   ngOnInit() {
@@ -148,7 +150,7 @@ export class ApplicationFormComponent implements OnInit {
         } else if (action === State.Detail && refAppform) {
           this.isDisabled = true;
           this.initialForm();
-          this.getDetail(refAppform);
+          this.getDetail(undefined, refAppform);
         } else if (action === State.Edit && refAppform) {
           this.isDisabled = true;
           this.userToken = getUserToken();
@@ -340,7 +342,7 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getDetail(refAppform: string, appFormId: string = undefined) {
-    this.service.getDetail(refAppform, appFormId).subscribe(response => {
+    this.service.getDetail(refAppform, appFormId, this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
