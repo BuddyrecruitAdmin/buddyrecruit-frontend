@@ -759,19 +759,19 @@ export class ApplicationFormComponent implements OnInit {
           if (!isQuestionValid && !qElement) {
             qElement = element;
           }
-        } else
-          if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
-            if (question.answer.expected !== question.answer.selected) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-              this.qExpectList.push(question.title)
-              // this.noExpect(qExpect);
-            }
-
-            if (!isQuestionValid && !qElement) {
-              qElement = element;
-            }
+        }
+        if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
+          if (question.answer.expected !== question.answer.selected) {
+            isQuestionValid = false;
+            element.classList.add("has-error");
+            this.qExpectList.push(question.title)
+            // this.noExpect(qExpect);
           }
+
+          if (!isQuestionValid && !qElement) {
+            qElement = element;
+          }
+        }
       }
     });
 
