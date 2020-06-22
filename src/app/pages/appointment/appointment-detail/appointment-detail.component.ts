@@ -539,6 +539,7 @@ export class AppointmentDetailComponent implements OnInit {
 
   selectDate(dialog: TemplateRef<any>) {
     this.loadingDialog = true;
+    this.locationList = [];
     this.initialModel();
     this.sError = '';
     this.callDialog(dialog);

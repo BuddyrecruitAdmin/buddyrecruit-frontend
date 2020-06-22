@@ -97,6 +97,7 @@ export class ApplicationFormComponent implements OnInit {
   userToken: any;
   flowId: string;
   @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
+  qExpectList: any = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -592,7 +593,7 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
-  noExpect(qExpect) {
+  noExpect(qExpect, qElement) {
     let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
     // if (this.language === 'th') {
     //   message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
@@ -607,6 +608,8 @@ export class ApplicationFormComponent implements OnInit {
         // window.close();
         this.stepperComponent.previous();
         this.stepperComponent.previous();
+      } else {
+        qElement.scrollIntoView();
       }
     });
   }
@@ -663,7 +666,7 @@ export class ApplicationFormComponent implements OnInit {
   getQuestionElementError(): any {
     let isQuestionValid = true;
     let qElement: any;
-    let qExpect: any = [];
+    this.qExpectList = [];
     this.appForm.questions.forEach((question, index) => {
 
       const element = document.getElementById('question' + index);
@@ -752,19 +755,19 @@ export class ApplicationFormComponent implements OnInit {
           if (!isQuestionValid && !qElement) {
             qElement = element;
           }
-        }
-        if (question.answer.expected && (question.type === this.InputType.Radio)) {
-          if (question.answer.expected !== question.answer.selected) {
-            isQuestionValid = false;
-            element.classList.add("has-error");
-            qExpect.push(question.title)
-            this.noExpect(qExpect);
-          }
+        } else
+          if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
+            if (question.answer.expected !== question.answer.selected) {
+              isQuestionValid = false;
+              element.classList.add("has-error");
+              this.qExpectList.push(question.title)
+              // this.noExpect(qExpect);
+            }
 
-          if (!isQuestionValid && !qElement) {
-            qElement = element;
+            if (!isQuestionValid && !qElement) {
+              qElement = element;
+            }
           }
-        }
       }
     });
 
@@ -784,7 +787,10 @@ export class ApplicationFormComponent implements OnInit {
     }
 
     const qElement = this.getQuestionElementError();
-    if (isValid && qElement) {
+    if (this.qExpectList.length > 0) {
+      this.noExpect(this.qExpectList, qElement);
+      isValid = false;
+    } else if (isValid && qElement) {
       isValid = false;
       qElement.scrollIntoView();
     }
