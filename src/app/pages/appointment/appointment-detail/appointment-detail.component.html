@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <!-- <div *ngIf="isExpress" style="padding-top:1rem;" class="row">
+    <div *ngIf="isExpress" style="padding-top:1rem;" class="row">
       <div class="col-md-12 col-lg-12">
         <button nbButton type="button" status="success" (click)="checkDate(dialogCheck)">
           <nb-icon icon="calendar-outline">
@@ -73,7 +73,7 @@
           ระบุนัดสัมภาษณ์
         </button>
       </div>
-    </div> -->
+    </div>
   </nb-card-body>
 </nb-card>
 
@@ -413,7 +413,7 @@
 </ng-template>
 
 <!-- Date -->
-<!-- <ng-template #dialogDate let-data let-ref="dialogRef">
+<ng-template #dialogDate let-data let-ref="dialogRef">
   <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
     [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
@@ -505,10 +505,10 @@
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
     </nb-card-footer>
   </nb-card>
-</ng-template> -->
+</ng-template>
 
 <!-- checkDate -->
-<!-- <ng-template #dialogCheck let-data let-ref="dialogRef">
+<ng-template #dialogCheck let-data let-ref="dialogRef">
   <nb-card [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..."
     [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
@@ -540,4 +540,4 @@
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
     </nb-card-footer>
   </nb-card>
-</ng-template> -->
+</ng-template>

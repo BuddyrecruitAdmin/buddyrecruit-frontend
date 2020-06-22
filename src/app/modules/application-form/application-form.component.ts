@@ -630,7 +630,7 @@ export class ApplicationFormComponent implements OnInit {
     if (this.validation()) {
       let content;
       if (this.language === 'th') {
-        content = 'คุณต้องการทำต่อหรือไม่ ?';
+        content = 'คุณต้องการยืนยันการสมัครงานหรือไม่?';
       }
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
