@@ -152,8 +152,9 @@ export class ApplicationFormComponent implements OnInit {
         } else if (action === State.Edit && refAppform) {
           this.isDisabled = true;
           this.userToken = getUserToken();
+          const appformId = getAppFormData();
           this.initialForm();
-          this.getDetail(this.userToken);
+          this.getDetail(this.userToken, appformId.refGeneralAppForm._id);
         } else {
           this.onError();
         }
@@ -338,8 +339,8 @@ export class ApplicationFormComponent implements OnInit {
     }
   }
 
-  getDetail(refAppform: string) {
-    this.service.getDetail(refAppform).subscribe(response => {
+  getDetail(refAppform: string, appFormId: string = undefined) {
+    this.service.getDetail(refAppform, appFormId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;

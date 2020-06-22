@@ -21,9 +21,10 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.LIST, {});
   }
 
-  getDetail(_id): Observable<ApiResponse> {
+  getDetail(token, appFormID): Observable<ApiResponse> {
     const body = {
-      _id: _id,
+      token,
+      appFormID
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.DETAIL, body);
   }

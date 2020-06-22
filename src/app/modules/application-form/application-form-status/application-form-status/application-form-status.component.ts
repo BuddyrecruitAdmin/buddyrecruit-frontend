@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex,setUserToken } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -17,7 +17,8 @@ export interface TableElement {
   position: string;
   date: string;
   status: any;
-  isSuccess : boolean;
+  isSuccess: boolean;
+  comId: string;
 }
 
 @Component({
@@ -65,12 +66,13 @@ export class ApplicationFormStatusComponent implements OnInit {
           this.tokenId = response.data.token;
           response.data.data.forEach(element => {
             this.dataSource.push({
-              appFormId: element.refJR.refJD.refPosition.refCompany,
+              comId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
               position: element.refJR.refJD.position,
               date: this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate) || '-',
               status: this.setStatus(element),
-              isSuccess : element.isSuccess 
+              isSuccess: element.isSuccess,
+              appFormId: element.generalAppForm
             });
           });
         }
@@ -132,9 +134,10 @@ export class ApplicationFormStatusComponent implements OnInit {
     return status;
   }
 
-  editAppForm(appFormId: string) {
+  editAppForm(comId: string,appFormId: string) {
     setUserToken(this.tokenId);
-    this.router.navigate([`/application-form/edit/${appFormId}`]);
+    setAppFormData(appFormId);
+    this.router.navigate([`/application-form/edit/${comId}`]);
   }
 
   reserveDate(dialog: TemplateRef<any>, flowId: string) {
