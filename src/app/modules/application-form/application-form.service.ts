@@ -65,7 +65,7 @@ export class ApplicationFormService extends NetworkService {
     const body = {
       refCompany: refCompany
     }
-    return this.post(API_ENDPOINT.APPLICATION_FORM.HUB_LIST, body);
+    return this.post(API_ENDPOINT.CONFIGURATION.HUB_LIST, body);
   }
 
   getStatusList(refCompany, phone, birth): Observable<ApiResponse> {

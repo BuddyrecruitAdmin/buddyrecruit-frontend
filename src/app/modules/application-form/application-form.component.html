@@ -58,8 +58,9 @@
                 <div class="offset-lg-2 col-lg-8">
                   <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'POSITION' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}"
-                      (selectionChange)="onChangeJR($event.value)" required [disabled]="isDisabled || isDisableJob">
+                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}" required
+                      [disabled]="isDisabled || isDisableJob">
+                      <!-- (selectionChange)="onChangeJR($event.value)" -->
                       <mat-option *ngFor="let option of jrs" [value]="option.value">
                         {{ option.label }}
                       </mat-option>
@@ -71,8 +72,23 @@
               <!-- Hubs -->
               <div *ngIf="appForm.refJR && hubs.length" class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div>
-                  <div *ngFor="let province of hub.provinces">
+                  <!-- <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div> -->
+                  <div class="text-gray">HUB</div>
+                  <div *ngFor="let hub of hubs">
+                    <nb-checkbox [(ngModel)]="hub.checked" [ngModelOptions]="{standalone: true}"
+                      (checkedChange)="onChangeProvince($event, hub._id)" status="primary">
+                      {{ language === 'en' ? hub.name.en :hub.name.th }}
+                    </nb-checkbox>
+                    <div *ngIf="hub.checked" style="margin-left: 1.5rem;">
+                      <div *ngFor="let area of hub.areas">
+                        <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
+                          (checkedChange)="onChangeHub($event, area._id)" status="primary">
+                          {{ area.name }}
+                        </nb-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div *ngFor="let province of hub.provinces">
                     <mat-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                       (click)="onChangeProvince()" [disabled]="isDisabled">
                       {{ language === 'en' ? province.refProvince.name.en :province.refProvince.name.th }}
@@ -98,7 +114,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

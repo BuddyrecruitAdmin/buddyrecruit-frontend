@@ -82,7 +82,7 @@ export class ApplicationFormComponent implements OnInit {
   isPreview = false;
   isDisabled = false;
   isDisableJob = false;
-  isAgree = false;
+  isAgree = true;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
   stepper: NbStepperComponent;
@@ -99,6 +99,7 @@ export class ApplicationFormComponent implements OnInit {
   flowId: string;
   @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   qExpectList: any = [];
+  reserve: boolean;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -196,20 +197,24 @@ export class ApplicationFormComponent implements OnInit {
         if (response.code === ResponseCode.Success) {
           this.hubs = response.data;
           this.hubs.map(hub => {
-            hub.provinces.map(province => {
-              province.checked = false;
-              province.districts.map(district => {
-                district.checked = false;
-                district.subDistricts.map(subDistrict => {
-                  subDistrict.checked = false;
-                });
-              });
-            });
+            hub.checked = false;
+            hub.areas.map(area => {
+              area.checked = false;
+            })
+            // hub.provinces.map(province => {
+            //   province.checked = false;
+            //   province.districts.map(district => {
+            //     district.checked = false;
+            //     district.subDistricts.map(subDistrict => {
+            //       subDistrict.checked = false;
+            //     });
+            //   });
+            // });
           });
         }
-        if (this.isDisableJob) {
-          this.onChangeJR(this.appForm.refJR);
-        }
+        // if (this.isDisableJob) {
+        //   this.onChangeJR(this.appForm.refJR);
+        // }
         this.loading = false;
       });
     });
@@ -259,6 +264,7 @@ export class ApplicationFormComponent implements OnInit {
       postcode: '',
       gender: '',
       expectedSalary: '',
+      reserve: false,
       workExperience: {
         totalExpMonth: 0,
         work: []
@@ -457,17 +463,41 @@ export class ApplicationFormComponent implements OnInit {
     this.refPosition = refPosition.group;
   }
 
-  onChangeProvince() {
-    this.hub.provinces.forEach(province => {
-      if (!province.checked) {
-        province.districts.map(district => {
-          district.checked = false;
-          district.subDistricts.forEach(subDistrict => {
-            subDistrict.checked = false;
-          });
+  onChangeProvince(checked, _id) {
+    if (checked) {
+      this.hubs.forEach(hub => {
+        if (hub._id !== _id) {
+          hub.checked = false;
+        }
+        // hub.forEach(area => {
+        //   if (area._id !== _id) {
+        //     area.checked = false;
+        //   }
+        // });
+      });
+    }
+    // this.hub.provinces.forEach(province => {
+    //   if (!province.checked) {
+    //     province.districts.map(district => {
+    //       district.checked = false;
+    //       district.subDistricts.forEach(subDistrict => {
+    //         subDistrict.checked = false;
+    //       });
+    //     });
+    //   }
+    // });
+  }
+
+  onChangeHub(checked, _id) {
+    if (checked) {
+      this.hubs.forEach(hub => {
+        hub.areas.forEach(area => {
+          if (area._id !== _id) {
+            area.checked = false;
+          }
         });
-      }
-    });
+      });
+    }
   }
 
   onChangeDistrict() {
@@ -600,23 +630,29 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
-  noExpect(qExpect, qElement) {
-    let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
-    // if (this.language === 'th') {
-    //   message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
-    // }
-
+  noExpect(qExpect) {
+    // let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+    let message = 'Your qualifications do not match';
+    let btnText = 'Accept'
+    let btnText2 = 'Exit'
+    if (this.language === 'th') {
+      message = 'คุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+      btnText = 'ยืนยัน';
+      btnText2 = 'ออกจากหน้านี้'
+    }
     const confirm = this.matDialog.open(PopupMessageComponent, {
       width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-      data: { type: 'E', content: message, contents: qExpect, btnText: 'แก้ไข', btnText2: 'ออกจากหน้านี้' }
+      data: { type: 'E', content: message, contents: qExpect, btnText: btnText, btnText2: btnText2 }
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
         // window.close();
         this.stepperComponent.previous();
         this.stepperComponent.previous();
-      } else {
-        qElement.scrollIntoView();
+      }
+      else {
+        this.stepperComponent.next();
+        // qElement.scrollIntoView();
       }
     });
   }
@@ -674,6 +710,9 @@ export class ApplicationFormComponent implements OnInit {
     let isQuestionValid = true;
     let qElement: any;
     this.qExpectList = [];
+    if (document.getElementById('question' + 0)) {
+      this.reserve = false;
+    }
     this.appForm.questions.forEach((question, index) => {
 
       const element = document.getElementById('question' + index);
@@ -765,10 +804,11 @@ export class ApplicationFormComponent implements OnInit {
         }
         if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
           if (question.answer.expected !== question.answer.selected) {
+            this.reserve = true;
             isQuestionValid = false;
             element.classList.add("has-error");
             this.qExpectList.push(question.title)
-            // this.noExpect(qExpect);
+
           }
 
           if (!isQuestionValid && !qElement) {
@@ -783,7 +823,6 @@ export class ApplicationFormComponent implements OnInit {
 
   validation(): boolean {
     let isValid = true;
-
     const elements = document.getElementsByClassName('mat-input-element ng-invalid');
     if (elements.length > 0) {
       isValid = false;
@@ -795,9 +834,9 @@ export class ApplicationFormComponent implements OnInit {
 
     const qElement = this.getQuestionElementError();
     if (this.qExpectList.length > 0) {
-      this.noExpect(this.qExpectList, qElement);
-      isValid = false;
-    } else if (isValid && qElement) {
+      this.noExpect(this.qExpectList);
+    }
+    if (isValid && qElement) {
       isValid = false;
       qElement.scrollIntoView();
     }
@@ -807,36 +846,49 @@ export class ApplicationFormComponent implements OnInit {
 
   setRequest(): IApplicationForm {
     const request = this.appForm;
-
+    // ทำต่อตรงนี่
     request.hubs = [];
-    if (this.hub && this.hub.provinces && this.hub.provinces.length) {
-      this.hub.provinces.forEach(province => {
-        let districts = [];
-        if (province.checked) {
-          province.districts.forEach(district => {
-            let subDistricts = [];
-            if (district.checked) {
-              district.subDistricts.forEach(subDistrict => {
-                if (subDistrict.checked) {
-                  subDistricts.push({
-                    refSubDistrict: subDistrict.refSubDistrict._id
-                  });
-                }
-              });
-              districts.push({
-                refDistrict: district.refDistrict._id,
-                subDistricts: subDistricts,
-              });
+    // if (this.hub && this.hub.provinces && this.hub.provinces.length) {
+    if (this.hubs && this.hubs.length) {
+      this.hubs.forEach(hub => {
+        if (hub.checked) {
+          hub.areas.forEach(area => {
+            if (area.checked) {
+              request.hubs.push({
+                refProvince: hub.refProvince,
+                area: area._id
+              })
             }
           });
-          request.hubs.push({
-            refProvince: province.refProvince._id,
-            districts: districts
-          });
         }
-      });
+      })
+      // this.hub.provinces.forEach(province => {
+      //   let districts = [];
+      //   if (province.checked) {
+      //     province.districts.forEach(district => {
+      //       let subDistricts = [];
+      //       if (district.checked) {
+      //         district.subDistricts.forEach(subDistrict => {
+      //           if (subDistrict.checked) {
+      //             subDistricts.push({
+      //               refSubDistrict: subDistrict.refSubDistrict._id
+      //             });
+      //           }
+      //         });
+      //         districts.push({
+      //           refDistrict: district.refDistrict._id,
+      //           subDistricts: subDistricts,
+      //         });
+      //       }
+      //     });
+      //     request.hubs.push({
+      //       refProvince: province.refProvince._id,
+      //       districts: districts
+      //     });
+      //   }
+      // });
     }
-
+    request.reserve = this.reserve;
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
     request.road + ' '
@@ -988,7 +1040,7 @@ export class ApplicationFormComponent implements OnInit {
 
   uploadFile(target, files: FileList, isCV = false, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
-    if (FileSize > 10) {
+    if (FileSize > 15) {
       this.showToast('danger', 'File size more than 10MB');
       target.uploadName = '';
       target.originalName = '';

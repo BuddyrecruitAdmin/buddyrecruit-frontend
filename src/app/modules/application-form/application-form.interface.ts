@@ -4,7 +4,7 @@ export interface IApplicationForm {
   _id?;
   refCompany?;
   refTemplate?;
-  refJR?;  
+  refJR?;
   hubs?: any;
   otherJob: string;
   title: string;
@@ -23,14 +23,15 @@ export interface IApplicationForm {
   postcode: string;
   gender: string;
   expectedSalary: string;
-
+  reserve: boolean;
+  
   workExperience: IWorkExperience;
   education: IEducation[];
   hardSkill: string[];
   softSkill: string[];
   certificate: string[];
   questions: IQuestion[];
-  
+
   refPosition: any;
   jobSelected: string;
   jobChildSelected: string;

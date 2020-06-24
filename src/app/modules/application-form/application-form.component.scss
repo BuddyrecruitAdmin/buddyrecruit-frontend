@@ -50,3 +50,6 @@
   max-height: 80vh;
   overflow-y: auto;
 }
+::ng-deep .nb-theme-default nb-checkbox.status-primary .custom-checkbox{
+  border-radius: 25px;
+}
