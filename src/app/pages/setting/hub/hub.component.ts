@@ -91,7 +91,6 @@ export class HubComponent implements OnInit {
       isBangkokAndPerimeter: undefined,
       isProvincial: undefined,
       isNewHub: undefined,
-      isDeleted: true,
       areas: [{
         name: undefined,
         isFull: false,
@@ -195,6 +194,10 @@ export class HubComponent implements OnInit {
     this.getProvince().then((response) => {
       this.loadingDialog = false;
     })
+  }
+
+  deleteHub(index) {
+    this.itemDialog.areas.splice(index, 1);
   }
 
   // เรียก popup

@@ -191,11 +191,13 @@
             <div class="row" *ngFor="let item of itemDialog.areas;let i = index;">
                 <div id="in{{i}}" [ngClass]="{ 'has-error': !item.name && touched }" style="padding-top: 0.65rem;"
                     class="col-md-6 col-lg-6 form-control-group">
-                    <textarea nbInput fullWidth [(ngModel)]="item.name" placeholder="รายละเอียดใส่Hub">
+                    <textarea nbInput fullWidth [(ngModel)]="item.name" placeholder="ระบุพื้นที่">
                         </textarea>
                 </div>
                 <div class="col-md-6 col-lg-6">
                     <nb-checkbox [(ngModel)]="item.isFull" status="basic">เต็ม</nb-checkbox>
+                    <nb-icon *ngIf="i > 0" style="float: right;margin-top: 0.35rem;" icon="trash-2-outline" class="link text-red" nbTooltip="Delete"
+                        (click)="deleteHub(i)"></nb-icon>
                     <input type="text" [(ngModel)]="item.remark" nbInput fullWidth placeholder="รายละเอียดเพิ่มเติม">
                 </div>
             </div>
