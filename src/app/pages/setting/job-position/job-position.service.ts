@@ -83,7 +83,7 @@ export class JobPositionService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.HUB_EDIT, provinces);
   }
   
-  getHubList(criteria: any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.HUB_LIST, { criteria });
+  getHubList(criteria: any = undefined, refCompany: any = undefined): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.HUB_LIST, { criteria, refCompany });
   }
 }
