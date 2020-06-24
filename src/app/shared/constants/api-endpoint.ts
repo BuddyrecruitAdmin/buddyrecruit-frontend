@@ -144,6 +144,7 @@ export const API_ENDPOINT = {
     SUB_DISTRICT: "subDistrict/list",
     HUB_DETAIL: "hub/detail",
     HUB_EDIT: "hub/edit",
+    HUB_LIST: "hub/list",
 
     LOCATION_LIST: "location/list",
     LOCATION_EDIT: "location/edit",
