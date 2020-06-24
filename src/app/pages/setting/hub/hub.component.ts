@@ -128,7 +128,7 @@ export class HubComponent implements OnInit {
       ]
     };
     this.items = [];
-    this.service.getHubList(this.criteria).subscribe(response => {
+    this.service.getHubList(this.criteria, this.role.refCompany._id).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
