@@ -825,15 +825,15 @@ export class ApplicationFormComponent implements OnInit {
         if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
           if (question.answer.expected !== question.answer.selected) {
             this.reserve = true;
-            isQuestionValid = false;
-            element.classList.add("has-error");
+            // isQuestionValid = false;
+            // element.classList.add("has-error");
             this.qExpectList.push(question.title)
 
           }
 
-          if (!isQuestionValid && !qElement) {
-            qElement = element;
-          }
+          // if (!isQuestionValid && !qElement) {
+          //   qElement = element;
+          // }
         }
       }
     });
@@ -853,12 +853,12 @@ export class ApplicationFormComponent implements OnInit {
     }
 
     const qElement = this.getQuestionElementError();
-    if (this.qExpectList.length > 0) {
-      this.noExpect(this.qExpectList);
-    }
     if (isValid && qElement) {
       isValid = false;
       qElement.scrollIntoView();
+    } else if (this.qExpectList.length > 0) {
+      isValid = false;
+      this.noExpect(this.qExpectList);
     }
 
     return isValid;
