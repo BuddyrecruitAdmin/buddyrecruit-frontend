@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -101,6 +101,9 @@ export class ApplicationFormComponent implements OnInit {
   @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   qExpectList: any = [];
   reserve: boolean;
+  provinceFlag: boolean = false;
+  areaFlag: boolean = false;
+  dataIndex: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -151,6 +154,7 @@ export class ApplicationFormComponent implements OnInit {
           }
           this.isPreview = true;
         } else if (action === State.Submit && refCompany) {
+          this.dataIndex = getAppformIndex()
           this.getTemplate(refCompany, undefined);
         } else if (action === State.Detail && refAppform) {
           this.isDisabled = true;
@@ -196,6 +200,11 @@ export class ApplicationFormComponent implements OnInit {
           this.jrs.forEach(element => {
             if (element._id && element.refJD && element.refJD.position) {
               element.checked = false;
+              if (this.appForm.refJR) {
+                if (this.appForm.refJR === element._id) {
+                  element.checked = true;
+                }
+              }
             }
           })
         }
@@ -207,6 +216,14 @@ export class ApplicationFormComponent implements OnInit {
             hub.checked = false;
             hub.areas.map(area => {
               area.checked = false;
+              if (this.hub.length > 0) {
+                if (this.hub[0].refProvince._id === hub.refProvince) {
+                  hub.checked = true;
+                }
+                if (this.hub[0].area === area._id) {
+                  area.checked = true;
+                }
+              }
             })
             // hub.provinces.map(province => {
             //   province.checked = false;
@@ -321,6 +338,10 @@ export class ApplicationFormComponent implements OnInit {
             this.appForm.questions = this.template.questions;
             this.initialAnswer();
           }
+          if(this.dataIndex){
+            this.appForm.phone = this.dataIndex.phone;
+            // this.appForm.idCard = this.dataIndex.idCard;
+          }
           if (!refPosition) {
             this.getJR(this.template.refCompany);
           }
@@ -369,25 +390,45 @@ export class ApplicationFormComponent implements OnInit {
         if (response.data) {
           this.appForm = response.data;
           this.template = response.data.refTemplate;
-          this.hub.provinces = this.appForm.hubs || [];
-          if (this.hub.provinces && this.hub.provinces.length) {
-            this.hub.provinces.map(province => {
-              province.checked = true;
-              if (province.districts && province.districts.length) {
-                province.districts.map(district => {
-                  district.checked = true;
-                  if (district.subDistricts && district.subDistricts.length) {
-                    district.subDistricts.map(subDistrict => {
-                      subDistrict.checked = true;
-                    });
-                  }
-                });
+          // this.hub.provinces = this.appForm.hubs || [];
+          // if (this.hub.provinces && this.hub.provinces.length) {
+          //   this.hub.provinces.map(province => {
+          //     province.checked = true;
+          //     if (province.districts && province.districts.length) {
+          //       province.districts.map(district => {
+          //         district.checked = true;
+          //         if (district.subDistricts && district.subDistricts.length) {
+          //           district.subDistricts.map(subDistrict => {
+          //             subDistrict.checked = true;
+          //           });
+          //         }
+          //       });
+          //     }
+          //   });
+          // }
+
+          this.hub = this.appForm.hubs || [];
+
+          this.getJR(this.appForm.refCompany);
+          if (this.appForm.refJR) {
+            this.jrs.forEach(element => {
+              if (element._id === this.appForm.refJR) {
+                this.refPosition = element.refJD.refPosition;
               }
             });
           }
-
-          this.getJR(this.appForm.refCompany);
-
+          if (response.data.hubs) {
+            response.data.hubs.forEach(element => {
+              if (element.refProvince) {
+                if (element.refProvince._id) {
+                  this.provinceFlag = true;
+                }
+              }
+              if (element.area) {
+                this.areaFlag = true;
+              }
+            });
+          }
           this.appForm.birth = new Date(this.appForm.birth);
           if (this.appForm.workExperience.work && this.appForm.workExperience.work.length) {
             this.appForm.workExperience.work.map(element => {
@@ -471,7 +512,9 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   onChangeProvince(checked, _id) {
+    this.provinceFlag = false;
     if (checked) {
+      this.provinceFlag = true;
       this.hubs.forEach(hub => {
         if (hub._id !== _id) {
           hub.checked = false;
@@ -503,13 +546,16 @@ export class ApplicationFormComponent implements OnInit {
         }
       });
       this.appForm.refJR = option;
+      this.refPosition = option;
     } else {
       this.appForm.refJR = '';
     }
   }
 
   onChangeHub(checked, _id) {
+    this.areaFlag = false;
     if (checked) {
+      this.areaFlag = true;
       this.hubs.forEach(hub => {
         hub.areas.forEach(area => {
           if (area._id !== _id) {

@@ -10,7 +10,7 @@ import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angu
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole, setAppFormData } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -82,15 +82,16 @@ export class ApplicationFormIndexComponent implements OnInit {
       // let birth = new Date(this.birth);
       // birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
       this.service.getStatusList(this.companyId, this.phone, this.idCard).subscribe(response => {
+        const appFormIndex = {
+          companyId: this.companyId,
+          phone: this.phone,
+          idCard: this.idCard,
+        };
         if (response.code === ResponseCode.Success) {
-          const appFormIndex = {
-            companyId: this.companyId,
-            phone: this.phone,
-            idCard: this.idCard,
-          };
           setAppformIndex(appFormIndex);
           this.router.navigate(['/application-form/status']);
         } else {
+          setAppformIndex(appFormIndex);
           this.router.navigate([`/application-form/submit/${this.companyId}`]);
           // this.matDialog.open(PopupMessageComponent, {
           //   width: `${this.utilitiesService.getWidthOfPopupCard()}px`,

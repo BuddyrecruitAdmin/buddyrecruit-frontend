@@ -18,6 +18,7 @@ export interface TableElement {
   date: string;
   status: any;
   comId: string;
+  hub: string;
 }
 
 @Component({
@@ -29,11 +30,11 @@ export class ApplicationFormStatusComponent implements OnInit {
   language = 'en';
   loading = true;
 
-  displayedColumns: string[] = ['position', 'date', 'status', 'action'];
+  displayedColumns: string[] = ['position', 'hub', 'date', 'status', 'action'];
   dataSource: TableElement[] = [];
   tokenId: any;
   fullName: string;
-
+  comName: string;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -61,20 +62,22 @@ export class ApplicationFormStatusComponent implements OnInit {
   getStatusList() {
     const data = getAppformIndex();
     if (data) {
-      this.service.getStatusList(data.companyId, data.phone, data.birth).subscribe(response => {
+      this.service.getStatusList(data.companyId, data.phone, data.idCard).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;
           response.data.data.forEach(element => {
+            this.comName = element.refCompany.name;
             this.fullName = element.refCandidate ?
               `${element.refCandidate.title} ${element.refCandidate.firstname} ${element.refCandidate.lastname}` : 'Unknown';
             this.dataSource.push({
               comId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
               position: element.refJR.refJD.position,
-              date: this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate) || '-',
+              date: this.utilitiesService.convertDateTime(element.timestamp) || '-',
               status: this.setStatus(element),
-              appFormId: element.generalAppForm
+              appFormId: element.generalAppForm,
+              hub: element.hubs
             });
           });
         }
@@ -104,11 +107,7 @@ export class ApplicationFormStatusComponent implements OnInit {
           if (element.isSuccessed) {
             status.nameEN = 'Registered';
             status.nameTH = 'ยื่นสมัครแล้ว';
-          } else {
-            status.nameEN = 'Waiting more information';
-            status.nameTH = 'รอการเพิ่มข้อมูล';
-            status.color = 'label-warning';
-          }
+          }           
           break;
 
         case '3':
@@ -131,6 +130,8 @@ export class ApplicationFormStatusComponent implements OnInit {
           break;
 
         case '7':
+          status.nameEN = 'Waiting more information';
+          status.nameTH = 'รอการเพิ่มข้อมูล';
           status.color = 'label-warning';
           break;
 

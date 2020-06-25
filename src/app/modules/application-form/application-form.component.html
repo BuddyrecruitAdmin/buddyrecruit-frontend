@@ -69,7 +69,7 @@
                   </mat-form-field> -->
                   <div *ngFor="let option of jrs">
                     <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
-                      (checkedChange)="onSelectPosition($event, option._id)" status="primary"
+                      (checkedChange)="onSelectPosition($event, option.refJD.refPosition)" status="primary"
                       [disabled]="isDisabled || isDisableJob">
                       {{ option.refJD.position }}
                     </nb-checkbox>
@@ -132,7 +132,7 @@
           </div>
           <div class="footer-right">
             <button nbButton type="button" nbStepperNext (click)="getTemplate(refCompany, undefined, refPosition)"
-              [disabled]="!appForm.refJR">
+              [disabled]="!appForm.refJR || !areaFlag || !provinceFlag">
               {{ 'NEXT' | translate }}
             </button>
           </div>
