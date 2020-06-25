@@ -23,7 +23,7 @@ export interface IApplicationForm {
   postcode: string;
   gender: string;
   expectedSalary: string;
-  reserve: boolean;
+  isReserve: boolean;
   
   workExperience: IWorkExperience;
   education: IEducation[];

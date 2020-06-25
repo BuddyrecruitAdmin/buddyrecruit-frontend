@@ -264,7 +264,7 @@ export class ApplicationFormComponent implements OnInit {
       postcode: '',
       gender: '',
       expectedSalary: '',
-      reserve: false,
+      isReserve: false,
       workExperience: {
         totalExpMonth: 0,
         work: []
@@ -888,7 +888,7 @@ export class ApplicationFormComponent implements OnInit {
       //   }
       // });
     }
-    request.reserve = this.reserve;
+    request.isReserve = this.reserve;
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
     request.road + ' '
