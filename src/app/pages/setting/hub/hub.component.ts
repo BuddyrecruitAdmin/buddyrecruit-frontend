@@ -56,6 +56,7 @@ export class HubComponent implements OnInit {
   // listFiltered: any;
   sError: string;
   touched: boolean;
+  editFlag: boolean;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -80,6 +81,7 @@ export class HubComponent implements OnInit {
     this.loading = true;
     this.provinceListArr = [];
     this.filteredList = [];
+    this.editFlag = false;
     this.refresh();
   }
 
@@ -190,6 +192,7 @@ export class HubComponent implements OnInit {
     this.touched = false;
     this.sError = '';
     this._id = this.itemDialog._id;
+    this.editFlag = true;
     this.callDialog(dialog);
     this.getProvince().then((response) => {
       this.loadingDialog = false;
@@ -303,6 +306,13 @@ export class HubComponent implements OnInit {
               value: item._id
             });
           });
+          if(this.editFlag){
+            this.editFlag = false;
+            this.provinceList.push({
+              label: this.itemDialog.name.th,
+              value: this.itemDialog.refProvince
+            })
+          }
           this.filteredList = this.provinceList.slice();
           this.loadingDialog = false;
           resolve();

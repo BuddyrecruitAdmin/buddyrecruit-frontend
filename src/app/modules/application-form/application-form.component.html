@@ -56,16 +56,23 @@
               </div>
               <div class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <mat-form-field appearance="outline" class="fit-content">
+                  <!-- (selectionChange)="onChangeJR($event.value)" -->
+                  <!-- <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'POSITION' | translate }}</mat-label>
                     <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}" required
                       [disabled]="isDisabled || isDisableJob">
-                      <!-- (selectionChange)="onChangeJR($event.value)" -->
+               
                       <mat-option *ngFor="let option of jrs" [value]="option.value">
                         {{ option.label }}
                       </mat-option>
                     </mat-select>
-                  </mat-form-field>
+                  </mat-form-field> -->
+                  <div *ngFor="let option of jrs">
+                    <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
+                      (checkedChange)="onSelectPosition($event, option._id)" status="primary">
+                      {{ option.refJD.position }}
+                    </nb-checkbox>
+                  </div>
                 </div>
               </div>
 
@@ -83,7 +90,10 @@
                       <div *ngFor="let area of hub.areas">
                         <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
                           (checkedChange)="onChangeHub($event, area._id)" status="primary">
-                          {{ area.name }}
+                          {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                            {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
+                          <span class="text-red" *ngIf="!area.isFull && area.remark">
+                            ({{ area.remark }})</span>
                         </nb-checkbox>
                       </div>
                     </div>

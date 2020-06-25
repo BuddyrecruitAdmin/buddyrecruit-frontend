@@ -52,7 +52,8 @@ export class ApplicationFormComponent implements OnInit {
 
   degreesEN: DropDownValue[] = [];
   degreesTH: DropDownValue[] = [];
-  jrs: DropDownGroup[] = [];
+  // jrs: DropDownGroup[] = [];
+  jrs: any = [];
   hubs: any[] = [];
   hub: any = {};
 
@@ -182,15 +183,21 @@ export class ApplicationFormComponent implements OnInit {
     this.service.getJR(refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          response.data.forEach(element => {
+          // response.data.forEach(element => {
+          //   if (element._id && element.refJD && element.refJD.position) {
+          //     this.jrs.push({
+          //       label: element.refJD.position,
+          //       group: element.refJD.refPosition,
+          //       value: element._id
+          //     });
+          //   }
+          // });
+          this.jrs = response.data;
+          this.jrs.forEach(element => {
             if (element._id && element.refJD && element.refJD.position) {
-              this.jrs.push({
-                label: element.refJD.position,
-                group: element.refJD.refPosition,
-                value: element._id
-              });
+              element.checked = false;
             }
-          });
+          })
         }
       }
       this.service.getHub(refCompany).subscribe(response => {
@@ -486,6 +493,19 @@ export class ApplicationFormComponent implements OnInit {
     //     });
     //   }
     // });
+  }
+
+  onSelectPosition(checked, option) {
+    if (checked) {
+      this.jrs.forEach(opt => {
+        if (opt._id !== option) {
+          opt.checked = false
+        }
+      });
+      this.appForm.refJR = option;
+    } else {
+      this.appForm.refJR = '';
+    }
   }
 
   onChangeHub(checked, _id) {
