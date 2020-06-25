@@ -86,4 +86,12 @@ export class JobPositionService extends NetworkService {
   getHubList(criteria: any = undefined, refCompany: any = undefined): Observable<ApiResponse> {
     return this.post(API_ENDPOINT.CONFIGURATION.HUB_LIST, { criteria, refCompany });
   }
+
+  deleteHub(item: any): Observable<ApiResponse> {
+    const body = {
+      _id: item._id
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.HUB_DELETE, body);
+  }
+
 }

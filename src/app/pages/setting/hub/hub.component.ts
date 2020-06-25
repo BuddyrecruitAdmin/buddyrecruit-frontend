@@ -477,7 +477,7 @@ export class HubComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.deleteItem(item).subscribe(response => {
+        this.service.deleteHub(item).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.search();
