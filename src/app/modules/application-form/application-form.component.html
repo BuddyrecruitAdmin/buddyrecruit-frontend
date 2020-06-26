@@ -69,7 +69,7 @@
                   </mat-form-field> -->
                   <div *ngFor="let option of jrs">
                     <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
-                      (checkedChange)="onSelectPosition($event, option.refJD.refPosition)" status="primary"
+                      (checkedChange)="onSelectPosition($event, option)" status="primary"
                       [disabled]="isDisabled || isDisableJob">
                       {{ option.refJD.position }}
                     </nb-checkbox>

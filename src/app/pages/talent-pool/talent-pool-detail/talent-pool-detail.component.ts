@@ -53,6 +53,7 @@ export class TalentPoolDetailComponent implements OnInit {
   loading: boolean;
   count: Count;
   showTips: boolean;
+  showCondition: boolean;
   email: boolean = true;
   jobsDB: boolean = true;
   other: boolean = true;
@@ -161,6 +162,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.searchArea = [];
     this.keyword = '';
     this.showTips = false;
+    this.showCondition = true;
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -654,24 +656,43 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any, dialog: any) {
-    if (item.refCandidate.email) {
-      setUserEmail(item.refCandidate.email);
+    if (this.isExpress) {
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: MESSAGE[44] }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          this.candidateService.candidateFlowApprove(item._id, this.refStageId, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.search();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
+      });
+    } else {
+      if (item.refCandidate.email) {
+        setUserEmail(item.refCandidate.email);
+      }
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setButtonId(button._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        if (result) {
+          this.search();
+        }
+      });
     }
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.search();
-      }
-    });
   }
 
   appointmentExam(item: any) {

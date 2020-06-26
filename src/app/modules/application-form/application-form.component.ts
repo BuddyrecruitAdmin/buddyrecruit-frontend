@@ -338,7 +338,7 @@ export class ApplicationFormComponent implements OnInit {
             this.appForm.questions = this.template.questions;
             this.initialAnswer();
           }
-          if(this.dataIndex){
+          if (this.dataIndex) {
             this.appForm.phone = this.dataIndex.phone;
             // this.appForm.idCard = this.dataIndex.idCard;
           }
@@ -429,7 +429,11 @@ export class ApplicationFormComponent implements OnInit {
               }
             });
           }
-          this.appForm.birth = new Date(this.appForm.birth);
+          if (this.utilitiesService.dateIsValid(this.appForm.birth)) {
+            this.appForm.birth = new Date(this.appForm.birth);
+          } else {
+            this.appForm.birth = null;
+          }
           if (this.appForm.workExperience.work && this.appForm.workExperience.work.length) {
             this.appForm.workExperience.work.map(element => {
               element.start = new Date(element.start);
@@ -541,12 +545,12 @@ export class ApplicationFormComponent implements OnInit {
   onSelectPosition(checked, option) {
     if (checked) {
       this.jrs.forEach(opt => {
-        if (opt._id !== option) {
+        if (opt._id !== option.refJD.refPosition) {
           opt.checked = false
         }
       });
-      this.appForm.refJR = option;
-      this.refPosition = option;
+      this.appForm.refJR = option._id;
+      this.refPosition = option.refJD.refPosition;
     } else {
       this.appForm.refJR = '';
     }

@@ -10,6 +10,11 @@
     จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
   </span>
 </nb-alert>
+<nb-alert *ngIf="showCondition" status="warning" closable (close)="showCondition = !showCondition">
+  <span>
+    พื้นหลังสี <span class="dot"></span> สำหรับ Candidate ที่เป็นตัวสำรอง(คุณสมบัติไม่ตรง)
+  </span>
+</nb-alert>
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -297,7 +302,8 @@
 
           <!-- PENDING, SELECTED, REJECT -->
           <div *ngIf="tabSelected !== 'NOT BUY'">
-            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i">
+            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i"
+              [ngClass]="{ 'bg-reserve': item.isReserve }">
               <nb-card-header>
                 <div class="title">
                   <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"

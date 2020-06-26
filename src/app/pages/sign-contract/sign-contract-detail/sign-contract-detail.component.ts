@@ -378,28 +378,47 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (item.refCandidate.email) {
-      setUserEmail(item.refCandidate.email);
-    }
-    if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        setButtonId();
+    if (this.isExpress) {
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: MESSAGE[44] }
+      });
+      confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.search();
+          this.candidateService.candidateFlowApprove(item._id, this.refStageId, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.search();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
         }
       });
     } else {
-      this.nextStep(item, button);
+      if (item.refCandidate.email) {
+        setUserEmail(item.refCandidate.email);
+      }
+      if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
+        setFlowId(item._id);
+        setCandidateId(item.refCandidate._id);
+        setButtonId(button._id);
+        this.dialogService.open(PopupPreviewEmailComponent,
+          {
+            closeOnBackdropClick: true,
+            hasScroll: true,
+          }
+        ).onClose.subscribe(result => {
+          setFlowId();
+          setCandidateId();
+          setButtonId();
+          if (result) {
+            this.search();
+          }
+        });
+      } else {
+        this.nextStep(item, button);
+      }
     }
   }
 
