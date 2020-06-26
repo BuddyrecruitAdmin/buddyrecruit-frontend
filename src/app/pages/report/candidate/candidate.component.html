@@ -23,11 +23,11 @@
           <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
             (click)="filterToggle()">
           </nb-action>
-          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+          <!-- <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
             (click)="changeLayout(true)">
           </nb-action>
           <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
-            (click)="changeLayout(false)"></nb-action>
+            (click)="changeLayout(false)"></nb-action> -->
         </nb-actions>
       </div>
     </div>
@@ -102,6 +102,38 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">
+            <label class="label">Period Date</label>
+            <!-- <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker> -->
+            <nb-rangepicker #startDate></nb-rangepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="startDate" [(ngModel)]="startTime" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <nb-icon icon="search-outline" class="link" style="margin-top: 2.15rem;"
+            (click)="paging.pageIndex = 0; search()"></nb-icon>
+        </div>
+        <!-- <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">End Date</label>
+            <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="endDate" (ngModelChange)="dateSearch()" [(ngModel)]="endTime" nbInput fullWidth
+                style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-4">
+          <div class="form-control-group">
             <label class="label">Stage</label>
             <mat-form-field [color]="primary" appearance="outline">
               <mat-select [(ngModel)]="filter.selected.stage" (ngModelChange)="search(true)" multiple>
@@ -112,10 +144,6 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <!-- <nb-select multiple [(selected)]="filter.selected.stage" (selectedChange)="search(true)" placeholder="All"
-              fullWidth>
-              <nb-option *ngFor="let stage of filter.data.stage" [value]="stage.value">{{stage.label}}</nb-option>
-            </nb-select> -->
           </div>
         </div>
         <div class="col-md-4">
@@ -130,20 +158,16 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <!-- <nb-select multiple [(selected)]="filter.selected.subStage" (selectedChange)="search(true)"
-              placeholder="All" fullWidth>
-              <nb-option *ngFor="let sub of filter.data.subStage" [value]="sub.value">{{sub.label}}</nb-option>
-            </nb-select> -->
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-control-group">
-            <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox>
+            <!-- <nb-checkbox [(ngModel)]="checked" (checkedChange)="toggle($event)">Include Reject</nb-checkbox> -->
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="padding-bottom: 16px;">
           <div class="form-control-group">
             <button nbButton status="default" class="pull-right" (click)="clearFilter()">
               Clear Filter
@@ -164,7 +188,7 @@
 
 <div *ngIf="!loading && items.length">
   <!-- Grid Layout -->
-  <div *ngIf="isGridLayout">
+  <!-- <div *ngIf="isGridLayout">
     <div class="row">
       <div class="col-lg-6" *ngFor="let item of items;">
         <nb-card style="margin-bottom: 1rem;">
@@ -225,7 +249,7 @@
         </mat-paginator>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Table layout -->
   <nb-card *ngIf="!isGridLayout">
@@ -234,14 +258,16 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr style="font-size: 14px;">
-              <th scope="col">Candidate Name</th>
-              <th scope="col" style="width: 170px;">Job Description</th>
-              <th scope="col" style="width: 90px;">Job Status</th>
-              <th scope="col" style="width: 120px;">Stage</th>
-              <th scope="col" style="width: 120px;">Sub Stage</th>
-              <th scope="col" style="width: 120px;">Last changed update</th>
-              <th *ngIf="checked" scope="col">Rejected Reason</th>
-              <th *ngIf="checked" scope="col" style="width: 90px;">Rejected By</th>
+              <th scope="col">ชื่อ-นามสกุล</th>
+              <th scope="col" style="width: 170px;">ตำแหน่ง</th>
+              <th scope="col" style="width: 90px;">HUB</th>
+              <th scope="col" style="width: 120px;">เบอร์โทร</th>
+              <th scope="col" style="width: 120px;">ระดับการศึกษา</th>
+              <th scope="col" style="width: 120px;">Apply Date</th>
+              <th scope="col">Pending Sign Contract Date</th>
+              <th scope="col" style="width: 90px;">Onboard Date</th>
+              <th scope="col" style="width: 90px;">Reject Date</th>
+              <th scope="col" style="width: 90px;">Reject Reason</th>
             </tr>
           </thead>
           <tbody>
@@ -280,12 +306,22 @@
                   {{ utilitiesService.convertDateTimeFromSystem(item?.actionDate) || '-' }}
                 </span>
               </td>
-              <td *ngIf="checked">
+              <td>
                 <span>
                   {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
                 </span>
               </td>
-              <td *ngIf="checked">
+              <td>
+                <span>
+                  {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
+                </span>
+              </td>
+              <td>
+                <span>
+                  {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
+                </span>
+              </td>
+              <td>
                 <span>
                   {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
                 </span>
@@ -300,3 +336,30 @@
     </nb-card-body>
   </nb-card>
 </div>
+
+<!-- Excel Popup -->
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+    <nb-card-body>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Period Date</label>
+            <nb-rangepicker #startDate></nb-rangepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="startDate" [(ngModel)]="dialogTime" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="default" (click)="ref.close()">Cancel</button>
+      <button nbButton status="success" [disabled]="!dialogTime" (click)="exportAsXLSX()">Export</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

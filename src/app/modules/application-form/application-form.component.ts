@@ -104,6 +104,10 @@ export class ApplicationFormComponent implements OnInit {
   provinceFlag: boolean = false;
   areaFlag: boolean = false;
   dataIndex: any;
+  detailFlag: boolean;
+  editFlag: boolean;
+  saveFlag: boolean;
+  buttonText: string = 'edit';
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -127,7 +131,9 @@ export class ApplicationFormComponent implements OnInit {
     this.getDegrees();
     this.initialModel();
     this.initialForm();
-
+    this.detailFlag = false;
+    this.editFlag = true;
+    this.saveFlag = false;
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
       const refCompany = params.id;
@@ -158,6 +164,8 @@ export class ApplicationFormComponent implements OnInit {
           this.getTemplate(refCompany, undefined);
         } else if (action === State.Detail && refAppform) {
           this.isDisabled = true;
+          this.detailFlag = true;
+          this.editFlag = false;
           this.initialForm();
           this.getDetail(undefined, refAppform);
         } else if (action === State.Edit && refAppform) {
@@ -173,6 +181,24 @@ export class ApplicationFormComponent implements OnInit {
         this.onError();
       }
     });
+  }
+
+  setEdit() {
+    if (this.editFlag) {
+      this.buttonText = "edit";
+      this.saveFlag = false;
+    } else {
+      this.buttonText = "display";
+      this.saveFlag = true;
+      this.formGroup = this.formBuilder.group({
+        email: [{ value: '', disabled: false }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+        // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+        phone: [{ value: '', disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
+        postcode: [{ value: '', disabled: false }, [Validators.pattern('^[0-9]{5}$')]],
+        gpa: [{ value: '', disabled: false }, [Validators.maxLength(4)]],
+      });
+    }
+    this.editFlag = !this.editFlag;
   }
 
   setLang(lang) {
@@ -207,7 +233,6 @@ export class ApplicationFormComponent implements OnInit {
               }
             }
           })
-          debugger
           if (this.appForm.refJR) {
             this.jrs.forEach(element => {
               if (element._id === this.appForm.refJR) {

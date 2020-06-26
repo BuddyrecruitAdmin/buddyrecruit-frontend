@@ -285,7 +285,8 @@ export const API_ENDPOINT = {
     EDIT: "feedbackReport/edit",
     DEPARTMENT: "dropdown/department",
     ListCandidate: "candidateReport/list",
-    STAGING: "stagingEmail/list"
+    STAGING: "stagingEmail/list",
+    EXCEL: "report/export"
   },
   HERO: {
     LIST: "hero/list"
