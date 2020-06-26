@@ -21,9 +21,9 @@
                 <div class="col-md-12 col-lg-12">
                     <div class="form-control-group">
                         <label class="text-black">ระยะเวลาในการสอบ <span
-                                *ngIf="preview && duration">{{ duration.hour || '' }}
-                                :
-                                {{ duration.minute || '' }} </span><span *ngIf="preview && !duration">
+                                *ngIf="preview && duration.hour">{{ duration.hour || '' }} ชั่วโมง</span>
+                            <span *ngIf="preview && duration.minute"> {{ duration.minute || '' }} นาที</span><span
+                                *ngIf="preview && !duration">
                                 ไม่จำกัดเวลา</span></label>
                         <ngb-timepicker *ngIf="!preview" [(ngModel)]="duration" [spinners]="false">
                         </ngb-timepicker>

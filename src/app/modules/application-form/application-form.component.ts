@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -52,7 +52,8 @@ export class ApplicationFormComponent implements OnInit {
 
   degreesEN: DropDownValue[] = [];
   degreesTH: DropDownValue[] = [];
-  jrs: DropDownGroup[] = [];
+  // jrs: DropDownGroup[] = [];
+  jrs: any = [];
   hubs: any[] = [];
   hub: any = {};
 
@@ -81,7 +82,8 @@ export class ApplicationFormComponent implements OnInit {
   submitted = false;
   isPreview = false;
   isDisabled = false;
-  isAgree = false;
+  isDisableJob = false;
+  isAgree = true;
 
   uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'data' });
   stepper: NbStepperComponent;
@@ -98,6 +100,10 @@ export class ApplicationFormComponent implements OnInit {
   flowId: string;
   @ViewChild('stepper', { static: false }) stepperComponent: NbStepperComponent;
   qExpectList: any = [];
+  reserve: boolean;
+  provinceFlag: boolean = false;
+  areaFlag: boolean = false;
+  dataIndex: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -148,13 +154,14 @@ export class ApplicationFormComponent implements OnInit {
           }
           this.isPreview = true;
         } else if (action === State.Submit && refCompany) {
+          this.dataIndex = getAppformIndex()
           this.getTemplate(refCompany, undefined);
         } else if (action === State.Detail && refAppform) {
           this.isDisabled = true;
           this.initialForm();
           this.getDetail(undefined, refAppform);
         } else if (action === State.Edit && refAppform) {
-          // this.isDisabled = true;
+          this.isDisableJob = true;
           this.userToken = getUserToken();
           const appformId = getAppFormData();
           this.initialForm();
@@ -180,32 +187,58 @@ export class ApplicationFormComponent implements OnInit {
     this.service.getJR(refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          response.data.forEach(element => {
+          // response.data.forEach(element => {
+          //   if (element._id && element.refJD && element.refJD.position) {
+          //     this.jrs.push({
+          //       label: element.refJD.position,
+          //       group: element.refJD.refPosition,
+          //       value: element._id
+          //     });
+          //   }
+          // });
+          this.jrs = response.data;
+          this.jrs.forEach(element => {
             if (element._id && element.refJD && element.refJD.position) {
-              this.jrs.push({
-                label: element.refJD.position,
-                group: element.refJD.refPosition,
-                value: element._id
-              });
+              element.checked = false;
+              if (this.appForm.refJR) {
+                if (this.appForm.refJR === element._id) {
+                  element.checked = true;
+                }
+              }
             }
-          });
+          })
         }
       }
       this.service.getHub(refCompany).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.hubs = response.data;
           this.hubs.map(hub => {
-            hub.provinces.map(province => {
-              province.checked = false;
-              province.districts.map(district => {
-                district.checked = false;
-                district.subDistricts.map(subDistrict => {
-                  subDistrict.checked = false;
-                });
-              });
-            });
+            hub.checked = false;
+            hub.areas.map(area => {
+              area.checked = false;
+              if (this.hub.length > 0) {
+                if (this.hub[0].refProvince._id === hub.refProvince) {
+                  hub.checked = true;
+                }
+                if (this.hub[0].area === area._id) {
+                  area.checked = true;
+                }
+              }
+            })
+            // hub.provinces.map(province => {
+            //   province.checked = false;
+            //   province.districts.map(district => {
+            //     district.checked = false;
+            //     district.subDistricts.map(subDistrict => {
+            //       subDistrict.checked = false;
+            //     });
+            //   });
+            // });
           });
         }
+        // if (this.isDisableJob) {
+        //   this.onChangeJR(this.appForm.refJR);
+        // }
         this.loading = false;
       });
     });
@@ -255,6 +288,7 @@ export class ApplicationFormComponent implements OnInit {
       postcode: '',
       gender: '',
       expectedSalary: '',
+      isReserve: false,
       workExperience: {
         totalExpMonth: 0,
         work: []
@@ -293,17 +327,24 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getTemplate(refCompany: string, refTemplate: string, refPosition = undefined) {
-    if (!this.isDisabled) {
+    if (!this.isDisabled && refPosition !== this.appForm.refPosition) {
       this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
             this.template = response.data;
             this.appForm.refCompany = this.template.refCompany;
             this.appForm.refTemplate = this.template._id;
+            this.appForm.refPosition = this.refPosition;
             this.appForm.questions = this.template.questions;
             this.initialAnswer();
           }
-          this.getJR(this.template.refCompany);
+          if(this.dataIndex){
+            this.appForm.phone = this.dataIndex.phone;
+            // this.appForm.idCard = this.dataIndex.idCard;
+          }
+          if (!refPosition) {
+            this.getJR(this.template.refCompany);
+          }
           this.uploader = new FileUploader({
             url: URL,
             itemAlias: 'data',
@@ -349,25 +390,45 @@ export class ApplicationFormComponent implements OnInit {
         if (response.data) {
           this.appForm = response.data;
           this.template = response.data.refTemplate;
-          this.hub.provinces = this.appForm.hubs || [];
-          if (this.hub.provinces && this.hub.provinces.length) {
-            this.hub.provinces.map(province => {
-              province.checked = true;
-              if (province.districts && province.districts.length) {
-                province.districts.map(district => {
-                  district.checked = true;
-                  if (district.subDistricts && district.subDistricts.length) {
-                    district.subDistricts.map(subDistrict => {
-                      subDistrict.checked = true;
-                    });
-                  }
-                });
+          // this.hub.provinces = this.appForm.hubs || [];
+          // if (this.hub.provinces && this.hub.provinces.length) {
+          //   this.hub.provinces.map(province => {
+          //     province.checked = true;
+          //     if (province.districts && province.districts.length) {
+          //       province.districts.map(district => {
+          //         district.checked = true;
+          //         if (district.subDistricts && district.subDistricts.length) {
+          //           district.subDistricts.map(subDistrict => {
+          //             subDistrict.checked = true;
+          //           });
+          //         }
+          //       });
+          //     }
+          //   });
+          // }
+
+          this.hub = this.appForm.hubs || [];
+
+          this.getJR(this.appForm.refCompany);
+          if (this.appForm.refJR) {
+            this.jrs.forEach(element => {
+              if (element._id === this.appForm.refJR) {
+                this.refPosition = element.refJD.refPosition;
               }
             });
           }
-
-          this.getJR(this.appForm.refCompany);
-
+          if (response.data.hubs) {
+            response.data.hubs.forEach(element => {
+              if (element.refProvince) {
+                if (element.refProvince._id) {
+                  this.provinceFlag = true;
+                }
+              }
+              if (element.area) {
+                this.areaFlag = true;
+              }
+            });
+          }
           this.appForm.birth = new Date(this.appForm.birth);
           if (this.appForm.workExperience.work && this.appForm.workExperience.work.length) {
             this.appForm.workExperience.work.map(element => {
@@ -450,17 +511,59 @@ export class ApplicationFormComponent implements OnInit {
     this.refPosition = refPosition.group;
   }
 
-  onChangeProvince() {
-    this.hub.provinces.forEach(province => {
-      if (!province.checked) {
-        province.districts.map(district => {
-          district.checked = false;
-          district.subDistricts.forEach(subDistrict => {
-            subDistrict.checked = false;
-          });
+  onChangeProvince(checked, _id) {
+    this.provinceFlag = false;
+    if (checked) {
+      this.provinceFlag = true;
+      this.hubs.forEach(hub => {
+        if (hub._id !== _id) {
+          hub.checked = false;
+        }
+        // hub.forEach(area => {
+        //   if (area._id !== _id) {
+        //     area.checked = false;
+        //   }
+        // });
+      });
+    }
+    // this.hub.provinces.forEach(province => {
+    //   if (!province.checked) {
+    //     province.districts.map(district => {
+    //       district.checked = false;
+    //       district.subDistricts.forEach(subDistrict => {
+    //         subDistrict.checked = false;
+    //       });
+    //     });
+    //   }
+    // });
+  }
+
+  onSelectPosition(checked, option) {
+    if (checked) {
+      this.jrs.forEach(opt => {
+        if (opt._id !== option) {
+          opt.checked = false
+        }
+      });
+      this.appForm.refJR = option;
+      this.refPosition = option;
+    } else {
+      this.appForm.refJR = '';
+    }
+  }
+
+  onChangeHub(checked, _id) {
+    this.areaFlag = false;
+    if (checked) {
+      this.areaFlag = true;
+      this.hubs.forEach(hub => {
+        hub.areas.forEach(area => {
+          if (area._id !== _id) {
+            area.checked = false;
+          }
         });
-      }
-    });
+      });
+    }
   }
 
   onChangeDistrict() {
@@ -593,23 +696,29 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
-  noExpect(qExpect, qElement) {
-    let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
-    // if (this.language === 'th') {
-    //   message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
-    // }
-
+  noExpect(qExpect) {
+    // let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+    let message = 'Your qualifications do not match';
+    let btnText = 'Accept'
+    let btnText2 = 'Exit'
+    if (this.language === 'th') {
+      message = 'คุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
+      btnText = 'ยืนยัน';
+      btnText2 = 'ออกจากหน้านี้'
+    }
     const confirm = this.matDialog.open(PopupMessageComponent, {
       width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-      data: { type: 'E', content: message, contents: qExpect, btnText: 'แก้ไข', btnText2: 'ออกจากหน้านี้' }
+      data: { type: 'E', content: message, contents: qExpect, btnText: btnText, btnText2: btnText2 }
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
         // window.close();
         this.stepperComponent.previous();
         this.stepperComponent.previous();
-      } else {
-        qElement.scrollIntoView();
+      }
+      else {
+        this.stepperComponent.next();
+        // qElement.scrollIntoView();
       }
     });
   }
@@ -667,6 +776,9 @@ export class ApplicationFormComponent implements OnInit {
     let isQuestionValid = true;
     let qElement: any;
     this.qExpectList = [];
+    if (document.getElementById('question' + 0)) {
+      this.reserve = false;
+    }
     this.appForm.questions.forEach((question, index) => {
 
       const element = document.getElementById('question' + index);
@@ -755,19 +867,20 @@ export class ApplicationFormComponent implements OnInit {
           if (!isQuestionValid && !qElement) {
             qElement = element;
           }
-        } else
-          if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
-            if (question.answer.expected !== question.answer.selected) {
-              isQuestionValid = false;
-              element.classList.add("has-error");
-              this.qExpectList.push(question.title)
-              // this.noExpect(qExpect);
-            }
+        }
+        if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
+          if (question.answer.expected !== question.answer.selected) {
+            this.reserve = true;
+            // isQuestionValid = false;
+            // element.classList.add("has-error");
+            this.qExpectList.push(question.title)
 
-            if (!isQuestionValid && !qElement) {
-              qElement = element;
-            }
           }
+
+          // if (!isQuestionValid && !qElement) {
+          //   qElement = element;
+          // }
+        }
       }
     });
 
@@ -776,7 +889,6 @@ export class ApplicationFormComponent implements OnInit {
 
   validation(): boolean {
     let isValid = true;
-
     const elements = document.getElementsByClassName('mat-input-element ng-invalid');
     if (elements.length > 0) {
       isValid = false;
@@ -787,12 +899,12 @@ export class ApplicationFormComponent implements OnInit {
     }
 
     const qElement = this.getQuestionElementError();
-    if (this.qExpectList.length > 0) {
-      this.noExpect(this.qExpectList, qElement);
-      isValid = false;
-    } else if (isValid && qElement) {
+    if (isValid && qElement) {
       isValid = false;
       qElement.scrollIntoView();
+    } else if (this.qExpectList.length > 0) {
+      isValid = false;
+      this.noExpect(this.qExpectList);
     }
 
     return isValid;
@@ -800,36 +912,49 @@ export class ApplicationFormComponent implements OnInit {
 
   setRequest(): IApplicationForm {
     const request = this.appForm;
-
+    // ทำต่อตรงนี่
     request.hubs = [];
-    if (this.hub && this.hub.provinces && this.hub.provinces.length) {
-      this.hub.provinces.forEach(province => {
-        let districts = [];
-        if (province.checked) {
-          province.districts.forEach(district => {
-            let subDistricts = [];
-            if (district.checked) {
-              district.subDistricts.forEach(subDistrict => {
-                if (subDistrict.checked) {
-                  subDistricts.push({
-                    refSubDistrict: subDistrict.refSubDistrict._id
-                  });
-                }
-              });
-              districts.push({
-                refDistrict: district.refDistrict._id,
-                subDistricts: subDistricts,
-              });
+    // if (this.hub && this.hub.provinces && this.hub.provinces.length) {
+    if (this.hubs && this.hubs.length) {
+      this.hubs.forEach(hub => {
+        if (hub.checked) {
+          hub.areas.forEach(area => {
+            if (area.checked) {
+              request.hubs.push({
+                refProvince: hub.refProvince,
+                area: area._id
+              })
             }
           });
-          request.hubs.push({
-            refProvince: province.refProvince._id,
-            districts: districts
-          });
         }
-      });
+      })
+      // this.hub.provinces.forEach(province => {
+      //   let districts = [];
+      //   if (province.checked) {
+      //     province.districts.forEach(district => {
+      //       let subDistricts = [];
+      //       if (district.checked) {
+      //         district.subDistricts.forEach(subDistrict => {
+      //           if (subDistrict.checked) {
+      //             subDistricts.push({
+      //               refSubDistrict: subDistrict.refSubDistrict._id
+      //             });
+      //           }
+      //         });
+      //         districts.push({
+      //           refDistrict: district.refDistrict._id,
+      //           subDistricts: subDistricts,
+      //         });
+      //       }
+      //     });
+      //     request.hubs.push({
+      //       refProvince: province.refProvince._id,
+      //       districts: districts
+      //     });
+      //   }
+      // });
     }
-
+    request.isReserve = this.reserve;
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
     request.road + ' '
@@ -981,7 +1106,7 @@ export class ApplicationFormComponent implements OnInit {
 
   uploadFile(target, files: FileList, isCV = false, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
-    if (FileSize > 10) {
+    if (FileSize > 15) {
       this.showToast('danger', 'File size more than 10MB');
       target.uploadName = '';
       target.originalName = '';

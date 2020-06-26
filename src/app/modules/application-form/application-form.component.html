@@ -56,23 +56,50 @@
               </div>
               <div class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <mat-form-field appearance="outline" class="fit-content">
+                  <!-- (selectionChange)="onChangeJR($event.value)" -->
+                  <!-- <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'POSITION' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}"
-                      (selectionChange)="onChangeJR($event.value)" required [disabled]="isDisabled">
+                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}" required
+                      [disabled]="isDisabled || isDisableJob">
+               
                       <mat-option *ngFor="let option of jrs" [value]="option.value">
                         {{ option.label }}
                       </mat-option>
                     </mat-select>
-                  </mat-form-field>
+                  </mat-form-field> -->
+                  <div *ngFor="let option of jrs">
+                    <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
+                      (checkedChange)="onSelectPosition($event, option.refJD.refPosition)" status="primary"
+                      [disabled]="isDisabled || isDisableJob">
+                      {{ option.refJD.position }}
+                    </nb-checkbox>
+                  </div>
                 </div>
               </div>
 
               <!-- Hubs -->
               <div *ngIf="appForm.refJR && hubs.length" class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div>
-                  <div *ngFor="let province of hub.provinces">
+                  <!-- <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div> -->
+                  <div class="text-gray">HUB</div>
+                  <div *ngFor="let hub of hubs">
+                    <nb-checkbox [(ngModel)]="hub.checked" [ngModelOptions]="{standalone: true}"
+                      (checkedChange)="onChangeProvince($event, hub._id)" status="primary" [disabled]="isDisabled">
+                      {{ language === 'en' ? hub.name.en :hub.name.th }}
+                    </nb-checkbox>
+                    <div *ngIf="hub.checked" style="margin-left: 1.5rem;">
+                      <div *ngFor="let area of hub.areas">
+                        <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
+                          (checkedChange)="onChangeHub($event, area._id)" status="primary" [disabled]="isDisabled">
+                          {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                            {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
+                          <span class="text-red" *ngIf="!area.isFull && area.remark">
+                            ({{ area.remark }})</span>
+                        </nb-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div *ngFor="let province of hub.provinces">
                     <mat-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                       (click)="onChangeProvince()" [disabled]="isDisabled">
                       {{ language === 'en' ? province.refProvince.name.en :province.refProvince.name.th }}
@@ -98,14 +125,14 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
           </div>
           <div class="footer-right">
             <button nbButton type="button" nbStepperNext (click)="getTemplate(refCompany, undefined, refPosition)"
-              [disabled]="!appForm.refJR">
+              [disabled]="!appForm.refJR || !areaFlag || !provinceFlag">
               {{ 'NEXT' | translate }}
             </button>
           </div>
@@ -646,8 +673,7 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button nbButton type="button" (click)="validation() ? stepper.next() : false"
-              [nbSpinner]="loadingButton">
+            <button nbButton type="button" (click)="validation() ? stepper.next() : false" [nbSpinner]="loadingButton">
               {{ 'NEXT' | translate }}
             </button>
           </div>
@@ -853,7 +879,7 @@
                       {{ question.answer.attachment.originalName }}
                     </span>
                   </p>
-                  <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
+                  <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 15 MB)</small></p>
                   <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
                     [disabled]="question.isLoading">
                     <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
