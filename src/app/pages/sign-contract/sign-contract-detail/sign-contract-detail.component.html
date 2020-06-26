@@ -270,7 +270,7 @@
               </button>
 
               <button
-                *ngIf="item.condition.button.signInfo && !utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date)"
+                *ngIf="item.condition.button.signInfo && !utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date) && !isExpress"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 nbTooltip="Edit Sign Contract Date"
                 (click)="openPopupSignContractDate(item, item.condition.icon.onBoard)"
