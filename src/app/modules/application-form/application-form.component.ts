@@ -207,6 +207,14 @@ export class ApplicationFormComponent implements OnInit {
               }
             }
           })
+          debugger
+          if (this.appForm.refJR) {
+            this.jrs.forEach(element => {
+              if (element._id === this.appForm.refJR) {
+                this.refPosition = element.refJD.refPosition;
+              }
+            });
+          }
         }
       }
       this.service.getHub(refCompany).subscribe(response => {
@@ -410,13 +418,6 @@ export class ApplicationFormComponent implements OnInit {
           this.hub = this.appForm.hubs || [];
 
           this.getJR(this.appForm.refCompany);
-          if (this.appForm.refJR) {
-            this.jrs.forEach(element => {
-              if (element._id === this.appForm.refJR) {
-                this.refPosition = element.refJD.refPosition;
-              }
-            });
-          }
           if (response.data.hubs) {
             response.data.hubs.forEach(element => {
               if (element.refProvince) {
