@@ -62,10 +62,9 @@
             </div>
           </nb-card-header>
           <nb-card-body>
-            <div class="text-group" (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint"
-              nbPopoverPlacement="top">
+            <div class="text-group">
               <label class="label">Remark</label>
-              <span>{{ item.remark || '-' }}</span>
+              <span [nbTooltip]="item.remark">{{ item.remark || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Status</label>
@@ -116,9 +115,8 @@
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
-              <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint" nbPopoverPlacement="top"
-                class="text-dot text-left" style="width: 300px;">
-                <div class="text-dot" style="width: 300px;" [ngClass]="{'text-center': !item.remark }">
+              <td class="text-left" [nbTooltip]="item.remark">
+                <div [ngClass]="{'text-center': !item.remark }">
                   {{ item.remark || '-' }}
                 </div>
               </td>

@@ -161,13 +161,19 @@ export class HubComponent implements OnInit {
       refProvince: "",
       isAllDistrict: false,
       remark: "",
-      districts: [],
+      districts: [{ remark: '' }],
       hubsFlag: true,
     })
     this.listAll.push([]);
     this.listFiltered.push([]);
     this.provinceListArr[this.hubs.length - 1] = this.provinceList;
     this.filteredList[this.hubs.length - 1] = this.provinceList.slice();
+  }
+
+  test(){
+    this.service.test().subscribe(response => {
+      console.log(response)
+    })
   }
 
   addHublist() {
@@ -211,15 +217,15 @@ export class HubComponent implements OnInit {
     this.getDistrict(hub.refProvince, index, this.listAll[index].length - 1, hub);
   }
   // เพิ่มตำบล
-  addSubDistrict(dis, index, jIndex) {
-    dis.subDistricts.push({
-      refSubDistrict: "",
-      remark: "",
-    })
-    this.listAll[index][jIndex].sub.push([]);
-    this.listFiltered[index][jIndex].sub.push([]);
-    this.getSubDistrict(dis.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, dis)
-  }
+  // addSubDistrict(dis, index, jIndex) {
+  //   dis.subDistricts.push({
+  //     refSubDistrict: "",
+  //     remark: "",
+  //   })
+  //   this.listAll[index][jIndex].sub.push([]);
+  //   this.listFiltered[index][jIndex].sub.push([]);
+  //   this.getSubDistrict(dis.refDistrict, index, jIndex, this.listAll[index][jIndex].sub.length - 1, dis)
+  // }
 
   async getProvince() {
     await this.loadProvince();

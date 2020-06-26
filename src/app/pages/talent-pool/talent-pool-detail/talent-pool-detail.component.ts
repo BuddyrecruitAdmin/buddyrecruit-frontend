@@ -375,7 +375,7 @@ export class TalentPoolDetailComponent implements OnInit {
             group: province
           });
         });
-      });
+      });debugger
       const districtSelected = _.cloneDeep(this.filter.selected.districts);
       this.filter.selected.districts = [];
       if (districtSelected.length) {
