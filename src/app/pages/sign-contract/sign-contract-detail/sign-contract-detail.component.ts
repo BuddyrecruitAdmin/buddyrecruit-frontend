@@ -379,6 +379,7 @@ export class SignContractDetailComponent implements OnInit {
 
   approve(item: any, button: any) {
     if (item.refJR.isDefault) {
+      this.refStageId = item.refStage._id;
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
         data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
