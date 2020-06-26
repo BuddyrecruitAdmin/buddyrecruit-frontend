@@ -378,10 +378,10 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (this.isExpress) {
+    if (item.refJR.isDefault) {
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-        data: { type: 'C', content: MESSAGE[44] }
+        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
