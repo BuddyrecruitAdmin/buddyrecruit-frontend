@@ -19,11 +19,14 @@
               onKeyPress="if(this.value.length === 10) return false;">
           </mat-form-field>
           <mat-form-field appearance="outline">
-            <mat-label>{{ 'BIRTHDAY' | translate }}</mat-label>
-            <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate" [(ngModel)]="birth"
+            <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
+            <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="idCard"
+            [ngModelOptions]="{standalone: true}" required digitOnly
+            onKeyPress="if(this.value.length === 13) return false;">
+            <!-- <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate" [(ngModel)]="birth"
               (click)="birthDate.open()" [ngModelOptions]="{standalone: true}" readonly required>
             <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
-            <mat-datepicker #birthDate></mat-datepicker>
+            <mat-datepicker #birthDate></mat-datepicker> -->
           </mat-form-field>
           <button nbButton type="submit" status="success" [nbSpinner]="loading" nbSpinnerSize="tiny">
             {{ 'CHECK_STATUS' | translate }}

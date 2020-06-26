@@ -11,3 +11,6 @@
 .paddTop1{
     padding-top: 1rem;
 }
+::ng-deep .nb-theme-default nb-checkbox.status-primary .custom-checkbox{
+    border-radius: 25px;
+}
