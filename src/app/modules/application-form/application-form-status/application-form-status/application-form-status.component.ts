@@ -36,6 +36,7 @@ export class ApplicationFormStatusComponent implements OnInit {
   tokenId: any;
   fullName: string;
   comName: string;
+  hubName: string;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -67,10 +68,17 @@ export class ApplicationFormStatusComponent implements OnInit {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;
+          this.hubName = '-'
           response.data.data.forEach(element => {
             this.comName = element.refCompany.name;
             this.fullName = element.refCandidate ?
               `${element.refCandidate.title} ${element.refCandidate.firstname} ${element.refCandidate.lastname}` : 'Unknown';
+            if (element.hubs.length > 0) {
+              element.hubs.forEach(element => {
+                this.hubName = element.refProvince.name.th + ' (' + element.hubName + ')';
+              });
+
+            }
             this.dataSource.push({
               comId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
@@ -78,7 +86,7 @@ export class ApplicationFormStatusComponent implements OnInit {
               date: this.utilitiesService.convertDateTimeFromSystem(element.timestamp) || '-',
               status: this.setStatus(element),
               appFormId: element.generalAppForm,
-              hub: element.hubs,
+              hub: this.hubName,
               isSuccessed: element.isSuccessed
             });
           });
