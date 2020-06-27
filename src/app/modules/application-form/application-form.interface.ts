@@ -11,6 +11,8 @@ export interface IApplicationForm {
   idCard: string;
   firstname: string;
   lastname: string;
+  firstnameTH: string;
+  lastnameTH: string;
   birth: Date;
   age: number;
   phone: string;

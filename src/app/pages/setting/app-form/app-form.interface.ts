@@ -32,7 +32,7 @@ export interface IAppFormTemplate {
     postcode: IAction;
     gender: IAction;
     expectedSalary: IAction;
-    facebook: IAction;
+    // facebook: IAction;
   };
   workExperience: {
     active: boolean;

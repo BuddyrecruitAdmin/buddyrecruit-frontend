@@ -321,6 +321,8 @@ export class ApplicationFormComponent implements OnInit {
       title: '',
       firstname: '',
       lastname: '',
+      firstnameTH: '',
+      lastnameTH: '',
       birth: null,
       age: null,
       phone: '',

@@ -119,7 +119,7 @@ export class AppFormDetailComponent implements OnInit {
         postcode: this.initialAction(),
         gender: this.initialAction(),
         expectedSalary: this.initialAction(),
-        facebook: this.initialAction(),
+        // facebook: this.initialAction(),
       },
       workExperience: {
         active: true,
@@ -162,11 +162,9 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.personalDetail.phone.required = true;
 
     this.appForm.workExperience.position.required = true;
-    this.appForm.workExperience.position.disabled = true;
     this.appForm.workExperience.company.required = true;
 
     this.appForm.education.refDegree.required = true;
-    this.appForm.education.refDegree.disabled = true;
   }
 
   initialOption(): IOption {
@@ -587,7 +585,8 @@ export class AppFormDetailComponent implements OnInit {
 
   preview() {
     setAppFormData(this.appForm);
-    this.router.navigate([]).then(result => { window.open('/application-form/preview', '_blank'); });
+    const url = `/application-form/preview/${this.appForm._id}`;
+    this.router.navigate([]).then(result => { window.open(url, '_blank'); });
   }
 
   copyToClipboard() {
@@ -763,9 +762,9 @@ export class AppFormDetailComponent implements OnInit {
     if (!this.appForm.personalDetail.address.visible) {
       this.appForm.personalDetail.address.required = false;
     }
-    if (!this.appForm.personalDetail.facebook.visible) {
-      this.appForm.personalDetail.facebook.required = false;
-    }
+    // if (!this.appForm.personalDetail.facebook.visible) {
+    //   this.appForm.personalDetail.facebook.required = false;
+    // }
   }
 
   changeWorkExperienceCheckbox() {
