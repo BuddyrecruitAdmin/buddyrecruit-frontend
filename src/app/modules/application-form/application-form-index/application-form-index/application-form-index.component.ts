@@ -54,7 +54,7 @@ export class ApplicationFormIndexComponent implements OnInit {
     this.role = getRole();
     this.innerHeight = window.innerHeight;
     setLangPath("RESUME");
-    this.language = getLanguage() || 'en';
+    this.language = getLanguage() || 'th';
     this.setLang(this.language);
   }
 
