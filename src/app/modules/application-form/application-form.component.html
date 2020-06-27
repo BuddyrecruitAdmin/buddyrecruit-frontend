@@ -162,18 +162,21 @@
                 <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
               </div>
               <div class="row">
-                <div class="col-md-2" *ngIf="template.personalDetail.firstname?.visible">
+                <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="appForm.titleTH" [ngModelOptions]="{standalone: true}"
+                    <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
-                      <mat-option value="นาย">นาย</mat-option>
+                      <!-- <mat-option value="นาย">นาย</mat-option>
                       <mat-option value="นาง">นาง</mat-option>
-                      <mat-option value="นางสาว">นางสาว</mat-option>
+                      <mat-option value="นางสาว">นางสาว</mat-option> -->
+                      <mat-option *ngFor="let title of titleListTH" [value]="title.value">
+                        {{ title.label }}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-md-5" *ngIf="template.personalDetail.firstname?.visible">
+                <div class="col-md-5" *ngIf="template.personalDetail.firstname.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'FIRST_NAME' | translate }} ({{ 'THAI' | translate }})</mat-label>
                     <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
@@ -181,7 +184,7 @@
                       [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
-                <div class="col-md-5" *ngIf="template.personalDetail.lastname?.visible">
+                <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'LAST_NAME' | translate }} ({{ 'THAI' | translate }})</mat-label>
                     <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
@@ -211,9 +214,12 @@
                     <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
                     <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
-                      <mat-option value="Mr.">Mr.</mat-option>
+                      <!-- <mat-option value="Mr.">Mr.</mat-option>
                       <mat-option value="Mrs.">Mrs.</mat-option>
-                      <mat-option value="Miss">Miss</mat-option>
+                      <mat-option value="Miss">Miss</mat-option> -->
+                      <mat-option *ngFor="let title of titleListEN" [value]="title.value">
+                        {{ title.label }}
+                      </mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -235,7 +241,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-4" *ngIf="template.personalDetail.idCard?.visible">
+                <div class="col-md-4" *ngIf="template.personalDetail.idCard.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
                     <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="appForm.idCard"

@@ -109,7 +109,8 @@ export class ApplicationFormComponent implements OnInit {
   saveFlag: boolean;
   successFlag: boolean;
   buttonText: string = 'edit';
-  titleList: any;
+  titleListTH: DropDownValue[] = [];
+  titleListEN: DropDownValue[] = [];
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -157,7 +158,7 @@ export class ApplicationFormComponent implements OnInit {
               this.appForm.questions = this.template.questions;
               this.initialAnswer();
               this.getJR(this.role && this.role.refCompany ? this.role.refCompany : undefined);
-              this.getTitle();
+              this.getTitle(this.role && this.role.refCompany ? this.role.refCompany : undefined);
             } else {
               this.onError();
             }
@@ -291,12 +292,22 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
-  getTitle() {
-    this.titleList = [];
-    this.service.getTitle().subscribe(response => {
+  getTitle(refCompany: string) {
+    this.titleListTH = [];
+    this.titleListEN = [];
+    this.service.getTitle(refCompany).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
-          console.log(response.data)
+          response.data.map(element => {
+            this.titleListTH.push({
+              label: element.name.th,
+              value: element._id
+            })
+            this.titleListEN.push({
+              label: element.name.en,
+              value: element._id
+            })
+          })
         }
       }
     })
@@ -332,7 +343,6 @@ export class ApplicationFormComponent implements OnInit {
       otherJob: '',
       idCard: '',
       title: '',
-      titleTH: '',
       firstnameEN: '',
       lastnameEN: '',
       firstname: '',
@@ -415,9 +425,7 @@ export class ApplicationFormComponent implements OnInit {
           }
           if (!refPosition) {
             this.getJR(this.template.refCompany);
-          }
-          if (!this.titleList) {
-            this.getTitle();
+            this.getTitle(this.template.refCompany);
           }
           this.uploader = new FileUploader({
             url: URL,
@@ -484,7 +492,7 @@ export class ApplicationFormComponent implements OnInit {
           this.hub = this.appForm.hubs || [];
 
           this.getJR(this.appForm.refCompany);
-          this.getTitle();
+          this.getTitle(this.appForm.refCompany);
           if (response.data.hubs) {
             response.data.hubs.forEach(element => {
               if (element.refProvince) {

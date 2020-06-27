@@ -715,8 +715,8 @@ export class AppFormDetailComponent implements OnInit {
           if (!this.appForm.personalDetail.lastname) {
             this.appForm.personalDetail.lastname = this.initialAction();
           }
-          this.appForm.personalDetail.firstnameEN.disabled = false;
-          this.appForm.personalDetail.lastnameEN.disabled = false;
+          // this.appForm.personalDetail.firstnameEN.disabled = false;
+          // this.appForm.personalDetail.lastnameEN.disabled = false;
           this.appForm.personalDetail.phone.disabled = false;
           this.appForm.personalDetail.email.disabled = false;
           this.appForm.companyName = this.role.refCompany.name;
