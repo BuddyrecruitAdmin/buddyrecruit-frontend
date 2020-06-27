@@ -8,11 +8,12 @@ export interface IApplicationForm {
   hubs?: any;
   otherJob: string;
   title: string;
+  titleTH: string;
   idCard: string;
+  firstnameEN: string;
+  lastnameEN: string;
   firstname: string;
   lastname: string;
-  firstnameTH: string;
-  lastnameTH: string;
   birth: Date;
   age: number;
   phone: string;

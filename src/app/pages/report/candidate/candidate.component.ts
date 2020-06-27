@@ -5,7 +5,7 @@ import { Criteria, Paging as IPaging, DropDownValue, Devices } from '../../../sh
 import { getRole, setFlowId, setCandidateId, setIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
-import { NbDialogService, NbDialogRef } from '@nebular/theme';
+import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
@@ -57,6 +57,8 @@ export class CandidateComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   dialogTime: any;
   noticeHeight: any;
+  hubArea: any;
+  eduList: any;
   constructor(
     private router: Router,
     private service: ReportService,
@@ -64,7 +66,8 @@ export class CandidateComponent implements OnInit {
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private dialogService: NbDialogService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    private toastrService: NbToastrService
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
@@ -98,7 +101,7 @@ export class CandidateComponent implements OnInit {
         department: [],
       }
     }
-  this.startTime = {};
+    this.startTime = {};
     this.refresh();
   }
 
@@ -136,7 +139,6 @@ export class CandidateComponent implements OnInit {
         'refCandidate.firstname',
         'refCandidate.lastname',
         'refJR.refStatus.name',
-        // 'refSubStage.name',
         'actionDate',
         'reject.remark',
         'reject.rejectBy.refUser.firstname',
@@ -160,14 +162,6 @@ export class CandidateComponent implements OnInit {
           name: 'startTime',
           value: this.startTime
         }
-        // {
-        //   name: 'refStage._id',
-        //   value: this.filter.selected.stage
-        // },
-        // {
-        //   name: 'refSubStage._id',
-        //   value: this.filter.selected.subStage
-        // },
       ]
     };
     this.getList();
@@ -330,7 +324,7 @@ export class CandidateComponent implements OnInit {
     }
   }
 
-  create(dialog: TemplateRef<any>) {
+  openDate(dialog: TemplateRef<any>) {
     this.dialogTime = this.startTime;
     this.callDialog(dialog);
   }
@@ -341,25 +335,81 @@ export class CandidateComponent implements OnInit {
 
   exportAsXLSX(): void {
     let dataExcel = [];
-    this.service.getListExcel((response) => {
+    let fileName = '';
+    fileName = this.utilitiesService.convertDateTime(this.dialogTime.start) + 'to' + this.utilitiesService.convertDateTime(this.dialogTime.end);
+    this.criteria = {
+      keyword: this.keyword,
+      skip: (this.paging.pageIndex * this.paging.pageSize),
+      limit: this.paging.pageSize,
+      filter: [
+        'refJR.refJD.position',
+        'refStage.name',
+        'refCandidate.firstname',
+        'refCandidate.lastname',
+        'refJR.refStatus.name',
+        'actionDate',
+        'reject.remark',
+        'reject.rejectBy.refUser.firstname',
+        'reject.rejectBy.refUser.lastname',
+        'department.name'
+      ],
+      filters: [
+        {
+          name: 'department._id',
+          value: this.filter.selected.department
+        },
+        {
+          name: 'refJR.refJD._id',
+          value: this.filter.selected.jobPosition
+        },
+        {
+          name: 'refJR.refStatus._id',
+          value: this.filter.selected.jobStatus
+        },
+        {
+          name: 'startTime',
+          value: this.dialogTime
+        }
+      ]
+    };
+    this.service.getListExcel(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         dataExcel = response.data;
+        dataExcel.forEach((item) => {
+          this.hubArea = '';
+          this.eduList = '';
+          if (item.hubs.length > 0) {
+            item.hubs.forEach(element => {
+              if (element.refProvince.name.th && element.areaName) {
+                this.hubArea = element.refProvince.name.th + ' - ' + element.areaName;
+              } else {
+                this.hubArea = element.refProvince.name.th;
+              }
+            });
+          }
+          if (item.refCandidate.education.length > 0) {
+            item.refCandidate.education.forEach(edu => {
+              this.eduList = edu.refDegree.nameTH;
+            });
+          }
+          dataExcel.push({
+            "ชื่อ-นามสกุล": this.utilitiesService.setFullname(item.refCandidate) || '',
+            "ตำแหน่ง": item.refJR.refJD.position || '-',
+            "HUB": this.hubArea || '',
+            "เบอร์โทร": item.refCandidate.phone || '',
+            "ระดับการศึกษา": this.eduList || '',
+            "Apply Date": this.utilitiesService.convertDateTimeFromSystem(item.timestamp) || '-',
+            "Pending Sign Contract Date": this.utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+            "Onboard Date": this.utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+            "Reject Date": this.utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-',
+            "Rejected Reason": item.reject.rejectBy.refReject.name || '-'
+          })
+        })
+        this.excelService.exportAsExcelFile(dataExcel, fileName);
+      } else {
+        this.showToast('danger', 'Error Message', 'Export Failed');
       }
     })
-    let data = [];
-    this.items.forEach((item) => {
-      data.push({
-        "Candidate Name": this.utilitiesService.setFullname(item.refCandidate),
-        "Job Description": item.refJR.refJD.position,
-        "Job Status": item.refJR.refStatus.name,
-        "Stage": item.refStage.name,
-        "Sub Stage": item.refSubStage.name,
-        "Last changed update": this.utilitiesService.convertDateTimeFromSystem(item.actionDate),
-        "Rejected Reason": (item.reject.rejectBy.refReject) ? item.reject.rejectBy.refReject.name : "",
-        "Rejected By": this.utilitiesService.setFullname(item.reject.rejectBy.refUser)
-      })
-    })
-    this.excelService.exportAsExcelFile(data, 'sample');
   }
 
   removeDuplicates(myArr, prop) {
@@ -374,6 +424,18 @@ export class CandidateComponent implements OnInit {
         window.open(`/application-form/detail/${item.refGeneralAppForm}`, '_blank');
       });
     }
+  }
+
+  showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 5000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: false,
+    };
+    this.toastrService.show(body, title, config);
   }
 
 }

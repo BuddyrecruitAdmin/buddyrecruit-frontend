@@ -75,7 +75,7 @@ export class ApplicationFormStatusComponent implements OnInit {
               comId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
               position: element.refJR.refJD.position,
-              date: this.utilitiesService.convertDateTime(element.timestamp) || '-',
+              date: this.utilitiesService.convertDateTimeFromSystem(element.timestamp) || '-',
               status: this.setStatus(element),
               appFormId: element.generalAppForm,
               hub: element.hubs,

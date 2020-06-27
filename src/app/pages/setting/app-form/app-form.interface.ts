@@ -16,10 +16,10 @@ export interface IAppFormTemplate {
   personalDetail: {
     active: boolean;
     idCard: IAction;
+    firstnameEN: IAction; 
+    lastnameEN: IAction;
     firstname: IAction;
     lastname: IAction;
-    firstnameTH: IAction;
-    lastnameTH: IAction;
     birth: IAction;
     age: IAction;
     phone: IAction;

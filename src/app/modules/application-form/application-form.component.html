@@ -162,36 +162,36 @@
                 <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
               </div>
               <div class="row">
-                <div class="col-md-2" *ngIf="template.personalDetail.firstnameTH?.visible">
+                <div class="col-md-2" *ngIf="template.personalDetail.firstname?.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                    <mat-select [(ngModel)]="appForm.titleTH" [ngModelOptions]="{standalone: true}"
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                       <mat-option value="นาย">นาย</mat-option>
                       <mat-option value="นาง">นาง</mat-option>
                       <mat-option value="นางสาว">นางสาว</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-md-5" *ngIf="template.personalDetail.firstnameTH?.visible">
+                <div class="col-md-5" *ngIf="template.personalDetail.firstname?.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'FIRST_NAME' | translate }} ({{ 'THAI' | translate }})</mat-label>
-                    <input matInput type="text" id="firstnameTH" name="firstnameTH" [(ngModel)]="appForm.firstnameTH"
-                      [required]="template.personalDetail.firstnameTH.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                    <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
+                      [required]="template.personalDetail.firstname.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
-                <div class="col-md-5" *ngIf="template.personalDetail.lastnameTH?.visible">
+                <div class="col-md-5" *ngIf="template.personalDetail.lastname?.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'LAST_NAME' | translate }} ({{ 'THAI' | translate }})</mat-label>
-                    <input matInput type="text" id="lastnameTH" name="lastnameTH" [(ngModel)]="appForm.lastnameTH"
-                      [required]="template.personalDetail.lastnameTH.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                    <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
+                      [required]="template.personalDetail.lastname.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
+                <div class="col-md-2" *ngIf="template.personalDetail.firstnameEN.visible">
                   <!-- <mat-form-field appearance="outline">
                     <mat-label>{{ 'GENDER' | translate }}</mat-label>
                     <mat-select [(ngModel)]="appForm.gender" [ngModelOptions]="{standalone: true}"
@@ -210,26 +210,26 @@
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
                     <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                       <mat-option value="Mr.">Mr.</mat-option>
                       <mat-option value="Mrs.">Mrs.</mat-option>
                       <mat-option value="Miss">Miss</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-md-5" *ngIf="template.personalDetail.firstname.visible">
+                <div class="col-md-5" *ngIf="template.personalDetail.firstnameEN.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'FIRST_NAME' | translate }} ({{ 'ENGLISH' | translate }})</mat-label>
-                    <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
-                      [required]="template.personalDetail.firstname.required" [ngModelOptions]="{standalone: true}"
+                    <input matInput type="text" id="firstnameEN" name="firstnameEN" [(ngModel)]="appForm.firstnameEN"
+                      [required]="template.personalDetail.firstnameEN.required" [ngModelOptions]="{standalone: true}"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
-                <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
+                <div class="col-md-5" *ngIf="template.personalDetail.lastnameEN.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'LAST_NAME' | translate }} ({{ 'ENGLISH' | translate }})</mat-label>
-                    <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
-                      [required]="template.personalDetail.lastname.required" [ngModelOptions]="{standalone: true}"
+                    <input matInput type="text" id="lastnameEN" name="lastnameEN" [(ngModel)]="appForm.lastnameEN"
+                      [required]="template.personalDetail.lastnameEN.required" [ngModelOptions]="{standalone: true}"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>

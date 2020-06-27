@@ -18,7 +18,7 @@
       <div class="col-md-6 actions-block">
         <nb-actions size="small" class="h-100 pull-right">
           <nb-action *ngIf="!loading && items.length" class="link" icon="download-outline" nbTooltip="Export to Excel"
-            (click)="exportAsXLSX()">
+            (click)="openDate(dialog)">
           </nb-action>
           <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
             (click)="filterToggle()">
@@ -260,13 +260,13 @@
             <tr style="font-size: 14px;">
               <th scope="col">ชื่อ-นามสกุล</th>
               <th scope="col" style="width: 170px;">ตำแหน่ง</th>
-              <th scope="col" style="width: 90px;">HUB</th>
+              <th scope="col" style="width: 100px;">HUB</th>
               <th scope="col" style="width: 120px;">เบอร์โทร</th>
               <th scope="col" style="width: 120px;">ระดับการศึกษา</th>
               <th scope="col" style="width: 120px;">Apply Date</th>
-              <th scope="col">Pending Sign Contract Date</th>
-              <th scope="col" style="width: 90px;">Onboard Date</th>
-              <th scope="col" style="width: 90px;">Reject Date</th>
+              <th scope="col" style="width: 120px;">Pending Sign Contract Date</th>
+              <th scope="col" style="width: 120px;">Onboard Date</th>
+              <th scope="col" style="width: 120px;">Reject Date</th>
               <th scope="col" style="width: 90px;">Reject Reason</th>
             </tr>
           </thead>
@@ -282,48 +282,55 @@
                   src="https://image.flaticon.com/icons/svg/582/582761.svg" width="15" height="15">
               </td>
               <td class="text-left">
-                <span [nbTooltip]="item?.refJR?.refJD?.position">
+                <span>
                   {{ item?.refJR?.refJD?.position || '-' }}
                 </span>
               </td>
               <td>
-                <small class="label" [ngClass]="item.refJR.refStatus.class">
-                  {{ item?.refJR?.refStatus?.name || '-' }}
+                <small *ngFor="let hub of item.hubs;">
+                  {{ hub.refProvince?.name.th || '-' }} <span *ngIf="hub.areaName"> - {{ hub.areaName  }}</span>
                 </small>
               </td>
               <td>
+                <!-- phone -->
                 <span>
-                  {{ item?.refStage?.name || '-' }}
+                  {{ item?.refCandidate?.phone || '-' }}
                 </span>
               </td>
               <td>
-                <span>
-                  {{ item?.refSubStage?.name || '-' }}
+                <!-- degree -->
+                <span *ngFor="let edu of item.refCandidate.education;">
+                  {{ edu.refDegree.nameTH || '-' }}
                 </span>
               </td>
               <td>
+                <!-- apply date -->
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.actionDate) || '-' }}
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.timestamp) || '-' }}
                 </span>
               </td>
               <td>
+                <!-- sign date -->
+                <span>
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.pendingSignContractInfo?.sign?.date) || '-'  }}
+                </span>
+              </td>
+              <td>
+                <!-- on date -->
+                <span>
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.pendingSignContractInfo?.agreeStartDate) || '-'  }}
+                </span>
+              </td>
+              <td>
+                <!-- reject Date -->
+                <span>
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.reject?.rejectBy?.date) || '-'  }}
+                </span>
+              </td>
+              <td>
+                <!-- Reject Reason -->
                 <span>
                   {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
-                </span>
-              </td>
-              <td>
-                <span>
-                  {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
-                </span>
-              </td>
-              <td>
-                <span>
-                  {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
-                </span>
-              </td>
-              <td>
-                <span>
-                  {{ utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' }}
                 </span>
               </td>
             </tr>
@@ -342,7 +349,7 @@
   <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-body>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-12">
           <div class="form-control-group">
             <label class="label">Period Date</label>
             <nb-rangepicker #startDate></nb-rangepicker>
@@ -359,7 +366,7 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" [disabled]="!dialogTime" (click)="exportAsXLSX()">Export</button>
+      <button nbButton status="success" [disabled]="!dialogTime.start || !dialogTime.end" (click)="exportAsXLSX()">Export</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
