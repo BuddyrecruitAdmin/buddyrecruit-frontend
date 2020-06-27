@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -18,6 +18,8 @@ export interface TableElement {
   date: string;
   status: any;
   comId: string;
+  hub: string;
+  isSuccessed: boolean;
 }
 
 @Component({
@@ -29,11 +31,11 @@ export class ApplicationFormStatusComponent implements OnInit {
   language = 'en';
   loading = true;
 
-  displayedColumns: string[] = ['position', 'date', 'status', 'action'];
+  displayedColumns: string[] = ['position', 'hub', 'date', 'status', 'action'];
   dataSource: TableElement[] = [];
   tokenId: any;
   fullName: string;
-
+  comName: string;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -61,20 +63,23 @@ export class ApplicationFormStatusComponent implements OnInit {
   getStatusList() {
     const data = getAppformIndex();
     if (data) {
-      this.service.getStatusList(data.companyId, data.phone, data.birth).subscribe(response => {
+      this.service.getStatusList(data.companyId, data.phone, data.idCard).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;
           response.data.data.forEach(element => {
+            this.comName = element.refCompany.name;
             this.fullName = element.refCandidate ?
               `${element.refCandidate.title} ${element.refCandidate.firstname} ${element.refCandidate.lastname}` : 'Unknown';
             this.dataSource.push({
               comId: element.refJR.refJD.refPosition.refCompany,
               flowId: element._id,
               position: element.refJR.refJD.position,
-              date: this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate) || '-',
+              date: this.utilitiesService.convertDateTime(element.timestamp) || '-',
               status: this.setStatus(element),
-              appFormId: element.generalAppForm
+              appFormId: element.generalAppForm,
+              hub: element.hubs,
+              isSuccessed: element.isSuccessed
             });
           });
         }
@@ -90,7 +95,7 @@ export class ApplicationFormStatusComponent implements OnInit {
       nameEN: '',
       nameTH: '',
       color: '',
-      editable: false,
+      editable: true,
       reserve: false,
     };
 
@@ -100,14 +105,9 @@ export class ApplicationFormStatusComponent implements OnInit {
       switch (element.refStage.order.toString().substring(0, 1)) {
         case '1' || '2':
           status.color = 'label-info';
-          status.editable = true;
           if (element.isSuccessed) {
             status.nameEN = 'Registered';
             status.nameTH = 'ยื่นสมัครแล้ว';
-          } else {
-            status.nameEN = 'Waiting more information';
-            status.nameTH = 'รอการเพิ่มข้อมูล';
-            status.color = 'label-warning';
           }
           break;
 
@@ -131,6 +131,8 @@ export class ApplicationFormStatusComponent implements OnInit {
           break;
 
         case '7':
+          status.nameEN = 'Waiting more information';
+          status.nameTH = 'รอการเพิ่มข้อมูล';
           status.color = 'label-warning';
           break;
 
@@ -138,6 +140,7 @@ export class ApplicationFormStatusComponent implements OnInit {
           status.nameEN = 'Approved';
           status.nameTH = 'ผ่านการพิจารณา';
           status.color = 'label-success';
+          status.editable = false;
           break;
       }
     }
@@ -145,13 +148,14 @@ export class ApplicationFormStatusComponent implements OnInit {
     // Replace from backend
     status.nameEN = (element.refStage.text && element.refStage.text.en) || status.nameEN;
     status.nameTH = (element.refStage.text && element.refStage.text.th) || status.nameTH;
-    status.editable = !element.isSuccessed;
+    // status.editable = !element.isSuccessed;
     status.reserve = element.isReserve;
 
     return status;
   }
 
-  editAppForm(comId: string, appFormId: string, flowId: string) {
+  editAppForm(comId: string, appFormId: string, flowId: string, isSuccessed) {
+    setUserSuccess(isSuccessed);
     setUserToken(this.tokenId);
     setAppFormData(appFormId);
     setFlowId(flowId);

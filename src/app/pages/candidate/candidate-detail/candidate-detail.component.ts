@@ -52,7 +52,7 @@ export class CandidateDetailComponent implements OnInit {
   ExamLists: DropDownValue[];
   filteredListExam: any;
   exanTest: any;
-
+  refStageId: any;
   isExpress = false;
   questionFilter = [];
 
@@ -383,11 +383,11 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 501:
               this.condition.icon.signContract = true;
-              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.sign.date)
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.sign.date) && !this.isExpress
               ) {
                 this.condition.button.errMsg = 'Please input sign contract info';
                 this.condition.button.disabled = true;
-              } else {
+              } else if (!this.isExpress) {
                 if (!item.email) {
                   this.condition.button.errMsg = " Email not found, Can't send email to candidate.";
                 } else if (this.utilitiesService.isDateGreaterThanToday(item.candidateFlow.pendingSignContractInfo.sign.date)) {
@@ -404,10 +404,10 @@ export class CandidateDetailComponent implements OnInit {
               break;
             case 601:
               this.condition.icon.onboard = true;
-              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
+              if (!this.utilitiesService.dateIsValid(item.candidateFlow.pendingSignContractInfo.agreeStartDate) && !this.isExpress) {
                 this.condition.button.disabled = true;
                 this.condition.button.errMsg = 'Please input onboard date';
-              } else {
+              } else if (!this.isExpress) {
                 if (!item.email) {
                   this.condition.button.errMsg = "Email not found, Can't send email to candidate.";
                 }
@@ -489,28 +489,48 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (item.email) {
-      setUserEmail(item.email);
-    }
-    if (this.onMail) {
-      setFlowId(item.candidateFlow._id);
-      setCandidateId(item._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        setButtonId();
+    if (item.candidateFlow.refJR.isDefault) {
+      this.refStageId = item.candidateFlow.refStage._id;
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+      });
+      confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.getDetail();
+          this.service.candidateFlowApprove(item.candidateFlow._id, this.refStageId, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.getDetail();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
         }
       });
     } else {
-      this.nextStep(item, button);
+      if (item.email) {
+        setUserEmail(item.email);
+      }
+      if (this.onMail) {
+        setFlowId(item.candidateFlow._id);
+        setCandidateId(item._id);
+        setButtonId(button._id);
+        this.dialogService.open(PopupPreviewEmailComponent,
+          {
+            closeOnBackdropClick: true,
+            hasScroll: true,
+          }
+        ).onClose.subscribe(result => {
+          setFlowId();
+          setCandidateId();
+          setButtonId();
+          if (result) {
+            this.getDetail();
+          }
+        });
+      } else {
+        this.nextStep(item, button);
+      }
     }
   }
 

@@ -3,6 +3,11 @@
         <div class="col-sm-8 col-md-9 col-lg-10">
             <h3>Hub</h3>
         </div>
+        <div class="col-sm-4 col-md-3 col-lg-2">
+            <button nbButton fullWidth status="success" nbTooltip="Create" (click)="create(dialog)">
+                <nb-icon icon="plus-outline"></nb-icon>Create
+            </button>
+        </div>
     </div>
 </div>
 
@@ -46,7 +51,7 @@
                 <nb-card *ngIf="!loading" [accent]="item.active ? 'success' : 'default'">
                     <nb-card-header>
                         <div class="title">
-                            <label [nbTooltip]="item.name">{{ item.name }}</label>
+                            <label [nbTooltip]="item.name.th">{{ item.name.th }}</label>
                         </div>
                         <div *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="actions">
                             <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)">
@@ -56,7 +61,7 @@
                             </nb-icon>
                         </div>
                     </nb-card-header>
-                    <nb-card-body>
+                    <!-- <nb-card-body>
                         <div class="text-group" (mouseenter)="itemDialog = item" [nbPopover]="remark"
                             nbPopoverTrigger="hint" nbPopoverPlacement="top">
                             <label class="label">Remark</label>
@@ -82,7 +87,7 @@
                                 <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
                             </div>
                         </i>
-                    </nb-card-body>
+                    </nb-card-body> -->
                 </nb-card>
             </div>
         </div>
@@ -100,10 +105,10 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Job Name</th>
-                            <th scope="col">Remark</th>
+                            <th scope="col">Hub Name</th>
+                            <!-- <th scope="col">Remark</th>
                             <th scope="col" style="width: 90px;">Status</th>
-                            <th scope="col">Last update by</th>
+                            <th scope="col">Last update by</th> -->
                             <th *ngIf="role.refAuthorize.configuration.jobPosition.editable" scope="col"
                                 style="width: 110px;">Actions
                             </th>
@@ -112,9 +117,9 @@
                     <tbody>
                         <tr *ngFor="let item of items;">
                             <td class="text-left">
-                                <span [nbTooltip]="item.name">{{ item.name }}</span>
+                                <span [nbTooltip]="item.name.th">{{ item.name.th || '-' }}</span>
                             </td>
-                            <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint"
+                            <!-- <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint"
                                 nbPopoverPlacement="top" class="text-dot text-left" style="width: 300px;">
                                 <div class="text-dot" style="width: 300px;" [ngClass]="{'text-center': !item.remark }">
                                     {{ item.remark || '-' }}
@@ -131,7 +136,7 @@
                                     {{ item.lastChangedInfo?.refUser?.firstname }}
                                     {{ item.lastChangedInfo?.refUser?.lastname }}
                                 </span>
-                            </td>
+                            </td> -->
                             <td *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="actions">
                                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                                     (click)="edit(item, dialog)">
@@ -157,11 +162,72 @@
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()"
         [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-6 col-lg-6">
+                    <mat-form-field [color]="primary" appearance="outline" class="fit-content">
+                        <mat-label>จังหวัด</mat-label>
+                        <mat-select [(ngModel)]="itemDialog.refProvince" required>
+                            <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="provinceList"
+                                (filteredReturn)="filteredList =$event">
+                            </mat-select-filter>
+                            <mat-option *ngFor="let province of filteredList" [value]="province.value">
+                                {{province.label}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <nb-checkbox [(ngModel)]="itemDialog.isBangkokAndPerimeter"
+                        (checkedChange)="toggle($event, 'bangkok')" status="primary">กรุงเทพ/ปริมณฑล</nb-checkbox>
+                    <nb-checkbox [(ngModel)]="itemDialog.isProvincial" (checkedChange)="toggle($event, 'provincial')"
+                        status="primary">ต่างจังหวัด</nb-checkbox>
+                    <nb-checkbox [(ngModel)]="itemDialog.isNewHub" (checkedChange)="toggle($event, 'new')"
+                        status="primary">New Hub</nb-checkbox>
+                </div>
+            </div>
+            <div class="row" *ngFor="let item of itemDialog.areas;let i = index;">
+                <div id="in{{i}}" [ngClass]="{ 'has-error': !item.name && touched }" style="padding-top: 0.65rem;"
+                    class="col-md-6 col-lg-6 form-control-group">
+                    <textarea nbInput fullWidth [(ngModel)]="item.name" placeholder="ระบุพื้นที่">
+                        </textarea>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <nb-checkbox [(ngModel)]="item.isFull" status="basic">เต็ม</nb-checkbox>
+                    <nb-icon *ngIf="i > 0" style="float: right;margin-top: 0.35rem;" icon="trash-2-outline"
+                        class="link text-red" nbTooltip="Delete" (click)="deleteHub(i)"></nb-icon>
+                    <input type="text" [(ngModel)]="item.remark" nbInput fullWidth placeholder="รายละเอียดเพิ่มเติม">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <button nbButton type="button" status="success" size="small" (click)="addArea()">
+                        <nb-icon icon="plus-outline">
+                        </nb-icon>
+                        เพิ่มพื้นที่
+                    </button>
+                </div>
+            </div>
+        </nb-card-body>
+        <small *ngIf="sError" class="text-red-right">{{ sError }}</small>
+        <nb-card-footer>
+            <button nbButton status="default" (click)="ref.close()">Cancel</button>
+            <button nbButton status="success" [disabled]="!itemDialog.refProvince" (click)="save()">Save</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<!-- <ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()"
+        [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
         <nb-card-header>
             {{ itemDialog.name }}
         </nb-card-header>
         <nb-card-body>
-            <!-- จังหวัด -->
+          
             <div class="row">
                 <div *ngFor="let hub of hubs;let i = index;" class="col-md-12 col-lg-12">
                     <nb-icon *ngIf="i > 0" style="float: right;" icon="trash-2-outline" class="link text-red"
@@ -180,11 +246,11 @@
                     </mat-form-field>
                     <input *ngIf="hub.districts.length === 0" type="text" [(ngModel)]="hub.remark" nbInput fullWidth
                         placeholder="จุดสังเกต">
-                    <!-- อำเภอ -->
+    
                     <div *ngFor="let dis of hub.districts;let j = index;" class="row" style="padding-left: 1.25rem;">
-                        <div class="col-md-6 col-lg-6">
-                            <label>อำเภอ
-                                <nb-icon style="float: right;" icon="trash-2-outline" class="link text-red"
+                        <div class="col-md-12 col-lg-12">
+                            <label>จุดสังเกต
+                                <nb-icon *ngIf="j > 0" style="float: right;" icon="trash-2-outline" class="link text-red"
                                     nbTooltip="Delete" (click)="deleteDistrict(i, j)"></nb-icon>
                             </label>
                             <mat-form-field [color]="primary" appearance="outline">
@@ -196,13 +262,15 @@
                                     <mat-option *ngFor="let district of listFiltered[i][j].main"
                                         [value]="district.value"
                                         (click)="getSubDistrict(district.value, i, j, 'all',dis)">
-                                        <!-- (click)="getSubDistrict(district.value,i, district.group,hub)" -->
                                         {{district.label}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <input *ngIf="dis.subDistricts.length === 0" type="text" [(ngModel)]="dis.remark" nbInput
-                                fullWidth placeholder="จุดสังเกต"><br>
+                                fullWidth placeholder="จุดสังเกต">
+                            <textarea nbInput fullWidth [(ngModel)]="dis.remark">
+                                </textarea>
+                            <br>
                         </div>
                         <div class="col-md-6 col-lg-6">
                             <div *ngFor="let sub of dis.subDistricts;let k = index;">
@@ -234,8 +302,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <!-- <br> -->
-                            <!-- button ตำบล -->
+              
                             <div *ngIf="dis.subDistricts.length === 0" class="paddTop0">
                                 <button *ngIf="dis.refDistrict" nbButton type="button" status="success" size="small"
                                     (click)="addSubDistrict(dis, i, j)">
@@ -246,18 +313,18 @@
                             </div>
                         </div>
                     </div>
-                    <!-- button อำเภอ -->
+               
                     <div class="row" style="padding-top: 1rem;padding-left: 1.25rem;">
                         <div class="col-md-6 col-lg-6">
                             <button nbButton type="button" status="success" size="small" (click)="addDistrict(hub,i)">
                                 <nb-icon icon="plus-outline">
                                 </nb-icon>
-                                เพิ่ม อำเภอ
+                                เพิ่ม จุดสังเกต
                             </button>
                         </div>
                     </div>
                 </div>
-                <!-- Button เพิ่มจังหวัด -->
+               
                 <div class="col-md-12 col-lg-12" style="text-align: center;">
                     <button nbButton type="button" status="primary" size="small" (click)="addHubs()">
                         <nb-icon icon="plus-outline">
@@ -274,4 +341,4 @@
             <button nbButton status="success" (click)="save()">Save</button>
         </nb-card-footer>
     </nb-card>
-</ng-template>
+</ng-template>  -->

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownValue, Devices } from '../../../shared/interfaces/common.interface';
 import { getRole, setFlowId, setCandidateId, setIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
@@ -13,6 +13,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { DepartmentService } from '../../setting/department/department.service';
 import { ExcelService } from '../excel.service';
 import { Router } from '@angular/router';
+import { start } from 'repl';
 @Component({
   selector: 'ngx-candidate',
   templateUrl: './candidate.component.html',
@@ -49,9 +50,13 @@ export class CandidateComponent implements OnInit {
   filteredList: any;
   filteredList2: any;
   filteredList3: any;
-  filteredList4: any;
-  filteredList5: any;
+  // filteredList4: any;
+  // filteredList5: any;
+  startTime: any;
   isExpress = false;
+  dialogRef: NbDialogRef<any>;
+  dialogTime: any;
+  noticeHeight: any;
   constructor(
     private router: Router,
     private service: ReportService,
@@ -69,6 +74,7 @@ export class CandidateComponent implements OnInit {
       this.changeLayout(false);
     }
     this.isExpress = this.role.refCompany.isExpress;
+    this.noticeHeight = window.innerHeight * 0.85;
   }
 
   ngOnInit() {
@@ -92,6 +98,7 @@ export class CandidateComponent implements OnInit {
         department: [],
       }
     }
+  this.startTime = {};
     this.refresh();
   }
 
@@ -129,7 +136,7 @@ export class CandidateComponent implements OnInit {
         'refCandidate.firstname',
         'refCandidate.lastname',
         'refJR.refStatus.name',
-        'refSubStage.name',
+        // 'refSubStage.name',
         'actionDate',
         'reject.remark',
         'reject.rejectBy.refUser.firstname',
@@ -150,13 +157,17 @@ export class CandidateComponent implements OnInit {
           value: this.filter.selected.jobStatus
         },
         {
-          name: 'refStage._id',
-          value: this.filter.selected.stage
-        },
-        {
-          name: 'refSubStage._id',
-          value: this.filter.selected.subStage
-        },
+          name: 'startTime',
+          value: this.startTime
+        }
+        // {
+        //   name: 'refStage._id',
+        //   value: this.filter.selected.stage
+        // },
+        // {
+        //   name: 'refSubStage._id',
+        //   value: this.filter.selected.subStage
+        // },
       ]
     };
     this.getList();
@@ -179,18 +190,18 @@ export class CandidateComponent implements OnInit {
             value: element._id
           })
         });
-        response.filter.stage.forEach(element => {
-          this.filter.data.stage.push({
-            label: element.name,
-            value: element._id
-          })
-        });
-        response.filter.subStage.forEach(element => {
-          this.filter.data.subStage.push({
-            label: element.name,
-            value: element._id
-          })
-        });
+        // response.filter.stage.forEach(element => {
+        //   this.filter.data.stage.push({
+        //     label: element.name,
+        //     value: element._id
+        //   })
+        // });
+        // response.filter.subStage.forEach(element => {
+        //   this.filter.data.subStage.push({
+        //     label: element.name,
+        //     value: element._id
+        //   })
+        // });
         // this.items.forEach(element => {
         //   //job status
         //   this.filter.data.jobStatus.push({
@@ -212,8 +223,8 @@ export class CandidateComponent implements OnInit {
         this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
         this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
         this.filteredList3 = this.filter.data.jobStatus.slice();
-        this.filteredList4 = this.filter.data.stage.slice();
-        this.filteredList5 = this.filter.data.subStage.slice();
+        // this.filteredList4 = this.filter.data.stage.slice();
+        // this.filteredList5 = this.filter.data.subStage.slice();
         // this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
         this.items.map(item => {
           switch (item.refJR.refStatus.name) {
@@ -319,8 +330,22 @@ export class CandidateComponent implements OnInit {
     }
   }
 
+  create(dialog: TemplateRef<any>) {
+    this.dialogTime = this.startTime;
+    this.callDialog(dialog);
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
+  }
+
   exportAsXLSX(): void {
-    console.log(this.items)
+    let dataExcel = [];
+    this.service.getListExcel((response) => {
+      if (response.code === ResponseCode.Success) {
+        dataExcel = response.data;
+      }
+    })
     let data = [];
     this.items.forEach((item) => {
       data.push({

@@ -10,6 +10,11 @@
     จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
   </span>
 </nb-alert>
+<nb-alert *ngIf="showCondition" status="warning" closable (close)="showCondition = !showCondition">
+  <span>
+    พื้นหลังสี <span class="dot"></span> สำหรับ Candidate ที่เป็นตัวสำรอง(คุณสมบัติไม่ตรง)
+  </span>
+</nb-alert>
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -74,6 +79,20 @@
         </div>
         <div class="col-md-4">
           <div class="form-control-group">
+            <label class="label">Area</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.areas" (ngModelChange)="changeFilter(true)" multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.areas"
+                  (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+          <div class="form-control-group">
             <label class="label">District</label>
             <mat-form-field [color]="primary" appearance="outline">
               <mat-select [(ngModel)]="filter.selected.districts" (ngModelChange)="changeFilter(true)" multiple>
@@ -85,8 +104,8 @@
               </mat-select>
             </mat-form-field>
           </div>
-        </div>
-        <div class="col-md-4">
+        </div> -->
+        <!-- <div class="col-md-4">
           <div class="form-control-group">
             <label class="label">SubDistrict</label>
             <mat-form-field [color]="primary" appearance="outline">
@@ -99,7 +118,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-        </div>
+        </div> -->
       </div>
     </div><br>
     <div *ngIf="filter.isFilter" class="row" style="text-align: center;">
@@ -283,12 +302,14 @@
 
           <!-- PENDING, SELECTED, REJECT -->
           <div *ngIf="tabSelected !== 'NOT BUY'">
-            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i">
+            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i"
+              [ngClass]="{ 'bg-reserve': item.isReserve }">
               <nb-card-header>
                 <div class="title">
                   <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
                     (click)="openCandidateDetail(item)">
-                    {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
+                    {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
+                      (ตัวสำรอง)</span>
                   </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
@@ -574,8 +595,18 @@
                   <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
                     position="top right"></nb-badge>
                 </button>
-                <button *ngIf="item.condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                  status="success" [nbTooltip]="item.condition.button.step.button"
+                <button *ngIf="item.condition.button.nextStep && !isExpress" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                  [nbTooltip]="item.condition.button.step.button"
+                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
+                </button>
+                <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                  nbTooltip="Pass to Sign Contract"
                   (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">

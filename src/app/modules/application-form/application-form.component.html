@@ -38,7 +38,6 @@
           (click)="setLang('th')">ไทย</span>
       </div>
     </div>
-
     <form class="container" (ngSubmit)="save()" style="padding-top: 2rem;">
       <nb-stepper #stepper disableStepNavigation="true">
 
@@ -56,23 +55,52 @@
               </div>
               <div class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <mat-form-field appearance="outline" class="fit-content">
+                  <!-- (selectionChange)="onChangeJR($event.value)" -->
+                  <!-- <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'POSITION' | translate }}</mat-label>
-                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}"
-                      (selectionChange)="onChangeJR($event.value)" required [disabled]="isDisabled || isDisableJob">
+                    <mat-select [(ngModel)]="appForm.refJR" [ngModelOptions]="{standalone: true}" required
+                      [disabled]="isDisabled || isDisableJob">
+               
                       <mat-option *ngFor="let option of jrs" [value]="option.value">
                         {{ option.label }}
                       </mat-option>
                     </mat-select>
-                  </mat-form-field>
+                  </mat-form-field> -->
+                  <div *ngFor="let option of jrs">
+                    <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
+                      (checkedChange)="onSelectPosition($event, option)" status="primary"
+                      [disabled]="isDisabled || isDisableJob">
+                      {{ option.refJD.position }}
+                    </nb-checkbox>
+                  </div>
                 </div>
               </div>
 
               <!-- Hubs -->
               <div *ngIf="appForm.refJR && hubs.length" class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div>
-                  <div *ngFor="let province of hub.provinces">
+                  <!-- <div *ngIf="hub.provinces.length" class="text-gray">{{ 'PROVINCE' | translate }}</div> -->
+                  <div class="text-gray">HUB</div>
+                  <div *ngFor="let hub of hubs">
+                    <nb-checkbox [(ngModel)]="hub.checked" [ngModelOptions]="{standalone: true}"
+                      (checkedChange)="onChangeProvince($event, hub._id)" status="primary"
+                      [disabled]="isDisabled || successFlag">
+                      {{ language === 'en' ? hub.name.en :hub.name.th }}
+                    </nb-checkbox>
+                    <div *ngIf="hub.checked" style="margin-left: 1.5rem;">
+                      <div *ngFor="let area of hub.areas">
+                        <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
+                          (checkedChange)="onChangeHub($event, area._id)" status="primary"
+                          [disabled]="isDisabled || successFlag">
+                          {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                            {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
+                          <span class="text-red" *ngIf="!area.isFull && area.remark">
+                            ({{ area.remark }})</span>
+                        </nb-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div *ngFor="let province of hub.provinces">
                     <mat-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                       (click)="onChangeProvince()" [disabled]="isDisabled">
                       {{ language === 'en' ? province.refProvince.name.en :province.refProvince.name.th }}
@@ -98,14 +126,14 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
           </div>
           <div class="footer-right">
             <button nbButton type="button" nbStepperNext (click)="getTemplate(refCompany, undefined, refPosition)"
-              [disabled]="!appForm.refJR">
+              [disabled]="!appForm.refJR || !areaFlag || !provinceFlag">
               {{ 'NEXT' | translate }}
             </button>
           </div>
@@ -118,6 +146,17 @@
           <!-- Personal Details -->
           <div class="card" *ngIf="template.personalDetail.active">
             <div class="card-body">
+              <div class="row">
+                <div *ngIf="detailFlag" class="col-md-12" style="text-align: right;">
+                  <span (click)="setEdit()" class="link underline">
+                    <nb-icon class="font-inherit m-r-5" *ngIf="!editFlag" icon="eye-outline">
+                    </nb-icon>
+                    <nb-icon class="font-inherit m-r-5" *ngIf="editFlag" icon="edit-2-outline">
+                    </nb-icon>
+                    {{ buttonText.toUpperCase() }}
+                  </span><br>
+                </div>
+              </div>
               <div class="topic">
                 <mat-icon>account_circle</mat-icon>
                 <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
@@ -183,7 +222,7 @@
                     <mat-label>{{ 'FIRST_NAME' | translate }} ({{ 'ENGLISH' | translate }})</mat-label>
                     <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
                       [required]="template.personalDetail.firstname.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
                 <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
@@ -191,7 +230,7 @@
                     <mat-label>{{ 'LAST_NAME' | translate }} ({{ 'ENGLISH' | translate }})</mat-label>
                     <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
                       [required]="template.personalDetail.lastname.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
               </div>
@@ -201,7 +240,8 @@
                     <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
                     <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="appForm.idCard"
                       [required]="template.personalDetail.idCard.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled" digitOnly onKeyPress="if(this.value.length === 13) return false;">
+                      digitOnly onKeyPress="if(this.value.length === 13) return false;"
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
                 <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
@@ -211,7 +251,7 @@
                       [(ngModel)]="appForm.birth" readonly (click)="birthDate.open()"
                       (dateInput)="onChangeBirthday($event.target.value)"
                       [required]="template.personalDetail.birth.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                     <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
                     <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
@@ -268,7 +308,7 @@
                       <mat-label>{{ 'ADDRESS_NO' | translate }}</mat-label>
                       <input matInput type="text" id="addressNo" name="addressNo" [(ngModel)]="appForm.addressNo"
                         [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -276,7 +316,7 @@
                       <mat-label>{{ 'ROAD' | translate }}</mat-label>
                       <input matInput type="text" id="road" name="road" [(ngModel)]="appForm.road"
                         [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -284,7 +324,7 @@
                       <mat-label>{{ 'DISTRICT' | translate }}</mat-label>
                       <input matInput type="text" id="district" name="district" [(ngModel)]="appForm.district"
                         [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                 </div>
@@ -294,7 +334,7 @@
                       <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
                       <input matInput type="text" id="province" name="province" [(ngModel)]="appForm.province"
                         [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                   <div class="col-md-6">
@@ -348,7 +388,7 @@
                       <mat-label>{{ 'POSITION' | translate }}</mat-label>
                       <input matInput type="text" id="position{{i}}" [(ngModel)]="work.position"
                         [required]="template.workExperience.position.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                   <div class="col-md-6" *ngIf="template.workExperience.company.visible">
@@ -356,7 +396,7 @@
                       <mat-label>{{ 'COMPANY' | translate }}</mat-label>
                       <input matInput type="text" id="company{{i}}" [(ngModel)]="work.company"
                         [required]="template.workExperience.company.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                 </div>
@@ -367,14 +407,14 @@
                       <input matInput type="text" id="start{{i}}" name="start" [matDatepicker]="startDate"
                         [(ngModel)]="work.start" readonly (click)="startDate.open()"
                         [required]="template.workExperience.start.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                       <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                       <mat-datepicker #startDate></mat-datepicker>
                     </mat-form-field>
                   </div>
                   <div class="col-md-2 checkbox-margin" *ngIf="template.workExperience.start.visible">
                     <mat-checkbox [(ngModel)]="work.isPresent" class="is-present" [ngModelOptions]="{standalone: true}"
-                      [disabled]="isDisabled">
+                      [disabled]="(successFlag || isDisabled) && !editFlag">
                       {{ 'PRESENT' | translate }}</mat-checkbox>
                   </div>
                   <div *ngIf="template.workExperience.end.visible && !work.isPresent" class="col-md-4">
@@ -383,7 +423,7 @@
                       <input matInput type="text" id="end{{i}}" name="end" [matDatepicker]="endDate"
                         [(ngModel)]="work.end" readonly (click)="endDate.open()"
                         [required]="template.workExperience.end.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                       <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                       <mat-datepicker #endDate></mat-datepicker>
                     </mat-form-field>
@@ -395,7 +435,7 @@
                       <mat-label>{{ 'RESPONSIBILITY' | translate }}</mat-label>
                       <textarea matInput type="text" id="duty{{i}}" rows="3" [(ngModel)]="work.duty"
                         [required]="template.workExperience.duty.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled"></textarea>
+                        [disabled]="(successFlag || isDisabled) && !editFlag"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -441,14 +481,14 @@
                       <mat-label>{{ 'DEGREE' | translate }}</mat-label>
                       <mat-select *ngIf="language === 'en'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
                         [ngModelOptions]="{ standalone: true }" [required]="template.education.refDegree.required"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                         <mat-option *ngFor="let degree of degreesEN" [value]="degree.value">
                           {{ degree.label }}
                         </mat-option>
                       </mat-select>
                       <mat-select *ngIf="language === 'th'" id="refDegree{{i}}" [(ngModel)]="education.refDegree"
                         [ngModelOptions]="{ standalone: true }" [required]="template.education.refDegree.required"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                         <mat-option *ngFor="let degree of degreesTH" [value]="degree.value">
                           {{ degree.label }}
                         </mat-option>
@@ -476,7 +516,7 @@
                       <mat-label>{{ 'UNIVERSITY' | translate }}</mat-label>
                       <input matInput type="text" id="university{{i}}" [(ngModel)]="education.university"
                         [ngModelOptions]="{standalone: true}" [required]="template.education.university.required"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                   <div class="col-md-6" *ngIf="template.education.major.visible">
@@ -484,7 +524,7 @@
                       <mat-label>{{ 'MAJOR' | translate }}</mat-label>
                       <input matInput type="text" id="major{{i}}" [(ngModel)]="education.major"
                         [ngModelOptions]="{standalone: true}" [required]="template.education.major.required"
-                        [disabled]="isDisabled">
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
                 </div>
@@ -671,8 +711,12 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button nbButton type="button" (click)="validation() ? stepper.next() : false" [nbSpinner]="loadingButton">
+            <button *ngIf="!saveFlag" nbButton type="button" (click)="validation() ? stepper.next() : false"
+              [nbSpinner]="loadingButton">
               {{ 'NEXT' | translate }}
+            </button>
+            <button *ngIf="saveFlag" nbButton status="primary" type="submit">
+              {{ 'SUBMIT' | translate }}
             </button>
           </div>
         </nb-step>
@@ -709,7 +753,7 @@
                   <div class="offset-lg-2 col-lg-8">
                     <mat-form-field appearance="outline">
                       <input matInput type="text" [(ngModel)]="question.answer.input" [required]="question.required"
-                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
                     </mat-form-field>
                   </div>
                 </div>
@@ -721,7 +765,7 @@
                     <mat-form-field appearance="outline">
                       <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3"
                         [required]="question.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled"></textarea>
+                        [disabled]="isDisabled || successFlag"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -731,7 +775,7 @@
                 <div class="row">
                   <div class="offset-lg-2 col-lg-8">
                     <mat-radio-group [(ngModel)]="question.answer.selected" [required]="question.required"
-                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
                       <div class="row">
                         <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
                           [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
@@ -755,7 +799,7 @@
                       *ngIf="question.answer.selected === question.answer.options.length">
                       <mat-label>{{ question.answer.otherLabel }}</mat-label>
                       <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
                     </mat-form-field>
                   </div>
                 </div>
@@ -772,19 +816,19 @@
                           <img [src]="option.imgaeURL">
                         </div>
                         <mat-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
-                          [disabled]="isDisabled">
+                          [disabled]="isDisabled || successFlag">
                           {{ option.label }}
                         </mat-checkbox>
                       </div>
                       <div *ngIf="question.answer.hasOther" class="col-md-12">
                         <mat-checkbox [(ngModel)]="question.answer.otherChecked" [ngModelOptions]="{standalone: true}"
-                          [disabled]="isDisabled">
+                          [disabled]="isDisabled || successFlag">
                           {{ question.answer.otherLabel }}
                         </mat-checkbox>
                         <mat-form-field appearance="outline" *ngIf="question.answer.otherChecked">
                           <mat-label>{{ question.answer.otherLabel }}</mat-label>
                           <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                            [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                            [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
                         </mat-form-field>
                       </div>
                     </div>
@@ -797,7 +841,7 @@
                   <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                     <mat-select [(ngModel)]="question.answer.selected" [required]="question.required"
-                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
                       <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i">
                         {{ option.label }}
                       </mat-option>
@@ -810,7 +854,7 @@
                     *ngIf="question.answer.selected === question.answer.options.length">
                     <mat-label>{{ question.answer.otherLabel }}</mat-label>
                     <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
                   </mat-form-field>
                 </div>
               </div>
@@ -820,7 +864,7 @@
                   <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                     <mat-select [(ngModel)]="question.parentSelected" [ngModelOptions]="{standalone: true}"
-                      [required]="question.required" [disabled]="isDisabled">
+                      [required]="question.required" [disabled]="isDisabled || successFlag">
                       <mat-option *ngFor="let option of question.parentChild; let i = index;" [value]="i">
                         {{ option.name }}
                       </mat-option>
@@ -831,7 +875,7 @@
                       <mat-form-field appearance="outline" class="fit-content">
                         <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                         <mat-select [(ngModel)]="question.childSelected" [ngModelOptions]="{standalone: true}"
-                          [required]="getChild(question).required" [disabled]="isDisabled">
+                          [required]="getChild(question).required" [disabled]="isDisabled || successFlag">
                           <mat-option *ngFor="let option of getChild(question).children; let i = index;" [value]="i">
                             {{ option.name }}
                           </mat-option>
@@ -850,7 +894,7 @@
                             </span>
                           </mat-select-trigger>
                           <mat-option *ngFor="let option of getChild(question).children" [value]="option.name"
-                            [disabled]="isDisabled">
+                            [disabled]="isDisabled || successFlag">
                             {{ option.name }}
                           </mat-option>
                         </mat-select>
@@ -877,7 +921,7 @@
                       {{ question.answer.attachment.originalName }}
                     </span>
                   </p>
-                  <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 10 MB)</small></p>
+                  <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 15 MB)</small></p>
                   <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
                     [disabled]="question.isLoading">
                     <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
@@ -891,7 +935,7 @@
               <div *ngIf="question.type === InputType.Linear" class="row">
                 <div class="offset-lg-2 col-lg-8">
                   <mat-radio-group [(ngModel)]="question.answer.linearValue" [ngModelOptions]="{standalone: true}"
-                    [required]="question.required" [disabled]="isDisabled">
+                    [required]="question.required" [disabled]="isDisabled || successFlag">
                     <div class="linear">
                       <div *ngIf="question.linear.fromLabel">{{ question.linear.fromLabel }}</div>
                       <div *ngFor="let linearOption of question.answer.linearOptions">
@@ -922,7 +966,7 @@
                         <td>{{ gridRadio.rowName }}</td>
                         <td>
                           <mat-radio-group [(ngModel)]="gridRadio.value" [ngModelOptions]="{standalone: true}"
-                            [required]="question.required" [disabled]="isDisabled">
+                            [required]="question.required" [disabled]="isDisabled || successFlag">
                             <div class="grid-item">
                               <div *ngFor="let col of question.grid.columns">
                                 <mat-radio-button [value]="col.label"></mat-radio-button>
@@ -956,7 +1000,7 @@
                           <div class="grid-item">
                             <div *ngFor="let col of gridCheckbox.columns">
                               <mat-checkbox [(ngModel)]="col.checked" [ngModelOptions]="{standalone: true}"
-                                [disabled]="isDisabled"></mat-checkbox>
+                                [disabled]="isDisabled || successFlag"></mat-checkbox>
                             </div>
                           </div>
                         </td>
@@ -973,7 +1017,8 @@
                       <mat-label>Date</mat-label>
                       <input matInput type="text" id="date_{{iQuestion}}" name="date" [matDatepicker]="picker"
                         [(ngModel)]="question.answer.date" readonly (click)="picker.open()"
-                        [required]="question.required" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+                        [required]="question.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled || successFlag">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -986,7 +1031,8 @@
                   <div class="text-center">
                     <ngb-timepicker id="time_{{iQuestion}}" [(ngModel)]="question.answer.time"
                       [ngModelOptions]="{standalone: true}" [minuteStep]="minuteStep" [spinners]="false"
-                      [required]="question.required" [disabled]="isDisabled" style="display: inline-block;">
+                      [required]="question.required" [disabled]="isDisabled || successFlag"
+                      style="display: inline-block;">
                     </ngb-timepicker>
                   </div>
                 </div>
@@ -996,8 +1042,12 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button *ngIf="!isDisabled" nbButton type="button" (click)="validation() ? stepper.next() : false">
+            <button *ngIf="!isDisabled && !successFlag" nbButton type="button"
+              (click)="validation() ? stepper.next() : false">
               {{ 'NEXT' | translate }}
+            </button>
+            <button *ngIf="successFlag && !detailFlag" nbButton status="primary" type="submit">
+              {{ 'SUBMIT' | translate }}
             </button>
           </div>
         </nb-step>

@@ -37,7 +37,8 @@ import {
   companyName,
   companyId,
   AppFormIndex,
-  UserToken
+  UserToken,
+  UserSuccess
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -397,4 +398,12 @@ export function setUserToken(userToken: string = null) {
 export function getUserToken() {
   const userToken = JSON.parse(localStorage.getItem(UserToken));
   return (!userToken || userToken === null) ? undefined : userToken;
+}
+export function setUserSuccess(userSuccess: string = null) {
+  localStorage.setItem(UserSuccess, JSON.stringify(userSuccess));
+}
+
+export function getUserSuccess() {
+  const userSuccess = JSON.parse(localStorage.getItem(UserSuccess));
+  return (!userSuccess || userSuccess === null) ? undefined : userSuccess;
 }

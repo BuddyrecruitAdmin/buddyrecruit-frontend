@@ -248,7 +248,7 @@
               </button>
 
               <button
-                *ngIf="item.condition.button.nextStep && utilitiesService.dateIsValid(item.pendingSignContractInfo?.sign?.date)"
+                *ngIf="item.condition.button.nextStep && utilitiesService.dateIsValid(item.pendingSignContractInfo?.sign?.date) && !isExpress"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" [disabled]="!utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.sign?.date) || item.condition.isExpired || showTips 
                 || (item.refCandidate.email !== '' && !item.pendingSignContractInfo?.mail?.flag)"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)">
@@ -260,9 +260,17 @@
                   {{ item.refJR?.refStatus?.name }}
                 </span>
               </button>
+              <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)">
+                <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
+                </span>
+              </button>
 
               <button
-                *ngIf="item.condition.button.signInfo && !utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date)"
+                *ngIf="item.condition.button.signInfo && !utilitiesService.dateIsValid(item.pendingSignContractInfo.sign.date) && !isExpress"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 nbTooltip="Edit Sign Contract Date"
                 (click)="openPopupSignContractDate(item, item.condition.icon.onBoard)"

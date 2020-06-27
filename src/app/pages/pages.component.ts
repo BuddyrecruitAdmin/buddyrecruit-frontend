@@ -70,13 +70,13 @@ export class PagesComponent {
           if (menu.talentPool && menu.talentPool.active) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[1]);
           }
-          if (menu.pendingExam && menu.pendingExam.active) {
+          if (menu.pendingExam && menu.pendingExam.active && !role.refCompany.isExpress) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[2]);
           }
-          if (menu.pendingAppointment && menu.pendingAppointment.active) {
+          if (menu.pendingAppointment && menu.pendingAppointment.active && !role.refCompany.isExpress) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[3]);
           }
-          if (menu.pendingInterview && menu.pendingInterview.active) {
+          if (menu.pendingInterview && menu.pendingInterview.active && !role.refCompany.isExpress) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[4]);
           }
           if (menu.pendingSignContract && menu.pendingSignContract.active) {

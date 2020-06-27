@@ -83,6 +83,7 @@ export const companyName = 'companyName';
 export const companyId = 'companyId';
 export const AppFormIndex = 'AppFormIndex';
 export const UserToken = 'UserToken';
+export const UserSuccess = 'UserSuccess';
 
 export enum DayOfWeek {
   Sunday = 0,

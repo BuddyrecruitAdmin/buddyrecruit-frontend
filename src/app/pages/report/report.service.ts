@@ -26,6 +26,12 @@ export class ReportService extends NetworkService {
     }
     return this.post(API_ENDPOINT.REPORT.LIST, body);
   }
+  getListExcel(criteria: any = undefined): Observable<ApiResponse> {
+    const body = {
+      criteria: criteria
+    }
+    return this.post(API_ENDPOINT.REPORT.EXCEL, body);
+  }
   getListReport(criteria: any = undefined): Observable<ApiResponse> {
     const body = {
       criteria: criteria

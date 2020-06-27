@@ -314,7 +314,7 @@ export class SignContractDetailComponent implements OnInit {
           condition.icon.signContract = true;
           condition.button.nextStep = true;
           condition.button.reject = true;
-          if (!this.utilitiesService.convertDateTime(item.pendingSignContractInfo.sign.date)
+          if (!this.utilitiesService.convertDateTime(item.pendingSignContractInfo.sign.date) && !this.isExpress
           ) {
             condition.button.signInfo = true;
             condition.button.nextStep = false;
@@ -378,28 +378,48 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (item.refCandidate.email) {
-      setUserEmail(item.refCandidate.email);
-    }
-    if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        setButtonId();
+    if (item.refJR.isDefault) {
+      this.refStageId = item.refStage._id;
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+      });
+      confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.search();
+          this.candidateService.candidateFlowApprove(item._id, this.refStageId, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.search();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
         }
       });
     } else {
-      this.nextStep(item, button);
+      if (item.refCandidate.email) {
+        setUserEmail(item.refCandidate.email);
+      }
+      if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
+        setFlowId(item._id);
+        setCandidateId(item.refCandidate._id);
+        setButtonId(button._id);
+        this.dialogService.open(PopupPreviewEmailComponent,
+          {
+            closeOnBackdropClick: true,
+            hasScroll: true,
+          }
+        ).onClose.subscribe(result => {
+          setFlowId();
+          setCandidateId();
+          setButtonId();
+          if (result) {
+            this.search();
+          }
+        });
+      } else {
+        this.nextStep(item, button);
+      }
     }
   }
 
