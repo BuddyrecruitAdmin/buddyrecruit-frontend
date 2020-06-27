@@ -395,7 +395,7 @@ export class ApplicationFormComponent implements OnInit {
           }
           if (this.dataIndex) {
             this.appForm.phone = this.dataIndex.phone;
-            // this.appForm.idCard = this.dataIndex.idCard;
+            this.appForm.idCard = this.dataIndex.idCard;
           }
           if (!refPosition) {
             this.getJR(this.template.refCompany);
@@ -816,6 +816,13 @@ export class ApplicationFormComponent implements OnInit {
       let content;
       if (this.language === 'th') {
         content = 'คุณต้องการยืนยันการสมัครงานหรือไม่?';
+        if (this.detailFlag || this.successFlag) {
+          content = 'คุณต้องการบันทึกหรือไม่?';
+        }
+      } else {
+        if (this.detailFlag || this.successFlag) {
+          content = 'Do you want to save?';
+        }
       }
       const confirm = this.matDialog.open(PopupMessageComponent, {
         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,

@@ -57,3 +57,11 @@
  ::ng-deep .nb-theme-default nb-checkbox.status-primary .native-input:disabled + .custom-checkbox.checked{
    background-color: #3366ff;
  }
+ .btn-link{
+  background-color: var(--color-blue);
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+    cursor: pointer;
+    font-family: Open Sans, sans-serif;
+ }
