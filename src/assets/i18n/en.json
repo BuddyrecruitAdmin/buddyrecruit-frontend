@@ -195,6 +195,8 @@
     "PREV": "Prev",
     "NEXT": "Next",
     "STEP": "Step",
-    "NAME": "Name"
+    "NAME": "Name",
+    "THAI": "Thai",
+    "ENGLISH": "English"
   }
 }

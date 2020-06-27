@@ -18,6 +18,8 @@ export interface IAppFormTemplate {
     idCard: IAction;
     firstname: IAction;
     lastname: IAction;
+    firstnameTH: IAction;
+    lastnameTH: IAction;
     birth: IAction;
     age: IAction;
     phone: IAction;

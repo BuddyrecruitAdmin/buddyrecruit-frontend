@@ -105,6 +105,8 @@ export class AppFormDetailComponent implements OnInit {
         idCard: this.initialAction(),
         firstname: this.initialAction(),
         lastname: this.initialAction(),
+        firstnameTH: this.initialAction(),
+        lastnameTH: this.initialAction(),
         birth: this.initialAction(),
         age: this.initialAction(),
         phone: this.initialAction(),
@@ -152,15 +154,12 @@ export class AppFormDetailComponent implements OnInit {
   }
 
   setDefault() {
+    this.appForm.personalDetail.firstnameTH.required = true;
+    this.appForm.personalDetail.lastnameTH.required = true;
     this.appForm.personalDetail.firstname.required = true;
-    this.appForm.personalDetail.firstname.disabled = true;
     this.appForm.personalDetail.lastname.required = true;
-    this.appForm.personalDetail.lastname.disabled = true;
     this.appForm.personalDetail.birth.required = true;
     this.appForm.personalDetail.phone.required = true;
-    this.appForm.personalDetail.phone.disabled = true;
-    this.appForm.personalDetail.email.required = true;
-    this.appForm.personalDetail.email.disabled = true;
 
     this.appForm.workExperience.position.required = true;
     this.appForm.workExperience.position.disabled = true;
@@ -708,6 +707,19 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          if (!this.appForm.personalDetail.idCard) {
+            this.appForm.personalDetail.idCard = this.initialAction();
+          }
+          if (!this.appForm.personalDetail.firstnameTH) {
+            this.appForm.personalDetail.firstnameTH = this.initialAction();
+          }
+          if (!this.appForm.personalDetail.lastnameTH) {
+            this.appForm.personalDetail.lastnameTH = this.initialAction();
+          }
+          this.appForm.personalDetail.firstname.disabled = false;
+          this.appForm.personalDetail.lastname.disabled = false;
+          this.appForm.personalDetail.phone.disabled = false;
+          this.appForm.personalDetail.email.disabled = false;
           this.appForm.companyName = this.role.refCompany.name;
           this.calGrandScore();
           this.getJobPosition();
@@ -721,11 +733,20 @@ export class AppFormDetailComponent implements OnInit {
   }
 
   changePersonalCheckbox() {
+    if (!this.appForm.personalDetail.firstnameTH.visible) {
+      this.appForm.personalDetail.firstnameTH.required = false;
+    }
+    if (!this.appForm.personalDetail.lastnameTH.visible) {
+      this.appForm.personalDetail.lastnameTH.required = false;
+    }
     if (!this.appForm.personalDetail.firstname.visible) {
       this.appForm.personalDetail.firstname.required = false;
     }
     if (!this.appForm.personalDetail.lastname.visible) {
       this.appForm.personalDetail.lastname.required = false;
+    }
+    if (!this.appForm.personalDetail.idCard.visible) {
+      this.appForm.personalDetail.idCard.required = false;
     }
     if (!this.appForm.personalDetail.birth.visible) {
       this.appForm.personalDetail.birth.required = false;
