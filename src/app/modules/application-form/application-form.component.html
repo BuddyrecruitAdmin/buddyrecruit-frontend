@@ -162,6 +162,35 @@
                 <p>{{ 'PERSONAL_DETAILS' | translate }}</p>
               </div>
               <div class="row">
+                <div class="col-md-2" *ngIf="template.personalDetail.firstnameTH?.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
+                    <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                      <mat-option value="นาย">นาย</mat-option>
+                      <mat-option value="นาง">นาง</mat-option>
+                      <mat-option value="นางสาว">นางสาว</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5" *ngIf="template.personalDetail.firstnameTH?.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'FIRST_NAME' | translate }} ({{ 'THAI' | translate }})</mat-label>
+                    <input matInput type="text" id="firstnameTH" name="firstnameTH" [(ngModel)]="appForm.firstnameTH"
+                      [required]="template.personalDetail.firstnameTH.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-5" *ngIf="template.personalDetail.lastnameTH?.visible">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'LAST_NAME' | translate }} ({{ 'THAI' | translate }})</mat-label>
+                    <input matInput type="text" id="lastnameTH" name="lastnameTH" [(ngModel)]="appForm.lastnameTH"
+                      [required]="template.personalDetail.lastnameTH.required" [ngModelOptions]="{standalone: true}"
+                      [disabled]="isDisabled">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-md-2" *ngIf="template.personalDetail.firstname.visible">
                   <!-- <mat-form-field appearance="outline">
                     <mat-label>{{ 'GENDER' | translate }}</mat-label>
@@ -181,22 +210,16 @@
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'TITLE_NAME' | translate }}</mat-label>
                     <mat-select [(ngModel)]="appForm.title" [ngModelOptions]="{standalone: true}"
-                      [disabled]="(successFlag || isDisabled) && !editFlag">
-                      <mat-option value="Mr.">
-                        {{ 'TITLE_MR' | translate }}
-                      </mat-option>
-                      <mat-option value="Mrs.">
-                        {{ 'TITLE_MRS' | translate }}
-                      </mat-option>
-                      <mat-option value="Miss">
-                        {{ 'TITLE_MISS' | translate }}
-                      </mat-option>
+                      [disabled]="isDisabled">
+                      <mat-option value="Mr.">Mr.</mat-option>
+                      <mat-option value="Mrs.">Mrs.</mat-option>
+                      <mat-option value="Miss">Miss</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-md-5" *ngIf="template.personalDetail.firstname.visible">
                   <mat-form-field appearance="outline">
-                    <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
+                    <mat-label>{{ 'FIRST_NAME' | translate }} ({{ 'ENGLISH' | translate }})</mat-label>
                     <input matInput type="text" id="firstname" name="firstname" [(ngModel)]="appForm.firstname"
                       [required]="template.personalDetail.firstname.required" [ngModelOptions]="{standalone: true}"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
@@ -204,17 +227,20 @@
                 </div>
                 <div class="col-md-5" *ngIf="template.personalDetail.lastname.visible">
                   <mat-form-field appearance="outline">
-                    <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
+                    <mat-label>{{ 'LAST_NAME' | translate }} ({{ 'ENGLISH' | translate }})</mat-label>
                     <input matInput type="text" id="lastname" name="lastname" [(ngModel)]="appForm.lastname"
                       [required]="template.personalDetail.lastname.required" [ngModelOptions]="{standalone: true}"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
-                <div class="col-md-6" *ngIf="template.personalDetail.idCard?.visible">
+              </div>
+              <div class="row">
+                <div class="col-md-4" *ngIf="template.personalDetail.idCard?.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
                     <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="appForm.idCard"
                       [required]="template.personalDetail.idCard.required" [ngModelOptions]="{standalone: true}"
+                      digitOnly onKeyPress="if(this.value.length === 13) return false;"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
                   </mat-form-field>
                 </div>
@@ -230,14 +256,14 @@
                     <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
                 </div>
-                <div class="col-md-2" *ngIf="template.personalDetail.birth.visible && !template.isExpress">
+                <!-- <div class="col-md-2" *ngIf="template.personalDetail.birth.visible && !template.isExpress">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'AGE' | translate }}</mat-label>
                     <input matInput type="number" id="age" name="age" [(ngModel)]="appForm.age" disabled
                       [required]="template.personalDetail.age.required" [ngModelOptions]="{standalone: true}">
                   </mat-form-field>
-                </div>
-                <div class="col-md-6" *ngIf="template.personalDetail.phone.visible">
+                </div> -->
+                <div class="col-md-4" *ngIf="template.personalDetail.phone.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'PHONE' | translate }}</mat-label>
                     <input matInput type="text" id="phone" name="phone" [formControl]="f.phone"
@@ -991,7 +1017,8 @@
                       <mat-label>Date</mat-label>
                       <input matInput type="text" id="date_{{iQuestion}}" name="date" [matDatepicker]="picker"
                         [(ngModel)]="question.answer.date" readonly (click)="picker.open()"
-                        [required]="question.required" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                        [required]="question.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="isDisabled || successFlag">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -1004,7 +1031,8 @@
                   <div class="text-center">
                     <ngb-timepicker id="time_{{iQuestion}}" [(ngModel)]="question.answer.time"
                       [ngModelOptions]="{standalone: true}" [minuteStep]="minuteStep" [spinners]="false"
-                      [required]="question.required" [disabled]="isDisabled || successFlag" style="display: inline-block;">
+                      [required]="question.required" [disabled]="isDisabled || successFlag"
+                      style="display: inline-block;">
                     </ngb-timepicker>
                   </div>
                 </div>
@@ -1014,7 +1042,8 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button *ngIf="!isDisabled && !successFlag" nbButton type="button" (click)="validation() ? stepper.next() : false">
+            <button *ngIf="!isDisabled && !successFlag" nbButton type="button"
+              (click)="validation() ? stepper.next() : false">
               {{ 'NEXT' | translate }}
             </button>
             <button *ngIf="successFlag && !detailFlag" nbButton status="primary" type="submit">

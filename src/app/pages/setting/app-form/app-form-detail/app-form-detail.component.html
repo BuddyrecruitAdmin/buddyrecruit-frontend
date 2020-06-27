@@ -134,8 +134,37 @@
               </div>
             </div>
           </div>
+          <div *ngIf="appForm.personalDetail.firstnameTH" class="table-control">
+            <div class="table-control-name">First name (Thai)</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstnameTH.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.firstnameTH.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstnameTH.required"
+                  [disabled]="!appForm.personalDetail.firstnameTH.visible">
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="appForm.personalDetail.lastnameTH" class="table-control">
+            <div class="table-control-name">Last name (Thai)</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastnameTH.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.lastnameTH.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastnameTH.required"
+                  [disabled]="!appForm.personalDetail.lastnameTH.visible"></mat-checkbox>
+              </div>
+            </div>
+          </div>
           <div class="table-control">
-            <div class="table-control-name">Fisrt name</div>
+            <div class="table-control-name">First name (Eng)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
                 <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.visible" (change)="changePersonalCheckbox()"
@@ -150,7 +179,7 @@
             </div>
           </div>
           <div class="table-control">
-            <div class="table-control-name">Last name</div>
+            <div class="table-control-name">Last name (Eng)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
                 <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.visible" (change)="changePersonalCheckbox()"
