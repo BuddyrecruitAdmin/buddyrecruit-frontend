@@ -56,7 +56,7 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <button mat-flat-button type="button" color="primary"
-                (click)="editAppForm(element.comId, element.appFormId)" [disabled]="!element.status.editable">
+                (click)="editAppForm(element.comId, element.appFormId,'',element.isSuccessed )" [disabled]="!element.status.editable">
                 {{ 'EDIT' | translate }}
               </button>
               <!-- <button mat-flat-button type="button" color="primary" (click)="reserveDate(dialog, element.flowId)"

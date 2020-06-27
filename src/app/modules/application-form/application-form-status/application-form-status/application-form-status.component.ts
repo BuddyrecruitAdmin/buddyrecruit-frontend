@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -19,6 +19,7 @@ export interface TableElement {
   status: any;
   comId: string;
   hub: string;
+  isSuccessed: boolean;
 }
 
 @Component({
@@ -77,7 +78,8 @@ export class ApplicationFormStatusComponent implements OnInit {
               date: this.utilitiesService.convertDateTime(element.timestamp) || '-',
               status: this.setStatus(element),
               appFormId: element.generalAppForm,
-              hub: element.hubs
+              hub: element.hubs,
+              isSuccessed: element.isSuccessed
             });
           });
         }
@@ -93,7 +95,7 @@ export class ApplicationFormStatusComponent implements OnInit {
       nameEN: '',
       nameTH: '',
       color: '',
-      editable: false,
+      editable: true,
       reserve: false,
     };
 
@@ -103,11 +105,10 @@ export class ApplicationFormStatusComponent implements OnInit {
       switch (element.refStage.order.toString().substring(0, 1)) {
         case '1' || '2':
           status.color = 'label-info';
-          status.editable = true;
           if (element.isSuccessed) {
             status.nameEN = 'Registered';
             status.nameTH = 'ยื่นสมัครแล้ว';
-          }           
+          }
           break;
 
         case '3':
@@ -139,6 +140,7 @@ export class ApplicationFormStatusComponent implements OnInit {
           status.nameEN = 'Approved';
           status.nameTH = 'ผ่านการพิจารณา';
           status.color = 'label-success';
+          status.editable = false;
           break;
       }
     }
@@ -146,13 +148,14 @@ export class ApplicationFormStatusComponent implements OnInit {
     // Replace from backend
     status.nameEN = (element.refStage.text && element.refStage.text.en) || status.nameEN;
     status.nameTH = (element.refStage.text && element.refStage.text.th) || status.nameTH;
-    status.editable = !element.isSuccessed;
+    // status.editable = !element.isSuccessed;
     status.reserve = element.isReserve;
 
     return status;
   }
 
-  editAppForm(comId: string, appFormId: string, flowId: string) {
+  editAppForm(comId: string, appFormId: string, flowId: string, isSuccessed) {
+    setUserSuccess(isSuccessed);
     setUserToken(this.tokenId);
     setAppFormData(appFormId);
     setFlowId(flowId);

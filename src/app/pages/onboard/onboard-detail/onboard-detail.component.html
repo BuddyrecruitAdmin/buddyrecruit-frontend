@@ -228,7 +228,7 @@
                   position="top right"></nb-badge>
               </button>
               <button
-                *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
+                *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate) && !isExpress"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 nbTooltip="Edit Agree Start Date"
                 (click)="openPopupOnboardDate(item ,item.condition.icon.signContract ,item.condition.icon.onBoard)"
@@ -240,7 +240,7 @@
               </button>
 
               <button
-                *ngIf="item.condition.button.nextStep && utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate)"
+                *ngIf="item.condition.button.nextStep && utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate) && !isExpress"
                 nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
                 [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)"
                 [disabled]="item.condition.isExpired || !utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) 
@@ -252,6 +252,15 @@
                   *ngIf="utilitiesService.isDateLowerThanToday(item.pendingSignContractInfo?.agreeStartDate) && !item.onboard.mail.flag"
                   nbTooltip="Plesae send email in onboard info" text=" ! " status="warning" position="top right">
                 </nb-badge>
+                <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                <span *ngIf="item.condition.isExpired">
+                  {{ item.refJR?.refStatus?.name }}
+                </span>
+              </button>
+
+              <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                [nbTooltip]="item.condition.button.step.button" (click)="approve(item, item.condition.button.step)">
                 <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                 <span *ngIf="item.condition.isExpired">
                   {{ item.refJR?.refStatus?.name }}

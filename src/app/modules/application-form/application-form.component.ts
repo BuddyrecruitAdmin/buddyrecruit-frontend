@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -107,6 +107,7 @@ export class ApplicationFormComponent implements OnInit {
   detailFlag: boolean;
   editFlag: boolean;
   saveFlag: boolean;
+  successFlag: boolean;
   buttonText: string = 'edit';
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -134,6 +135,7 @@ export class ApplicationFormComponent implements OnInit {
     this.detailFlag = false;
     this.editFlag = true;
     this.saveFlag = false;
+    this.successFlag = false;
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
       const refCompany = params.id;
@@ -163,6 +165,7 @@ export class ApplicationFormComponent implements OnInit {
           this.dataIndex = getAppformIndex()
           this.getTemplate(refCompany, undefined);
         } else if (action === State.Detail && refAppform) {
+          this.successFlag = true;
           this.isDisabled = true;
           this.detailFlag = true;
           this.editFlag = false;
@@ -170,6 +173,10 @@ export class ApplicationFormComponent implements OnInit {
           this.getDetail(undefined, refAppform);
         } else if (action === State.Edit && refAppform) {
           this.isDisableJob = true;
+          this.successFlag = getUserSuccess();
+          if (this.successFlag) {
+            this.editFlag = false;
+          }
           this.userToken = getUserToken();
           const appformId = getAppFormData();
           this.initialForm();
@@ -187,15 +194,20 @@ export class ApplicationFormComponent implements OnInit {
     if (this.editFlag) {
       this.buttonText = "edit";
       this.saveFlag = false;
+      this.formGroup = this.formBuilder.group({
+        email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+        // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+        phone: [{ value: this.appForm.phone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
+        postcode: [{ value: this.appForm.postcode, disabled: true }, [Validators.pattern('^[0-9]{5}$')]],
+      });
     } else {
       this.buttonText = "display";
       this.saveFlag = true;
       this.formGroup = this.formBuilder.group({
-        email: [{ value: '', disabled: false }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+        email: [{ value: this.appForm.email, disabled: false }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
         // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
-        phone: [{ value: '', disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
-        postcode: [{ value: '', disabled: false }, [Validators.pattern('^[0-9]{5}$')]],
-        gpa: [{ value: '', disabled: false }, [Validators.maxLength(4)]],
+        phone: [{ value: this.appForm.phone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
+        postcode: [{ value: this.appForm.postcode, disabled: false }, [Validators.pattern('^[0-9]{5}$')]],
       });
     }
     this.editFlag = !this.editFlag;
@@ -347,7 +359,17 @@ export class ApplicationFormComponent implements OnInit {
       postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
       gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
     });
+
+    if (this.successFlag) {
+      this.formGroup = this.formBuilder.group({
+        email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+        // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
+        phone: [{ value: this.appForm.phone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
+        postcode: [{ value: this.appForm.postcode, disabled: true }, [Validators.pattern('^[0-9]{5}$')]],
+      });
+    }
   }
+
   get f() { return this.formGroup.controls; }
 
   initialAttahment(): IAttachment {
@@ -360,7 +382,7 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getTemplate(refCompany: string, refTemplate: string, refPosition = undefined) {
-    if (!this.isDisabled && refPosition !== this.appForm.refPosition) {
+    if (!this.isDisabled && !this.successFlag && refPosition !== this.appForm.refPosition) {
       this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (response.data) {
@@ -481,6 +503,26 @@ export class ApplicationFormComponent implements OnInit {
               question.multiChilds.value = multiChilds;
             }
           });
+          if (this.successFlag) {
+            this.uploader = new FileUploader({
+              url: URL,
+              itemAlias: 'data',
+              headers: [
+                {
+                  name: 'refCompany',
+                  value: this.appForm.refCompany
+                },
+                {
+                  name: 'isCV',
+                  value: false
+                },
+                {
+                  name: 'isExpress',
+                  value: this.template.isExpress
+                },
+              ],
+            });
+          }
         }
       }
     });
