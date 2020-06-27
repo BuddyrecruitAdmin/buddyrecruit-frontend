@@ -471,6 +471,7 @@ export class ApplicationFormComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          this.appForm.title = response.data.refTitle;
           this.template = response.data.refTemplate;
           // this.hub.provinces = this.appForm.hubs || [];
           // if (this.hub.provinces && this.hub.provinces.length) {
