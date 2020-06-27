@@ -109,6 +109,7 @@ export class ApplicationFormComponent implements OnInit {
   saveFlag: boolean;
   successFlag: boolean;
   buttonText: string = 'edit';
+  titleList: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -156,6 +157,7 @@ export class ApplicationFormComponent implements OnInit {
               this.appForm.questions = this.template.questions;
               this.initialAnswer();
               this.getJR(this.role && this.role.refCompany ? this.role.refCompany : undefined);
+              this.getTitle();
             } else {
               this.onError();
             }
@@ -289,6 +291,17 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
+  getTitle() {
+    this.titleList = [];
+    this.service.getTitle().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          console.log(response.data)
+        }
+      }
+    })
+  }
+
   getDegrees() {
     this.degreesEN = [];
     this.degreesTH = [];
@@ -403,6 +416,9 @@ export class ApplicationFormComponent implements OnInit {
           if (!refPosition) {
             this.getJR(this.template.refCompany);
           }
+          if (!this.titleList) {
+            this.getTitle();
+          }
           this.uploader = new FileUploader({
             url: URL,
             itemAlias: 'data',
@@ -468,6 +484,7 @@ export class ApplicationFormComponent implements OnInit {
           this.hub = this.appForm.hubs || [];
 
           this.getJR(this.appForm.refCompany);
+          this.getTitle();
           if (response.data.hubs) {
             response.data.hubs.forEach(element => {
               if (element.refProvince) {

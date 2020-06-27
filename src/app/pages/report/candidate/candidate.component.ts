@@ -59,6 +59,8 @@ export class CandidateComponent implements OnInit {
   noticeHeight: any;
   hubArea: any;
   eduList: any;
+  dataExcel: any;
+  refName: any;
   constructor(
     private router: Router,
     private service: ReportService,
@@ -334,7 +336,7 @@ export class CandidateComponent implements OnInit {
   }
 
   exportAsXLSX(): void {
-    let dataExcel = [];
+    this.dataExcel = [];
     let fileName = '';
     fileName = this.utilitiesService.convertDateTime(this.dialogTime.start) + 'to' + this.utilitiesService.convertDateTime(this.dialogTime.end);
     this.criteria = {
@@ -374,10 +376,14 @@ export class CandidateComponent implements OnInit {
     };
     this.service.getListExcel(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
-        dataExcel = response.data;
-        dataExcel.forEach((item) => {
+        this.dataExcel = [];
+        response.data.forEach((item) => {
           this.hubArea = '';
           this.eduList = '';
+          this.refName = '';
+          if (item.reject.rejectBy.refReject) {
+            this.refName = item.reject.rejectBy.refReject.name;
+          }
           if (item.hubs.length > 0) {
             item.hubs.forEach(element => {
               if (element.refProvince.name.th && element.areaName) {
@@ -392,7 +398,7 @@ export class CandidateComponent implements OnInit {
               this.eduList = edu.refDegree.nameTH;
             });
           }
-          dataExcel.push({
+          this.dataExcel.push({
             "ชื่อ-นามสกุล": this.utilitiesService.setFullname(item.refCandidate) || '',
             "ตำแหน่ง": item.refJR.refJD.position || '-',
             "HUB": this.hubArea || '',
@@ -402,10 +408,11 @@ export class CandidateComponent implements OnInit {
             "Pending Sign Contract Date": this.utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
             "Onboard Date": this.utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
             "Reject Date": this.utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-',
-            "Rejected Reason": item.reject.rejectBy.refReject.name || '-'
+            "Rejected Reason": this.refName || '-'
           })
         })
-        this.excelService.exportAsExcelFile(dataExcel, fileName);
+        console.log(this.dataExcel)
+        this.excelService.exportAsExcelFile(this.dataExcel, fileName);
       } else {
         this.showToast('danger', 'Error Message', 'Export Failed');
       }

@@ -129,6 +129,9 @@ export class ApplicationFormStatusComponent implements OnInit {
           status.nameTH = 'รอการพิจารณา';
           status.color = 'label-warning';
           break;
+        case '5':
+          status.color = 'label-warning';
+          break;
 
         case '7':
           status.nameEN = 'Waiting more information';
