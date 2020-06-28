@@ -32,7 +32,7 @@ import { ApplicationFormService } from '../../application-form.service';
 export class ApplicationFormIndexComponent implements OnInit {
   role: any;
   innerHeight: any;
-  language = 'en';
+  language = 'th';
   loading = false;
 
   companyId: string;
@@ -54,7 +54,7 @@ export class ApplicationFormIndexComponent implements OnInit {
     this.role = getRole();
     this.innerHeight = window.innerHeight;
     setLangPath("RESUME");
-    this.language = getLanguage() || 'th';
+    // this.language = getLanguage() || 'th';
     this.setLang(this.language);
   }
 

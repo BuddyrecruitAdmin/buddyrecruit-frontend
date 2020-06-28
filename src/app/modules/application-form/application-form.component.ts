@@ -108,6 +108,7 @@ export class ApplicationFormComponent implements OnInit {
   editFlag: boolean;
   saveFlag: boolean;
   successFlag: boolean;
+  submitFlag: boolean;
   buttonText: string = 'edit';
   titleListTH: DropDownValue[] = [];
   titleListEN: DropDownValue[] = [];
@@ -137,6 +138,7 @@ export class ApplicationFormComponent implements OnInit {
     this.detailFlag = false;
     this.editFlag = true;
     this.saveFlag = false;
+    this.submitFlag = false;
     this.successFlag = false;
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
@@ -166,6 +168,7 @@ export class ApplicationFormComponent implements OnInit {
           this.isPreview = true;
         } else if (action === State.Submit && refCompany) {
           this.dataIndex = getAppformIndex()
+          this.submitFlag = true;
           this.getTemplate(refCompany, undefined);
         } else if (action === State.Detail && refAppform) {
           this.successFlag = true;
@@ -416,7 +419,9 @@ export class ApplicationFormComponent implements OnInit {
             this.appForm.refCompany = this.template.refCompany;
             this.appForm.refTemplate = this.template._id;
             this.appForm.refPosition = this.refPosition;
-            this.appForm.questions = this.template.questions;
+            if (this.submitFlag) {
+              this.appForm.questions = this.template.questions;
+            }
             this.initialAnswer();
           }
           if (this.dataIndex) {
