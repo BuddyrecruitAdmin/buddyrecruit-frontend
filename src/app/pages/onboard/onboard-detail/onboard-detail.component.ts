@@ -333,25 +333,45 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (item.refCandidate.email) {
-      setUserEmail(item.refCandidate.email);
+    if (item.refJR.isDefault) {
+      // this.refStageId = item.refStage._id;
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.search();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
+      });
+    } else {
+      if (item.refCandidate.email) {
+        setUserEmail(item.refCandidate.email);
+      }
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setButtonId(button._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        setButtonId();
+        if (result) {
+          this.search();
+        }
+      });
     }
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      setButtonId();
-      if (result) {
-        this.search();
-      }
-    });
   }
 
   reject(item: any) {
