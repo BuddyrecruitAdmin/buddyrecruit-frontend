@@ -83,20 +83,29 @@
                   <div class="text-gray">HUB</div>
                   <div *ngFor="let hub of hubs">
                     <nb-checkbox [(ngModel)]="hub.checked" [ngModelOptions]="{standalone: true}"
-                      (checkedChange)="onChangeProvince($event, hub._id)" status="primary"
+                      (checkedChange)="onChangeHub($event, hub._id)" status="primary"
                       [disabled]="isDisabled || successFlag">
                       {{ language === 'en' ? hub.name.en :hub.name.th }}
                     </nb-checkbox>
-                    <div *ngIf="hub.checked" style="margin-left: 1.5rem;">
-                      <div *ngFor="let area of hub.areas">
-                        <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
-                          (checkedChange)="onChangeHub($event, area._id)" status="primary"
+                    <div *ngIf="hub.checked && hub.provinces.length > 0" style="margin-left: 1.5rem;">
+                      <div *ngFor="let province of hub.provinces">
+                        <nb-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
+                          (checkedChange)="onChangeProvince($event, province.refProvince)" status="primary"
                           [disabled]="isDisabled || successFlag">
-                          {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
-                            {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
-                          <span class="text-red" *ngIf="!area.isFull && area.remark">
-                            ({{ area.remark }})</span>
+                          {{ language === 'en' ? province.name.en :province.name.th }}
                         </nb-checkbox>
+                        <div *ngIf="province.checked" style="margin-left: 1.75rem;">
+                          <div *ngFor="let area of province.areas">
+                            <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
+                              (checkedChange)="onChangeArea($event, area._id)" status="primary"
+                              [disabled]="isDisabled || successFlag">
+                              {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                                {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
+                              <span class="text-red" *ngIf="!area.isFull && area.remark">
+                                ({{ area.remark }})</span>
+                            </nb-checkbox>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -328,19 +337,43 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline">
                       <mat-label>{{ 'DISTRICT' | translate }}</mat-label>
-                      <input matInput type="text" id="district" name="district" [(ngModel)]="appForm.district"
+                      <!-- <input matInput type="text" id="district" name="district" [(ngModel)]="appForm.district"
+                        [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="(successFlag || isDisabled) && !editFlag"> -->
+                      <mat-select id="district" name="district" [(ngModel)]="appForm.district"
                         [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
                         [disabled]="(successFlag || isDisabled) && !editFlag">
+                        <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="districtList"
+                          (filteredReturn)="filteredDistricts =$event">
+                        </mat-select-filter>
+                        <mat-option *ngFor="let district of filteredDistricts" [value]="district.value">
+                          {{district.label}}
+                        </mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <mat-form-field appearance="outline">
+                    <!-- <mat-form-field appearance="outline">
                       <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
                       <input matInput type="text" id="province" name="province" [(ngModel)]="appForm.province"
                         [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
                         [disabled]="(successFlag || isDisabled) && !editFlag">
+                    </mat-form-field> -->
+                    <mat-form-field [color]="primary" appearance="outline" class="fit-content">
+                      <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
+                      <mat-select id="province" name="province" [(ngModel)]="appForm.province"
+                        [required]="template.personalDetail.address.required" [ngModelOptions]="{standalone: true}"
+                        [disabled]="(successFlag || isDisabled) && !editFlag">
+                        <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="provinceList"
+                          (filteredReturn)="filteredList =$event">
+                        </mat-select-filter>
+                        <mat-option *ngFor="let province of filteredList" [value]="province.value"
+                          (click)="getDistrict(province.value)">
+                          {{province.label}}
+                        </mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </div>
                   <div class="col-md-6">
@@ -759,7 +792,7 @@
                   <div class="offset-lg-2 col-lg-8">
                     <mat-form-field appearance="outline">
                       <input matInput type="text" [(ngModel)]="question.answer.input" [required]="question.required"
-                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                     </mat-form-field>
                   </div>
                 </div>
@@ -771,7 +804,7 @@
                     <mat-form-field appearance="outline">
                       <textarea matInput type="text" [(ngModel)]="question.answer.textArea" rows="3"
                         [required]="question.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled || successFlag"></textarea>
+                        [disabled]="isDisabled"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -781,7 +814,7 @@
                 <div class="row">
                   <div class="offset-lg-2 col-lg-8">
                     <mat-radio-group [(ngModel)]="question.answer.selected" [required]="question.required"
-                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                       <div class="row">
                         <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
                           [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
@@ -805,7 +838,7 @@
                       *ngIf="question.answer.selected === question.answer.options.length">
                       <mat-label>{{ question.answer.otherLabel }}</mat-label>
                       <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                        [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                     </mat-form-field>
                   </div>
                 </div>
@@ -822,19 +855,19 @@
                           <img [src]="option.imgaeURL">
                         </div>
                         <mat-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
-                          [disabled]="isDisabled || successFlag">
+                          [disabled]="isDisabled">
                           {{ option.label }}
                         </mat-checkbox>
                       </div>
                       <div *ngIf="question.answer.hasOther" class="col-md-12">
                         <mat-checkbox [(ngModel)]="question.answer.otherChecked" [ngModelOptions]="{standalone: true}"
-                          [disabled]="isDisabled || successFlag">
+                          [disabled]="isDisabled">
                           {{ question.answer.otherLabel }}
                         </mat-checkbox>
                         <mat-form-field appearance="outline" *ngIf="question.answer.otherChecked">
                           <mat-label>{{ question.answer.otherLabel }}</mat-label>
                           <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                            [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                            [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                         </mat-form-field>
                       </div>
                     </div>
@@ -847,7 +880,7 @@
                   <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                     <mat-select [(ngModel)]="question.answer.selected" [required]="question.required"
-                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                       <mat-option *ngFor="let option of question.answer.options; let i = index" [value]="i">
                         {{ option.label }}
                       </mat-option>
@@ -860,7 +893,7 @@
                     *ngIf="question.answer.selected === question.answer.options.length">
                     <mat-label>{{ question.answer.otherLabel }}</mat-label>
                     <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
-                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled || successFlag">
+                      [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                   </mat-form-field>
                 </div>
               </div>
@@ -870,7 +903,7 @@
                   <mat-form-field appearance="outline" class="fit-content">
                     <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                     <mat-select [(ngModel)]="question.parentSelected" [ngModelOptions]="{standalone: true}"
-                      [required]="question.required" [disabled]="isDisabled || successFlag">
+                      [required]="question.required" [disabled]="isDisabled">
                       <mat-option *ngFor="let option of question.parentChild; let i = index;" [value]="i">
                         {{ option.name }}
                       </mat-option>
@@ -881,7 +914,7 @@
                       <mat-form-field appearance="outline" class="fit-content">
                         <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                         <mat-select [(ngModel)]="question.childSelected" [ngModelOptions]="{standalone: true}"
-                          [required]="getChild(question).required" [disabled]="isDisabled || successFlag">
+                          [required]="getChild(question).required" [disabled]="isDisabled">
                           <mat-option *ngFor="let option of getChild(question).children; let i = index;" [value]="i">
                             {{ option.name }}
                           </mat-option>
@@ -900,7 +933,7 @@
                             </span>
                           </mat-select-trigger>
                           <mat-option *ngFor="let option of getChild(question).children" [value]="option.name"
-                            [disabled]="isDisabled || successFlag">
+                            [disabled]="isDisabled">
                             {{ option.name }}
                           </mat-option>
                         </mat-select>
@@ -941,7 +974,7 @@
               <div *ngIf="question.type === InputType.Linear" class="row">
                 <div class="offset-lg-2 col-lg-8">
                   <mat-radio-group [(ngModel)]="question.answer.linearValue" [ngModelOptions]="{standalone: true}"
-                    [required]="question.required" [disabled]="isDisabled || successFlag">
+                    [required]="question.required" [disabled]="isDisabled">
                     <div class="linear">
                       <div *ngIf="question.linear.fromLabel">{{ question.linear.fromLabel }}</div>
                       <div *ngFor="let linearOption of question.answer.linearOptions">
@@ -972,7 +1005,7 @@
                         <td>{{ gridRadio.rowName }}</td>
                         <td>
                           <mat-radio-group [(ngModel)]="gridRadio.value" [ngModelOptions]="{standalone: true}"
-                            [required]="question.required" [disabled]="isDisabled || successFlag">
+                            [required]="question.required" [disabled]="isDisabled">
                             <div class="grid-item">
                               <div *ngFor="let col of question.grid.columns">
                                 <mat-radio-button [value]="col.label"></mat-radio-button>
@@ -1006,7 +1039,7 @@
                           <div class="grid-item">
                             <div *ngFor="let col of gridCheckbox.columns">
                               <mat-checkbox [(ngModel)]="col.checked" [ngModelOptions]="{standalone: true}"
-                                [disabled]="isDisabled || successFlag"></mat-checkbox>
+                                [disabled]="isDisabled"></mat-checkbox>
                             </div>
                           </div>
                         </td>
@@ -1023,8 +1056,7 @@
                       <mat-label>Date</mat-label>
                       <input matInput type="text" id="date_{{iQuestion}}" name="date" [matDatepicker]="picker"
                         [(ngModel)]="question.answer.date" readonly (click)="picker.open()"
-                        [required]="question.required" [ngModelOptions]="{standalone: true}"
-                        [disabled]="isDisabled || successFlag">
+                        [required]="question.required" [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>

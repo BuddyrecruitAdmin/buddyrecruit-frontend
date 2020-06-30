@@ -112,6 +112,10 @@ export class ApplicationFormComponent implements OnInit {
   buttonText: string = 'edit';
   titleListTH: DropDownValue[] = [];
   titleListEN: DropDownValue[] = [];
+  provinceList: DropDownValue[] = [];
+  districtList: DropDownGroup[] = [];
+  filteredList: any;
+  filteredDistricts: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -180,9 +184,9 @@ export class ApplicationFormComponent implements OnInit {
         } else if (action === State.Edit && refAppform) {
           this.isDisableJob = true;
           this.successFlag = getUserSuccess();
-          if (this.successFlag) {
-            this.editFlag = false;
-          }
+          // if (this.successFlag) {
+          //   this.editFlag = false;
+          // }
           this.userToken = getUserToken();
           const appformId = getAppFormData();
           this.initialForm();
@@ -224,6 +228,7 @@ export class ApplicationFormComponent implements OnInit {
     this.translate.use(lang);
     this._adapter.setLocale(lang === 'en' ? 'en-GB' : 'th-TH');
     setLanguage(this.language);
+    this.getProvince();
   }
 
   getJR(refCompany: string) {
@@ -265,16 +270,20 @@ export class ApplicationFormComponent implements OnInit {
           this.hubs = response.data;
           this.hubs.map(hub => {
             hub.checked = false;
-            hub.areas.map(area => {
-              area.checked = false;
-              if (this.hub.length > 0) {
-                if (this.hub[0].refProvince._id === hub.refProvince) {
-                  hub.checked = true;
+            hub.provinces.map(province => {
+              province.checked = false;
+              province.areas.map(area => {
+                area.checked = false;
+                if (this.hub.length > 0) {
+                  if (this.hub[0].refProvince._id === province.refProvince) {
+                    province.checked = true;
+                    hub.checked = true;
+                  }
+                  if (this.hub[0].area === area._id) {
+                    area.checked = true;
+                  }
                 }
-                if (this.hub[0].area === area._id) {
-                  area.checked = true;
-                }
-              }
+              })
             })
             // hub.provinces.map(province => {
             //   province.checked = false;
@@ -312,6 +321,45 @@ export class ApplicationFormComponent implements OnInit {
             })
           })
         }
+      }
+    })
+    this.getProvince();
+  }
+
+  getProvince() {
+    this.provinceList = [];
+    this.service.getProvince().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(item => {
+          if (this.language === 'th') {
+            this.provinceList.push({
+              label: item.name.th,
+              value: item._id
+            });
+          } else {
+            this.provinceList.push({
+              label: item.name.en,
+              value: item._id
+            });
+          }
+        });
+        this.filteredList = this.provinceList.slice();
+      }
+    });
+  }
+
+  getDistrict(value) {
+    this.districtList = [];
+    this.service.getDistrict(value).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach((item, index) => {
+          this.districtList.push({
+            label: item.name.th,
+            value: item._id,
+            group: index
+          });
+        });
+        this.filteredDistricts = this.provinceList.slice();
       }
     })
   }
@@ -389,7 +437,7 @@ export class ApplicationFormComponent implements OnInit {
       gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
     });
 
-    if (this.successFlag) {
+    if (this.successFlag && !this.editFlag) {
       this.formGroup = this.formBuilder.group({
         email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
         // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
@@ -499,6 +547,9 @@ export class ApplicationFormComponent implements OnInit {
 
           this.getJR(this.appForm.refCompany);
           this.getTitle(this.appForm.refCompany);
+          if (this.appForm.province) {
+            this.getDistrict(this.appForm.province);
+          }
           if (response.data.hubs) {
             response.data.hubs.forEach(element => {
               if (element.refProvince) {
@@ -605,31 +656,25 @@ export class ApplicationFormComponent implements OnInit {
     }
   }
 
-  onChangeJR(refJR: string) {
-    const refPosition = this.jrs.find(jr => {
-      return jr.value === refJR;
-    });
-    if (refPosition) {
-      this.hub = this.hubs.find(element => {
-        return element.refPosition._id === refPosition.group;
-      });
-    }
-    this.refPosition = refPosition.group;
-  }
+  // onChangeJR(refJR: string) {
+  //   const refPosition = this.jrs.find(jr => {
+  //     return jr.value === refJR;
+  //   });
+  //   if (refPosition) {
+  //     this.hub = this.hubs.find(element => {
+  //       return element.refPosition._id === refPosition.group;
+  //     });
+  //   }
+  //   this.refPosition = refPosition.group;
+  // }
 
-  onChangeProvince(checked, _id) {
+  onChangeHub(checked, _id) {
     this.provinceFlag = false;
     if (checked) {
-      this.provinceFlag = true;
       this.hubs.forEach(hub => {
         if (hub._id !== _id) {
           hub.checked = false;
         }
-        // hub.forEach(area => {
-        //   if (area._id !== _id) {
-        //     area.checked = false;
-        //   }
-        // });
       });
     }
     // this.hub.provinces.forEach(province => {
@@ -642,6 +687,21 @@ export class ApplicationFormComponent implements OnInit {
     //     });
     //   }
     // });
+  }
+
+  onChangeProvince(checked, _id) {
+    this.provinceFlag = false;
+    this.areaFlag = false;
+    if (checked) {
+      this.provinceFlag = true;
+      this.hubs.forEach(hub => {
+        hub.provinces.forEach(province => {
+          if (province.refProvince !== _id) {
+            province.checked = false;
+          }
+        });
+      });
+    }
   }
 
   onSelectPosition(checked, option) {
@@ -658,31 +718,33 @@ export class ApplicationFormComponent implements OnInit {
     }
   }
 
-  onChangeHub(checked, _id) {
+  onChangeArea(checked, _id) {
     this.areaFlag = false;
     if (checked) {
       this.areaFlag = true;
       this.hubs.forEach(hub => {
-        hub.areas.forEach(area => {
-          if (area._id !== _id) {
-            area.checked = false;
-          }
-        });
+        hub.provinces.forEach(province => {
+          province.areas.forEach(area => {
+            if (area._id !== _id) {
+              area.checked = false;
+            }
+          });
+        })
       });
     }
   }
 
-  onChangeDistrict() {
-    this.hub.provinces.forEach(province => {
-      province.districts.map(district => {
-        if (!district.checked) {
-          district.subDistricts.forEach(subDistrict => {
-            subDistrict.checked = false;
-          });
-        }
-      });
-    });
-  }
+  // onChangeDistrict() {
+  //   this.hub.provinces.forEach(province => {
+  //     province.districts.map(district => {
+  //       if (!district.checked) {
+  //         district.subDistricts.forEach(subDistrict => {
+  //           subDistrict.checked = false;
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
 
   onChangeBirthday(value: any) {
     const birthDay = new Date(value);
@@ -1031,12 +1093,17 @@ export class ApplicationFormComponent implements OnInit {
     if (this.hubs && this.hubs.length) {
       this.hubs.forEach(hub => {
         if (hub.checked) {
-          hub.areas.forEach(area => {
-            if (area.checked) {
-              request.hubs.push({
-                refProvince: hub.refProvince,
-                area: area._id
-              })
+          hub.provinces.forEach(province => {
+            if (province.checked) {
+              province.areas.forEach(area => {
+                if (area.checked) {
+                  request.hubs.push({
+                    refProvince: province.refProvince,
+                    area: area._id,
+                    refSector: hub._id
+                  })
+                }
+              });
             }
           });
         }
@@ -1067,7 +1134,7 @@ export class ApplicationFormComponent implements OnInit {
       //   }
       // });
     }
-    request.isReserve = this.reserve;
+    request.isReserve = this.reserve || this.appForm.isReserve;
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
     request.road + ' '

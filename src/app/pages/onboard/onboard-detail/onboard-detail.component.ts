@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
+import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
 import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
@@ -52,10 +52,30 @@ export class OnboardDetailComponent implements OnInit {
   sourceBy: any;
   soList: any;
 
-  isExpress = false;
+  isExpress: boolean = false;
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  filter: {
+    isFilter: boolean,
+    data: {
+      provinces: DropDownValue[],
+      areas: DropDownGroup[]
+    },
+    temp: {
+      provinces: DropDownValue[],
+      areas: DropDownGroup[]
+    },
+    selected: {
+      provinces: any,
+      areas: any;
+    }
+  };
+  filteredProvince: any;
+  filteredDistrict: any;
+  filterBy: any;
+  searchArea: any;
+  filterSort: any;
   constructor(
     private router: Router,
     private service: OnboardService,
@@ -118,12 +138,44 @@ export class OnboardDetailComponent implements OnInit {
     this.keyword = '';
     this.soList = [];
     this.sourceBy = [];
+    this.filterBy = [];
+    this.searchArea = [];
+    this.filterSort = 'apply';
     this.paging = {
       length: 0,
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.filter = {
+      isFilter: false,
+      data: {
+        provinces: [],
+        areas: []
+      },
+      temp: {
+        provinces: [],
+        areas: []
+      },
+      selected: {
+        provinces: [],
+        areas: []
+      }
+    }
+    if (!this.isExpress) {
+      this.filterBy = this.sourceBy;
+    } else {
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.provinces
+        },
+        {
+          name: 'area',
+          value: this.searchArea
+        }
+      ]
+    };
     this.onModel();
   }
 
@@ -209,7 +261,7 @@ export class OnboardDetailComponent implements OnInit {
         'refStage.name',
         'refSource.name'
       ],
-      filters: this.sourceBy,
+      filters: this.filterBy,
       questionFilters: this.questionFilterSelected
     };
     this.items = [];
@@ -225,6 +277,35 @@ export class OnboardDetailComponent implements OnInit {
             item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
           }
         });
+        // filter hub
+        if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
+          this.filter.isFilter = true;
+          response.filter.provinces.forEach(element => {
+            this.filter.data.provinces.push({
+              label: element.refProvince.name.th,
+              value: element.refProvince._id
+            })
+            this.filter.temp.provinces.push({
+              label: element.refProvince.name.th,
+              value: element.refProvince._id
+            })
+          });
+          response.filter.areas.forEach(element => {
+            this.filter.data.areas.push({
+              label: element.name,
+              value: element._id,
+              group: element.refProvince
+            })
+            this.filter.temp.areas.push({
+              label: element.name,
+              value: element._id,
+              group: element.refProvince
+            })
+          });
+          this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+          this.filteredProvince = this.filter.data.provinces.slice();
+        }
+        this.sortData('apply')
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
 
@@ -234,6 +315,76 @@ export class OnboardDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  changeFilter(calculate: boolean = true) {
+    if (calculate) {
+      this.filter.data.areas = [];
+      this.searchArea = [];
+      this.filter.selected.provinces.forEach(province => {
+        const districts = this.filter.temp.areas.filter(district => {
+          return district.group === province;
+        });
+        districts.forEach(district => {
+          this.filter.data.areas.push({
+            label: district.label,
+            value: district.value,
+            group: province
+          });
+        });
+      });
+      const districtSelected = _.cloneDeep(this.filter.selected.areas);
+      this.filter.selected.areas = [];
+      if (districtSelected.length) {
+        districtSelected.forEach(district => {
+          const found = this.filter.data.areas.find(element => {
+            return element.value === district;
+          });
+          if (found) {
+            this.filter.selected.areas.push(found.value);
+            this.searchArea.push({
+              refProvince: found.group,
+              _id: found.value
+            })
+          }
+        });
+      }
+      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      }
+    ]
+    this.search();
+  }
+
+  removeDuplicates(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  }
+
+  clearFilter() {
+    this.filter.selected.provinces = [];
+    this.filter.selected.areas = [];
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      }
+    ]
+    this.search();
   }
 
   filterSource(event, _id) {
@@ -540,6 +691,20 @@ export class OnboardDetailComponent implements OnInit {
     index = index % colors.length;
     color = colors[index];
     return color;
+  }
+
+  sortData(name) {
+    if (name === 'score') {
+      this.items.sort(function (a, b) {
+        return b.totalScore - a.totalScore
+      })
+    } else {
+      this.items.sort(function (a, b) {
+        const aa = new Date(a.timestamp);
+        const bb = new Date(b.timestamp);
+        return aa < bb ? -1 : aa > bb ? 1 : 0;
+      })
+    }
   }
 
   changePaging(event) {

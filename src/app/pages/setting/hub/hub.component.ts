@@ -298,7 +298,7 @@ export class HubComponent implements OnInit {
     return new Promise((resolve) => {
       this.loadingDialog = true;
       this.provinceList = [];
-      this.service.getProvince().subscribe(response => {
+      this.service.getProvince(this.role.refCompany._id).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           response.data.forEach(item => {
             this.provinceList.push({

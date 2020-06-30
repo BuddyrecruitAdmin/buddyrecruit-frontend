@@ -93,6 +93,7 @@ export class TalentPoolDetailComponent implements OnInit {
   filteredSubDistrict: any;
   filterBy: any;
   searchArea: any;
+  filterSort: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -163,6 +164,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.keyword = '';
     this.showTips = false;
     this.showCondition = true;
+    this.filterSort = 'apply';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -370,6 +372,7 @@ export class TalentPoolDetailComponent implements OnInit {
             this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
             this.filteredProvince = this.filter.data.provinces.slice();
           }
+          this.sortData('apply')
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
 
@@ -903,6 +906,20 @@ export class TalentPoolDetailComponent implements OnInit {
     index = index % colors.length;
     color = colors[index];
     return color;
+  }
+
+  sortData(name) {
+    if (name === 'score') {
+      this.items.sort(function (a, b) {
+        return b.totalScore - a.totalScore
+      })
+    } else {
+      this.items.sort(function (a, b) {
+        const aa = new Date(a.timestamp);
+        const bb = new Date(b.timestamp);
+        return aa < bb ? -1 : aa > bb ? 1 : 0;
+      })
+    }
   }
 
   changePaging(event) {

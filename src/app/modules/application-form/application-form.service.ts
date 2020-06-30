@@ -72,7 +72,7 @@ export class ApplicationFormService extends NetworkService {
     const body = {
       refCompany: refCompany
     }
-    return this.post(API_ENDPOINT.CONFIGURATION.HUB_LIST, body);
+    return this.post(API_ENDPOINT.APPLICATION_FORM.HUB_LIST, body);
   }
 
   getStatusList(refCompany, phone, idCard): Observable<ApiResponse> {
@@ -100,5 +100,15 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.COMPANY, body);
   }
 
+  getProvince(): Observable<ApiResponse> {
+    return this.post(API_ENDPOINT.CONFIGURATION.PROVINCE, undefined);
+  }
+
+  getDistrict(provinceId: any): Observable<ApiResponse> {
+    const body = {
+      provinceId: provinceId
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.DISTRICT, body);
+  }
 
 }

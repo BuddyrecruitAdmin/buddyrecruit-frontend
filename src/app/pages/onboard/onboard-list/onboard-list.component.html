@@ -4,9 +4,9 @@
   </div>
   <nb-stepper *ngIf="showStepper" orientation="horizontal" disableStepNavigation selectedIndex="5">
     <nb-step label="Talent Pool"></nb-step>
-    <nb-step label="Pending Exam"></nb-step>
-    <nb-step label="Pending Appointment"></nb-step>
-    <nb-step label="Pending Interview"></nb-step>
+    <nb-step *ngIf="!isExpress" label="Pending Exam"></nb-step>
+    <nb-step *ngIf="!isExpress" label="Pending Appointment"></nb-step>
+    <nb-step *ngIf="!isExpress" label="Pending Interview"></nb-step>
     <nb-step label="Pending Sign Contract"></nb-step>
     <nb-step label="Onboard"></nb-step>
   </nb-stepper>

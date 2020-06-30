@@ -80,7 +80,7 @@ import {
   MatTreeModule,
   MAT_DATE_LOCALE,
 } from '@angular/material';
-
+import { MatSelectFilterModule } from 'mat-select-filter';
 import {
   NgbModule,
   NgbCarouselModule,
@@ -195,7 +195,8 @@ import { ApplicationFormStatusComponent } from './application-form/application-f
     CountdownTimerModule.forRoot(),
     FileUploadModule,
     HttpClientModule,
-    AngularEditorModule
+    AngularEditorModule,
+    MatSelectFilterModule
   ],
   declarations: [
     ModulesComponent,

@@ -76,6 +76,9 @@ export class ApplicationFormStatusComponent implements OnInit {
             if (element.hubs.length > 0) {
               element.hubs.forEach(element => {
                 this.hubName = element.refProvince.name.th + ' (' + element.hubName + ')';
+                if(element.status){
+                  this.hubName = this.hubName + ' - ' + element.status;
+                }
               });
 
             }

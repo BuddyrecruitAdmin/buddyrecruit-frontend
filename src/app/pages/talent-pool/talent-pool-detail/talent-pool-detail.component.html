@@ -28,7 +28,8 @@
         </div>
       </div>
       <div class="col-md-6" style="margin-top: 3px;">
-        <nb-radio-group [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
+        <nb-radio-group id="expend" name="expend" [(ngModel)]="collapseAll" class="inline"
+          (valueChange)="onClickCollapseAll($event)">
           <nb-radio [value]="true">Collapse All</nb-radio>
           <nb-radio [value]="false">Expand All</nb-radio>
         </nb-radio-group>
@@ -60,8 +61,20 @@
       </div>
     </div>
     <!-- filter hubs -->
-    <div *ngIf="filter.isFilter" class="filter-block">
+    <div *ngIf="filter.isFilter && isExpress" class="filter-block">
       <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-12">
+          <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort">
+            <nb-radio value="apply" (click)="sortData('apply')">
+              Apply Date
+            </nb-radio>
+            <nb-radio value="scoring" (click)="sortData('score')">
+              Scoring
+            </nb-radio>
+          </nb-radio-group>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">
@@ -605,8 +618,7 @@
                   </span>
                 </button>
                 <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
-                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
-                  nbTooltip="Pass to Sign Contract"
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Pass to Sign Contract"
                   (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">

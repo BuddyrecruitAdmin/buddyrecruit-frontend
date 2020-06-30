@@ -50,6 +50,59 @@
         </div>
       </div>
     </div>
+    <!-- filter hubs -->
+    <div *ngIf="filter.isFilter && isExpress" class="filter-block">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-12">
+          <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort">
+            <nb-radio value="apply" (click)="sortData('apply')">
+              Apply Date
+            </nb-radio>
+            <nb-radio value="scoring" (click)="sortData('score')">
+              Scoring
+            </nb-radio>
+          </nb-radio-group>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Province</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.provinces" (ngModelChange)="changeFilter(true)" multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.provinces"
+                  (filteredReturn)="filteredProvince =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredProvince" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Area</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.areas" (ngModelChange)="changeFilter(true)" multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.areas"
+                  (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div><br>
+    <div *ngIf="filter.isFilter" class="row" style="text-align: center;">
+      <div class="col-md-12">
+        <button nbButton status="default" (click)="clearFilter()">
+          Clear Filter
+        </button>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
 

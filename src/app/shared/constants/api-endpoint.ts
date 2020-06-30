@@ -346,7 +346,7 @@ export const API_ENDPOINT = {
     DELETE: "generalAppForm/delete",
     JR_LIST: "generalAppForm/jrs",
     TITLE_LIST: "title/list",
-    HUB_LIST: "generalAppForm/hubs",
+    HUB_LIST: "generalAppForm/getHubs",
     GET_TEMPLATE: "generalAppForm/getTemplate",
     GET_STATUS_LIST: "generalAppForm/getStatusList",
     COMPANY: "generalAppForm/getComName"
