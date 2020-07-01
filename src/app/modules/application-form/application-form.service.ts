@@ -111,4 +111,12 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.DISTRICT, body);
   }
 
+  getSubDistrict(districtId : any): Observable<ApiResponse> {
+    const body = {
+      districtId : districtId 
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.SUB_DISTRICT, body);
+  }
+
+
 }

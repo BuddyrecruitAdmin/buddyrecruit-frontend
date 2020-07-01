@@ -114,8 +114,10 @@ export class ApplicationFormComponent implements OnInit {
   titleListEN: DropDownValue[] = [];
   provinceList: DropDownValue[] = [];
   districtList: DropDownGroup[] = [];
+  subDistrictList: DropDownGroup[] = [];
   filteredList: any;
   filteredDistricts: any;
+  filteredSubDistricts: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -359,7 +361,23 @@ export class ApplicationFormComponent implements OnInit {
             group: index
           });
         });
-        this.filteredDistricts = this.provinceList.slice();
+        this.filteredDistricts = this.districtList.slice();
+      }
+    })
+  }
+
+  getSubDistrict(value) {
+    this.subDistrictList = [];
+    this.service.getSubDistrict(value).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach((item, index) => {
+          this.subDistrictList.push({
+            label: item.name.th,
+            value: item._id,
+            group: index
+          });
+        });
+        this.filteredSubDistricts = this.subDistrictList.slice();
       }
     })
   }
@@ -405,8 +423,9 @@ export class ApplicationFormComponent implements OnInit {
       address: '',
       addressNo: '',
       road: '',
-      district: '',
-      province: '',
+      refDistrict: '',
+      refSubDistrict: '',
+      refProvince: '',
       postcode: '',
       gender: '',
       expectedSalary: '',
@@ -547,8 +566,11 @@ export class ApplicationFormComponent implements OnInit {
 
           this.getJR(this.appForm.refCompany);
           this.getTitle(this.appForm.refCompany);
-          if (this.appForm.province) {
-            this.getDistrict(this.appForm.province);
+          if (this.appForm.refProvince) {
+            this.getDistrict(this.appForm.refProvince);
+            if (this.appForm.refDistrict) {
+              this.getSubDistrict(this.appForm.refDistrict);
+            }
           }
           if (response.data.hubs) {
             response.data.hubs.forEach(element => {
@@ -1138,8 +1160,9 @@ export class ApplicationFormComponent implements OnInit {
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
     request.road + ' '
-    request.district + ' '
-    request.province + ' '
+    request.refDistrict + ' '
+    request.refSubDistrict + ' '
+    request.refProvince + ' '
     request.postcode;
     if (request.workExperience.work && request.workExperience.work.length) {
       request.workExperience.work.map(element => {

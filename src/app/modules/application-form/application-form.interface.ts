@@ -20,8 +20,9 @@ export interface IApplicationForm {
   address: string;
   addressNo: string;
   road: string;
-  district: string;
-  province: string;
+  refDistrict: string;
+  refSubDistrict: string;
+  refProvince: string;
   postcode: string;
   gender: string;
   expectedSalary: string;

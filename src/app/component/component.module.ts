@@ -110,6 +110,8 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { PopupConsentComponent } from './popup-consent/popup-consent.component';
 import { PopupExtractionComponent } from './popup-extraction/popup-extraction.component';
 import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-appointment-date.component';
+import { PopupTrainingDateComponent } from './popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -220,6 +222,8 @@ import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-ap
     PopupConsentComponent,
     PopupExtractionComponent,
     PopupAppointmentDateComponent,
+    PopupTrainingDateComponent,
+    PopupChatUserComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -245,7 +249,9 @@ import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-ap
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
     PopupConsentComponent,
-    PopupExtractionComponent
+    PopupExtractionComponent,
+    PopupTrainingDateComponent,
+    PopupChatUserComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -271,7 +277,9 @@ import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-ap
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
     PopupConsentComponent,
-    PopupExtractionComponent
+    PopupExtractionComponent,
+    PopupTrainingDateComponent,
+    PopupChatUserComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

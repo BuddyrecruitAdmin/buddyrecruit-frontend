@@ -1,0 +1,30 @@
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+    <nb-card-header>
+        <div class="title">
+            <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+            <small class="status text-gray m-0">
+                {{ jrName }}
+            </small>
+        </div>
+        <div class="actions">
+            <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
+        </div>
+    </nb-card-header>
+    <nb-card-body class="dialog-body">
+        <div class="form-control-group">
+            <label class="label">Information </label>
+            <textarea nbInput fullWidth [(ngModel)]="textTemp" placeholder="Text..." rows="5"></textarea>
+        </div>
+        <nb-checkbox [(ngModel)]="infoFlag" style="text-align: left;"><span style="font-family: kanit;"> Offering
+                Infomation</span></nb-checkbox>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="footer-collapse">
+            <button nbButton status="default" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                (click)="ref.close(result)">CLOSE</button>
+        </div>
+        <button nbButton status="success" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+            (click)="save()">SEND</button>
+    </nb-card-footer>
+</nb-card>
