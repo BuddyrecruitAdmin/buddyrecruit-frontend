@@ -323,6 +323,10 @@
                     (click)="openCandidateDetail(item)">
                     {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
                       (ตัวสำรอง)</span>
+                    <nb-icon icon="checkmark-circle-2-outline" style="margin-right: 0;"></nb-icon>
+                    <nb-icon icon="checkmark-circle-2-outline" style="margin-right: 0;color: aquamarine;">
+                    </nb-icon>
+                    <nb-icon icon="close-circle-outline" style="margin-right: 0;"></nb-icon>
                   </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
@@ -367,7 +371,7 @@
                       <label class="label">Age</label>
                       <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
                     </div>
-                    <div class="text-group">
+                    <div class="text-group" *ngIf="!isExpress">
                       <label class="label">Work Experience</label>
                       <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
                     </div>
@@ -375,7 +379,7 @@
                       <label class="label">Phone</label>
                       <span>{{ item.refCandidate?.phone || '-' }}</span>
                     </div>
-                    <div class="text-group">
+                    <div class="text-group" *ngIf="!isExpress">
                       <label class="label">Email</label>
                       <span>{{ item.refCandidate?.email || '-' }}</span>
                     </div>
@@ -395,6 +399,22 @@
                         </div>
                       </div>
                     </div>
+                    <div *ngIf="isExpress">
+                      <label class="label text-black m-r-5">Information</label>
+                      <nb-icon icon="edit-2-outline" class="link" nbTooltip="Edit Information"
+                        (click)="openPopupTrainingDate(item)">
+                      </nb-icon>
+                      <div class="m-l-15">
+                        <div class="text-group">
+                          <label class="label">Training Date</label>
+                          <!-- <span>{{  utilitiesService.convertDateTimeFromSystem(item.examInfo?.refLocation?.name) || '-' }}</span> -->
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Onboarding Date</label>
+                          <!-- <span>{{ utilitiesService.convertDateTimeFromSystem(item.examInfo?.date) || '-' }}</span> -->
+                        </div>
+                      </div>
+                    </div>
                     <div *ngIf="!isExpress" class="text-group">
                       <span class="link" (click)="info(item, 'page'+i)">
                         <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
@@ -406,6 +426,17 @@
                       <span class="link underline" (click)="openApplicationForm(item)">
                         <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
                         <span>Application Form</span>
+                      </span>
+                    </div>
+
+                    <div *ngIf="isExpress" class="text-group">
+                      <span *ngIf="!item.called.flag">
+                        <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-outline"
+                          class="font-inherit link"></nb-icon><span>Pending Call</span>
+                      </span>
+                      <span *ngIf="item.called.flag">
+                        <nb-icon style="width: 30px;height: 30px;" icon="phone-call-outline" class="font-inherit link">
+                        </nb-icon><span>Called</span>
                       </span>
                     </div>
 
@@ -601,6 +632,12 @@
                   (click)="openPopupTransfer(item)">
                   <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
                 </button>
+
+                <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning"
+                  (click)="openChatUser(item)">
+                  <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
+                </button>
+
                 <button *ngIf="item.condition.button.comment && !devices.isMobile" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                   (click)="openPopupComment(item)">

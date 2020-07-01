@@ -24,7 +24,8 @@ import { CandidateService } from '../../candidate/candidate.service';
 import { resolve } from 'url';
 import { AppFormService } from '../../setting/app-form/app-form.service';
 import { group } from 'console';
-
+import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -920,6 +921,52 @@ export class TalentPoolDetailComponent implements OnInit {
         return aa < bb ? -1 : aa > bb ? 1 : 0;
       })
     }
+  }
+
+  changeCall(item) {
+    item.called.flag = true;
+    this.candidateService.candidateFlowEdit(item._id, item).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.search()
+      }
+    })
+  }
+
+  openPopupTrainingDate(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupTrainingDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openChatUser(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupChatUserComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   changePaging(event) {
