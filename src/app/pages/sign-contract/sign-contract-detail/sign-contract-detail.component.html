@@ -127,8 +127,11 @@
                 </label>
                 <small class="status">
                   <span>
-                    Status: <label class="label label-gray" style="word-wrap: break-word;
-                    white-space: initial;">{{ item.refStage?.name || item.refStage }}</label>
+                    Status: <label
+                      class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>&nbsp;&nbsp;
+                    HUB: <label *ngFor="let hub of item.hubs"
+                      class="label label-info">{{ hub.refProvince.name.th }}&nbsp;
+                      ({{ hub.areaName }})</label>
                   </span><br *ngIf="devices.isMobile">
                   <span *ngIf="!isExpress">
                     <span *ngIf="!devices.isMobile">|</span> Source:
@@ -172,6 +175,22 @@
                   <div class="text-group">
                     <label class="label">Email</label>
                     <span>{{ item.refCandidate?.email || '-' }}</span>
+                  </div>
+                  <div *ngIf="isExpress">
+                    <label class="label text-black m-r-5">Information</label>
+                    <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
+                    </nb-icon>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Training Date</label>
+                        <span>{{  utilitiesService.convertDateTimeFromSystem(item.training?.date) || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Onboarding Date</label>
+                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.onboard?.date) || '-' }}</span>
+                      </div>
+                    </div>
                   </div>
                   <div *ngIf="!isExpress" class="text-group">
                     <span class="link" (click)="info(item)">
@@ -283,6 +302,10 @@
                 </div>
               </div>
 
+              <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning"
+                (click)="openChatUser(item)">
+                <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
+              </button>
               <!-- Mobile -->
               <button *ngIf="item.condition.button.comment && devices.isMobile" nbButton style="text-align: left;"
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"

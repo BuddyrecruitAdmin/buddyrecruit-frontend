@@ -200,6 +200,10 @@
     "STEP": "Step",
     "NAME": "Name",
     "THAI": "Thai",
-    "ENGLISH": "English"
+    "ENGLISH": "English",
+    "TRAIN_DATE": "Training Date",
+    "START_DATE": "Started Date",
+    "STATUS_REGIS": "Register Status",
+    "CREATE":"Register"
   }
 }

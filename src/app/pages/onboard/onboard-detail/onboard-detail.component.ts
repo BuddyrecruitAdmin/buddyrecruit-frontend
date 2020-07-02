@@ -21,6 +21,8 @@ import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date/popup-onboard-date.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
+import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 // import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 @Component({
   selector: 'ngx-onboard-detail',
@@ -705,6 +707,40 @@ export class OnboardDetailComponent implements OnInit {
         return aa < bb ? -1 : aa > bb ? 1 : 0;
       })
     }
+  }
+
+  openPopupTrainingDate(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupTrainingDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openChatUser(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupChatUserComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   changePaging(event) {

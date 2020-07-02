@@ -13,13 +13,31 @@
   <nb-card-header>
     <div class="title">
       <label class="text-cap" [nbTooltip]="utilitiesService.setFullname(item)">
-        {{ utilitiesService.setFullname(item) }}
+        {{ utilitiesService.setFullname(item) }}&nbsp;
+        <span>
+          <nb-icon *ngIf="item.candidateFlow.offer.flag && condition.icon.called && !item.candidateFlow.offer.responsed"
+            icon="checkmark-circle-2-outline" style="margin-right: 0;color: var(--color-gray)">
+          </nb-icon>
+          <nb-icon *ngIf="item.candidateFlow.offer.responsed && item.candidateFlow.offer.isOk && condition.icon.called"
+            icon="checkmark-circle-2-outline" style="margin-right: 0;color: aquamarine;">
+          </nb-icon>
+          <nb-icon *ngIf="item.candidateFlow.offer.responsed && !item.candidateFlow.offer.isOk && condition.icon.called"
+            icon="close-circle-outline" style="margin-right: 0;color: red;">
+          </nb-icon>
+        </span>
       </label>
       <small class="status">
+        <span>
+          Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name  }}</label>&nbsp;&nbsp;
+          HUB: <label *ngFor="let hub of item.candidateFlow.hubs"
+            class="label label-info">{{ hub.refProvince.name.th }}&nbsp;
+            ({{ hub.areaName }})</label>
+        </span>
         <span>
           Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
         </span><br *ngIf="devices.isMobile">
         <span *ngIf="!isExpress">
+
           <span *ngIf="!devices.isMobile">|</span> Source:
           <label class="label"
             [ngClass]="utilitiesService.sourcingColors(item.candidateFlow?.refSource?.key)">{{ item.candidateFlow?.refSource?.name || 'Email' }}</label>
@@ -152,6 +170,34 @@
             <span (click)="gotoStage()" class="link underline"
               nbTooltip="See More Job Positon">{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
           </div>
+        </div>
+        <div *ngIf="isExpress">
+          <label class="label topic m-r-5">Information</label>
+          <nb-icon *ngIf="condition.button.nextStep && isExpress" icon="edit-2-outline" class="link" nbTooltip="Edit Information"
+            (click)="openPopupTrainingDate(item)">
+          </nb-icon>
+          <div class="m-l-15">
+            <div class="text-group">
+              <label class="label">Training Date</label>
+              <span>{{  utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.training?.date) || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Onboarding Date</label>
+              <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.onboard?.date) || '-' }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isExpress && condition.icon.called" class="text-group m-t-10 m-b-10">
+          <span *ngIf="!item.candidateFlow.called.flag" class="text-icon-center">
+            <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item.candidateFlow)" icon="phone-outline"
+              class="font-inherit link"></nb-icon><span>Pending Call</span>
+          </span>
+        </div>
+        <div *ngIf="isExpress && condition.icon.called" class="text-group m-t-10 m-b-10">
+          <span *ngIf="item.candidateFlow.called.flag" class="text-icon-center">
+            <nb-icon style="width: 30px;height: 30px;" icon="phone-call-outline" class="font-inherit link">
+            </nb-icon><span>Called</span>
+          </span>
         </div>
         <div *ngIf="item.candidateFlow?.exams?.length > 0  && role.refAuthorize.checkAswer" class="text-group">
           <span class="link underline"
@@ -368,6 +414,11 @@
         <nb-icon icon="printer-outline"></nb-icon>
       </button>
     </div>
+
+    <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning"
+      (click)="openChatUser(item.candidateFlow)">
+      <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
+    </button>
 
     <button *ngIf="condition.button.trans && !isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
       status="info" style="color:white;background: #A0A0A0;border-color: #A0A0A0;" nbTooltip="Transfer"

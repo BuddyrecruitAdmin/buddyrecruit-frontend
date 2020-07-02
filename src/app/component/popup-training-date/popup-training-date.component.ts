@@ -26,7 +26,7 @@ export class PopupTrainingDateComponent implements OnInit {
   jrName: string;
   training: any;
   onboard: any;
-  note: string;
+  remark: string;
   loading: boolean;
   editable: boolean;
   errMsg = {
@@ -66,7 +66,7 @@ export class PopupTrainingDateComponent implements OnInit {
       date: null,
       time: null
     };
-    this.note = '';
+    this.remark = '';
     if (this.flowId) {
       this.getDetail();
     } else {
@@ -79,14 +79,9 @@ export class PopupTrainingDateComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
-        // if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.sign.date)) {
-        //   this.signDate = new Date(response.data.candidateFlow.pendingSignContractInfo.sign.date);
-        //   this.signTime = this.utilitiesService.convertDateToTimePicker(this.signDate);
-        // }
-        // if (this.utilitiesService.dateIsValid(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate)) {
-        //   this.agreeDate = new Date(response.data.candidateFlow.pendingSignContractInfo.agreeStartDate);
-        // }
-        this.note = response.data.candidateFlow.pendingSignContractInfo.note;
+        this.training = response.data.candidateFlow.data.training;
+        this.onboard = response.data.candidateFlow.data.onboard;
+        this.remark = response.data.candidateFlow.data.remark;
       }
       this.loading = false;
     });
@@ -109,7 +104,8 @@ export class PopupTrainingDateComponent implements OnInit {
   setRequest(): any {
     const data = {
       training: this.training,
-      onboard: this.onboard
+      onboard: this.onboard,
+      remark: this.remark
     };
     return data;
   }

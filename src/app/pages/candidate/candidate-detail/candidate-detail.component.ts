@@ -30,6 +30,8 @@ import { PopupResendEmailComponent } from '../../../component/popup-resend-email
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { PopupExamFormComponent } from '../../../component/popup-exam-form/popup-exam-form.component';
+import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 var FileSaver = require('file-saver');
 @Component({
   selector: 'ngx-candidate-detail',
@@ -132,6 +134,7 @@ export class CandidateDetailComponent implements OnInit {
         interviewDate: false,
         interviewScore: false,
         signContract: false,
+        called: false
       },
       button: {
         step: {},
@@ -224,6 +227,7 @@ export class CandidateDetailComponent implements OnInit {
       // Set display block
       switch (step.refStage.order) {
         case 101:
+          this
           break;
         case 102:
           break;
@@ -296,9 +300,11 @@ export class CandidateDetailComponent implements OnInit {
           switch (step.refStage.order) {
             case 101:
               this.condition.button.trans = true;
+              this.condition.icon.called = true;
               break;
             case 102:
               this.condition.button.trans = true;
+              this.condition.icon.called = true;
               break;
             case 103:
               this.condition.icon.examDate = true;
@@ -903,6 +909,56 @@ export class CandidateDetailComponent implements OnInit {
         window.open(`/application-form/detail/${item.candidateFlow.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
+  }
+
+  changeCall(item) {
+    item.called.flag = true;
+    let data;
+    data = {
+      called: item.called
+    }
+    this.service.candidateFlowEdit(item._id, data).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+        this.getDetail()
+      }
+    })
+  }
+
+  openPopupTrainingDate(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupTrainingDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.getDetail();
+      }
+    });
+  }
+
+  openChatUser(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupChatUserComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.getDetail();
+      }
+    });
   }
 
   getProgressBarColor(index: number): string {

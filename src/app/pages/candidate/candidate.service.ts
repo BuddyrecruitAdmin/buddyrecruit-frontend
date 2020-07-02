@@ -170,4 +170,12 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.EXAM.EXAM_EMAIL, body);
   }
 
+  sendMessage(candidateFlowId: any, data: any): Observable<ApiResponse> {
+    const body = {
+      refCandidateFlowId: candidateFlowId,
+      data: data
+    }
+    return this.post(API_ENDPOINT.CANDIDATE.MESSAGE, body);
+  }
+
 }

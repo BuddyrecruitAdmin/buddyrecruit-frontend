@@ -925,7 +925,11 @@ export class TalentPoolDetailComponent implements OnInit {
 
   changeCall(item) {
     item.called.flag = true;
-    this.candidateService.candidateFlowEdit(item._id, item).subscribe(response => {
+    let data;
+    data = {
+      called: item.called
+    }
+    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
       } else {

@@ -22,7 +22,8 @@ import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { PopupInterviewResultComponent } from '../../../component/popup-interview-result/popup-interview-result.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
-
+import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 @Component({
   selector: 'ngx-sign-contract-detail',
   templateUrl: './sign-contract-detail.component.html',
@@ -771,6 +772,40 @@ export class SignContractDetailComponent implements OnInit {
         return aa < bb ? -1 : aa > bb ? 1 : 0;
       })
     }
+  }
+
+  openPopupTrainingDate(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupTrainingDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openChatUser(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupChatUserComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   changePaging(event) {

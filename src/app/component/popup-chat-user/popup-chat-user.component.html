@@ -16,7 +16,8 @@
             <label class="label">Information </label>
             <textarea nbInput fullWidth [(ngModel)]="textTemp" placeholder="Text..." rows="5"></textarea>
         </div>
-        <nb-checkbox [(ngModel)]="infoFlag" style="text-align: left;"><span style="font-family: kanit;"> Offering
+        <nb-checkbox [(ngModel)]="infoFlag" style="text-align: left;" [disabled]="condition.responsed"><span
+                style="font-family: kanit;"> Offering
                 Infomation</span></nb-checkbox>
     </nb-card-body>
     <nb-card-footer>

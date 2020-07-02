@@ -28,6 +28,7 @@ export class PopupChatUserComponent implements OnInit {
   loading: boolean;
   infoFlag: boolean;
   devices: Devices;
+  condition: any;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupChatUserComponent>,
@@ -49,6 +50,9 @@ export class PopupChatUserComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.infoFlag = false;
+    this.condition = {
+      flag: false
+    };
     this.candidateName = '';
     if (this.flowId) {
       this.getDetail();
@@ -61,6 +65,8 @@ export class PopupChatUserComponent implements OnInit {
     this.candidateService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.candidateName = this.utilitiesService.setFullname(response.data);
+        this.condition = response.data.candidateFlow.offer;
+        this.infoFlag = response.data.candidateFlow.offer.flag;
       }
       this.loading = false;
     });
@@ -69,7 +75,7 @@ export class PopupChatUserComponent implements OnInit {
   save() {
     this.loading = true;
     const request = this.setRequest();
-    this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
+    this.candidateService.sendMessage(this.flowId, request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
       } else {
@@ -81,7 +87,12 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   setRequest(): any {
-    const data = {}
+    const data = {
+      offer: {
+        flag: this.infoFlag
+      },
+      textTemp: this.textTemp
+    }
     return data;
   }
 
