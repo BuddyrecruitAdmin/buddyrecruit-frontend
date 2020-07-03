@@ -59,11 +59,12 @@
       <label class="label">Filters:</label>
       <div class="row">
         <div class="col-md-12">
-          <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort">
-            <nb-radio value="apply" (click)="sortData('apply')">
+          <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort"
+            (valueChange)="sortData($event)">
+            <nb-radio value="apply">
               Apply Date
             </nb-radio>
-            <nb-radio value="scoring" (click)="sortData('score')">
+            <nb-radio value="score">
               Scoring
             </nb-radio>
           </nb-radio-group>
@@ -177,9 +178,9 @@
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
                   <div *ngIf="isExpress">
-                    <label class="label text-black m-r-5">Information</label>
+                    <label class="label text-black m-r-5">Infomation</label>
                     <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
+                      nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
                     </nb-icon>
                     <div class="m-l-15">
                       <div class="text-group">
@@ -302,8 +303,8 @@
                 </div>
               </div>
 
-              <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning"
-                (click)="openChatUser(item)">
+              <button *ngIf="isExpress && item.haveFbId" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                status="warning" (click)="openChatUser(item)">
                 <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
               </button>
               <!-- Mobile -->

@@ -399,7 +399,8 @@ export class CandidateComponent implements OnInit {
             });
           }
           this.dataExcel.push({
-            "ชื่อ-นามสกุล": this.utilitiesService.setFullname(item.refCandidate) || '',
+            "ชื่อ": item.refCandidate.firstname || '-',
+            "นามสกุล": item.refCandidate.lastname || '-',
             "ตำแหน่ง": item.refJR.refJD.position || '-',
             "HUB": this.hubArea || '',
             "เบอร์โทร": item.refCandidate.phone || '',

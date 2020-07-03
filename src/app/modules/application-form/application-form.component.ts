@@ -120,6 +120,7 @@ export class ApplicationFormComponent implements OnInit {
   filteredDistricts: any;
   filteredSubDistricts: any;
   dataStatus: any;
+  selectIndex: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -149,6 +150,7 @@ export class ApplicationFormComponent implements OnInit {
     this.submitFlag = false;
     this.successFlag = false;
     this.uploadOnly = false;
+    this.selectIndex = 0;
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
       const refCompany = params.id;
@@ -196,7 +198,9 @@ export class ApplicationFormComponent implements OnInit {
           this.isDisableJob = true;
           this.successFlag = getUserSuccess();
           this.editFlag = false;
-
+          if (this.successFlag) {
+            this.selectIndex = 2;
+          }
           // if (this.successFlag) {
           //   this.editFlag = false;
           // }
@@ -576,8 +580,6 @@ export class ApplicationFormComponent implements OnInit {
           this.hub = this.appForm.hubs || [];
 
           if (this.dataStatus) {
-            this.appForm.refProvince = '';
-            this.appForm.refDistrict = '';
             this.appForm.refJR = '';
             this.appForm.hubs = [];
             this.hub = [];

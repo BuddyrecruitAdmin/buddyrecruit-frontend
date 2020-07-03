@@ -39,7 +39,7 @@
       </div>
     </div>
     <form class="container" (ngSubmit)="save()" style="padding-top: 2rem;">
-      <nb-stepper #stepper disableStepNavigation="true">
+      <nb-stepper #stepper disableStepNavigation="true" [(selectedIndex)]="selectIndex">
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 1 -->

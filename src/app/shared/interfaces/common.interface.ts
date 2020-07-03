@@ -76,6 +76,7 @@ export interface Criteria {
   filter?: string[];
   filters?: Filter[];
   questionFilters?: Filter[];
+  sortOrderBy?: string;
 }
 
 export interface Paging {

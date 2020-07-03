@@ -266,7 +266,8 @@ export class SignContractDetailComponent implements OnInit {
         'refSource.name'
       ],
       filters: this.filterBy,
-      questionFilters: this.questionFilterSelected
+      questionFilters: this.questionFilterSelected,
+      sortOrderBy: this.filterSort
     };
     this.items = [];
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -335,7 +336,6 @@ export class SignContractDetailComponent implements OnInit {
           this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
           this.filteredProvince = this.filter.data.provinces.slice();
         }
-        this.sortData('apply')
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
 
@@ -762,16 +762,24 @@ export class SignContractDetailComponent implements OnInit {
 
   sortData(name) {
     if (name === 'score') {
-      this.items.sort(function (a, b) {
-        return b.totalScore - a.totalScore
-      })
+      this.filterSort = 'score';
+      // this.items.sort(function (a, b) {
+      //   return b.totalScore - a.totalScore
+      // })
     } else {
-      this.items.sort(function (a, b) {
-        const aa = new Date(a.timestamp);
-        const bb = new Date(b.timestamp);
-        return aa < bb ? -1 : aa > bb ? 1 : 0;
-      })
+      this.filterSort = 'apply';
+      // console.log(this.items)
+      // var _this = this;
+      // this.items.sort(function (a, b) {
+
+
+      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
+      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
+      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
+      // })
+      // console.log(this.items)
     }
+    this.search();
   }
 
   openPopupTrainingDate(item: any) {
