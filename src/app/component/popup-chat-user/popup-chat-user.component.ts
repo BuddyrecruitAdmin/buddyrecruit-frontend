@@ -38,10 +38,8 @@ export class PopupChatUserComponent implements OnInit {
   ) {
     this.role = getRole();
     this.flowId = getFlowId();
-    this.candidateId = getCandidateId();
     setButtonId();
     setFlowId();
-    setCandidateId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
     this.devices = this.utilitiesService.getDevice();

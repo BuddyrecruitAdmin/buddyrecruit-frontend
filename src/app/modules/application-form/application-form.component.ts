@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -119,6 +119,7 @@ export class ApplicationFormComponent implements OnInit {
   filteredList: any;
   filteredDistricts: any;
   filteredSubDistricts: any;
+  dataStatus: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -175,9 +176,15 @@ export class ApplicationFormComponent implements OnInit {
           }
           this.isPreview = true;
         } else if (action === State.Submit && refCompany) {
-          this.dataIndex = getAppformIndex()
+          this.dataIndex = getAppformIndex();
+          this.dataStatus = getAppformStatus();
+          setAppformStatus();
           this.submitFlag = true;
-          this.getTemplate(refCompany, undefined);
+          if (this.dataStatus) {
+            this.getDetail(this.dataStatus.token, this.dataStatus.appformId)
+          } else {
+            this.getTemplate(refCompany, undefined);
+          }
         } else if (action === State.Detail && refAppform) {
           this.successFlag = true;
           this.isDisabled = true;
@@ -189,6 +196,7 @@ export class ApplicationFormComponent implements OnInit {
           this.isDisableJob = true;
           this.successFlag = getUserSuccess();
           this.editFlag = false;
+
           // if (this.successFlag) {
           //   this.editFlag = false;
           // }
@@ -495,8 +503,8 @@ export class ApplicationFormComponent implements OnInit {
             this.initialAnswer();
           }
           if (this.dataIndex) {
-            this.appForm.phone = this.dataIndex.phone;
-            this.appForm.idCard = this.dataIndex.idCard;
+            this.appForm.phone = this.dataIndex.phone || this.appForm.phone;
+            this.appForm.idCard = this.dataIndex.idCard || this.appForm.idCard;
           }
           if (!refPosition) {
             this.getJR(this.template.refCompany);
@@ -566,6 +574,14 @@ export class ApplicationFormComponent implements OnInit {
           // }
 
           this.hub = this.appForm.hubs || [];
+
+          if (this.dataStatus) {
+            this.appForm.refProvince = '';
+            this.appForm.refDistrict = '';
+            this.appForm.refJR = '';
+            this.appForm.hubs = [];
+            this.hub = [];
+          }
 
           this.getJR(this.appForm.refCompany);
           this.getTitle(this.appForm.refCompany);

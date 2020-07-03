@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex, setAppformStatus } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -68,7 +68,7 @@ export class ApplicationFormStatusComponent implements OnInit {
   getStatusList() {
     const data = getAppformIndex();
     if (data) {
-      this.service.getStatusList(data.companyId, data.phone, data.idCard).subscribe(response => {
+      this.service.getStatusList(data.companyId, data.idCard).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;
@@ -78,7 +78,9 @@ export class ApplicationFormStatusComponent implements OnInit {
           this.fullName = response.data ?
             `${response.data.title} ${response.data.firstname} ${response.data.lastname}` : 'Unknown';
           response.data.positions.forEach(element => {
-            this.hubName = element.hub.province + ' (' + element.hub.area + ')';
+            if (element.hub.province) {
+              this.hubName = element.hub.province + ' (' + element.hub.area + ')';
+            }
             this.dataSource.push({
               comId: response.data.company._id,
               flowId: "",
@@ -199,10 +201,15 @@ export class ApplicationFormStatusComponent implements OnInit {
     setFlowId(flowId);
     this.router.navigate([`/application-form/edit/${comId}`]);
   }
-
-  createNew(comId: string,) {
-    setAppformIndex()
-    this.router.navigate([`/application-form/submit/${comId}`]);
+  // element.appFormId
+  // appformId
+  createNew() {
+    const data = {
+      token: this.tokenId,
+      appformId: this.dataSource[this.dataSource.length - 1].appFormId
+    }
+    setAppformStatus(data);
+    this.router.navigate([`/application-form/submit/${this.dataSource[this.dataSource.length - 1].comId}`]);
   }
 
   reserveDate(dialog: TemplateRef<any>, flowId: string) {

@@ -32,9 +32,6 @@
           HUB: <label *ngFor="let hub of item.candidateFlow.hubs"
             class="label label-info">{{ hub.refProvince.name.th }}&nbsp;
             ({{ hub.areaName }})</label>
-        </span>
-        <span>
-          Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name }}</label>
         </span><br *ngIf="devices.isMobile">
         <span *ngIf="!isExpress">
 
@@ -172,9 +169,9 @@
           </div>
         </div>
         <div *ngIf="isExpress">
-          <label class="label topic m-r-5">Information</label>
-          <nb-icon *ngIf="condition.button.nextStep && isExpress" icon="edit-2-outline" class="link" nbTooltip="Edit Information"
-            (click)="openPopupTrainingDate(item)">
+          <label class="label topic m-r-5">Infomation</label>
+          <nb-icon *ngIf="condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
+            nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
           </nb-icon>
           <div class="m-l-15">
             <div class="text-group">
@@ -416,7 +413,7 @@
     </div>
 
     <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning"
-      (click)="openChatUser(item.candidateFlow)">
+      (click)="openChatUser(item)">
       <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
     </button>
 

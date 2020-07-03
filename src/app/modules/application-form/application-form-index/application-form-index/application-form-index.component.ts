@@ -77,14 +77,14 @@ export class ApplicationFormIndexComponent implements OnInit {
   }
 
   checkStatus() {
-    if (this.phone && this.idCard) {
+    if (this.idCard) {
       this.loading = true;
       // let birth = new Date(this.birth);
       // birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
-      this.service.getStatusList(this.companyId, this.phone, this.idCard).subscribe(response => {
+      this.service.getStatusList(this.companyId, this.idCard).subscribe(response => {
         const appFormIndex = {
           companyId: this.companyId,
-          phone: this.phone,
+          // phone: this.phone,
           idCard: this.idCard,
         };
         if (response.code === ResponseCode.Success) {

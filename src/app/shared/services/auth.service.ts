@@ -38,7 +38,8 @@ import {
   companyId,
   AppFormIndex,
   UserToken,
-  UserSuccess
+  UserSuccess,
+  AppFormIStatus
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -406,4 +407,13 @@ export function setUserSuccess(userSuccess: string = null) {
 export function getUserSuccess() {
   const userSuccess = JSON.parse(localStorage.getItem(UserSuccess));
   return (!userSuccess || userSuccess === null) ? undefined : userSuccess;
+}
+
+export function setAppformStatus(data: any = null) {
+  localStorage.setItem(AppFormIStatus, JSON.stringify(data));
+}
+
+export function getAppformStatus() {
+  const data = JSON.parse(localStorage.getItem(AppFormIStatus));
+  return (!data || data === null) ? undefined : data;
 }

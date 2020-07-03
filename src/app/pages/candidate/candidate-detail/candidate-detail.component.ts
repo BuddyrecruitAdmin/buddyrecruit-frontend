@@ -928,8 +928,7 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   openPopupTrainingDate(item: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
+    setFlowId(item.candidateFlow._id);
     this.dialogService.open(PopupTrainingDateComponent,
       {
         closeOnBackdropClick: false,
@@ -937,7 +936,6 @@ export class CandidateDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
-      setCandidateId();
       if (result) {
         this.getDetail();
       }
@@ -945,8 +943,7 @@ export class CandidateDetailComponent implements OnInit {
   }
 
   openChatUser(item: any) {
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
+    setFlowId(item.candidateFlow._id);
     this.dialogService.open(PopupChatUserComponent,
       {
         closeOnBackdropClick: false,
@@ -954,7 +951,6 @@ export class CandidateDetailComponent implements OnInit {
       }
     ).onClose.subscribe(result => {
       setFlowId();
-      setCandidateId();
       if (result) {
         this.getDetail();
       }

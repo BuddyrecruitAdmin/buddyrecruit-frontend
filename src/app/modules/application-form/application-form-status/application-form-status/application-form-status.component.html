@@ -35,7 +35,7 @@
           <!-- พื้นที่สถานะ -->
           <ng-container matColumnDef="hubStatus">
             <th class="bg-green" mat-header-cell *matHeaderCellDef> HUB({{ 'STATUS' | translate }}) </th>
-            <td mat-cell *matCellDef="let element"> {{element.hubStatus}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.hubStatus || '-' }} </td>
           </ng-container>
 
           <!-- วันที่สมัครงาน -->
@@ -79,7 +79,8 @@
               <button mat-flat-button type="button" color="primary"
                 (click)="editAppForm(element.comId, element.appFormId,'',element.action )"
                 [disabled]="!element.action.canEdit">
-                {{ 'EDIT' | translate }}
+                <span *ngIf="element.action.canUploadOnly"> {{ 'EDIT_UPLOAD' | translate }}</span>
+                <span *ngIf="!element.action.canUploadOnly">{{ 'EDIT' | translate }}</span>
               </button>
               <!-- <button mat-flat-button type="button" color="primary" (click)="reserveDate(dialog, element.flowId)"
                 [disabled]="!element.status.reserve">
@@ -94,7 +95,7 @@
       </div>
       <br><br>
       <div *ngIf="canCreate" style="text-align:center">
-        <button nbButton status="success" nbTooltip="Create" (click)="createNew(element.comId)">
+        <button nbButton status="success" nbTooltip="Create" (click)="createNew()">
           <nb-icon icon="plus-outline"></nb-icon>{{ 'CREATE' | translate }}
         </button>
       </div>
