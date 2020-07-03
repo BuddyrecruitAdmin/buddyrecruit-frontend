@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -15,11 +15,14 @@ export interface TableElement {
   appFormId: string;
   flowId: string;
   position: string;
+  hub: string;
+  hubStatus: string;
   date: string;
+  trainDate: string;
+  startDate: string;
   status: any;
   comId: string;
-  hub: string;
-  isSuccessed: boolean;
+  action: boolean;
 }
 
 @Component({
@@ -31,12 +34,13 @@ export class ApplicationFormStatusComponent implements OnInit {
   language = 'en';
   loading = true;
 
-  displayedColumns: string[] = ['position', 'hub', 'date', 'status', 'action'];
+  displayedColumns: string[] = ['position', 'hub', 'hubStatus', 'date', 'trainDate', 'startDate', 'status', 'action'];
   dataSource: TableElement[] = [];
   tokenId: any;
   fullName: string;
   comName: string;
   hubName: string;
+  canCreate: boolean;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -68,31 +72,51 @@ export class ApplicationFormStatusComponent implements OnInit {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;
+          this.canCreate = response.data.action.canCreate;
           this.hubName = '-'
-          response.data.data.forEach(element => {
-            this.comName = element.refCompany.name;
-            this.fullName = element.refCandidate ?
-              `${element.refCandidate.title} ${element.refCandidate.firstname} ${element.refCandidate.lastname}` : 'Unknown';
-            if (element.hubs.length > 0) {
-              element.hubs.forEach(element => {
-                this.hubName = element.refProvince.name.th + ' (' + element.hubName + ')';
-                if(element.status){
-                  this.hubName = this.hubName + ' - ' + element.status;
-                }
-              });
-
-            }
+          this.comName = response.data.company.name || '';
+          this.fullName = response.data ?
+            `${response.data.title} ${response.data.firstname} ${response.data.lastname}` : 'Unknown';
+          response.data.positions.forEach(element => {
+            this.hubName = element.hub.province + ' (' + element.hub.area + ')';
             this.dataSource.push({
-              comId: element.refJR.refJD.refPosition.refCompany,
-              flowId: element._id,
-              position: element.refJR.refJD.position,
-              date: this.utilitiesService.convertDateTimeFromSystem(element.timestamp) || '-',
-              status: this.setStatus(element),
-              appFormId: element.generalAppForm,
+              comId: response.data.company._id,
+              flowId: "",
+              position: element.position,
               hub: this.hubName,
-              isSuccessed: element.isSuccessed
+              hubStatus: element.hub.status,
+              date: this.utilitiesService.convertDateTimeFromSystem(element.date.apply) || '-',
+              trainDate: this.utilitiesService.convertDateTimeFromSystem(element.date.training) || '-',
+              startDate: this.utilitiesService.convertDateTimeFromSystem(element.date.onboard) || '-',
+              status: this.setStatus(element.stage),
+              appFormId: element.generalAppFormId,
+              action: element.action
             });
           });
+          // response.data.forEach(element => {
+          //   this.comName = element.refCompany.name || '';
+          //   this.fullName = element.refCandidate ?
+          //     `${element.refCandidate.title} ${element.refCandidate.firstname} ${element.refCandidate.lastname}` : 'Unknown';
+          //   if (element.hubs.length > 0) {
+          //     element.hubs.forEach(element => {
+          //       this.hubName = element.refProvince.name.th + ' (' + element.hubName + ')';
+          //       if (element.status) {
+          //         this.hubName = this.hubName + ' - ' + element.status;
+          //       }
+          //     });
+
+          //   }
+          //   this.dataSource.push({
+          //     comId: element.refJR.refJD.refPosition.refCompany,
+          //     flowId: element._id,
+          //     position: element.refJR.refJD.position,
+          //     date: this.utilitiesService.convertDateTimeFromSystem(element.timestamp) || '-',
+          //     status: this.setStatus(element),
+          //     appFormId: element.generalAppForm,
+          //     hub: this.hubName,
+          //     isSuccessed: element.isSuccessed
+          //   });
+          // });
         }
         this.loading = false;
       });
@@ -109,71 +133,76 @@ export class ApplicationFormStatusComponent implements OnInit {
       editable: true,
       reserve: false,
     };
+    switch (element.order.toString().substring(0, 1)) {
+      case '0':
+        status.color = 'label-danger';
+        break
+      case '1' || '2':
+        status.color = 'label-warning';
+        if (element.isSuccessed) {
+          // status.nameEN = 'Registered';
+          status.nameTH = 'ยื่นสมัครแล้ว';
+        }
+        break;
 
-    if (element.reject.flag) {
-      status.color = 'label-gray';
-    } else {
-      switch (element.refStage.order.toString().substring(0, 1)) {
-        case '1' || '2':
-          status.color = 'label-info';
-          if (element.isSuccessed) {
-            status.nameEN = 'Registered';
-            status.nameTH = 'ยื่นสมัครแล้ว';
-          }
-          break;
+      case '3':
+        // if (this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate)) {
+        //   status.nameEN = 'Interview date confirmed';
+        //   status.nameTH = 'ยืนยันวันสัมภาษณ์แล้ว';
+        //   status.color = 'label-primary';
+        // } else {
+        //   status.nameEN = 'Confirm nterview date';
+        //   status.nameTH = 'รอการยืนยันวันสัมภาษณ์';
+        //   status.color = 'label-info';
+        //   status.reserve = true;
+        // }
+        break;
 
-        case '3':
-          if (this.utilitiesService.convertDateTime(element.pendingInterviewInfo.startDate)) {
-            status.nameEN = 'Interview date confirmed';
-            status.nameTH = 'ยืนยันวันสัมภาษณ์แล้ว';
-            status.color = 'label-primary';
-          } else {
-            status.nameEN = 'Confirm nterview date';
-            status.nameTH = 'รอการยืนยันวันสัมภาษณ์';
-            status.color = 'label-info';
-            status.reserve = true;
-          }
-          break;
+      case '4':
+        // status.nameEN = 'Waiting for Approval';
+        status.nameTH = 'รอการพิจารณา';
+        status.color = 'label-warning';
+        break;
+      case '5':
+        status.color = 'label-warning';
+        break;
 
-        case '4':
-          status.nameEN = 'Waiting for Approval';
-          status.nameTH = 'รอการพิจารณา';
-          status.color = 'label-warning';
-          break;
-        case '5':
-          status.color = 'label-warning';
-          break;
+      case '7':
+        // status.nameEN = 'Waiting more information';
+        status.nameTH = 'รอการเพิ่มข้อมูล';
+        status.color = 'label-warning';
+        break;
 
-        case '7':
-          status.nameEN = 'Waiting more information';
-          status.nameTH = 'รอการเพิ่มข้อมูล';
-          status.color = 'label-warning';
-          break;
+      default:
+        // status.nameEN = 'Approved';
+        status.nameTH = 'ผ่านการพิจารณา';
+        status.color = 'label-success';
+        status.editable = false;
+        break;
 
-        default:
-          status.nameEN = 'Approved';
-          status.nameTH = 'ผ่านการพิจารณา';
-          status.color = 'label-success';
-          status.editable = false;
-          break;
-      }
     }
 
     // Replace from backend
-    status.nameEN = (element.refStage.text && element.refStage.text.en) || status.nameEN;
-    status.nameTH = (element.refStage.text && element.refStage.text.th) || status.nameTH;
+    // status.nameEN = (element.refStage.text && element.refStage.text.en) || status.nameEN;
+    status.nameTH = element.text || status.nameTH;
     // status.editable = !element.isSuccessed;
-    status.reserve = element.isReserve;
+    // status.reserve = element.isReserve;
 
     return status;
   }
 
   editAppForm(comId: string, appFormId: string, flowId: string, isSuccessed) {
-    setUserSuccess(isSuccessed);
+    // canUploadOnly
+    setUserSuccess(isSuccessed.canUploadOnly);
     setUserToken(this.tokenId);
     setAppFormData(appFormId);
     setFlowId(flowId);
     this.router.navigate([`/application-form/edit/${comId}`]);
+  }
+
+  createNew(comId: string,) {
+    setAppformIndex()
+    this.router.navigate([`/application-form/submit/${comId}`]);
   }
 
   reserveDate(dialog: TemplateRef<any>, flowId: string) {

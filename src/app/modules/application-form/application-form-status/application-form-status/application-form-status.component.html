@@ -29,12 +29,31 @@
 
           <ng-container matColumnDef="hub">
             <th class="bg-green" mat-header-cell *matHeaderCellDef> HUB </th>
-            <td mat-cell *matCellDef="let element"> {{element.hub}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.hub || '-'}} </td>
           </ng-container>
 
+          <!-- พื้นที่สถานะ -->
+          <ng-container matColumnDef="hubStatus">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> HUB({{ 'STATUS' | translate }}) </th>
+            <td mat-cell *matCellDef="let element"> {{element.hubStatus}} </td>
+          </ng-container>
+
+          <!-- วันที่สมัครงาน -->
           <ng-container matColumnDef="date">
             <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'REGISTER_DATE' | translate }} </th>
             <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+          </ng-container>
+
+          <!-- วันที่อบรม -->
+          <ng-container matColumnDef="trainDate">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'TRAIN_DATE' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.trainDate}} </td>
+          </ng-container>
+
+          <!-- วันที่เริ่่มงาน -->
+          <ng-container matColumnDef="startDate">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'START_DATE' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.startDate}} </td>
           </ng-container>
 
           <!-- <ng-container matColumnDef="date">
@@ -42,11 +61,13 @@
             <td mat-cell *matCellDef="let element"> {{element.date}} </td>
           </ng-container> -->
 
+          <!-- สถานะการสมัครงาน -->
           <ng-container matColumnDef="status">
-            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'STATUS' | translate }} </th>
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'STATUS_REGIS' | translate }} </th>
             <td mat-cell *matCellDef="let element">
               <span class="{{ element.status.color }}">
-                {{ language === 'en' ? element.status.nameEN : element.status.nameTH }}
+                <!-- {{ language === 'en' ? element.status.nameEN : element.status.nameTH }} -->
+                {{element.status.nameTH}}
               </span>
             </td>
           </ng-container>
@@ -56,7 +77,8 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <button mat-flat-button type="button" color="primary"
-                (click)="editAppForm(element.comId, element.appFormId,'',element.isSuccessed )" [disabled]="!element.status.editable">
+                (click)="editAppForm(element.comId, element.appFormId,'',element.action )"
+                [disabled]="!element.action.canEdit">
                 {{ 'EDIT' | translate }}
               </button>
               <!-- <button mat-flat-button type="button" color="primary" (click)="reserveDate(dialog, element.flowId)"
@@ -70,7 +92,12 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </div>
-
+      <br><br>
+      <div *ngIf="canCreate" style="text-align:center">
+        <button nbButton status="success" nbTooltip="Create" (click)="createNew(element.comId)">
+          <nb-icon icon="plus-outline"></nb-icon>{{ 'CREATE' | translate }}
+        </button>
+      </div>
     </div>
   </div>
 

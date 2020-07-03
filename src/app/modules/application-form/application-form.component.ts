@@ -108,6 +108,7 @@ export class ApplicationFormComponent implements OnInit {
   editFlag: boolean;
   saveFlag: boolean;
   successFlag: boolean;
+  uploadOnly: boolean;
   submitFlag: boolean;
   buttonText: string = 'edit';
   titleListTH: DropDownValue[] = [];
@@ -146,6 +147,7 @@ export class ApplicationFormComponent implements OnInit {
     this.saveFlag = false;
     this.submitFlag = false;
     this.successFlag = false;
+    this.uploadOnly = false;
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
       const refCompany = params.id;
@@ -186,13 +188,14 @@ export class ApplicationFormComponent implements OnInit {
         } else if (action === State.Edit && refAppform) {
           this.isDisableJob = true;
           this.successFlag = getUserSuccess();
+          this.editFlag = false;
           // if (this.successFlag) {
           //   this.editFlag = false;
           // }
           this.userToken = getUserToken();
           const appformId = getAppFormData();
           this.initialForm();
-          this.getDetail(this.userToken, appformId.refGeneralAppForm._id);
+          this.getDetail(this.userToken, appformId);
         } else {
           this.onError();
         }
