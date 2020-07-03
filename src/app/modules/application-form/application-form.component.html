@@ -334,6 +334,8 @@
                         [disabled]="(successFlag || isDisabled) && !editFlag">
                     </mat-form-field>
                   </div>
+                </div>
+                <div class="row">
                   <div class="col-md-4">
                     <mat-form-field [color]="primary" appearance="outline" class="fit-content">
                       <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
@@ -350,9 +352,7 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-5">
+                  <div class="col-md-3">
                     <!-- <mat-form-field appearance="outline">
                       <mat-label>{{ 'PROVINCE' | translate }}</mat-label>
                       <input matInput type="text" id="province" name="province" [(ngModel)]="appForm.province"
@@ -377,7 +377,7 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
-                  <div class="col-md-5">
+                  <div class="col-md-3">
                     <mat-form-field appearance="outline">
                       <mat-label>{{ 'SUB_DISTRICT' | translate }}</mat-label>
                       <mat-select id="district" name="district" [(ngModel)]="appForm.refSubDistrict"
