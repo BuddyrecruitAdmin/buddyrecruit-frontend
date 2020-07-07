@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownValue, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, setFlowId, setCandidateId, setIsGridLayout, setUserToken } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, setCandidateId, setIsGridLayout } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -58,9 +58,12 @@ export class CandidateComponent implements OnInit {
   dialogTime: any;
   noticeHeight: any;
   hubArea: any;
+  hubCode: any;
   eduList: any;
   dataExcel: any;
+  dataExcelList: any;
   refName: any;
+  uploadList: any;
   constructor(
     private router: Router,
     private service: ReportService,
@@ -145,7 +148,11 @@ export class CandidateComponent implements OnInit {
         'reject.remark',
         'reject.rejectBy.refUser.firstname',
         'reject.rejectBy.refUser.lastname',
-        'department.name'
+        'department.name',
+        'refProvince.name.th',
+        'refCandidate.phone',
+        'refCandidate.education',
+        'refSubStage.text'
       ],
       filters: [
         {
@@ -377,15 +384,25 @@ export class CandidateComponent implements OnInit {
     this.service.getListExcel(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.dataExcel = [];
-        response.data.forEach((item) => {
+        response.data.forEach((item, index) => {
+          this.uploadList = [];
           this.hubArea = '';
+          this.hubCode = '';
           this.eduList = '';
           this.refName = '';
+          if (item.uploads.length > 0) {
+            item.uploads.forEach(element => {
+              this.uploadList.push({
+                [element.fieldName]: element.fieldValue.toString()
+              })
+            });
+          }
           if (item.reject.rejectBy.refReject) {
             this.refName = item.reject.rejectBy.refReject.name;
           }
           if (item.hubs.length > 0) {
             item.hubs.forEach(element => {
+              this.hubCode = element.hubCode;
               if (element.refProvince.name.th && element.areaName) {
                 this.hubArea = element.refProvince.name.th + ' - ' + element.areaName;
               } else {
@@ -402,17 +419,38 @@ export class CandidateComponent implements OnInit {
             "ชื่อ": item.refCandidate.firstname || '-',
             "นามสกุล": item.refCandidate.lastname || '-',
             "ตำแหน่ง": item.refJR.refJD.position || '-',
-            "HUB": this.hubArea || '',
-            "เบอร์โทร": item.refCandidate.phone || '',
-            "ระดับการศึกษา": this.eduList || '',
-            "Apply Date": this.utilitiesService.convertDateTimeFromSystem(item.timestamp) || '-',
-            "Pending Sign Contract Date": this.utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-            "Onboard Date": this.utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-            "Reject Date": this.utilitiesService.convertDateTimeFromSystem(item.reject.rejectBy.date) || '-',
-            "Rejected Reason": this.refName || '-'
+            "HUB": this.hubArea || '-',
+            "HUB Code": this.hubCode || '-',
+            "เบอร์โทร": item.refCandidate.phone || '-',
+            "ระดับการศึกษา": this.eduList || '-',
+            "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
+            "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
+            "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+            "เวลาเซ็นสัญญา": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+            "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+            "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+            "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
+            "เวลาที่ถูกปฏิเสธ": this.utilitiesService.convertTimeFromSystem(item.reject.rejectBy.date) || '-',
+            "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
+            "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
+            "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
+            // "แก้ไขล่าสุด-ชื่อ": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.refUser.firstname) || '-',
+            // "แก้ไขล่าสุด-นามสกุล": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.refUser.lastname) || '-',
+            "สถานะปัจจุบัน": item.refSubStage.text || '-',
+            "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
+            "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
+            "แบล็คลิสต์โดย-ชื่อ": item.blacklist.blockBy.refUser.firstname || '-',
+            "แบล็คลิสต์โดย-นามสกุล": item.blacklist.blockBy.refUser.lastname || '-',
+            "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
+            "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
+            // "สมัครรอบที่": item. || '-',
+            // "ติดต่อโดย": item. || '-',
+            // "วันที่ติดต่อ": item. || '-',
           })
+          this.uploadList.forEach(element => {
+            this.dataExcel[index] = { ...this.dataExcel[index], ...element };
+          });
         })
-        console.log(this.dataExcel)
         this.excelService.exportAsExcelFile(this.dataExcel, fileName);
       } else {
         this.showToast('danger', 'Error Message', 'Export Failed');
@@ -428,7 +466,6 @@ export class CandidateComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.refGeneralAppForm) {
-      setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.refGeneralAppForm}`, '_blank');
       });

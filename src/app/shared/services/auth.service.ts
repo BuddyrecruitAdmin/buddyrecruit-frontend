@@ -39,7 +39,8 @@ import {
   AppFormIndex,
   UserToken,
   UserSuccess,
-  AppFormIStatus
+  AppFormIStatus,
+  HistoryData
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -416,4 +417,13 @@ export function setAppformStatus(data: any = null) {
 export function getAppformStatus() {
   const data = JSON.parse(localStorage.getItem(AppFormIStatus));
   return (!data || data === null) ? undefined : data;
+}
+
+export function setHistoryData(history: any = null) {
+  localStorage.setItem(HistoryData, JSON.stringify(history));
+}
+
+export function getHistoryData() {
+  const history = JSON.parse(localStorage.getItem(HistoryData));
+  return (!history || history === null) ? undefined : history;
 }

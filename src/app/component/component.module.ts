@@ -112,6 +112,7 @@ import { PopupExtractionComponent } from './popup-extraction/popup-extraction.co
 import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-appointment-date.component';
 import { PopupTrainingDateComponent } from './popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.component';
+import { PopupHistoryComponent } from './popup-history/popup-history.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -224,6 +225,7 @@ import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.compon
     PopupAppointmentDateComponent,
     PopupTrainingDateComponent,
     PopupChatUserComponent,
+    PopupHistoryComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -251,7 +253,8 @@ import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.compon
     PopupConsentComponent,
     PopupExtractionComponent,
     PopupTrainingDateComponent,
-    PopupChatUserComponent
+    PopupChatUserComponent,
+    PopupHistoryComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -279,7 +282,8 @@ import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.compon
     PopupConsentComponent,
     PopupExtractionComponent,
     PopupTrainingDateComponent,
-    PopupChatUserComponent
+    PopupChatUserComponent,
+    PopupHistoryComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

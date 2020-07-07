@@ -335,7 +335,10 @@
                       <nb-icon *ngIf="item.offer.responsed && !item.offer.isOk" icon="close-circle-outline"
                         style="margin-right: 0;color: red;"></nb-icon>
                     </span>
-                  </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
+                  </label><span *ngIf="isExpress && item.history.exist">
+                    <nb-icon (click)="openHistory(item.history)" icon="close-circle-outline"
+                      style="margin-right: 0;color: blue;"></nb-icon>
+                  </span>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
                   <small class="status">

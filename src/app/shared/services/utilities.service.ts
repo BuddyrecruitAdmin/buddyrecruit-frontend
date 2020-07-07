@@ -81,6 +81,24 @@ export class UtilitiesService {
     }
   }
 
+  convertDateFromSystem(date: Date): string {
+    if (this.dateIsValid(date)) {
+      const dateTime = this.convertDateTimeFromSystem(date);
+      return dateTime.split(' ')[0];
+    } else {
+      return null;
+    }
+  }
+
+  convertTimeFromSystem(date: Date): string {
+    if (this.dateIsValid(date)) {
+      const dateTime = this.convertDateTimeFromSystem(date);
+      return dateTime.split(' ')[1];
+    } else {
+      return null;
+    }
+  }
+
   convertDateTime(date: Date): string {
     if (this.dateIsValid(date)) {
       let text = '';

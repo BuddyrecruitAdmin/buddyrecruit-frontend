@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -26,6 +26,7 @@ import { AppFormService } from '../../setting/app-form/app-form.service';
 import { group } from 'console';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
+import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -978,6 +979,20 @@ export class TalentPoolDetailComponent implements OnInit {
       setCandidateId();
       if (result) {
         this.search();
+      }
+    });
+  }
+
+  openHistory(item: any) {
+    setHistoryData(item)
+    this.dialogService.open(PopupHistoryComponent, {
+      closeOnBackdropClick: false,
+      hasScroll: true,
+    }
+    ).onClose.subscribe(result => {
+      if (result) {
+        this.search();
+        setHistoryData();
       }
     });
   }

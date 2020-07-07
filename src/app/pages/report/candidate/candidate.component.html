@@ -258,16 +258,34 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr style="font-size: 14px;">
-              <th scope="col">ชื่อ-นามสกุล</th>
-              <th scope="col" style="width: 170px;">ตำแหน่ง</th>
-              <th scope="col" style="width: 100px;">HUB</th>
+              <th scope="col" style="width: 240px">ชื่อ-นามสกุล</th>
+              <th scope="col" style="width: 230px;">ตำแหน่ง</th>
+              <th scope="col" style="width: 300px;">HUB</th>
+              <th scope="col" style="width: 300px;">HUB Code</th>
               <th scope="col" style="width: 120px;">เบอร์โทร</th>
-              <th scope="col" style="width: 120px;">ระดับการศึกษา</th>
-              <th scope="col" style="width: 120px;">Apply Date</th>
-              <th scope="col" style="width: 120px;">Pending Sign Contract Date</th>
-              <th scope="col" style="width: 120px;">Onboard Date</th>
-              <th scope="col" style="width: 120px;">Reject Date</th>
-              <th scope="col" style="width: 90px;">Reject Reason</th>
+              <th scope="col" style="width: 250px;">ระดับการศึกษา</th>
+              <th scope="col" style="width: 120px;">วันที่สมัคร</th>
+              <th scope="col" style="width: 250px;">เวลาที่สมัคร</th>
+              <th scope="col" style="width: 250px;">วันที่เซ็นสัญญา</th>
+              <th scope="col" style="width: 200px;">เวลาเซ็นสัญญา</th>
+              <th scope="col" style="width: 200px;">วันที่เริ่มงาน</th>
+              <th scope="col" style="width: 200px;">เวลาเริ่มงาน</th>
+              <th scope="col" style="width: 200px;">วันที่ถูกปฏิเสธ</th>
+              <th scope="col" style="width: 200px;">เวลาที่ถูกปฏิเสธ</th>
+              <th scope="col" style="width: 200px;">เหตุผลที่ถูกปฏิเสธ</th>
+              <th scope="col" style="width: 200px;">วันที่เเก้ไขล่าสุด</th>
+              <th scope="col" style="width: 200px;">เวลาที่เเก้ไขล่าสุด</th>
+              <th scope="col" style="width: 200px;">แก้ไขล่าสุดโดย</th>
+              <th scope="col" style="width: 200px;">สถานะปัจจุบัน</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์สถานะ</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-สาเหตุ</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-ชื่อ</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-นามสกุล</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-วันที่</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-เวลา</th>
+              <th scope="col" style="width: 200px;">สมัครรอบที่</th>
+              <th scope="col" style="width: 200px;">ติดต่อโดย</th>
+              <th scope="col" style="width: 200px;">วันที่ติดต่อ</th>
             </tr>
           </thead>
           <tbody>
@@ -287,9 +305,14 @@
                 </span>
               </td>
               <td>
-                <small *ngFor="let hub of item.hubs;">
+                <span *ngFor="let hub of item.hubs;">
                   {{ hub.refProvince?.name.th || '-' }} <span *ngIf="hub.areaName"> - {{ hub.areaName  }}</span>
-                </small>
+                </span>
+              </td>
+              <td>
+                <span *ngFor="let hub of item.hubs;">
+                  {{ hub.hubCode || '-' }}
+                </span>
               </td>
               <td>
                 <!-- phone -->
@@ -306,31 +329,133 @@
               <td>
                 <!-- apply date -->
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.timestamp) || '-' }}
+                  {{ utilitiesService.convertDateFromSystem(item?.timestamp) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- apply time -->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item?.timestamp) || '-' }}
                 </span>
               </td>
               <td>
                 <!-- sign date -->
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.pendingSignContractInfo?.sign?.date) || '-'  }}
+                  {{ utilitiesService.convertDateFromSystem(item?.pendingSignContractInfo?.sign?.date) || '-'  }}
+                </span>
+              </td>
+              <td>
+                <!-- sign time -->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item?.pendingSignContractInfo?.sign?.date) || '-'  }}
                 </span>
               </td>
               <td>
                 <!-- on date -->
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.pendingSignContractInfo?.agreeStartDate) || '-'  }}
+                  {{ utilitiesService.convertDateFromSystem(item?.pendingSignContractInfo?.agreeStartDate) || '-'  }}
+                </span>
+              </td>
+              <td>
+                <!-- on time -->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item?.pendingSignContractInfo?.agreeStartDate) || '-'  }}
                 </span>
               </td>
               <td>
                 <!-- reject Date -->
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.reject?.rejectBy?.date) || '-'  }}
+                  {{ utilitiesService.convertDateFromSystem(item?.reject?.rejectBy?.date) || '-'  }}
+                </span>
+              </td>
+              <td>
+                <!-- reject Time -->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item?.reject?.rejectBy?.date) || '-'  }}
                 </span>
               </td>
               <td>
                 <!-- Reject Reason -->
                 <span>
                   {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Lastchange Date -->
+                <span>
+                  {{ utilitiesService.convertDateFromSystem(item.lastChangedInfo?.date) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Lastchange Time -->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Lastchange By -->
+                <span>
+                  {{ utilitiesService.setFullname(item.lastChangedInfo?.refUser) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Status -->
+                <span>
+                  {{ item.refSubStage.text || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Blacklist flag -->
+                <span>
+                  {{ item.blacklist.flag.toString() || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Blacklist remark -->
+                <span>
+                  {{ item.blacklist.refReject || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Blacklist by-->
+                <span>
+                  {{ item.blacklist.blockBy?.refUser?.firstname || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Blacklist by-->
+                <span>
+                  {{ item.blacklist.blockBy?.refUser?.lastname || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Blacklist date-->
+                <span>
+                  {{ utilitiesService.convertDateFromSystem(item.blacklist?.blockBy?.date) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- Blacklist date-->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item.blacklist?.blockBy?.date) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- สมัครรอบที่ -->
+                <span>
+                  {{ item.refSubStage.text || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- ติดต่อโดย -->
+                <span>
+                  {{ item.refSubStage.text || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- วันที่ติดต่อ -->
+                <span>
+                  {{ item.refSubStage.text || '-' }}
                 </span>
               </td>
             </tr>
@@ -366,7 +491,8 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" [disabled]="!dialogTime.start || !dialogTime.end" (click)="exportAsXLSX()">Export</button>
+      <button nbButton status="success" [disabled]="!dialogTime.start || !dialogTime.end"
+        (click)="exportAsXLSX()">Export</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>
