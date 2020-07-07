@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -662,6 +662,7 @@ export class OnboardDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });

@@ -21,17 +21,22 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.LIST, {});
   }
 
-  getDetail(token: string, appFormID: string, flowId: string): Observable<ApiResponse> {
+  getDetail(token: string, appFormID: string, flowId: string, isUser: boolean): Observable<ApiResponse> {
     const body = {
       token,
       appFormID,
-      flowId
+      flowId,
+      isUser
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.DETAIL, body);
   }
 
-  create(request: IApplicationForm): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, request);
+  create(request: IApplicationForm, isUser: boolean): Observable<ApiResponse> {
+    const body = {
+      request,
+      isUser
+    }
+    return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, body);
   }
 
   edit(request: IApplicationForm): Observable<ApiResponse> {
@@ -60,7 +65,7 @@ export class ApplicationFormService extends NetworkService {
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.JR_LIST, body);
   }
-  
+
   getTitle(refCompany = undefined): Observable<ApiResponse> {
     const body = {
       refCompany: refCompany
@@ -93,9 +98,9 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.FILE.FILE_DOWNLOAD, body);
   }
 
-  getCompany(_id ): Observable<ApiResponse> {
+  getCompany(_id): Observable<ApiResponse> {
     const body = {
-      _id ,
+      _id,
     }
     return this.post(API_ENDPOINT.APPLICATION_FORM.COMPANY, body);
   }
@@ -111,9 +116,9 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.DISTRICT, body);
   }
 
-  getSubDistrict(districtId : any): Observable<ApiResponse> {
+  getSubDistrict(districtId: any): Observable<ApiResponse> {
     const body = {
-      districtId : districtId 
+      districtId: districtId
     }
     return this.post(API_ENDPOINT.CONFIGURATION.SUB_DISTRICT, body);
   }

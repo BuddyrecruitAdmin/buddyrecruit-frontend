@@ -876,6 +876,7 @@ export class TalentPoolDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });

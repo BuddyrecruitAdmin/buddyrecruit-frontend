@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 import { CandidateService } from '../candidate.service';
 import { ResponseCode } from '../../../shared/app.constants';
-import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName, setExamId, setFlagExam } from '../../../shared/services/auth.service';
+import { getRole, getFlowId, setUserEmail, setCandidateId, setFlowId, setJdId, setJdName, setJrId, setButtonId, setFieldName, setExamId, setFlagExam, setUserToken } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -905,6 +905,7 @@ export class CandidateDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.candidateFlow.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.candidateFlow.generalAppForm.refGeneralAppForm}`, '_blank');
       });

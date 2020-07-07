@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -121,6 +121,7 @@ export class ApplicationFormComponent implements OnInit {
   filteredSubDistricts: any;
   dataStatus: any;
   selectIndex: any;
+  isUser: boolean = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -192,8 +193,13 @@ export class ApplicationFormComponent implements OnInit {
           this.isDisabled = true;
           this.detailFlag = true;
           this.editFlag = false;
+          this.userToken = getUserToken();
+          const role = getRole()
+          if (role) {
+            this.isUser = true;
+          }
           this.initialForm();
-          this.getDetail(undefined, refAppform);
+          this.getDetail(this.userToken, refAppform);
         } else if (action === State.Edit && refAppform) {
           this.isDisableJob = true;
           this.successFlag = getUserSuccess();
@@ -205,6 +211,7 @@ export class ApplicationFormComponent implements OnInit {
           //   this.editFlag = false;
           // }
           this.userToken = getUserToken();
+          setUserToken();
           const appformId = getAppFormData();
           this.initialForm();
           this.getDetail(this.userToken, appformId);
@@ -554,7 +561,7 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getDetail(refAppform: string, appFormId: string = undefined) {
-    this.service.getDetail(refAppform, appFormId, this.flowId).subscribe(response => {
+    this.service.getDetail(refAppform, appFormId, this.flowId, this.isUser).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
@@ -971,7 +978,7 @@ export class ApplicationFormComponent implements OnInit {
         if (result) {
           this.loading = true;
           const request = this.setRequest();
-          this.service.create(request).subscribe(response => {
+          this.service.create(request, this.isUser).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.submitted = true;
             } else if (response.code === ResponseCode.Duplicate) {
