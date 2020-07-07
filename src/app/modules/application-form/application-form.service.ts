@@ -31,12 +31,9 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.DETAIL, body);
   }
 
-  create(request: IApplicationForm, isUser: boolean): Observable<ApiResponse> {
-    const body = {
-      request,
-      isUser
-    }
-    return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, body);
+  create(request: IApplicationForm): Observable<ApiResponse> {
+      request
+    return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, request);
   }
 
   edit(request: IApplicationForm): Observable<ApiResponse> {

@@ -41,6 +41,7 @@ export interface IApplicationForm {
   jobMultiChild: any;
 
   attachment: IAttachment;
+  isUser: boolean;
 }
 
 export interface IWorkExperience {

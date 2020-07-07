@@ -465,7 +465,8 @@ export class ApplicationFormComponent implements OnInit {
       refPosition: '',
       jobSelected: '',
       jobChildSelected: '',
-      jobMultiChild: new FormControl()
+      jobMultiChild: new FormControl(),
+      isUser: false
     };
   }
 
@@ -978,7 +979,7 @@ export class ApplicationFormComponent implements OnInit {
         if (result) {
           this.loading = true;
           const request = this.setRequest();
-          this.service.create(request, this.isUser).subscribe(response => {
+          this.service.create(request).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.submitted = true;
             } else if (response.code === ResponseCode.Duplicate) {
@@ -1184,6 +1185,7 @@ export class ApplicationFormComponent implements OnInit {
       //   }
       // });
     }
+    request.isUser = this.isUser
     request.isReserve = this.reserve || this.appForm.isReserve;
     request.birth = new Date(request.birth);
     request.address = request.addressNo + ' '
