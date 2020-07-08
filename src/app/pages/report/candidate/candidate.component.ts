@@ -411,11 +411,11 @@ export class CandidateComponent implements OnInit {
               }
             });
           }
-          if (item.refCandidate.education.length > 0) {
-            item.refCandidate.education.forEach(edu => {
-              this.eduList = edu.refDegree.nameTH;
-            });
-          }
+          // if (item.refCandidate.education.length > 0) {
+          //   item.refCandidate.education.forEach(edu => {
+          //     this.eduList = edu.refDegree.nameTH;
+          //   });
+          // }
           this.dataExcel.push({
             "ชื่อ": item.refCandidate.firstname || '-',
             "นามสกุล": item.refCandidate.lastname || '-',
@@ -424,7 +424,7 @@ export class CandidateComponent implements OnInit {
             "HUB Code": this.hubCode || '-',
             "เบอร์โทร": item.refCandidate.phone || '-',
             "เบอร์โทร(สำรอง)": item.refCandidate.reservePhone || '-',
-            "ระดับการศึกษา": this.eduList || '-',
+            // "ระดับการศึกษา": this.eduList || '-',
             "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
             "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
             "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
