@@ -94,7 +94,7 @@
                   <div class="text-gray">HUB</div>
                   <div *ngFor="let hub of hubs">
                     <!-- recruiter -->
-                    <div *ngIf="recruiterAll">12
+                    <div *ngIf="recruiterAll">
                       <nb-checkbox [(ngModel)]="hub.checked" [ngModelOptions]="{standalone: true}"
                         (checkedChange)="onChangeHub($event, hub._id)" status="primary" [disabled]="!editFlag">
                         {{ language === 'en' ? hub.name.en :hub.name.th }}
@@ -352,8 +352,8 @@
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'RESERVE_PHONE' | translate }}</mat-label>
                     <input matInput type="text" id="reservePhone" name="reservePhone" [formControl]="f.reservePhone"
-                      [(ngModel)]="appForm.reservePhone" [required]="template.personalDetail.reservePhone.required" digitOnly
-                      onKeyPress="if(this.value.length === 10) return false;">
+                      [(ngModel)]="appForm.reservePhone" [required]="template.personalDetail.reservePhone.required"
+                      digitOnly onKeyPress="if(this.value.length === 10) return false;">
                     <mat-hint align="start" class="text-red">
                       <div *ngIf="f.reservePhone.invalid && (submitted || f.reservePhone.touched)">
                         <div *ngIf="f.reservePhone.errors?.pattern">
@@ -992,7 +992,8 @@
                       <mat-form-field appearance="outline" class="fit-content">
                         <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
                         <mat-select [(ngModel)]="question.childSelected" [ngModelOptions]="{standalone: true}"
-                          [required]="getChild(question).required" [disabled]="(successFlag || isDisabled) && !editFlag">
+                          [required]="getChild(question).required"
+                          [disabled]="(successFlag || isDisabled) && !editFlag">
                           <mat-option *ngFor="let option of getChild(question).children; let i = index;" [value]="i">
                             {{ option.name }}
                           </mat-option>
@@ -1029,18 +1030,18 @@
                     <span *ngIf="question.answer.attachment.originalName && !isDisabled">
                       {{ question.answer.attachment.originalName }}
                     </span>
-                    <mat-icon *ngIf="question.answer.attachment.originalName && !isDisabled" class="delete"
-                      (click)="clearFile(question.answer.attachment); fileInput.value = ''">
-                      cancel
-                    </mat-icon>
                     <span *ngIf="question.answer.attachment.originalName && isDisabled" class="link underline text-gray"
                       (click)="fileDownload(dialog, question.answer.attachment)">
                       {{ question.answer.attachment.originalName }}
                     </span>
+                    <mat-icon *ngIf="question.answer.attachment.originalName && (!isDisabled || editFlag)"
+                      class="delete" (click)="clearFile(question.answer.attachment); fileInput.value = ''">
+                      cancel
+                    </mat-icon>
                   </p>
                   <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 15 MB)</small></p>
-                  <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
-                    [disabled]="question.isLoading">
+                  <button *ngIf="!isDisabled || editFlag" mat-flat-button type="button" color="primary"
+                    (click)="fileInput.click()" [disabled]="question.isLoading">
                     <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
                     <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
                       (change)="uploadFile(question.answer.attachment, $event.target.files, false, question)" accept="*"

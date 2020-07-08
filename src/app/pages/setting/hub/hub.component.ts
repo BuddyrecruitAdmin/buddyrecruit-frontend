@@ -185,7 +185,7 @@ export class HubComponent implements OnInit {
       isFull: false,
       remark: '',
       isDeleted: true,
-      code: ''
+      hubCode: ''
     })
   }
 

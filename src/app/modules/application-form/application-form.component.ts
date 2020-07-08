@@ -1144,7 +1144,7 @@ export class ApplicationFormComponent implements OnInit {
     if (isValid && qElement) {
       isValid = false;
       qElement.scrollIntoView();
-    } else if (this.qExpectList.length > 0) {
+    } else if (this.qExpectList.length > 0 && !this.detailFlag) {
       isValid = false;
       this.noExpect(this.qExpectList);
     }

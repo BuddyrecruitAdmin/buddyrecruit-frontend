@@ -429,7 +429,7 @@ export class OnboardDetailComponent implements OnInit {
       step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === item.refStage._id;
       });
-    }
+    }debugger
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -441,6 +441,9 @@ export class OnboardDetailComponent implements OnInit {
         } else {
           condition.button.revoke = true;
           // condition.button.send = true
+        }
+        if(this.tabSelected === 'JOB STARTED'){
+          condition.button.reject = true;
         }
       }
     }
