@@ -591,6 +591,7 @@ export class ApplicationFormComponent implements OnInit {
             this.appForm.refJR = '';
             this.appForm.hubs = [];
             this.hub = [];
+            this.appForm._id = '';
           }
 
           this.getJR(this.appForm.refCompany);
