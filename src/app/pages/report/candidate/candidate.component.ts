@@ -322,13 +322,14 @@ export class CandidateComponent implements OnInit {
   clearFilter() {
     if (this.filter.selected.jobPosition.length || this.filter.selected.jobStatus.length
       || this.filter.selected.subStage.length || this.filter.selected.stage.length ||
-      this.filter.selected.department.length
+      this.filter.selected.department.length || this.startTime
     ) {
       this.filter.selected.jobPosition = [];
       this.filter.selected.stage = [];
       this.filter.selected.subStage = [];
       this.filter.selected.jobStatus = [];
       this.filter.selected.department = [];
+      this.startTime = {};
       this.search();
     }
   }

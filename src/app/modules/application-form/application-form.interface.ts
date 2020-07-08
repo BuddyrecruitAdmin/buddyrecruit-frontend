@@ -16,6 +16,7 @@ export interface IApplicationForm {
   birth: Date;
   age: number;
   phone: string;
+  reservePhone: string;
   email: string;
   address: string;
   addressNo: string;

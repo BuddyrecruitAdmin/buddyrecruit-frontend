@@ -110,6 +110,7 @@ export class AppFormDetailComponent implements OnInit {
         birth: this.initialAction(),
         age: this.initialAction(),
         phone: this.initialAction(),
+        reservePhone: this.initialAction(),
         email: this.initialAction(),
         address: this.initialAction(),
         addressNo: this.initialAction(),
@@ -160,6 +161,7 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.personalDetail.lastnameEN.required = true;
     this.appForm.personalDetail.birth.required = true;
     this.appForm.personalDetail.phone.required = true;
+    this.appForm.personalDetail.reservePhone.required = false;
 
     this.appForm.workExperience.position.required = true;
     this.appForm.workExperience.company.required = true;
@@ -718,6 +720,7 @@ export class AppFormDetailComponent implements OnInit {
           // this.appForm.personalDetail.firstnameEN.disabled = false;
           // this.appForm.personalDetail.lastnameEN.disabled = false;
           this.appForm.personalDetail.phone.disabled = false;
+          this.appForm.personalDetail.reservePhone.disabled = false;
           this.appForm.personalDetail.email.disabled = false;
           this.appForm.companyName = this.role.refCompany.name;
           this.calGrandScore();
@@ -755,6 +758,9 @@ export class AppFormDetailComponent implements OnInit {
     }
     if (!this.appForm.personalDetail.phone.visible) {
       this.appForm.personalDetail.phone.required = false;
+    }
+    if (!this.appForm.personalDetail.reservePhone.visible) {
+      this.appForm.personalDetail.reservePhone.required = false;
     }
     if (!this.appForm.personalDetail.email.visible) {
       this.appForm.personalDetail.email.required = false;

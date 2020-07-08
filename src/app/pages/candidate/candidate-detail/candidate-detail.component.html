@@ -80,6 +80,10 @@
             <label class="label">Phone</label>
             <span>{{ item.phone || '-' }}</span>
           </div>
+          <div *ngIf="isExpress" class="text-group">
+            <label class="label">Apply Date</label>
+            <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow.timestamp) || '-' }}</span>
+          </div>
           <div class="text-group">
             <label class="label">Email</label>
             <span>{{ item.email || '-' }}</span>

@@ -206,9 +206,13 @@
                   <div class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
                     <div class="m-l-15">
-                      <div class="text-group">
+                      <div class="text-group" *ngIf="!isExpress">
                         <label class="label">Sign Contract Date</label>
                         <span>{{ utilitiesService.convertDateTime(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+                      </div>
+                      <div class="text-group" *ngIf="isExpress">
+                        <label class="label">Sign Contract Date</label>
+                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.pendingSignContractInfo?.sign?.date) || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Email Sent Date</label>
