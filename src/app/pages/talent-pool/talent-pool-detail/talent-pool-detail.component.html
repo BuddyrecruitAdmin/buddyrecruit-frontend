@@ -396,6 +396,10 @@
                       <label class="label">Phone</label>
                       <span>{{ item.refCandidate?.phone || '-' }}</span>
                     </div>
+                    <div class="text-group">
+                      <label class="label">Reserve Phone</label>
+                      <span>{{ item.refCandidate?.reservePhone || '-' }}</span>
+                    </div>
                     <div *ngIf="isExpress" class="text-group">
                       <label class="label">Apply Date</label>
                       <span>{{ utilitiesService.convertDateTimeFromSystem(item.timestamp) || '-' }}</span>

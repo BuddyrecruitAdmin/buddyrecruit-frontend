@@ -423,6 +423,7 @@ export class CandidateComponent implements OnInit {
             "HUB": this.hubArea || '-',
             "HUB Code": this.hubCode || '-',
             "เบอร์โทร": item.refCandidate.phone || '-',
+            "เบอร์โทร(สำรอง)": item.refCandidate.reservePhone || '-',
             "ระดับการศึกษา": this.eduList || '-',
             "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
             "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
