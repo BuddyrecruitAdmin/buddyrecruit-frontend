@@ -279,13 +279,14 @@
               <th scope="col" style="width: 200px;">สถานะปัจจุบัน</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์สถานะ</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์-สาเหตุ</th>
-              <th scope="col" style="width: 200px;">แบล็คลิสต์-ชื่อ</th>
-              <th scope="col" style="width: 200px;">แบล็คลิสต์-นามสกุล</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-โดย</th>
+              <!-- <th scope="col" style="width: 200px;">แบล็คลิสต์-นามสกุล</th> -->
               <th scope="col" style="width: 200px;">แบล็คลิสต์-วันที่</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์-เวลา</th>
               <th scope="col" style="width: 200px;">สมัครรอบที่</th>
               <th scope="col" style="width: 200px;">ติดต่อโดย</th>
               <th scope="col" style="width: 200px;">วันที่ติดต่อ</th>
+              <th scope="col" style="width: 200px;">เวลาที่ติดต่อ</th>
             </tr>
           </thead>
           <tbody>
@@ -419,13 +420,7 @@
               <td>
                 <!-- Blacklist by-->
                 <span>
-                  {{ item.blacklist.blockBy?.refUser?.firstname || '-' }}
-                </span>
-              </td>
-              <td>
-                <!-- Blacklist by-->
-                <span>
-                  {{ item.blacklist.blockBy?.refUser?.lastname || '-' }}
+                  {{ utilitiesService.setFullname(item.blacklist.blockBy?.refUser) || '-' }}
                 </span>
               </td>
               <td>
@@ -443,19 +438,25 @@
               <td>
                 <!-- สมัครรอบที่ -->
                 <span>
-                  {{ item.refSubStage.text || '-' }}
+                  {{ item.order || '1' }}
                 </span>
               </td>
               <td>
                 <!-- ติดต่อโดย -->
                 <span>
-                  {{ item.refSubStage.text || '-' }}
+                  {{ utilitiesService.setFullname(item.called.createdInfo.refUser) || '-' }}
                 </span>
               </td>
               <td>
                 <!-- วันที่ติดต่อ -->
                 <span>
-                  {{ item.refSubStage.text || '-' }}
+                  {{ utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-' }}
+                </span>
+              </td>
+              <td>
+                <!-- วันที่ติดต่อ -->
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-' }}
                 </span>
               </td>
             </tr>

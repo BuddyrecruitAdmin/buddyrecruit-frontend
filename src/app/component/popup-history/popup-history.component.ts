@@ -21,7 +21,6 @@ export class PopupHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.item)
   }
 
 }

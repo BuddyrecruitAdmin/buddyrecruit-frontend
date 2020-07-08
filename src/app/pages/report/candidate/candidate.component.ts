@@ -434,8 +434,8 @@ export class CandidateComponent implements OnInit {
             "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
             "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
             "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
-            // "แก้ไขล่าสุด-ชื่อ": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.refUser.firstname) || '-',
-            // "แก้ไขล่าสุด-นามสกุล": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.refUser.lastname) || '-',
+            "แก้ไขล่าสุด-ชื่อ": item.lastChangedInfo.refUser.firstname || '-',
+            "แก้ไขล่าสุด-นามสกุล": item.lastChangedInfo.refUser.lastname || '-',
             "สถานะปัจจุบัน": item.refSubStage.text || '-',
             "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
             "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
@@ -443,9 +443,11 @@ export class CandidateComponent implements OnInit {
             "แบล็คลิสต์โดย-นามสกุล": item.blacklist.blockBy.refUser.lastname || '-',
             "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
             "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
-            // "สมัครรอบที่": item. || '-',
-            // "ติดต่อโดย": item. || '-',
-            // "วันที่ติดต่อ": item. || '-',
+            "สมัครรอบที่": item.order || '-',
+            "ติดต่อโดย-ชื่อ": item.called.createdInfo.refUser.firstname || '-',
+            "ติดต่อโดย-นามสกุล": item.called.createdInfo.refUser.lastname || '-',
+            "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-',
+            "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-',
           })
           this.uploadList.forEach(element => {
             this.dataExcel[index] = { ...this.dataExcel[index], ...element };
