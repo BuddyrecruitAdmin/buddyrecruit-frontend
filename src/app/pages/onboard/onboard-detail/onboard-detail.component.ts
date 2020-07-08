@@ -442,10 +442,10 @@ export class OnboardDetailComponent implements OnInit {
           condition.button.revoke = true;
           // condition.button.send = true
         }
-        if(this.tabSelected === 'JOB STARTED'){
-          condition.button.reject = true;
-        }
       }
+    }
+    if(this.tabSelected === 'JOB STARTED'){
+      condition.button.reject = true;
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
       condition.isExpired = true;
