@@ -603,6 +603,8 @@ export class ApplicationFormComponent implements OnInit {
           if (this.dataStatus) {
             this.appForm.refJR = '';
             this.appForm.hubs = [];
+            // this.appForm.questions = [];
+            // this.appForm.refPosition = '';
             this.hub = [];
             this.appForm._id = null;
           }
