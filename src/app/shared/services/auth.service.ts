@@ -40,7 +40,8 @@ import {
   UserToken,
   UserSuccess,
   AppFormIStatus,
-  HistoryData
+  HistoryData,
+  FacebookId
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -426,4 +427,13 @@ export function setHistoryData(history: any = null) {
 export function getHistoryData() {
   const history = JSON.parse(localStorage.getItem(HistoryData));
   return (!history || history === null) ? undefined : history;
+}
+
+export function setFacebookId(fbId: any = null) {
+  localStorage.setItem(FacebookId, JSON.stringify(fbId));
+}
+
+export function getFacebookId() {
+  const fbId = JSON.parse(localStorage.getItem(FacebookId));
+  return (!fbId || fbId === null) ? undefined : fbId;
 }

@@ -10,7 +10,7 @@ import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angu
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole, setAppFormData } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole, setAppFormData, setFacebookId } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -59,6 +59,12 @@ export class ApplicationFormIndexComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(param => {
+      console.log(param.id);
+      if (param.id) {
+        setFacebookId(param.id);
+      }
+    })
     this.activatedRoute.params.subscribe(params => {
       this.companyId = params.id;
       this.service.getCompany(this.companyId).subscribe(response => {

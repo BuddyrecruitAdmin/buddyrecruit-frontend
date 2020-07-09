@@ -292,9 +292,9 @@
                 </div>
               </div>
 
-              <button *ngIf="isExpress && item.haveFbId" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                status="warning" (click)="openChatUser(item)">
-                <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
+              <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
+                <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
               </button>
               <!-- Mobile -->
               <button *ngIf="item.condition.button.comment && devices.isMobile" nbButton style="text-align: left;"

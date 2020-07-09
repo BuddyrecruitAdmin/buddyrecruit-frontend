@@ -38,7 +38,7 @@
           (click)="setLang('th')">ไทย</span>
       </div>
     </div>
-    <form class="container" (ngSubmit)="save()" style="padding-top: 2rem;">
+    <form id="headerForm" class="container" (ngSubmit)="save()" style="padding-top: 2rem;">
       <nb-stepper #stepper disableStepNavigation="true" [(selectedIndex)]="selectIndex">
 
         <!-- --------------------------------------------------------------- -->
@@ -80,7 +80,7 @@
                   <div *ngFor="let option of jrs">
                     <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
                       (checkedChange)="onSelectPosition($event, option)" status="primary"
-                      [disabled]="isDisabled || isDisableJob">
+                      [disabled]="(isDisabled || isDisableJob) && !editFlag">
                       {{ option.refJD.position }}
                     </nb-checkbox>
                   </div>

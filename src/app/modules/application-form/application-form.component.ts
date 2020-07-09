@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -125,6 +125,7 @@ export class ApplicationFormComponent implements OnInit {
   previewFlag: boolean = false;
   recruiterAll: boolean = false;
   canAll: any;
+  fbId: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -155,6 +156,7 @@ export class ApplicationFormComponent implements OnInit {
     this.successFlag = false;
     this.uploadOnly = false;
     this.selectIndex = 0;
+    this.fbId = getFacebookId();
     this.activatedRoute.params.subscribe(params => {
       const action = params.action;
       const refCompany = params.id;
@@ -445,6 +447,7 @@ export class ApplicationFormComponent implements OnInit {
       otherJob: '',
       idCard: '',
       title: '',
+      fbId: '',
       firstnameEN: '',
       lastnameEN: '',
       firstname: '',
@@ -518,13 +521,20 @@ export class ApplicationFormComponent implements OnInit {
     if (!this.isDisabled && !this.successFlag && refPosition !== this.appForm.refPosition) {
       this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
         if (response.code === ResponseCode.Success) {
+          if (this.submitFlag && this.appForm.refJR) {
+            const header = document.getElementById("headerForm");
+            header.scrollIntoView();
+          }
           if (response.data) {
+            if (this.fbId) {
+              this.appForm.fbId = this.fbId;
+            }
             this.template = response.data;
             this.appForm.refCompany = this.template.refCompany;
             this.appForm.refTemplate = this.template._id;
             this.appForm.refPosition = this.refPosition;
             this.refCompany = this.appForm.refCompany;
-            if(this.previewFlag){
+            if (this.previewFlag) {
               this.appForm.questions = this.template.questions
             }
             if (this.submitFlag) {
@@ -1154,7 +1164,10 @@ export class ApplicationFormComponent implements OnInit {
       isValid = false;
       this.noExpect(this.qExpectList);
     }
-
+    if (isValid) {
+      const header = document.getElementById("headerForm");
+      header.scrollIntoView();
+    }
     return isValid;
   }
 
