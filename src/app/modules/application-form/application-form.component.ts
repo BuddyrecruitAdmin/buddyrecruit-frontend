@@ -122,6 +122,7 @@ export class ApplicationFormComponent implements OnInit {
   dataStatus: any;
   selectIndex: any;
   isUser: boolean = false;
+  previewFlag: boolean = false;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -162,6 +163,7 @@ export class ApplicationFormComponent implements OnInit {
 
       if (action) {
         if (action === State.Preview) {
+          this.previewFlag = true;
           if (refTemplate) {
             this.getTemplate(undefined, refTemplate);
           } else {
@@ -509,6 +511,10 @@ export class ApplicationFormComponent implements OnInit {
             this.appForm.refCompany = this.template.refCompany;
             this.appForm.refTemplate = this.template._id;
             this.appForm.refPosition = this.refPosition;
+            this.refCompany = this.appForm.refCompany;
+            if(this.previewFlag){
+              this.appForm.questions = this.template.questions
+            }
             if (this.submitFlag) {
               this.appForm.questions = this.template.questions;
             }

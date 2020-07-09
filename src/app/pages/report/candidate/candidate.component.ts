@@ -56,6 +56,8 @@ export class CandidateComponent implements OnInit {
   isExpress = false;
   dialogRef: NbDialogRef<any>;
   dialogTime: any;
+  dialogTime1: Date;
+  dialogTime2: Date;
   noticeHeight: any;
   hubArea: any;
   hubCode: any;
@@ -334,7 +336,8 @@ export class CandidateComponent implements OnInit {
   }
 
   openDate(dialog: TemplateRef<any>) {
-    this.dialogTime = this.startTime;
+    this.dialogTime1 = this.startTime.start;
+    this.dialogTime2 = this.startTime.end;
     this.callDialog(dialog);
   }
 
@@ -345,7 +348,11 @@ export class CandidateComponent implements OnInit {
   exportAsXLSX(): void {
     this.dataExcel = [];
     let fileName = '';
-    fileName = this.utilitiesService.convertDateTime(this.dialogTime.start) + 'to' + this.utilitiesService.convertDateTime(this.dialogTime.end);
+    this.dialogTime = {
+      start: this.dialogTime1,
+      end: this.dialogTime2
+    }
+    fileName = this.utilitiesService.convertDate(this.dialogTime.start) + 'to' + this.utilitiesService.convertDate(this.dialogTime.end);
     this.criteria = {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),

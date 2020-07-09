@@ -477,12 +477,36 @@
         <div class="col-md-12">
           <div class="form-control-group">
             <label class="label">Period Date</label>
-            <nb-rangepicker #startDate></nb-rangepicker>
+            <!-- <nb-rangepicker #startDate></nb-rangepicker>
             <div class="input-group">
               <input [nbDatepicker]="startDate" [(ngModel)]="dialogTime" nbInput fullWidth style="cursor: pointer;">
               <div class="input-group-addon" style="pointer-events: none;">
                 <nb-icon icon="calendar-outline" class="text-green">
                 </nb-icon>
+              </div>
+            </div> -->
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <label class="label">Start Date</label>
+                <div class="input-group">
+                  <input [nbDatepicker]="datepicker" format="dd/MM/yyyy" [(ngModel)]="dialogTime1" nbInput fullWidth>
+                  <div class="input-group-addon" style="pointer-events: none;">
+                    <nb-icon icon="calendar-outline" class="text-green">
+                    </nb-icon>
+                  </div>
+                  <nb-datepicker #datepicker></nb-datepicker>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <label class="label">End Date</label>
+                <div class="input-group">
+                  <input [nbDatepicker]="formpicker" format="dd/MM/yyyy" [(ngModel)]="dialogTime2" nbInput fullWidth>
+                  <div class="input-group-addon" style="pointer-events: none;">
+                    <nb-icon icon="calendar-outline" class="text-green">
+                    </nb-icon>
+                  </div>
+                  <nb-datepicker #formpicker></nb-datepicker>
+                </div>
               </div>
             </div>
           </div>
@@ -491,8 +515,8 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" [disabled]="!dialogTime.start || !dialogTime.end"
-        (click)="exportAsXLSX()">Export</button>
+      <button nbButton status="success" (click)="exportAsXLSX()">Export</button>
+      <!-- [disabled]="!dialogTime.start || !dialogTime.end" -->
     </nb-card-footer>
   </nb-card>
 </ng-template>
