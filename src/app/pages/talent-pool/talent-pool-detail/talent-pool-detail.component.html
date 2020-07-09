@@ -321,10 +321,15 @@
               [ngClass]="{ 'bg-reserve': item.isReserve }">
               <nb-card-header>
                 <div class="title">
-                  <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
-                    (click)="openCandidateDetail(item)">
-                    {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
-                      (ตัวสำรอง)</span>&nbsp;
+                  <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'">
+                    <span class="link" (click)="openCandidateDetail(item)">
+                      {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
+                        (ตัวสำรอง)</span></span>&nbsp;
+                    <span *ngIf="isExpress && item.history.exist" class="fa fa-list-alt link"
+                      (click)="openHistory(item.history)">
+                      <!-- <nb-icon (click)="openHistory(item.history)" icon="close-circle-outline"
+                      style="margin-right: 0;color: blue;"></nb-icon> -->
+                    </span>&nbsp;
                     <span>
                       <nb-icon *ngIf="item.offer.flag && !item.offer.responsed" icon="checkmark-circle-2-outline"
                         style="margin-right: 0;color: var(--color-gray)">
@@ -335,10 +340,7 @@
                       <nb-icon *ngIf="item.offer.responsed && !item.offer.isOk" icon="close-circle-outline"
                         style="margin-right: 0;color: red;"></nb-icon>
                     </span>
-                  </label><span *ngIf="isExpress && item.history.exist">
-                    <nb-icon (click)="openHistory(item.history)" icon="close-circle-outline"
-                      style="margin-right: 0;color: blue;"></nb-icon>
-                  </span>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
+                  </label>&nbsp;<i *ngIf="item.refCandidate.blacklist"
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
                   <small class="status">
@@ -393,6 +395,10 @@
                     <div class="text-group">
                       <label class="label">Phone</label>
                       <span>{{ item.refCandidate?.phone || '-' }}</span>
+                    </div>
+                    <div class="text-group">
+                      <label class="label">Reserve Phone</label>
+                      <span>{{ item.refCandidate?.reservePhone || '-' }}</span>
                     </div>
                     <div *ngIf="isExpress" class="text-group">
                       <label class="label">Apply Date</label>
@@ -653,9 +659,9 @@
                   <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
                 </button>
 
-                <button *ngIf="isExpress && item.haveFbId" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                  status="warning" (click)="openChatUser(item)">
-                  <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
+                <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                  (click)="openChatUser(item)">
+                  <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
                 </button>
 
                 <button *ngIf="item.condition.button.comment && !devices.isMobile" nbButton

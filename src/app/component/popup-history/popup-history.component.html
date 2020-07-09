@@ -1,5 +1,5 @@
-<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
-    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+<nb-card [style.max-width.px]="innerWidth" [style.max-height.px]="innerHeight" [nbSpinner]="loading"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..." style="border-radius: 25px;">
     <nb-card-header>
         <div class="title">
         </div>
@@ -8,12 +8,15 @@
         </div>
     </nb-card-header>
     <nb-card-body class="dialog-body">
-        <label>History</label><br>
-        <label>Position: {{ item.latest.position || '-' }}</label><br>
-        <label>Hub: {{ item.latest.hub.province || '-' }} <span *ngIf="item.latest.hub.area"> -
-                {{ item.latest.hub.area || '-' }}</span>
-        </label><br>
-        <label>Stage: {{ item.latest.stage || '-' }}</label><br>
-        <label>Date: {{ utilitiesService.convertDateTimeFromSystem(item.latest.date) || '-' }}</label>
+        <label style="font-weight: bold;font-size: 1.25rem;">History</label><br>
+        <label class="label">Position: </label> <span> {{ item.latest.position || '-' }}</span><br>
+        <label class="label">Hub: </label> <span> {{ item.latest.hub.province || '-' }}</span> <span
+            *ngIf="item.latest.hub.area">
+            -
+            <span> {{ item.latest.hub.area || '-' }}</span></span>
+        <br>
+        <label class="label">Stage: </label> <span> {{ item.latest.stage || '-' }}</span><br>
+        <label class="label">Date: </label>
+        <span> {{ utilitiesService.convertDateTimeFromSystem(item.latest.date) || '-' }}</span>
     </nb-card-body>
 </nb-card>

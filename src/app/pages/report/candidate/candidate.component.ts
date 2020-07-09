@@ -324,13 +324,14 @@ export class CandidateComponent implements OnInit {
   clearFilter() {
     if (this.filter.selected.jobPosition.length || this.filter.selected.jobStatus.length
       || this.filter.selected.subStage.length || this.filter.selected.stage.length ||
-      this.filter.selected.department.length
+      this.filter.selected.department.length || this.startTime
     ) {
       this.filter.selected.jobPosition = [];
       this.filter.selected.stage = [];
       this.filter.selected.subStage = [];
       this.filter.selected.jobStatus = [];
       this.filter.selected.department = [];
+      this.startTime = {};
       this.search();
     }
   }
@@ -417,11 +418,11 @@ export class CandidateComponent implements OnInit {
               }
             });
           }
-          if (item.refCandidate.education.length > 0) {
-            item.refCandidate.education.forEach(edu => {
-              this.eduList = edu.refDegree.nameTH;
-            });
-          }
+          // if (item.refCandidate.education.length > 0) {
+          //   item.refCandidate.education.forEach(edu => {
+          //     this.eduList = edu.refDegree.nameTH;
+          //   });
+          // }
           this.dataExcel.push({
             "ชื่อ": item.refCandidate.firstname || '-',
             "นามสกุล": item.refCandidate.lastname || '-',
@@ -429,7 +430,8 @@ export class CandidateComponent implements OnInit {
             "HUB": this.hubArea || '-',
             "HUB Code": this.hubCode || '-',
             "เบอร์โทร": item.refCandidate.phone || '-',
-            "ระดับการศึกษา": this.eduList || '-',
+            "เบอร์โทร(สำรอง)": item.refCandidate.reservePhone || '-',
+            // "ระดับการศึกษา": this.eduList || '-',
             "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
             "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
             "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
@@ -441,8 +443,8 @@ export class CandidateComponent implements OnInit {
             "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
             "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
             "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
-            // "แก้ไขล่าสุด-ชื่อ": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.refUser.firstname) || '-',
-            // "แก้ไขล่าสุด-นามสกุล": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.refUser.lastname) || '-',
+            "แก้ไขล่าสุด-ชื่อ": item.lastChangedInfo.refUser.firstname || '-',
+            "แก้ไขล่าสุด-นามสกุล": item.lastChangedInfo.refUser.lastname || '-',
             "สถานะปัจจุบัน": item.refSubStage.text || '-',
             "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
             "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
@@ -450,9 +452,11 @@ export class CandidateComponent implements OnInit {
             "แบล็คลิสต์โดย-นามสกุล": item.blacklist.blockBy.refUser.lastname || '-',
             "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
             "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
-            // "สมัครรอบที่": item. || '-',
-            // "ติดต่อโดย": item. || '-',
-            // "วันที่ติดต่อ": item. || '-',
+            "สมัครรอบที่": item.order || '-',
+            "ติดต่อโดย-ชื่อ": item.called.createdInfo.refUser.firstname || '-',
+            "ติดต่อโดย-นามสกุล": item.called.createdInfo.refUser.lastname || '-',
+            "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-',
+            "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-',
           })
           this.uploadList.forEach(element => {
             this.dataExcel[index] = { ...this.dataExcel[index], ...element };

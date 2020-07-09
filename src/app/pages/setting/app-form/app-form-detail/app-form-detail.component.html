@@ -235,6 +235,20 @@
             </div>
           </div>
           <div class="table-control">
+            <div class="table-control-name">reservePhone</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.reservePhone.visible" (change)="changePersonalCheckbox()"
+                  [disabled]="appForm.personalDetail.reservePhone.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.reservePhone.required"
+                  [disabled]="!appForm.personalDetail.reservePhone.visible"></mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="table-control">
             <div class="table-control-name">Email</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">

@@ -50,7 +50,10 @@ export class JobPositionService extends NetworkService {
   }
 
   getProvince(refCompany:any = undefined): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.CONFIGURATION.PROVINCE, refCompany);
+    const body = {
+      refCompany : refCompany
+    }
+    return this.post(API_ENDPOINT.CONFIGURATION.PROVINCE, body);
   }
 
   getDistrict(provinceId: any): Observable<ApiResponse> {

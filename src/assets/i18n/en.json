@@ -114,6 +114,7 @@
     "BIRTHDAY": "Birthday",
     "AGE": "Age",
     "PHONE": "Phone",
+    "RESERVE_PHONE": "Phone(reserve)",
     "EMAIL": "Email",
     "ADDRESS": "Address",
     "ADDRESS_NO": "Address No.",

@@ -57,6 +57,7 @@ export class HubComponent implements OnInit {
   sError: string;
   touched: boolean;
   editFlag: boolean;
+  tempItem: any;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -81,6 +82,7 @@ export class HubComponent implements OnInit {
     this.loading = true;
     this.provinceListArr = [];
     this.filteredList = [];
+    this.tempItem = [];
     this.editFlag = false;
     this.refresh();
   }
@@ -134,7 +136,7 @@ export class HubComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
         this.paging.length = response.totalDataSize;
-
+        this.tempItem = response.data;
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
           this.search();
@@ -182,17 +184,23 @@ export class HubComponent implements OnInit {
       name: '',
       isFull: false,
       remark: '',
-      isDeleted: true
+      hubCode: ''
     })
   }
 
   edit(item: any, dialog: TemplateRef<any>) {
-    this.itemDialog = item;
+    this.tempItem.forEach(element => {
+      if (item._id === element._id) {
+        this.itemDialog = element
+      }
+    });
+    // this.itemDialog = item;
     this.loadingDialog = true;
     this.touched = false;
     this.sError = '';
     this._id = this.itemDialog._id;
     this.editFlag = true;
+    this.search()
     this.callDialog(dialog);
     this.getProvince().then((response) => {
       this.loadingDialog = false;
@@ -306,7 +314,7 @@ export class HubComponent implements OnInit {
               value: item._id
             });
           });
-          if(this.editFlag){
+          if (this.editFlag) {
             this.editFlag = false;
             this.provinceList.push({
               label: this.itemDialog.name.th,

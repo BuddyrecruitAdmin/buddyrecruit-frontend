@@ -60,10 +60,8 @@
         </div>
     </nb-card-body>
     <nb-card-footer>
-        <div class="footer-collapse">
-            <button nbButton shape="semi-round" status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                (click)="ref.close(result)">CANCEL</button>
-        </div>
+        <button nbButton shape="semi-round" status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+            (click)="ref.close(result)">CANCEL</button>
         <button nbButton shape="semi-round" status="primary" [size]="(devices.isMobile)? 'tiny' : 'medium'"
             (click)="save()">SAVE</button>
     </nb-card-footer>

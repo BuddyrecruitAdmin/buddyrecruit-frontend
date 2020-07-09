@@ -261,31 +261,33 @@
               <th scope="col" style="width: 240px">ชื่อ-นามสกุล</th>
               <th scope="col" style="width: 230px;">ตำแหน่ง</th>
               <th scope="col" style="width: 300px;">HUB</th>
-              <th scope="col" style="width: 300px;">HUB Code</th>
+              <!-- <th scope="col" style="width: 300px;">HUB Code</th> -->
               <th scope="col" style="width: 120px;">เบอร์โทร</th>
-              <th scope="col" style="width: 250px;">ระดับการศึกษา</th>
+              <th scope="col" style="width: 120px;">เบอร์โทร(สำรอง)</th>
+              <!-- <th scope="col" style="width: 250px;">ระดับการศึกษา</th> -->
               <th scope="col" style="width: 120px;">วันที่สมัคร</th>
-              <th scope="col" style="width: 250px;">เวลาที่สมัคร</th>
-              <th scope="col" style="width: 250px;">วันที่เซ็นสัญญา</th>
+              <!-- <th scope="col" style="width: 250px;">เวลาที่สมัคร</th> -->
+              <!-- <th scope="col" style="width: 250px;">วันที่เซ็นสัญญา</th>
               <th scope="col" style="width: 200px;">เวลาเซ็นสัญญา</th>
               <th scope="col" style="width: 200px;">วันที่เริ่มงาน</th>
               <th scope="col" style="width: 200px;">เวลาเริ่มงาน</th>
               <th scope="col" style="width: 200px;">วันที่ถูกปฏิเสธ</th>
               <th scope="col" style="width: 200px;">เวลาที่ถูกปฏิเสธ</th>
-              <th scope="col" style="width: 200px;">เหตุผลที่ถูกปฏิเสธ</th>
-              <th scope="col" style="width: 200px;">วันที่เเก้ไขล่าสุด</th>
-              <th scope="col" style="width: 200px;">เวลาที่เเก้ไขล่าสุด</th>
-              <th scope="col" style="width: 200px;">แก้ไขล่าสุดโดย</th>
+              <th scope="col" style="width: 200px;">เหตุผลที่ถูกปฏิเสธ</th> -->
               <th scope="col" style="width: 200px;">สถานะปัจจุบัน</th>
-              <th scope="col" style="width: 200px;">แบล็คลิสต์สถานะ</th>
+              <th scope="col" style="width: 200px;">วันที่เเก้ไขล่าสุด</th>
+              <!-- <th scope="col" style="width: 200px;">เวลาที่เเก้ไขล่าสุด</th> -->
+              <th scope="col" style="width: 200px;">แก้ไขล่าสุดโดย</th>
+              <!-- <th scope="col" style="width: 200px;">แบล็คลิสต์สถานะ</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์-สาเหตุ</th>
-              <th scope="col" style="width: 200px;">แบล็คลิสต์-ชื่อ</th>
-              <th scope="col" style="width: 200px;">แบล็คลิสต์-นามสกุล</th>
-              <th scope="col" style="width: 200px;">แบล็คลิสต์-วันที่</th>
+              <th scope="col" style="width: 200px;">แบล็คลิสต์-โดย</th> -->
+              <!-- <th scope="col" style="width: 200px;">แบล็คลิสต์-นามสกุล</th> -->
+              <!-- <th scope="col" style="width: 200px;">แบล็คลิสต์-วันที่</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์-เวลา</th>
               <th scope="col" style="width: 200px;">สมัครรอบที่</th>
               <th scope="col" style="width: 200px;">ติดต่อโดย</th>
               <th scope="col" style="width: 200px;">วันที่ติดต่อ</th>
+              <th scope="col" style="width: 200px;">เวลาที่ติดต่อ</th> -->
             </tr>
           </thead>
           <tbody>
@@ -309,11 +311,11 @@
                   {{ hub.refProvince?.name.th || '-' }} <span *ngIf="hub.areaName"> - {{ hub.areaName  }}</span>
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span *ngFor="let hub of item.hubs;">
                   {{ hub.hubCode || '-' }}
                 </span>
-              </td>
+              </td> -->
               <td>
                 <!-- phone -->
                 <span>
@@ -321,143 +323,153 @@
                 </span>
               </td>
               <td>
-                <!-- degree -->
+                <!-- phone -->
+                <span>
+                  {{ item?.refCandidate?.reservePhone || '-' }}
+                </span>
+              </td>
+              <!-- <td>
+               
                 <span *ngFor="let edu of item.refCandidate.education;">
                   {{ edu.refDegree.nameTH || '-' }}
                 </span>
-              </td>
+              </td> -->
               <td>
                 <!-- apply date -->
                 <span>
-                  {{ utilitiesService.convertDateFromSystem(item?.timestamp) || '-' }}
+                  {{ utilitiesService.convertDateTimeFromSystem(item?.timestamp) || '-' }}
                 </span>
+                <!-- <span>
+                  {{ utilitiesService.convertDateFromSystem(item?.timestamp) || '-' }}
+                </span> -->
               </td>
-              <td>
-                <!-- apply time -->
+              <!-- apply time -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertTimeFromSystem(item?.timestamp) || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- sign date -->
+              </td> -->
+              <!-- sign date -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertDateFromSystem(item?.pendingSignContractInfo?.sign?.date) || '-'  }}
                 </span>
-              </td>
-              <td>
-                <!-- sign time -->
+              </td> -->
+              <!-- sign time -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertTimeFromSystem(item?.pendingSignContractInfo?.sign?.date) || '-'  }}
                 </span>
-              </td>
-              <td>
-                <!-- on date -->
+              </td> -->
+              <!-- on date -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertDateFromSystem(item?.pendingSignContractInfo?.agreeStartDate) || '-'  }}
                 </span>
-              </td>
-              <td>
-                <!-- on time -->
+              </td> -->
+              <!-- on time -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertTimeFromSystem(item?.pendingSignContractInfo?.agreeStartDate) || '-'  }}
                 </span>
-              </td>
-              <td>
-                <!-- reject Date -->
+              </td> -->
+              <!-- reject Date -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertDateFromSystem(item?.reject?.rejectBy?.date) || '-'  }}
                 </span>
-              </td>
-              <td>
-                <!-- reject Time -->
+              </td> -->
+              <!-- reject Time -->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertTimeFromSystem(item?.reject?.rejectBy?.date) || '-'  }}
                 </span>
-              </td>
-              <td>
-                <!-- Reject Reason -->
+              </td> -->
+              <!-- Reject Reason -->
+              <!-- <td>
                 <span>
                   {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- Lastchange Date -->
-                <span>
-                  {{ utilitiesService.convertDateFromSystem(item.lastChangedInfo?.date) || '-' }}
-                </span>
-              </td>
-              <td>
-                <!-- Lastchange Time -->
-                <span>
-                  {{ utilitiesService.convertTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
-                </span>
-              </td>
-              <td>
-                <!-- Lastchange By -->
-                <span>
-                  {{ utilitiesService.setFullname(item.lastChangedInfo?.refUser) || '-' }}
-                </span>
-              </td>
+              </td> -->
               <td>
                 <!-- Status -->
                 <span>
                   {{ item.refSubStage.text || '-' }}
                 </span>
               </td>
+              <!-- Lastchange Date -->
               <td>
-                <!-- Blacklist flag -->
+                <span>
+                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
+                </span>
+              </td>
+              <!-- Lastchange Time -->
+              <!-- <td>
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
+                </span>
+              </td> -->
+              <!-- Lastchange By -->
+              <td>
+                <span>
+                  {{ utilitiesService.setFullname(item.lastChangedInfo?.refUser) || '-' }}
+                </span>
+              </td>
+
+              <!-- Blacklist flag -->
+              <!-- <td>
                 <span>
                   {{ item.blacklist.flag.toString() || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- Blacklist remark -->
+              </td> -->
+              <!-- Blacklist remark -->
+              <!-- <td>
                 <span>
                   {{ item.blacklist.refReject || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- Blacklist by-->
+              </td> -->
+              <!-- Blacklist by-->
+              <!-- <td>
                 <span>
-                  {{ item.blacklist.blockBy?.refUser?.firstname || '-' }}
+                  {{ utilitiesService.setFullname(item.blacklist.blockBy?.refUser) || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- Blacklist by-->
-                <span>
-                  {{ item.blacklist.blockBy?.refUser?.lastname || '-' }}
-                </span>
-              </td>
-              <td>
-                <!-- Blacklist date-->
+              </td> -->
+              <!-- Blacklist date-->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertDateFromSystem(item.blacklist?.blockBy?.date) || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- Blacklist date-->
+              </td> -->
+              <!-- Blacklist date-->
+              <!-- <td>
                 <span>
                   {{ utilitiesService.convertTimeFromSystem(item.blacklist?.blockBy?.date) || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- สมัครรอบที่ -->
+              </td> -->
+              <!-- สมัครรอบที่ -->
+              <!-- <td>
                 <span>
-                  {{ item.refSubStage.text || '-' }}
+                  {{ item.order || '1' }}
                 </span>
-              </td>
-              <td>
-                <!-- ติดต่อโดย -->
+              </td> -->
+              <!-- ติดต่อโดย -->
+              <!-- <td>
                 <span>
-                  {{ item.refSubStage.text || '-' }}
+                  {{ utilitiesService.setFullname(item.called.createdInfo.refUser) || '-' }}
                 </span>
-              </td>
-              <td>
-                <!-- วันที่ติดต่อ -->
+              </td> -->
+              <!-- วันที่ติดต่อ -->
+              <!-- <td>
                 <span>
-                  {{ item.refSubStage.text || '-' }}
+                  {{ utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-' }}
                 </span>
-              </td>
+              </td> -->
+              <!-- วันที่ติดต่อ -->
+              <!-- <td>
+                <span>
+                  {{ utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-' }}
+                </span>
+              </td> -->
             </tr>
           </tbody>
         </table>

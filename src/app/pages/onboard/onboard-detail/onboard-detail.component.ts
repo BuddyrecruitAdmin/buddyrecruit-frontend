@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -429,7 +429,7 @@ export class OnboardDetailComponent implements OnInit {
       step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === item.refStage._id;
       });
-    }
+    }debugger
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -443,6 +443,9 @@ export class OnboardDetailComponent implements OnInit {
           // condition.button.send = true
         }
       }
+    }
+    if(this.tabSelected === 'JOB STARTED'){
+      condition.button.reject = true;
     }
     if (item.refJR.refStatus.status !== 'JRS002') {
       condition.isExpired = true;
@@ -663,6 +666,7 @@ export class OnboardDetailComponent implements OnInit {
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
+      setFlagExam('false');
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });

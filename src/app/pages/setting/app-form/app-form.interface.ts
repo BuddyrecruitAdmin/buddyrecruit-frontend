@@ -23,6 +23,7 @@ export interface IAppFormTemplate {
     birth: IAction;
     age: IAction;
     phone: IAction;
+    reservePhone: IAction;
     email: IAction;
     address: IAction;
     addressNo: IAction;

@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -123,6 +123,8 @@ export class ApplicationFormComponent implements OnInit {
   selectIndex: any;
   isUser: boolean = false;
   previewFlag: boolean = false;
+  recruiterAll: boolean = false;
+  canAll: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -197,6 +199,11 @@ export class ApplicationFormComponent implements OnInit {
           this.editFlag = false;
           this.userToken = getUserToken();
           const role = getRole()
+          this.canAll = getFlagExam();
+          console.log(this.canAll)
+          if (this.canAll === 'true') {
+            this.recruiterAll = true;
+          }
           if (role) {
             this.isUser = true;
           }
@@ -234,6 +241,7 @@ export class ApplicationFormComponent implements OnInit {
         email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
         // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
         phone: [{ value: this.appForm.phone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
+        reservePhone: [{ value: this.appForm.reservePhone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
         postcode: [{ value: this.appForm.postcode, disabled: true }, [Validators.pattern('^[0-9]{5}$')]],
       });
     } else {
@@ -243,6 +251,7 @@ export class ApplicationFormComponent implements OnInit {
         email: [{ value: this.appForm.email, disabled: false }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
         // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
         phone: [{ value: this.appForm.phone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
+        reservePhone: [{ value: this.appForm.reservePhone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
         postcode: [{ value: this.appForm.postcode, disabled: false }, [Validators.pattern('^[0-9]{5}$')]],
       });
     }
@@ -443,6 +452,7 @@ export class ApplicationFormComponent implements OnInit {
       birth: null,
       age: null,
       phone: '',
+      reservePhone: '',
       email: '',
       address: '',
       addressNo: '',
@@ -477,6 +487,7 @@ export class ApplicationFormComponent implements OnInit {
       email: [{ value: '', disabled: this.isDisabled }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
       // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
       phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{10}$')]],
+      reservePhone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{10}$')]],
       postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
       gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
     });
@@ -486,6 +497,7 @@ export class ApplicationFormComponent implements OnInit {
         email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
         // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
         phone: [{ value: this.appForm.phone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
+        reservePhone: [{ value: this.appForm.reservePhone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
         postcode: [{ value: this.appForm.postcode, disabled: true }, [Validators.pattern('^[0-9]{5}$')]],
       });
     }
@@ -522,6 +534,7 @@ export class ApplicationFormComponent implements OnInit {
           }
           if (this.dataIndex) {
             this.appForm.phone = this.dataIndex.phone || this.appForm.phone;
+            this.appForm.reservePhone = this.dataIndex.reservePhone || this.appForm.reservePhone;
             this.appForm.idCard = this.dataIndex.idCard || this.appForm.idCard;
           }
           if (!refPosition) {
@@ -596,7 +609,10 @@ export class ApplicationFormComponent implements OnInit {
           if (this.dataStatus) {
             this.appForm.refJR = '';
             this.appForm.hubs = [];
+            // this.appForm.questions = [];
+            // this.appForm.refPosition = '';
             this.hub = [];
+            this.appForm._id = null;
           }
 
           this.getJR(this.appForm.refCompany);
@@ -1134,7 +1150,7 @@ export class ApplicationFormComponent implements OnInit {
     if (isValid && qElement) {
       isValid = false;
       qElement.scrollIntoView();
-    } else if (this.qExpectList.length > 0) {
+    } else if (this.qExpectList.length > 0 && !this.detailFlag) {
       isValid = false;
       this.noExpect(this.qExpectList);
     }
