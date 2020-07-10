@@ -346,6 +346,16 @@ export class CandidateComponent implements OnInit {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
+  onEventStartEndRange(event) {
+    if (event.start && !event.end) {
+      this.startTime.start = event.start;
+      this.startTime.end = event.start;
+    } else {
+      this.startTime = event;
+    }
+    this.search();
+  }
+
   exportAsXLSX(): void {
     this.dataExcel = [];
     let fileName = '';

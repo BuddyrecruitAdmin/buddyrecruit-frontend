@@ -97,6 +97,34 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Training Date</label>
+            <nb-rangepicker (rangeChange)="onEventStartEndRange($event, 'train')" #trainDate></nb-rangepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="trainDate" [(ngModel)]="filterTrain" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Onboard Date</label>
+            <nb-rangepicker (rangeChange)="onEventStartEndRange($event, 'onboard')" #onDate></nb-rangepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="onDate" [(ngModel)]="filterOn" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div><br>
     <div *ngIf="filter.isFilter" class="row" style="text-align: center;">
       <div class="col-md-12">

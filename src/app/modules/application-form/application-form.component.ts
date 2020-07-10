@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId, getCompanyId } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -126,6 +126,7 @@ export class ApplicationFormComponent implements OnInit {
   recruiterAll: boolean = false;
   canAll: any;
   fbId: any;
+  companyId: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -204,6 +205,7 @@ export class ApplicationFormComponent implements OnInit {
           this.canAll = getFlagExam();
           console.log(this.canAll)
           if (this.canAll === 'true') {
+            this.companyId = getCompanyId();
             this.recruiterAll = true;
           }
           if (role) {
@@ -297,6 +299,9 @@ export class ApplicationFormComponent implements OnInit {
             this.jrs.forEach(element => {
               if (element._id === this.appForm.refJR) {
                 this.refPosition = element.refJD.refPosition;
+                if (this.recruiterAll) {
+                  this.appForm.refPosition = this.refPosition;
+                }
               }
             });
           }
@@ -518,7 +523,10 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   getTemplate(refCompany: string, refTemplate: string, refPosition = undefined) {
-    if (!this.isDisabled && !this.successFlag && refPosition !== this.appForm.refPosition) {
+    if ((!this.isDisabled && !this.successFlag && refPosition !== this.appForm.refPosition) || (this.recruiterAll && (refPosition !== this.appForm.refPosition))) {
+      if (this.recruiterAll) {
+        refCompany = this.companyId;
+      }
       this.service.getTemplate(refCompany, refTemplate, refPosition).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           if (this.submitFlag && this.appForm.refJR) {
@@ -538,6 +546,9 @@ export class ApplicationFormComponent implements OnInit {
               this.appForm.questions = this.template.questions
             }
             if (this.submitFlag) {
+              this.appForm.questions = this.template.questions;
+            }
+            if (this.recruiterAll) {
               this.appForm.questions = this.template.questions;
             }
             this.initialAnswer();

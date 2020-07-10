@@ -209,7 +209,7 @@ export class ApplicationFormStatusComponent implements OnInit {
       let message = 'You are already an employee in company.';
       let message2 = ['Do you want to register again?'];
       if (this.language === 'th') {
-        message = 'ท่านผ่านการพิจารณาเป็นพนังงานเรียบร้อยเเล้ว';
+        message = 'ท่านผ่านการพิจารณาเป็นพนักงานเรียบร้อยเเล้ว';
         message2 = ['ท่านต้องการที่จะสมัครงานใหม่หรือไม่']
       }
       const confirm = this.matDialog.open(PopupMessageComponent, {

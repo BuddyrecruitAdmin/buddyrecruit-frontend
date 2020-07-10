@@ -77,12 +77,22 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field> -->
-                  <div *ngFor="let option of jrs">
-                    <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
-                      (checkedChange)="onSelectPosition($event, option)" status="primary"
-                      [disabled]="(isDisabled || isDisableJob) && !editFlag">
-                      {{ option.refJD.position }}
-                    </nb-checkbox>
+                  <div *ngIf="!recruiterAll">
+                    <div *ngFor="let option of jrs">
+                      <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
+                        (checkedChange)="onSelectPosition($event, option)" status="primary"
+                        [disabled]="isDisabled || isDisableJob">
+                        {{ option.refJD.position }}
+                      </nb-checkbox>
+                    </div>
+                  </div>
+                  <div *ngIf="recruiterAll">
+                    <div *ngFor="let option of jrs">
+                      <nb-checkbox [(ngModel)]="option.checked" [ngModelOptions]="{standalone: true}"
+                        (checkedChange)="onSelectPosition($event, option)" status="primary" [disabled]="!editFlag">
+                        {{ option.refJD.position }}
+                      </nb-checkbox>
+                    </div>
                   </div>
                 </div>
               </div>

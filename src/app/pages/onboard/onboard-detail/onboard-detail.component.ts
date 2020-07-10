@@ -78,6 +78,8 @@ export class OnboardDetailComponent implements OnInit {
   filterBy: any;
   searchArea: any;
   filterSort: any;
+  filterTrain: any = {};
+  filterOn: any = {};
   constructor(
     private router: Router,
     private service: OnboardService,
@@ -175,6 +177,14 @@ export class OnboardDetailComponent implements OnInit {
         {
           name: 'area',
           value: this.searchArea
+        },
+        {
+          name: 'training',
+          value: this.filterTrain
+        },
+        {
+          name: 'onboard',
+          value: this.filterOn
         }
       ]
     };
@@ -396,6 +406,8 @@ export class OnboardDetailComponent implements OnInit {
   clearFilter() {
     this.filter.selected.provinces = [];
     this.filter.selected.areas = [];
+    this.filterOn = {};
+    this.filterTrain = {};
     this.filterBy = [
       {
         name: 'province',
@@ -404,10 +416,19 @@ export class OnboardDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
       }
     ]
     this.search();
   }
+
 
   filterSource(event, _id) {
     this.sourceBy = [];
@@ -449,7 +470,7 @@ export class OnboardDetailComponent implements OnInit {
       step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === item.refStage._id;
       });
-    } debugger
+    } 
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -691,6 +712,49 @@ export class OnboardDetailComponent implements OnInit {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
+  }
+
+  onEventStartEndRange(event, name) {
+    switch (name) {
+      case 'train':
+        if (event.start && !event.end) {
+          this.filterTrain.start = event.start;
+          this.filterTrain.end = event.start;
+        } else {
+          this.filterTrain = event;
+        }
+        break;
+      case 'onboard':
+        if (event.start && !event.end) {
+          this.filterOn.start = event.start;
+          this.filterOn.end = event.start;
+        } else {
+          this.filterOn = event;
+        }
+        break;
+
+      default:
+        break;
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
+    ]
+    this.search();
   }
 
   changeQuestionFilter(name, filter) {

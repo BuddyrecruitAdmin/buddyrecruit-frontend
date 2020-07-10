@@ -2,7 +2,7 @@
   <div *ngIf="!showStepper" class="breadcrumb">
     <h4>Onboard</h4>
   </div>
-  <nb-stepper *ngIf="showStepper" orientation="horizontal" disableStepNavigation selectedIndex="5">
+  <nb-stepper *ngIf="showStepper" orientation="horizontal" disableStepNavigation [selectedIndex]="selectedIndex">
     <nb-step label="Talent Pool"></nb-step>
     <nb-step *ngIf="!isExpress" label="Pending Exam"></nb-step>
     <nb-step *ngIf="!isExpress" label="Pending Appointment"></nb-step>

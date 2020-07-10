@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam, setCompanyId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -79,6 +79,8 @@ export class SignContractDetailComponent implements OnInit {
   filterBy: any;
   searchArea: any;
   filterSort: any;
+  filterTrain: any = {};
+  filterOn: any = {};
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -177,6 +179,14 @@ export class SignContractDetailComponent implements OnInit {
         {
           name: 'area',
           value: this.searchArea
+        },
+        {
+          name: 'training',
+          value: this.filterTrain
+        },
+        {
+          name: 'onboard',
+          value: this.filterOn
         }
       ]
     };
@@ -424,6 +434,8 @@ export class SignContractDetailComponent implements OnInit {
   clearFilter() {
     this.filter.selected.provinces = [];
     this.filter.selected.areas = [];
+    this.filterOn = {};
+    this.filterTrain = {};
     this.filterBy = [
       {
         name: 'province',
@@ -432,6 +444,14 @@ export class SignContractDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
       }
     ]
     this.search();
@@ -753,6 +773,49 @@ export class SignContractDetailComponent implements OnInit {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
+  }
+
+  onEventStartEndRange(event, name) {
+    switch (name) {
+      case 'train':
+        if (event.start && !event.end) {
+          this.filterTrain.start = event.start;
+          this.filterTrain.end = event.start;
+        } else {
+          this.filterTrain = event;
+        }
+        break;
+      case 'onboard':
+        if (event.start && !event.end) {
+          this.filterOn.start = event.start;
+          this.filterOn.end = event.start;
+        } else {
+          this.filterOn = event;
+        }
+        break;
+
+      default:
+        break;
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
+    ]
+    this.search();
   }
 
   changeQuestionFilter(name, filter) {

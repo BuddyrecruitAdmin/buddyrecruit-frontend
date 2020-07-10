@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -901,6 +901,7 @@ export class TalentPoolDetailComponent implements OnInit {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
       setFlagExam('true');
+      setCompanyId(this.role.refCompany._id)
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
