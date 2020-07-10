@@ -134,21 +134,21 @@
                     <div *ngIf="!recruiterAll">
                       <nb-checkbox [(ngModel)]="hub.checked" [ngModelOptions]="{standalone: true}"
                         (checkedChange)="onChangeHub($event, hub._id)" status="primary"
-                        [disabled]="isDisabled || successFlag">
+                        [disabled]="(isDisabled || successFlag) && !editFlag">
                         {{ language === 'en' ? hub.name.en :hub.name.th }}
                       </nb-checkbox>
                       <div *ngIf="hub.checked && hub.provinces.length > 0" style="margin-left: 1.5rem;">
                         <div *ngFor="let province of hub.provinces">
                           <nb-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                             (checkedChange)="onChangeProvince($event, province.refProvince)" status="primary"
-                            [disabled]="isDisabled || successFlag">
+                            [disabled]="(isDisabled || successFlag) && !editFlag">
                             {{ language === 'en' ? province.name.en :province.name.th }}
                           </nb-checkbox>
                           <div *ngIf="province.checked" style="margin-left: 1.75rem;">
                             <div *ngFor="let area of province.areas">
                               <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
                                 (checkedChange)="onChangeArea($event, area._id)" status="primary"
-                                [disabled]="isDisabled || successFlag">
+                                [disabled]="(isDisabled || successFlag) && !editFlag">
                                 {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
                                   {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
                                 <span class="text-red" *ngIf="!area.isFull && area.remark">
