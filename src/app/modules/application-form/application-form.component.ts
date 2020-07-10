@@ -453,6 +453,7 @@ export class ApplicationFormComponent implements OnInit {
       idCard: '',
       title: '',
       fbId: '',
+      channel: '',
       firstnameEN: '',
       lastnameEN: '',
       firstname: '',
@@ -535,7 +536,8 @@ export class ApplicationFormComponent implements OnInit {
           }
           if (response.data) {
             if (this.fbId) {
-              this.appForm.fbId = this.fbId;
+              this.appForm.fbId = this.fbId._id;
+              this.appForm.channel = this.fbId.channel;
             }
             this.template = response.data;
             this.appForm.refCompany = this.template.refCompany;
