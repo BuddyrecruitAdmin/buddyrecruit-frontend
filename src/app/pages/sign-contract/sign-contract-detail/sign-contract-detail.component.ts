@@ -375,7 +375,7 @@ export class SignContractDetailComponent implements OnInit {
       this.searchArea = [];
       this.filter.selected.areas = [];
       this.filter.data.areas = this.filter.temp.areas;
-      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
       this.filteredDistrict = this.filter.data.areas.slice();
     }
     if (calculate && this.filter.selected.provinces.length > 0) {
@@ -409,7 +409,7 @@ export class SignContractDetailComponent implements OnInit {
           }
         });
       }
-      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
       this.filteredDistrict = this.filter.data.areas.slice();
     }
     this.filterBy = [

@@ -393,7 +393,7 @@ export class TalentPoolDetailComponent implements OnInit {
             //     group: element.refDistrict
             //   })
             // });
-            this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+            // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
             this.filteredDistrict = this.filter.data.areas.slice();
             this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
             this.filteredProvince = this.filter.data.provinces.slice();
@@ -429,7 +429,7 @@ export class TalentPoolDetailComponent implements OnInit {
       this.searchArea = [];
       this.filter.selected.areas = [];
       this.filter.data.areas = this.filter.temp.areas;
-      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
       this.filteredDistrict = this.filter.data.areas.slice();
     }
     if (calculate && this.filter.selected.provinces.length > 0) {
@@ -465,7 +465,7 @@ export class TalentPoolDetailComponent implements OnInit {
           }
         });
       }
-      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
       this.filteredDistrict = this.filter.data.areas.slice();
       // subDistrict
       // this.filter.selected.districts.forEach(district => {
