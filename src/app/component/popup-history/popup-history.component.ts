@@ -8,14 +8,15 @@ import { NbDialogRef } from '@nebular/theme';
   styleUrls: ['./popup-history.component.scss']
 })
 export class PopupHistoryComponent implements OnInit {
-  item: any;
+  items: any;
   innerWidth: any;
   innerHeight: any;
   constructor(
     public ref: NbDialogRef<PopupHistoryComponent>,
     private utilitiesService: UtilitiesService,
   ) {
-    this.item = getHistoryData();
+    this.items = getHistoryData();
+    console.log(this.items)
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
     this.innerHeight = window.innerHeight * 0.8;
   }

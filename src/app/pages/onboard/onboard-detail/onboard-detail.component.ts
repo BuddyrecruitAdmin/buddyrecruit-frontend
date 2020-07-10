@@ -319,8 +319,28 @@ export class OnboardDetailComponent implements OnInit {
     });
   }
 
-  changeFilter(calculate: boolean = true) {
-    if (calculate) {
+  changeFilter(calculate: boolean = true, filterBy: any) {
+    if (this.filter.selected.areas.length > 0 && this.filter.selected.provinces.length === 0 && filterBy === 'area') {
+      this.searchArea = [];
+      this.filter.data.areas.forEach(area => {
+        this.filter.selected.areas.forEach(element => {
+          if (element === area.value) {
+            this.searchArea.push({
+              refProvince: area.group,
+              _id: area.value
+            })
+          }
+        });
+      })
+    }
+    if (this.filter.selected.provinces.length === 0 && filterBy === 'province') {
+      this.searchArea = [];
+      this.filter.selected.areas = [];
+      this.filter.data.areas = this.filter.temp.areas;
+      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    if (calculate && this.filter.selected.provinces.length > 0) {
       this.filter.data.areas = [];
       this.searchArea = [];
       this.filter.selected.provinces.forEach(province => {
@@ -362,7 +382,7 @@ export class OnboardDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
-      }
+      },
     ]
     this.search();
   }
@@ -429,7 +449,7 @@ export class OnboardDetailComponent implements OnInit {
       step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === item.refStage._id;
       });
-    }debugger
+    } debugger
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -444,7 +464,7 @@ export class OnboardDetailComponent implements OnInit {
         }
       }
     }
-    if(this.tabSelected === 'JOB STARTED'){
+    if (this.tabSelected === 'JOB STARTED') {
       condition.button.reject = true;
     }
     if (item.refJR.refStatus.status !== 'JRS002') {

@@ -2,13 +2,67 @@
     nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading..." style="border-radius: 25px;">
     <nb-card-header>
         <div class="title">
+            <label>ประวัติการสมัครงาน</label>
         </div>
         <div class="actions">
             <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
         </div>
     </nb-card-header>
     <nb-card-body class="dialog-body">
-        <label style="font-weight: bold;font-size: 1.25rem;">History</label><br>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr style="font-size: 14px;">
+                        <th scope="col">No.</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Hub</th>
+                        <th scope="col">Stage</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Last Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of items.latest;let i = index;" style="font-size: 14px;">
+                        <td>
+                            <span>
+                                {{ i + 1 }}.
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ item.position || '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span *ngIf="item.hub.province">
+                                {{ item.hub.province || '-' }}
+                            </span>
+                            <span *ngIf="item.hub.area">
+                                ({{ item.hub.area || '-' }})
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ item.stage || '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ item?.reason || '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ utilitiesService.convertDateTimeFromSystem(item?.date) || '-' }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- <label style="font-weight: bold;font-size: 1.25rem;">History</label><br>
         <label class="label">Position: </label> <span> {{ item.latest.position || '-' }}</span><br>
         <label class="label">Hub: </label> <span> {{ item.latest.hub.province || '-' }}</span> <span
             *ngIf="item.latest.hub.area">
@@ -17,6 +71,6 @@
         <br>
         <label class="label">Stage: </label> <span> {{ item.latest.stage || '-' }}</span><br>
         <label class="label">Date: </label>
-        <span> {{ utilitiesService.convertDateTimeFromSystem(item.latest.date) || '-' }}</span>
+        <span> {{ utilitiesService.convertDateTimeFromSystem(item.latest.date) || '-' }}</span> -->
     </nb-card-body>
 </nb-card>

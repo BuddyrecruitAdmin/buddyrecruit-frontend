@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
   innerHeight: any;
   previewPicture: boolean;
   imgHeight: number;
-
+  isExpress: boolean;
   constructor(
     private service: ProfileService,
     private formBuilder: FormBuilder,
@@ -61,6 +61,7 @@ export class ProfileComponent implements OnInit {
   ) {
     this.role = getRole();
     this.innerHeight = window.innerHeight;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

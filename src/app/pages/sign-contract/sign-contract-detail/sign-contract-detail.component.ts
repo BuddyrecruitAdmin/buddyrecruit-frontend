@@ -347,8 +347,28 @@ export class SignContractDetailComponent implements OnInit {
     });
   }
 
-  changeFilter(calculate: boolean = true) {
-    if (calculate) {
+  changeFilter(calculate: boolean = true, filterBy: any) {
+    if (this.filter.selected.areas.length > 0 && this.filter.selected.provinces.length === 0 && filterBy === 'area') {
+      this.searchArea = [];
+      this.filter.data.areas.forEach(area => {
+        this.filter.selected.areas.forEach(element => {
+          if (element === area.value) {
+            this.searchArea.push({
+              refProvince: area.group,
+              _id: area.value
+            })
+          }
+        });
+      })
+    }
+    if (this.filter.selected.provinces.length === 0 && filterBy === 'province') {
+      this.searchArea = [];
+      this.filter.selected.areas = [];
+      this.filter.data.areas = this.filter.temp.areas;
+      this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    if (calculate && this.filter.selected.provinces.length > 0) {
       this.filter.data.areas = [];
       this.searchArea = [];
       this.filter.selected.provinces.forEach(province => {
@@ -390,7 +410,7 @@ export class SignContractDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
-      }
+      },
     ]
     this.search();
   }

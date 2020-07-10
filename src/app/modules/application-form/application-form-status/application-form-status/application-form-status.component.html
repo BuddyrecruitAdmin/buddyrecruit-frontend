@@ -94,7 +94,7 @@
         </table>
       </div>
       <br><br>
-      <div *ngIf="canCreate" style="text-align:center">
+      <div *ngIf="actionUser.canCreate" style="text-align:center">
         <button nbButton status="success" nbTooltip="Create" (click)="createNew()">
           <nb-icon icon="plus-outline"></nb-icon>{{ 'CREATE' | translate }}
         </button>

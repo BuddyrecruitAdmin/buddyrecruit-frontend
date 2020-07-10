@@ -56,7 +56,7 @@ export class UtilitiesService {
     let isValid = false;
     if (date) {
       date = new Date(date);
-      if (date.getUTCFullYear() > 1970) {
+      if (date.getUTCFullYear() > 1930) {
         isValid = true;
       }
     }

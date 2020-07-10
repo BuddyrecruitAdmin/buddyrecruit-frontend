@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex, setAppformStatus } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex, setAppformStatus, setUserEmail } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -40,7 +40,7 @@ export class ApplicationFormStatusComponent implements OnInit {
   fullName: string;
   comName: string;
   hubName: string;
-  canCreate: boolean;
+  actionUser: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -72,7 +72,7 @@ export class ApplicationFormStatusComponent implements OnInit {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;
-          this.canCreate = response.data.action.canCreate;
+          this.actionUser = response.data.action;
           this.hubName = '-'
           this.comName = response.data.company.name || '';
           this.fullName = response.data ?
@@ -204,12 +204,37 @@ export class ApplicationFormStatusComponent implements OnInit {
   // element.appFormId
   // appformId
   createNew() {
-    const data = {
-      token: this.tokenId,
-      appformId: this.dataSource[this.dataSource.length - 1].appFormId
+    if (this.actionUser.canCreate && this.actionUser.reSign) {
+      setUserEmail('skipEmail')
+      let message = 'You are already an employee in company.';
+      let message2 = ['Do you want to register again?'];
+      if (this.language === 'th') {
+        message = 'ท่านผ่านการพิจารณาเป็นพนังงานเรียบร้อยเเล้ว';
+        message2 = ['ท่านต้องการที่จะสมัครงานใหม่หรือไม่']
+      }
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'W', content: message, contents: message2 }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          window.close();
+          const data = {
+            token: this.tokenId,
+            appformId: this.dataSource[this.dataSource.length - 1].appFormId
+          }
+          setAppformStatus(data);
+          this.router.navigate([`/application-form/submit/${this.dataSource[this.dataSource.length - 1].comId}`]);
+        }
+      });
+    } else {
+      const data = {
+        token: this.tokenId,
+        appformId: this.dataSource[this.dataSource.length - 1].appFormId
+      }
+      setAppformStatus(data);
+      this.router.navigate([`/application-form/submit/${this.dataSource[this.dataSource.length - 1].comId}`]);
     }
-    setAppformStatus(data);
-    this.router.navigate([`/application-form/submit/${this.dataSource[this.dataSource.length - 1].comId}`]);
   }
 
   reserveDate(dialog: TemplateRef<any>, flowId: string) {

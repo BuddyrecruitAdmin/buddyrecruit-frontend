@@ -1707,9 +1707,9 @@
       margin-bottom: 0;
     }
   }
-  .mat-select-panel {
+  ::ng-deep .mat-select-panel {
     padding: 8px 0;
-    max-height: 80vh;
+    max-height: 40vh;
   }
   .mat-divider {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
