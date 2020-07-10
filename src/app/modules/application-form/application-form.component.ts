@@ -536,7 +536,7 @@ export class ApplicationFormComponent implements OnInit {
           }
           if (response.data) {
             if (this.fbId) {
-              this.appForm.fbId = this.fbId._id;
+              this.appForm.fbId = this.fbId.id;
               this.appForm.channel = this.fbId.channel;
             }
             this.template = response.data;

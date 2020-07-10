@@ -434,39 +434,86 @@ export class CandidateComponent implements OnInit {
           //   });
           // }
           this.dataExcel.push({
-            "ชื่อ": item.refCandidate.firstname || '-',
-            "นามสกุล": item.refCandidate.lastname || '-',
-            "ตำแหน่ง": item.refJR.refJD.position || '-',
-            "HUB": this.hubArea || '-',
-            "HUB Code": this.hubCode || '-',
-            "เบอร์โทร": item.refCandidate.phone || '-',
-            "เบอร์โทร(สำรอง)": item.refCandidate.reservePhone || '-',
-            // "ระดับการศึกษา": this.eduList || '-',
+            "สมัครรอบที่": item.order || '-',
+            "Status": '',
+            "สถานะปัจจุบัน": item.refSubStage.text || '-',
             "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
             "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
-            "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-            "เวลาเซ็นสัญญา": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-            "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-            "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-            "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
-            "เวลาที่ถูกปฏิเสธ": this.utilitiesService.convertTimeFromSystem(item.reject.rejectBy.date) || '-',
-            "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
-            "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
-            "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
-            "แก้ไขล่าสุด-ชื่อ": item.lastChangedInfo.refUser.firstname || '-',
-            "แก้ไขล่าสุด-นามสกุล": item.lastChangedInfo.refUser.lastname || '-',
-            "สถานะปัจจุบัน": item.refSubStage.text || '-',
-            "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
-            "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
-            "แบล็คลิสต์โดย-ชื่อ": item.blacklist.blockBy.refUser.firstname || '-',
-            "แบล็คลิสต์โดย-นามสกุล": item.blacklist.blockBy.refUser.lastname || '-',
-            "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
-            "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
-            "สมัครรอบที่": item.order || '-',
             "ติดต่อโดย-ชื่อ": item.called.createdInfo.refUser.firstname || '-',
             "ติดต่อโดย-นามสกุล": item.called.createdInfo.refUser.lastname || '-',
             "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-',
             "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-',
+            "Type": '',
+            "ตำแหน่ง": item.refJR.refJD.position || '-',
+            "No": '',
+            "LMS Code": '',
+            "Code": '',
+            "Code Type": '',
+            "Source Type": '',
+            "Rate": '',
+            "HUB Code": this.hubCode || '-',
+            "Source": '',
+            "Area": '',
+            "CC Name": '',
+            "Cost Center": '',
+            // "Name": item.refCandidate.firstname.en || '-', ////////////////////////////////////////
+            // "Surname": item.refCandidate.lastname.en || '-', ////////////////////////////////////////
+            // "Title(Th)": item.refCandidate.title.th || '-' ////////////////////////////////////////
+            // "ชื่อ": item.refCandidate.firstname.th || '-', ////////////////////////////////////////
+            // "นามสกุล": item.refCandidate.lastname.th || '-', ////////////////////////////////////////
+            "New/Transfer": '',
+            "Contract Duration": '',
+            "Service Year": '',
+            "Original Start date": '',
+            "Start Date": '',
+            "Latest End": '',
+            "Resigned date": '',
+            "สาเหตุ": '',
+            "Single Number": '',
+            "Mobile No.": item.refCandidate.phone || '-',
+            "Mobile No. (2)": item.refCandidate.reservePhone || '-',
+            // "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
+            "ID No.": item.refCandidate.idCard || '-',
+            // "Address": item.refCandidate.address, ////////////////////////////////////////
+            // "ตำบล": '' ////////////////////////////////////////
+            // "อำเภอ": '' ////////////////////////////////////////
+            // "จังหวัด": '' ////////////////////////////////////////
+            // "ตำบล ENG": '' ////////////////////////////////////////
+            // "อำเภอ ENG": '' ////////////////////////////////////////
+            // "จังหวัด ENG": '' ////////////////////////////////////////
+            "License Expiry date": '',
+            "Brand (Type)": '',
+            "Model": '',
+            "Color": '',
+            "Sticker": '',
+            "Truck Code": '',
+            "Year": '',
+            "อายุรถ": '',
+            "Emergency  Contact Information": '',
+            "Bank": '',
+            "Account Name": '',
+            "Code2": '',
+            "Branch": '',
+            "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
+            "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
+            "แก้ไขล่าสุด (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.lastChangedInfo.refUser) || '-',
+            "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+            "เวลาเซ็นสัญญา": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+            "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
+            "เวลาที่ถูกปฏิเสธ": this.utilitiesService.convertTimeFromSystem(item.reject.rejectBy.date) || '-',
+            "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
+            "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
+            "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
+            "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
+            "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
+            "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
+            // "HUB": this.hubArea || '-',
+            // "ระดับการศึกษา": this.eduList || '-',
+            "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+            "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+            // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
+
+
           })
           this.uploadList.forEach(element => {
             this.dataExcel[index] = { ...this.dataExcel[index], ...element };
