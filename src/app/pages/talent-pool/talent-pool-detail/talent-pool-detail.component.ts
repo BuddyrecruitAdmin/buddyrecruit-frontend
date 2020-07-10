@@ -96,6 +96,10 @@ export class TalentPoolDetailComponent implements OnInit {
   filterBy: any;
   searchArea: any;
   filterSort: any;
+  checkPending: boolean;
+  checkCalled: boolean;
+  checkPendingSend: boolean;
+  checkCalledSend: boolean;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -166,6 +170,10 @@ export class TalentPoolDetailComponent implements OnInit {
     this.keyword = '';
     this.showTips = false;
     this.showCondition = true;
+    this.checkCalled = true;
+    this.checkPending = true;
+    this.checkCalledSend = true;
+    this.checkPendingSend = true;
     this.filterSort = 'apply';
     this.paging = {
       length: 0,
@@ -205,6 +213,14 @@ export class TalentPoolDetailComponent implements OnInit {
         {
           name: 'area',
           value: this.searchArea
+        },
+        {
+          name: 'pendingCall',
+          value: this.checkPending
+        },
+        {
+          name: 'called',
+          value: this.checkCalled
         },
         // {
         //   name: 'subDistrict',
@@ -337,13 +353,18 @@ export class TalentPoolDetailComponent implements OnInit {
               })
             });
             response.filter.areas.forEach(element => {
+              let hubName = '';
+              hubName = element.name;
+              if (element.hubCode) {
+                hubName = element.name + '(' + element.hubCode + ')';
+              }
               this.filter.data.areas.push({
-                label: element.name,
+                label: hubName,
                 value: element._id,
                 group: element.refProvince
               })
               this.filter.temp.areas.push({
-                label: element.name,
+                label: hubName,
                 value: element._id,
                 group: element.refProvince
               })
@@ -483,6 +504,14 @@ export class TalentPoolDetailComponent implements OnInit {
         name: 'area',
         value: this.searchArea
       },
+      {
+        name: 'pendingCall',
+        value: this.checkPending
+      },
+      {
+        name: 'called',
+        value: this.checkCalled
+      },
       // {
       //   name: 'subDistrict',
       //   value: this.filter.selected.subDistricts
@@ -500,6 +529,10 @@ export class TalentPoolDetailComponent implements OnInit {
   clearFilter() {
     this.filter.selected.provinces = [];
     this.filter.selected.areas = [];
+    this.checkCalled = true;
+    this.checkPending = true;
+    this.checkCalledSend = true;
+    this.checkPendingSend = true;
     // this.filter.selected.districts = [];
     // this.filter.selected.subDistricts = [];
     this.filterBy = [
@@ -511,6 +544,14 @@ export class TalentPoolDetailComponent implements OnInit {
         name: 'area',
         value: this.searchArea
       },
+      {
+        name: 'pendingCall',
+        value: this.checkPending
+      },
+      {
+        name: 'called',
+        value: this.checkCalled
+      }
       // {
       //   name: 'subDistrict',
       //   value: this.filter.selected.subDistricts
@@ -957,8 +998,35 @@ export class TalentPoolDetailComponent implements OnInit {
     }
   }
 
+  checkSort(event, name) {
+    if (name === 'pend') {
+      this.checkPendingSend = event;
+    } else {
+      this.checkCalledSend = event;
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'pendingCall',
+        value: this.checkPendingSend
+      },
+      {
+        name: 'called',
+        value: this.checkCalledSend
+      },
+    ]
+    this.search();
+  }
+
   changeCall(item) {
-    item.called.flag = true;
+    item.called.flag = !item.called.flag;
     let data;
     data = {
       called: item.called
@@ -966,9 +1034,9 @@ export class TalentPoolDetailComponent implements OnInit {
     this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
+        this.search();
       } else {
         this.showToast('danger', 'Error Message', response.message);
-        this.search()
       }
     })
   }

@@ -75,6 +75,16 @@
             </nb-radio>
           </nb-radio-group>
         </div>
+        <div class="col-md-12">
+          <nb-checkbox (checkedChange)="checkSort($event,'pend')" [(ngModel)]="checkPending"
+            [ngModelOptions]="{standalone: true}">
+            <span>Pending Call</span>
+          </nb-checkbox>
+          <nb-checkbox (checkedChange)="checkSort($event,'call')" [(ngModel)]="checkCalled"
+            [ngModelOptions]="{standalone: true}">
+            <span>Called</span>
+          </nb-checkbox>
+        </div>
       </div>
       <label class="label">Filters:</label>
       <div class="row">
@@ -463,7 +473,8 @@
                     </div>
                     <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
                       <span *ngIf="item.called.flag" class="text-icon-center">
-                        <nb-icon style="width: 30px;height: 30px;" icon="phone-call-outline" class="font-inherit link">
+                        <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-call-outline"
+                          class="font-inherit link">
                         </nb-icon><span>Called</span>
                       </span>
                     </div>

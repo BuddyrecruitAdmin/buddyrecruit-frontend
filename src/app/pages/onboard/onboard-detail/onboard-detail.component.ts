@@ -470,7 +470,7 @@ export class OnboardDetailComponent implements OnInit {
       step = this.role.refAuthorize.processFlow.noExam.steps.find(step => {
         return step.refStage._id === item.refStage._id;
       });
-    } 
+    }
     if (step) {
       condition.button.step = step;
       condition.button.comment = true;
@@ -804,6 +804,22 @@ export class OnboardDetailComponent implements OnInit {
       // console.log(this.items)
     }
     this.search();
+  }
+
+  changeTraining(item) {
+    item.training.finished = !item.training.finished;
+    let data;
+    data = {
+      training: item.training
+    }
+    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.search();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
   }
 
   openPopupTrainingDate(item: any) {

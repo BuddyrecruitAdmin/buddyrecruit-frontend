@@ -182,9 +182,20 @@
             nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
           </nb-icon>
           <div class="m-l-15">
-            <div class="text-group">
+            <div class="text-group text-icon-center">
+              <!-- <nb-checkbox *ngIf="condition.button.nextStep && isExpress"
+                (checkedChange)="changeTraining(item.candidateFlow)" [(ngModel)]="item.candidateFlow.training.finished"
+                [ngModelOptions]="{standalone: true}">
+                <label class="label">Training Date</label>
+                <span>{{  utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.training?.date) || '-' }}</span>
+              </nb-checkbox> -->
+              <nb-icon *ngIf="condition.button.nextStep && isExpress"
+                [ngClass]="{ 'text-green': item.candidateFlow.training.finished, 'text-light-gray': !item.candidateFlow.training.finished }"
+                style="width: 20px;height: 20px;" (click)="changeTraining(item.candidateFlow)" icon="checkmark-outline"
+                class="font-inherit link"></nb-icon>
               <label class="label">Training Date</label>
-              <span>{{  utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.training?.date) || '-' }}</span>
+              <span
+                *ngIf="!condition.button.nextStep && isExpress">{{  utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.training?.date) || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Onboarding Date</label>
@@ -420,9 +431,9 @@
       </button>
     </div>
 
-    <button *ngIf="isExpress && item.haveFbId" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning"
-      (click)="openChatUser(item)">
-      <nb-icon icon="email-outline" style="margin-right: 0;"></nb-icon>
+    <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
+      [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning" (click)="openChatUser(item)">
+      <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
     </button>
 
     <button *ngIf="condition.button.trans && !isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"

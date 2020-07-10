@@ -958,6 +958,22 @@ export class CandidateDetailComponent implements OnInit {
     });
   }
 
+  changeTraining(item) {
+    item.training.finished = !item.training.finished;
+    let data;
+    data = {
+      training: item.training
+    }
+    this.service.candidateFlowEdit(item._id, data).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.getDetail();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
+  }
+
   getProgressBarColor(index: number): string {
     const colors = ['primary', 'info', 'success', 'warning', 'danger'];
     let color = colors[0];
