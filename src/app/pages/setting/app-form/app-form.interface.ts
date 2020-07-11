@@ -15,11 +15,15 @@ export interface IAppFormTemplate {
   questions: IQuestion[];
   personalDetail: {
     active: boolean;
+    idCard: IAction;
+    firstnameEN: IAction; 
+    lastnameEN: IAction;
     firstname: IAction;
     lastname: IAction;
     birth: IAction;
     age: IAction;
     phone: IAction;
+    reservePhone: IAction;
     email: IAction;
     address: IAction;
     addressNo: IAction;
@@ -29,6 +33,7 @@ export interface IAppFormTemplate {
     postcode: IAction;
     gender: IAction;
     expectedSalary: IAction;
+    // facebook: IAction;
   };
   workExperience: {
     active: boolean;
@@ -58,7 +63,7 @@ export interface IAppFormTemplate {
   uploadCV: {
     active: boolean;
   };
-  jobPositions: ITreeNode[];
+  refPositions: string[];
 }
 
 export interface IQuestion {
@@ -85,6 +90,7 @@ export interface IQuestion {
   multiChilds: any;
   isFilter: boolean;
   score: IScore;
+  isLoading: boolean;
 }
 
 export interface IAnswer {
@@ -92,6 +98,7 @@ export interface IAnswer {
   textArea: string;
   options: IOption[];
   selected: number;
+  expected: number;
   hasOther: boolean;
   otherLabel: string;
   otherChecked: boolean;
@@ -162,6 +169,7 @@ export interface ITime {
 }
 
 export interface IScore {
+  isAnswer: boolean;
   isScore: boolean;
   maxScore: number;
   keywords: string[];

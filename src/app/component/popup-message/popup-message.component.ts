@@ -11,6 +11,7 @@ import { UtilitiesService } from '../../shared/services/utilities.service';
 export class PopupMessageComponent implements OnInit {
   userEmail: any;
   devices: Devices;
+  innerHeight: any;
   constructor(
     public dialogRef: MatDialogRef<PopupMessageComponent>,
     private utilitiesService: UtilitiesService,
@@ -19,12 +20,14 @@ export class PopupMessageComponent implements OnInit {
       title: string,
       content: string,
       contents: string[],
-      btnText: string
+      btnText: string,
+      btnText2: string
     }
   ) {
     this.userEmail = getUserEmail();
     setUserEmail();
     this.devices = this.utilitiesService.getDevice();
+    this.innerHeight = window.innerHeight * 0.7;
   }
 
   ngOnInit() {
@@ -39,6 +42,15 @@ export class PopupMessageComponent implements OnInit {
       case "I": { // Information
         this.data.title = this.data.title || "Information";
         this.data.btnText = this.data.btnText || "OK";
+        break;
+      }
+      case "E": { // Expect
+        this.data.title = this.data.title || "Information";
+        this.data.btnText = this.data.btnText || "EDIT";
+        this.data.btnText2 = this.data.btnText2 || "OK";
+        if (this.data.contents) {
+          this.data.contents = this.data.contents;
+        }
         break;
       }
       case "W": { // Warning

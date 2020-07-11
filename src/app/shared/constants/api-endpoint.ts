@@ -70,6 +70,8 @@ export const API_ENDPOINT = {
   PENDING_APPOINTMENT: {
     LIST: "pendingAppointment/list",
     DETAIL: "pendingAppointment/detail",
+    DATE_CREATE: "appointmentDate/create",
+    DATE_LIST: "appontmentDate/list"
   },
   PENDING_INTERVIEW: {
     LIST: "pendingInterview/list",
@@ -111,6 +113,7 @@ export const API_ENDPOINT = {
     BLOCK: "candidate/block",
     UNBLOCK: "candidate/unblock",
     BLACKLIST: "candidate/blacklist",
+    MESSAGE: "facebook/inbox"
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",
@@ -142,6 +145,8 @@ export const API_ENDPOINT = {
     SUB_DISTRICT: "subDistrict/list",
     HUB_DETAIL: "hub/detail",
     HUB_EDIT: "hub/edit",
+    HUB_LIST: "hub/list",
+    HUB_DELETE: "hub/delete",
 
     LOCATION_LIST: "location/list",
     LOCATION_EDIT: "location/edit",
@@ -240,7 +245,8 @@ export const API_ENDPOINT = {
       EDIT: "appFormTemplate/edit",
       DELETE: "appFormTemplate/delete",
       TOGGLE_ACTIVE: "appFormTemplate/toggleActive",
-      GET_ACTIVE: "appFormTemplate/getActive"
+      GET_ACTIVE: "appFormTemplate/getActive",
+      JOBPOSITION: "appFormTemplate/getPosition",
     },
 
     CONSENT_DETAIL: "userConsentText/detail",
@@ -280,7 +286,8 @@ export const API_ENDPOINT = {
     EDIT: "feedbackReport/edit",
     DEPARTMENT: "dropdown/department",
     ListCandidate: "candidateReport/list",
-    STAGING: "stagingEmail/list"
+    STAGING: "stagingEmail/list",
+    EXCEL: "report/export"
   },
   HERO: {
     LIST: "hero/list"
@@ -339,7 +346,11 @@ export const API_ENDPOINT = {
     EDIT: "generalAppForm/edit",
     DELETE: "generalAppForm/delete",
     JR_LIST: "generalAppForm/jrs",
-    GET_TEMPLATE: "generalAppForm/getTemplate"
+    TITLE_LIST: "title/list",
+    HUB_LIST: "generalAppForm/getHubs",
+    GET_TEMPLATE: "generalAppForm/getTemplate",
+    GET_STATUS_LIST: "generalAppForm/getStatusList",
+    COMPANY: "generalAppForm/getComName"
   },
   BLOG: {
     CREATE: "blog/create",

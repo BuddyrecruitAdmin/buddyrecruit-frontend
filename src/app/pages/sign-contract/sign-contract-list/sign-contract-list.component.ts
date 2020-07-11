@@ -48,6 +48,8 @@ export class SignContractListComponent implements OnInit {
   showStepper: boolean;
   filteredList: any;
   filteredList2: any;
+  isExpress: boolean;
+  selectedIndex: any;
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -59,6 +61,12 @@ export class SignContractListComponent implements OnInit {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();
+    this.isExpress = this.role.refCompany.isExpress;
+    if (this.isExpress) {
+      this.selectedIndex = 1;
+    } else {
+      this.selectedIndex = 4
+    }
     if (this.devices.isMobile || this.devices.isTablet) {
       this.isGridLayout = this.isGridLayout ? this.isGridLayout : true;
       this.showStepper = false;

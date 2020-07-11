@@ -109,7 +109,7 @@
         <!-- Personal Details -->
         <div class="table-control table-control-header">
           <div class="table-control-name">
-            <mat-checkbox [(ngModel)]="appForm.personalDetail.active" disabled>
+            <mat-checkbox [(ngModel)]="appForm.personalDetail.active">
               <span class="text-gray">Personal Details</span>
             </mat-checkbox>
           </div>
@@ -119,8 +119,52 @@
           </div>
         </div>
         <div *ngIf="appForm.personalDetail.active">
+          <div *ngIf="appForm.personalDetail.idCard" class="table-control">
+            <div class="table-control-name">ID Card</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.idCard.visible" (change)="changePersonalCheckbox()"
+                  [disabled]="appForm.personalDetail.idCard.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.idCard.required"
+                  [disabled]="!appForm.personalDetail.idCard.visible">
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="appForm.personalDetail.firstname" class="table-control">
+            <div class="table-control-name">First name (Thai)</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.firstname.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.required"
+                  [disabled]="!appForm.personalDetail.firstname.visible">
+                </mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="appForm.personalDetail.lastname" class="table-control">
+            <div class="table-control-name">Last name (Thai)</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.lastname.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.required"
+                  [disabled]="!appForm.personalDetail.lastname.visible"></mat-checkbox>
+              </div>
+            </div>
+          </div>
           <div class="table-control">
-            <div class="table-control-name">Fisrt name</div>
+            <div class="table-control-name">First name (Eng)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
                 <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.visible" (change)="changePersonalCheckbox()"
@@ -135,7 +179,7 @@
             </div>
           </div>
           <div class="table-control">
-            <div class="table-control-name">Last name</div>
+            <div class="table-control-name">Last name (Eng)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
                 <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.visible" (change)="changePersonalCheckbox()"
@@ -191,6 +235,20 @@
             </div>
           </div>
           <div class="table-control">
+            <div class="table-control-name">reservePhone</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.reservePhone.visible" (change)="changePersonalCheckbox()"
+                  [disabled]="appForm.personalDetail.reservePhone.disabled">
+                </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.reservePhone.required"
+                  [disabled]="!appForm.personalDetail.reservePhone.visible"></mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="table-control">
             <div class="table-control-name">Email</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
@@ -204,6 +262,20 @@
               </div>
             </div>
           </div>
+          <!-- <div class="table-control">
+            <div class="table-control-name">Facebook</div>
+            <div class="table-control-actions">
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.facebook.visible" (change)="changePersonalCheckbox()"
+                [disabled]="appForm.personalDetail.facebook.disabled">
+              </mat-checkbox>
+              </div>
+              <div class="table-control-actions-item">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.facebook.required"
+                  [disabled]="!appForm.personalDetail.facebook.visible"></mat-checkbox>
+              </div>
+            </div>
+          </div> -->
           <div class="table-control">
             <div class="table-control-name">Address</div>
             <div class="table-control-actions">
@@ -431,69 +503,31 @@
   </nb-accordion>
 
   <!-- Job Position -->
-  <!-- <nb-accordion *ngIf="isExpress" [nbSpinner]="loadingJob" nbSpinnerStatus="success" nbSpinnerMessage="Loading...">
+  <nb-accordion id="jobPosition" *ngIf="isExpress" [nbSpinner]="loadingJob" nbSpinnerStatus="success"
+    nbSpinnerMessage="Loading...">
     <nb-accordion-item [expanded]="true">
       <nb-accordion-item-header>
-        Job Position<small class="text-gray m-l-5">(Source from job position master)</small>
+        <div>
+          Job Position
+          <span class="text-red">*</span>
+          <small class="text-gray m-l-5">(Job positions showing in Application form)</small>
+          <small class="text-red m-l-5">{{ jobPositionError }}</small>
+        </div>
       </nb-accordion-item-header>
       <nb-accordion-item-body style="font-size: 14px;">
-        <div *ngFor="let node of appForm.jobPositions; let iNode = index" style="margin-bottom: 1.5rem;">
-          <div class="radio-line">
-            <mat-icon>radio_button_unchecked</mat-icon>
-            <mat-form-field>
-              <input matInput type="text" id="node_{{iNode}}" [(ngModel)]="node.name" (click)="$event.target.select()"
-                required>
-            </mat-form-field>
-            <button *ngIf="node.children.length" mat-icon-button type="button" [matMenuTriggerFor]="menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item type="button" (click)="node.required = !node.required">
-                <mat-icon [ngClass]="{ 'text-green' : node.required }">
-                  {{ node.required ? 'check_box' : 'check_box_outline_blank' }}
-                </mat-icon>
-                <span>Item Required</span>
-              </button>
-              <button mat-menu-item type="button" (click)="node.isMultiAnswer = !node.isMultiAnswer">
-                <mat-icon [ngClass]="{ 'text-green' : node.isMultiAnswer }">
-                  {{ node.isMultiAnswer ? 'check_box' : 'check_box_outline_blank' }}
-                </mat-icon>
-                <span>Multiple Answer</span>
-              </button>
-            </mat-menu>
-            <button mat-icon-button type="button" (click)="deleteNode(iNode)">
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
-          <div style="padding-left: 2rem;">
-            <div *ngFor="let nodeItem of node.children; let iNodeItem = index" class="radio-line">
-              <mat-icon [ngClass]="{ 'text-red' : node.required }">
-                {{ node.isMultiAnswer ? 'check_box_outline_blank' : 'radio_button_unchecked' }}
-              </mat-icon>
-              <mat-form-field>
-                <input matInput type="text" id="nodeItem_{{iNode}}_{{iNodeItem}}" [(ngModel)]="nodeItem.name"
-                  (click)="$event.target.select()" required>
-              </mat-form-field>
-              <button mat-icon-button type="button" (click)="deleteNodeItem(iNode, iNodeItem)">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-            <div class="radio-line-add">
-              <mat-icon class="text-light-gray m-r-10">
-                {{ node.isMultiAnswer ? 'check_box_outline_blank' : 'radio_button_unchecked' }}
-              </mat-icon>
-              <span class="link" (click)="addNodeItem(iNode)">Add Child</span>
-            </div>
-          </div>
+        <div *ngFor="let jobPosition of jobPositions; let i = index;" style="margin-bottom: 0.5rem;">
+          <mat-checkbox [(ngModel)]="jobPosition.active">
+            {{ jobPosition.name }}
+          </mat-checkbox>
         </div>
-        <div class="text-center">
+        <!-- <div class="text-center">
           <button mat-flat-button type="button" color="primary" (click)="getJobPosition()" [disabled]="loadingJob">
             <mat-icon class="text-white">refresh</mat-icon> Update job position
           </button>
-        </div>
+        </div> -->
       </nb-accordion-item-body>
     </nb-accordion-item>
-  </nb-accordion> -->
+  </nb-accordion>
 
   <!-- Question -->
   <nb-card id="question" class="m-0">
@@ -891,7 +925,7 @@
               <div class="row w-100">
                 <div class="col-6">
                   <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isScore"
-                    (change)="toggleScoreCalculator(question)" class="toggle">
+                    (change)="toggleScoreCalculator(question,'score')" class="toggle">
                     Score calculator:
                   </mat-slide-toggle>
                 </div>
@@ -1129,6 +1163,52 @@
           </nb-accordion-item>
         </nb-accordion>
       </div>
+      <!-- Condition -->
+      <div *ngIf="isExpress">
+        <nb-accordion class="score" *ngIf="question.type === InputType.Radio">
+          <nb-accordion-item [expanded]="question.score?.isAnswer" [disabled]="!question.score?.isAnswer">
+            <nb-accordion-item-header style="background: #f9f9f9;">
+              <div class="row w-100">
+                <div class="col-6">
+                  <mat-slide-toggle labelPosition="before" [(ngModel)]="question.score.isAnswer"
+                    (change)="toggleScoreCalculator(question,'answer')" class="toggle">
+                    Expect Answer
+                  </mat-slide-toggle>
+                </div>
+              </div>
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>
+
+              <mat-radio-group [(ngModel)]="question.answer.expected" [required]="question.required"
+                [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+
+                <div *ngFor="let option of question.answer.options; let i = index" class="m-b-15"
+                  [ngClass]="{ 'col-md-6' : option.imgaeURL, 'col-md-12': !option.imgaeURL}">
+                  <div *ngIf="option.imgaeURL" class="answer-image"
+                    [ngClass]="{ 'active': question.answer.expected === i }" (click)="question.answer.expected = i">
+                    <img [src]="option.imgaeURL">
+                  </div>
+                  <mat-radio-button [value]="i">
+                    {{ option.label }}
+                  </mat-radio-button>
+                </div>
+                <div class="col-md-12">
+                  <mat-radio-button *ngIf="question.answer.hasOther" [value]="question.answer.options.length">
+                    {{ question.answer.otherLabel }}
+                  </mat-radio-button>
+                </div>
+
+              </mat-radio-group>
+              <mat-form-field appearance="outline" *ngIf="question.answer.selected === question.answer.options.length">
+                <mat-label>{{ question.answer.otherLabel }}</mat-label>
+                <input matInput type="text" [(ngModel)]="question.answer.otherInput" required
+                  [ngModelOptions]="{standalone: true}" [disabled]="isDisabled">
+              </mat-form-field>
+
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>
+      </div>
 
       <!-- <nb-card-footer>
         <div *ngIf="question.type !== InputType.Label">
@@ -1153,7 +1233,7 @@
     </div>
 
     <div class="text-right m-r-20">
-      <small class="text-red">{{ questionError }}</small>
+      <small class="text-red">{{ jobPositionError || questionError  }}</small>
     </div>
   </div>
 

@@ -109,6 +109,10 @@ import { PopupExamFormComponent } from './popup-exam-form/popup-exam-form.compon
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { PopupConsentComponent } from './popup-consent/popup-consent.component';
 import { PopupExtractionComponent } from './popup-extraction/popup-extraction.component';
+import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-appointment-date.component';
+import { PopupTrainingDateComponent } from './popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.component';
+import { PopupHistoryComponent } from './popup-history/popup-history.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -218,6 +222,10 @@ import { PopupExtractionComponent } from './popup-extraction/popup-extraction.co
     PopupExamFormComponent,
     PopupConsentComponent,
     PopupExtractionComponent,
+    PopupAppointmentDateComponent,
+    PopupTrainingDateComponent,
+    PopupChatUserComponent,
+    PopupHistoryComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -243,7 +251,10 @@ import { PopupExtractionComponent } from './popup-extraction/popup-extraction.co
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
     PopupConsentComponent,
-    PopupExtractionComponent
+    PopupExtractionComponent,
+    PopupTrainingDateComponent,
+    PopupChatUserComponent,
+    PopupHistoryComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -269,7 +280,10 @@ import { PopupExtractionComponent } from './popup-extraction/popup-extraction.co
     PopupSearchDropdownComponent,
     PopupExamFormComponent,
     PopupConsentComponent,
-    PopupExtractionComponent
+    PopupExtractionComponent,
+    PopupTrainingDateComponent,
+    PopupChatUserComponent,
+    PopupHistoryComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

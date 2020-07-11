@@ -42,7 +42,7 @@ export interface ErrMsg {
     '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
   ]
 })
-export class IndexComponent implements OnInit,AfterViewInit {
+export class IndexComponent implements OnInit, AfterViewInit {
   innerHeight: any;
   innerWidth: any;
   devices: Devices;
@@ -118,19 +118,19 @@ export class IndexComponent implements OnInit,AfterViewInit {
     {
       title: 'CEBIT ASEAN Thailand 2019',
       remark: 'พบกับ Buddy Recruit ได้ในงาน "CEBIT ASEAN Thailand 2019" ระหว่างวันที่ 27-29 พฤศจิกายน 2562 ณ บูท C25 อาคาร 7 อิมแพ็ค เมืองทองธานี',
-      img: 'https://s3-ap-southeast-1.amazonaws.com/img-in-th/460b612e7485a9505d5148571e3db815.jpg',
+      img: 'https://www.img.in.th/images/dab833e78077921bedbee399487901bf.jpg',
       link: 'https://cebitasean.com'
     },
     {
       title: 'Thailand HR TECH Conferenc',
       remark: 'Thailand HR TECH Conference & Exposition 2019 ขึ้น ในวันที่ 28–29 พฤษภาคม 2562',
-      img: 'https://s3-ap-southeast-1.amazonaws.com/img-in-th/1fcfd5663356b5939a5604e1e50ce59f.jpg',
+      img: 'https://www.img.in.th/images/c3d4bb630e115d07ce3764691df49920.jpg',
       link: 'http://hrtech.pmat.or.th/app/netattm/attendee/page/88567'
     },
     {
       title: 'ZyGen ครบรอบ 20 ปี',
       remark: 'ZyGen ครบรอบ 20 ปี จัดงาน Practical Innovations For Business Opportunities & Profits',
-      img: 'https://s3-ap-southeast-1.amazonaws.com/img-in-th/06774ffa1ca994fbeadb3b11e2f1be8c.jpg',
+      img: 'https://www.img.in.th/images/60b5575481d949a31f7b576a06c58895.jpg',
       link: 'https://www.techtalkthai.com/zygen-20-anniversary-event-practical-innovation-for-business-opportunities-and-profit'
     },
   ];
@@ -140,7 +140,8 @@ export class IndexComponent implements OnInit,AfterViewInit {
   navContact: boolean;
   navCom: boolean;
   pathName: any;
-  role:any;
+  role: any;
+  adminCheck: boolean;
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
@@ -168,7 +169,11 @@ export class IndexComponent implements OnInit,AfterViewInit {
     }
     this.pathName = getPathName();
     setPathName();
+    this.adminCheck = false;
     this.role = getRole();
+    if(this.role && this.role.refHero.isSuperAdmin){
+      this.adminCheck = true;
+    }
   }
 
   ngOnInit() {
@@ -186,7 +191,7 @@ export class IndexComponent implements OnInit,AfterViewInit {
     if (this.pathName) {
       this.scrollToElement(document.getElementById(this.pathName), this.pathName);
     }
-}
+  }
 
   initialModel(): ContactUs {
     return {

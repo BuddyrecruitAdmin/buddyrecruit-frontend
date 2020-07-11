@@ -13,6 +13,7 @@ export interface ApiResponse {
   otherJR?;
   usedTime?;
   isExpired?;
+  token?: string;
 }
 
 export interface Count {
@@ -35,6 +36,12 @@ export interface Authentication {
 export interface DropDownValue {
   label: string;
   value: any;
+}
+
+export interface DropDownLangValue {
+  label: Language;
+  value: any;
+  remark?: string;
 }
 
 export interface DropDownGroup {
@@ -69,6 +76,7 @@ export interface Criteria {
   filter?: string[];
   filters?: Filter[];
   questionFilters?: Filter[];
+  sortOrderBy?: string;
 }
 
 export interface Paging {

@@ -150,7 +150,7 @@ import { ExtractionComponent } from './extraction/extraction.component';
     NbTooltipModule,
     NbTreeGridModule,
     Ng2SmartTableModule,
-    NbDialogModule.forRoot(),
+    NbDialogModule.forChild(),
     NbWindowModule.forChild(),
     NbAccordionModule,
     NbSpinnerModule,

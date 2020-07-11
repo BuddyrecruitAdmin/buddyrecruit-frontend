@@ -34,6 +34,8 @@ export class JobPositionComponent implements OnInit {
   minPageSize = Paging.pageSizeOptions[0];
   devices: Devices;
   isGridLayout: boolean;
+  noticeHeight: any;
+  isExpress: boolean = false;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -44,6 +46,8 @@ export class JobPositionComponent implements OnInit {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();
+    this.noticeHeight = window.innerHeight * 0.85;
+    this.isExpress = this.role.refCompany.isExpress;
     if (!this.isGridLayout) {
       if (this.devices.isMobile || this.devices.isTablet) {
         this.isGridLayout = true;
@@ -114,7 +118,11 @@ export class JobPositionComponent implements OnInit {
 
   create(dialog: TemplateRef<any>) {
     this.itemDialog = this.initialModel();
-    this.itemDialog.active = true;
+    if (this.isExpress) {
+      this.itemDialog.active = false;
+    } else {
+      this.itemDialog.active = true;
+    }
     this.callDialog(dialog);
   }
 

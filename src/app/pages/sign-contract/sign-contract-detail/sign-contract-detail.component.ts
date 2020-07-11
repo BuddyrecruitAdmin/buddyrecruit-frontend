@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam, setCompanyId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -22,7 +22,8 @@ import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { PopupInterviewResultComponent } from '../../../component/popup-interview-result/popup-interview-result.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
-
+import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 @Component({
   selector: 'ngx-sign-contract-detail',
   templateUrl: './sign-contract-detail.component.html',
@@ -54,10 +55,32 @@ export class SignContractDetailComponent implements OnInit {
   sourceBy: any;
   soList: any;
 
-  isExpress = false;
+  isExpress: boolean = false;
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  filter: {
+    isFilter: boolean,
+    data: {
+      provinces: DropDownValue[],
+      areas: DropDownGroup[]
+    },
+    temp: {
+      provinces: DropDownValue[],
+      areas: DropDownGroup[]
+    },
+    selected: {
+      provinces: any,
+      areas: any;
+    }
+  };
+  filteredProvince: any;
+  filteredDistrict: any;
+  filterBy: any;
+  searchArea: any;
+  filterSort: any;
+  filterTrain: any = {};
+  filterOn: any = {};
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -121,12 +144,52 @@ export class SignContractDetailComponent implements OnInit {
     this.soList = [];
     this.sourceBy = [];
     this.showTips = false;
+    this.filterBy = [];
+    this.searchArea = [];
+    this.filterSort = 'apply';
     this.paging = {
       length: 0,
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.filter = {
+      isFilter: false,
+      data: {
+        provinces: [],
+        areas: []
+      },
+      temp: {
+        provinces: [],
+        areas: []
+      },
+      selected: {
+        provinces: [],
+        areas: []
+      }
+    }
+    if (!this.isExpress) {
+      this.filterBy = this.sourceBy;
+    } else {
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.provinces
+        },
+        {
+          name: 'area',
+          value: this.searchArea
+        },
+        {
+          name: 'training',
+          value: this.filterTrain
+        },
+        {
+          name: 'onboard',
+          value: this.filterOn
+        }
+      ]
+    };
     this.onModel();
   }
 
@@ -212,8 +275,9 @@ export class SignContractDetailComponent implements OnInit {
         'refStage.name',
         'refSource.name'
       ],
-      filters: this.sourceBy,
-      questionFilters: this.questionFilterSelected
+      filters: this.filterBy,
+      questionFilters: this.questionFilterSelected,
+      sortOrderBy: this.filterSort
     };
     this.items = [];
     this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -254,6 +318,34 @@ export class SignContractDetailComponent implements OnInit {
           fullResult = fullResult.trim();
           item.result = fullResult;
         });
+        // filter hub
+        if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
+          this.filter.isFilter = true;
+          response.filter.provinces.forEach(element => {
+            this.filter.data.provinces.push({
+              label: element.refProvince.name.th,
+              value: element.refProvince._id
+            })
+            this.filter.temp.provinces.push({
+              label: element.refProvince.name.th,
+              value: element.refProvince._id
+            })
+          });
+          response.filter.areas.forEach(element => {
+            this.filter.data.areas.push({
+              label: element.name,
+              value: element._id,
+              group: element.refProvince
+            })
+            this.filter.temp.areas.push({
+              label: element.name,
+              value: element._id,
+              group: element.refProvince
+            })
+          });
+          this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+          this.filteredProvince = this.filter.data.provinces.slice();
+        }
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
 
@@ -263,6 +355,106 @@ export class SignContractDetailComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  changeFilter(calculate: boolean = true, filterBy: any) {
+    if (this.filter.selected.areas.length > 0 && this.filter.selected.provinces.length === 0 && filterBy === 'area') {
+      this.searchArea = [];
+      this.filter.data.areas.forEach(area => {
+        this.filter.selected.areas.forEach(element => {
+          if (element === area.value) {
+            this.searchArea.push({
+              refProvince: area.group,
+              _id: area.value
+            })
+          }
+        });
+      })
+    }
+    if (this.filter.selected.provinces.length === 0 && filterBy === 'province') {
+      this.searchArea = [];
+      this.filter.selected.areas = [];
+      this.filter.data.areas = this.filter.temp.areas;
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    if (calculate && this.filter.selected.provinces.length > 0) {
+      this.filter.data.areas = [];
+      this.searchArea = [];
+      this.filter.selected.provinces.forEach(province => {
+        const districts = this.filter.temp.areas.filter(district => {
+          return district.group === province;
+        });
+        districts.forEach(district => {
+          this.filter.data.areas.push({
+            label: district.label,
+            value: district.value,
+            group: province
+          });
+        });
+      });
+      const districtSelected = _.cloneDeep(this.filter.selected.areas);
+      this.filter.selected.areas = [];
+      if (districtSelected.length) {
+        districtSelected.forEach(district => {
+          const found = this.filter.data.areas.find(element => {
+            return element.value === district;
+          });
+          if (found) {
+            this.filter.selected.areas.push(found.value);
+            this.searchArea.push({
+              refProvince: found.group,
+              _id: found.value
+            })
+          }
+        });
+      }
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+    ]
+    this.search();
+  }
+
+  removeDuplicates(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  }
+
+  clearFilter() {
+    this.filter.selected.provinces = [];
+    this.filter.selected.areas = [];
+    this.filterOn = {};
+    this.filterTrain = {};
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
+    ]
+    this.search();
   }
 
   filterSource(event, _id) {
@@ -314,7 +506,7 @@ export class SignContractDetailComponent implements OnInit {
           condition.icon.signContract = true;
           condition.button.nextStep = true;
           condition.button.reject = true;
-          if (!this.utilitiesService.convertDateTime(item.pendingSignContractInfo.sign.date)
+          if (!this.utilitiesService.convertDateTime(item.pendingSignContractInfo.sign.date) && !this.isExpress
           ) {
             condition.button.signInfo = true;
             condition.button.nextStep = false;
@@ -378,28 +570,48 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (item.refCandidate.email) {
-      setUserEmail(item.refCandidate.email);
-    }
-    if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        setButtonId();
+    if (item.refJR.isDefault) {
+      // this.refStageId = item.refStage._id;
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+      });
+      confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.search();
+          this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.search();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
         }
       });
     } else {
-      this.nextStep(item, button);
+      if (item.refCandidate.email) {
+        setUserEmail(item.refCandidate.email);
+      }
+      if (this.utilitiesService.dateIsValid(item.pendingSignContractInfo.agreeStartDate)) {
+        setFlowId(item._id);
+        setCandidateId(item.refCandidate._id);
+        setButtonId(button._id);
+        this.dialogService.open(PopupPreviewEmailComponent,
+          {
+            closeOnBackdropClick: true,
+            hasScroll: true,
+          }
+        ).onClose.subscribe(result => {
+          setFlowId();
+          setCandidateId();
+          setButtonId();
+          if (result) {
+            this.search();
+          }
+        });
+      } else {
+        this.nextStep(item, button);
+      }
     }
   }
 
@@ -555,10 +767,55 @@ export class SignContractDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
+      setFlagExam('false');
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
+  }
+
+  onEventStartEndRange(event, name) {
+    switch (name) {
+      case 'train':
+        if (event.start && !event.end) {
+          this.filterTrain.start = event.start;
+          this.filterTrain.end = event.start;
+        } else {
+          this.filterTrain = event;
+        }
+        break;
+      case 'onboard':
+        if (event.start && !event.end) {
+          this.filterOn.start = event.start;
+          this.filterOn.end = event.start;
+        } else {
+          this.filterOn = event;
+        }
+        break;
+
+      default:
+        break;
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
+    ]
+    this.search();
   }
 
   changeQuestionFilter(name, filter) {
@@ -586,6 +843,62 @@ export class SignContractDetailComponent implements OnInit {
     index = index % colors.length;
     color = colors[index];
     return color;
+  }
+
+  sortData(name) {
+    if (name === 'score') {
+      this.filterSort = 'score';
+      // this.items.sort(function (a, b) {
+      //   return b.totalScore - a.totalScore
+      // })
+    } else {
+      this.filterSort = 'apply';
+      // console.log(this.items)
+      // var _this = this;
+      // this.items.sort(function (a, b) {
+
+
+      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
+      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
+      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
+      // })
+      // console.log(this.items)
+    }
+    this.search();
+  }
+
+  openPopupTrainingDate(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupTrainingDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openChatUser(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupChatUserComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
   }
 
   changePaging(event) {

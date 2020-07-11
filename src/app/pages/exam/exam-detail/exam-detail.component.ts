@@ -2,8 +2,8 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, setFlagExam } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownGroup } from '../../../shared/interfaces/common.interface';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, setFlagExam, setUserToken } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -66,6 +66,28 @@ export class ExamDetailComponent implements OnInit {
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  filter: {
+    isFilter: boolean,
+    data: {
+      provinces: DropDownValue[],
+      districts: DropDownGroup[]
+      subDistricts: DropDownGroup[]
+    },
+    temp: {
+      provinces: DropDownValue[],
+      districts: DropDownGroup[],
+      subDistricts: DropDownGroup[]
+    },
+    selected: {
+      provinces: any,
+      districts: any,
+      subDistricts: any;
+    }
+  };
+  filteredProvince: any;
+  filteredDistrict: any;
+  filteredSubDistrict: any;
+  filterBy: any;
   constructor(
     private router: Router,
     private service: ExamService,
@@ -126,6 +148,7 @@ export class ExamDetailComponent implements OnInit {
     this.comments = [];
     this.soList = [];
     this.sourceBy = [];
+    this.filterBy = [];
     this.keyword = '';
     this.paging = {
       length: 0,
@@ -133,6 +156,42 @@ export class ExamDetailComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    // this.filter = {
+    //   isFilter: false,
+    //   data: {
+    //     provinces: [],
+    //     districts: [],
+    //     subDistricts: [],
+    //   },
+    //   temp: {
+    //     provinces: [],
+    //     districts: [],
+    //     subDistricts: [],
+    //   },
+    //   selected: {
+    //     provinces: [],
+    //     districts: [],
+    //     subDistricts: [],
+    //   }
+    // }
+    // if (!this.isExpress) {
+    //   this.filterBy = this.sourceBy;
+    // } else {
+    //   this.filterBy = [
+    //     {
+    //       name: 'province',
+    //       value: this.filter.selected.provinces
+    //     },
+    //     {
+    //       name: 'district',
+    //       value: this.filter.selected.districts
+    //     },
+    //     {
+    //       name: 'subDistrict',
+    //       value: this.filter.selected.subDistricts
+    //     }
+    //   ]
+    // };
     this.onModel();
   }
 
@@ -257,6 +316,46 @@ export class ExamDetailComponent implements OnInit {
             item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
           }
         });
+        // filter hub
+        // if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
+        //   this.filter.isFilter = true;
+        //   response.filter.provinces.forEach(element => {
+        //     this.filter.data.provinces.push({
+        //       label: element.name.th,
+        //       value: element._id
+        //     })
+        //     this.filter.temp.provinces.push({
+        //       label: element.name.th,
+        //       value: element._id
+        //     })
+        //   });
+        //   response.filter.districts.forEach(element => {
+        //     this.filter.data.districts.push({
+        //       label: element.name.th,
+        //       value: element._id,
+        //       group: element.refProvince
+        //     })
+        //     this.filter.temp.districts.push({
+        //       label: element.name.th,
+        //       value: element._id,
+        //       group: element.refProvince
+        //     })
+        //   });
+        //   response.filter.subDistricts.forEach(element => {
+        //     this.filter.data.subDistricts.push({
+        //       label: element.name.th,
+        //       value: element._id,
+        //       group: element.refDistrict
+        //     })
+        //     this.filter.temp.subDistricts.push({
+        //       label: element.name.th,
+        //       value: element._id,
+        //       group: element.refDistrict
+        //     })
+        //   });
+        //   this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+        //   this.filteredProvince = this.filter.data.provinces.slice();
+        // }
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
 
@@ -267,6 +366,87 @@ export class ExamDetailComponent implements OnInit {
       this.loading = false;
     });
   }
+
+  // changeFilter(calculate: boolean = true) {
+  //   if (calculate) {
+  //     this.filter.data.districts = [];
+  //     this.filter.data.subDistricts = [];
+  //     this.filter.selected.provinces.forEach(province => {
+  //       const districts = this.filter.temp.districts.filter(district => {
+  //         return district.group === province;
+  //       });
+  //       districts.forEach(district => {
+  //         this.filter.data.districts.push({
+  //           label: district.label,
+  //           value: district.value,
+  //           group: province
+  //         });
+  //       });
+  //     });
+  //     const districtSelected = _.cloneDeep(this.filter.selected.districts);
+  //     this.filter.selected.districts = [];
+  //     if (districtSelected.length) {
+  //       districtSelected.forEach(district => {
+  //         const found = this.filter.data.districts.find(element => {
+  //           return element.value === district;
+  //         });
+  //         if (found) {
+  //           this.filter.selected.districts.push(found.value);
+  //         }
+  //       });
+  //     }
+  //     this.filter.data.districts = this.removeDuplicates(this.filter.data.districts, "value")
+  //     this.filteredDistrict = this.filter.data.districts.slice();
+  //     // subDistrict
+  //     this.filter.selected.districts.forEach(district => {
+  //       const subDistricts = this.filter.temp.subDistricts.filter(sub => {
+  //         return sub.group === district;
+  //       });
+  //       subDistricts.forEach(sub => {
+  //         this.filter.data.subDistricts.push({
+  //           label: sub.label,
+  //           value: sub.value,
+  //           group: district
+  //         });
+  //       });
+  //     });
+  //     const subDistrictSelected = _.cloneDeep(this.filter.selected.subDistricts);
+  //     this.filter.selected.subDistricts = [];
+  //     if (subDistrictSelected.length) {
+  //       subDistrictSelected.forEach(sub => {
+  //         const found = this.filter.data.subDistricts.find(element => {
+  //           return element.value === sub;
+  //         });
+  //         if (found) {
+  //           this.filter.selected.subDistricts.push(found.value);
+  //         }
+  //       });
+  //     }
+  //     this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
+  //     this.filteredSubDistrict = this.filter.data.subDistricts.slice();
+  //   }
+  //   this.filterBy = [
+  //     {
+  //       name: 'province',
+  //       value: this.filter.selected.provinces
+  //     },
+  //     {
+  //       name: 'district',
+  //       value: this.filter.selected.districts
+  //     },
+  //     {
+  //       name: 'subDistrict',
+  //       value: this.filter.selected.subDistricts
+  //     }
+  //   ]
+  //   this.search();
+  // }
+
+  // removeDuplicates(myArr, prop) {
+  //   return myArr.filter((obj, pos, arr) => {
+  //     return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+  //   });
+  // }
 
   setCondition(item: any): any {
     let condition = {
@@ -654,6 +834,7 @@ export class ExamDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });

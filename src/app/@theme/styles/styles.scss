@@ -1707,9 +1707,9 @@
       margin-bottom: 0;
     }
   }
-  .mat-select-panel {
+  ::ng-deep .mat-select-panel {
     padding: 8px 0;
-    max-height: 80vh;
+    max-height: 40vh;
   }
   .mat-divider {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -1927,6 +1927,14 @@
       text-align: right;
       margin: 1rem 0;
     }
+
+    nb-stepper .header .step.selected,
+    nb-stepper .header .step.selected .label span {
+      color: #274bdb;
+    }
+    nb-stepper .header .step.selected .label-index {
+      border-color: #274bdb;
+    }  
   }
 
   /* Thank you for your information */

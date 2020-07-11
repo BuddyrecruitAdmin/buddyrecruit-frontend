@@ -35,7 +35,13 @@ import {
   PathName,
   consentFlag,
   companyName,
-  companyId
+  companyId,
+  AppFormIndex,
+  UserToken,
+  UserSuccess,
+  AppFormIStatus,
+  HistoryData,
+  FacebookId
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -369,6 +375,7 @@ export function getCompanyName() {
   const com = JSON.parse(localStorage.getItem(companyName));
   return (!com || com === null) ? undefined : com;
 }
+
 export function setCompanyId(com: any = null) {
   localStorage.setItem(companyId, JSON.stringify(com));
 }
@@ -376,4 +383,57 @@ export function setCompanyId(com: any = null) {
 export function getCompanyId() {
   const com = JSON.parse(localStorage.getItem(companyId));
   return (!com || com === null) ? undefined : com;
+}
+
+export function setAppformIndex(data: any = null) {
+  localStorage.setItem(AppFormIndex, JSON.stringify(data));
+}
+
+export function getAppformIndex() {
+  const data = JSON.parse(localStorage.getItem(AppFormIndex));
+  return (!data || data === null) ? undefined : data;
+}
+
+export function setUserToken(userToken: string = null) {
+  localStorage.setItem(UserToken, JSON.stringify(userToken));
+}
+
+export function getUserToken() {
+  const userToken = JSON.parse(localStorage.getItem(UserToken));
+  return (!userToken || userToken === null) ? undefined : userToken;
+}
+export function setUserSuccess(userSuccess: string = null) {
+  localStorage.setItem(UserSuccess, JSON.stringify(userSuccess));
+}
+
+export function getUserSuccess() {
+  const userSuccess = JSON.parse(localStorage.getItem(UserSuccess));
+  return (!userSuccess || userSuccess === null) ? undefined : userSuccess;
+}
+
+export function setAppformStatus(data: any = null) {
+  localStorage.setItem(AppFormIStatus, JSON.stringify(data));
+}
+
+export function getAppformStatus() {
+  const data = JSON.parse(localStorage.getItem(AppFormIStatus));
+  return (!data || data === null) ? undefined : data;
+}
+
+export function setHistoryData(history: any = null) {
+  localStorage.setItem(HistoryData, JSON.stringify(history));
+}
+
+export function getHistoryData() {
+  const history = JSON.parse(localStorage.getItem(HistoryData));
+  return (!history || history === null) ? undefined : history;
+}
+
+export function setFacebookId(fbId: any = null) {
+  localStorage.setItem(FacebookId, JSON.stringify(fbId));
+}
+
+export function getFacebookId() {
+  const fbId = JSON.parse(localStorage.getItem(FacebookId));
+  return (!fbId || fbId === null) ? undefined : fbId;
 }

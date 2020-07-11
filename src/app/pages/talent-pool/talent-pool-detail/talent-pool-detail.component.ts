@@ -2,8 +2,8 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
-import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam } from '../../../shared/services/auth.service';
+import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -23,7 +23,10 @@ import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
 import { resolve } from 'url';
 import { AppFormService } from '../../setting/app-form/app-form.service';
-
+import { group } from 'console';
+import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
+import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
+import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -52,6 +55,7 @@ export class TalentPoolDetailComponent implements OnInit {
   loading: boolean;
   count: Count;
   showTips: boolean;
+  showCondition: boolean;
   email: boolean = true;
   jobsDB: boolean = true;
   other: boolean = true;
@@ -61,10 +65,41 @@ export class TalentPoolDetailComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   listExamDialog: any;
 
-  isExpress = false;
+  isExpress: boolean = false;
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  filter: {
+    isFilter: boolean,
+    data: {
+      provinces: DropDownValue[],
+      areas: DropDownGroup[]
+      // districts: DropDownGroup[],
+      // subDistricts: DropDownGroup[]
+    },
+    temp: {
+      provinces: DropDownValue[],
+      areas: DropDownGroup[]
+      // districts: DropDownGroup[],
+      // subDistricts: DropDownGroup[]
+    },
+    selected: {
+      provinces: any,
+      areas: any;
+      // districts: any,
+      // subDistricts: any;
+    }
+  };
+  filteredProvince: any;
+  filteredDistrict: any;
+  filteredSubDistrict: any;
+  filterBy: any;
+  searchArea: any;
+  filterSort: any;
+  checkPending: boolean;
+  checkCalled: boolean;
+  checkPendingSend: boolean;
+  checkCalledSend: boolean;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -130,14 +165,69 @@ export class TalentPoolDetailComponent implements OnInit {
     this.comments = [];
     this.soList = [];
     this.sourceBy = [];
+    this.filterBy = [];
+    this.searchArea = [];
     this.keyword = '';
     this.showTips = false;
+    this.showCondition = true;
+    this.checkCalled = true;
+    this.checkPending = true;
+    this.checkCalledSend = true;
+    this.checkPendingSend = true;
+    this.filterSort = 'apply';
     this.paging = {
       length: 0,
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
+    this.filter = {
+      isFilter: false,
+      data: {
+        provinces: [],
+        areas: [],
+        // districts: [],
+        // subDistricts: [],
+      },
+      temp: {
+        provinces: [],
+        areas: [],
+        // districts: [],
+        // subDistricts: [],
+      },
+      selected: {
+        provinces: [],
+        areas: [],
+        // districts: [],
+        // subDistricts: [],
+      }
+    }
+    if (!this.isExpress) {
+      this.filterBy = this.sourceBy;
+    } else {
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.provinces
+        },
+        {
+          name: 'area',
+          value: this.searchArea
+        },
+        {
+          name: 'pendingCall',
+          value: this.checkPending
+        },
+        {
+          name: 'called',
+          value: this.checkCalled
+        },
+        // {
+        //   name: 'subDistrict',
+        //   value: this.filter.selected.subDistricts
+        // }
+      ]
+    };
     this.onModel();
   }
 
@@ -227,10 +317,11 @@ export class TalentPoolDetailComponent implements OnInit {
           'refCandidate.phone',
           'refCandidate.email',
           'refStage.name',
-          'refSource.name'
+          'refSource.name',
         ],
-        filters: this.sourceBy,
-        questionFilters: this.questionFilterSelected
+        filters: this.filterBy,
+        questionFilters: this.questionFilterSelected,
+        sortOrderBy: this.filterSort
       };
       this.items = [];
       this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
@@ -248,6 +339,65 @@ export class TalentPoolDetailComponent implements OnInit {
               }
             }
           });
+          // filter hub
+          if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
+            this.filter.isFilter = true;
+            response.filter.provinces.forEach(element => {
+              this.filter.data.provinces.push({
+                label: element.refProvince.name.th,
+                value: element.refProvince._id
+              })
+              this.filter.temp.provinces.push({
+                label: element.refProvince.name.th,
+                value: element.refProvince._id
+              })
+            });
+            response.filter.areas.forEach(element => {
+              let hubName = '';
+              hubName = element.name;
+              if (element.hubCode) {
+                hubName = element.name + '(' + element.hubCode + ')';
+              }
+              this.filter.data.areas.push({
+                label: hubName,
+                value: element._id,
+                group: element.refProvince
+              })
+              this.filter.temp.areas.push({
+                label: hubName,
+                value: element._id,
+                group: element.refProvince
+              })
+            });
+            // response.filter.districts.forEach(element => {
+            //   this.filter.data.districts.push({
+            //     label: element.name.th,
+            //     value: element._id,
+            //     group: element.refProvince
+            //   })
+            //   this.filter.temp.districts.push({
+            //     label: element.name.th,
+            //     value: element._id,
+            //     group: element.refProvince
+            //   })
+            // });
+            // response.filter.subDistricts.forEach(element => {
+            //   this.filter.data.subDistricts.push({
+            //     label: element.name.th,
+            //     value: element._id,
+            //     group: element.refDistrict
+            //   })
+            //   this.filter.temp.subDistricts.push({
+            //     label: element.name.th,
+            //     value: element._id,
+            //     group: element.refDistrict
+            //   })
+            // });
+            // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+            this.filteredDistrict = this.filter.data.areas.slice();
+            this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+            this.filteredProvince = this.filter.data.provinces.slice();
+          }
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
 
@@ -259,6 +409,155 @@ export class TalentPoolDetailComponent implements OnInit {
         resolve();
       });
     })
+  }
+
+  changeFilter(calculate: boolean = true, filterBy: any) {
+    if (this.filter.selected.areas.length > 0 && this.filter.selected.provinces.length === 0 && filterBy === 'area') {
+      this.searchArea = [];
+      this.filter.data.areas.forEach(area => {
+        this.filter.selected.areas.forEach(element => {
+          if (element === area.value) {
+            this.searchArea.push({
+              refProvince: area.group,
+              _id: area.value
+            })
+          }
+        });
+      })
+    }
+    if (this.filter.selected.provinces.length === 0 && filterBy === 'province') {
+      this.searchArea = [];
+      this.filter.selected.areas = [];
+      this.filter.data.areas = this.filter.temp.areas;
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    if (calculate && this.filter.selected.provinces.length > 0) {
+      this.filter.data.areas = [];
+      this.searchArea = [];
+      // this.filter.data.districts = [];
+      // this.filter.data.subDistricts = [];
+      this.filter.selected.provinces.forEach(province => {
+        const districts = this.filter.temp.areas.filter(district => {
+          return district.group === province;
+        });
+        districts.forEach(district => {
+          this.filter.data.areas.push({
+            label: district.label,
+            value: district.value,
+            group: province
+          });
+        });
+      });
+      const districtSelected = _.cloneDeep(this.filter.selected.areas);
+      this.filter.selected.areas = [];
+      if (districtSelected.length) {
+        districtSelected.forEach(district => {
+          const found = this.filter.data.areas.find(element => {
+            return element.value === district;
+          });
+          if (found) {
+            this.filter.selected.areas.push(found.value);
+            this.searchArea.push({
+              refProvince: found.group,
+              _id: found.value
+            })
+          }
+        });
+      }
+      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
+      this.filteredDistrict = this.filter.data.areas.slice();
+      // subDistrict
+      // this.filter.selected.districts.forEach(district => {
+      //   const subDistricts = this.filter.temp.subDistricts.filter(sub => {
+      //     return sub.group === district;
+      //   });
+      //   subDistricts.forEach(sub => {
+      //     this.filter.data.subDistricts.push({
+      //       label: sub.label,
+      //       value: sub.value,
+      //       group: district
+      //     });
+      //   });
+      // });
+      // const subDistrictSelected = _.cloneDeep(this.filter.selected.subDistricts);
+      // this.filter.selected.subDistricts = [];
+      // if (subDistrictSelected.length) {
+      //   subDistrictSelected.forEach(sub => {
+      //     const found = this.filter.data.subDistricts.find(element => {
+      //       return element.value === sub;
+      //     });
+      //     if (found) {
+      //       this.filter.selected.subDistricts.push(found.value);
+      //     }
+      //   });
+      // }
+      // this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
+      // this.filteredSubDistrict = this.filter.data.subDistricts.slice();
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'pendingCall',
+        value: this.checkPending
+      },
+      {
+        name: 'called',
+        value: this.checkCalled
+      },
+      // {
+      //   name: 'subDistrict',
+      //   value: this.filter.selected.subDistricts
+      // }
+    ]
+    this.search();
+  }
+
+  removeDuplicates(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  }
+
+  clearFilter() {
+    this.filter.selected.provinces = [];
+    this.filter.selected.areas = [];
+    this.checkCalled = true;
+    this.checkPending = true;
+    this.checkCalledSend = true;
+    this.checkPendingSend = true;
+    // this.filter.selected.districts = [];
+    // this.filter.selected.subDistricts = [];
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'pendingCall',
+        value: this.checkPending
+      },
+      {
+        name: 'called',
+        value: this.checkCalled
+      }
+      // {
+      //   name: 'subDistrict',
+      //   value: this.filter.selected.subDistricts
+      // }
+    ]
+    this.search();
   }
 
   filterSource(event, _id) {
@@ -425,24 +724,44 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any, dialog: any) {
-    if (item.refCandidate.email) {
-      setUserEmail(item.refCandidate.email);
+    if (item.refJR.isDefault) {
+      // this.refStageId = item.refStage._id;
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
+            if (response.code === ResponseCode.Success) {
+              this.showToast('success', 'Success Message', response.message);
+              this.search();
+            } else {
+              this.showToast('danger', 'Error Message', response.message);
+            }
+          });
+        }
+      });
+    } else {
+      if (item.refCandidate.email) {
+        setUserEmail(item.refCandidate.email);
+      }
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      setButtonId(button._id);
+      this.dialogService.open(PopupPreviewEmailComponent,
+        {
+          closeOnBackdropClick: true,
+          hasScroll: true,
+        }
+      ).onClose.subscribe(result => {
+        setFlowId();
+        setCandidateId();
+        if (result) {
+          this.search();
+        }
+      });
     }
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    setButtonId(button._id);
-    this.dialogService.open(PopupPreviewEmailComponent,
-      {
-        closeOnBackdropClick: true,
-        hasScroll: true,
-      }
-    ).onClose.subscribe(result => {
-      setFlowId();
-      setCandidateId();
-      if (result) {
-        this.search();
-      }
-    });
   }
 
   appointmentExam(item: any) {
@@ -621,6 +940,9 @@ export class TalentPoolDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
+      setFlagExam('true');
+      setCompanyId(this.role.refCompany._id)
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
@@ -652,6 +974,119 @@ export class TalentPoolDetailComponent implements OnInit {
     index = index % colors.length;
     color = colors[index];
     return color;
+  }
+
+  sortData(name) {
+    if (name === 'score') {
+      this.filterSort = 'score';
+      this.search();
+      // this.items.sort(function (a, b) {
+      //   return b.totalScore - a.totalScore
+      // })
+    } else {
+      this.filterSort = 'apply';
+      // console.log(this.items)
+      // var _this = this;
+      // this.items.sort(function (a, b) {
+      this.search();
+
+      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
+      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
+      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
+      // })
+      // console.log(this.items)
+    }
+  }
+
+  checkSort(event, name) {
+    if (name === 'pend') {
+      this.checkPendingSend = event;
+    } else {
+      this.checkCalledSend = event;
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'pendingCall',
+        value: this.checkPendingSend
+      },
+      {
+        name: 'called',
+        value: this.checkCalledSend
+      },
+    ]
+    this.search();
+  }
+
+  changeCall(item) {
+    item.called.flag = !item.called.flag;
+    let data;
+    data = {
+      called: item.called
+    }
+    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.search();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
+  }
+
+  openPopupTrainingDate(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupTrainingDateComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openChatUser(item: any) {
+    setFlowId(item._id);
+    setCandidateId(item.refCandidate._id);
+    this.dialogService.open(PopupChatUserComponent,
+      {
+        closeOnBackdropClick: false,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      setFlowId();
+      setCandidateId();
+      if (result) {
+        this.search();
+      }
+    });
+  }
+
+  openHistory(item: any) {
+    setHistoryData(item)
+    this.dialogService.open(PopupHistoryComponent, {
+      closeOnBackdropClick: false,
+      hasScroll: true,
+    }
+    ).onClose.subscribe(result => {
+      if (result) {
+        this.search();
+        setHistoryData();
+      }
+    });
   }
 
   changePaging(event) {

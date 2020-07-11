@@ -115,15 +115,21 @@
               <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.talentPool.mail">
                 Talent Pool
               </nb-checkbox><br>
-              <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingExam.mail">
+              <nb-checkbox *ngIf="!isExpress" [(ngModel)]="profileDetail.setting?.notification.pendingExam.mail">
                 Pending Exam
+              </nb-checkbox>
+              <nb-checkbox *ngIf="isExpress" [(ngModel)]="profileDetail.setting?.notification.pendingSignContract.mail">
+                Pending Sign Contract
               </nb-checkbox><br>
-              <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingAppointment.mail">
+              <nb-checkbox *ngIf="!isExpress" [(ngModel)]="profileDetail.setting?.notification.pendingAppointment.mail">
                 Pending Appointment
+              </nb-checkbox>
+              <nb-checkbox *ngIf="isExpress" [(ngModel)]="profileDetail.setting?.notification.onboard.mail">
+                Onboard
               </nb-checkbox><br>
             </div>
           </div>
-          <div class="col-sm-6 col-md-6">
+          <div *ngIf="!isExpress" class="col-sm-6 col-md-6">
             <div class="form-group">
               <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingInterview.mail">
                 Pending Interview

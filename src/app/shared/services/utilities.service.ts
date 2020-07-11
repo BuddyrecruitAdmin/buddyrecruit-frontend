@@ -56,7 +56,7 @@ export class UtilitiesService {
     let isValid = false;
     if (date) {
       date = new Date(date);
-      if (date.getUTCFullYear() > 1970) {
+      if (date.getUTCFullYear() > 1930) {
         isValid = true;
       }
     }
@@ -75,6 +75,24 @@ export class UtilitiesService {
   convertTime(date: Date): string {
     if (this.dateIsValid(date)) {
       const dateTime = this.convertDateTime(date);
+      return dateTime.split(' ')[1];
+    } else {
+      return null;
+    }
+  }
+
+  convertDateFromSystem(date: Date): string {
+    if (this.dateIsValid(date)) {
+      const dateTime = this.convertDateTimeFromSystem(date);
+      return dateTime.split(' ')[0];
+    } else {
+      return null;
+    }
+  }
+
+  convertTimeFromSystem(date: Date): string {
+    if (this.dateIsValid(date)) {
+      const dateTime = this.convertDateTimeFromSystem(date);
       return dateTime.split(' ')[1];
     } else {
       return null;

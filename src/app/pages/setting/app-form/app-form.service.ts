@@ -53,8 +53,11 @@ export class AppFormService extends NetworkService {
     return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.TOGGLE_ACTIVE, body);
   }
 
-  getJobPosition(): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.DROPDOWN.JOBPOSITION, {});
+  getJobPosition(refTemplate = undefined): Observable<ApiResponse> {
+    const body = {
+      refTemplate: refTemplate
+    };
+    return this.post(API_ENDPOINT.CONFIGURATION.APP_FORM.JOBPOSITION, body);
   }
 
   getActive(): Observable<ApiResponse> {

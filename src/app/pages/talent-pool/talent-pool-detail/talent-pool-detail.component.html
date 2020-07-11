@@ -10,6 +10,11 @@
     จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
   </span>
 </nb-alert>
+<nb-alert *ngIf="showCondition" status="warning" closable (close)="showCondition = !showCondition">
+  <span>
+    พื้นหลังสี <span class="dot"></span> สำหรับ Candidate ที่เป็นตัวสำรอง(คุณสมบัติไม่ตรง)
+  </span>
+</nb-alert>
 <nb-card>
   <nb-card-body>
     <div class="row">
@@ -23,7 +28,8 @@
         </div>
       </div>
       <div class="col-md-6" style="margin-top: 3px;">
-        <nb-radio-group [(ngModel)]="collapseAll" class="inline" (valueChange)="onClickCollapseAll($event)">
+        <nb-radio-group id="expend" name="expend" [(ngModel)]="collapseAll" class="inline"
+          (valueChange)="onClickCollapseAll($event)">
           <nb-radio [value]="true">Collapse All</nb-radio>
           <nb-radio [value]="false">Expand All</nb-radio>
         </nb-radio-group>
@@ -52,6 +58,100 @@
             </mat-select>
           </mat-form-field>
         </div>
+      </div>
+    </div>
+    <!-- filter hubs -->
+    <div *ngIf="filter.isFilter && isExpress" class="filter-block">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="label">Sort by: </label>&nbsp;&nbsp;&nbsp;
+          <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort"
+            (valueChange)="sortData($event)">
+            <nb-radio value="apply">
+              Apply Date
+            </nb-radio>
+            <nb-radio value="score">
+              Scoring
+            </nb-radio>
+          </nb-radio-group>
+        </div>
+        <div class="col-md-12">
+          <nb-checkbox (checkedChange)="checkSort($event,'pend')" [(ngModel)]="checkPending"
+            [ngModelOptions]="{standalone: true}">
+            <span>Pending Call</span>
+          </nb-checkbox>
+          <nb-checkbox (checkedChange)="checkSort($event,'call')" [(ngModel)]="checkCalled"
+            [ngModelOptions]="{standalone: true}">
+            <span>Called</span>
+          </nb-checkbox>
+        </div>
+      </div>
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Province</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.provinces" (ngModelChange)="changeFilter(true,'province')"
+                multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.provinces"
+                  (filteredReturn)="filteredProvince =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredProvince" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Area</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.areas" (ngModelChange)="changeFilter(true, 'area')" multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.areas"
+                  (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">District</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.districts" (ngModelChange)="changeFilter(true)" multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.districts"
+                  (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">SubDistrict</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select [(ngModel)]="filter.selected.subDistricts" (ngModelChange)="changeFilter(true)" multiple>
+                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.subDistricts"
+                  (filteredReturn)="filteredSubDistrict =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredSubDistrict" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div> -->
+      </div>
+    </div><br>
+    <div *ngIf="filter.isFilter" class="row" style="text-align: center;">
+      <div class="col-md-12">
+        <button nbButton status="default" (click)="clearFilter()">
+          Clear Filter
+        </button>
       </div>
     </div>
   </nb-card-body>
@@ -228,18 +328,39 @@
 
           <!-- PENDING, SELECTED, REJECT -->
           <div *ngIf="tabSelected !== 'NOT BUY'">
-            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i">
+            <nb-card *ngFor="let item of items;let i = index;" accent="success" [id]="'page'+i" [name]="'page'+i"
+              [ngClass]="{ 'bg-reserve': item.isReserve }">
               <nb-card-header>
                 <div class="title">
-                  <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
-                    (click)="openCandidateDetail(item)">
-                    {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
-                  </label>&nbsp;&nbsp;<i *ngIf="item.refCandidate.blacklist"
+                  <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'">
+                    <span class="link" (click)="openCandidateDetail(item)">
+                      {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
+                        (ตัวสำรอง)</span></span>&nbsp;
+                    <span *ngIf="isExpress && item.history.exist" class="fa fa-list-alt link"
+                      (click)="openHistory(item.history)">
+                      <!-- <nb-icon (click)="openHistory(item.history)" icon="close-circle-outline"
+                      style="margin-right: 0;color: blue;"></nb-icon> -->
+                    </span>
+                    <span>
+                      <nb-icon *ngIf="item.offer.flag && !item.offer.responsed" icon="checkmark-circle-2-outline"
+                        style="margin-right: 0;color: var(--color-gray)">
+                      </nb-icon>
+                      <nb-icon *ngIf="item.offer.responsed && item.offer.isOk" icon="checkmark-circle-2-outline"
+                        style="margin-right: 0;color: green;">
+                      </nb-icon>
+                      <nb-icon *ngIf="item.offer.responsed && !item.offer.isOk" icon="close-circle-outline"
+                        style="margin-right: 0;color: red;"></nb-icon>
+                    </span>
+                  </label>&nbsp;<i *ngIf="item.refCandidate.blacklist"
                     [nbTooltip]="'Blacklist - '+ item.refCandidate.blacklist.refReject.name"
                     class="fas fa-exclamation-triangle"></i>
                   <small class="status">
                     <span>
-                      Status: <label class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>
+                      Status: <label
+                        class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>&nbsp;&nbsp;
+                      HUB: <label *ngFor="let hub of item.hubs"
+                        class="label label-info">{{ hub.refProvince.name.th }}&nbsp;
+                        ({{ hub.areaName }})</label>
                     </span><br *ngIf="devices.isMobile">
                     <span *ngIf="!isExpress">
                       <span *ngIf="!devices.isMobile">|</span> Source:
@@ -278,7 +399,7 @@
                       <label class="label">Age</label>
                       <span>{{ item.refCandidate?.age > 0 ? item.refCandidate?.age : '-' }}</span>
                     </div>
-                    <div class="text-group">
+                    <div class="text-group" *ngIf="!isExpress">
                       <label class="label">Work Experience</label>
                       <span>{{ utilitiesService.convertMonthToYearText(item.refCandidate?.workExperience?.totalExpMonth) || '-' }}</span>
                     </div>
@@ -287,6 +408,14 @@
                       <span>{{ item.refCandidate?.phone || '-' }}</span>
                     </div>
                     <div class="text-group">
+                      <label class="label">Reserve Phone</label>
+                      <span>{{ item.refCandidate?.reservePhone || '-' }}</span>
+                    </div>
+                    <div *ngIf="isExpress" class="text-group">
+                      <label class="label">Apply Date</label>
+                      <span>{{ utilitiesService.convertDateTimeFromSystem(item.timestamp) || '-' }}</span>
+                    </div>
+                    <div class="text-group" *ngIf="!isExpress">
                       <label class="label">Email</label>
                       <span>{{ item.refCandidate?.email || '-' }}</span>
                     </div>
@@ -306,6 +435,22 @@
                         </div>
                       </div>
                     </div>
+                    <div *ngIf="isExpress">
+                      <label class="label text-black m-r-5">Infomation</label>
+                      <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
+                        nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
+                      </nb-icon>
+                      <div class="m-l-15">
+                        <div class="text-group">
+                          <label class="label">Training Date</label>
+                          <span>{{  utilitiesService.convertDateTimeFromSystem(item.training?.date) || '-' }}</span>
+                        </div>
+                        <div class="text-group">
+                          <label class="label">Onboarding Date</label>
+                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.onboard?.date) || '-' }}</span>
+                        </div>
+                      </div>
+                    </div>
                     <div *ngIf="!isExpress" class="text-group">
                       <span class="link" (click)="info(item, 'page'+i)">
                         <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
@@ -313,20 +458,34 @@
                     </div>
 
                     <!-- isExpress -->
-                    <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                    <div *ngIf="item.refSource.name === 'App-Form' || isExpress" class="text-group m-t-10 m-b-10">
                       <span class="link underline" (click)="openApplicationForm(item)">
                         <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
                         <span>Application Form</span>
                       </span>
                     </div>
 
+                    <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                      <span *ngIf="!item.called.flag" class="text-icon-center">
+                        <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-outline"
+                          class="font-inherit link"></nb-icon><span>Pending Call</span>
+                      </span>
+                    </div>
+                    <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                      <span *ngIf="item.called.flag" class="text-icon-center">
+                        <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-call-outline"
+                          class="font-inherit link">
+                        </nb-icon><span>Called by {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) }}</span>
+                      </span>
+                    </div>
                     <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
                       <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
                         <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
                       </span>
                     </div>
                     <div *ngIf="tabSelected === 'REJECTED' && item.reject.flag" class="m-t-5">
-                      <label class="label text-light-gray">Reject Info</label>
+                      <label class="label" [ngClass]="{'text-black': isExpress, 'text-light-gray': !isExpress}">Reject
+                        Info</label>
                       <div class="m-l-15">
                         <div class="text-group">
                           <label class="label">Reject Reason</label>
@@ -512,6 +671,12 @@
                   (click)="openPopupTransfer(item)">
                   <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
                 </button>
+
+                <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
+                  <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
+                </button>
+
                 <button *ngIf="item.condition.button.comment && !devices.isMobile" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                   (click)="openPopupComment(item)">
@@ -519,8 +684,17 @@
                   <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
                     position="top right"></nb-badge>
                 </button>
-                <button *ngIf="item.condition.button.nextStep" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                  status="success" [nbTooltip]="item.condition.button.step.button"
+                <button *ngIf="item.condition.button.nextStep && !isExpress" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success"
+                  [nbTooltip]="item.condition.button.step.button"
+                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
+                  <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
+                  <span *ngIf="item.condition.isExpired">
+                    {{ item.refJR?.refStatus?.name }}
+                  </span>
+                </button>
+                <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Pass to Sign Contract"
                   (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">

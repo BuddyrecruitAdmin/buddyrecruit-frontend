@@ -11,6 +11,13 @@ import { InputType, State, ResponseCode } from '../../../../shared/app.constants
 import { setAppFormData, getRole } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
 import { FormControl } from '@angular/forms';
+import { debug } from 'util';
+
+export interface IPosition {
+  id: string;
+  name: string;
+  active: boolean;
+}
 
 @Component({
   selector: 'ngx-app-form-detail',
@@ -44,8 +51,10 @@ export class AppFormDetailComponent implements OnInit {
   lenearTo = [2, 3, 4, 5, 6, 7, 8, 9, 10];
   totalScore = 0;
   questionError: string;
+  jobPositionError: string;
   isExpress = false;
   refCompany: string;
+  jobPositions: IPosition[] = [];
 
   constructor(
     private router: Router,
@@ -77,7 +86,7 @@ export class AppFormDetailComponent implements OnInit {
 
   initialModel() {
     this.appForm = {
-      _id: '',
+      _id: undefined,
       refCompany: this.role.refCompany._id,
       companyName: this.role.refCompany.name,
       formName: 'Application Form',
@@ -93,11 +102,15 @@ export class AppFormDetailComponent implements OnInit {
       questions: [],
       personalDetail: {
         active: true,
+        idCard: this.initialAction(),
+        firstnameEN: this.initialAction(),
+        lastnameEN: this.initialAction(),
         firstname: this.initialAction(),
         lastname: this.initialAction(),
         birth: this.initialAction(),
         age: this.initialAction(),
         phone: this.initialAction(),
+        reservePhone: this.initialAction(),
         email: this.initialAction(),
         address: this.initialAction(),
         addressNo: this.initialAction(),
@@ -107,6 +120,7 @@ export class AppFormDetailComponent implements OnInit {
         postcode: this.initialAction(),
         gender: this.initialAction(),
         expectedSalary: this.initialAction(),
+        // facebook: this.initialAction(),
       },
       workExperience: {
         active: true,
@@ -136,27 +150,23 @@ export class AppFormDetailComponent implements OnInit {
       uploadCV: {
         active: true,
       },
-      jobPositions: [],
+      refPositions: [],
     };
   }
 
   setDefault() {
     this.appForm.personalDetail.firstname.required = true;
-    this.appForm.personalDetail.firstname.disabled = true;
     this.appForm.personalDetail.lastname.required = true;
-    this.appForm.personalDetail.lastname.disabled = true;
+    this.appForm.personalDetail.firstnameEN.required = true;
+    this.appForm.personalDetail.lastnameEN.required = true;
     this.appForm.personalDetail.birth.required = true;
     this.appForm.personalDetail.phone.required = true;
-    this.appForm.personalDetail.phone.disabled = true;
-    this.appForm.personalDetail.email.required = true;
-    this.appForm.personalDetail.email.disabled = true;
+    this.appForm.personalDetail.reservePhone.required = false;
 
     this.appForm.workExperience.position.required = true;
-    this.appForm.workExperience.position.disabled = true;
     this.appForm.workExperience.company.required = true;
 
     this.appForm.education.refDegree.required = true;
-    this.appForm.education.refDegree.disabled = true;
   }
 
   initialOption(): IOption {
@@ -278,6 +288,7 @@ export class AppFormDetailComponent implements OnInit {
         textArea: '',
         options: [this.initialOption()],
         selected: null,
+        expected: null,
         hasOther: false,
         otherLabel: 'Other',
         otherChecked: false,
@@ -326,11 +337,13 @@ export class AppFormDetailComponent implements OnInit {
       isFilter: false,
       score: {
         isScore: false,
+        isAnswer: false,
         maxScore: 0,
         keywords: [],
         girdRowScore: 0,
         submitScore: 0,
-      }
+      },
+      isLoading: false,
     });
   }
 
@@ -359,32 +372,32 @@ export class AppFormDetailComponent implements OnInit {
     this.appForm.questions[iQuestion].answer.options.splice(iOption, 1);
   }
 
-  addNode() {
-    this.appForm.jobPositions.push({
-      refPosition: '',
-      name: `Job Position ${this.appForm.jobPositions.length + 1}`,
-      required: false,
-      isMultiAnswer: false,
-      children: [],
-    });
-  }
+  // addNode() {
+  //   this.appForm.jobPositions.push({
+  //     refPosition: '',
+  //     name: `Job Position ${this.appForm.jobPositions.length + 1}`,
+  //     required: false,
+  //     isMultiAnswer: false,
+  //     children: [],
+  //   });
+  // }
 
-  deleteNode(iNode: number) {
-    this.appForm.jobPositions.splice(iNode, 1);
-  }
+  // deleteNode(iNode: number) {
+  //   this.appForm.jobPositions.splice(iNode, 1);
+  // }
 
-  addNodeItem(iNode: number) {
-    this.appForm.jobPositions[iNode].children.push({
-      name: `Child ${this.appForm.jobPositions[iNode].children.length + 1}`,
-      required: false,
-      isMultiAnswer: false,
-      children: [],
-    });
-  }
+  // addNodeItem(iNode: number) {
+  //   this.appForm.jobPositions[iNode].children.push({
+  //     name: `Child ${this.appForm.jobPositions[iNode].children.length + 1}`,
+  //     required: false,
+  //     isMultiAnswer: false,
+  //     children: [],
+  //   });
+  // }
 
-  deleteNodeItem(iNode: number, iNodeItem: number) {
-    this.appForm.jobPositions[iNode].children.splice(iNodeItem, 1);
-  }
+  // deleteNodeItem(iNode: number, iNodeItem: number) {
+  //   this.appForm.jobPositions[iNode].children.splice(iNodeItem, 1);
+  // }
 
   addParent(iQuestion: number): void {
     this.appForm.questions[iQuestion].parentChild.push({
@@ -469,13 +482,25 @@ export class AppFormDetailComponent implements OnInit {
     return score;
   }
 
-  toggleScoreCalculator(question): void {
+  toggleScoreCalculator(question, type): void {
+    if (question.type === InputType.Radio) {
+      if (type === 'score' && question.score.isAnswer && question.score.isScore) {
+        question.score.isAnswer = false;
+      }
+      if (type === 'answer' && question.score.isAnswer && question.score.isScore) {
+        question.score.isScore = false;
+      }
+    }
+    if (!question.score.isAnswer) {
+      question.answer.expected = null;
+    }
     if (!question.score.isScore) {
       question.score = {
         isScore: false,
-        maxScore: 0,
-        keywords: [],
-        girdRowScore: 0,
+        isAnswer: question.score.isAnswer,
+        maxScore: question.score.maxScore,
+        keywords: question.score.keywords,
+        girdRowScore: question.score.girdRowScore,
         submitScore: 0,
       };
       this.calGrandScore();
@@ -562,7 +587,8 @@ export class AppFormDetailComponent implements OnInit {
 
   preview() {
     setAppFormData(this.appForm);
-    this.router.navigate([]).then(result => { window.open('/application-form/preview', '_blank'); });
+    const url = `/application-form/preview/${this.appForm._id}`;
+    this.router.navigate([]).then(result => { window.open(url, '_blank'); });
   }
 
   copyToClipboard() {
@@ -606,6 +632,7 @@ export class AppFormDetailComponent implements OnInit {
   validation(): boolean {
     let isValid = true;
     this.questionError = '';
+    this.jobPositionError = '';
 
     const elements = document.getElementsByClassName('mat-input-element ng-invalid');
     if (elements.length > 0) {
@@ -627,6 +654,13 @@ export class AppFormDetailComponent implements OnInit {
       }
     }
 
+    if (this.isExpress) {
+      if (!this.jobPositions.find(jobPosition => jobPosition.active)) {
+        this.jobPositionError = '* Please select at least job position.';
+        isValid = false;
+      }
+    }
+
     return isValid;
   }
 
@@ -636,32 +670,37 @@ export class AppFormDetailComponent implements OnInit {
     if (this.state === State.Create) {
       delete request._id;
     }
+    let unique = [];
+    this.jobPositions.forEach(jobPosition => {
+      if (jobPosition.active) {
+        unique.push(jobPosition.id);
+      }
+    });
+    request.refPositions = [...new Set(unique)];
     return request;
   }
 
   getJobPosition() {
-    // this.loadingJob = true;
-    // this.service.getJobPosition().subscribe(response => {
-    //   if (response.code === ResponseCode.Success) {
-    //     if (response.data) {
-    //       response.data.forEach(data => {
-    //         const found = this.appForm.jobPositions.find(jobPosition => {
-    //           return jobPosition.refPosition === data._id;
-    //         });
-    //         if (!found) {
-    //           this.appForm.jobPositions.push({
-    //             refPosition: data._id,
-    //             name: data.name,
-    //             required: false,
-    //             isMultiAnswer: false,
-    //             children: [],
-    //           });
-    //         }
-    //       });
-    //     }
-    //   }
-    //   this.loadingJob = false;
-    // });
+    this.jobPositions = [];
+    this.loadingJob = true;
+    this.service.getJobPosition(this.appForm._id).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.forEach(data => {
+            let active = false;
+            if (this.appForm.refPositions.find((jobPosition) => jobPosition === data._id)) {
+              active = true;
+            }
+            this.jobPositions.push({
+              id: data._id,
+              name: data.name,
+              active: active
+            });
+          });
+        }
+      }
+      this.loadingJob = false;
+    });
   }
 
   getDetail() {
@@ -669,8 +708,23 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          if (!this.appForm.personalDetail.idCard) {
+            this.appForm.personalDetail.idCard = this.initialAction();
+          }
+          if (!this.appForm.personalDetail.firstname) {
+            this.appForm.personalDetail.firstname = this.initialAction();
+          }
+          if (!this.appForm.personalDetail.lastname) {
+            this.appForm.personalDetail.lastname = this.initialAction();
+          }
+          // this.appForm.personalDetail.firstnameEN.disabled = false;
+          // this.appForm.personalDetail.lastnameEN.disabled = false;
+          this.appForm.personalDetail.phone.disabled = false;
+          this.appForm.personalDetail.reservePhone.disabled = false;
+          this.appForm.personalDetail.email.disabled = false;
           this.appForm.companyName = this.role.refCompany.name;
           this.calGrandScore();
+          this.getJobPosition();
         }
       } else {
         this.showToast('danger', response.message || 'Error!');
@@ -687,6 +741,15 @@ export class AppFormDetailComponent implements OnInit {
     if (!this.appForm.personalDetail.lastname.visible) {
       this.appForm.personalDetail.lastname.required = false;
     }
+    if (!this.appForm.personalDetail.firstnameEN.visible) {
+      this.appForm.personalDetail.firstnameEN.required = false;
+    }
+    if (!this.appForm.personalDetail.lastnameEN.visible) {
+      this.appForm.personalDetail.lastnameEN.required = false;
+    }
+    if (!this.appForm.personalDetail.idCard.visible) {
+      this.appForm.personalDetail.idCard.required = false;
+    }
     if (!this.appForm.personalDetail.birth.visible) {
       this.appForm.personalDetail.birth.required = false;
     }
@@ -696,12 +759,18 @@ export class AppFormDetailComponent implements OnInit {
     if (!this.appForm.personalDetail.phone.visible) {
       this.appForm.personalDetail.phone.required = false;
     }
+    if (!this.appForm.personalDetail.reservePhone.visible) {
+      this.appForm.personalDetail.reservePhone.required = false;
+    }
     if (!this.appForm.personalDetail.email.visible) {
       this.appForm.personalDetail.email.required = false;
     }
     if (!this.appForm.personalDetail.address.visible) {
       this.appForm.personalDetail.address.required = false;
     }
+    // if (!this.appForm.personalDetail.facebook.visible) {
+    //   this.appForm.personalDetail.facebook.required = false;
+    // }
   }
 
   changeWorkExperienceCheckbox() {

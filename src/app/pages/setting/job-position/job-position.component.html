@@ -62,10 +62,9 @@
             </div>
           </nb-card-header>
           <nb-card-body>
-            <div class="text-group" (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint"
-              nbPopoverPlacement="top">
+            <div class="text-group">
               <label class="label">Remark</label>
-              <span>{{ item.remark || '-' }}</span>
+              <span [nbTooltip]="item.remark">{{ item.remark || '-' }}</span>
             </div>
             <div class="text-group">
               <label class="label">Status</label>
@@ -116,9 +115,8 @@
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
-              <td (mouseenter)="itemDialog = item" [nbPopover]="remark" nbPopoverTrigger="hint" nbPopoverPlacement="top"
-                class="text-dot text-left" style="width: 300px;">
-                <div class="text-dot" style="width: 300px;" [ngClass]="{'text-center': !item.remark }">
+              <td class="text-left" [nbTooltip]="item.remark">
+                <div [ngClass]="{'text-center': !item.remark }">
                   {{ item.remark || '-' }}
                 </div>
               </td>
@@ -155,7 +153,7 @@
 </div>
 
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
     <nb-card-header>
       Job Position
     </nb-card-header>
@@ -165,11 +163,11 @@
         <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Position">
       </div>
       <div class="form-control-group">
-        <label class="label">Qualification</label>
+        <label class="label">Qualification<span style="color:red">*</span></label>
         <textarea type="" [(ngModel)]="itemDialog.qualification" nbInput fullWidth placeholder="Remark"></textarea>
       </div>
       <div class="form-control-group">
-        <label class="label">Specification</label>
+        <label class="label">Specification<span style="color:red">*</span></label>
         <textarea type="" [(ngModel)]="itemDialog.specification" nbInput fullWidth placeholder="Remark"></textarea>
       </div>
       <div class="form-control-group">
@@ -178,7 +176,8 @@
       </div>
       <div>
         <label class="label">Status</label>
-        <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id || itemDialog.isUsed">
+        <nb-radio-group [(ngModel)]="itemDialog.active"
+          [disabled]="!itemDialog._id || (itemDialog.isUsed && !isExpress) ">
           <nb-radio *ngFor="let status of statusList" [value]="status.value">
             {{ status.label }}
           </nb-radio>
@@ -187,7 +186,8 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" (click)="save()" [disabled]="!itemDialog.name">Save</button>
+      <button nbButton status="success" (click)="save()"
+        [disabled]="!itemDialog.name || !itemDialog.qualification || !itemDialog.specification">Save</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

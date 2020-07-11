@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setFlagExam, setUserEmail, setFieldName, setJdName } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setFlagExam, setUserEmail, setFieldName, setJdName, setUserToken } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -20,9 +20,11 @@ import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogR
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from '../../../shared/constants/message';
 import { CandidateService } from '../../candidate/candidate.service';
+import { LocationService } from '../../setting/location/location.service';
 import { CalendarService } from '../../calendar/calendar.service';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
+import { DropDownValue } from '../../../shared/interfaces/common.interface';
 @Component({
   selector: 'ngx-appointment-detail',
   templateUrl: './appointment-detail.component.html',
@@ -63,6 +65,20 @@ export class AppointmentDetailComponent implements OnInit {
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
+  locationList: DropDownValue[];
+  filteredListLocation: any;
+  location: any;
+  loadingDialog: boolean;
+  noticeHeight: any;
+  sDate: Date;
+  eDate: Date;
+  staffTotal: any;
+  timePerNo: any;
+  candidateTotal: any;
+  periodTime: any;
+  diffDay: any;
+  sError: string;
+  listTime: any;
   constructor(
     private router: Router,
     private service: AppointmentService,
@@ -73,11 +89,13 @@ export class AppointmentDetailComponent implements OnInit {
     public candidateService: CandidateService,
     public calendarService: CalendarService,
     public appFormService: AppFormService,
+    private locationService: LocationService
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
       this.router.navigate(['/employer/appointment/list']);
     }
+    this.noticeHeight = window.innerHeight * 0.85;
     this.role = getRole();
     this.jrName = getJdName();
     this.collapseAll = getCollapse();
@@ -146,13 +164,26 @@ export class AppointmentDetailComponent implements OnInit {
     this.keyword = '';
     this.soList = [];
     this.sourceBy = [];
+    this.locationList = [];
     this.paging = {
       length: 0,
       pageIndex: 0,
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     };
+    this.initialModel();
     this.onModel();
+  }
+
+  initialModel(): any {
+    this.location = '';
+    this.sDate = null;
+    this.eDate = null;
+    this.periodTime = [];
+    this.periodTime.push({});
+    this.staffTotal = 0;
+    this.timePerNo = 0;
+    this.candidateTotal = 0;
   }
 
   async onModel() {
@@ -506,6 +537,148 @@ export class AppointmentDetailComponent implements OnInit {
     this.router.navigate([path]);
   }
 
+  selectDate(dialog: TemplateRef<any>) {
+    this.loadingDialog = true;
+    this.locationList = [];
+    this.initialModel();
+    this.sError = '';
+    this.callDialog(dialog);
+    this.locationService.getList().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        if (response.data) {
+          response.data.map(element => {
+            this.locationList.push({
+              label: element.name,
+              value: element._id
+            });
+          });
+          this.filteredListLocation = this.locationList.slice();
+        }
+      }
+      this.loadingDialog = false;
+    })
+  }
+
+  checkDate(dialog: TemplateRef<any>) {
+    this.listTime = [];
+    this.loadingDialog = true;
+    this.callDialog(dialog);
+    this.service.listDate(this.jrId).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.listTime = response.data;
+      }
+      this.loadingDialog = false;
+    })
+  }
+
+  saveDate() {
+    if (this.validation()) {
+      const request = this.setRequest();
+      this.service.saveDate(request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+          this.dialogRef.close();
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+      })
+    }
+  }
+
+  addPeriod() {
+    this.periodTime.push({
+      start: {},
+      end: {}
+    })
+  }
+
+  validation(): boolean {
+    this.sError = '';
+    let isValid = true;
+    this.setCandidateTotal();
+    if (!this.location) {
+      isValid = false;
+      this.sError = this.sError || MESSAGE[107];
+    }
+    if (!this.sDate) {
+      isValid = false;
+      this.sError = this.sError || MESSAGE[33];
+    }
+    if (!this.eDate) {
+      isValid = false;
+      this.sError = this.sError || MESSAGE[33];
+    }
+    if (this.sDate > this.eDate) {
+      isValid = false;
+      this.sError = this.sError || MESSAGE[32];
+    }
+    this.periodTime.forEach((element, index) => {
+      if (!element || !element.start || !element.end || !element.start.hour || !element.end.hour) {
+        isValid = false;
+        this.sError = this.sError || 'Please complete all period time fields.';
+      } else if (element.start.hour > element.end.hour) {
+        isValid = false;//เวลาเริ่มมากกว่าเวลาจบ
+        this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+      } else if (element.start.hour === element.end.hour) {
+        if (element.start.minute > element.end.minute) {
+          isValid = false;
+          //เวลาเริ่มนาทีมากกว่า เวลาจบ
+          this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+        }
+      }
+      if (index > 0) {
+        if (this.periodTime[index - 1].end.hour > element.start.hour) {
+          isValid = false;
+          this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+        }
+        if (this.periodTime[index - 1].end.hour === element.start.hour) {
+          if (this.periodTime[index - 1].end.minute > element.start.minute) {
+            isValid = false;
+            //เวลาเริ่มนาทีมากกว่า เวลาจบ
+            this.sError = this.sError || 'เวลาเริ่มต้องน้อยกว่าเวลาจบ';
+          }
+        }
+      }
+    });
+    if (!this.timePerNo) {
+      isValid = false;
+      this.sError = this.sError || 'โปรดใส่ระยะเวลาสัมภาษณ์ต่อคน';
+    }
+    return isValid;
+  }
+
+  setRequest(): any {
+    this.setCandidateTotal();
+    const data = {
+      location: this.location,
+      startDate: this.sDate,
+      endDate: this.eDate,
+      periodTime: this.periodTime,
+      staffTotal: this.staffTotal,
+      timePerNo: this.timePerNo,
+      candidateTotal: this.candidateTotal,
+      refJR: this.jrId
+    }
+    return data;
+  }
+
+  setCandidateTotal() {
+    this.diffDay = this.utilitiesService.calculateDuration2Date(this.sDate, this.eDate);
+    this.candidateTotal = 0;
+    let diffMIn = 0;
+    this.periodTime.map(element => {
+      if (element.start.hour) {
+        diffMIn = ((element.end.hour * 60) + element.end.minute) - ((element.start.hour * 60) + element.start.minute);
+        this.candidateTotal = this.candidateTotal + Math.floor(diffMIn / this.timePerNo);
+      }
+    })
+    this.candidateTotal = this.candidateTotal * (this.diffDay + 1);
+  }
+
+  deleteTime(index) {
+    this.periodTime.splice(index, 1);
+  }
+
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
@@ -536,6 +709,7 @@ export class AppointmentDetailComponent implements OnInit {
 
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });

@@ -48,6 +48,7 @@ export class TalentPoolListComponent implements OnInit {
   showStepper: boolean;
   filteredList: any;
   filteredList2: any;
+  isExpress: boolean;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -60,6 +61,7 @@ export class TalentPoolListComponent implements OnInit {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();
+    this.isExpress = this.role.refCompany.isExpress;
     if (this.devices.isMobile || this.devices.isTablet) {
       this.isGridLayout = this.isGridLayout ? this.isGridLayout : true;
       this.showStepper = false;

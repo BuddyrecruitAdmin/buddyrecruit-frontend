@@ -1,0 +1,29 @@
+.loading {
+  margin: 2rem 0;
+  height: 5rem;
+}
+.block-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cursor {
+  cursor: pointer;
+}
+.cursor.text-green {
+  cursor: default;
+}
+.title {
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.sub-title {
+  font-weight: 400;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: gray;
+}
+button {
+  font-family: kanit !important;
+}

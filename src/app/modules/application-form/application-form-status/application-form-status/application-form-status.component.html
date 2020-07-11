@@ -1,0 +1,131 @@
+<div id="resume">
+  <div *ngIf="loading" class="container">
+    <div class="loading" [nbSpinner]="loading" nbSpinnerStatus="primary" nbSpinnerMessage="Loading Document...">
+    </div>
+  </div>
+
+  <div *ngIf="!loading">
+    <div class="nav-bar">
+      <div class="nav-brand">
+        <mat-icon>ballot</mat-icon>
+        <div class="title">{{ 'CHECK_STATUS2' | translate }}</div>
+        <div class="title">{{ comName }}</div>
+      </div>
+      <div class="nav-right">
+        <span class="lang" [ngClass]="{ 'active' : language === 'en' }" (click)="setLang('en')">ENG</span>
+        |
+        <span class="lang" [ngClass]="{ 'active' : language === 'th' }" (click)="setLang('th')">ไทย</span>
+      </div>
+    </div>
+    <div class="container">
+      <div style="margin-top: 2.5rem;">
+        <div class="fullname">{{ 'NAME' | translate }}: {{fullName}}</div>
+        <table mat-table [dataSource]="dataSource" class="w-100">
+
+          <ng-container matColumnDef="position">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'POSITION' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="hub">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> HUB </th>
+            <td mat-cell *matCellDef="let element"> {{element.hub || '-'}} </td>
+          </ng-container>
+
+          <!-- พื้นที่สถานะ -->
+          <ng-container matColumnDef="hubStatus">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> HUB({{ 'STATUS' | translate }}) </th>
+            <td mat-cell *matCellDef="let element"> {{element.hubStatus || '-' }} </td>
+          </ng-container>
+
+          <!-- วันที่สมัครงาน -->
+          <ng-container matColumnDef="date">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'REGISTER_DATE' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+          </ng-container>
+
+          <!-- วันที่อบรม -->
+          <ng-container matColumnDef="trainDate">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'TRAIN_DATE' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.trainDate}} </td>
+          </ng-container>
+
+          <!-- วันที่เริ่่มงาน -->
+          <ng-container matColumnDef="startDate">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'START_DATE' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.startDate}} </td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="date">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'INTERVIEW_DATE' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+          </ng-container> -->
+
+          <!-- สถานะการสมัครงาน -->
+          <ng-container matColumnDef="status">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef> {{ 'STATUS_REGIS' | translate }} </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="{{ element.status.color }}">
+                <!-- {{ language === 'en' ? element.status.nameEN : element.status.nameTH }} -->
+                {{element.status.nameTH}}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th class="bg-green" mat-header-cell *matHeaderCellDef style="max-width: 250px;">{{ 'ACTION' | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-flat-button type="button" color="primary"
+                (click)="editAppForm(element.comId, element.appFormId,'',element.action )"
+                [disabled]="!element.action.canEdit">
+                <span *ngIf="element.action.canUploadOnly"> {{ 'EDIT_UPLOAD' | translate }}</span>
+                <span *ngIf="!element.action.canUploadOnly">{{ 'EDIT' | translate }}</span>
+              </button>
+              <!-- <button mat-flat-button type="button" color="primary" (click)="reserveDate(dialog, element.flowId)"
+                [disabled]="!element.status.reserve">
+                {{ 'RESERVE' | translate }}
+              </button> -->
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <br><br>
+      <div *ngIf="actionUser.canCreate" style="text-align:center">
+        <button nbButton status="success" nbTooltip="Create" (click)="createNew()">
+          <nb-icon icon="plus-outline"></nb-icon>{{ 'CREATE' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #dialog let-data let-ref="dialogRef">
+    <div class="card">
+      <div class="card-header">
+        <div class="title">{{ 'RESERVE' | translate }}</div>
+      </div>
+      <div class="card-body">
+        Out of service.
+        <!-- <mat-form-field appearance="outline" class="fit-content">
+          <mat-label>{{ 'SELECT_ANSWER' | translate }}</mat-label>
+          <mat-select required>
+            <mat-option value="aaa">aaa</mat-option>
+            <mat-option value="bbb">bbb</mat-option>
+            <mat-option value="ccc">ccc</mat-option>
+          </mat-select>
+        </mat-form-field> -->
+      </div>
+    </div>
+    <!-- <nb-card>
+      <nb-card-header>Template Dialog</nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="ref.close()">Close Dialog</button>
+      </nb-card-footer>
+    </nb-card> -->
+  </ng-template>
+
+</div>

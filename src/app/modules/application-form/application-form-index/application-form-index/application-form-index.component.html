@@ -1,0 +1,41 @@
+<div id="resume">
+
+  <div class="block-center" [style.height.px]="innerHeight">
+    <div style="width: 400px;">
+      <form class="card m-0" (ngSubmit)="checkStatus()">
+        <div class="card-body text-center">
+          <div class="text-right m-b-20">
+            <span class="cursor" [ngClass]="{ 'text-green' : language === 'en' }" (click)="setLang('en')">ENG</span>
+            |
+            <span class="cursor" [ngClass]="{ 'text-green' : language === 'th' }" (click)="setLang('th')">ไทย</span>
+          </div>
+          <div class="title">{{ companyName }}</div>
+          <div class="sub-title">{{ 'APP_FROM' | translate }}</div>
+          <!-- <div *ngIf="role?.refCompany?.name" class="sub-title">{{ role?.refCompany?.name }}</div> -->
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>{{ 'PHONE' | translate }}</mat-label>
+            <input matInput type="text" id="phone" name="phone" [(ngModel)]="phone"
+              [ngModelOptions]="{standalone: true}" required digitOnly
+              onKeyPress="if(this.value.length === 10) return false;">
+          </mat-form-field> -->
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
+            <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="idCard"
+            [ngModelOptions]="{standalone: true}" required digitOnly
+            onKeyPress="if(this.value.length === 13) return false;">
+            <!-- <input matInput type="text" id="birth" name="birth" [matDatepicker]="birthDate" [(ngModel)]="birth"
+              (click)="birthDate.open()" [ngModelOptions]="{standalone: true}" readonly required>
+            <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
+            <mat-datepicker #birthDate></mat-datepicker> -->
+          </mat-form-field>
+          <button nbButton type="submit" status="success" [nbSpinner]="loading" nbSpinnerSize="tiny">
+            {{ 'CHECK_STATUS' | translate }}
+          </button>
+        </div>
+      </form>
+      <!-- <button nbButton type="button" status="success" class="w-100 m-t-20" (click)="register()">
+        {{ 'REGISTER' | translate }}
+      </button> -->
+    </div>
+  </div>
+</div>

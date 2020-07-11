@@ -1,0 +1,35 @@
+.loading {
+  margin: 2rem 0;
+  height: 5rem;
+}
+.fullname {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+.mat-table {
+  font-family: kanit !important;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+th.mat-header-cell {
+  padding: 1rem !important;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+td.mat-cell {
+  padding: 0.5rem 0.25rem !important;
+  text-align: center;
+  border-bottom: none;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+
+  button {
+    font-family: kanit !important;
+    margin: 5px;
+  }
+}
+.bg-green {
+  background: var(--color-green);
+}

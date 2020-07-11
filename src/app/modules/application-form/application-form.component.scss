@@ -45,3 +45,28 @@
   opacity: 0.75;
   font-size: 0.75em;
 }
+.card-body.img-preview {
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+::ng-deep .nb-theme-default nb-checkbox.status-primary .custom-checkbox{
+  border-radius: 25px;
+}
+
+ ::ng-deep .nb-theme-default nb-checkbox.status-primary .native-input:disabled + .custom-checkbox.checked{
+   background-color: #3366ff;
+ }
+ .btn-link{
+  background-color: var(--color-blue);
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+    cursor: pointer;
+    font-family: Open Sans, sans-serif;
+ }
+
+ ::ng-deep .nb-theme-default .mat-select-panel {
+  max-height: 30vh;
+  padding: 0;
+}
