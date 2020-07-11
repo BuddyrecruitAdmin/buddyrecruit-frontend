@@ -210,22 +210,6 @@
                     <label class="label">Email</label>
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
-                  <div *ngIf="isExpress">
-                    <label class="label text-black m-r-5">Infomation</label>
-                    <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
-                      nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
-                    </nb-icon>
-                    <div class="m-l-15">
-                      <div class="text-group">
-                        <label class="label">Training Date</label>
-                        <span>{{  utilitiesService.convertDateTimeFromSystem(item.training?.date) || '-' }}</span>
-                      </div>
-                      <div class="text-group">
-                        <label class="label">Onboarding Date</label>
-                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.onboard?.date) || '-' }}</span>
-                      </div>
-                    </div>
-                  </div>
                   <div *ngIf="!isExpress" class="text-group">
                     <span class="link" (click)="info(item)">
                       <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
@@ -240,7 +224,23 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="m-t-5">
+                  <div *ngIf="isExpress" class="m-t-5">
+                    <label class="label text-black m-r-5">Information</label>
+                    <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
+                      nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
+                    </nb-icon>
+                    <div class="m-l-15">
+                      <div class="text-group">
+                        <label class="label">Training Date</label>
+                        <span>{{  utilitiesService.convertDateTimeFromSystem(item.training?.date) || '-' }}</span>
+                      </div>
+                      <div class="text-group">
+                        <label class="label">Onboarding Date</label>
+                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.onboard?.date) || '-' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="!isExpress" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Interview Info</label>
                     <div class="m-l-15">
                       <div class="text-group">
@@ -265,7 +265,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="m-t-5">
+                  <div *ngIf="!isExpress" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
                     <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
                       nbTooltip="Edit Sign Contract Info"

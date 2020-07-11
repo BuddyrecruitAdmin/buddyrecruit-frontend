@@ -771,6 +771,12 @@ export class ApplicationFormComponent implements OnInit {
         if (hub._id !== _id) {
           hub.checked = false;
         }
+        hub.provinces.forEach(province => {
+          province.checked = false;
+          province.areas.forEach(area => {
+            area.checked = false;
+          });
+        });
       });
     }
     // this.hub.provinces.forEach(province => {
@@ -795,6 +801,9 @@ export class ApplicationFormComponent implements OnInit {
           if (province.refProvince !== _id) {
             province.checked = false;
           }
+          province.areas.forEach(area => {
+            area.checked = false;
+          });
         });
       });
     }
