@@ -58,6 +58,7 @@ export class HubComponent implements OnInit {
   touched: boolean;
   editFlag: boolean;
   tempItem: any;
+  isCreate: boolean;
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
@@ -84,6 +85,7 @@ export class HubComponent implements OnInit {
     this.filteredList = [];
     this.tempItem = [];
     this.editFlag = false;
+    this.isCreate = false;
     this.refresh();
   }
 
@@ -148,7 +150,7 @@ export class HubComponent implements OnInit {
 
   create(dialog: TemplateRef<any>) {
     this.loadingDialog = true;
-    this.editFlag = false;
+    this.isCreate = true;
     this._id = undefined;
     this.sError = '';
     this.touched = false;
@@ -196,6 +198,7 @@ export class HubComponent implements OnInit {
       }
     });
     // this.itemDialog = item;
+    this.isCreate = false;
     this.loadingDialog = true;
     this.touched = false;
     this.sError = '';
