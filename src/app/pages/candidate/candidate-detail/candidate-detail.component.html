@@ -177,7 +177,7 @@
           </div>
         </div>
         <div *ngIf="isExpress">
-          <label class="label topic m-r-5">Infomation</label>
+          <label class="label topic m-r-5">Information</label>
           <nb-icon *ngIf="condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
             nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
           </nb-icon>
@@ -326,7 +326,7 @@
         </div>
 
         <!-- Sign Contract Info -->
-        <div *ngIf="condition.block.signContract">
+        <div *ngIf="condition.block.signContract && !isExpress">
           <label class="label topic">Sign Contract Info <span *ngIf="condition.icon.signContract"
               class="text-red">*</span></label>
           <nb-icon *ngIf="condition.icon.signContract" icon="edit-2-outline" class="link"
@@ -352,7 +352,7 @@
         </div>
 
         <!-- Onboard Info -->
-        <div *ngIf="condition.block.onboard">
+        <div *ngIf="condition.block.onboard && !isExpress">
           <label class="label topic">Onboard Info <span *ngIf="condition.icon.onboard" class="text-red">*</span></label>
           <nb-icon *ngIf="condition.icon.onboard" icon="edit-2-outline" class="link" nbTooltip="Edit Onobard Info"
             (click)="openPopupOnboardDate(item)"></nb-icon>

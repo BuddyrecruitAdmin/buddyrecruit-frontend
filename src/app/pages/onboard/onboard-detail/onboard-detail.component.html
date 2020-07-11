@@ -206,8 +206,22 @@
                     <label class="label">Email</label>
                     <span>{{ item.refCandidate?.email || '-' }}</span>
                   </div>
-                  <div *ngIf="isExpress">
-                    <label class="label text-black m-r-5">Infomation</label>
+                  <div *ngIf="!isExpress" class="text-group">
+                    <span class="link" (click)="info(item)">
+                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
+                    </span>
+                  </div>
+                  <!-- isExpress -->
+                  <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                    <span class="link underline" (click)="openApplicationForm(item)">
+                      <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
+                      <span>Application Form</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div *ngIf="isExpress" class="m-t-5">
+                    <label class="label text-black m-r-5">Information</label>
                     <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
                       nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
                     </nb-icon>
@@ -233,21 +247,7 @@
                       </div>
                     </div>
                   </div>
-                  <div *ngIf="!isExpress" class="text-group">
-                    <span class="link" (click)="info(item)">
-                      <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
-                    </span>
-                  </div>
-                  <!-- isExpress -->
-                  <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
-                    <span class="link underline" (click)="openApplicationForm(item)">
-                      <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
-                      <span>Application Form</span>
-                    </span>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="m-t-5">
+                  <div *ngIf="!isExpress" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Sign Contract Info</label>
                     <div class="m-l-15">
                       <div class="text-group" *ngIf="!isExpress">
@@ -268,7 +268,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="m-t-5">
+                  <div *ngIf="!isExpress" class="m-t-5">
                     <label class="label text-light-gray m-r-5">Onboard Info</label>
                     <nb-icon *ngIf="item.condition.icon.signContract" icon="edit-2-outline" class="link"
                       nbTooltip="Edit Agree Start Date"
