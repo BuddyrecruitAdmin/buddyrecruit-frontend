@@ -148,6 +148,7 @@ export class HubComponent implements OnInit {
 
   create(dialog: TemplateRef<any>) {
     this.loadingDialog = true;
+    this.editFlag = false;
     this._id = undefined;
     this.sError = '';
     this.touched = false;
