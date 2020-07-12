@@ -414,8 +414,14 @@
                 <nb-icon icon="close-circle"></nb-icon>
               </button>
 
-              <button *ngIf="item.condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                status="primary" nbTooltip="Revoke" (click)="revoke(item)">
+              <button *ngIf="item.condition.button.revoke && !isExpress" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary" nbTooltip="Revoke"
+                (click)="revoke(item)">
+                <nb-icon icon="undo"></nb-icon>
+              </button>
+              <button *ngIf="item.condition.button.revoke && isExpress && item.canRevoke" nbButton
+                [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary" nbTooltip="Revoke"
+                (click)="revoke(item)">
                 <nb-icon icon="undo"></nb-icon>
               </button>
 

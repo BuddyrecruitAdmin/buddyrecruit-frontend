@@ -466,7 +466,12 @@
       nbTooltip="Reject" (click)="reject(item)">
       <nb-icon icon="close-circle"></nb-icon>
     </button>
-    <button *ngIf="condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary"
+    <button *ngIf="condition.button.revoke && !isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
+      status="primary" [nbTooltip]="(item.blacklist)? 'unblock' : 'revoke'" (click)="revoke(item)">
+      <nb-icon icon="undo"></nb-icon>
+    </button>
+    <button *ngIf="condition.button.revoke && isExpress && item.candidateFlow.canRevoke" nbButton
+      [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary"
       [nbTooltip]="(item.blacklist)? 'unblock' : 'revoke'" (click)="revoke(item)">
       <nb-icon icon="undo"></nb-icon>
     </button>

@@ -475,7 +475,8 @@
                       <span *ngIf="item.called.flag" class="text-icon-center">
                         <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-call-outline"
                           class="font-inherit link">
-                        </nb-icon><span>Called by {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) }}</span>
+                        </nb-icon><span>Called by
+                          {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) }}</span>
                       </span>
                     </div>
                     <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
@@ -713,8 +714,14 @@
                   status="danger" nbTooltip="Reject" (click)="reject(item)">
                   <nb-icon icon="close-circle"></nb-icon>
                 </button>
-                <button *ngIf="item.condition.button.revoke" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                  status="primary" nbTooltip="Revoke" (click)="revoke(item)" [disabled]="showTips">
+                <button *ngIf="item.condition.button.revoke && !isExpress" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary" nbTooltip="Revoke"
+                  (click)="revoke(item)" [disabled]="showTips">
+                  <nb-icon icon="undo"></nb-icon>
+                </button>
+                <button *ngIf="item.condition.button.revoke && isExpress && item.canRevoke" nbButton
+                  [size]="(devices.isMobile)? 'tiny' : 'medium'" status="primary" nbTooltip="Revoke"
+                  (click)="revoke(item)" [disabled]="showTips">
                   <nb-icon icon="undo"></nb-icon>
                 </button>
               </nb-card-footer>
