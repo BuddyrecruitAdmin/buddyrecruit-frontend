@@ -526,15 +526,15 @@ export class ApplicationFormComponent implements OnInit {
             this.appForm.refTemplate = this.template._id;
             this.appForm.refPosition = this.refPosition;
             this.refCompany = this.appForm.refCompany;
-            if (this.previewFlag) {
+            if (this.previewFlag || this.submitFlag || this.recruiterAll) {
               this.appForm.questions = this.template.questions
             }
-            if (this.submitFlag) {
-              this.appForm.questions = this.template.questions;
-            }
-            if (this.recruiterAll) {
-              this.appForm.questions = this.template.questions;
-            }
+            // if (this.submitFlag) {
+            //   this.appForm.questions = this.template.questions;
+            // }
+            // if (this.recruiterAll) {
+            //   this.appForm.questions = this.template.questions;
+            // }
             this.initialAnswer();
           }
           if (this.dataIndex) {
@@ -952,7 +952,6 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   noExpect(qExpect) {
-    // let message = 'ไม่สามารถลงทะเบียนได้ ขออภัยคุณสมบัติของท่านไม่ตรงตามที่กำหนด ดังนี้';
     let message = 'Your qualifications do not match';
     let btnText = 'Accept'
     let btnText2 = 'Exit'
@@ -967,13 +966,11 @@ export class ApplicationFormComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        // window.close();
         this.stepperComponent.previous();
         this.stepperComponent.previous();
       }
       else {
         this.stepperComponent.next();
-        // qElement.scrollIntoView();
       }
     });
   }
@@ -1133,15 +1130,9 @@ export class ApplicationFormComponent implements OnInit {
         if (question.answer.expected >= 0 && (question.type === this.InputType.Radio) && question.answer.expected !== null) {
           if (question.answer.expected !== question.answer.selected) {
             this.reserve = true;
-            // isQuestionValid = false;
-            // element.classList.add("has-error");
             this.qExpectList.push(question.title)
 
           }
-
-          // if (!isQuestionValid && !qElement) {
-          //   qElement = element;
-          // }
         }
       }
     });
@@ -1177,7 +1168,6 @@ export class ApplicationFormComponent implements OnInit {
 
   setRequest(): IApplicationForm {
     const request = this.appForm;
-    // ทำต่อตรงนี่
     request.hubs = [];
     // if (this.hub && this.hub.provinces && this.hub.provinces.length) {
     if (this.hubs && this.hubs.length) {

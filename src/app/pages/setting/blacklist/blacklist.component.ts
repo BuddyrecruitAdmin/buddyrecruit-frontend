@@ -29,7 +29,7 @@ export class BlacklistComponent implements OnInit {
   devices: Devices;
   loading: boolean;
   isGridLayout: boolean;
-
+  isExpress: boolean;
   constructor(
     private router: Router,
     private service: CandidateService,
@@ -49,6 +49,7 @@ export class BlacklistComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

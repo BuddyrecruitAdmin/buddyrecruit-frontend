@@ -49,7 +49,11 @@
                 {{ utilitiesService.setFullname(item.refCandidate) }}
               </label>
             </div>
-            <div *ngIf="role.refAuthorize.configuration.blacklist.editable" class="actions">
+            <div *ngIf="role.refAuthorize.configuration.blacklist.editable && !isExpress" class="actions">
+              <nb-icon icon="undo-outline" class="link" nbTooltip="Unblock" (click)="unblock(item)"></nb-icon>
+            </div>
+            <div *ngIf="role.refAuthorize.configuration.blacklist.editable && isExpress && item.refReject.canRevoke"
+              class="actions">
               <nb-icon icon="undo-outline" class="link" nbTooltip="Unblock" (click)="unblock(item)"></nb-icon>
             </div>
           </nb-card-header>
@@ -153,7 +157,12 @@
                 <button nbButton status="info" size="tiny" nbTooltip="More details" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
-                <button nbButton status="primary" size="tiny" nbTooltip="Unblock" (click)="unblock(item)">
+                <button *ngIf="!isExpress" nbButton status="primary" size="tiny" nbTooltip="Unblock"
+                  (click)="unblock(item)">
+                  <nb-icon icon="undo-outline"></nb-icon>
+                </button>
+                <button *ngIf="isExpress && item.refReject.canRevoke" nbButton status="primary" size="tiny"
+                  nbTooltip="Unblock" (click)="unblock(item)">
                   <nb-icon icon="undo-outline"></nb-icon>
                 </button>
               </td>
