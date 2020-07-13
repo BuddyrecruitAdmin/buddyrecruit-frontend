@@ -63,6 +63,8 @@ export class ApplicationFormIndexComponent implements OnInit {
       console.log(param.id);
       if (param.id) {
         setFacebookId(param);
+      }else{
+        setFacebookId();
       }
     })
     this.activatedRoute.params.subscribe(params => {
