@@ -32,7 +32,7 @@ export class ApplicationFormService extends NetworkService {
   }
 
   create(request: IApplicationForm): Observable<ApiResponse> {
-      request
+    request
     return this.post(API_ENDPOINT.APPLICATION_FORM.CREATE, request);
   }
 
@@ -77,13 +77,23 @@ export class ApplicationFormService extends NetworkService {
     return this.post(API_ENDPOINT.APPLICATION_FORM.HUB_LIST, body);
   }
 
-  getStatusList(refCompany, idCard): Observable<ApiResponse> {
-    const body = {
-      refCompany: refCompany,
-      // phone: phone,
-      idCard: idCard
+  getStatusList(refCompany, idCard, facebook): Observable<ApiResponse> {
+    if (facebook) {
+      const body = {
+        refCompany: refCompany,
+        // phone: phone,
+        fbId: facebook.id,
+        channel: facebook.channel,
+        idCard: idCard
+      }
+      return this.post(API_ENDPOINT.APPLICATION_FORM.GET_STATUS_LIST, body);
+    } else {
+      const body = {
+        refCompany: refCompany,
+        idCard: idCard
+      }
+      return this.post(API_ENDPOINT.APPLICATION_FORM.GET_STATUS_LIST, body);
     }
-    return this.post(API_ENDPOINT.APPLICATION_FORM.GET_STATUS_LIST, body);
   }
 
   fileDownload(refCompany: string, uploadName = ''): Observable<ApiResponse> {

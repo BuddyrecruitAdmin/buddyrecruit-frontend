@@ -127,6 +127,8 @@ export class ApplicationFormComponent implements OnInit {
   canAll: any;
   fbId: any;
   companyId: any;
+  fIdCard: FormControl;
+  IdError: string;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -165,7 +167,7 @@ export class ApplicationFormComponent implements OnInit {
       const refAppform = params.id;
 
       this.refCompany = refCompany;
-
+      this.fIdCard = new FormControl('', [Validators.required, Validators.minLength(13)]);
       if (action) {
         if (action === State.Preview) {
           this.previewFlag = true;
@@ -1149,6 +1151,12 @@ export class ApplicationFormComponent implements OnInit {
       if (id) {
         document.getElementById(id).focus();
       }
+    }
+    // idCard
+    if (this.appForm.idCard.length === 12 || this.appForm.idCard.toString().substring(0, 1) === '0') {
+      isValid = false;
+      this.IdError = 'เลขบัตรประชาชนไม่ถูกต้อง';
+      this.fIdCard.setErrors({})
     }
 
     const qElement = this.getQuestionElementError();

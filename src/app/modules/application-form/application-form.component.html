@@ -304,10 +304,11 @@
                 <div class="col-md-4" *ngIf="template.personalDetail.idCard.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
-                    <input matInput type="text" id="idCard" name="idCard" [(ngModel)]="appForm.idCard"
-                      [required]="template.personalDetail.idCard.required" [ngModelOptions]="{standalone: true}"
-                      digitOnly onKeyPress="if(this.value.length === 13) return false;"
+                    <input matInput [formControl]="fIdCard" type="text" id="idCard" name="idCard"
+                      [(ngModel)]="appForm.idCard" [required]="template.personalDetail.idCard.required" digitOnly
+                      onKeyPress="if(this.value.length === 13) return false;"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
+                    <mat-error *ngIf="fIdCard.invalid">{{IdError}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
