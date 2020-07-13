@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex, setAppformStatus, setUserEmail } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, getAppformIndex, setUserToken, setAppFormData, setFlowId, setUserSuccess, setAppformIndex, setAppformStatus, setUserEmail, setFacebookId, getFacebookId } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -41,6 +41,7 @@ export class ApplicationFormStatusComponent implements OnInit {
   comName: string;
   hubName: string;
   actionUser: any;
+  facebook: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -53,6 +54,7 @@ export class ApplicationFormStatusComponent implements OnInit {
     setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
+    this.facebook = getFacebookId();
   }
 
   ngOnInit() {
@@ -68,7 +70,7 @@ export class ApplicationFormStatusComponent implements OnInit {
   getStatusList() {
     const data = getAppformIndex();
     if (data) {
-      this.service.getStatusList(data.companyId, data.idCard).subscribe(response => {
+      this.service.getStatusList(data.companyId, data.idCard, this.facebook).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.dataSource = [];
           this.tokenId = response.data.token;

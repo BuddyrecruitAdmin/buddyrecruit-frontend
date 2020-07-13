@@ -14,6 +14,7 @@ import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole, setApp
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'ngx-application-form-index',
@@ -42,6 +43,9 @@ export class ApplicationFormIndexComponent implements OnInit {
   idCard: string;
   // birth: Date;
   companyName: string;
+  fIdCard: FormControl;
+  IdError: string;
+  faceId: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -59,11 +63,13 @@ export class ApplicationFormIndexComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.fIdCard = new FormControl('', [Validators.required, Validators.minLength(13)]);
     this.activatedRoute.queryParams.subscribe(param => {
       console.log(param.id);
       if (param.id) {
+        this.faceId = param;
         setFacebookId(param);
-      }else{
+      } else {
         setFacebookId();
       }
     })
@@ -85,11 +91,11 @@ export class ApplicationFormIndexComponent implements OnInit {
   }
 
   checkStatus() {
-    if (this.idCard) {
+    if (this.validation()) {
       this.loading = true;
       // let birth = new Date(this.birth);
       // birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
-      this.service.getStatusList(this.companyId, this.idCard).subscribe(response => {
+      this.service.getStatusList(this.companyId, this.idCard,this.faceId).subscribe(response => {
         const appFormIndex = {
           companyId: this.companyId,
           // phone: this.phone,
@@ -112,6 +118,17 @@ export class ApplicationFormIndexComponent implements OnInit {
         this.loading = false;
       });
     }
+  }
+
+  validation(): boolean {
+    let isValid = true;
+    this.IdError = '';
+    if (this.idCard.length !== 13 || this.idCard.toString().substring(0, 1) === '0') {
+      isValid = false;
+      this.IdError = 'เลขบัตรประชาชนไม่ถูกต้อง';
+      this.fIdCard.setErrors({})
+    }
+    return isValid;
   }
   // ยุบปุ่มรวมกันเเยกcase ข้างบน
   // register() {

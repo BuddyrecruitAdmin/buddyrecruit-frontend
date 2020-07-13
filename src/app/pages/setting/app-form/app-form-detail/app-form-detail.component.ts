@@ -290,7 +290,7 @@ export class AppFormDetailComponent implements OnInit {
         selected: null,
         expected: null,
         hasOther: false,
-        otherLabel: 'Other',
+        otherLabel: 'อื่นๆ',
         otherChecked: false,
         otherInput: '',
         otherScore: 0,

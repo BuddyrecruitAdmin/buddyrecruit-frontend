@@ -527,7 +527,8 @@
     </nb-card-body>
     <nb-card-footer>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" (click)="exportAsXLSX()">Export</button>
+      <button nbButton status="success" [disabled]="!dialogTime1 && !dialogTime1"
+        (click)="exportAsXLSX()">Export</button>
       <!-- [disabled]="!dialogTime.start || !dialogTime.end" -->
     </nb-card-footer>
   </nb-card>

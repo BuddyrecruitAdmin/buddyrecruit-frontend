@@ -363,6 +363,18 @@ export class CandidateComponent implements OnInit {
       start: this.dialogTime1,
       end: this.dialogTime2
     }
+    if (!this.dialogTime1) {
+      this.dialogTime = {
+        start: this.dialogTime2,
+        end: this.dialogTime2
+      }
+    }
+    if (!this.dialogTime2) {
+      this.dialogTime = {
+        start: this.dialogTime1,
+        end: this.dialogTime1
+      }
+    }
     fileName = this.utilitiesService.convertDate(this.dialogTime.start) + 'to' + this.utilitiesService.convertDate(this.dialogTime.end);
     this.criteria = {
       keyword: this.keyword,
