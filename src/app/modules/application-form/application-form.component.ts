@@ -241,23 +241,23 @@ export class ApplicationFormComponent implements OnInit {
     if (this.editFlag) {
       this.buttonText = "edit";
       this.saveFlag = false;
-      this.formGroup = this.formBuilder.group({
-        email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
-        // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
-        phone: [{ value: this.appForm.phone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
-        reservePhone: [{ value: this.appForm.reservePhone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
-        postcode: [{ value: this.appForm.postcode, disabled: true }, [Validators.pattern('^[0-9]{5}$')]],
-      });
+      this.formGroup.disable();
+      // this.formGroup = this.formBuilder.group({
+      //   email: [{ value: this.appForm.email, disabled: true }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+      //   phone: [{ value: this.appForm.phone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
+      //   reservePhone: [{ value: this.appForm.reservePhone, disabled: true }, [Validators.pattern('^[0-9]{10}$')]],
+      //   postcode: [{ value: this.appForm.postcode, disabled: true }, [Validators.pattern('^[0-9]{5}$')]],
+      // });
     } else {
       this.buttonText = "display";
       this.saveFlag = true;
-      this.formGroup = this.formBuilder.group({
-        email: [{ value: this.appForm.email, disabled: false }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
-        // phone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^(\\(?\\+?[0-9]*\\)?)?[0-9_\\- \\(\\)]*$')]],
-        phone: [{ value: this.appForm.phone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
-        reservePhone: [{ value: this.appForm.reservePhone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
-        postcode: [{ value: this.appForm.postcode, disabled: false }, [Validators.pattern('^[0-9]{5}$')]],
-      });
+      this.formGroup.enable();
+      // this.formGroup = this.formBuilder.group({
+      //   email: [{ value: this.appForm.email, disabled: false }, [Validators.email, Validators.pattern('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')]],
+      //   phone: [{ value: this.appForm.phone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
+      //   reservePhone: [{ value: this.appForm.reservePhone, disabled: false }, [Validators.pattern('^[0-9]{10}$')]],
+      //   postcode: [{ value: this.appForm.postcode, disabled: false }, [Validators.pattern('^[0-9]{5}$')]],
+      // });
     }
     this.editFlag = !this.editFlag;
   }
