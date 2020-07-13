@@ -95,7 +95,7 @@ export class ApplicationFormIndexComponent implements OnInit {
       this.loading = true;
       // let birth = new Date(this.birth);
       // birth = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate() + 1);
-      this.service.getStatusList(this.companyId, this.idCard,this.faceId).subscribe(response => {
+      this.service.getStatusList(this.companyId, this.idCard, this.faceId).subscribe(response => {
         const appFormIndex = {
           companyId: this.companyId,
           // phone: this.phone,
@@ -104,16 +104,17 @@ export class ApplicationFormIndexComponent implements OnInit {
         if (response.code === ResponseCode.Success) {
           setAppformIndex(appFormIndex);
           this.router.navigate(['/application-form/status']);
+        } else if (response.code === ResponseCode.Unauthorized) {
+          this.matDialog.open(PopupMessageComponent, {
+            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+            data: {
+              type: 'I',
+              content: response.message,
+            }
+          });
         } else {
           setAppformIndex(appFormIndex);
           this.router.navigate([`/application-form/submit/${this.companyId}`]);
-          // this.matDialog.open(PopupMessageComponent, {
-          //   width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-          //   data: {
-          //     type: 'I',
-          //     content: this.language === 'en' ? 'No registered.' : 'ไม่พบข้อมูลการสมัครงาน',
-          //   }
-          // });
         }
         this.loading = false;
       });
