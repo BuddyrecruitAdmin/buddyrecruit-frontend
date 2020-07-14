@@ -66,10 +66,13 @@
               </label>
             </div>
             <div class="actions">
-              <nb-icon icon="eye-outline" class="link" nbTooltip="Preview" (click)="preview(item)">
-              </nb-icon>
+              <!-- <nb-icon icon="eye-outline" class="link" nbTooltip="Preview" (click)="preview(item)">
+              </nb-icon> -->
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/setting/app-form/edit/'+item._id">
+              </nb-icon>
+              <nb-icon icon="copy-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/setting/app-form/duplicate/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
               </nb-icon>
@@ -148,12 +151,16 @@
                 </div>
               </td>
               <td class="actions">
-                <button nbButton status="info" size="tiny" nbTooltip="Preview" (click)="preview(item)">
+                <!-- <button nbButton status="info" size="tiny" nbTooltip="Preview" (click)="preview(item)">
                   <nb-icon icon="eye-outline"></nb-icon>
-                </button>
+                </button> -->
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/setting/app-form/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+                <button nbButton status="info" size="tiny" nbTooltip="Edit"
+                  [routerLink]="'/employer/setting/app-form/duplicate/'+item._id">
+                  <nb-icon icon="copy-outline"></nb-icon>
                 </button>
                 <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)">
                   <nb-icon icon="trash-2-outline"></nb-icon>

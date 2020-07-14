@@ -80,6 +80,11 @@ export class AppFormDetailComponent implements OnInit {
         this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Edit;
         this.getDetail();
+      } else if (params.action === State.Duplicate) {
+        this._id = params.id;
+        this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
+        this.state = State.Duplicate;
+        this.getDetail();
       }
     });
   }
@@ -605,7 +610,7 @@ export class AppFormDetailComponent implements OnInit {
     if (this.validation()) {
       const request = this.setRequest();
       this.loading = true;
-      if (this.state === State.Create) {
+      if (this.state === State.Create || this.state === State.Duplicate) {
         this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', response.message || 'Saved Successful');
@@ -708,6 +713,9 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          if (this.state === State.Duplicate) {
+            this.appForm._id = null;
+          }
           if (!this.appForm.personalDetail.idCard) {
             this.appForm.personalDetail.idCard = this.initialAction();
           }

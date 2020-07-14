@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -128,7 +128,11 @@ export class ApplicationFormComponent implements OnInit {
   fbId: any;
   companyId: any;
   fIdCard: FormControl;
+  dob: FormControl;
   IdError: string;
+  dobError: string;
+  today: Date;
+  @Input() max: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -145,7 +149,9 @@ export class ApplicationFormComponent implements OnInit {
     setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
-    this.flowId = getFlowId()
+    this.flowId = getFlowId();
+    this.today = new Date();
+    this.today.setDate(this.today.getDate() - 1);
   }
 
   ngOnInit() {
@@ -168,6 +174,7 @@ export class ApplicationFormComponent implements OnInit {
 
       this.refCompany = refCompany;
       this.fIdCard = new FormControl('', [Validators.required, Validators.minLength(13)]);
+      this.dob = new FormControl('', [Validators.required]);
       if (action) {
         if (action === State.Preview) {
           this.previewFlag = true;
@@ -1158,6 +1165,11 @@ export class ApplicationFormComponent implements OnInit {
       this.IdError = 'เลขบัตรประชาชนไม่ถูกต้อง';
       this.fIdCard.setErrors({})
     }
+    // if(this.utilitiesService.isDateGreaterThanToday(this.appForm.birth)){
+    //   isValid = false;
+    //   this.dobError = 'วันเกิเ'
+    //   this.dob.setErrors({});
+    // }
 
     const qElement = this.getQuestionElementError();
     if (isValid && qElement) {

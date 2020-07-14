@@ -698,7 +698,7 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   openCandidateDetail(item: any) {
-    if (this.isExpress) {
+    if (!this.isExpress) {
       setTabName(this.tabSelected);
       setCollapse(this.collapseAll);
       setFlowId(item._id);

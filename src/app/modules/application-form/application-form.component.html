@@ -318,7 +318,7 @@
                       [(ngModel)]="appForm.birth" readonly (click)="birthDate.open()"
                       (dateInput)="onChangeBirthday($event.target.value)"
                       [required]="template.personalDetail.birth.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="(successFlag || isDisabled) && !editFlag">
+                      [disabled]="(successFlag || isDisabled) && !editFlag" [max]="today">
                     <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
                     <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
