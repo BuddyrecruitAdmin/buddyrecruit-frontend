@@ -674,6 +674,9 @@ export class ApplicationFormComponent implements OnInit {
               question.multiChilds = new FormControl();
               question.multiChilds.value = multiChilds;
             }
+            if (question.answer.attachment.originalName) {
+              this.fileDownload(undefined, question.answer.attachment)
+            }
           });
           if (this.successFlag) {
             this.uploader = new FileUploader({
@@ -1263,7 +1266,9 @@ export class ApplicationFormComponent implements OnInit {
     // Question
     if (request.questions && request.questions.length) {
       request.questions.map(question => {
-
+        if (question.answer.attachment.imgaeURL) {
+          question.answer.attachment.imgaeURL = '';
+        }
         if (question.type === InputType.ParentChild) {
           if (question.multiChilds && question.multiChilds.value) {
             question.multiChilds = question.multiChilds.value;
@@ -1389,7 +1394,7 @@ export class ApplicationFormComponent implements OnInit {
   uploadFile(target, files: FileList, isCV = false, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 15) {
-      this.showToast('danger', 'File size more than 10MB');
+      this.showToast('danger', 'File size more than 15MB');
       target.uploadName = '';
       target.originalName = '';
       target.type = '';
@@ -1418,6 +1423,17 @@ export class ApplicationFormComponent implements OnInit {
           target.type = files[0].type;
           target.size = files[0].size;
           this.loadingUpload = false;
+          // set pic preview
+          let reader = new FileReader();
+          reader.readAsDataURL(files[0]);
+          reader.onload = (e) => {
+            let imgage = new Image;
+            const chImg = reader.result;
+            imgage.src = chImg.toString();
+            imgage.onload = (ee) => {
+            };
+            target.imgaeURL = imgage.src;
+          };
           if (question) {
             question.isLoading = false;
           }
@@ -1440,6 +1456,7 @@ export class ApplicationFormComponent implements OnInit {
     target.originalName = '';
     target.type = '';
     target.size = 0;
+    target.imgaeURL = '';
   }
 
   fileDownload(dialog: TemplateRef<any>, attachment: any): void {
@@ -1449,13 +1466,18 @@ export class ApplicationFormComponent implements OnInit {
       url: '',
       loading: true
     };
-    this.dialogService.open(dialog);
+    if (dialog) {
+      this.dialogService.open(dialog);
+    }
     this.service.fileDownload(this.appForm.refCompany, attachment.uploadName).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.image.originalName = attachment.originalName;
         this.image.uploadName = attachment.uploadName;
         this.image.url = response.data.url;
         this.image.loading = false;
+        if (!dialog) {
+          attachment.imgaeURL = response.data.url;
+        }
       }
     });
   }

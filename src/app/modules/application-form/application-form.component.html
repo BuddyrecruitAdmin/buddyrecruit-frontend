@@ -868,10 +868,20 @@
                 <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
                 <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
               </div>
-              <div class="row">
+              <div *ngIf="!detailFlag" class="row">
                 <div class="offset-lg-2 col-lg-8">
                   <div *ngIf="question.imgaeURL" class="question-image">
                     <img [src]="question.imgaeURL" class="w-100">
+                  </div>
+                </div>
+              </div>
+              <div class="topic" *ngIf="question.type !== InputType.Label && !detailFlag">
+                <span>ตัวอย่างรูปที่อัพโหลด</span>
+              </div>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div *ngIf="question.answer.attachment.imgaeURL" class="question-image">
+                    <img [src]="question.answer.attachment.imgaeURL" class="w-100">
                   </div>
                 </div>
               </div>

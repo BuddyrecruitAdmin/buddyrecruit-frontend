@@ -16,7 +16,7 @@ export interface IAppFormTemplate {
   personalDetail: {
     active: boolean;
     idCard: IAction;
-    firstnameEN: IAction; 
+    firstnameEN: IAction;
     lastnameEN: IAction;
     firstname: IAction;
     lastname: IAction;
@@ -140,6 +140,7 @@ export interface IAttachment {
   originalName: string;
   type: string;
   size: number;
+  imgaeURL: string;
 }
 
 export interface IGridOption {
