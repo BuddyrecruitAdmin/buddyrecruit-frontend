@@ -147,7 +147,8 @@
           <nb-card *ngFor="let item of items" accent="success">
             <nb-card-header>
               <div class="title">
-                <label class="link" [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
+                <label [ngClass]="{ 'link' : !isExpress, 'text-black' : isExpress}"
+                  [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
                   (click)="openCandidateDetail(item)">
                   {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
                 </label>

@@ -333,7 +333,8 @@
               <nb-card-header>
                 <div class="title">
                   <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'">
-                    <span class="link" (click)="openCandidateDetail(item)">
+                    <span [ngClass]="{ 'link' : !isExpress, 'text-black' : isExpress}"
+                      (click)="openCandidateDetail(item)">
                       {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
                         (ตัวสำรอง)</span></span>&nbsp;
                     <span *ngIf="isExpress && item.history.exist" class="fa fa-list-alt link"
@@ -341,7 +342,7 @@
                       <!-- <nb-icon (click)="openHistory(item.history)" icon="close-circle-outline"
                       style="margin-right: 0;color: blue;"></nb-icon> -->
                     </span>
-                    <span>
+                    <span *ngIf="isExpress">
                       <nb-icon *ngIf="item.offer.flag && !item.offer.responsed" icon="checkmark-circle-2-outline"
                         style="margin-right: 0;color: var(--color-gray)">
                       </nb-icon>
@@ -436,9 +437,9 @@
                       </div>
                     </div>
                     <div *ngIf="isExpress">
-                      <label class="label text-black m-r-5">Infomation</label>
+                      <label class="label text-black m-r-5">Information</label>
                       <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
-                        nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
+                        nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
                       </nb-icon>
                       <div class="m-l-15">
                         <div class="text-group">
