@@ -127,12 +127,9 @@ export class ApplicationFormComponent implements OnInit {
   canAll: any;
   fbId: any;
   companyId: any;
-  fIdCard: FormControl;
-  dob: FormControl;
-  IdError: string;
-  dobError: string;
   today: Date;
   @Input() max: any;
+  IdError: string;
   constructor(
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
@@ -173,8 +170,6 @@ export class ApplicationFormComponent implements OnInit {
       const refAppform = params.id;
 
       this.refCompany = refCompany;
-      this.fIdCard = new FormControl('', [Validators.required, Validators.minLength(13)]);
-      this.dob = new FormControl('', [Validators.required]);
       if (action) {
         if (action === State.Preview) {
           this.previewFlag = true;
@@ -496,8 +491,8 @@ export class ApplicationFormComponent implements OnInit {
       reservePhone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{10}$')]],
       postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
       gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
+      fIdCard: [{ value: '', disabled: this.isDisabled }, [Validators.required, Validators.minLength(13)]]
     });
-
     if (this.successFlag && !this.editFlag) {
       this.formGroup.disable();
     }
@@ -1166,13 +1161,8 @@ export class ApplicationFormComponent implements OnInit {
     if (this.appForm.idCard.length === 12 || this.appForm.idCard.toString().substring(0, 1) === '0') {
       isValid = false;
       this.IdError = 'เลขบัตรประชาชนไม่ถูกต้อง';
-      this.fIdCard.setErrors({})
+      this.formGroup.controls.fIdCard.setErrors({})
     }
-    // if(this.utilitiesService.isDateGreaterThanToday(this.appForm.birth)){
-    //   isValid = false;
-    //   this.dobError = 'วันเกิเ'
-    //   this.dob.setErrors({});
-    // }
 
     const qElement = this.getQuestionElementError();
     if (isValid && qElement) {

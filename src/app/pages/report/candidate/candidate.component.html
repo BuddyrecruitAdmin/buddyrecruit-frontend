@@ -483,7 +483,8 @@
 
 <!-- Excel Popup -->
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()"
+    [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
     <nb-card-body>
       <div class="row">
         <div class="col-md-12">

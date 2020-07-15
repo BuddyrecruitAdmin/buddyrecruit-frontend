@@ -3,7 +3,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="navbar-brand d-flex align-items-center">
-      <img src="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
+      <img lazyLoad="../../../assets/images/logo.png" class="d-inline-block align-middle" alt="Buddy Recruit Logo" />
       <strong class="pl-2 d-none d-sm-block">
         <span class="text-green">B</span>uddy
         <span class="text-green">R</span>ecruit
@@ -42,7 +42,8 @@
             (click)="scrollToElement(contact,'contact')">ติดต่อเรา</a>
         </li>
         <button style="text-align: center;font-family: kanit;" nbButton outline status="success"
-          [routerLink]="'/employer/login'"><span *ngIf="!adminCheck">Sign In</span><span *ngIf="adminCheck">ย้อนกลับ</span>
+          [routerLink]="'/employer/login'"><span *ngIf="!adminCheck">Sign In</span><span
+            *ngIf="adminCheck">ย้อนกลับ</span>
         </button>
       </ul>
     </div>
@@ -55,7 +56,7 @@
       <div class="row" style="text-align: center;">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12">
           <h3>
-            <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+            <img lazyLoad="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
               alt="Buddy Recruit Logo" />
             <br>
             <h3 style="font-weight: 700;padding-top: 2rem;">
@@ -79,7 +80,7 @@
       <div class="row" style="width: 100%;text-align: center;">
         <div class="col-12 col-sm-12">
           <h3>
-            <img src="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
+            <img lazyLoad="../../../assets/images/logo.png" class="d-inline-block align-middle img-logo"
               alt="Buddy Recruit Logo" />
             <br>
             <h3 style="font-weight: 700;padding-top: 2rem;">
@@ -153,13 +154,13 @@
         </div>
         <div class="col-md-5 col-lg-5 text-mob-wide">
           <!-- img-name:  -->
-          <img class="img-bg" src="https://www.img.in.th/images/106168ecd0f445af54dcb21289d5a203.jpg">
+          <img class="img-bg" lazyLoad="https://www.img.in.th/images/106168ecd0f445af54dcb21289d5a203.jpg">
         </div>
       </div>
       <div class="row rwid text-mob">
         <div class="col-md-1 col-lg-1"></div>
         <div *ngIf="!devices.isMobile" class="col-md-6 col-lg-6 pd1">
-          <img class="img-bg-wide" src="https://www.img.in.th/images/f66df8245eab1506b9486cd119b40786.jpg">
+          <img class="img-bg-wide" lazyLoad="https://www.img.in.th/images/f66df8245eab1506b9486cd119b40786.jpg">
         </div>
         <div *ngIf="!devices.isMobile" class="col-md-5 col-lg-5 text-mob-wide">
           <p>
@@ -184,7 +185,7 @@
           </span>
         </div>
         <div *ngIf="devices.isMobile" class="col-md-5 col-lg-5 pd1">
-          <img class="img-bg-wide" src="https://www.img.in.th/images/f66df8245eab1506b9486cd119b40786.jpg">
+          <img class="img-bg-wide" lazyLoad="https://www.img.in.th/images/f66df8245eab1506b9486cd119b40786.jpg">
         </div>
       </div>
       <div class="row rwid text-mob">
@@ -200,7 +201,7 @@
           </span>
         </div>
         <div class="col-md-5 col-lg-5 text-mob-wide">
-          <img class="img-bg-2" src="https://www.img.in.th/images/9ff53614a5ff731e5e438e29204946c4.jpg">
+          <img class="img-bg-2" lazyLoad="https://www.img.in.th/images/9ff53614a5ff731e5e438e29204946c4.jpg">
         </div>
       </div>
     </div>
@@ -218,7 +219,7 @@
         <button class="btn-stand" shape="round" nbButton ghost [routerLink]="'/pdpa'">More Detail</button>
       </div>
       <div class="col-md-6 col-lg-6">
-        <img class="img-bg" src="https://www.img.in.th/images/f2884ab3fec3ddcf27f0096d66c6d9c6.jpg">
+        <img class="img-bg" lazyLoad="https://www.img.in.th/images/f2884ab3fec3ddcf27f0096d66c6d9c6.jpg">
       </div>
     </div>
   </div>
@@ -234,13 +235,13 @@
         <p style="line-height: 2rem;">Buddy Recruit พัฒนาขึ้นโดยบริษัท ZyGen Company เราคือผู้เชี่ยวชาญทางด้าน IT
           service&solution และ SAP professional consulting service firm <br>ก่อตั้งเมื่อ ปี 1999 โดยมี
           ลูกค้าเป็นองค์กรชั้นนำของประเทศจำนวนมาก</p>
-        <img src="https://www.img.in.th/images/ada378d0bc39d83d09d7a016311b6e5e.png"
+        <img lazyLoad="https://www.img.in.th/images/ada378d0bc39d83d09d7a016311b6e5e.png"
           class="d-inline-block align-middle img-logo" alt="Buddy Recruit Logo" /><br>
         <a href="https://www.zygencenter.com"><button style="font-family: kanit;color: black;margin-top: 3%;"
             shape="round" nbButton outline status="success">More Detail</button></a>
       </div>
       <div class="col-md-6 col-lg-6">
-        <img class="img-bg" src="https://www.img.in.th/images/f004ea3223b09ec9576df9cdc2b3e135.jpg">
+        <img class="img-bg" lazyLoad="https://www.img.in.th/images/f004ea3223b09ec9576df9cdc2b3e135.jpg">
       </div>
     </div>
   </div>
@@ -323,7 +324,7 @@
         <button nbButton status="success" (click)="expanded = true" shape="round">Try it free</button>
       </div>
       <div class="col-md-6 col-lg-6">
-        <img class="img-bg" src="https://www.img.in.th/images/94e32ae2fc85c0dcb697729c33305b34.jpg">
+        <img class="img-bg" lazyLoad="https://www.img.in.th/images/94e32ae2fc85c0dcb697729c33305b34.jpg">
       </div>
     </div>
   </div>

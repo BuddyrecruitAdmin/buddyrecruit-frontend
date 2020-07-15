@@ -27,6 +27,7 @@ export class CandidateComponent implements OnInit {
   pageEvent: PageEvent;
   criteria: Criteria;
   loading: boolean;
+  loadingDialog: boolean;
   checked: boolean;
   isGridLayout: boolean;
   devices: Devices;
@@ -358,6 +359,7 @@ export class CandidateComponent implements OnInit {
 
   exportAsXLSX(): void {
     this.dataExcel = [];
+    this.loadingDialog = true;
     let fileName = '';
     this.dialogTime = {
       start: this.dialogTime1,
@@ -535,6 +537,8 @@ export class CandidateComponent implements OnInit {
       } else {
         this.showToast('danger', 'Error Message', 'Export Failed');
       }
+      this.loadingDialog = false;
+      this.dialogRef.close();
     })
   }
 
