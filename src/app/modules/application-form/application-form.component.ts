@@ -299,42 +299,45 @@ export class ApplicationFormComponent implements OnInit {
           }
         }
       }
-      this.service.getHub(refCompany).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.hubs = response.data;
-          this.hubs.map(hub => {
-            hub.checked = false;
-            hub.provinces.map(province => {
-              province.checked = false;
-              province.areas.map(area => {
-                area.checked = false;
-                if (this.hub.length > 0) {
-                  if (this.hub[0].refProvince._id === province.refProvince) {
-                    province.checked = true;
-                    hub.checked = true;
+      if (this.template.isExpress) {
+        this.service.getHub(refCompany).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.hubs = response.data;
+            this.hubs.map(hub => {
+              hub.checked = false;
+              hub.provinces.map(province => {
+                province.checked = false;
+                province.areas.map(area => {
+                  area.checked = false;
+                  if (this.hub.length > 0) {
+                    if (this.hub[0].refProvince._id === province.refProvince) {
+                      province.checked = true;
+                      hub.checked = true;
+                    }
+                    if (this.hub[0].area === area._id) {
+                      area.checked = true;
+                    }
                   }
-                  if (this.hub[0].area === area._id) {
-                    area.checked = true;
-                  }
-                }
+                })
               })
-            })
-            // hub.provinces.map(province => {
-            //   province.checked = false;
-            //   province.districts.map(district => {
-            //     district.checked = false;
-            //     district.subDistricts.map(subDistrict => {
-            //       subDistrict.checked = false;
-            //     });
-            //   });
-            // });
-          });
-        }
-        // if (this.isDisableJob) {
-        //   this.onChangeJR(this.appForm.refJR);
-        // }
-        this.loading = false;
-      });
+              // hub.provinces.map(province => {
+              //   province.checked = false;
+              //   province.districts.map(district => {
+              //     district.checked = false;
+              //     district.subDistricts.map(subDistrict => {
+              //       subDistrict.checked = false;
+              //     });
+              //   });
+              // });
+            });
+          }
+          // if (this.isDisableJob) {
+          //   this.onChangeJR(this.appForm.refJR);
+          // }
+          this.loading = false;
+        });
+      }
+      this.loading = false;
     });
   }
 

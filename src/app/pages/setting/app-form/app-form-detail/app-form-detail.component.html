@@ -651,8 +651,8 @@
           </div>
           <button *ngIf="question.type !== InputType.Label" mat-icon-button type="button" (click)="fileInput.click()">
             <mat-icon class="showPhoto">photo</mat-icon>
-            <input #fileInput type="file" (change)="uploadFile(question, $event.target.files)" style="display:none;"
-              accept="image/*" />
+            <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+              (change)="uploadFile(question, $event.target.files)" style="display:none;" accept="image/*" />
           </button>
         </div>
 
@@ -719,8 +719,8 @@
                   <button *ngIf="question.type === InputType.Radio || question.type === InputType.ChcekBox"
                     mat-icon-button type="button" (click)="fileInput.click()">
                     <mat-icon class="showPhoto">photo</mat-icon>
-                    <input #fileInput type="file" (change)="uploadFile(option, $event.target.files)"
-                      style="display:none;" accept="image/*" />
+                    <input #fileInput type="file" (change)="uploadFile(option, $event.target.files)" ng2FileSelect
+                      [uploader]="uploader" style="display:none;" accept="image/*" />
                   </button>
                   <div class="button-close">
                     <button mat-icon-button type="button" *ngIf="question.answer.options.length > 1"

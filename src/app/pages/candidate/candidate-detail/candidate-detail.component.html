@@ -432,7 +432,7 @@
     </div>
 
     <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
-      [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning" (click)="openChatUser(item)">
+      [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
       <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
     </button>
 
