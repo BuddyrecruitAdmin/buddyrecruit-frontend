@@ -79,6 +79,10 @@
             </div>
           </nb-card-header>
           <nb-card-body>
+            <div *ngIf="isExpress" class="text-group">
+              <label class="label">Job Position</label>
+              <span *ngFor="let job of item.refPositions">{{ job.name || '-' }}</span>
+            </div>
             <div class="text-group">
               <label class="label">Remark</label>
               <span>{{ item.formRemark || '-' }}</span>
@@ -120,6 +124,7 @@
           <thead>
             <tr>
               <th scope="col" class="text-left">Name</th>
+              <th *ngIf="isExpress" scope="col" class="text-left">Job Position</th>
               <th scope="col" class="text-left">Remark</th>
               <th scope="col" style="width: 100px;">Active</th>
               <th scope="col" style="width: 150px;">Last Update</th>
@@ -133,8 +138,12 @@
                   {{ item.formName }}
                 </span>
               </td>
-              <td class="text-left">
-                <span [nbTooltip]="item.formName">{{ item.formRemark || '-' }}</span>
+              <td *ngIf="isExpress">
+                <span class="text-left" *ngFor="let job of item.refPositions">{{ job.name || '-' }}</span>
+                <span *ngIf="item.refPositions.length === 0" class="text-center">-</span>
+              </td>
+              <td [ngClass]="{'text-left': item.formRemark, 'text-center': !item.formRemark}">
+                <span>{{ item.formRemark || '-' }}</span>
               </td>
               <td>
                 <mat-slide-toggle labelPosition="before" [(ngModel)]="item.active" class="toggle"

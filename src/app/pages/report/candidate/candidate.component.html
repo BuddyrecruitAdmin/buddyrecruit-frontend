@@ -260,7 +260,7 @@
             <tr style="font-size: 14px;">
               <th scope="col" style="width: 240px">ชื่อ-นามสกุล</th>
               <th scope="col" style="width: 230px;">ตำแหน่ง</th>
-              <th scope="col" style="width: 300px;">HUB</th>
+              <th *ngIf="isExpress" scope="col" style="width: 300px;">HUB</th>
               <!-- <th scope="col" style="width: 300px;">HUB Code</th> -->
               <th scope="col" style="width: 120px;">เบอร์โทร</th>
               <th scope="col" style="width: 120px;">เบอร์โทร(สำรอง)</th>
@@ -306,7 +306,7 @@
                   {{ item?.refJR?.refJD?.position || '-' }}
                 </span>
               </td>
-              <td>
+              <td *ngIf="isExpress">
                 <span *ngFor="let hub of item.hubs;">
                   {{ hub.refProvince?.name.th || '-' }} <span *ngIf="hub.areaName"> - {{ hub.areaName  }}</span>
                 </span>

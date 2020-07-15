@@ -469,6 +469,7 @@ export class SignContractDetailComponent implements OnInit {
         this.sourceBy.push(element._id);
       }
     })
+    this.filterBy = this.sourceBy;
     this.search();
   }
 
