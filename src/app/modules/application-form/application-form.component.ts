@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
   MAT_MOMENT_DATE_FORMATS,
@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId, getCompanyId } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId, getCompanyId, setAppformIndex, setUserEmail } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -25,7 +25,7 @@ import { environment } from '../../../environments/environment';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_UPLOAD;
 import { PopupConsentComponent } from '../../component/popup-consent/popup-consent.component';
-
+import { saveAs } from "file-saver";
 @Component({
   selector: 'ngx-application-form',
   templateUrl: './application-form.component.html',
@@ -131,6 +131,7 @@ export class ApplicationFormComponent implements OnInit {
   @Input() max: any;
   IdError: string;
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
     private service: ApplicationFormService,
@@ -307,8 +308,10 @@ export class ApplicationFormComponent implements OnInit {
               hub.checked = false;
               hub.provinces.map(province => {
                 province.checked = false;
+                province.color = false;
                 province.areas.map(area => {
                   area.checked = false;
+                  area.color = false;
                   if (this.hub.length > 0) {
                     if (this.hub[0].refProvince._id === province.refProvince) {
                       province.checked = true;
@@ -509,6 +512,7 @@ export class ApplicationFormComponent implements OnInit {
       originalName: '',
       type: '',
       size: 0,
+      imgaeURL: ''
     };
   }
 
@@ -790,6 +794,7 @@ export class ApplicationFormComponent implements OnInit {
       this.provinceFlag = true;
       this.hubs.forEach(hub => {
         hub.provinces.forEach(province => {
+          province.color = false;
           if (province.refProvince !== _id) {
             province.checked = false;
           }
@@ -822,6 +827,7 @@ export class ApplicationFormComponent implements OnInit {
       this.hubs.forEach(hub => {
         hub.provinces.forEach(province => {
           province.areas.forEach(area => {
+            area.color = false;
             if (area._id !== _id) {
               area.checked = false;
             }
@@ -1475,6 +1481,18 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
+  downloadPress(file: any,) {
+    this.jdService
+      .downloadFile(file.uploadName)
+      .subscribe(data => this.downloadFile(data, file.originalName), function (error) {
+        this.alertType = "danger";
+        this.alertMessage = error;
+      });
+  }
+
+  downloadFile(data: any, name: string) {
+    saveAs(data, name);
+  }
   // onChangeJobPosition(value: string) {
   //   this.appForm.jobChildSelected = '';
   //   this.appForm.jobMultiChild = new FormControl();
@@ -1489,6 +1507,61 @@ export class ApplicationFormComponent implements OnInit {
       child = question.parentChild[question.parentSelected];
     }
     return child;
+  }
+
+  gotoStatus() {
+    this.router.navigate(['/application-form/status']);
+  }
+
+  validJob(refCompany: string, refTemplate: string, refPosition = undefined) {
+    let valid = true;
+    let message = '';
+    if (this.template.isExpress) {
+      if (!this.provinceFlag) {
+        valid = false;
+        message = message || 'โปรดเลือกจังหวัด';
+        if (this.hubs.length > 0) {
+          this.hubs.forEach(hub => {
+            if (hub.checked) {
+              hub.provinces.forEach(province => {
+                province.color = true;
+              });
+            }
+          })
+        }
+      }
+      if (!this.areaFlag) {
+        valid = false;
+        message = message || 'โปรดเลือกพื้นที่ในจังหวัด';
+        if (this.hubs.length > 0) {
+          this.hubs.forEach(hub => {
+            if (hub.checked) {
+              hub.provinces.forEach(province => {
+                if (province.checked) {
+                  province.areas.forEach(area => {
+                    area.color = true;
+                  });
+                }
+              });
+            }
+          })
+        }
+      }
+    }
+    if (!valid) {
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'I', content: message }
+      });
+      confirm.afterClosed().subscribe(result => {
+        if (result) {
+          window.close();
+        }
+      });
+    } else {
+      this.stepperComponent.next();
+      this.getTemplate(refCompany, refTemplate, refPosition);
+    }
   }
 
   openPopupConsent() {

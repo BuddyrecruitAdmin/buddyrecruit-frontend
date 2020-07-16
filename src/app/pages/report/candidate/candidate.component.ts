@@ -536,30 +536,11 @@ export class CandidateComponent implements OnInit {
               "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
               "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-', "Type": '',
               "ตำแหน่ง": item.refJR.refJD.position || '-',
-              "No": '',
-              "LMS Code": '',
-              "Code": '',
-              "Code Type": '',
-              "Source Type": '',
-              "Rate": '',
-              "Source": '',
-              "Area": '',
-              "CC Name": '',
-              "Cost Center": '',
               "Name": item.refCandidate.firstnameEN || '-', ////////////////////////////////////////
               "Surname": item.refCandidate.lastnameEN || '-', ////////////////////////////////////////
               "Title(Th)": item.refCandidate.refTitle.name.th || '-', ////////////////////////////////////////
               "ชื่อ": item.refCandidate.firstname || '-', ////////////////////////////////////////
               "นามสกุล": item.refCandidate.lastname || '-', ////////////////////////////////////////
-              "New/Transfer": '',
-              "Contract Duration": '',
-              "Service Year": '',
-              "Original Start date": '',
-              "Start Date": '',
-              "Latest End": '',
-              "Resigned date": '',
-              "สาเหตุ": '',
-              "Single Number": '',
               "Mobile No.": item.refCandidate.phone || '-',
               "Mobile No. (2)": item.refCandidate.reservePhone || '-',
               "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
@@ -571,37 +552,15 @@ export class CandidateComponent implements OnInit {
               "ตำบล ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en : '-', ////////////////////////////////////////
               "อำเภอ ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refDistrict.name.en : '-', ////////////////////////////////////////
               "จังหวัด ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refProvince.name.en : '-', ////////////////////////////////////////
-              "License Expiry date": '',
-              "Brand (Type)": '',
-              "Model": '',
-              "Color": '',
-              "Sticker": '',
-              "Truck Code": '',
-              "Year": '',
-              "อายุรถ": '',
-              "Emergency  Contact Information": '',
-              "Bank": '',
-              "Account Name": '',
-              "Code2": '',
-              "Branch": '',
-              // "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
-              // "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
-              // "แก้ไขล่าสุด (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.lastChangedInfo.refUser) || '-',
               "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-              // "เวลาเซ็นสัญญา": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
               "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
-              // "เวลาที่ถูกปฏิเสธ": this.utilitiesService.convertTimeFromSystem(item.reject.rejectBy.date) || '-',
               "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
               "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
               "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
-              // "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
               "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
               "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
-              // "HUB": this.hubArea || '-',
-              // "ระดับการศึกษา": this.eduList || '-',
               "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-              // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
             })
           }
           if (this.isExpress) {

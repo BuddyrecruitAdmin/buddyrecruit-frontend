@@ -76,4 +76,5 @@ export interface IAttachment {
   originalName: string;
   type: string;
   size: number;
+  imgaeURL: string;
 }
