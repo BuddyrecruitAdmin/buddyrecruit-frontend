@@ -1482,8 +1482,8 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   downloadPress(file: any,) {
-    this.jdService
-      .downloadFile(file.uploadName)
+    this.service
+      .fileDownload(this.appForm.refCompany, file.uploadName)
       .subscribe(data => this.downloadFile(data, file.originalName), function (error) {
         this.alertType = "danger";
         this.alertMessage = error;
@@ -1491,7 +1491,8 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   downloadFile(data: any, name: string) {
-    saveAs(data, name);
+    let url = data.data.url;
+    saveAs(url, name);
   }
   // onChangeJobPosition(value: string) {
   //   this.appForm.jobChildSelected = '';

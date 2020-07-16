@@ -907,7 +907,9 @@
               </div>
               <div class="row">
                 <div class="offset-lg-2 col-lg-8">
-                  <div *ngIf="question.answer.attachment.imgaeURL" class="question-image">
+                  <div
+                    *ngIf="question.answer.attachment.imgaeURL && (question.answer.attachment.type.length > 5 && question.answer.attachment.type.toString().substring(0, 5) === 'image')"
+                    class="question-image">
                     <img [src]="question.answer.attachment.imgaeURL" class="w-100">
                   </div>
                 </div>
