@@ -117,14 +117,26 @@
                           <nb-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                             (checkedChange)="onChangeProvince($event, province.refProvince)" status="primary"
                             [disabled]="!editFlag">
-                            {{ language === 'en' ? province.name.en :province.name.th }}
+                            <span *ngIf="editFlag"
+                              [ngClass]="{ 'text-red': province.color, 'text-black': !province.color  }">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
+                            <span *ngIf="!editFlag">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
                           </nb-checkbox>
                           <div *ngIf="province.checked" style="margin-left: 1.75rem;">
                             <div *ngFor="let area of province.areas">
                               <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
                                 (checkedChange)="onChangeArea($event, area._id)" status="primary"
                                 [disabled]="!editFlag">
-                                {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                                <span *ngIf="editFlag"
+                                  [ngClass]="{ 'text-red': area.color, 'text-black': !area.color }">
+                                  {{ area.name }}
+                                </span>
+                                <span *ngIf="!editFlag">
+                                  {{ area.name }}
+                                </span> &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
                                   {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
                                 <span class="text-red" *ngIf="!area.isFull && area.remark">
                                   ({{ area.remark }})</span>
@@ -145,7 +157,11 @@
                           <nb-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                             (checkedChange)="onChangeProvince($event, province.refProvince)" status="primary"
                             [disabled]="(isDisabled || successFlag) && !editFlag">
-                            <span [ngClass]="{ 'text-red': province.color, 'text-black': !province.color }">
+                            <span *ngIf="editFlag"
+                              [ngClass]="{ 'text-red': province.color, 'text-black': !province.color  }">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
+                            <span *ngIf="!editFlag">
                               {{ language === 'en' ? province.name.en :province.name.th }}
                             </span>
                           </nb-checkbox>
@@ -154,7 +170,11 @@
                               <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
                                 (checkedChange)="onChangeArea($event, area._id)" status="primary"
                                 [disabled]="(isDisabled || successFlag) && !editFlag">
-                                <span [ngClass]="{ 'text-red': area.color, 'text-black': !area.color }">
+                                <span *ngIf="editFlag"
+                                  [ngClass]="{ 'text-red': area.color, 'text-black': !area.color }">
+                                  {{ area.name }}
+                                </span>
+                                <span *ngIf="!editFlag">
                                   {{ area.name }}
                                 </span>
                                 &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">

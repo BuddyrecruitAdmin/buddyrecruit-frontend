@@ -1555,9 +1555,9 @@ export class ApplicationFormComponent implements OnInit {
         data: { type: 'I', content: message }
       });
       confirm.afterClosed().subscribe(result => {
-        if (result) {
-          window.close();
-        }
+        // if (result) {
+        //   window.close();
+        // }
       });
     } else {
       this.stepperComponent.next();
