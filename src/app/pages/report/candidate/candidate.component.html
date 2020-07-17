@@ -78,7 +78,7 @@
             </nb-select> -->
           </div>
         </div>
-        <div class="col-md-4">
+        <div *ngIf="!isExpress" class="col-md-4">
           <div class="form-control-group">
             <label class="label">Job Status</label>
             <mat-form-field [color]="primary" appearance="outline">
@@ -98,8 +98,22 @@
             </nb-select> -->
           </div>
         </div>
+        <div *ngIf="isExpress" class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Period Date</label>
+            <!-- <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker> -->
+            <nb-rangepicker (rangeChange)="onEventStartEndRange($event)" #startDate></nb-rangepicker>
+            <div class="input-group">
+              <input [nbDatepicker]="startDate" [(ngModel)]="startTime" nbInput fullWidth style="cursor: pointer;">
+              <div class="input-group-addon" style="pointer-events: none;">
+                <nb-icon icon="calendar-outline" class="text-green">
+                </nb-icon>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row">
+      <div *ngIf="!isExpress" class="row">
         <div class="col-md-4">
           <div class="form-control-group">
             <label class="label">Period Date</label>

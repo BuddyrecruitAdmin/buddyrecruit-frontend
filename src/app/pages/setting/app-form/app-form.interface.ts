@@ -12,6 +12,8 @@ export interface IAppFormTemplate {
   bgColor: string;
   titleColor: string;
   subTitleColor: string;
+  jobRemark: string;
+  jobRemarkColor: string;
   questions: IQuestion[];
   personalDetail: {
     active: boolean;

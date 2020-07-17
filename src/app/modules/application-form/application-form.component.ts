@@ -813,8 +813,13 @@ export class ApplicationFormComponent implements OnInit {
           opt.checked = false
         }
       });
+      // if (this.appForm.refJR !== option._id) {
+      //   const topHeader = document.getElementById("resume");
+      //   topHeader.scrollIntoView();
+      // }
       this.appForm.refJR = option._id;
       this.refPosition = option.refJD.refPosition;
+      this.getTemplate(this.refCompany, undefined, this.refPosition);
     } else {
       this.appForm.refJR = '';
     }

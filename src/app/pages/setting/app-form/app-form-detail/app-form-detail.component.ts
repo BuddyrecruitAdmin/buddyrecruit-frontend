@@ -105,6 +105,8 @@ export class AppFormDetailComponent implements OnInit {
       bgColor: '#35c4b2',
       titleColor: '#ffffff',
       subTitleColor: '#ffffff',
+      jobRemark:'',
+      jobRemarkColor: '#ffffff',
       isExpress: false,
       active: false,
 
