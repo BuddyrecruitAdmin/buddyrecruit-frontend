@@ -12,11 +12,13 @@ export interface IAppFormTemplate {
   bgColor: string;
   titleColor: string;
   subTitleColor: string;
+  jobRemark: string;
+  jobRemarkColor: string;
   questions: IQuestion[];
   personalDetail: {
     active: boolean;
     idCard: IAction;
-    firstnameEN: IAction; 
+    firstnameEN: IAction;
     lastnameEN: IAction;
     firstname: IAction;
     lastname: IAction;
@@ -140,6 +142,7 @@ export interface IAttachment {
   originalName: string;
   type: string;
   size: number;
+  imgaeURL: string;
 }
 
 export interface IGridOption {

@@ -15,6 +15,9 @@
           <div>{{ 'SUBMIT_CONTENT' | translate }}</div>
           <div>{{ 'SUBMIT_THANK' | translate }}</div>
         </div>
+        <button *ngIf="!detailFlag" mat-flat-button type="button" color="primary" (click)="gotoStatus()">
+          {{ 'BACK_HOME' | translate }}
+        </button>
         <!-- <button mat-flat-button type="button" color="primary" (click)="closeWindow()">
           {{ 'CLOSE' | translate }}
         </button> -->
@@ -43,7 +46,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 1 -->
-        <nb-step label="{{'STEP' | translate}} 1">
+        <nb-step label="{{'STEP' | translate}}">
 
           <!-- JR -->
           <!-- <div class="card" *ngIf="jrs.length && !template.jobPositions.length"> -->
@@ -94,6 +97,7 @@
                       </nb-checkbox>
                     </div>
                   </div>
+                  <div class="title" *ngIf="template.jobRemark && this.appForm.refJR" [style.color]="template.jobRemarkColor">{{ template.jobRemark }}</div>
                 </div>
               </div>
 
@@ -114,14 +118,26 @@
                           <nb-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                             (checkedChange)="onChangeProvince($event, province.refProvince)" status="primary"
                             [disabled]="!editFlag">
-                            {{ language === 'en' ? province.name.en :province.name.th }}
+                            <span *ngIf="editFlag"
+                              [ngClass]="{ 'text-red': province.color, 'text-black': !province.color  }">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
+                            <span *ngIf="!editFlag">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
                           </nb-checkbox>
                           <div *ngIf="province.checked" style="margin-left: 1.75rem;">
                             <div *ngFor="let area of province.areas">
                               <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
                                 (checkedChange)="onChangeArea($event, area._id)" status="primary"
                                 [disabled]="!editFlag">
-                                {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                                <span *ngIf="editFlag"
+                                  [ngClass]="{ 'text-red': area.color, 'text-black': !area.color }">
+                                  {{ area.name }}
+                                </span>
+                                <span *ngIf="!editFlag">
+                                  {{ area.name }}
+                                </span> &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
                                   {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
                                 <span class="text-red" *ngIf="!area.isFull && area.remark">
                                   ({{ area.remark }})</span>
@@ -142,14 +158,27 @@
                           <nb-checkbox [(ngModel)]="province.checked" [ngModelOptions]="{standalone: true}"
                             (checkedChange)="onChangeProvince($event, province.refProvince)" status="primary"
                             [disabled]="(isDisabled || successFlag) && !editFlag">
-                            {{ language === 'en' ? province.name.en :province.name.th }}
+                            <span *ngIf="editFlag"
+                              [ngClass]="{ 'text-red': province.color, 'text-black': !province.color  }">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
+                            <span *ngIf="!editFlag">
+                              {{ language === 'en' ? province.name.en :province.name.th }}
+                            </span>
                           </nb-checkbox>
                           <div *ngIf="province.checked" style="margin-left: 1.75rem;">
                             <div *ngFor="let area of province.areas">
                               <nb-checkbox [(ngModel)]="area.checked" [ngModelOptions]="{standalone: true}"
                                 (checkedChange)="onChangeArea($event, area._id)" status="primary"
                                 [disabled]="(isDisabled || successFlag) && !editFlag">
-                                {{ area.name }} &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
+                                <span *ngIf="editFlag"
+                                  [ngClass]="{ 'text-red': area.color, 'text-black': !area.color }">
+                                  {{ area.name }}
+                                </span>
+                                <span *ngIf="!editFlag">
+                                  {{ area.name }}
+                                </span>
+                                &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
                                   {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
                                 <span class="text-red" *ngIf="!area.isFull && area.remark">
                                   ({{ area.remark }})</span>
@@ -192,8 +221,11 @@
             </div>
           </div>
           <div class="footer-right">
-            <button nbButton type="button" nbStepperNext (click)="getTemplate(refCompany, undefined, refPosition)"
-              [disabled]="!appForm.refJR || !areaFlag || !provinceFlag">
+            <button *ngIf="template.isExpress" nbButton type="button"
+              (click)="validJob(refCompany, undefined, refPosition)" [disabled]="!appForm.refJR">
+              {{ 'NEXT' | translate }}
+            </button>
+            <button *ngIf="!template.isExpress" nbButton type="button" nbStepperNext [disabled]="!appForm.refJR">
               {{ 'NEXT' | translate }}
             </button>
           </div>
@@ -201,7 +233,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 2 -->
-        <nb-step label="{{'STEP' | translate}} 2">
+        <nb-step label="{{'STEP2' | translate}}">
 
           <!-- Personal Details -->
           <div class="card" *ngIf="template.personalDetail.active">
@@ -304,11 +336,11 @@
                 <div class="col-md-4" *ngIf="template.personalDetail.idCard.visible">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'ID_CARD' | translate }}</mat-label>
-                    <input matInput [formControl]="fIdCard" type="text" id="idCard" name="idCard"
+                    <input matInput [formControl]="f.fIdCard" type="text" id="idCard" name="idCard"
                       [(ngModel)]="appForm.idCard" [required]="template.personalDetail.idCard.required" digitOnly
                       onKeyPress="if(this.value.length === 13) return false;"
                       [disabled]="(successFlag || isDisabled) && !editFlag">
-                    <mat-error *ngIf="fIdCard.invalid">{{IdError}}</mat-error>
+                    <mat-error *ngIf="f.fIdCard.invalid">{{IdError}}</mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-md-4" *ngIf="template.personalDetail.birth.visible">
@@ -318,7 +350,7 @@
                       [(ngModel)]="appForm.birth" readonly (click)="birthDate.open()"
                       (dateInput)="onChangeBirthday($event.target.value)"
                       [required]="template.personalDetail.birth.required" [ngModelOptions]="{standalone: true}"
-                      [disabled]="(successFlag || isDisabled) && !editFlag">
+                      [disabled]="(successFlag || isDisabled) && !editFlag" [max]="today">
                     <mat-datepicker-toggle matSuffix [for]="birthDate"></mat-datepicker-toggle>
                     <mat-datepicker #birthDate></mat-datepicker>
                   </mat-form-field>
@@ -809,11 +841,27 @@
                 <p>{{ 'RESUME' | translate }}</p>
                 <span *ngIf="!isDisabled">{{ 'RESUME_SUB' | translate }}</span>
               </div>
+              <div class="topic"
+                *ngIf="appForm.attachment.imgaeURL && (appForm.attachment.type.length > 5 && appForm.attachment.type.toString().substring(0, 5) === 'image')">
+                <span>ตัวอย่างรูปที่อัพโหลด</span>
+              </div>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div
+                    *ngIf="appForm.attachment.imgaeURL && (appForm.attachment.type.length > 5 && appForm.attachment.type.toString().substring(0, 5) === 'image')"
+                    class="question-image">
+                    <img [src]="appForm.attachment.imgaeURL" class="w-100">
+                  </div>
+                </div>
+              </div>
               <div class="upload-file box-dashed">
                 <p class="file-preview">
                   <mat-icon>insert_drive_file</mat-icon>
                   <span *ngIf="!appForm.attachment.originalName">{{ 'NO_FILE' | translate }}</span>
-                  <span *ngIf="appForm.attachment.originalName">{{ appForm.attachment.originalName }}</span>
+                  <span *ngIf="appForm.attachment.originalName && detailFlag" class="text-gray link underline"
+                    (click)="downloadPress(appForm.attachment)">{{ appForm.attachment.originalName }}</span>
+                  <span *ngIf="appForm.attachment.originalName && !detailFlag"
+                    class="text-gray">{{ appForm.attachment.originalName }}</span>
                   <mat-icon *ngIf="appForm.attachment.originalName && !isDisabled" class="delete"
                     (click)="clearFile(appForm.attachment); fileInput.value = ''">
                     cancel
@@ -841,7 +889,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 3 -->
-        <nb-step label="{{'STEP' | translate}} 3">
+        <nb-step *ngIf="appForm.questions.length > 0" label="{{'STEP3' | translate}}">
           <div class="row">
             <div *ngIf="detailFlag" class="col-md-12" style="text-align: right;">
               <span (click)="setEdit()" class="btn-link">
@@ -868,10 +916,22 @@
                 <p>{{ question.title }} <span class="text-red" *ngIf="question.required">*</span></p>
                 <span *ngIf="question.showSubTitle">{{ question.subTitle }}</span>
               </div>
-              <div class="row">
+              <div *ngIf="!detailFlag" class="row">
                 <div class="offset-lg-2 col-lg-8">
                   <div *ngIf="question.imgaeURL" class="question-image">
                     <img [src]="question.imgaeURL" class="w-100">
+                  </div>
+                </div>
+              </div>
+              <div class="topic" *ngIf="question.answer.attachment.imgaeURL && !detailFlag">
+                <span>ตัวอย่างรูปที่อัพโหลด</span>
+              </div>
+              <div class="row">
+                <div class="offset-lg-2 col-lg-8">
+                  <div
+                    *ngIf="question.answer.attachment.imgaeURL && (question.answer.attachment.type.length > 5 && question.answer.attachment.type.toString().substring(0, 5) === 'image')"
+                    class="question-image">
+                    <img [src]="question.answer.attachment.imgaeURL" class="w-100">
                   </div>
                 </div>
               </div>
@@ -1041,8 +1101,12 @@
                     <span *ngIf="question.answer.attachment.originalName && !isDisabled">
                       {{ question.answer.attachment.originalName }}
                     </span>
-                    <span *ngIf="question.answer.attachment.originalName && isDisabled" class="link underline text-gray"
-                      (click)="fileDownload(dialog, question.answer.attachment)">
+                    <span *ngIf="question.answer.attachment.originalName && isDisabled && detailFlag"
+                      class="text-gray link underline" (click)="downloadPress(question.answer.attachment)">
+                      {{ question.answer.attachment.originalName }}
+                    </span>
+                    <span *ngIf="question.answer.attachment.originalName && isDisabled  && !detailFlag"
+                      class="text-gray">
                       {{ question.answer.attachment.originalName }}
                     </span>
                     <mat-icon *ngIf="question.answer.attachment.originalName && (!isDisabled || editFlag)"
@@ -1185,7 +1249,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 4 -->
-        <nb-step label="{{'DONE' | translate}}" [hidden]="isDisabled">
+        <nb-step label="{{'STEP4' | translate}}" [hidden]="isDisabled">
           <div class="card">
             <div class="card-body">
               <div class="topic">

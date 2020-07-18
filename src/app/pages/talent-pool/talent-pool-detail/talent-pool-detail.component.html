@@ -15,7 +15,7 @@
     พื้นหลังสี <span class="dot"></span> สำหรับ Candidate ที่เป็นตัวสำรอง(คุณสมบัติไม่ตรง)
   </span>
 </nb-alert>
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
   <nb-card-body>
     <div class="row">
       <div class="col-md-6">
@@ -333,7 +333,8 @@
               <nb-card-header>
                 <div class="title">
                   <label [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'">
-                    <span class="link" (click)="openCandidateDetail(item)">
+                    <span [ngClass]="{ 'link' : !isExpress, 'text-black' : isExpress}"
+                      (click)="openCandidateDetail(item)">
                       {{ utilitiesService.setFullname(item.refCandidate) || '-' }} <span *ngIf="item.isReserve">
                         (ตัวสำรอง)</span></span>&nbsp;
                     <span *ngIf="isExpress && item.history.exist" class="fa fa-list-alt link"
@@ -341,7 +342,7 @@
                       <!-- <nb-icon (click)="openHistory(item.history)" icon="close-circle-outline"
                       style="margin-right: 0;color: blue;"></nb-icon> -->
                     </span>
-                    <span>
+                    <span *ngIf="isExpress">
                       <nb-icon *ngIf="item.offer.flag && !item.offer.responsed" icon="checkmark-circle-2-outline"
                         style="margin-right: 0;color: var(--color-gray)">
                       </nb-icon>
@@ -358,7 +359,7 @@
                     <span>
                       Status: <label
                         class="label label-gray">{{ item.refStage?.name || item.refStage }}</label>&nbsp;&nbsp;
-                      HUB: <label *ngFor="let hub of item.hubs"
+                      <span *ngIf="isExpress">HUB: </span><label *ngFor="let hub of item.hubs"
                         class="label label-info">{{ hub.refProvince.name.th }}&nbsp;
                         ({{ hub.areaName }})</label>
                     </span><br *ngIf="devices.isMobile">
@@ -436,9 +437,9 @@
                       </div>
                     </div>
                     <div *ngIf="isExpress">
-                      <label class="label text-black m-r-5">Infomation</label>
+                      <label class="label text-black m-r-5">Information</label>
                       <nb-icon *ngIf="item.condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
-                        nbTooltip="Edit Infomation" (click)="openPopupTrainingDate(item)">
+                        nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
                       </nb-icon>
                       <div class="m-l-15">
                         <div class="text-group">
@@ -458,7 +459,7 @@
                     </div>
 
                     <!-- isExpress -->
-                    <div *ngIf="item.refSource.name === 'App-Form' || isExpress" class="text-group m-t-10 m-b-10">
+                    <div *ngIf="item.refSource.name === 'App-Form'" class="text-group m-t-10 m-b-10">
                       <span class="link underline" (click)="openApplicationForm(item)">
                         <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
                         <span>Application Form</span>

@@ -1964,7 +1964,9 @@
     // nb-layout .layout .layout-container .content .columns nb-layout-column {
     //   padding: 1rem 1rem 0.75rem;
     // }
-
+    .scrollable-container{
+      overflow-y: auto !important;
+    }
     nb-card {
       margin-bottom: 1rem;
 
@@ -1983,7 +1985,7 @@
     }
 
     .fixed .content-wrapper,
-    .fixed .right-side {
+    .fixed .righ  t-side {
       padding-top: 54px;
     }
     .content-header .breadcrumb {

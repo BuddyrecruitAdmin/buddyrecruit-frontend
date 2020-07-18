@@ -30,7 +30,7 @@ export class AppFormListComponent implements OnInit {
   role: any;
   haveActive = false;
   url: string;
-
+  isExpress: boolean;
   constructor(
     private router: Router,
     private service: AppFormService,
@@ -49,6 +49,7 @@ export class AppFormListComponent implements OnInit {
       }
     }
     this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

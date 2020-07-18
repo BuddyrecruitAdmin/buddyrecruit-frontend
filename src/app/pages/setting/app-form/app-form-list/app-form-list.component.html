@@ -66,16 +66,23 @@
               </label>
             </div>
             <div class="actions">
-              <nb-icon icon="eye-outline" class="link" nbTooltip="Preview" (click)="preview(item)">
-              </nb-icon>
+              <!-- <nb-icon icon="eye-outline" class="link" nbTooltip="Preview" (click)="preview(item)">
+              </nb-icon> -->
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/setting/app-form/edit/'+item._id">
+              </nb-icon>
+              <nb-icon icon="copy-outline" class="link" nbTooltip="Edit"
+                [routerLink]="'/employer/setting/app-form/duplicate/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
               </nb-icon>
             </div>
           </nb-card-header>
           <nb-card-body>
+            <div *ngIf="isExpress" class="text-group">
+              <label class="label">Job Position</label>
+              <span *ngFor="let job of item.refPositions">{{ job.name || '-' }}</span>
+            </div>
             <div class="text-group">
               <label class="label">Remark</label>
               <span>{{ item.formRemark || '-' }}</span>
@@ -117,6 +124,7 @@
           <thead>
             <tr>
               <th scope="col" class="text-left">Name</th>
+              <th *ngIf="isExpress" scope="col" class="text-left">Job Position</th>
               <th scope="col" class="text-left">Remark</th>
               <th scope="col" style="width: 100px;">Active</th>
               <th scope="col" style="width: 150px;">Last Update</th>
@@ -130,8 +138,12 @@
                   {{ item.formName }}
                 </span>
               </td>
-              <td class="text-left">
-                <span [nbTooltip]="item.formName">{{ item.formRemark || '-' }}</span>
+              <td *ngIf="isExpress">
+                <span class="text-left" *ngFor="let job of item.refPositions">{{ job.name || '-' }}</span>
+                <span *ngIf="item.refPositions.length === 0" class="text-center">-</span>
+              </td>
+              <td [ngClass]="{'text-left': item.formRemark, 'text-center': !item.formRemark}">
+                <span>{{ item.formRemark || '-' }}</span>
               </td>
               <td>
                 <mat-slide-toggle labelPosition="before" [(ngModel)]="item.active" class="toggle"
@@ -148,12 +160,16 @@
                 </div>
               </td>
               <td class="actions">
-                <button nbButton status="info" size="tiny" nbTooltip="Preview" (click)="preview(item)">
+                <!-- <button nbButton status="info" size="tiny" nbTooltip="Preview" (click)="preview(item)">
                   <nb-icon icon="eye-outline"></nb-icon>
-                </button>
+                </button> -->
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/setting/app-form/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+                <button nbButton status="info" size="tiny" nbTooltip="Edit"
+                  [routerLink]="'/employer/setting/app-form/duplicate/'+item._id">
+                  <nb-icon icon="copy-outline"></nb-icon>
                 </button>
                 <button nbButton status="danger" size="tiny" nbTooltip="Delete" (click)="delete(item)">
                   <nb-icon icon="trash-2-outline"></nb-icon>

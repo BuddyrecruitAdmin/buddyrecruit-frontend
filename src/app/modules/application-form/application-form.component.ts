@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
   MAT_MOMENT_DATE_FORMATS,
@@ -9,7 +9,7 @@ import {
 import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 
 import { TranslateService } from '../../translate.service';
-import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId, getCompanyId } from '../../shared/services';
+import { setLangPath, getAppFormData, getRole, setCompanyName, setFlagConsent, setCompanyId, getLanguage, setLanguage, getUserToken, getFlowId, getAppformIndex, getUserSuccess, getAppformStatus, setAppformStatus, setUserToken, getFlagExam, setFlagExam, getFacebookId, getCompanyId, setAppformIndex, setUserEmail } from '../../shared/services';
 import { IApplicationForm, IAttachment } from './application-form.interface';
 import { DropDownValue, DropDownLangValue, DropDownGroup } from '../../shared/interfaces';
 import { ApplicationFormService } from './application-form.service';
@@ -25,7 +25,7 @@ import { environment } from '../../../environments/environment';
 import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_UPLOAD;
 import { PopupConsentComponent } from '../../component/popup-consent/popup-consent.component';
-
+import { saveAs } from "file-saver";
 @Component({
   selector: 'ngx-application-form',
   templateUrl: './application-form.component.html',
@@ -127,9 +127,11 @@ export class ApplicationFormComponent implements OnInit {
   canAll: any;
   fbId: any;
   companyId: any;
-  fIdCard: FormControl;
+  today: Date;
+  @Input() max: any;
   IdError: string;
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private translate: TranslateService,
     private service: ApplicationFormService,
@@ -145,7 +147,9 @@ export class ApplicationFormComponent implements OnInit {
     setLangPath("RESUME");
     this.language = getLanguage() || 'en';
     this.setLang(this.language);
-    this.flowId = getFlowId()
+    this.flowId = getFlowId();
+    this.today = new Date();
+    this.today.setDate(this.today.getDate() - 1);
   }
 
   ngOnInit() {
@@ -167,7 +171,6 @@ export class ApplicationFormComponent implements OnInit {
       const refAppform = params.id;
 
       this.refCompany = refCompany;
-      this.fIdCard = new FormControl('', [Validators.required, Validators.minLength(13)]);
       if (action) {
         if (action === State.Preview) {
           this.previewFlag = true;
@@ -297,42 +300,47 @@ export class ApplicationFormComponent implements OnInit {
           }
         }
       }
-      this.service.getHub(refCompany).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.hubs = response.data;
-          this.hubs.map(hub => {
-            hub.checked = false;
-            hub.provinces.map(province => {
-              province.checked = false;
-              province.areas.map(area => {
-                area.checked = false;
-                if (this.hub.length > 0) {
-                  if (this.hub[0].refProvince._id === province.refProvince) {
-                    province.checked = true;
-                    hub.checked = true;
+      if (this.template.isExpress) {
+        this.service.getHub(refCompany).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.hubs = response.data;
+            this.hubs.map(hub => {
+              hub.checked = false;
+              hub.provinces.map(province => {
+                province.checked = false;
+                province.color = false;
+                province.areas.map(area => {
+                  area.checked = false;
+                  area.color = false;
+                  if (this.hub.length > 0) {
+                    if (this.hub[0].refProvince._id === province.refProvince) {
+                      province.checked = true;
+                      hub.checked = true;
+                    }
+                    if (this.hub[0].area === area._id) {
+                      area.checked = true;
+                    }
                   }
-                  if (this.hub[0].area === area._id) {
-                    area.checked = true;
-                  }
-                }
+                })
               })
-            })
-            // hub.provinces.map(province => {
-            //   province.checked = false;
-            //   province.districts.map(district => {
-            //     district.checked = false;
-            //     district.subDistricts.map(subDistrict => {
-            //       subDistrict.checked = false;
-            //     });
-            //   });
-            // });
-          });
-        }
-        // if (this.isDisableJob) {
-        //   this.onChangeJR(this.appForm.refJR);
-        // }
-        this.loading = false;
-      });
+              // hub.provinces.map(province => {
+              //   province.checked = false;
+              //   province.districts.map(district => {
+              //     district.checked = false;
+              //     district.subDistricts.map(subDistrict => {
+              //       subDistrict.checked = false;
+              //     });
+              //   });
+              // });
+            });
+          }
+          // if (this.isDisableJob) {
+          //   this.onChangeJR(this.appForm.refJR);
+          // }
+          this.loading = false;
+        });
+      }
+      this.loading = false;
     });
   }
 
@@ -489,8 +497,8 @@ export class ApplicationFormComponent implements OnInit {
       reservePhone: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{10}$')]],
       postcode: [{ value: '', disabled: this.isDisabled }, [Validators.pattern('^[0-9]{5}$')]],
       gpa: [{ value: '', disabled: this.isDisabled }, [Validators.maxLength(4)]],
+      fIdCard: [{ value: '', disabled: this.isDisabled }, [Validators.required, Validators.minLength(13)]]
     });
-
     if (this.successFlag && !this.editFlag) {
       this.formGroup.disable();
     }
@@ -504,6 +512,7 @@ export class ApplicationFormComponent implements OnInit {
       originalName: '',
       type: '',
       size: 0,
+      imgaeURL: ''
     };
   }
 
@@ -667,6 +676,9 @@ export class ApplicationFormComponent implements OnInit {
               question.multiChilds = new FormControl();
               question.multiChilds.value = multiChilds;
             }
+            if (question.answer.attachment.originalName) {
+              this.fileDownload(undefined, question.answer.attachment)
+            }
           });
           if (this.successFlag) {
             this.uploader = new FileUploader({
@@ -782,6 +794,7 @@ export class ApplicationFormComponent implements OnInit {
       this.provinceFlag = true;
       this.hubs.forEach(hub => {
         hub.provinces.forEach(province => {
+          province.color = false;
           if (province.refProvince !== _id) {
             province.checked = false;
           }
@@ -800,8 +813,13 @@ export class ApplicationFormComponent implements OnInit {
           opt.checked = false
         }
       });
+      // if (this.appForm.refJR !== option._id) {
+      //   const topHeader = document.getElementById("resume");
+      //   topHeader.scrollIntoView();
+      // }
       this.appForm.refJR = option._id;
       this.refPosition = option.refJD.refPosition;
+      this.getTemplate(this.refCompany, undefined, this.refPosition);
     } else {
       this.appForm.refJR = '';
     }
@@ -814,6 +832,7 @@ export class ApplicationFormComponent implements OnInit {
       this.hubs.forEach(hub => {
         hub.provinces.forEach(province => {
           province.areas.forEach(area => {
+            area.color = false;
             if (area._id !== _id) {
               area.checked = false;
             }
@@ -1156,7 +1175,7 @@ export class ApplicationFormComponent implements OnInit {
     if (this.appForm.idCard.length === 12 || this.appForm.idCard.toString().substring(0, 1) === '0') {
       isValid = false;
       this.IdError = 'เลขบัตรประชาชนไม่ถูกต้อง';
-      this.fIdCard.setErrors({})
+      this.formGroup.controls.fIdCard.setErrors({})
     }
 
     const qElement = this.getQuestionElementError();
@@ -1251,7 +1270,9 @@ export class ApplicationFormComponent implements OnInit {
     // Question
     if (request.questions && request.questions.length) {
       request.questions.map(question => {
-
+        if (question.answer.attachment.imgaeURL) {
+          question.answer.attachment.imgaeURL = '';
+        }
         if (question.type === InputType.ParentChild) {
           if (question.multiChilds && question.multiChilds.value) {
             question.multiChilds = question.multiChilds.value;
@@ -1377,7 +1398,7 @@ export class ApplicationFormComponent implements OnInit {
   uploadFile(target, files: FileList, isCV = false, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 15) {
-      this.showToast('danger', 'File size more than 10MB');
+      this.showToast('danger', 'File size more than 15MB');
       target.uploadName = '';
       target.originalName = '';
       target.type = '';
@@ -1406,6 +1427,17 @@ export class ApplicationFormComponent implements OnInit {
           target.type = files[0].type;
           target.size = files[0].size;
           this.loadingUpload = false;
+          // set pic preview
+          let reader = new FileReader();
+          reader.readAsDataURL(files[0]);
+          reader.onload = (e) => {
+            let imgage = new Image;
+            const chImg = reader.result;
+            imgage.src = chImg.toString();
+            imgage.onload = (ee) => {
+            };
+            target.imgaeURL = imgage.src;
+          };
           if (question) {
             question.isLoading = false;
           }
@@ -1428,6 +1460,7 @@ export class ApplicationFormComponent implements OnInit {
     target.originalName = '';
     target.type = '';
     target.size = 0;
+    target.imgaeURL = '';
   }
 
   fileDownload(dialog: TemplateRef<any>, attachment: any): void {
@@ -1437,17 +1470,35 @@ export class ApplicationFormComponent implements OnInit {
       url: '',
       loading: true
     };
-    this.dialogService.open(dialog);
+    if (dialog) {
+      this.dialogService.open(dialog);
+    }
     this.service.fileDownload(this.appForm.refCompany, attachment.uploadName).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.image.originalName = attachment.originalName;
         this.image.uploadName = attachment.uploadName;
         this.image.url = response.data.url;
         this.image.loading = false;
+        if (!dialog) {
+          attachment.imgaeURL = response.data.url;
+        }
       }
     });
   }
 
+  downloadPress(file: any,) {
+    this.service
+      .fileDownload(this.appForm.refCompany, file.uploadName)
+      .subscribe(data => this.downloadFile(data, file.originalName), function (error) {
+        this.alertType = "danger";
+        this.alertMessage = error;
+      });
+  }
+
+  downloadFile(data: any, name: string) {
+    let url = data.data.url;
+    saveAs(url, name);
+  }
   // onChangeJobPosition(value: string) {
   //   this.appForm.jobChildSelected = '';
   //   this.appForm.jobMultiChild = new FormControl();
@@ -1462,6 +1513,61 @@ export class ApplicationFormComponent implements OnInit {
       child = question.parentChild[question.parentSelected];
     }
     return child;
+  }
+
+  gotoStatus() {
+    this.router.navigate(['/application-form/status']);
+  }
+
+  validJob(refCompany: string, refTemplate: string, refPosition = undefined) {
+    let valid = true;
+    let message = '';
+    if (this.template.isExpress) {
+      if (!this.provinceFlag) {
+        valid = false;
+        message = message || 'โปรดเลือกจังหวัด';
+        if (this.hubs.length > 0) {
+          this.hubs.forEach(hub => {
+            if (hub.checked) {
+              hub.provinces.forEach(province => {
+                province.color = true;
+              });
+            }
+          })
+        }
+      }
+      if (!this.areaFlag) {
+        valid = false;
+        message = message || 'โปรดเลือกพื้นที่ในจังหวัด';
+        if (this.hubs.length > 0) {
+          this.hubs.forEach(hub => {
+            if (hub.checked) {
+              hub.provinces.forEach(province => {
+                if (province.checked) {
+                  province.areas.forEach(area => {
+                    area.color = true;
+                  });
+                }
+              });
+            }
+          })
+        }
+      }
+    }
+    if (!valid) {
+      const confirm = this.matDialog.open(PopupMessageComponent, {
+        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+        data: { type: 'I', content: message }
+      });
+      confirm.afterClosed().subscribe(result => {
+        // if (result) {
+        //   window.close();
+        // }
+      });
+    } else {
+      this.stepperComponent.next();
+      this.getTemplate(refCompany, refTemplate, refPosition);
+    }
   }
 
   openPopupConsent() {

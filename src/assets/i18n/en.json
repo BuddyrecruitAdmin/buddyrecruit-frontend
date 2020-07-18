@@ -199,13 +199,17 @@
     "DONE": "Done",
     "PREV": "Prev",
     "NEXT": "Next",
-    "STEP": "Step",
+    "STEP": "Select Job Position",
+    "STEP2": "Personal Information",
+    "STEP3": "Job Qualification",
+    "STEP4": "Completed",
     "NAME": "Name",
     "THAI": "Thai",
     "ENGLISH": "English",
     "TRAIN_DATE": "Training Date",
     "START_DATE": "Started Date",
     "STATUS_REGIS": "Register Status",
-    "CREATE":"Register"
+    "CREATE":"Register",
+    "BACK_HOME": "Back To Status"
   }
 }

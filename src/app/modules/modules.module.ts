@@ -108,6 +108,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ApplicationFormIndexComponent } from './application-form/application-form-index/application-form-index/application-form-index.component';
 import { ApplicationFormStatusComponent } from './application-form/application-form-status/application-form-status/application-form-status.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @NgModule({
   imports: [
@@ -196,7 +197,8 @@ import { ApplicationFormStatusComponent } from './application-form/application-f
     FileUploadModule,
     HttpClientModule,
     AngularEditorModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    LazyLoadImageModule
   ],
   declarations: [
     ModulesComponent,

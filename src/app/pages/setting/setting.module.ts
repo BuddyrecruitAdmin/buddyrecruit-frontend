@@ -111,7 +111,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConsentListComponent } from './consent/consent-list/consent-list.component';
 import { ConsentDetailComponent } from './consent/consent-detail/consent-detail.component';
 import { HubComponent } from './hub/hub.component';
-
+import { FileUploadModule } from 'ng2-file-upload';
 @NgModule({
   declarations: [
     SettingComponent,
@@ -224,7 +224,8 @@ import { HubComponent } from './hub/hub.component';
     MatFormFieldModule,
     NgxMatSelectSearchModule,
     MatSelectFilterModule,
-    NgbModule
+    NgbModule,
+    FileUploadModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

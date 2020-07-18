@@ -442,6 +442,7 @@ export class OnboardDetailComponent implements OnInit {
         this.sourceBy.push(element._id);
       }
     })
+    this.filterBy = this.sourceBy;
     this.search();
   }
 
@@ -625,11 +626,13 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   openCandidateDetail(item: any) {
-    setTabName(this.tabSelected);
-    setCollapse(this.collapseAll);
-    setFlowId(item._id);
-    setCandidateId(item.refCandidate._id);
-    this.router.navigate(["/employer/candidate/detail"]);
+    if(!this.isExpress){
+      setTabName(this.tabSelected);
+      setCollapse(this.collapseAll);
+      setFlowId(item._id);
+      setCandidateId(item.refCandidate._id);
+      this.router.navigate(["/employer/candidate/detail"]);
+    }
   }
 
   openPopupOnboardDate(item: any, button: any, icon: any) {

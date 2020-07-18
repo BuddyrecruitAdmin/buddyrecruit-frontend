@@ -269,6 +269,7 @@ export const API_ENDPOINT = {
     DOWNLOAD: "jd/download",
     FILE_UPLOAD: "file/upload",
     FILE_DOWNLOAD: "file/download",
+    FILE_PREVIEW: "uploads/appFormTemplate"
   },
   APPFORM: {
     ACTION: "appForm/action",

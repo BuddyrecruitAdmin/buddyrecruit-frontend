@@ -14,7 +14,7 @@
     <div class="title">
       <label class="text-cap" [nbTooltip]="utilitiesService.setFullname(item)">
         {{ utilitiesService.setFullname(item) }}&nbsp;
-        <span>
+        <span *ngIf="isExpress">
           <nb-icon *ngIf="item.candidateFlow.offer.flag && condition.icon.called && !item.candidateFlow.offer.responsed"
             icon="checkmark-circle-2-outline" style="margin-right: 0;color: var(--color-gray)">
           </nb-icon>
@@ -29,9 +29,9 @@
       <small class="status">
         <span>
           Status: <label class="label label-gray">{{ item.candidateFlow?.refStage?.name  }}</label>&nbsp;&nbsp;
-          HUB: <label *ngFor="let hub of item.candidateFlow.hubs"
+          <!-- HUB: <label *ngFor="let hub of item.candidateFlow.hubs"
             class="label label-info">{{ hub.refProvince.name.th }}&nbsp;
-            ({{ hub.areaName }})</label>
+            ({{ hub.areaName }})</label> -->
         </span><br *ngIf="devices.isMobile">
         <span *ngIf="!isExpress">
 
@@ -178,8 +178,8 @@
         </div>
         <div *ngIf="isExpress">
           <label class="label topic m-r-5">Information</label>
-          <nb-icon *ngIf="condition.button.nextStep && isExpress" icon="edit-2-outline" class="link"
-            nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
+          <nb-icon *ngIf="condition.button.nextStep && isExpress && condition.block.interviewDate" icon="edit-2-outline"
+            class="link" nbTooltip="Edit Information" (click)="openPopupTrainingDate(item)">
           </nb-icon>
           <div class="m-l-15">
             <div class="text-group text-icon-center">
@@ -432,7 +432,7 @@
     </div>
 
     <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
-      [size]="(devices.isMobile)? 'tiny' : 'medium'" status="warning" (click)="openChatUser(item)">
+      [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
       <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
     </button>
 

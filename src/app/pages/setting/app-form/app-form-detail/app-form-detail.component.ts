@@ -12,7 +12,10 @@ import { setAppFormData, getRole } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
 import { FormControl } from '@angular/forms';
 import { debug } from 'util';
-
+import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
+import { API_ENDPOINT } from '../../../../shared/constants';
+import { environment } from '../../../../../environments/environment';
+const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_PREVIEW;
 export interface IPosition {
   id: string;
   name: string;
@@ -55,7 +58,7 @@ export class AppFormDetailComponent implements OnInit {
   isExpress = false;
   refCompany: string;
   jobPositions: IPosition[] = [];
-
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'file' });
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -65,6 +68,7 @@ export class AppFormDetailComponent implements OnInit {
     this.role = getRole();
     this.isExpress = this.role.refCompany.isExpress;
     this.refCompany = this.role.refCompany._id;
+    this.uploader = new FileUploader({ url: URL, itemAlias: 'file', headers: [{ name: 'x-access-token', value: this.role.token }] });
   }
 
   ngOnInit() {
@@ -79,6 +83,11 @@ export class AppFormDetailComponent implements OnInit {
         this._id = params.id;
         this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Edit;
+        this.getDetail();
+      } else if (params.action === State.Duplicate) {
+        this._id = params.id;
+        this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
+        this.state = State.Duplicate;
         this.getDetail();
       }
     });
@@ -96,6 +105,8 @@ export class AppFormDetailComponent implements OnInit {
       bgColor: '#35c4b2',
       titleColor: '#ffffff',
       subTitleColor: '#ffffff',
+      jobRemark:'',
+      jobRemarkColor: '#ffffff',
       isExpress: false,
       active: false,
 
@@ -299,6 +310,7 @@ export class AppFormDetailComponent implements OnInit {
           originalName: '',
           type: '',
           size: 0,
+          imgaeURL: ''
         },
         linearValue: null,
         linearOptions: [],
@@ -605,7 +617,7 @@ export class AppFormDetailComponent implements OnInit {
     if (this.validation()) {
       const request = this.setRequest();
       this.loading = true;
-      if (this.state === State.Create) {
+      if (this.state === State.Create || this.state === State.Duplicate) {
         this.service.create(request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', response.message || 'Saved Successful');
@@ -708,6 +720,9 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          if (this.state === State.Duplicate) {
+            this.appForm._id = null;
+          }
           if (!this.appForm.personalDetail.idCard) {
             this.appForm.personalDetail.idCard = this.initialAction();
           }
@@ -816,10 +831,21 @@ export class AppFormDetailComponent implements OnInit {
       imgage.onload = (ee) => {
       };
       const FileSize = files.item(0).size / 1024 / 1024; // MB
-      if (FileSize > 2) {
-        this.showToast('danger', 'File size more than 2MB');
+      if (FileSize > 15) {
+        this.showToast('danger', 'File size more than 15MB');
       } else {
-        target.imgaeURL = imgage.src;
+        const queue = this.uploader.queue.find(element => {
+          return element.file.name === files[0].name
+            && element.file.type === files[0].type
+            && element.file.size === files[0].size;
+        });
+        if (queue) {
+          this.uploader.uploadItem(queue);
+          this.uploader.onSuccessItem = (item, response, status, headers) => {
+            const responseData = JSON.parse(response);
+            target.imgaeURL = responseData.data.path;
+          };
+        }
       }
     };
   }

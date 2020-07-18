@@ -138,8 +138,8 @@
             <div class="table-control-name">First name (Thai)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
-                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.visible"
-                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.firstname.disabled">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstname.visible" (change)="changePersonalCheckbox()"
+                  [disabled]="appForm.personalDetail.firstname.disabled">
                 </mat-checkbox>
               </div>
               <div class="table-control-actions-item">
@@ -153,8 +153,8 @@
             <div class="table-control-name">Last name (Thai)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
-                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.visible"
-                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.lastname.disabled">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastname.visible" (change)="changePersonalCheckbox()"
+                  [disabled]="appForm.personalDetail.lastname.disabled">
                 </mat-checkbox>
               </div>
               <div class="table-control-actions-item">
@@ -167,8 +167,8 @@
             <div class="table-control-name">First name (Eng)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
-                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstnameEN.visible" (change)="changePersonalCheckbox()"
-                  [disabled]="appForm.personalDetail.firstnameEN.disabled">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.firstnameEN.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.firstnameEN.disabled">
                 </mat-checkbox>
               </div>
               <div class="table-control-actions-item">
@@ -182,8 +182,8 @@
             <div class="table-control-name">Last name (Eng)</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
-                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastnameEN.visible" (change)="changePersonalCheckbox()"
-                  [disabled]="appForm.personalDetail.lastnameEN.disabled">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.lastnameEN.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.lastnameEN.disabled">
                 </mat-checkbox>
               </div>
               <div class="table-control-actions-item">
@@ -238,8 +238,8 @@
             <div class="table-control-name">reservePhone</div>
             <div class="table-control-actions">
               <div class="table-control-actions-item">
-                <mat-checkbox [(ngModel)]="appForm.personalDetail.reservePhone.visible" (change)="changePersonalCheckbox()"
-                  [disabled]="appForm.personalDetail.reservePhone.disabled">
+                <mat-checkbox [(ngModel)]="appForm.personalDetail.reservePhone.visible"
+                  (change)="changePersonalCheckbox()" [disabled]="appForm.personalDetail.reservePhone.disabled">
                 </mat-checkbox>
               </div>
               <div class="table-control-actions-item">
@@ -525,6 +525,20 @@
             <mat-icon class="text-white">refresh</mat-icon> Update job position
           </button>
         </div> -->
+        <br>
+        <mat-form-field appearance="outline">
+          <mat-label>Job Position Remark</mat-label>
+          <input matInput type="text" id="jobRemark" [(ngModel)]="appForm.jobRemark">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="m-b-20">
+          <mat-label>Job Position Remark Color</mat-label>
+          <input matInput type="text" id="jobRemarkColor" [(ngModel)]="appForm.jobRemarkColor">
+          <mat-hint align="start" style="font-size: 20px;">
+            <mat-icon *ngFor="let color of bgColors;" class="link" [style.color]="color"
+              (click)="appForm.jobRemarkColor = color">lens</mat-icon>
+          </mat-hint>
+        </mat-form-field>
+        <div class="title" [style.color]="appForm.jobRemarkColor">{{ appForm.jobRemark }}</div>
       </nb-accordion-item-body>
     </nb-accordion-item>
   </nb-accordion>
@@ -651,8 +665,8 @@
           </div>
           <button *ngIf="question.type !== InputType.Label" mat-icon-button type="button" (click)="fileInput.click()">
             <mat-icon class="showPhoto">photo</mat-icon>
-            <input #fileInput type="file" (change)="uploadFile(question, $event.target.files)" style="display:none;"
-              accept="image/*" />
+            <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+              (change)="uploadFile(question, $event.target.files)" style="display:none;" accept="image/*" />
           </button>
         </div>
 
@@ -719,8 +733,8 @@
                   <button *ngIf="question.type === InputType.Radio || question.type === InputType.ChcekBox"
                     mat-icon-button type="button" (click)="fileInput.click()">
                     <mat-icon class="showPhoto">photo</mat-icon>
-                    <input #fileInput type="file" (change)="uploadFile(option, $event.target.files)"
-                      style="display:none;" accept="image/*" />
+                    <input #fileInput type="file" (change)="uploadFile(option, $event.target.files)" ng2FileSelect
+                      [uploader]="uploader" style="display:none;" accept="image/*" />
                   </button>
                   <div class="button-close">
                     <button mat-icon-button type="button" *ngIf="question.answer.options.length > 1"
@@ -1248,7 +1262,8 @@
         <nb-icon icon="eye-outline"></nb-icon> PREVIEW
       </button>
       <button nbButton type="submit" status="success" class="m-l-10" (click)="save()">
-        <nb-icon icon="save-outline"></nb-icon> SAVE
+        <nb-icon icon="save-outline"></nb-icon> <span *ngIf="state === 'edit'">SAVE</span><span
+          *ngIf="state !== 'edit'">CREATE</span>
       </button>
     </div>
   </div>

@@ -62,6 +62,10 @@
             </div>
           </nb-card-header>
           <nb-card-body>
+            <div class="text-group" *ngIf="isExpress">
+              <label class="label">Application Name</label>
+              <span>{{ item.appForm || '-' }}</span>
+            </div>
             <div class="text-group">
               <label class="label">Remark</label>
               <span [nbTooltip]="item.remark">{{ item.remark || '-' }}</span>
@@ -103,6 +107,7 @@
           <thead>
             <tr>
               <th scope="col">Job Name</th>
+              <th *ngIf="isExpress" scope="col">Application Name</th>
               <th scope="col">Remark</th>
               <th scope="col" style="width: 90px;">Status</th>
               <th scope="col">Last update by</th>
@@ -114,6 +119,9 @@
             <tr *ngFor="let item of items;">
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
+              </td>
+              <td *ngIf="isExpress" [ngClass]="{'text-left': item.appForm, 'text-center': !item.appForm}">
+                <span>{{ item.appForm || '-' }}</span>
               </td>
               <td class="text-left" [nbTooltip]="item.remark">
                 <div [ngClass]="{'text-center': !item.remark }">
