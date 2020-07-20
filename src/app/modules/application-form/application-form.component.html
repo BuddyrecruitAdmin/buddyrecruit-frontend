@@ -97,7 +97,8 @@
                       </nb-checkbox>
                     </div>
                   </div>
-                  <div class="title" *ngIf="template.jobRemark && this.appForm.refJR" [style.color]="template.jobRemarkColor">{{ template.jobRemark }}</div>
+                  <div class="title" *ngIf="template.jobRemark && this.appForm.refJR"
+                    [style.color]="template.jobRemarkColor">{{ template.jobRemark }}</div>
                 </div>
               </div>
 
@@ -1114,10 +1115,12 @@
                       cancel
                     </mat-icon>
                   </p>
-                  <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 15 MB)</small></p>
+                  <p><small>{{ 'ATTACH_UPLOAD' | translate }} (pdf, doc, docx, jpeg, png -
+                      {{ 'MAX_UPLOAD' | translate }})</small></p>
+                  <!-- <p><small>Attach a file. (pdf, doc, docx, jpeg, png - Max 15 MB)</small></p> -->
                   <button *ngIf="!isDisabled || editFlag" mat-flat-button type="button" color="primary"
                     (click)="fileInput.click()" [disabled]="question.isLoading">
-                    <mat-icon class="m-r-5">cloud_upload</mat-icon> Upload file
+                    <mat-icon class="m-r-5">cloud_upload</mat-icon> {{ 'UPLOAD_UPLOAD' | translate }}
                     <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
                       (change)="uploadFile(question.answer.attachment, $event.target.files, false, question)" accept="*"
                       style="display:none;" />
