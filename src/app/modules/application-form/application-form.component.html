@@ -46,7 +46,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 1 -->
-        <nb-step label="{{'STEP' | translate}}">
+        <nb-step>
 
           <!-- JR -->
           <!-- <div class="card" *ngIf="jrs.length && !template.jobPositions.length"> -->
@@ -234,7 +234,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 2 -->
-        <nb-step label="{{'STEP2' | translate}}">
+        <nb-step>
 
           <!-- Personal Details -->
           <div class="card" *ngIf="template.personalDetail.active">
@@ -890,7 +890,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 3 -->
-        <nb-step *ngIf="appForm.questions.length > 0" label="{{'STEP3' | translate}}">
+        <nb-step *ngIf="appForm.questions.length > 0">
           <div class="row">
             <div *ngIf="detailFlag" class="col-md-12" style="text-align: right;">
               <span (click)="setEdit()" class="btn-link">
@@ -1111,7 +1111,7 @@
                       {{ question.answer.attachment.originalName }}
                     </span>
                     <mat-icon *ngIf="question.answer.attachment.originalName && (!isDisabled || editFlag)"
-                      class="delete" (click)="clearFile(question.answer.attachment); fileInput.value = ''">
+                      class="delete" (click)="clearFile(question.answer.attachment);">
                       cancel
                     </mat-icon>
                   </p>
@@ -1252,7 +1252,7 @@
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 4 -->
-        <nb-step label="{{'STEP4' | translate}}" [hidden]="isDisabled">
+        <nb-step [hidden]="isDisabled">
           <div class="card">
             <div class="card-body">
               <div class="topic">
