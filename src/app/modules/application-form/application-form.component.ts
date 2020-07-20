@@ -1352,6 +1352,8 @@ export class ApplicationFormComponent implements OnInit {
             case InputType.Upload:
               if (question.answer.attachment && question.answer.attachment.uploadName) {
                 question.score.submitScore = question.score.maxScore;
+              } else {
+                question.score.submitScore = 0;
               }
               break;
 
@@ -1486,7 +1488,7 @@ export class ApplicationFormComponent implements OnInit {
     });
   }
 
-  downloadPress(file: any,) {
+  downloadPress(file: any) {
     this.service
       .fileDownload(this.appForm.refCompany, file.uploadName)
       .subscribe(data => this.downloadFile(data, file.originalName), function (error) {

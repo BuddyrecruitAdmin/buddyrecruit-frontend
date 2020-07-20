@@ -78,7 +78,13 @@ export class PopupTrainingDateComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.training = response.data.candidateFlow.data.training;
+        if (this.utilitiesService.dateIsValid(this.training.date)) {
+          this.training.date = new Date(this.training.date)
+        }
         this.onboard = response.data.candidateFlow.data.onboard;
+        if (this.utilitiesService.dateIsValid(this.onboard.date)) {
+          this.onboard.date = new Date(this.onboard.date)
+        }
         this.remark = response.data.candidateFlow.data.remark;
       }
       this.loading = false;
