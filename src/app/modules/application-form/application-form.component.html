@@ -864,7 +864,7 @@
                   <span *ngIf="appForm.attachment.originalName && !detailFlag"
                     class="text-gray">{{ appForm.attachment.originalName }}</span>
                   <mat-icon *ngIf="appForm.attachment.originalName && !isDisabled" class="delete"
-                    (click)="clearFile(appForm.attachment); fileInput.value = ''">
+                    (click)="clearFile(appForm.attachment, appForm); fileInput.value = ''">
                     cancel
                   </mat-icon>
                 </p>
@@ -1111,7 +1111,7 @@
                       {{ question.answer.attachment.originalName }}
                     </span>
                     <mat-icon *ngIf="question.answer.attachment.originalName && (!isDisabled || editFlag)"
-                      class="delete" (click)="clearFile(question.answer.attachment);">
+                      class="delete" (click)="clearFile(question.answer.attachment, question);">
                       cancel
                     </mat-icon>
                   </p>
