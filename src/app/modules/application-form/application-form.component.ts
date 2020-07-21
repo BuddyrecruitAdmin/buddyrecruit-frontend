@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, OnDestroy, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {
@@ -1406,6 +1406,7 @@ export class ApplicationFormComponent implements OnInit {
       target.type = '';
       target.size = 0;
     } else {
+      target.originalName = files[0].name;
       const queue = this.uploader.queue.find(element => {
         return element.file.name === files[0].name
           && element.file.type === files[0].type
@@ -1420,35 +1421,47 @@ export class ApplicationFormComponent implements OnInit {
         this.loadingUpload = true;
         if (question) {
           question.isLoading = true;
+          // this.appForm.questions.forEach(ques => {
+          //   ques.isLoading = true;
+          // })
         }
         this.uploader.uploadItem(queue);
         this.uploader.onSuccessItem = (item, response, status, headers) => {
           const responseData = JSON.parse(response);
-          target.uploadName = responseData.uploadName;
-          target.originalName = responseData.originalName;
-          target.type = files[0].type;
-          target.size = files[0].size;
-          this.loadingUpload = false;
-          // set pic preview
-          let reader = new FileReader();
-          reader.readAsDataURL(files[0]);
-          reader.onload = (e) => {
-            let imgage = new Image;
-            const chImg = reader.result;
-            imgage.src = chImg.toString();
-            imgage.onload = (ee) => {
-            };
-            target.imgaeURL = imgage.src;
-          };
           if (question) {
-            question.isLoading = false;
+            this.appForm.questions.forEach(ques => {
+              if (ques.answer.attachment.originalName === responseData.originalName) {
+                ques.answer.attachment.uploadName = responseData.uploadName;
+                ques.answer.attachment.originalName = responseData.originalName;
+                ques.answer.attachment.type = files[0].type;
+                ques.answer.attachment.size = files[0].size;
+                this.loadingUpload = false;
+                // set pic preview
+                let reader = new FileReader();
+                reader.readAsDataURL(item._file);
+                reader.onload = (e) => {
+                  let imgage = new Image;
+                  const chImg = reader.result;
+                  imgage.src = chImg.toString();
+                  imgage.onload = (ee) => {
+                  };
+                  ques.answer.attachment.imgaeURL = imgage.src;
+                };
+                if (question) {
+                  ques.isLoading = false;
+                  // this.appForm.questions.forEach(ques => {
+                  //   ques.isLoading = false;
+                  // })
+                }
+              }
+            })
           }
         };
       }
     }
   }
 
-  clearFile(target): void {
+  clearFile(target, question): void {
     const queue = this.uploader.queue.find(element => {
       return element.file.name === target.originalName
         && element.file.type === target.type
@@ -1463,6 +1476,12 @@ export class ApplicationFormComponent implements OnInit {
     target.type = '';
     target.size = 0;
     target.imgaeURL = '';
+    question.isLoading = false;
+    this.loadingUpload = false;
+  }
+
+  clearAllFile() {
+    this.uploader.cancelAll();
   }
 
   fileDownload(dialog: TemplateRef<any>, attachment: any): void {

@@ -393,6 +393,14 @@ export class OnboardDetailComponent implements OnInit {
         name: 'area',
         value: this.searchArea
       },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
     ]
     this.search();
   }
@@ -626,7 +634,7 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   openCandidateDetail(item: any) {
-    if(!this.isExpress){
+    if (!this.isExpress) {
       setTabName(this.tabSelected);
       setCollapse(this.collapseAll);
       setFlowId(item._id);

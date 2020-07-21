@@ -421,6 +421,14 @@ export class SignContractDetailComponent implements OnInit {
         name: 'area',
         value: this.searchArea
       },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
     ]
     this.search();
   }

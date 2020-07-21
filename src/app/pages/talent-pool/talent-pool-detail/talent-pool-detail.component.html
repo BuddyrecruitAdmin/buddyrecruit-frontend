@@ -62,6 +62,82 @@
     </div>
     <!-- filter hubs -->
     <div *ngIf="filter.isFilter && isExpress" class="filter-block">
+      <!-- <div class="row">
+        <div class="col-md-12 table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 33.33%"> <label
+                    [ngClass]="{'label-pointer': selectType!=='sort', 'label-pointer-green': selectType==='sort' }"
+                    (click)="selectSort('sort')">Sort by </label></th>
+                <th scope="col" style="width: 33.33%"> <label
+                    [ngClass]="{'label-pointer': selectType!=='call', 'label-pointer-green': selectType==='call' }"
+                    (click)="selectSort('call')">Call type </label></th>
+                <th scope="col" style="width: 33.33%"> <label
+                    [ngClass]="{'label-pointer': selectType!=='cand', 'label-pointer-green': selectType==='cand' }"
+                    (click)="selectSort('cand')">Candidate Type </label></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div *ngIf="selectType==='sort'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='apply' }" nbButton status="success" shape="round"
+                        (click)="sortData('apply')">
+                        Apply Date
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='score' }" nbButton status="success" shape="round"
+                        (click)="sortData('score')">
+                        Scoring
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='apply' }" nbButton status="success" shape="round"
+                        (click)="sortData('apply')">
+                        Pending Call
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='score' }" nbButton status="success" shape="round"
+                        (click)="sortData('score')">
+                        Called
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+
+                    </div>
+                  </div>
+                  <div *ngIf="selectType==='cand'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='apply' }" nbButton status="success" shape="round"
+                        (click)="sortData('apply')">
+                        New
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='score' }" nbButton status="success" shape="round"
+                        (click)="sortData('score')">
+                        Old
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> -->
       <div class="row">
         <div class="col-md-12">
           <label class="label">Sort by: </label>&nbsp;&nbsp;&nbsp;
@@ -511,7 +587,8 @@
                     </div>
                     <!-- BlackList -->
                     <div *ngIf="tabSelected !== 'REJECTED' && item.refCandidate.blacklist" class="m-t-5">
-                      <label class="label text-light-gray">Blocked Info</label>
+                      <label class="label" [ngClass]="{'text-black': isExpress, 'text-light-gray': !isExpress}">Blocked
+                        Info</label>
                       <div class="m-l-15">
                         <div class="text-group">
                           <label class="label">Blacklist Reason</label>
