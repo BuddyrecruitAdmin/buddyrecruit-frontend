@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --vendor-chunk --common-chunk",
+    "build": "ng build --prod",
     "build-qas": "ng build --prod --vendor-chunk --common-chunk --configuration=qas",
     "test": "ng test",
     "lint": "ng lint",
