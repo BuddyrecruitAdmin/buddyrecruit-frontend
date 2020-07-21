@@ -1,6 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
 import { ModulesComponent } from './modules.component';
 import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
@@ -40,22 +39,6 @@ const routes: Routes = [
         path: 'exam-form/:action/:examId/:id',
         component: ExamFormComponent,
       },
-      // {
-      //   path: 'application-form/index/:id',
-      //   component: ApplicationFormIndexComponent,
-      // },
-      // {
-      //   path: 'application-form/status',
-      //   component: ApplicationFormStatusComponent,
-      // },
-      // {
-      //   path: 'application-form/:action',
-      //   component: ApplicationFormComponent,
-      // },
-      // {
-      //   path: 'application-form/:action/:id',
-      //   component: ApplicationFormComponent,
-      // },
       {
         path: 'resume',
         component: ResumeComponent,
@@ -76,11 +59,6 @@ const routes: Routes = [
         path: 'pdpa',
         component: PdpaComponent,
       },
-      // {
-      //   path: 'application-form',
-      //   loadChildren: () => import('./application-form/application-form.module')
-      //   .then(m => m.ApplicationFormModule),
-      // },
       {
         path: 'employer',
         loadChildren: () => import('./employer/employer.module')
