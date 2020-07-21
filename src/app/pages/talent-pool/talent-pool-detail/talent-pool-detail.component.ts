@@ -100,6 +100,7 @@ export class TalentPoolDetailComponent implements OnInit {
   checkCalled: boolean;
   checkPendingSend: boolean;
   checkCalledSend: boolean;
+  selectType: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -174,7 +175,8 @@ export class TalentPoolDetailComponent implements OnInit {
     this.checkPending = true;
     this.checkCalledSend = true;
     this.checkPendingSend = true;
-    this.filterSort = 'apply';
+    this.filterSort = 'score';
+    this.selectType = 'sort';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -1001,6 +1003,10 @@ export class TalentPoolDetailComponent implements OnInit {
     }
   }
 
+  selectSort(type: string) {
+    this.selectType = type;
+  }
+
   checkSort(event, name) {
     if (name === 'pend') {
       this.checkPendingSend = event;
@@ -1037,7 +1043,6 @@ export class TalentPoolDetailComponent implements OnInit {
     this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
-        this.search();
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }

@@ -6,14 +6,10 @@ import { IndexComponent } from './index/index.component';
 import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
-import { ApplicationFormComponent } from './application-form/application-form.component';
-import { HomeComponent } from './home/home.component';
 import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
-import { ApplicationFormIndexComponent } from './application-form/application-form-index/application-form-index/application-form-index.component';
-import { ApplicationFormStatusComponent } from './application-form/application-form-status/application-form-status/application-form-status.component';
 
 const routes: Routes = [
   {
@@ -23,10 +19,6 @@ const routes: Routes = [
       {
         path: 'index',
         component: IndexComponent,
-      },
-      {
-        path: 'home',
-        component: HomeComponent,
       },
       {
         path: 'features',
@@ -48,22 +40,22 @@ const routes: Routes = [
         path: 'exam-form/:action/:examId/:id',
         component: ExamFormComponent,
       },
-      {
-        path: 'application-form/index/:id',
-        component: ApplicationFormIndexComponent,
-      },
-      {
-        path: 'application-form/status',
-        component: ApplicationFormStatusComponent,
-      },
-      {
-        path: 'application-form/:action',
-        component: ApplicationFormComponent,
-      },
-      {
-        path: 'application-form/:action/:id',
-        component: ApplicationFormComponent,
-      },
+      // {
+      //   path: 'application-form/index/:id',
+      //   component: ApplicationFormIndexComponent,
+      // },
+      // {
+      //   path: 'application-form/status',
+      //   component: ApplicationFormStatusComponent,
+      // },
+      // {
+      //   path: 'application-form/:action',
+      //   component: ApplicationFormComponent,
+      // },
+      // {
+      //   path: 'application-form/:action/:id',
+      //   component: ApplicationFormComponent,
+      // },
       {
         path: 'resume',
         component: ResumeComponent,
@@ -84,6 +76,11 @@ const routes: Routes = [
         path: 'pdpa',
         component: PdpaComponent,
       },
+      // {
+      //   path: 'application-form',
+      //   loadChildren: () => import('./application-form/application-form.module')
+      //   .then(m => m.ApplicationFormModule),
+      // },
       {
         path: 'employer',
         loadChildren: () => import('./employer/employer.module')

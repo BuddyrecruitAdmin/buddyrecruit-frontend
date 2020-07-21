@@ -98,16 +98,15 @@ import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
-import { ApplicationFormComponent } from './application-form/application-form.component';
-import { HomeComponent } from './home/home.component';
+// import { ApplicationFormComponent } from './application-form/application-form.component';
 import { FeaturesComponent } from './features/features.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import { ApplicationFormIndexComponent } from './application-form/application-form-index/application-form-index/application-form-index.component';
-import { ApplicationFormStatusComponent } from './application-form/application-form-status/application-form-status/application-form-status.component';
+// import { ApplicationFormIndexComponent } from './application-form/application-form-index/application-form-index/application-form-index.component';
+// import { ApplicationFormStatusComponent } from './application-form/application-form-status/application-form-status/application-form-status.component';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @NgModule({
@@ -204,17 +203,13 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
     ModulesComponent,
     TranslatePipe,
     IndexComponent,
-    AppFormComponent,
     ExamFormComponent,
     ResumeComponent,
-    ApplicationFormComponent,
-    HomeComponent,
     FeaturesComponent,
     BlogDetailComponent,
     BlogListComponent,
     PdpaComponent,
-    ApplicationFormIndexComponent,
-    ApplicationFormStatusComponent
+    AppFormComponent
   ],
   providers: [
     TranslateService,

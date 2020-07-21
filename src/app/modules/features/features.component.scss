@@ -23,16 +23,10 @@
 .navbar-brand img {
   width: 40px;
 }
-// .navbar-brand strong {
-//   font-size: 32px;
-// }
 .navbar-nav .nav-link {
   font-weight: 600;
   font-family: kanit;
 }
-// .nav-item.active > .nav-link {
-//   color: var(--color-green) !important;
-// }
 .nav-shadow{
   color: var(--color-green) !important;
 }
@@ -124,7 +118,6 @@
   footer {
     background: rgb(53,196,178);
     background: linear-gradient(180deg, rgba(53,196,178,1) 0%, rgba(30,128,116,1) 50%);
-    // background-color: var(--color-green);
     padding: 40px 0 20px;
   
     #copyright {

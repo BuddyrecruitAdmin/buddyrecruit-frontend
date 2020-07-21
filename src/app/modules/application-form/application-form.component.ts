@@ -1478,6 +1478,10 @@ export class ApplicationFormComponent implements OnInit {
     target.imgaeURL = '';
   }
 
+  clearAllFile() {
+    this.uploader.cancelAll();
+  }
+
   fileDownload(dialog: TemplateRef<any>, attachment: any): void {
     this.image = {
       originalName: '',
