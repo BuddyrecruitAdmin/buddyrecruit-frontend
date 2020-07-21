@@ -1,12 +1,15 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { JobseekerRoutingModule } from './jobseeker-routing.module';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BlogComponent } from './blog.component';
+import { BlogRoutingModule } from './blog-routing.module';
+import { BlogDetailComponent } from './blog-detail/blog-detail.component';
+import { BlogListComponent } from './blog-list/blog-list.component';
 import { ThemeModule } from '../../@theme/theme.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   NbActionsModule,
   NbButtonModule,
   NbCardModule,
-  NbTabsetModule,
   NbUserModule,
   NbRadioModule,
   NbSelectModule,
@@ -17,67 +20,45 @@ import {
   NbCheckboxModule,
   NbDialogModule,
   NbWindowModule,
-  NbPopoverModule,
   NbTooltipModule,
-  NbDatepickerModule,
-  NbSpinnerModule
+  NbSpinnerModule,
+  NbStepperModule,
+  NbDatepickerModule
 } from '@nebular/theme';
-import { TranslateModule } from '@ngx-translate/core';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import {
   MatAutocompleteModule,
-  MatBadgeModule,
-  MatBottomSheetModule,
   MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
   MatDatepickerModule,
   MatDialogModule,
   MatDividerModule,
-  MatExpansionModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
   MatMenuModule,
   MatNativeDateModule,
-  MatPaginatorModule,
   MatProgressBarModule,
-  MatProgressSpinnerModule,
   MatRadioModule,
-  MatRippleModule,
   MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
   MatStepperModule,
   MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatTreeModule,
+  MAT_DATE_LOCALE
 } from '@angular/material'
+import { FileUploadModule } from 'ng2-file-upload';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsModule } from '../../component/component.module';
-import { JobseekerComponent } from './jobseeker.component';
-import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
-import { ForgotComponent } from './forgot/forgot.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-
+import { AngularEditorModule } from '@kolkov/angular-editor';
 @NgModule({
   imports: [
-    JobseekerRoutingModule,
+    BlogRoutingModule,
+    CommonModule,
+    ComponentsModule,
     ThemeModule,
     FormsModule,
     ReactiveFormsModule,
     NbCardModule,
     NbCheckboxModule,
-    NbTabsetModule,
-    NbPopoverModule,
     NbButtonModule,
     NbInputModule,
     NbSelectModule,
@@ -90,57 +71,46 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     NbDialogModule.forChild(),
     NbWindowModule.forChild(),
     NbToastrModule.forRoot(),
+    NbStepperModule,
     NbDatepickerModule,
     MatDatepickerModule,
-    ComponentsModule,
     MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
     MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
-    MatExpansionModule,
-    MatGridListModule,
     MatIconModule,
     MatInputModule,
-    MatListModule,
     MatMenuModule,
     MatNativeDateModule,
-    MatPaginatorModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule,
     MatRadioModule,
-    MatRippleModule,
     MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
     MatStepperModule,
     MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    TranslateModule.forRoot(),
     NbSpinnerModule,
-    DigitOnlyModule
+    DigitOnlyModule,
+    FileUploadModule,
+    NgbModule,
+    AngularEditorModule
   ],
   declarations: [
-    JobseekerComponent,
-    LoginComponent,
-    LogoutComponent,
-    ForgotComponent,
-    ChangePasswordComponent
+    BlogListComponent,
+    BlogComponent,
+    BlogDetailComponent,
   ],
   providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'en-GB'
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB'
+    },
   ]
 })
-export class JobseekerModule {
+export class BlogModule {
 }

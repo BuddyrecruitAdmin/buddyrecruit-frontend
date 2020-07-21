@@ -6,8 +6,6 @@ import { AppFormComponent } from './app-form/app-form.component';
 import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { FeaturesComponent } from './features/features.component';
-import { BlogListComponent } from './blog/blog-list/blog-list.component';
-import { BlogDetailComponent } from './blog/blog-detail/blog-detail.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
 
 const routes: Routes = [
@@ -44,20 +42,13 @@ const routes: Routes = [
         component: ResumeComponent,
       },
       {
-        path: 'blog',
-        component: BlogListComponent,
-      },
-      {
-        path: 'blog/:action',
-        component: BlogDetailComponent,
-      },
-      {
-        path: 'blog/:action/:id',
-        component: BlogDetailComponent,
-      },
-      {
         path: 'pdpa',
         component: PdpaComponent,
+      },
+      {
+        path: 'blog',
+        loadChildren: () => import('./blog/blog.module')
+          .then(m => m.BlogModule),
       },
       {
         path: 'employer',
