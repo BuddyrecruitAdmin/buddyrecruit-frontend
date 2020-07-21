@@ -1461,7 +1461,7 @@ export class ApplicationFormComponent implements OnInit {
     }
   }
 
-  clearFile(target): void {
+  clearFile(target, question): void {
     const queue = this.uploader.queue.find(element => {
       return element.file.name === target.originalName
         && element.file.type === target.type
@@ -1476,6 +1476,8 @@ export class ApplicationFormComponent implements OnInit {
     target.type = '';
     target.size = 0;
     target.imgaeURL = '';
+    question.isLoading = false;
+    this.loadingUpload = false;
   }
 
   clearAllFile() {
