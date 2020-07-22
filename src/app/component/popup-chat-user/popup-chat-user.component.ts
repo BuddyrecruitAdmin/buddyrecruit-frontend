@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId, getButtonId, setIconId, getIconId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId, getButtonId, setIconId, getIconId, setHistoryData, setFlagEdit } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -30,6 +30,7 @@ export class PopupChatUserComponent implements OnInit {
   infoFlag: boolean;
   devices: Devices;
   condition: any;
+  checkChange: boolean = false;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupChatUserComponent>,
@@ -80,6 +81,11 @@ export class PopupChatUserComponent implements OnInit {
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
+        if (this.checkChange) {
+          this.checkChange = false;
+          setHistoryData(response.data.candidateFlow.inboxes);
+          setFlagEdit('true')
+        }
       }
       this.loading = false;
     });
@@ -91,8 +97,9 @@ export class PopupChatUserComponent implements OnInit {
     this.candidateService.sendMessage(this.flowId, request).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
+        this.checkChange = true;
+        this.getDetail();
       } else {
-        this.ref.close(true);
         this.showToast('danger', 'Error Message', response.message);
       }
       this.loading = false;
