@@ -1048,6 +1048,7 @@ export class TalentPoolDetailComponent implements OnInit {
         value: this.filterType
       }
     ]
+    this.search();
   }
 
   changeCall(item) {
