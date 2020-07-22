@@ -429,7 +429,8 @@
               <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
                 <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.facebookLength" [text]="item.facebookLength" status="danger" position="top right">
+                <nb-badge *ngIf="item.facebookLength > 0" [text]="item.facebookLength" status="danger"
+                  position="top right">
                 </nb-badge>
               </button>
               <!-- Mobile -->
@@ -437,16 +438,16 @@
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.commentLenght" [text]="item.commentLenght" status="danger" position="top right">
-                </nb-badge>
+                <nb-badge *ngIf="item.commentLenght > 0" [text]="item.commentLenght" status="danger"
+                  position="top right"></nb-badge>
               </button>
               <!-- Desktop -->
               <button *ngIf="item.condition.button.comment && !devices.isMobile" nbButton
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.commentLenght" [text]="item.commentLenght" status="danger" position="top right">
-                </nb-badge>
+                <nb-badge *ngIf="item.commentLenght > 0" [text]="item.commentLenght" status="danger"
+                  position="top right"></nb-badge>
               </button>
               <button
                 *ngIf="item.condition.button.nextStep &&  !utilitiesService.convertDate(item.pendingSignContractInfo.agreeStartDate) && !isExpress"

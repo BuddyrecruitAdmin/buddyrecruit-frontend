@@ -446,7 +446,7 @@
               <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
                 <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.facebookLength" [text]="item.facebookLength" status="danger"
+                <nb-badge *ngIf="item.facebookLength > 0" [text]="item.facebookLength" status="danger"
                   position="top right">
                 </nb-badge>
               </button>
@@ -455,7 +455,7 @@
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.commentLenght" [text]="item.commentLenght" status="danger"
+                <nb-badge *ngIf="item.commentLenght > 0" [text]="item.commentLenght" status="danger"
                   position="top right"></nb-badge>
               </button>
               <!-- Desktop -->
@@ -463,7 +463,7 @@
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.commentLenght" [text]="item.commentLenght" status="danger"
+                <nb-badge *ngIf="item.commentLenght > 0" [text]="item.commentLenght" status="danger"
                   position="top right"></nb-badge>
               </button>
 
