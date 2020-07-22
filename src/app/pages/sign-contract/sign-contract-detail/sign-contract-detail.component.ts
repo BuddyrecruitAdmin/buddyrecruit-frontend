@@ -1086,8 +1086,8 @@ export class SignContractDetailComponent implements OnInit {
       if (result) {
         // this.search();
         let history = getHistoryData();
-        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
-        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
+        item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+        item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
       }
     });
   }
