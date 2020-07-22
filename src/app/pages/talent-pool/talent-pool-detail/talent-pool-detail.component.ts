@@ -96,10 +96,7 @@ export class TalentPoolDetailComponent implements OnInit {
   filterBy: any;
   searchArea: any;
   filterSort: any;
-  // checkPending: boolean;
-  // checkCalled: boolean;
-  // checkPendingSend: boolean;
-  // checkCalledSend: boolean;
+
   selectType: any;
   filterType: any;
   // call filter //
@@ -107,6 +104,9 @@ export class TalentPoolDetailComponent implements OnInit {
   userLists: any;
   userAll: any = [];
   filteredUserAll: any = [];
+
+  // cand filter //
+  candType: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -182,9 +182,10 @@ export class TalentPoolDetailComponent implements OnInit {
     // this.checkPending = true;
     // this.checkCalledSend = true;
     // this.checkPendingSend = true;
-    this.filterSort = 'score';
+    this.filterSort = 'apply';
     this.selectType = 'sort';
     this.callType = 'pending';
+    this.candType = 'new';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -551,12 +552,6 @@ export class TalentPoolDetailComponent implements OnInit {
   clearFilter() {
     this.filter.selected.provinces = [];
     this.filter.selected.areas = [];
-    // this.checkCalled = true;
-    // this.checkPending = true;
-    // this.checkCalledSend = true;
-    // this.checkPendingSend = true;
-    // this.filter.selected.districts = [];
-    // this.filter.selected.subDistricts = [];
     this.filterBy = [
       {
         name: 'province',
@@ -568,7 +563,7 @@ export class TalentPoolDetailComponent implements OnInit {
       }
     ]
     this.selectType = 'sort';
-    this.filterSort = 'apply'; 
+    this.filterSort = 'apply';
     this.search();
   }
 
@@ -1006,43 +1001,53 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   checkFiltered(name) {
+    this.callType = name;
     this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      }
+    ]
     if (name === 'pending') {
-      this.filterBy = [
-        {
-          name: 'province',
-          value: this.filter.selected.provinces
-        },
-        {
-          name: 'area',
-          value: this.searchArea
-        },
-        {
-          name: 'filterBy',
-          value: this.filterType
-        }
-      ]
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
     } else {
-      this.filterBy = [
-        {
-          name: 'province',
-          value: this.filter.selected.provinces
-        },
-        {
-          name: 'area',
-          value: this.searchArea
-        },
-        {
-          name: 'filterBy',
-          value: this.filterType
-        },
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
         {
           name: 'calledBy',
           value: this.userLists
-        }
-      ]
+        })
     }
     this.search();
+  }
+
+  checkCand(name) {
+    this.candType = name;
+    this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'filterBy',
+        value: this.filterType
+      }
+    ]
   }
 
   changeCall(item) {
