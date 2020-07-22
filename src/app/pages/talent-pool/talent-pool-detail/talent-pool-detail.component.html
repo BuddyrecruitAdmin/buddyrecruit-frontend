@@ -734,10 +734,10 @@
                   <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
                 </button>
                 <!-- download PDF -->
-                <!-- <button *ngIf="isExpress" [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton status="default"
+                <button *ngIf="isExpress" [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton status="default"
                   (click)="checkCV(item)" nbTooltip="Download PDF">
                   <nb-icon icon="file-text-outline"></nb-icon>
-                </button> -->
+                </button>
                 <!-- facebook -->
                 <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">

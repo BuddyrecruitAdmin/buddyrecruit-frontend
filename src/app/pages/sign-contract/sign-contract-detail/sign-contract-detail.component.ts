@@ -24,6 +24,7 @@ import { PopupInterviewResultComponent } from '../../../component/popup-intervie
 import { AppFormService } from '../../setting/app-form/app-form.service';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'ngx-sign-contract-detail',
   templateUrl: './sign-contract-detail.component.html',
@@ -310,12 +311,12 @@ export class SignContractDetailComponent implements OnInit {
           }
           if (this.utilitiesService.dateIsValid(item.training.date)) {
             item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
-          }else{
+          } else {
             item.training.date = '';
           }
           if (this.utilitiesService.dateIsValid(item.onboard.date)) {
             item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
-          }else{
+          } else {
             item.onboard.date = '';
           }
           if (item.called && item.called.lastChangedInfo) {
@@ -1100,6 +1101,11 @@ export class SignContractDetailComponent implements OnInit {
         item.facebookLength = comment.length;
       }
     });
+  }
+
+  checkCV(item: any) {
+    const url = environment.API_URI + "/pdf" + '?id=' + item._id;
+    window.open(url, '_blank');
   }
 
   changePaging(event) {

@@ -23,6 +23,7 @@ import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date
 import { AppFormService } from '../../setting/app-form/app-form.service';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
+import { environment } from '../../../../environments/environment';
 // import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 @Component({
   selector: 'ngx-onboard-detail',
@@ -940,6 +941,11 @@ export class OnboardDetailComponent implements OnInit {
         item.facebookLength = comment.length;
       }
     });
+  }
+
+  checkCV(item: any) {
+    const url = environment.API_URI + "/pdf" + '?id=' + item._id;
+    window.open(url, '_blank');
   }
 
   changePaging(event) {
