@@ -99,8 +99,8 @@
                 <td>
                   <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
                     <div class="col-md-6">
-                      <button [ngClass]="{'nbNotSelect': callType!=='pendingCall' }" nbButton status="success" shape="round"
-                        (click)="checkFiltered('pendingCall')">
+                      <button [ngClass]="{'nbNotSelect': callType!=='pendingCall' }" nbButton status="success"
+                        shape="round" (click)="checkFiltered('pendingCall')">
                         Pending Call
                       </button>
                     </div>
@@ -150,29 +150,29 @@
       <label class="label">Filters:</label>
       <div class="row">
         <div class="col-md-4">
-            <mat-form-field [color]="primary" appearance="outline">
-              <mat-label>Province</mat-label>
-              <mat-select [(ngModel)]="filter.selected.provinces" (ngModelChange)="changeFilter(true,'province')"
-                multiple>
-                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.provinces"
-                  (filteredReturn)="filteredProvince =$event"></mat-select-filter>
-                <mat-option *ngFor="let option of filteredProvince" [value]="option.value">
-                  {{option.label}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <mat-form-field [color]="primary" appearance="outline">
+            <mat-label>Province</mat-label>
+            <mat-select [(ngModel)]="filter.selected.provinces" (ngModelChange)="changeFilter(true,'province')"
+              multiple>
+              <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.provinces"
+                (filteredReturn)="filteredProvince =$event"></mat-select-filter>
+              <mat-option *ngFor="let option of filteredProvince" [value]="option.value">
+                {{option.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <div class="col-md-4">
-            <mat-form-field [color]="primary" appearance="outline">
-              <mat-label>Area</mat-label>
-              <mat-select [(ngModel)]="filter.selected.areas" (ngModelChange)="changeFilter(true, 'area')" multiple>
-                <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.areas"
-                  (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
-                <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
-                  {{option.label}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <mat-form-field [color]="primary" appearance="outline">
+            <mat-label>Area</mat-label>
+            <mat-select [(ngModel)]="filter.selected.areas" (ngModelChange)="changeFilter(true, 'area')" multiple>
+              <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="filter.data.areas"
+                (filteredReturn)="filteredDistrict =$event"></mat-select-filter>
+              <mat-option *ngFor="let option of filteredDistrict" [value]="option.value">
+                {{option.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <!-- <div class="col-md-4">
           <div class="form-control-group">
@@ -536,7 +536,8 @@
                         </nb-icon><span>Called by
                           {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) || '-' }}</span>
                       </span>
-                      <small style="padding-left: 2rem" *ngIf="item.called.flag">({{ item.called.lastChangedInfo.date || '-' }})</small>
+                      <small style="padding-left: 2rem"
+                        *ngIf="item.called.flag">({{ item.called.lastChangedInfo.date || '-' }})</small>
                     </div>
                     <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
                       <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
@@ -732,10 +733,17 @@
                   (click)="openPopupTransfer(item)">
                   <nb-icon icon="swap-outline" style="margin-right: 0;"></nb-icon>
                 </button>
-
+                <!-- download PDF -->
+                <!-- <button *ngIf="isExpress" [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton status="default"
+                  (click)="checkCV(item)" nbTooltip="Download PDF">
+                  <nb-icon icon="file-text-outline"></nb-icon>
+                </button> -->
+                <!-- facebook -->
                 <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
                   <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
+                  <nb-badge *ngIf="item.inboxes.length" [text]="item.facebookLength" status="danger"
+                    position="top right"></nb-badge>
                 </button>
 
                 <button *ngIf="item.condition.button.comment && !devices.isMobile" nbButton

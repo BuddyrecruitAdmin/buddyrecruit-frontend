@@ -36,6 +36,6 @@
                 (click)="ref.close(result)">CLOSE</button> -->
         </div>
         <button nbButton status="success" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
-            (click)="save()">SEND</button>
+            (click)="save()" [disabled]="!infoFlag || loading">SEND</button>
     </nb-card-footer>
 </nb-card>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PopupCommentService } from './popup-comment.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, setHistoryData } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, setHistoryData, setFlagEdit } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -73,6 +73,7 @@ export class PopupCommentComponent implements OnInit {
           if (this.checkChange) {
             this.checkChange = false;
             setHistoryData(response.data.comments);
+            setFlagEdit('true')
           }
         }
         this.loading = false;

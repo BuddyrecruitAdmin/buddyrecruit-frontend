@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -28,6 +28,7 @@ import { PopupTrainingDateComponent } from '../../../component/popup-training-da
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
 import { ArrayType } from '@angular/compiler';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -102,7 +103,7 @@ export class TalentPoolDetailComponent implements OnInit {
   filterType: any;
   // call filter //
   callType: any;
-  userLists: any;
+  userLists: any = [];
   userAll: any = [];
   filteredUserAll: any = [];
 
@@ -344,7 +345,7 @@ export class TalentPoolDetailComponent implements OnInit {
             item.collapse = this.collapseAll;
             item.condition = this.setCondition(item);
             item.commentLenght = item.comments.length;
-            // item.facebookLength = item.;
+            item.facebookLength = item.inboxes.length;
             if (!item.called.lastChangedInfo) {
               item.called.lastChangedInfo = {
                 refUser: ''
@@ -443,7 +444,6 @@ export class TalentPoolDetailComponent implements OnInit {
             this.forExpressCompany();
           }
         }
-        console.log(this.items)
         this.loading = false;
         resolve();
       });
@@ -935,8 +935,12 @@ export class TalentPoolDetailComponent implements OnInit {
       if (result) {
         setFlowId();
       }
-      let comment = getHistoryData();
-      item.commentLenght = comment.length;
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.commentLenght = comment.length;
+      }
     });
   }
 
@@ -1171,7 +1175,22 @@ export class TalentPoolDetailComponent implements OnInit {
       if (result) {
         // this.search();
       }
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.facebookLength = comment.length;
+      }
     });
+  }
+
+  checkCV(item: any) {
+    // const url = this.router.serializeUrl(
+    //   this.router.createUrlTree([`${environment.API_URI}?id=${item._id}`])
+    // );
+    const url = environment.API_URI + "/pdf" + '?id=' + item._id;
+    // this.router.navigate([url]);
+    window.open(url, '_blank');
   }
 
   openHistory(item: any) {

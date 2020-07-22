@@ -41,7 +41,8 @@ import {
   UserSuccess,
   AppFormIStatus,
   HistoryData,
-  FacebookId
+  FacebookId,
+  FlagEdit
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -436,4 +437,13 @@ export function setFacebookId(fbId: any = null) {
 export function getFacebookId() {
   const fbId = JSON.parse(localStorage.getItem(FacebookId));
   return (!fbId || fbId === null) ? undefined : fbId;
+}
+
+export function setFlagEdit(flag: any = null) {
+  localStorage.setItem(FlagEdit, JSON.stringify(flag));
+}
+
+export function getFlagEdit() {
+  const flag = JSON.parse(localStorage.getItem(FlagEdit));
+  return (!flag || flag === null) ? undefined : flag;
 }
