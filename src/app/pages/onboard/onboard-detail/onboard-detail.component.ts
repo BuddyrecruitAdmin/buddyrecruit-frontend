@@ -900,6 +900,23 @@ export class OnboardDetailComponent implements OnInit {
     })
   }
 
+  changeCall(item) {
+    item.called.flag = !item.called.flag;
+    let data;
+    data = {
+      called: item.called
+    }
+    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        item.called.lastChangedInfo.refUser = this.role;
+        item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(new Date());
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
+  }
+
   openPopupTrainingDate(item: any) {
     setFlowId(item._id);
     setCandidateId(item.refCandidate._id);
