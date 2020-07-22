@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -23,6 +23,7 @@ import { PopupOnboardDateComponent } from '../../../component/popup-onboard-date
 import { AppFormService } from '../../setting/app-form/app-form.service';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
+import { environment } from '../../../../environments/environment';
 // import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 @Component({
   selector: 'ngx-onboard-detail',
@@ -284,6 +285,28 @@ export class OnboardDetailComponent implements OnInit {
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
+          item.commentLenght = item.comments.length;
+          item.facebookLength = item.inboxes.length;
+          if (!item.called.lastChangedInfo) {
+            item.called.lastChangedInfo = {
+              refUser: ''
+            }
+          }
+          if (this.utilitiesService.dateIsValid(item.training.date)) {
+            item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+          } else {
+            item.training.date = '';
+          }
+          if (this.utilitiesService.dateIsValid(item.onboard.date)) {
+            item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+          } else {
+            item.onboard.date = '';
+          }
+          if (item.called && item.called.lastChangedInfo) {
+            if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
+              item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+            }
+          }
           if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
             item.refCandidate.birth = new Date((item.refCandidate.birth));
             var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
@@ -393,6 +416,14 @@ export class OnboardDetailComponent implements OnInit {
         name: 'area',
         value: this.searchArea
       },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
     ]
     this.search();
   }
@@ -542,7 +573,19 @@ export class OnboardDetailComponent implements OnInit {
           this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
-              this.search();
+              let indexA
+              this.items.map((element, index) => {
+                if (element._id === item._id) {
+                  indexA = index;
+                }
+              })
+              this.items.splice(indexA, 1);
+              this.tabs.map(element => {
+                if (element.name === 'PENDING') {
+                  element.badgeText = element.badgeText - 1;
+                }
+              })
+              // this.search();
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
@@ -584,7 +627,23 @@ export class OnboardDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+        let indexA
+        this.items.map((element, index) => {
+          if (element._id === item._id) {
+            indexA = index;
+          }
+        })
+        this.items.splice(indexA, 1);
+        const userBlock = getUserSuccess();
+        this.tabs.map(element => {
+          if (element.name === 'PENDING') {
+            element.badgeText = element.badgeText - 1;
+          }
+          if (element.name === 'REJECTED' && userBlock !== 'block') {
+            element.badgeText = element.badgeText + 1;
+          }
+        })
       }
     });
   }
@@ -599,7 +658,23 @@ export class OnboardDetailComponent implements OnInit {
         this.candidateService.candidateFlowRevoke(item._id, this.refStageId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.search();
+            // this.search();
+            let indexA
+            this.items.map((element, index) => {
+              if (element._id === item._id) {
+                indexA = index;
+              }
+            })
+            this.items.splice(indexA, 1);
+            const userBlock = getUserSuccess();
+            this.tabs.map(element => {
+              if (element.name === 'PENDING') {
+                element.badgeText = element.badgeText + 1;
+              }
+              if (element.name === 'REJECTED') {
+                element.badgeText = element.badgeText - 1;
+              }
+            })
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -626,7 +701,7 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   openCandidateDetail(item: any) {
-    if(!this.isExpress){
+    if (!this.isExpress) {
       setTabName(this.tabSelected);
       setCollapse(this.collapseAll);
       setFlowId(item._id);
@@ -710,7 +785,7 @@ export class OnboardDetailComponent implements OnInit {
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
-      setFlagExam('false');
+      setFlagExam('true');
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
@@ -837,7 +912,10 @@ export class OnboardDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+        let history = getHistoryData();
+        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
+        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
       }
     });
   }
@@ -854,9 +932,20 @@ export class OnboardDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+      }
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.facebookLength = comment.length;
       }
     });
+  }
+
+  checkCV(item: any) {
+    const url = environment.API_URI + "/pdf" + '?id=' + item._id;
+    window.open(url, '_blank');
   }
 
   changePaging(event) {

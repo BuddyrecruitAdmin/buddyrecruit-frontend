@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -27,6 +27,8 @@ import { group } from 'console';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
+import { ArrayType } from '@angular/compiler';
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -96,10 +98,17 @@ export class TalentPoolDetailComponent implements OnInit {
   filterBy: any;
   searchArea: any;
   filterSort: any;
-  checkPending: boolean;
-  checkCalled: boolean;
-  checkPendingSend: boolean;
-  checkCalledSend: boolean;
+
+  selectType: any;
+  filterType: any;
+  // call filter //
+  callType: any;
+  userLists: any = [];
+  userAll: any = [];
+  filteredUserAll: any = [];
+
+  // cand filter //
+  candType: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -167,14 +176,18 @@ export class TalentPoolDetailComponent implements OnInit {
     this.sourceBy = [];
     this.filterBy = [];
     this.searchArea = [];
+    this.filterType = '';
     this.keyword = '';
     this.showTips = false;
     this.showCondition = true;
-    this.checkCalled = true;
-    this.checkPending = true;
-    this.checkCalledSend = true;
-    this.checkPendingSend = true;
+    // this.checkCalled = true;
+    // this.checkPending = true;
+    // this.checkCalledSend = true;
+    // this.checkPendingSend = true;
     this.filterSort = 'apply';
+    this.selectType = 'sort';
+    this.callType = 'pendingCall';
+    this.candType = 'new';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -215,13 +228,13 @@ export class TalentPoolDetailComponent implements OnInit {
           value: this.searchArea
         },
         {
-          name: 'pendingCall',
-          value: this.checkPending
+          name: 'filterBy',
+          value: this.filterType
         },
-        {
-          name: 'called',
-          value: this.checkCalled
-        },
+        // {
+        //   name: 'called',
+        //   value: []
+        // }
         // {
         //   name: 'subDistrict',
         //   value: this.filter.selected.subDistricts
@@ -331,6 +344,28 @@ export class TalentPoolDetailComponent implements OnInit {
           this.items.map(item => {
             item.collapse = this.collapseAll;
             item.condition = this.setCondition(item);
+            item.commentLenght = item.comments.length;
+            item.facebookLength = item.inboxes.length;
+            if (!item.called.lastChangedInfo) {
+              item.called.lastChangedInfo = {
+                refUser: ''
+              }
+            }
+            if (this.utilitiesService.dateIsValid(item.training.date)) {
+              item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+            } else {
+              item.training.date = '';
+            }
+            if (this.utilitiesService.dateIsValid(item.onboard.date)) {
+              item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+            } else {
+              item.onboard.date = '';
+            }
+            if (item.called && item.called.lastChangedInfo) {
+              if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
+                item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+              }
+            }
             if (item.refCandidate && item.refCandidate.birth) {
               if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
                 item.refCandidate.birth = new Date((item.refCandidate.birth));
@@ -369,6 +404,12 @@ export class TalentPoolDetailComponent implements OnInit {
                 group: element.refProvince
               })
             });
+            response.filter.users.forEach(element => {
+              this.userAll.push({
+                label: this.utilitiesService.setFullname(element),
+                value: element._id
+              })
+            });
             // response.filter.districts.forEach(element => {
             //   this.filter.data.districts.push({
             //     label: element.name.th,
@@ -397,6 +438,8 @@ export class TalentPoolDetailComponent implements OnInit {
             this.filteredDistrict = this.filter.data.areas.slice();
             this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
             this.filteredProvince = this.filter.data.provinces.slice();
+            this.userAll = this.removeDuplicates(this.userAll, "value")
+            this.filteredUserAll = this.userAll.slice();
           }
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
@@ -495,6 +538,9 @@ export class TalentPoolDetailComponent implements OnInit {
       // this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
       // this.filteredSubDistrict = this.filter.data.subDistricts.slice();
     }
+    if (this.filter.selected.areas.length === 0) {
+      this.searchArea = [];
+    }
     this.filterBy = [
       {
         name: 'province',
@@ -503,20 +549,30 @@ export class TalentPoolDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
-      },
-      {
-        name: 'pendingCall',
-        value: this.checkPending
-      },
-      {
-        name: 'called',
-        value: this.checkCalled
-      },
-      // {
-      //   name: 'subDistrict',
-      //   value: this.filter.selected.subDistricts
-      // }
+      }
     ]
+    if (this.selectType === 'call' && this.callType === 'pendingCall') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
+    if (this.selectType === 'call' && this.callType === 'called') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
+    }
+    if (this.selectType === 'cand') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
     this.search();
   }
 
@@ -529,34 +585,19 @@ export class TalentPoolDetailComponent implements OnInit {
   clearFilter() {
     this.filter.selected.provinces = [];
     this.filter.selected.areas = [];
-    this.checkCalled = true;
-    this.checkPending = true;
-    this.checkCalledSend = true;
-    this.checkPendingSend = true;
-    // this.filter.selected.districts = [];
-    // this.filter.selected.subDistricts = [];
+    this.searchArea = []
     this.filterBy = [
       {
         name: 'province',
-        value: this.filter.selected.provinces
+        value: []
       },
       {
         name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'pendingCall',
-        value: this.checkPending
-      },
-      {
-        name: 'called',
-        value: this.checkCalled
+        value: []
       }
-      // {
-      //   name: 'subDistrict',
-      //   value: this.filter.selected.subDistricts
-      // }
     ]
+    this.selectType = 'sort';
+    this.filterSort = 'apply';
     this.search();
   }
 
@@ -595,7 +636,6 @@ export class TalentPoolDetailComponent implements OnInit {
       },
       isExpired: false
     };
-
     if (this.tabSelected === 'NOT BUY') {
       condition.button.comment = true;
       condition.button.reject = true;
@@ -736,7 +776,19 @@ export class TalentPoolDetailComponent implements OnInit {
           this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
-              this.search();
+              let indexA
+              this.items.map((element, index) => {
+                if (element._id === item._id) {
+                  indexA = index;
+                }
+              })
+              this.items.splice(indexA, 1);
+              this.tabs.map(element => {
+                if (element.name === 'PENDING') {
+                  element.badgeText = element.badgeText - 1;
+                }
+              })
+              // this.search();
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
@@ -794,7 +846,23 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+        let indexA
+        this.items.map((element, index) => {
+          if (element._id === item._id) {
+            indexA = index;
+          }
+        })
+        this.items.splice(indexA, 1);
+        const userBlock = getUserSuccess();
+        this.tabs.map(element => {
+          if (element.name === 'PENDING') {
+            element.badgeText = element.badgeText - 1;
+          }
+          if (element.name === 'REJECTED' && userBlock !== 'block') {
+            element.badgeText = element.badgeText + 1;
+          }
+        })
       }
     });
   }
@@ -809,7 +877,23 @@ export class TalentPoolDetailComponent implements OnInit {
         this.candidateService.candidateFlowRevoke(item._id, this.refStageId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.search();
+            // this.search();
+            let indexA
+            this.items.map((element, index) => {
+              if (element._id === item._id) {
+                indexA = index;
+              }
+            })
+            this.items.splice(indexA, 1);
+            const userBlock = getUserSuccess();
+            this.tabs.map(element => {
+              if (element.name === 'PENDING') {
+                element.badgeText = element.badgeText + 1;
+              }
+              if (element.name === 'REJECTED') {
+                element.badgeText = element.badgeText - 1;
+              }
+            })
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -857,9 +941,15 @@ export class TalentPoolDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
-      this.search();
+      // this.search();
       if (result) {
         setFlowId();
+      }
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.commentLenght = comment.length;
       }
     });
   }
@@ -983,30 +1073,50 @@ export class TalentPoolDetailComponent implements OnInit {
     if (name === 'score') {
       this.filterSort = 'score';
       this.search();
-      // this.items.sort(function (a, b) {
-      //   return b.totalScore - a.totalScore
-      // })
     } else {
       this.filterSort = 'apply';
-      // console.log(this.items)
-      // var _this = this;
-      // this.items.sort(function (a, b) {
       this.search();
-
-      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
-      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
-      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
-      // })
-      // console.log(this.items)
     }
   }
 
-  checkSort(event, name) {
-    if (name === 'pend') {
-      this.checkPendingSend = event;
+  selectSort(type: string) {
+    this.selectType = type;
+  }
+
+  checkFiltered(name) {
+    this.callType = name;
+    this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      }
+    ]
+    if (name === 'pendingCall') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
     } else {
-      this.checkCalledSend = event;
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
     }
+    this.search();
+  }
+
+  checkCand(name) {
+    this.candType = name;
+    this.filterType = name;
     this.filterBy = [
       {
         name: 'province',
@@ -1017,13 +1127,9 @@ export class TalentPoolDetailComponent implements OnInit {
         value: this.searchArea
       },
       {
-        name: 'pendingCall',
-        value: this.checkPendingSend
-      },
-      {
-        name: 'called',
-        value: this.checkCalledSend
-      },
+        name: 'filterBy',
+        value: this.filterType
+      }
     ]
     this.search();
   }
@@ -1037,7 +1143,8 @@ export class TalentPoolDetailComponent implements OnInit {
     this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
-        this.search();
+        item.called.lastChangedInfo.refUser = this.role;
+        item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(new Date());
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
@@ -1056,7 +1163,10 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+        let history = getHistoryData();
+        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
+        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
       }
     });
   }
@@ -1073,9 +1183,20 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+      }
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.facebookLength = comment.length;
       }
     });
+  }
+
+  checkCV(item: any) {
+    const url = environment.API_URI + "/pdf" + '?id=' + item._id;
+    window.open(url, '_blank');
   }
 
   openHistory(item: any) {
@@ -1086,7 +1207,7 @@ export class TalentPoolDetailComponent implements OnInit {
     }
     ).onClose.subscribe(result => {
       if (result) {
-        this.search();
+        // this.search();
         setHistoryData();
       }
     });

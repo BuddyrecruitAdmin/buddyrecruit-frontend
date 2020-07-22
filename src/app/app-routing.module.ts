@@ -3,6 +3,11 @@ import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'application-form',
+    loadChildren: () => import('../app/modules/application-form/application-form.module')
+      .then(m => m.ApplicationFormModule),
+  },
+  {
     path: '',
     loadChildren: () => import('../app/modules/modules.module')
       .then(m => m.ModulesModule),
@@ -12,11 +17,11 @@ const routes: Routes = [
   //   loadChildren: () => import('../app/pages/pages.module')
   //     .then(m => m.PagesModule),
   // },
-  {
-    path: '**',
-    redirectTo: '/index',
-    pathMatch: 'full'
-  },
+  // {
+  //   path: '**',
+  //   redirectTo: '/index',
+  //   pathMatch: 'full'
+  // },
 ];
 
 const config: ExtraOptions = {

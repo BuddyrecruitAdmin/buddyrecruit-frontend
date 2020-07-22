@@ -11,21 +11,31 @@
             <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
         </div>
     </nb-card-header>
-    <nb-card-body class="dialog-body">
-        <div class="form-control-group">
-            <label class="label">Information </label>
-            <textarea nbInput fullWidth [(ngModel)]="textTemp" placeholder="Text..." rows="5"></textarea>
-        </div>
-        <nb-checkbox [(ngModel)]="infoFlag" style="text-align: left;" [disabled]="condition.responsed"><span
-                style="font-family: kanit;"> Offering
-                Infomation</span></nb-checkbox>
+    <nb-card-body *ngIf="!loading" class="dialog-body">
+        <h6 *ngIf="!items.length" class="text-gray text-center">No Chat</h6>
+        <nb-card *ngFor="let item of items" [accent]="item.accent">
+            <nb-card-header>
+                <div class="title">
+                    <nb-user size="medium" [name]="item.name" [title]="item.title" [picture]="item.picture"></nb-user>
+                </div>
+            </nb-card-header>
+            <nb-card-body style="min-height: auto">
+                <span *ngIf="!item.editFlag" style="word-wrap: break-word;">{{ item.message }}</span>
+            </nb-card-body>
+        </nb-card>
     </nb-card-body>
     <nb-card-footer>
+        <div class="form-control-group">
+            <textarea nbInput fullWidth [(ngModel)]="textTemp" placeholder="Text..." rows="5"></textarea>
+        </div>
         <div class="footer-collapse">
-            <button nbButton status="default" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
-                (click)="ref.close(result)">CLOSE</button>
+            <nb-checkbox [(ngModel)]="infoFlag" style="text-align: left;" [disabled]="condition.responsed"><span
+                    style="font-family: kanit;"> Offering
+                    Infomation</span></nb-checkbox>
+            <!-- <button nbButton status="default" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+                (click)="ref.close(result)">CLOSE</button> -->
         </div>
         <button nbButton status="success" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
-            (click)="save()">SEND</button>
+            (click)="save()" [disabled]="!infoFlag || loading">SEND</button>
     </nb-card-footer>
 </nb-card>

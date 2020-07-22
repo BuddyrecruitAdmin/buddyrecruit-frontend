@@ -22,7 +22,6 @@ import {
   NbDatepickerModule,
   NbSpinnerModule
 } from '@nebular/theme';
-import { NgxEchartsModule } from 'ngx-echarts';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -99,7 +98,6 @@ import { RegistrationComponent } from './registration/registration.component';
     NbDialogModule.forChild(),
     NbWindowModule.forChild(),
     NbToastrModule.forRoot(),
-    NgxEchartsModule,
     NbDatepickerModule,
     MatDatepickerModule,
     ComponentsModule,
