@@ -96,11 +96,17 @@ export class TalentPoolDetailComponent implements OnInit {
   filterBy: any;
   searchArea: any;
   filterSort: any;
-  checkPending: boolean;
-  checkCalled: boolean;
-  checkPendingSend: boolean;
-  checkCalledSend: boolean;
+  // checkPending: boolean;
+  // checkCalled: boolean;
+  // checkPendingSend: boolean;
+  // checkCalledSend: boolean;
   selectType: any;
+  filterType: any;
+  // call filter //
+  callType: any;
+  userLists: any;
+  userAll: any = [];
+  filteredUserAll: any = [];
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -168,15 +174,17 @@ export class TalentPoolDetailComponent implements OnInit {
     this.sourceBy = [];
     this.filterBy = [];
     this.searchArea = [];
+    this.filterType = '';
     this.keyword = '';
     this.showTips = false;
     this.showCondition = true;
-    this.checkCalled = true;
-    this.checkPending = true;
-    this.checkCalledSend = true;
-    this.checkPendingSend = true;
+    // this.checkCalled = true;
+    // this.checkPending = true;
+    // this.checkCalledSend = true;
+    // this.checkPendingSend = true;
     this.filterSort = 'score';
     this.selectType = 'sort';
+    this.callType = 'pending';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -217,13 +225,13 @@ export class TalentPoolDetailComponent implements OnInit {
           value: this.searchArea
         },
         {
-          name: 'pendingCall',
-          value: this.checkPending
+          name: 'filterBy',
+          value: this.filterType
         },
-        {
-          name: 'called',
-          value: this.checkCalled
-        },
+        // {
+        //   name: 'called',
+        //   value: []
+        // }
         // {
         //   name: 'subDistrict',
         //   value: this.filter.selected.subDistricts
@@ -371,6 +379,12 @@ export class TalentPoolDetailComponent implements OnInit {
                 group: element.refProvince
               })
             });
+            response.filter.users.forEach(element => {
+              this.userAll.push({
+                label: this.utilitiesService.setFullname(element),
+                value: element._id
+              })
+            });
             // response.filter.districts.forEach(element => {
             //   this.filter.data.districts.push({
             //     label: element.name.th,
@@ -399,6 +413,8 @@ export class TalentPoolDetailComponent implements OnInit {
             this.filteredDistrict = this.filter.data.areas.slice();
             this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
             this.filteredProvince = this.filter.data.provinces.slice();
+            this.userAll = this.removeDuplicates(this.userAll, "value")
+            this.filteredUserAll = this.userAll.slice();
           }
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
@@ -505,20 +521,24 @@ export class TalentPoolDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
-      },
-      {
-        name: 'pendingCall',
-        value: this.checkPending
-      },
-      {
-        name: 'called',
-        value: this.checkCalled
-      },
-      // {
-      //   name: 'subDistrict',
-      //   value: this.filter.selected.subDistricts
-      // }
+      }
     ]
+    if (this.selectType === 'call' && this.callType === 'pending') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
+    if (this.selectType === 'call' && this.callType === 'called') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
+    }
     this.search();
   }
 
@@ -531,10 +551,10 @@ export class TalentPoolDetailComponent implements OnInit {
   clearFilter() {
     this.filter.selected.provinces = [];
     this.filter.selected.areas = [];
-    this.checkCalled = true;
-    this.checkPending = true;
-    this.checkCalledSend = true;
-    this.checkPendingSend = true;
+    // this.checkCalled = true;
+    // this.checkPending = true;
+    // this.checkCalledSend = true;
+    // this.checkPendingSend = true;
     // this.filter.selected.districts = [];
     // this.filter.selected.subDistricts = [];
     this.filterBy = [
@@ -545,20 +565,10 @@ export class TalentPoolDetailComponent implements OnInit {
       {
         name: 'area',
         value: this.searchArea
-      },
-      {
-        name: 'pendingCall',
-        value: this.checkPending
-      },
-      {
-        name: 'called',
-        value: this.checkCalled
       }
-      // {
-      //   name: 'subDistrict',
-      //   value: this.filter.selected.subDistricts
-      // }
     ]
+    this.selectType = 'sort';
+    this.filterSort = 'apply'; 
     this.search();
   }
 
@@ -985,21 +995,9 @@ export class TalentPoolDetailComponent implements OnInit {
     if (name === 'score') {
       this.filterSort = 'score';
       this.search();
-      // this.items.sort(function (a, b) {
-      //   return b.totalScore - a.totalScore
-      // })
     } else {
       this.filterSort = 'apply';
-      // console.log(this.items)
-      // var _this = this;
-      // this.items.sort(function (a, b) {
       this.search();
-
-      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
-      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
-      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
-      // })
-      // console.log(this.items)
     }
   }
 
@@ -1007,30 +1005,43 @@ export class TalentPoolDetailComponent implements OnInit {
     this.selectType = type;
   }
 
-  checkSort(event, name) {
-    if (name === 'pend') {
-      this.checkPendingSend = event;
+  checkFiltered(name) {
+    this.filterType = name;
+    if (name === 'pending') {
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.provinces
+        },
+        {
+          name: 'area',
+          value: this.searchArea
+        },
+        {
+          name: 'filterBy',
+          value: this.filterType
+        }
+      ]
     } else {
-      this.checkCalledSend = event;
+      this.filterBy = [
+        {
+          name: 'province',
+          value: this.filter.selected.provinces
+        },
+        {
+          name: 'area',
+          value: this.searchArea
+        },
+        {
+          name: 'filterBy',
+          value: this.filterType
+        },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        }
+      ]
     }
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'pendingCall',
-        value: this.checkPendingSend
-      },
-      {
-        name: 'called',
-        value: this.checkCalledSend
-      },
-    ]
     this.search();
   }
 

@@ -62,7 +62,7 @@
     </div>
     <!-- filter hubs -->
     <div *ngIf="filter.isFilter && isExpress" class="filter-block">
-      <!-- <div class="row">
+      <div class="row">
         <div class="col-md-12 table-responsive">
           <table class="table">
             <thead>
@@ -99,14 +99,14 @@
                 <td>
                   <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
                     <div class="col-md-6">
-                      <button [ngClass]="{'nbNotSelect': filterSort!=='apply' }" nbButton status="success" shape="round"
-                        (click)="sortData('apply')">
+                      <button [ngClass]="{'nbNotSelect': callType!=='pending' }" nbButton status="success" shape="round"
+                        (click)="checkFiltered('pending')">
                         Pending Call
                       </button>
                     </div>
                     <div class="col-md-6">
-                      <button [ngClass]="{'nbNotSelect': filterSort!=='score' }" nbButton status="success" shape="round"
-                        (click)="sortData('score')">
+                      <button [ngClass]="{'nbNotSelect': callType!=='score' }" nbButton status="success" shape="round"
+                        (click)="checkFiltered('called')">
                         Called
                       </button>
                     </div>
@@ -115,7 +115,18 @@
                 <td>
                   <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
                     <div class="col-md-6">
-
+                      <div class="form-control-group">
+                        <label class="label">Called by</label>
+                        <mat-form-field [color]="primary" appearance="outline">
+                          <mat-select [(ngModel)]="userLists" (ngModelChange)="checkFiltered('called')" multiple>
+                            <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="userAll"
+                              (filteredReturn)="filteredUserAll =$event"></mat-select-filter>
+                            <mat-option *ngFor="let option of filteredUserAll" [value]="option.value">
+                              {{option.label}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
                     </div>
                   </div>
                   <div *ngIf="selectType==='cand'" class="row" style="padding-top: 1rem;">
@@ -137,9 +148,9 @@
             </tbody>
           </table>
         </div>
-      </div> -->
+      </div>
       <div class="row">
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
           <label class="label">Sort by: </label>&nbsp;&nbsp;&nbsp;
           <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort"
             (valueChange)="sortData($event)">
@@ -150,7 +161,7 @@
               Scoring
             </nb-radio>
           </nb-radio-group>
-        </div>
+        </div> -->
         <div class="col-md-12">
           <nb-checkbox (checkedChange)="checkSort($event,'pend')" [(ngModel)]="checkPending"
             [ngModelOptions]="{standalone: true}">
