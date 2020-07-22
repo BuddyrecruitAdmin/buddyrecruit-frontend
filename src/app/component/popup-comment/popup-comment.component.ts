@@ -70,11 +70,11 @@ export class PopupCommentComponent implements OnInit {
               editFlag: false
             })
           });
-          if (this.checkChange) {
-            this.checkChange = false;
-            setHistoryData(response.data.comments);
-            setFlagEdit('true')
-          }
+        }
+        if (this.checkChange) {
+          this.checkChange = false;
+          setHistoryData(response.data.comments);
+          setFlagEdit('true')
         }
         this.loading = false;
       }
