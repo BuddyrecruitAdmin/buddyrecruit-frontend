@@ -3,7 +3,7 @@ import { PopupRejectService } from './popup-reject.service';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setUserSuccess } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -179,6 +179,7 @@ export class PopupRejectComponent implements OnInit {
         this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark, this.rejectId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
+            setUserSuccess('block');
             this.ref.close(true);
           } else {
             this.showToast('danger', 'Error Message', response.message);

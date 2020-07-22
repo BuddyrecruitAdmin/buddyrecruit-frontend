@@ -99,8 +99,8 @@
                 <td>
                   <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
                     <div class="col-md-6">
-                      <button [ngClass]="{'nbNotSelect': callType!=='pending' }" nbButton status="success" shape="round"
-                        (click)="checkFiltered('pending')">
+                      <button [ngClass]="{'nbNotSelect': callType!=='pendingCall' }" nbButton status="success" shape="round"
+                        (click)="checkFiltered('pendingCall')">
                         Pending Call
                       </button>
                     </div>
@@ -501,11 +501,11 @@
                       <div class="m-l-15">
                         <div class="text-group">
                           <label class="label">Training Date</label>
-                          <span>{{  utilitiesService.convertDateTimeFromSystem(item.training?.date) || '-' }}</span>
+                          <span>{{  item.training?.date || '-' }}</span>
                         </div>
                         <div class="text-group">
                           <label class="label">Onboarding Date</label>
-                          <span>{{ utilitiesService.convertDateTimeFromSystem(item.onboard?.date) || '-' }}</span>
+                          <span>{{ item.onboard?.date || '-' }}</span>
                         </div>
                       </div>
                     </div>
@@ -534,8 +534,9 @@
                         <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-call-outline"
                           class="font-inherit link">
                         </nb-icon><span>Called by
-                          {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) }}</span>
+                          {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) || '-' }}</span>
                       </span>
+                      <small style="padding-left: 2rem" *ngIf="item.called.flag">({{ item.called.lastChangedInfo.date || '-' }})</small>
                     </div>
                     <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
                       <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
@@ -721,7 +722,7 @@
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                   (click)="openPopupComment(item)">
                   <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                  <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                  <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
                     position="top right"></nb-badge>
                 </button>
                 <!-- Desktop -->
@@ -741,7 +742,7 @@
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                   (click)="openPopupComment(item)">
                   <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                  <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                  <nb-badge *ngIf="item.comments.length" [text]="item.commentLenght" status="danger"
                     position="top right"></nb-badge>
                 </button>
                 <button *ngIf="item.condition.button.nextStep && !isExpress" nbButton
