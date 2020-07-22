@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PopupCommentService } from './popup-comment.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, setHistoryData, setFlagEdit } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -23,6 +23,7 @@ export class PopupCommentComponent implements OnInit {
   message: string;
   loading: boolean;
   result: boolean = false;
+  checkChange: boolean = false;
   constructor(
     private service: PopupCommentService,
     public ref: NbDialogRef<PopupCommentComponent>,
@@ -70,6 +71,11 @@ export class PopupCommentComponent implements OnInit {
             })
           });
         }
+        if (this.checkChange) {
+          this.checkChange = false;
+          setHistoryData(response.data.comments);
+          setFlagEdit('true')
+        }
         this.loading = false;
       }
     });
@@ -79,6 +85,7 @@ export class PopupCommentComponent implements OnInit {
     this.result = true;
     this.service.create(this.flowId, this.message).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        this.checkChange = true;
         this.getList();
         this.message = '';
       }
@@ -95,6 +102,7 @@ export class PopupCommentComponent implements OnInit {
         this.result = true;
         this.service.deleteItem(this.flowId, item._id).subscribe(response => {
           if (response.code === ResponseCode.Success) {
+            this.checkChange = true;
             this.getList();
           }
         });

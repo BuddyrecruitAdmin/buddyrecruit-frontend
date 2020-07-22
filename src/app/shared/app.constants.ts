@@ -87,6 +87,7 @@ export const UserToken = 'UserToken';
 export const UserSuccess = 'UserSuccess';
 export const HistoryData = 'HistoryData';
 export const FacebookId = 'FacebookId';
+export const FlagEdit = 'flagEdit';
 
 export enum DayOfWeek {
   Sunday = 0,

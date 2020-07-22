@@ -40,6 +40,6 @@
   </nb-card-body>
   <nb-card-footer>
     <input type="text" [(ngModel)]="message" nbInput placeholder="Message" [disabled]="loading">
-    <button nbButton status="success" (click)="comment()" [disabled]="!message">COMMENT</button>
+    <button nbButton status="success" (click)="comment()" [disabled]="!message || loading">COMMENT</button>
   </nb-card-footer>
 </nb-card>

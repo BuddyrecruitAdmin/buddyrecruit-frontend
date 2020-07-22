@@ -98,7 +98,7 @@ export class CandidateListComponent implements OnInit {
       active: true,
     }
   ];
-
+  isExpress: any;
   constructor(
     private router: Router,
     private service: CandidateService,
@@ -114,6 +114,7 @@ export class CandidateListComponent implements OnInit {
     setKeyword();
     this.isFilter = false;
     this.filterAll = true;
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {

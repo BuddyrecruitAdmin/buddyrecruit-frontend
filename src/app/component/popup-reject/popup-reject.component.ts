@@ -3,7 +3,7 @@ import { PopupRejectService } from './popup-reject.service';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setUserSuccess } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
@@ -36,6 +36,7 @@ export class PopupRejectComponent implements OnInit {
   loading: boolean;
   result: boolean = false;
   devices: Devices;
+  isExpress: boolean;
   constructor(
     private service: PopupRejectService,
     private candidateService: CandidateService,
@@ -57,6 +58,7 @@ export class PopupRejectComponent implements OnInit {
     } else {
       this.innerWidth = window.innerWidth * 0.4;
     }
+    this.isExpress = this.role.refCompany.isExpress;
   }
 
   ngOnInit() {
@@ -158,7 +160,11 @@ export class PopupRejectComponent implements OnInit {
         this.candidateService.candidateFlowReject(this.flowId, this.rejectId, this.remark).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.sendEmail();
+            if (!this.isExpress) {
+              this.sendEmail();
+            } else {
+              this.ref.close(true);
+            }
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -179,6 +185,7 @@ export class PopupRejectComponent implements OnInit {
         this.candidateService.candidateBlock(this.candidateId, this.flowId, this.remark, this.rejectId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
+            setUserSuccess('block');
             this.ref.close(true);
           } else {
             this.showToast('danger', 'Error Message', response.message);

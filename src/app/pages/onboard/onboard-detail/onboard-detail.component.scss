@@ -4,6 +4,10 @@
  .label{
     margin-top: 10px;
  }
+ .text-icon-center{
+    display: flex;
+    align-items: center;
+}
 @media (max-width: 767px) {
     nb-checkbox{
         label{
