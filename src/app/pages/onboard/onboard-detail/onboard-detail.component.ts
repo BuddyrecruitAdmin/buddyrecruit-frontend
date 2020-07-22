@@ -718,7 +718,7 @@ export class OnboardDetailComponent implements OnInit {
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
-      setFlagExam('false');
+      setFlagExam('true');
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });

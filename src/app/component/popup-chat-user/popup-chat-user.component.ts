@@ -19,6 +19,7 @@ import { Devices } from '../../shared/interfaces/common.interface';
 export class PopupChatUserComponent implements OnInit {
 
   role: any;
+  items: any;
   flowId: any;
   candidateId: any;
   innerWidth: any;
@@ -41,12 +42,13 @@ export class PopupChatUserComponent implements OnInit {
     setButtonId();
     setFlowId();
     this.innerWidth = this.utilitiesService.getWidthOfPopupCard();
-    this.innerHeight = window.innerHeight * 0.8;
+    this.innerHeight = window.innerHeight;
     this.devices = this.utilitiesService.getDevice();
   }
 
   ngOnInit() {
     this.loading = true;
+    this.items = [];
     this.infoFlag = false;
     this.condition = {
       flag: false
@@ -60,8 +62,21 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   getDetail() {
+    this.items = [];
     this.candidateService.getDetail(this.flowId).subscribe(response => {
       if (response.code === ResponseCode.Success) {
+        if (response.data.candidateFlow.inboxes.length > 0) {
+          response.data.candidateFlow.inboxes.forEach(element => {
+            this.items.push({
+              _id: element._id,
+              name: this.utilitiesService.setFullname(element.refUser),
+              title: this.utilitiesService.convertDateTimeFromSystem(element.date),
+              picture: element.refUser.imageData,
+              message: element.message,
+              accent: element.refUser._id === this.role._id ? 'success' : 'default',
+            })
+          });
+        }
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
@@ -77,10 +92,10 @@ export class PopupChatUserComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
       } else {
+        this.ref.close(true);
         this.showToast('danger', 'Error Message', response.message);
       }
       this.loading = false;
-      this.ref.close(true);
     });
   }
 

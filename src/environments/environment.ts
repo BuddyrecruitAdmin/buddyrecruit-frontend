@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URI: 'http://10.35.1.20:9001', //QAS
+  API_URI: 'http://172.20.10.11:9001', //QAS
   WriteLog: true
 };
  
