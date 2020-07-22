@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam, setCompanyId } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam, setCompanyId, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -81,6 +81,17 @@ export class SignContractDetailComponent implements OnInit {
   filterSort: any;
   filterTrain: any = {};
   filterOn: any = {};
+
+  selectType: any;
+  filterType: any;
+  // call filter //
+  callType: any;
+  userLists: any;
+  userAll: any = [];
+  filteredUserAll: any = [];
+
+  // cand filter //
+  candType: any;
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -147,6 +158,9 @@ export class SignContractDetailComponent implements OnInit {
     this.filterBy = [];
     this.searchArea = [];
     this.filterSort = 'apply';
+    this.selectType = 'sort';
+    this.callType = 'pendingCall';
+    this.candType = 'new';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -287,6 +301,28 @@ export class SignContractDetailComponent implements OnInit {
         this.items.map(item => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
+          item.commentLenght = item.comments.length;
+          item.facebookLength = item.inboxes.length;
+          if (!item.called.lastChangedInfo) {
+            item.called.lastChangedInfo = {
+              refUser: ''
+            }
+          }
+          if (this.utilitiesService.dateIsValid(item.training.date)) {
+            item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+          }else{
+            item.training.date = '';
+          }
+          if (this.utilitiesService.dateIsValid(item.onboard.date)) {
+            item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+          }else{
+            item.onboard.date = '';
+          }
+          if (item.called && item.called.lastChangedInfo) {
+            if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
+              item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+            }
+          }
           if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
             item.refCandidate.birth = new Date((item.refCandidate.birth));
             var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
@@ -343,8 +379,16 @@ export class SignContractDetailComponent implements OnInit {
               group: element.refProvince
             })
           });
+          // response.filter.users.forEach(element => {
+          //   this.userAll.push({
+          //     label: this.utilitiesService.setFullname(element),
+          //     value: element._id
+          //   })
+          // });
           this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
           this.filteredProvince = this.filter.data.provinces.slice();
+          // this.userAll = this.removeDuplicates(this.userAll, "value")
+          // this.filteredUserAll = this.userAll.slice();
         }
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -430,6 +474,22 @@ export class SignContractDetailComponent implements OnInit {
         value: this.filterOn
       }
     ]
+    // if (this.selectType === 'call' && this.callType === 'pendingCall') {
+    //   this.filterBy.push({
+    //     name: 'filterBy',
+    //     value: this.filterType
+    //   })
+    // }
+    // if (this.selectType === 'call' && this.callType === 'called') {
+    //   this.filterBy.push({
+    //     name: 'filterBy',
+    //     value: this.filterType
+    //   },
+    //     {
+    //       name: 'calledBy',
+    //       value: this.userLists
+    //     })
+    // }
     this.search();
   }
 
@@ -462,6 +522,8 @@ export class SignContractDetailComponent implements OnInit {
         value: this.filterOn
       }
     ]
+    this.selectType = 'sort';
+    this.filterSort = 'apply';
     this.search();
   }
 
@@ -590,7 +652,19 @@ export class SignContractDetailComponent implements OnInit {
           this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
-              this.search();
+              let indexA
+              this.items.map((element, index) => {
+                if (element._id === item._id) {
+                  indexA = index;
+                }
+              })
+              this.items.splice(indexA, 1);
+              this.tabs.map(element => {
+                if (element.name === 'PENDING') {
+                  element.badgeText = element.badgeText - 1;
+                }
+              })
+              // this.search();
             } else {
               this.showToast('danger', 'Error Message', response.message);
             }
@@ -665,7 +739,23 @@ export class SignContractDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+        let indexA
+        this.items.map((element, index) => {
+          if (element._id === item._id) {
+            indexA = index;
+          }
+        })
+        this.items.splice(indexA, 1);
+        const userBlock = getUserSuccess();
+        this.tabs.map(element => {
+          if (element.name === 'PENDING') {
+            element.badgeText = element.badgeText - 1;
+          }
+          if (element.name === 'REJECTED' && userBlock !== 'block') {
+            element.badgeText = element.badgeText + 1;
+          }
+        })
       }
     });
   }
@@ -680,7 +770,23 @@ export class SignContractDetailComponent implements OnInit {
         this.candidateService.candidateFlowRevoke(item._id, this.refStageId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
-            this.search();
+            // this.search();
+            let indexA
+            this.items.map((element, index) => {
+              if (element._id === item._id) {
+                indexA = index;
+              }
+            })
+            this.items.splice(indexA, 1);
+            const userBlock = getUserSuccess();
+            this.tabs.map(element => {
+              if (element.name === 'PENDING') {
+                element.badgeText = element.badgeText + 1;
+              }
+              if (element.name === 'REJECTED') {
+                element.badgeText = element.badgeText - 1;
+              }
+            })
           } else {
             this.showToast('danger', 'Error Message', response.message);
           }
@@ -859,23 +965,98 @@ export class SignContractDetailComponent implements OnInit {
   sortData(name) {
     if (name === 'score') {
       this.filterSort = 'score';
-      // this.items.sort(function (a, b) {
-      //   return b.totalScore - a.totalScore
-      // })
     } else {
       this.filterSort = 'apply';
-      // console.log(this.items)
-      // var _this = this;
-      // this.items.sort(function (a, b) {
-
-
-      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
-      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
-      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
-      // })
-      // console.log(this.items)
     }
     this.search();
+  }
+
+  selectSort(type: string) {
+    this.selectType = type;
+  }
+
+  checkFiltered(name) {
+    this.callType = name;
+    this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
+    ]
+    if (name === 'pendingCall') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    } else {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
+    }
+    this.search();
+  }
+
+  checkCand(name) {
+    this.candType = name;
+    this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      },
+      {
+        name: 'filterBy',
+        value: this.filterType
+      }
+    ]
+    this.search();
+  }
+
+  changeCall(item) {
+    item.called.flag = !item.called.flag;
+    let data;
+    data = {
+      called: item.called
+    }
+    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        item.called.lastChangedInfo.refUser = this.role;
+        item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(new Date());
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+    })
   }
 
   openPopupTrainingDate(item: any) {
@@ -890,7 +1071,10 @@ export class SignContractDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+        let history = getHistoryData();
+        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
+        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
       }
     });
   }
@@ -907,7 +1091,13 @@ export class SignContractDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        this.search();
+        // this.search();
+      }
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.facebookLength = comment.length;
       }
     });
   }

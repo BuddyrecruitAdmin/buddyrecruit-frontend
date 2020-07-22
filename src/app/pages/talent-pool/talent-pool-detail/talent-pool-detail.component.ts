@@ -353,9 +353,13 @@ export class TalentPoolDetailComponent implements OnInit {
             }
             if (this.utilitiesService.dateIsValid(item.training.date)) {
               item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+            } else {
+              item.training.date = '';
             }
             if (this.utilitiesService.dateIsValid(item.onboard.date)) {
               item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+            } else {
+              item.onboard.date = '';
             }
             if (item.called && item.called.lastChangedInfo) {
               if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
@@ -562,6 +566,12 @@ export class TalentPoolDetailComponent implements OnInit {
           name: 'calledBy',
           value: this.userLists
         })
+    }
+    if (this.selectType === 'cand') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
     }
     this.search();
   }
@@ -1155,8 +1165,8 @@ export class TalentPoolDetailComponent implements OnInit {
       if (result) {
         // this.search();
         let history = getHistoryData();
-        item.training.date = history.training.date;
-        item.onboard.date = history.onboard.date;
+        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
+        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
       }
     });
   }
@@ -1201,7 +1211,7 @@ export class TalentPoolDetailComponent implements OnInit {
     }
     ).onClose.subscribe(result => {
       if (result) {
-        this.search();
+        // this.search();
         setHistoryData();
       }
     });
