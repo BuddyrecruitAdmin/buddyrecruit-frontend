@@ -946,7 +946,7 @@ export class TalentPoolDetailComponent implements OnInit {
         setFlowId();
       }
       let flag = getFlagEdit();
-      setFlagEdit()
+      setFlagEdit();
       if (flag) {
         let comment = getHistoryData();
         item.commentLenght = comment.length;
