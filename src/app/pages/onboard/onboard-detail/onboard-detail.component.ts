@@ -737,9 +737,15 @@ export class OnboardDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
-      this.search();
-      if (result) {
+       // this.search();
+       if (result) {
         setFlowId();
+      }
+      let flag = getFlagEdit();
+      setFlagEdit()
+      if (flag) {
+        let comment = getHistoryData();
+        item.commentLenght = comment.length;
       }
     });
   }
