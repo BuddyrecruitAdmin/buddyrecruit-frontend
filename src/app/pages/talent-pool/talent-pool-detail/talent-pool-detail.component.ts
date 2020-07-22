@@ -1195,11 +1195,7 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   checkCV(item: any) {
-    // const url = this.router.serializeUrl(
-    //   this.router.createUrlTree([`${environment.API_URI}?id=${item._id}`])
-    // );
     const url = environment.API_URI + "/pdf" + '?id=' + item._id;
-    // this.router.navigate([url]);
     window.open(url, '_blank');
   }
 
