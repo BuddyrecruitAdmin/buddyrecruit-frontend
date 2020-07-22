@@ -213,11 +213,28 @@
                     </span>
                   </div>
                   <!-- isExpress -->
-                  <div *ngIf="item.refSource.name === 'App-Form' && item.condition.button.nextStep && isExpress" class="text-group m-t-10 m-b-10">
+                  <div *ngIf="item.refSource.name === 'App-Form' && item.condition.button.nextStep && isExpress"
+                    class="text-group m-t-10 m-b-10">
                     <span class="link underline" (click)="openApplicationForm(item)">
                       <nb-icon icon="file-text-outline" class="font-inherit m-r-5"></nb-icon>
                       <span>Application Form</span>
                     </span>
+                  </div>
+                  <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                    <span *ngIf="!item.called.flag" class="text-icon-center">
+                      <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-outline"
+                        class="font-inherit link"></nb-icon><span>Pending Call</span>
+                    </span>
+                  </div>
+                  <div *ngIf="isExpress" class="text-group m-t-10 m-b-10">
+                    <span *ngIf="item.called.flag" class="text-icon-center">
+                      <nb-icon style="width: 30px;height: 30px;" (click)="changeCall(item)" icon="phone-call-outline"
+                        class="font-inherit link">
+                      </nb-icon><span>Called by
+                        {{ utilitiesService.setFullname(item.called.lastChangedInfo.refUser) || '-' }}</span>
+                    </span>
+                    <small style="padding-left: 2rem"
+                      *ngIf="item.called.flag">({{ item.called.lastChangedInfo.date || '-' }})</small>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -237,14 +254,14 @@
                       <div class="text-group text-icon-center">
                         <nb-icon *ngIf="item.condition.button.nextStep && isExpress"
                           [ngClass]="{ 'text-green': item.training.finished, 'text-black': !item.training.finished }"
-                          style="width: 20px;height: 20px;" (click)="changeTraining(item)" icon="checkmark-circle-2-outline"
-                          class="font-inherit link"></nb-icon>
+                          style="width: 20px;height: 20px;" (click)="changeTraining(item)"
+                          icon="checkmark-circle-2-outline" class="font-inherit link"></nb-icon>
                         <label class="label">Training Date</label>
-                        <span>{{  utilitiesService.convertDateTimeFromSystem(item.training?.date) || '-' }}</span>
+                        <span>{{  item.training?.date || '-' }}</span>
                       </div>
                       <div class="text-group">
                         <label class="label">Onboarding Date</label>
-                        <span>{{ utilitiesService.convertDateTimeFromSystem(item.onboard?.date) || '-' }}</span>
+                        <span>{{ item.onboard?.date || '-' }}</span>
                       </div>
                     </div>
                   </div>
