@@ -380,16 +380,16 @@ export class SignContractDetailComponent implements OnInit {
               group: element.refProvince
             })
           });
-          // response.filter.users.forEach(element => {
-          //   this.userAll.push({
-          //     label: this.utilitiesService.setFullname(element),
-          //     value: element._id
-          //   })
-          // });
+          response.filter.users.forEach(element => {
+            this.userAll.push({
+              label: this.utilitiesService.setFullname(element),
+              value: element._id
+            })
+          });
           this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
           this.filteredProvince = this.filter.data.provinces.slice();
-          // this.userAll = this.removeDuplicates(this.userAll, "value")
-          // this.filteredUserAll = this.userAll.slice();
+          this.userAll = this.removeDuplicates(this.userAll, "value")
+          this.filteredUserAll = this.userAll.slice();
         }
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -475,22 +475,28 @@ export class SignContractDetailComponent implements OnInit {
         value: this.filterOn
       }
     ]
-    // if (this.selectType === 'call' && this.callType === 'pendingCall') {
-    //   this.filterBy.push({
-    //     name: 'filterBy',
-    //     value: this.filterType
-    //   })
-    // }
-    // if (this.selectType === 'call' && this.callType === 'called') {
-    //   this.filterBy.push({
-    //     name: 'filterBy',
-    //     value: this.filterType
-    //   },
-    //     {
-    //       name: 'calledBy',
-    //       value: this.userLists
-    //     })
-    // }
+    if (this.selectType === 'call' && this.callType === 'pendingCall') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
+    if (this.selectType === 'call' && this.callType === 'called') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
+    }
+    if (this.selectType === 'cand') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
     this.search();
   }
 

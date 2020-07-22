@@ -723,7 +723,7 @@
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                   (click)="openPopupComment(item)">
                   <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                  <nb-badge *ngIf="item.comments.length" [text]="item.comments.length" status="danger"
+                  <nb-badge *ngIf="item.comments.length" [text]="item.commentLenght" status="danger"
                     position="top right"></nb-badge>
                 </button>
                 <!-- Desktop -->
