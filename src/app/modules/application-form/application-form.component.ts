@@ -697,6 +697,10 @@ export class ApplicationFormComponent implements OnInit {
                   name: 'isExpress',
                   value: this.template.isExpress
                 },
+                {
+                  name: 'index',
+                  value: 0
+                },
               ],
             });
           }
@@ -1397,7 +1401,7 @@ export class ApplicationFormComponent implements OnInit {
     return request;
   }
 
-  uploadFile(target, files: FileList, isCV = false, question = undefined): void {
+  uploadFile(target, files: FileList, isCV = false, index: any, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 15) {
       this.showToast('danger', 'File size more than 15MB');
@@ -1417,6 +1421,10 @@ export class ApplicationFormComponent implements OnInit {
           if (element.name === 'isCV') {
             element.value = isCV.toString();
           }
+          if (element.name === 'index') {
+            element.value = index;
+          }
+
         });
         this.loadingUpload = true;
         if (question) {
@@ -1429,7 +1437,7 @@ export class ApplicationFormComponent implements OnInit {
         this.uploader.onSuccessItem = (item, response, status, headers) => {
           const responseData = JSON.parse(response);
           if (question) {
-            this.appForm.questions.forEach(ques => {
+            this.appForm.questions.forEach((ques, index) => {
               if (ques.answer.attachment.originalName === responseData.originalName) {
                 ques.answer.attachment.uploadName = responseData.uploadName;
                 ques.answer.attachment.originalName = responseData.originalName;
