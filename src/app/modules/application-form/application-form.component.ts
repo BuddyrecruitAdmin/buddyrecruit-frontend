@@ -1401,7 +1401,7 @@ export class ApplicationFormComponent implements OnInit {
     return request;
   }
 
-  uploadFile(target, files: FileList, isCV = false, index: any, question = undefined): void {
+  uploadFile(target, files: FileList, isCV = false, index, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 15) {
       this.showToast('danger', 'File size more than 15MB');
