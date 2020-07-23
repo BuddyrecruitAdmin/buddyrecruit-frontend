@@ -1438,7 +1438,7 @@ export class ApplicationFormComponent implements OnInit {
           const responseData = JSON.parse(response);
           if (question) {
             this.appForm.questions.forEach((ques, index) => {
-              if (index  === responseData.index) {
+              if (index.toString()  === responseData.index) {
                 ques.answer.attachment.uploadName = responseData.uploadName;
                 ques.answer.attachment.originalName = responseData.originalName;
                 ques.answer.attachment.type = files[0].type;
