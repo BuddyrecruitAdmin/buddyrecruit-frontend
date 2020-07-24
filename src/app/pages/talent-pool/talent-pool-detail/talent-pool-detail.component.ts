@@ -946,7 +946,7 @@ export class TalentPoolDetailComponent implements OnInit {
         setFlowId();
       }
       let flag = getFlagEdit();
-      setFlagEdit()
+      setFlagEdit();
       if (flag) {
         let comment = getHistoryData();
         item.commentLenght = comment.length;
@@ -1036,9 +1036,11 @@ export class TalentPoolDetailComponent implements OnInit {
       setUserToken(this.role.token);
       setFlagExam('true');
       setCompanyId(this.role.refCompany._id)
-      this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
-      });
+      window.open("https://applicationform-e3e84.web.app/appform/detail" + item.generalAppForm.refGeneralAppForm);
+      // window.open("https://lazada-express-form.web.app/appform/detail" + item.generalAppForm.refGeneralAppForm);
+      // this.router.navigate([]).then(result => {
+      //   window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      // });
     }
   }
 
@@ -1163,10 +1165,13 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlowId();
       setCandidateId();
       if (result) {
-        // this.search();
         let history = getHistoryData();
-        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
-        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
+        if (history.training) {
+          item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+        }
+        if (history.onboard) {
+          item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+        }
       }
     });
   }

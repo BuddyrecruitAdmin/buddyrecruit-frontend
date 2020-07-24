@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  API_URI: 'http://85fd9599c5a7.ngrok.io', //QAS
+  API_URI: "http://localhost:9002", //QAS
   WriteLog: true
 };
  

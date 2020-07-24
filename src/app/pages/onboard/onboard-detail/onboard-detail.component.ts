@@ -81,6 +81,17 @@ export class OnboardDetailComponent implements OnInit {
   filterSort: any;
   filterTrain: any = {};
   filterOn: any = {};
+
+  selectType: any;
+  filterType: any;
+  // call filter //
+  callType: any;
+  userLists: any;
+  userAll: any = [];
+  filteredUserAll: any = [];
+
+  // cand filter //
+  candType: any;
   constructor(
     private router: Router,
     private service: OnboardService,
@@ -146,6 +157,9 @@ export class OnboardDetailComponent implements OnInit {
     this.filterBy = [];
     this.searchArea = [];
     this.filterSort = 'apply';
+    this.selectType = 'sort';
+    this.callType = 'pendingCall';
+    this.candType = 'new';
     this.paging = {
       length: 0,
       pageIndex: 0,
@@ -338,8 +352,16 @@ export class OnboardDetailComponent implements OnInit {
               group: element.refProvince
             })
           });
+          response.filter.users.forEach(element => {
+            this.userAll.push({
+              label: this.utilitiesService.setFullname(element),
+              value: element._id
+            })
+          });
           this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
           this.filteredProvince = this.filter.data.provinces.slice();
+          this.userAll = this.removeDuplicates(this.userAll, "value")
+          this.filteredUserAll = this.userAll.slice();
         }
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -425,6 +447,28 @@ export class OnboardDetailComponent implements OnInit {
         value: this.filterOn
       }
     ]
+    if (this.selectType === 'call' && this.callType === 'pendingCall') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
+    if (this.selectType === 'call' && this.callType === 'called') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
+    }
+    if (this.selectType === 'cand') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    }
     this.search();
   }
 
@@ -457,6 +501,8 @@ export class OnboardDetailComponent implements OnInit {
         value: this.filterOn
       }
     ]
+    this.selectType = 'sort';
+    this.filterSort = 'apply';
     this.search();
   }
 
@@ -737,8 +783,8 @@ export class OnboardDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
-       // this.search();
-       if (result) {
+      // this.search();
+      if (result) {
         setFlowId();
       }
       let flag = getFlagEdit();
@@ -792,9 +838,12 @@ export class OnboardDetailComponent implements OnInit {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
       setFlagExam('true');
-      this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
-      });
+
+      window.open("https://applicationform-e3e84.web.app/appform/detail" + item.generalAppForm.refGeneralAppForm);
+      // window.open("https://lazada-express-form.web.app/appform/detail" + item.generalAppForm.refGeneralAppForm);
+      // this.router.navigate([]).then(result => {
+      //   window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      // });
     }
   }
 
@@ -871,22 +920,80 @@ export class OnboardDetailComponent implements OnInit {
   sortData(name) {
     if (name === 'score') {
       this.filterSort = 'score';
-      // this.items.sort(function (a, b) {
-      //   return b.totalScore - a.totalScore
-      // })
     } else {
       this.filterSort = 'apply';
-      // console.log(this.items)
-      // var _this = this;
-      // this.items.sort(function (a, b) {
-
-
-      //   const aa = _this.utilitiesService.convertDateTimeFromSystem(a.timestamp)
-      //   const bb = _this.utilitiesService.convertDateTimeFromSystem(b.timestamp)
-      //   return aa < bb ? -1 : aa > bb ? 1 : 0;
-      // })
-      // console.log(this.items)
     }
+    this.search();
+  }
+
+  selectSort(type: string) {
+    this.selectType = type;
+  }
+
+  checkFiltered(name) {
+    this.callType = name;
+    this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      }
+    ]
+    if (name === 'pendingCall') {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      })
+    } else {
+      this.filterBy.push({
+        name: 'filterBy',
+        value: this.filterType
+      },
+        {
+          name: 'calledBy',
+          value: this.userLists
+        })
+    }
+    this.search();
+  }
+
+  checkCand(name) {
+    this.candType = name;
+    this.filterType = name;
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'training',
+        value: this.filterTrain
+      },
+      {
+        name: 'onboard',
+        value: this.filterOn
+      },
+      {
+        name: 'filterBy',
+        value: this.filterType
+      }
+    ]
     this.search();
   }
 
@@ -937,8 +1044,12 @@ export class OnboardDetailComponent implements OnInit {
       if (result) {
         // this.search();
         let history = getHistoryData();
-        item.training.date = this.utilitiesService.convertDateTime(history.training.date);
-        item.onboard.date = this.utilitiesService.convertDateTime(history.onboard.date);
+        if (history.training) {
+          item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+        }
+        if (history.onboard) {
+          item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+        }
       }
     });
   }

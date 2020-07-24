@@ -52,20 +52,92 @@
     </div>
     <!-- filter hubs -->
     <div *ngIf="filter.isFilter && isExpress" class="filter-block">
-      <label class="label">Filters:</label>
       <div class="row">
-        <div class="col-md-12">
-          <nb-radio-group class="inline" id="filterSort" name="filterSort" [(ngModel)]="filterSort"
-            (valueChange)="sortData($event)">
-            <nb-radio value="apply">
-              Apply Date
-            </nb-radio>
-            <nb-radio value="score">
-              Scoring
-            </nb-radio>
-          </nb-radio-group>
+        <div class="col-md-12 table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 33.33%"> <label
+                    [ngClass]="{'label-pointer': selectType!=='sort', 'label-pointer-green': selectType==='sort' }"
+                    (click)="selectSort('sort')">Sort by </label></th>
+                <th scope="col" style="width: 33.33%"> <label
+                    [ngClass]="{'label-pointer': selectType!=='call', 'label-pointer-green': selectType==='call' }"
+                    (click)="selectSort('call')">Call type </label></th>
+                <th scope="col" style="width: 33.33%"> <label
+                    [ngClass]="{'label-pointer': selectType!=='cand', 'label-pointer-green': selectType==='cand' }"
+                    (click)="selectSort('cand')">Candidate Type </label></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div *ngIf="selectType==='sort'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='apply' }" nbButton status="success" shape="round"
+                        (click)="sortData('apply')">
+                        Apply Date
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': filterSort!=='score' }" nbButton status="success" shape="round"
+                        (click)="sortData('score')">
+                        Scoring
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div *ngIf="selectType==='call'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': callType!=='pendingCall' }" nbButton status="success"
+                        shape="round" (click)="checkFiltered('pendingCall')">
+                        Pending Call
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': callType!=='called' }" nbButton status="success" shape="round"
+                        (click)="checkFiltered('called')">
+                        Called
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div *ngIf="selectType==='call' && callType === 'called'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-12">
+                      <mat-form-field [color]="primary" appearance="outline">
+                        <mat-label>Called by</mat-label>
+                        <mat-select [(ngModel)]="userLists" (ngModelChange)="checkFiltered('called')" multiple>
+                          <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="userAll"
+                            (filteredReturn)="filteredUserAll =$event"></mat-select-filter>
+                          <mat-option *ngFor="let option of filteredUserAll" [value]="option.value">
+                            {{option.label}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div *ngIf="selectType==='cand'" class="row" style="padding-top: 1rem;">
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': candType!=='new' }" nbButton status="success" shape="round"
+                        (click)="checkCand('new')">
+                        New
+                      </button>
+                    </div>
+                    <div class="col-md-6">
+                      <button [ngClass]="{'nbNotSelect': candType!=='old' }" nbButton status="success" shape="round"
+                        (click)="checkCand('old')">
+                        Old
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
+      <label class="label">Filters:</label>
       <div class="row">
         <div class="col-md-4">
           <div class="form-control-group">
@@ -357,13 +429,16 @@
               <button class="facebook-btn" *ngIf="isExpress && item.haveFbId" nbButton
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openChatUser(item)">
                 <nb-icon icon="facebook-outline" style="margin-right: 0;"></nb-icon>
+                <nb-badge *ngIf="item.facebookLength > 0" [text]="item.facebookLength" status="danger"
+                  position="top right">
+                </nb-badge>
               </button>
               <!-- Mobile -->
               <button *ngIf="item.condition.button.comment && devices.isMobile" nbButton style="text-align: left;"
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                <nb-badge *ngIf="item.commentLenght > 0" [text]="item.commentLenght" status="danger"
                   position="top right"></nb-badge>
               </button>
               <!-- Desktop -->
@@ -371,7 +446,7 @@
                 [size]="(devices.isMobile)? 'tiny' : 'medium'" status="info" nbTooltip="Comment"
                 (click)="openPopupComment(item)">
                 <nb-icon icon="message-circle" style="margin-right: 0;"></nb-icon>
-                <nb-badge *ngIf="item.comments?.length" [text]="item.comments?.length" status="danger"
+                <nb-badge *ngIf="item.commentLenght > 0" [text]="item.commentLenght" status="danger"
                   position="top right"></nb-badge>
               </button>
               <button

@@ -15,3 +15,27 @@
         }
     }
 }
+.table{
+    th {
+        text-align: center;
+        vertical-align: middle;
+        color: #8f9bb3;
+        border-bottom: 1px solid #dee2e6;
+        background-color: var(--color-white);
+        padding: 5px;
+      }
+}
+.nbNotSelect{
+    background-color: white !important;
+    border-color: var(--color-green) !important;
+    color: var(--color-green) !important;
+}
+.label-pointer-green{
+    font-size: 1rem;
+    color: var(--color-green);
+    font-family: Open Sans, sans-serif;
+    font-weight: 700;
+    line-height: 1rem;
+    margin-top: 7px;
+    cursor: pointer;
+}
