@@ -222,7 +222,7 @@
             </div>
           </div>
           <div class="footer-right">
-            <button *ngIf="template.isExpress" nbButton type="button"
+            <button *ngIf="template.isExpress" nbButton type="button" status="primary"
               (click)="validJob(refCompany, undefined, refPosition)" [disabled]="!appForm.refJR">
               {{ 'NEXT' | translate }}
             </button>
@@ -1122,8 +1122,8 @@
                     (click)="fileInput.click()" [disabled]="question.isLoading">
                     <mat-icon class="m-r-5">cloud_upload</mat-icon> {{ 'UPLOAD_UPLOAD' | translate }}
                     <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-                      (change)="uploadFile(question.answer.attachment, $event.target.files, false, iQuestion,question)" accept="*"
-                      style="display:none;" />
+                      (change)="uploadFile(question.answer.attachment, $event.target.files, false, iQuestion,question)"
+                      accept="*" style="display:none;" />
                   </button>
                 </div>
               </div>
