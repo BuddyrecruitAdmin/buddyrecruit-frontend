@@ -10,7 +10,7 @@ import { MatDialog, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angu
 import { ResponseCode } from '../../../../shared/app.constants';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 
-import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole, setAppFormData, setFacebookId } from '../../../../shared/services';
+import { setLangPath, setLanguage, getLanguage, setAppformIndex, getRole, setAppFormData, setFacebookId, setUserEmail } from '../../../../shared/services';
 import { TranslateService } from '../../../../translate.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { ApplicationFormService } from '../../application-form.service';
@@ -105,6 +105,7 @@ export class ApplicationFormIndexComponent implements OnInit {
           setAppformIndex(appFormIndex);
           this.router.navigate(['/application-form/status']);
         } else if (response.code === ResponseCode.Unauthorized) {
+          setUserEmail("facebook");
           this.matDialog.open(PopupMessageComponent, {
             width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
             data: {
