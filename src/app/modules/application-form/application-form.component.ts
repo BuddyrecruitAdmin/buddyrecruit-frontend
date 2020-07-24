@@ -573,6 +573,10 @@ export class ApplicationFormComponent implements OnInit {
                 name: 'isExpress',
                 value: this.template.isExpress
               },
+              {
+                name: 'index',
+                value: 0
+              },
             ],
           });
         } else if (response.code === ResponseCode.NoContent) {
