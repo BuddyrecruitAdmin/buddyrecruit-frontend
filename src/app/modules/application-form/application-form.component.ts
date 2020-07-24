@@ -573,6 +573,10 @@ export class ApplicationFormComponent implements OnInit {
                 name: 'isExpress',
                 value: this.template.isExpress
               },
+              {
+                name: 'index',
+                value: 0
+              },
             ],
           });
         } else if (response.code === ResponseCode.NoContent) {
@@ -696,6 +700,10 @@ export class ApplicationFormComponent implements OnInit {
                 {
                   name: 'isExpress',
                   value: this.template.isExpress
+                },
+                {
+                  name: 'index',
+                  value: 0
                 },
               ],
             });
@@ -1033,20 +1041,36 @@ export class ApplicationFormComponent implements OnInit {
         if (result) {
           this.loading = true;
           const request = this.setRequest();
-          this.service.create(request).subscribe(response => {
+          this.service.getStatusList(this.refCompany, this.appForm.idCard, this.fbId).subscribe(response => {
             if (response.code === ResponseCode.Success) {
-              this.submitted = true;
-            } else if (response.code === ResponseCode.Duplicate) {
-              let message = 'You have applied for this job position.';
-              if (this.language === 'th') {
-                message = 'คุณได้สมัครตำแหน่งงานนี้ไปแล้ว';
-              }
-              this.showToast('danger', message);
+              this.service.create(request).subscribe(response => {
+                if (response.code === ResponseCode.Success) {
+                  this.submitted = true;
+                } else if (response.code === ResponseCode.Duplicate) {
+                  let message = 'You have applied for this job position.';
+                  if (this.language === 'th') {
+                    message = 'คุณได้สมัครตำแหน่งงานนี้ไปแล้ว';
+                  }
+                  this.showToast('danger', message);
+                } else {
+                  this.showToast('danger', response.message || 'Error!', '');
+                }
+                this.loading = false;
+              });
             } else {
-              this.showToast('danger', response.message || 'Error!', '');
+              setUserEmail("facebook");
+              let message = 'กรุณาสมัครผ่าน Inbox ด้วยตัวเอง หรือเลขบัตรประจำตัวประชาชน ที่กรอกไว้ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง';
+              const confirm = this.matDialog.open(PopupMessageComponent, {
+                width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+                data: { type: 'I', content: message }
+              });
+              confirm.afterClosed().subscribe(result => {
+                if (result) {
+                  this.router.navigate(['/index/' + this.refCompany]);
+                }
+              });
             }
-            this.loading = false;
-          });
+          })
         }
       });
     }
@@ -1397,7 +1421,7 @@ export class ApplicationFormComponent implements OnInit {
     return request;
   }
 
-  uploadFile(target, files: FileList, isCV = false, question = undefined): void {
+  uploadFile(target, files: FileList, isCV = false, index, question = undefined): void {
     const FileSize = files[0].size / 1024 / 1024; // MB
     if (FileSize > 15) {
       this.showToast('danger', 'File size more than 15MB');
@@ -1417,6 +1441,10 @@ export class ApplicationFormComponent implements OnInit {
           if (element.name === 'isCV') {
             element.value = isCV.toString();
           }
+          if (element.name === 'index') {
+            element.value = index.toString();
+          }
+
         });
         this.loadingUpload = true;
         if (question) {
@@ -1429,8 +1457,8 @@ export class ApplicationFormComponent implements OnInit {
         this.uploader.onSuccessItem = (item, response, status, headers) => {
           const responseData = JSON.parse(response);
           if (question) {
-            this.appForm.questions.forEach(ques => {
-              if (ques.answer.attachment.originalName === responseData.originalName) {
+            this.appForm.questions.forEach((ques, index) => {
+              if (index.toString() === responseData.index) {
                 ques.answer.attachment.uploadName = responseData.uploadName;
                 ques.answer.attachment.originalName = responseData.originalName;
                 ques.answer.attachment.type = files[0].type;
@@ -1544,6 +1572,14 @@ export class ApplicationFormComponent implements OnInit {
     let valid = true;
     let message = '';
     if (this.template.isExpress) {
+      if (this.hubs.length > 0) {
+        message = 'โปรดเลือกภาค';
+        this.hubs.forEach(hub => {
+          if (hub.checked) {
+            message = '';
+          }
+        })
+      }
       if (!this.provinceFlag) {
         valid = false;
         message = message || 'โปรดเลือกจังหวัด';

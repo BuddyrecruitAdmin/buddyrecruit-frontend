@@ -91,7 +91,10 @@
         <div class="text-left">
           <p class="text-gray"><small>(Preview)</small></p>
           <div class="nav-bar" [style.background]="appForm.bgColor">
-            <mat-icon [style.color]="appForm.titleColor">account_box</mat-icon>
+            <mat-icon *ngIf="!isExpress" [style.color]="appForm.titleColor">account_box</mat-icon>
+            <img *ngIf="isExpress" style="margin-bottom: 1rem;"
+              src="https://www.img.in.th/images/a80c4eb1fb69ced2e15a2d98c158ee75.png" alt="LazadaExpress" width="auto"
+              height="60">
             <div class="title" [style.color]="appForm.titleColor">{{ appForm.title }}</div>
             <div class="sub-title" [style.color]="appForm.subTitleColor">{{ appForm.subTitle }}</div>
           </div>

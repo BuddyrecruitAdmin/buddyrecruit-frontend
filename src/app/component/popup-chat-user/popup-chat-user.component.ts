@@ -25,7 +25,7 @@ export class PopupChatUserComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   candidateName: string;
-  textTemp: string;
+  textTemp: string = '';
   loading: boolean;
   infoFlag: boolean;
   devices: Devices;
@@ -92,19 +92,21 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   save() {
-    this.loading = true;
-    const request = this.setRequest();
-    this.candidateService.sendMessage(this.flowId, request).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        this.textTemp = '';
-        this.checkChange = true;
-        this.getDetail();
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-      this.loading = false;
-    });
+    if (this.textTemp.length <= 2000) {
+      this.loading = true;
+      const request = this.setRequest();
+      this.candidateService.sendMessage(this.flowId, request).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+          this.textTemp = '';
+          this.checkChange = true;
+          this.getDetail();
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+        this.loading = false;
+      });
+    }
   }
 
   setRequest(): any {

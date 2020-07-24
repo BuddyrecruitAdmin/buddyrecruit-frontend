@@ -838,6 +838,9 @@ export class OnboardDetailComponent implements OnInit {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
       setFlagExam('true');
+
+      // window.open("https://applicationform-e3e84.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
+      // window.open("https://lazada-express-form.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       this.router.navigate([]).then(result => {
         window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
@@ -1041,8 +1044,12 @@ export class OnboardDetailComponent implements OnInit {
       if (result) {
         // this.search();
         let history = getHistoryData();
-        item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
-        item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+        if (history.training) {
+          item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+        }
+        if (history.onboard) {
+          item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+        }
       }
     });
   }
