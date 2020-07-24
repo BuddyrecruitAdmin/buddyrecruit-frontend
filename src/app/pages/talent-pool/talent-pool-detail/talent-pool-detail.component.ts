@@ -1036,9 +1036,11 @@ export class TalentPoolDetailComponent implements OnInit {
       setUserToken(this.role.token);
       setFlagExam('true');
       setCompanyId(this.role.refCompany._id)
-      this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
-      });
+      window.open("https://applicationform-e3e84.web.app/appform/detail" + item.generalAppForm.refGeneralAppForm);
+      // window.open("https://lazada-express-form.web.app/appform/detail" + item.generalAppForm.refGeneralAppForm);
+      // this.router.navigate([]).then(result => {
+      //   window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+      // });
     }
   }
 
