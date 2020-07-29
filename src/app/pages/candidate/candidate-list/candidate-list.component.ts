@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { CandidateService } from '../candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName, setFlowId } from '../../../shared/services/auth.service';
+import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName, setFlowId, setJdId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -11,7 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbDialogService } from '@nebular/theme';
 import { PopupJrInfoComponent } from '../../../component/popup-jr-info/popup-jr-info.component';
-
+import { MENU_PROCESS_FLOW } from "../../pages-menu";
 @Component({
   selector: 'ngx-candidate-list',
   templateUrl: './candidate-list.component.html',
@@ -201,6 +201,21 @@ export class CandidateListComponent implements OnInit {
 
   filterToggle() {
     this.isFilter = !this.isFilter;
+  }
+
+  gotoJR(item) {
+    let menu = MENU_PROCESS_FLOW.find(element => {
+      return element.title === item.candidateFlow.refStage.refMain.name;
+    });
+    menu.link = menu.link.replace('list', 'detail');
+    if (menu) {
+      setJdId(item.candidateFlow.refJR.refJD._id);
+      setJdName(item.candidateFlow.refJR.refJD.position);
+      setJrId(item.candidateFlow.refJR._id);
+      this.router.navigate([menu.link]);
+    } else {
+      this.router.navigate(['/employer/home']);
+    }
   }
 
   changePaging(event) {

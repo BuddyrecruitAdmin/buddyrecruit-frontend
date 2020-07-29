@@ -72,7 +72,7 @@
               <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
             </div>
           </nb-card-header>
-          <nb-card-header *ngIf="isExpress">
+          <nb-card-header *ngIf="isExpress" (click)="gotoJR(item)">
             <div class="title">
               <label class="link" [nbTooltip]="utilitiesService.setFullname(item)">
                 {{ utilitiesService.setFullname(item) }}
@@ -135,7 +135,8 @@
                   (click)="edit(item)">
                   {{ utilitiesService.setFullname(item) }}
                 </span>
-                <span *ngIf="isExpress" [nbTooltip]="utilitiesService.setFullname(item)">
+                <span *ngIf="isExpress" class="link" [nbTooltip]="utilitiesService.setFullname(item)"
+                  (click)="gotoJR(item)">
                   {{ utilitiesService.setFullname(item) }}
                 </span>
               </td>
@@ -155,7 +156,7 @@
                 <button nbButton status="info" size="tiny" nbTooltip="More Details" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
-                <button *ngIf="!isExpress" nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
+                <button nbButton *ngIf="!isExpress" status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
               </td>
