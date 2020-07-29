@@ -208,7 +208,6 @@ export class ApplicationFormComponent implements OnInit {
           this.userToken = getUserToken();
           const role = getRole()
           this.canAll = getFlagExam();
-          console.log(this.canAll)
           if (this.canAll === 'true') {
             this.companyId = getCompanyId();
             this.recruiterAll = true;
@@ -1041,39 +1040,47 @@ export class ApplicationFormComponent implements OnInit {
         if (result) {
           this.loading = true;
           const request = this.setRequest();
-          this.service.getStatusList(this.refCompany, this.appForm.idCard, this.fbId).subscribe(response => {
-            if (response.code === ResponseCode.Success) {
-              this.service.create(request).subscribe(response => {
-                if (response.code === ResponseCode.Success) {
-                  this.submitted = true;
-                } else if (response.code === ResponseCode.Duplicate) {
-                  let message = 'You have applied for this job position.';
-                  if (this.language === 'th') {
-                    message = 'คุณได้สมัครตำแหน่งงานนี้ไปแล้ว';
+          if (this.recruiterAll) {
+            this.serviceCreate(request);
+          } else {
+            this.service.getStatusList(this.refCompany, this.appForm.idCard, this.fbId).subscribe(response => {
+              if (response.code === ResponseCode.Success) {
+                this.serviceCreate(request);
+              } else {
+                setUserEmail("facebook");
+                let message = 'กรุณาสมัครผ่าน Inbox ด้วยตัวเอง หรือเลขบัตรประจำตัวประชาชน ที่กรอกไว้ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง';
+                const confirm = this.matDialog.open(PopupMessageComponent, {
+                  width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+                  data: { type: 'I', content: message }
+                });
+                confirm.afterClosed().subscribe(result => {
+                  if (result) {
+                    this.router.navigate(['/index/' + this.refCompany]);
                   }
-                  this.showToast('danger', message);
-                } else {
-                  this.showToast('danger', response.message || 'Error!', '');
-                }
-                this.loading = false;
-              });
-            } else {
-              setUserEmail("facebook");
-              let message = 'กรุณาสมัครผ่าน Inbox ด้วยตัวเอง หรือเลขบัตรประจำตัวประชาชน ที่กรอกไว้ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง';
-              const confirm = this.matDialog.open(PopupMessageComponent, {
-                width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-                data: { type: 'I', content: message }
-              });
-              confirm.afterClosed().subscribe(result => {
-                if (result) {
-                  this.router.navigate(['/index/' + this.refCompany]);
-                }
-              });
-            }
-          })
+                });
+              }
+            })
+          }
         }
       });
     }
+  }
+
+  serviceCreate(request) {
+    this.service.create(request).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.submitted = true;
+      } else if (response.code === ResponseCode.Duplicate) {
+        let message = 'You have applied for this job position.';
+        if (this.language === 'th') {
+          message = 'คุณได้สมัครตำแหน่งงานนี้ไปแล้ว';
+        }
+        this.showToast('danger', message);
+      } else {
+        this.showToast('danger', response.message || 'Error!', '');
+      }
+      this.loading = false;
+    });
   }
 
   getQuestionElementError(): any {
