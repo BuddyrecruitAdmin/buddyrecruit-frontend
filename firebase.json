@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "target": "buddyrecruitdemo", 
+      "target": "p3buddyrecruit",
       "public": "dist",
       "ignore": [
         "firebase.json",
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "target": "p3qasbuddyrecruitdemo", 
+      "target": "p3buddyrecruit-qas",
       "public": "dist",
       "ignore": [
         "firebase.json",
