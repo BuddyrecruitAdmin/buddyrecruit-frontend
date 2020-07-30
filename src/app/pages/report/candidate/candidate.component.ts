@@ -569,11 +569,11 @@ export class CandidateComponent implements OnInit {
               "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
-              "Talent Pool - Action By": (item.actions) ? (item.actions.talentPool) ? (item.action.talentPool.refUser) ? this.utilitiesService.setFullname(item.action.talentPool.refUser) : '' : '' : '',
+              "Talent Pool - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '',
               "Talent Pool - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '',
-              "Sign Contract - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.action.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.action.pendingSignContract.refUser) : '' : '' : '',
+              "Sign Contract - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '',
               "Sign Contract - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '',
-              "Onboard - Action By": (item.actions) ? (item.actions.onboard) ? (item.action.onboard.refUser) ? this.utilitiesService.setFullname(item.action.onboard.refUser) : '' : '' : '',
+              "Onboard - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '',
               "Onboard - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '',
             })
           } else {
