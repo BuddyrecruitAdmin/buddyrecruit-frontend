@@ -447,3 +447,11 @@ export function getFlagEdit() {
   const flag = JSON.parse(localStorage.getItem(FlagEdit));
   return (!flag || flag === null) ? undefined : flag;
 }
+export function setFlagReject(flag: any = null) {
+  localStorage.setItem(FlagEdit, JSON.stringify(flag));
+}
+
+export function getFlagReject() {
+  const flag = JSON.parse(localStorage.getItem(FlagEdit));
+  return (!flag || flag === null) ? undefined : flag;
+}

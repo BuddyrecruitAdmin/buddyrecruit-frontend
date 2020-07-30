@@ -61,7 +61,7 @@ export class UserService extends NetworkService {
   getAuthRoleList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
     const body = {
       userData: {
-        refCompany: refCompany._id
+        refCompany: refCompany
       },
       criteria: criteria
     }

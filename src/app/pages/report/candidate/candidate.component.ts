@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownValue, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, setFlowId, setCandidateId, setIsGridLayout } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, setCandidateId, setIsGridLayout, setFlagExam, setUserToken, setCompanyId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -14,6 +14,7 @@ import { DepartmentService } from '../../setting/department/department.service';
 import { ExcelService } from '../excel.service';
 import { Router } from '@angular/router';
 import { start } from 'repl';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'ngx-candidate',
   templateUrl: './candidate.component.html',
@@ -67,6 +68,10 @@ export class CandidateComponent implements OnInit {
   dataExcelList: any;
   refName: any;
   uploadList: any;
+  dataArray: any = [];
+  listRowItems: any = [];
+  rowListEnable: any;
+  rowListAll: any;
   constructor(
     private router: Router,
     private service: ReportService,
@@ -338,9 +343,37 @@ export class CandidateComponent implements OnInit {
   }
 
   openDate(dialog: TemplateRef<any>) {
+    this.rowListAll = [
+      { display: "ชื่อ-ผู้สมัคร", value: 0, checked: false },
+      { display: "นามสกุล-ผู้สมัคร", value: 1, checked: false },
+      { display: "ตำแหน่ง", value: 2, checked: false },
+    ]
+    this.rowListEnable = [];
     this.dialogTime1 = this.startTime.start;
     this.dialogTime2 = this.startTime.end;
     this.callDialog(dialog);
+  }
+
+  listRow(item) {
+    this.listRowItems = [
+      { "ชื่อ-ผู้สมัคร": item.refCandidate.firstname },
+      { "นามสกุล-ผู้สมัคร": item.refCandidate.lastname },
+      { "ตำแหน่ง": item.refJR.refJD.position },
+      // { "HUB": item.order },
+    ]
+  }
+
+  exportChange(item) {
+    item.checked = !item.checked;
+    if (!item.checked) {
+      this.rowListEnable.forEach((element, index) => {
+        if (element.value === item.value) {
+          this.rowListEnable.splice(index, 1);
+        }
+      });
+    } else {
+      this.rowListEnable.push(item);
+    }
   }
 
   callDialog(dialog: TemplateRef<any>) {
@@ -422,6 +455,15 @@ export class CandidateComponent implements OnInit {
           this.hubCode = '';
           this.eduList = '';
           this.refName = '';
+          // this.listRow(item);
+          // this.rowListEnable.forEach(element => {
+          //   this.listRowItems.forEach((list, i) => {
+          //     if (element.value === i) {
+          //       this.dataExcel[index] = { ...this.dataExcel[index], ...list };
+          //       console.log(this.dataExcel);
+          //     }
+          //   });
+          // });
           if (this.isExpress && item.uploads.length > 0) {
             item.uploads.forEach(element => {
               this.uploadList.push({
@@ -454,10 +496,10 @@ export class CandidateComponent implements OnInit {
               "สถานะปัจจุบัน": item.refSubStage.text || '-',
               "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
               "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
-              "ติดต่อโดย-ชื่อ": item.called.createdInfo.refUser.firstname || '-',
-              "ติดต่อโดย-นามสกุล": item.called.createdInfo.refUser.lastname || '-',
-              "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-',
-              "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-',
+              "ติดต่อโดย-ชื่อ": item.called.lastChangedInfo.refUser.firstname || '-',
+              "ติดต่อโดย-นามสกุล": item.called.lastChangedInfo.refUser.lastname || '-',
+              "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.lastChangedInfo.date) || '-',
+              "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.lastChangedInfo.date) || '-',
               "Type": '',
               "ตำแหน่ง": item.refJR.refJD.position || '-',
               "No": '',
@@ -527,6 +569,12 @@ export class CandidateComponent implements OnInit {
               "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
+              "Talent Pool - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '',
+              "Talent Pool - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '',
+              "Sign Contract - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '',
+              "Sign Contract - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '',
+              "Onboard - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '',
+              "Onboard - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '',
             })
           } else {
             this.dataExcel.push({
@@ -578,6 +626,17 @@ export class CandidateComponent implements OnInit {
     })
   }
 
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
   removeDuplicates(myArr, prop) {
     return myArr.filter((obj, pos, arr) => {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
@@ -585,9 +644,12 @@ export class CandidateComponent implements OnInit {
   }
 
   openApplicationForm(item: any) {
-    if (item.refGeneralAppForm) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
+      setFlagExam('true');
+      setCompanyId(this.role.refCompany._id)
       this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.refGeneralAppForm}`, '_blank');
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
   }

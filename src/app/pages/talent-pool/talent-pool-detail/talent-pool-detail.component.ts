@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -167,6 +167,7 @@ export class TalentPoolDetailComponent implements OnInit {
     });
     this.startFlag = true;
     this.isExpress = this.role.refCompany.isExpress;
+    this.keyword = getKeyword() || '';
   }
 
   ngOnInit() {
@@ -177,7 +178,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.filterBy = [];
     this.searchArea = [];
     this.filterType = '';
-    this.keyword = '';
+    // this.keyword = '';
     this.showTips = false;
     this.showCondition = true;
     // this.checkCalled = true;

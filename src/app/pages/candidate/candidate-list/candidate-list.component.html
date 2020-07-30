@@ -72,7 +72,7 @@
               <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
             </div>
           </nb-card-header>
-          <nb-card-header *ngIf="isExpress">
+          <nb-card-header *ngIf="isExpress" (click)="gotoJR(item)">
             <div class="title">
               <label class="link" [nbTooltip]="utilitiesService.setFullname(item)">
                 {{ utilitiesService.setFullname(item) }}
@@ -84,7 +84,7 @@
               <label class="label">Department</label>
               <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
             </div>
-            <div class="text-group">
+            <div *ngIf="!isExpress" class="text-group">
               <label class="label">Division</label>
               <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
             </div>
@@ -95,6 +95,10 @@
             <div class="text-group">
               <label class="label">Stage</label>
               <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Status</label>
+              <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}Test</span>
             </div>
             <div *ngIf="!isExpress" class="text-right ">
               <span class="link" (click)="info(item)">
@@ -122,9 +126,10 @@
             <tr>
               <th scope="col" class="text-left">Name</th>
               <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left">Division</th>
+              <th scope="col" class="text-left" *ngIf="!isExpress">Division</th>
               <th scope="col" class="text-left">Job Position</th>
               <th scope="col" class="text-left">Stage</th>
+              <th scope="col" class="text-left" *ngIf="isExpress">status</th>
               <th scope="col" style="width: 110px;">Actions</th>
             </tr>
           </thead>
@@ -135,14 +140,15 @@
                   (click)="edit(item)">
                   {{ utilitiesService.setFullname(item) }}
                 </span>
-                <span *ngIf="isExpress" [nbTooltip]="utilitiesService.setFullname(item)">
+                <span *ngIf="isExpress" class="link" [nbTooltip]="utilitiesService.setFullname(item)"
+                  (click)="gotoJR(item)">
                   {{ utilitiesService.setFullname(item) }}
                 </span>
               </td>
               <td class="text-left">
                 <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
               </td>
-              <td class="text-left">
+              <td *ngIf="!isExpress" class="text-left">
                 <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
               </td>
               <td class="text-left">
@@ -151,11 +157,23 @@
               <td class="text-left">
                 <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
               </td>
+              <td class="text-left">
+                <span *ngIf="item.isBlacklist" style="font-weight: bolder;">Blacklist</span>
+                <span *ngIf="!item.isBlacklist && item.candidateFlow.reject.flag" class="text-red">Reject</span>
+                <span
+                  *ngIf="!item.isBlacklist && !item.candidateFlow.reject.flag && item.candidateFlow.refStage.name !== 'Job Started'">Pending</span>
+                <span
+                  *ngIf="!item.isBlacklist && !item.candidateFlow.reject.flag && item.candidateFlow.refStage.name === 'Job Started'"
+                  class="text-green">Job Started</span>
+              </td>
               <td class="actions">
                 <button nbButton status="info" size="tiny" nbTooltip="More Details" (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
-                <button *ngIf="!isExpress" nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
+                <button nbButton *ngIf="!isExpress" status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">
+                  <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+                <button nbButton *ngIf="isExpress" status="primary" size="tiny" nbTooltip="Edit" (click)="gotoJR(item)">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
               </td>

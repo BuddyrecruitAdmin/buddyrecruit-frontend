@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setFlagExam, setUserCandidate, setUserEmail, setFieldName, setJdName, setUserToken } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setFlagExam, setUserCandidate, setUserEmail, setFieldName, setJdName, setUserToken, getKeyword } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -144,13 +144,14 @@ export class InterviewDetailComponent implements OnInit {
       }
     });
     this.isExpress = this.role.refCompany.isExpress;
+    this.keyword = getKeyword() || '';
   }
 
   ngOnInit() {
     this.items = [];
     this.soList = [];
     this.sourceBy = [];
-    this.keyword = '';
+    // this.keyword = '';
     this.paging = {
       length: 0,
       pageIndex: 0,

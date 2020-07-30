@@ -79,6 +79,7 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { DetailCandidateComponent } from './detail-candidate/detail-candidate.component';
 import { ExcelService } from './excel.service';
 import { ExtractionComponent } from './extraction/extraction.component';
+import { TagInputModule } from 'ngx-chips';
 @NgModule({
   declarations: [
     ReportComponent,
@@ -155,7 +156,8 @@ import { ExtractionComponent } from './extraction/extraction.component';
     NbAccordionModule,
     NbSpinnerModule,
     MatSelectFilterModule,
-    NbBadgeModule
+    NbBadgeModule,
+    TagInputModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
