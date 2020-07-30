@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AppointmentService } from '../appointment.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setFlagExam, setUserEmail, setFieldName, setJdName, setUserToken } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setJrId, setCandidateId, setButtonId, setFlagExam, setUserEmail, setFieldName, setJdName, setUserToken, getKeyword } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -156,12 +156,13 @@ export class AppointmentDetailComponent implements OnInit {
       }
     });
     this.isExpress = this.role.refCompany.isExpress;
+    this.keyword = getKeyword() || '';
   }
 
   ngOnInit() {
     this.items = [];
     this.comments = [];
-    this.keyword = '';
+    // this.keyword = '';
     this.soList = [];
     this.sourceBy = [];
     this.locationList = [];

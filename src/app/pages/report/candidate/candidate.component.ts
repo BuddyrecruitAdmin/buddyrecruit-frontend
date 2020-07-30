@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ReportService } from '../report.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, DropDownValue, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, setFlowId, setCandidateId, setIsGridLayout } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, setCandidateId, setIsGridLayout, setFlagExam, setUserToken, setCompanyId } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -455,15 +455,15 @@ export class CandidateComponent implements OnInit {
           this.hubCode = '';
           this.eduList = '';
           this.refName = '';
-          this.listRow(item);
-          this.rowListEnable.forEach(element => {
-            this.listRowItems.forEach((list, i) => {
-              if (element.value === i) {
-                this.dataExcel[index] = { ...this.dataExcel[index], ...list };
-                console.log(this.dataExcel);
-              }
-            });
-          });
+          // this.listRow(item);
+          // this.rowListEnable.forEach(element => {
+          //   this.listRowItems.forEach((list, i) => {
+          //     if (element.value === i) {
+          //       this.dataExcel[index] = { ...this.dataExcel[index], ...list };
+          //       console.log(this.dataExcel);
+          //     }
+          //   });
+          // });
           if (this.isExpress && item.uploads.length > 0) {
             item.uploads.forEach(element => {
               this.uploadList.push({
@@ -489,127 +489,127 @@ export class CandidateComponent implements OnInit {
           //     this.eduList = edu.refDegree.nameTH;
           //   });
           // }
-          // if (this.isExpress) {
-          //   this.dataExcel.push({
-          //     "สมัครรอบที่": item.order || '-',
-          //     "Status": '',
-          //     "สถานะปัจจุบัน": item.refSubStage.text || '-',
-          //     "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
-          //     "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
-          //     "ติดต่อโดย-ชื่อ": item.called.createdInfo.refUser.firstname || '-',
-          //     "ติดต่อโดย-นามสกุล": item.called.createdInfo.refUser.lastname || '-',
-          //     "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.createdInfo.date) || '-',
-          //     "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.createdInfo.date) || '-',
-          //     "Type": '',
-          //     "ตำแหน่ง": item.refJR.refJD.position || '-',
-          //     "No": '',
-          //     "LMS Code": '',
-          //     "Code": '',
-          //     "Code Type": '',
-          //     "Source Type": '',
-          //     "Rate": '',
-          //     "HUB Code": this.hubCode || '-',
-          //     "Source": '',
-          //     "Area": '',
-          //     "CC Name": '',
-          //     "Cost Center": '',
-          //     "Name": item.refCandidate.firstnameEN || '-', ////////////////////////////////////////
-          //     "Surname": item.refCandidate.lastnameEN || '-', ////////////////////////////////////////
-          //     "Title(Th)": item.refCandidate.refTitle.name.th || '-', ////////////////////////////////////////
-          //     "ชื่อ": item.refCandidate.firstname || '-', ////////////////////////////////////////
-          //     "นามสกุล": item.refCandidate.lastname || '-', ////////////////////////////////////////
-          //     "New/Transfer": '',
-          //     "Contract Duration": '',
-          //     "Service Year": '',
-          //     "Original Start date": '',
-          //     "Start Date": '',
-          //     "Latest End": '',
-          //     "Resigned date": '',
-          //     "สาเหตุ": '',
-          //     "Single Number": '',
-          //     "Mobile No.": item.refCandidate.phone || '-',
-          //     "Mobile No. (2)": item.refCandidate.reservePhone || '-',
-          //     "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
-          //     "ID No.": item.refCandidate.idCard || '-',
-          //     "Address": item.generalAppForm.refGeneralAppForm.address || '-', ////////////////////////////////////////
-          //     "ตำบล": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th || '-', ////////////////////////////////////////
-          //     "อำเภอ": item.generalAppForm.refGeneralAppForm.refDistrict.name.th || '-', ////////////////////////////////////////
-          //     "จังหวัด": item.generalAppForm.refGeneralAppForm.refProvince.name.th || '-', ////////////////////////////////////////
-          //     "ตำบล ENG": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en || '-', ////////////////////////////////////////
-          //     "อำเภอ ENG": item.generalAppForm.refGeneralAppForm.refDistrict.name.en || '-', ////////////////////////////////////////
-          //     "จังหวัด ENG": item.generalAppForm.refGeneralAppForm.refProvince.name.en || '-', ////////////////////////////////////////
-          //     "License Expiry date": '',
-          //     "Brand (Type)": '',
-          //     "Model": '',
-          //     "Color": '',
-          //     "Sticker": '',
-          //     "Truck Code": '',
-          //     "Year": '',
-          //     "อายุรถ": '',
-          //     "Emergency  Contact Information": '',
-          //     "Bank": '',
-          //     "Account Name": '',
-          //     "Code2": '',
-          //     "Branch": '',
-          //     "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
-          //     "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
-          //     "แก้ไขล่าสุด (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.lastChangedInfo.refUser) || '-',
-          //     "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-          //     // "เวลาเซ็นสัญญา": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-          //     "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
-          //     // "เวลาที่ถูกปฏิเสธ": this.utilitiesService.convertTimeFromSystem(item.reject.rejectBy.date) || '-',
-          //     "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
-          //     "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
-          //     "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
-          //     // "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
-          //     "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
-          //     "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
-          //     // "HUB": this.hubArea || '-',
-          //     // "ระดับการศึกษา": this.eduList || '-',
-          //     "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-          //     "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-          //     // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
-          //   })
-          // } else {
-          //   this.dataExcel.push({
-          //     "สมัครรอบที่": item.order || '-',
-          //     "Status": '',
-          //     "สถานะปัจจุบัน": item.refSubStage.text || '-',
-          //     "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
-          //     "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-', "Type": '',
-          //     "ตำแหน่ง": item.refJR.refJD.position || '-',
-          //     "Name": item.refCandidate.firstnameEN || '-', ////////////////////////////////////////
-          //     "Surname": item.refCandidate.lastnameEN || '-', ////////////////////////////////////////
-          //     "Title(Th)": item.refCandidate.refTitle.name.th || '-', ////////////////////////////////////////
-          //     "ชื่อ": item.refCandidate.firstname || '-', ////////////////////////////////////////
-          //     "นามสกุล": item.refCandidate.lastname || '-', ////////////////////////////////////////
-          //     "Mobile No.": item.refCandidate.phone || '-',
-          //     "Mobile No. (2)": item.refCandidate.reservePhone || '-',
-          //     "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
-          //     "ID No.": item.refCandidate.idCard || '-',
-          //     "Address": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.address : '-', ////////////////////////////////////////
-          //     "ตำบล": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th : '-', ////////////////////////////////////////
-          //     "อำเภอ": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refDistrict.name.th : '-', ////////////////////////////////////////
-          //     "จังหวัด": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refProvince.name.th : '-', ////////////////////////////////////////
-          //     "ตำบล ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en : '-', ////////////////////////////////////////
-          //     "อำเภอ ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refDistrict.name.en : '-', ////////////////////////////////////////
-          //     "จังหวัด ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refProvince.name.en : '-', ////////////////////////////////////////
-          //     "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
-          //     "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
-          //     "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
-          //     "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
-          //     "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
-          //     "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
-          //     "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
-          //     "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-          //     "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-          //   })
-          // }
-          // if (this.isExpress) {
-          //   this.uploadList.forEach(element => {
-          //     this.dataExcel[index] = { ...this.dataExcel[index], ...element };
-          //   });
-          // }
+          if (this.isExpress) {
+            this.dataExcel.push({
+              "สมัครรอบที่": item.order || '-',
+              "Status": '',
+              "สถานะปัจจุบัน": item.refSubStage.text || '-',
+              "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
+              "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
+              "ติดต่อโดย-ชื่อ":  item.called.lastChangedInfo.refUser.firstname || '-',
+              "ติดต่อโดย-นามสกุล": item.called.lastChangedInfo.refUser.lastname || '-',
+              "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.lastChangedInfo.date) || '-',
+              "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.lastChangedInfo.date) || '-',
+              "Type": '',
+              "ตำแหน่ง": item.refJR.refJD.position || '-',
+              "No": '',
+              "LMS Code": '',
+              "Code": '',
+              "Code Type": '',
+              "Source Type": '',
+              "Rate": '',
+              "HUB Code": this.hubCode || '-',
+              "Source": '',
+              "Area": '',
+              "CC Name": '',
+              "Cost Center": '',
+              "Name": item.refCandidate.firstnameEN || '-', ////////////////////////////////////////
+              "Surname": item.refCandidate.lastnameEN || '-', ////////////////////////////////////////
+              "Title(Th)": item.refCandidate.refTitle.name.th || '-', ////////////////////////////////////////
+              "ชื่อ": item.refCandidate.firstname || '-', ////////////////////////////////////////
+              "นามสกุล": item.refCandidate.lastname || '-', ////////////////////////////////////////
+              "New/Transfer": '',
+              "Contract Duration": '',
+              "Service Year": '',
+              "Original Start date": '',
+              "Start Date": '',
+              "Latest End": '',
+              "Resigned date": '',
+              "สาเหตุ": '',
+              "Single Number": '',
+              "Mobile No.": item.refCandidate.phone || '-',
+              "Mobile No. (2)": item.refCandidate.reservePhone || '-',
+              "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
+              "ID No.": item.refCandidate.idCard || '-',
+              "Address": item.generalAppForm.refGeneralAppForm.address || '-', ////////////////////////////////////////
+              "ตำบล": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th || '-', ////////////////////////////////////////
+              "อำเภอ": item.generalAppForm.refGeneralAppForm.refDistrict.name.th || '-', ////////////////////////////////////////
+              "จังหวัด": item.generalAppForm.refGeneralAppForm.refProvince.name.th || '-', ////////////////////////////////////////
+              "ตำบล ENG": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en || '-', ////////////////////////////////////////
+              "อำเภอ ENG": item.generalAppForm.refGeneralAppForm.refDistrict.name.en || '-', ////////////////////////////////////////
+              "จังหวัด ENG": item.generalAppForm.refGeneralAppForm.refProvince.name.en || '-', ////////////////////////////////////////
+              "License Expiry date": '',
+              "Brand (Type)": '',
+              "Model": '',
+              "Color": '',
+              "Sticker": '',
+              "Truck Code": '',
+              "Year": '',
+              "อายุรถ": '',
+              "Emergency  Contact Information": '',
+              "Bank": '',
+              "Account Name": '',
+              "Code2": '',
+              "Branch": '',
+              "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-',
+              "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-',
+              "แก้ไขล่าสุด (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.lastChangedInfo.refUser) || '-',
+              "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+              // "เวลาเซ็นสัญญา": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+              "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
+              // "เวลาที่ถูกปฏิเสธ": this.utilitiesService.convertTimeFromSystem(item.reject.rejectBy.date) || '-',
+              "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
+              "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
+              "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
+              // "แบล็คลิสต์-เวลา": this.utilitiesService.convertTimeFromSystem(item.blacklist.blockBy.date) || '-',
+              "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
+              "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
+              // "HUB": this.hubArea || '-',
+              // "ระดับการศึกษา": this.eduList || '-',
+              "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+              "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+              // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
+            })
+          } else {
+            this.dataExcel.push({
+              "สมัครรอบที่": item.order || '-',
+              "Status": '',
+              "สถานะปัจจุบัน": item.refSubStage.text || '-',
+              "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
+              "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-', "Type": '',
+              "ตำแหน่ง": item.refJR.refJD.position || '-',
+              "Name": item.refCandidate.firstnameEN || '-', ////////////////////////////////////////
+              "Surname": item.refCandidate.lastnameEN || '-', ////////////////////////////////////////
+              "Title(Th)": item.refCandidate.refTitle.name.th || '-', ////////////////////////////////////////
+              "ชื่อ": item.refCandidate.firstname || '-', ////////////////////////////////////////
+              "นามสกุล": item.refCandidate.lastname || '-', ////////////////////////////////////////
+              "Mobile No.": item.refCandidate.phone || '-',
+              "Mobile No. (2)": item.refCandidate.reservePhone || '-',
+              "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
+              "ID No.": item.refCandidate.idCard || '-',
+              "Address": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.address : '-', ////////////////////////////////////////
+              "ตำบล": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th : '-', ////////////////////////////////////////
+              "อำเภอ": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refDistrict.name.th : '-', ////////////////////////////////////////
+              "จังหวัด": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refProvince.name.th : '-', ////////////////////////////////////////
+              "ตำบล ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en : '-', ////////////////////////////////////////
+              "อำเภอ ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refDistrict.name.en : '-', ////////////////////////////////////////
+              "จังหวัด ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refProvince.name.en : '-', ////////////////////////////////////////
+              "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+              "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
+              "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
+              "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
+              "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
+              "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
+              "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
+              "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+              "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+            })
+          }
+          if (this.isExpress) {
+            this.uploadList.forEach(element => {
+              this.dataExcel[index] = { ...this.dataExcel[index], ...element };
+            });
+          }
         })
         this.excelService.exportAsExcelFile(this.dataExcel, fileName);
       } else {
@@ -638,9 +638,12 @@ export class CandidateComponent implements OnInit {
   }
 
   openApplicationForm(item: any) {
-    if (item.refGeneralAppForm) {
+    if (item.generalAppForm.refGeneralAppForm) {
+      setUserToken(this.role.token);
+      setFlagExam('true');
+      setCompanyId(this.role.refCompany._id)
       this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.refGeneralAppForm}`, '_blank');
+        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
       });
     }
   }

@@ -204,17 +204,23 @@ export class CandidateListComponent implements OnInit {
   }
 
   gotoJR(item) {
-    let menu = MENU_PROCESS_FLOW.find(element => {
-      return element.title === item.candidateFlow.refStage.refMain.name;
-    });
-    menu.link = menu.link.replace('list', 'detail');
-    if (menu) {
-      setJdId(item.candidateFlow.refJR.refJD._id);
-      setJdName(item.candidateFlow.refJR.refJD.position);
-      setJrId(item.candidateFlow.refJR._id);
-      this.router.navigate([menu.link]);
+    if (item.isBlacklist) {
+      this.router.navigate(['/employer/setting/blacklist']);
     } else {
-      this.router.navigate(['/employer/home']);
+      let menu = MENU_PROCESS_FLOW.find(element => {
+        return element.title === item.candidateFlow.refStage.refMain.name;
+      });
+      menu.link = menu.link.replace('list', 'detail');
+      if (menu) {
+        setJdId(item.candidateFlow.refJR.refJD._id);
+        setJdName(item.candidateFlow.refJR.refJD.position);
+        setJrId(item.candidateFlow.refJR._id);
+        setKeyword(item.firstname);
+        // setKeyword(this.utilitiesService.setFullname(item));
+        this.router.navigate([menu.link]);
+      } else {
+        this.router.navigate(['/employer/home']);
+      }
     }
   }
 

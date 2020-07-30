@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -146,12 +146,13 @@ export class OnboardDetailComponent implements OnInit {
       return step.refStage.refMain._id === this.role.refCompany.menu.onboard.refStage._id && step.editable;
     });
     this.isExpress = this.role.refCompany.isExpress;
+    this.keyword = getKeyword() || '';
   }
 
   ngOnInit() {
     this.items = [];
     this.comments = [];
-    this.keyword = '';
+    // this.keyword = '';
     this.soList = [];
     this.sourceBy = [];
     this.filterBy = [];
