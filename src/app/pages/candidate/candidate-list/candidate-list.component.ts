@@ -216,6 +216,7 @@ export class CandidateListComponent implements OnInit {
         setJdName(item.candidateFlow.refJR.refJD.position);
         setJrId(item.candidateFlow.refJR._id);
         setKeyword(item.firstname);
+        
         // setKeyword(this.utilitiesService.setFullname(item));
         this.router.navigate([menu.link]);
       } else {
