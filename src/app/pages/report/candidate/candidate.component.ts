@@ -496,7 +496,7 @@ export class CandidateComponent implements OnInit {
               "สถานะปัจจุบัน": item.refSubStage.text || '-',
               "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-',
               "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-',
-              "ติดต่อโดย-ชื่อ":  item.called.lastChangedInfo.refUser.firstname || '-',
+              "ติดต่อโดย-ชื่อ": item.called.lastChangedInfo.refUser.firstname || '-',
               "ติดต่อโดย-นามสกุล": item.called.lastChangedInfo.refUser.lastname || '-',
               "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.lastChangedInfo.date) || '-',
               "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.lastChangedInfo.date) || '-',
@@ -569,6 +569,12 @@ export class CandidateComponent implements OnInit {
               "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
+              "Talent Pool - Action By": (item.actions) ? (item.actions.talentPool) ? (item.action.talentPool.refUser) ? this.utilitiesService.setFullname(item.action.talentPool.refUser) : '' : '' : '',
+              "Talent Pool - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '',
+              "Sign Contract - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.action.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.action.pendingSignContract.refUser) : '' : '' : '',
+              "Sign Contract - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '',
+              "Onboard - Action By": (item.actions) ? (item.actions.onboard) ? (item.action.onboard.refUser) ? this.utilitiesService.setFullname(item.action.onboard.refUser) : '' : '' : '',
+              "Onboard - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '',
             })
           } else {
             this.dataExcel.push({
