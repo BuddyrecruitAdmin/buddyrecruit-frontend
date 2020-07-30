@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { CandidateService } from '../candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName, setFlowId, setJdId } from '../../../shared/services/auth.service';
+import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName, setFlowId, setJdId, setFlagReject, setTabName } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -216,7 +216,9 @@ export class CandidateListComponent implements OnInit {
         setJdName(item.candidateFlow.refJR.refJD.position);
         setJrId(item.candidateFlow.refJR._id);
         setKeyword(item.firstname);
-        
+        if (item.candidateFlow.reject.flag) {
+          setTabName("REJECTED")
+        }
         // setKeyword(this.utilitiesService.setFullname(item));
         this.router.navigate([menu.link]);
       } else {
