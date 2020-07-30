@@ -1,15 +1,15 @@
 {
   "projects": {
-    "smartrecruit": "smartrecruit"
+    "default": "buddyrecruitdemo"
   },
   "targets": {
-    "smartrecruit": {
+    "buddyrecruitdemo": {
       "hosting": {
-        "p3buddyrecruit": [
-          "p3buddyrecruit"
+        "buddyrecruitdemo": [
+          "buddyrecruitdemo"
         ],
-        "p3buddyrecruit-qas": [
-          "p3buddyrecruit-qas"
+        "p3qasbuddyrecruitdemo": [
+          "p3qasbuddyrecruitdemo"
         ]
       }
     }
