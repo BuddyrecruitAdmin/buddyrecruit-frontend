@@ -9,6 +9,7 @@ export interface IApplicationForm {
   otherJob: string;
   title: string;
   fbId: string;
+  fbName: string;
   channel: string;
   idCard: string;
   firstnameEN: string;
