@@ -346,25 +346,27 @@ export class TalentPoolDetailComponent implements OnInit {
             item.collapse = this.collapseAll;
             item.condition = this.setCondition(item);
             item.commentLenght = item.comments.length;
-            item.facebookLength = item.inboxes.length;
-            if (!item.called.lastChangedInfo) {
-              item.called.lastChangedInfo = {
-                refUser: ''
+            if (this.isExpress) {
+              item.facebookLength = item.inboxes.length;
+              if (!item.called.lastChangedInfo) {
+                item.called.lastChangedInfo = {
+                  refUser: ''
+                }
               }
-            }
-            if (this.utilitiesService.dateIsValid(item.training.date)) {
-              item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
-            } else {
-              item.training.date = '';
-            }
-            if (this.utilitiesService.dateIsValid(item.onboard.date)) {
-              item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
-            } else {
-              item.onboard.date = '';
-            }
-            if (item.called && item.called.lastChangedInfo) {
-              if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
-                item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+              if (this.utilitiesService.dateIsValid(item.training.date)) {
+                item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+              } else {
+                item.training.date = '';
+              }
+              if (this.utilitiesService.dateIsValid(item.onboard.date)) {
+                item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+              } else {
+                item.onboard.date = '';
+              }
+              if (item.called && item.called.lastChangedInfo) {
+                if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
+                  item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+                }
               }
             }
             if (item.refCandidate && item.refCandidate.birth) {
@@ -442,6 +444,7 @@ export class TalentPoolDetailComponent implements OnInit {
             this.userAll = this.removeDuplicates(this.userAll, "value")
             this.filteredUserAll = this.userAll.slice();
           }
+
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
           this.setTabCount(response.count);
 

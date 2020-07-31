@@ -450,6 +450,7 @@ export class ApplicationFormComponent implements OnInit {
       idCard: '',
       title: '',
       fbId: '',
+      fbName: '',
       channel: '',
       firstnameEN: '',
       lastnameEN: '',
