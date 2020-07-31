@@ -301,25 +301,27 @@ export class OnboardDetailComponent implements OnInit {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
           item.commentLenght = item.comments.length;
-          item.facebookLength = item.inboxes.length;
-          if (!item.called.lastChangedInfo) {
-            item.called.lastChangedInfo = {
-              refUser: ''
+          if (this.isExpress) {
+            item.facebookLength = item.inboxes.length;
+            if (!item.called.lastChangedInfo) {
+              item.called.lastChangedInfo = {
+                refUser: ''
+              }
             }
-          }
-          if (this.utilitiesService.dateIsValid(item.training.date)) {
-            item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
-          } else {
-            item.training.date = '';
-          }
-          if (this.utilitiesService.dateIsValid(item.onboard.date)) {
-            item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
-          } else {
-            item.onboard.date = '';
-          }
-          if (item.called && item.called.lastChangedInfo) {
-            if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
-              item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+            if (this.utilitiesService.dateIsValid(item.training.date)) {
+              item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+            } else {
+              item.training.date = '';
+            }
+            if (this.utilitiesService.dateIsValid(item.onboard.date)) {
+              item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+            } else {
+              item.onboard.date = '';
+            }
+            if (item.called && item.called.lastChangedInfo) {
+              if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
+                item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+              }
             }
           }
           if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
@@ -359,6 +361,7 @@ export class OnboardDetailComponent implements OnInit {
               value: element._id
             })
           });
+          this.filteredDistrict = this.filter.data.areas.slice();
           this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
           this.filteredProvince = this.filter.data.provinces.slice();
           this.userAll = this.removeDuplicates(this.userAll, "value")
@@ -484,6 +487,7 @@ export class OnboardDetailComponent implements OnInit {
     this.filter.selected.areas = [];
     this.filterOn = {};
     this.filterTrain = {};
+    this.searchArea = []
     this.filterBy = [
       {
         name: 'province',
@@ -1046,10 +1050,18 @@ export class OnboardDetailComponent implements OnInit {
         // this.search();
         let history = getHistoryData();
         if (history.training) {
-          item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+          if (this.utilitiesService.dateIsValid(history.training.date)) {
+            item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+          } else {
+            item.training.date = '';
+          }
         }
         if (history.onboard) {
-          item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+          if (this.utilitiesService.dateIsValid(history.onboard.date)) {
+            item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+          } else {
+            item.onboard.date = '';
+          }
         }
       }
     });

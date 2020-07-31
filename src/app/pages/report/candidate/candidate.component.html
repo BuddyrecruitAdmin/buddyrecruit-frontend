@@ -291,7 +291,7 @@
               <th scope="col" style="width: 200px;">สถานะปัจจุบัน</th>
               <th scope="col" style="width: 200px;">วันที่เเก้ไขล่าสุด</th>
               <!-- <th scope="col" style="width: 200px;">เวลาที่เเก้ไขล่าสุด</th> -->
-              <th scope="col" style="width: 200px;">แก้ไขล่าสุดโดย</th> 
+              <th scope="col" style="width: 200px;">แก้ไขล่าสุดโดย</th>
               <!-- <th scope="col" style="width: 200px;">แบล็คลิสต์สถานะ</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์-สาเหตุ</th>
               <th scope="col" style="width: 200px;">แบล็คลิสต์-โดย</th> -->
@@ -497,8 +497,8 @@
 
 <!-- Excel Popup -->
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()"
-    [nbSpinner]="loadingDialog" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
+  <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="noticeWidth" [nbSpinner]="loadingDialog"
+    nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
     <nb-card-body>
       <div class="row">
         <div class="col-md-12">
@@ -538,19 +538,19 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-md-12">
-          <tag-input [(ngModel)]="rowListEnable" [secondaryPlaceholder]="" placeholder="" [theme]="'bootstrap'"
-            [disable]="true" [ngModelOptions]=" { standalone: true }">
+        <div class="col-md-12">
+          <tag-input style="margin-bottom: 1rem;" [(ngModel)]="rowListEnable" [secondaryPlaceholder]="" placeholder=""
+            [theme]="'bootstrap'" [disable]="true" [ngModelOptions]=" { standalone: true }">
           </tag-input>
           <div class="row">
             <div *ngFor="let list of rowListAll;" class="col-4" style="text-align: center;">
-              <button [ngClass]="{'nbNotSelect': !list.checked }" (click)="exportChange(list)" nbButton
-                status="success">
+              <button style="margin-bottom: 1rem;" [ngClass]="{'nbNotSelect': !list.checked }"
+                (click)="exportChange(list)" nbButton status="success" fullWidth>
                 {{ list.display }}
               </button>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </nb-card-body>
     <nb-card-footer>

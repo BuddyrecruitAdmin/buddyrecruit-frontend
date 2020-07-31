@@ -61,6 +61,7 @@ export class CandidateComponent implements OnInit {
   dialogTime1: Date;
   dialogTime2: Date;
   noticeHeight: any;
+  noticeWidth: any;
   hubArea: any;
   hubCode: any;
   eduList: any;
@@ -70,8 +71,10 @@ export class CandidateComponent implements OnInit {
   uploadList: any;
   dataArray: any = [];
   listRowItems: any = [];
+  // export
   rowListEnable: any;
-  rowListAll: any;
+  rowListAll: any = [];
+  rowDisplay: any = [];
   constructor(
     private router: Router,
     private service: ReportService,
@@ -91,6 +94,11 @@ export class CandidateComponent implements OnInit {
     }
     this.isExpress = this.role.refCompany.isExpress;
     this.noticeHeight = window.innerHeight * 0.85;
+    if (!this.devices.isMobile) {
+      this.noticeWidth = window.innerWidth * 0.6;
+    } else {
+      this.noticeWidth = window.innerWidth * 0.85;
+    }
   }
 
   ngOnInit() {
@@ -115,6 +123,7 @@ export class CandidateComponent implements OnInit {
       }
     }
     this.startTime = {};
+    this.listDisplay();
     this.refresh();
   }
 
@@ -342,12 +351,32 @@ export class CandidateComponent implements OnInit {
     }
   }
 
+  listDisplay() {
+    this.rowDisplay = ["Talent Pool Pass(By)", "Talent Pool Pass(Date)",
+      "Sign Contract Pass(By)", "Sign Contract Pass(Date)", "Onboard Pass(By)",
+      "Onboard Pass(Date)", "Training Date", "Onboarding Date", "สมัครรอบที่", "Status", "สถานะปัจจุบัน", "วันที่สมัคร", "เวลาที่สมัคร", "ติดต่อโดย-ชื่อ",
+      "ติดต่อโดย-นามสกุล", "วันที่ติดต่อ", "เวลาที่ติดต่อ", "Type", "ตำแหน่ง", "No", "LMS Code", "Code",
+      "Code Type", "Source Type", "Rate", "HUB Code", "Source", "Area", "CC Name", "Cost Center",
+      "Name", "Surname", "Title(Th)", "ชื่อ", "นามสกุล", "New/Transfer", "Contract Duration",
+      "Service Year", "Original Start date", "Start Date", "Latest End", "Resigned date",
+      "สาเหตุ", "Single Number", "Mobile No.", "Mobile No. (2)", "Birth Date", "ID No.",
+      "Address", "ตำบล", "อำเภอ", "จังหวัด", "ตำบล ENG", "อำเภอ ENG", "จังหวัด ENG",
+      "License Expiry date", "Brand (Type)", "Model", "Color", "Sticker", "Truck Code",
+      "Year", "อายุรถ", "Emergency  Contact", "Bank", "Account Name", "Code2",
+      "Branch", "วันที่เเก้ไขล่าสุด", "เวลาที่เเก้ไขล่าสุด", "แก้ไขล่าสุดโดย", "วันที่เซ็นสัญญา",
+      "วันที่ถูกปฏิเสธ", "เหตุผลที่ถูกปฏิเสธ", "ถูกปฏิเสธโดย",
+      "แบล็คลิสต์-วันที่", "แบล็คลิสต์-สาเหตุ", "แบล็คลิสต์โดย"];
+  }
+
   openDate(dialog: TemplateRef<any>) {
-    this.rowListAll = [
-      { display: "ชื่อ-ผู้สมัคร", value: 0, checked: false },
-      { display: "นามสกุล-ผู้สมัคร", value: 1, checked: false },
-      { display: "ตำแหน่ง", value: 2, checked: false },
-    ]
+    this.rowListAll = [];
+    this.rowDisplay.forEach((element, index) => {
+      this.rowListAll.push({
+        display: element,
+        value: index,
+        checked: false
+      })
+    });
     this.rowListEnable = [];
     this.dialogTime1 = this.startTime.start;
     this.dialogTime2 = this.startTime.end;
@@ -356,10 +385,84 @@ export class CandidateComponent implements OnInit {
 
   listRow(item) {
     this.listRowItems = [
-      { "ชื่อ-ผู้สมัคร": item.refCandidate.firstname },
-      { "นามสกุล-ผู้สมัคร": item.refCandidate.lastname },
-      { "ตำแหน่ง": item.refJR.refJD.position },
-      // { "HUB": item.order },
+      { "Talent Pool pass - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '' },
+      { "Talent Pool pass - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '' },
+      { "Sign Contract pass - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '' },
+      { "Sign Contract pass - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '' },
+      { "Onboard pass - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '' },
+      { "Onboard pass - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '' },
+      { "Training Date": (item.training.flag) ? this.utilitiesService.convertDateFromSystem(item.training.date) : '' },
+      { "Onboarding Date": this.utilitiesService.convertDateFromSystem(item.onboard.date) || '' },
+      { "สมัครรอบที่": item.order || '-' },
+      { "Status": '' },
+      { "สถานะปัจจุบัน": item.refSubStage.text || '-' },
+      { "วันที่สมัคร": this.utilitiesService.convertDateFromSystem(item.timestamp) || '-' },
+      { "เวลาที่สมัคร": this.utilitiesService.convertTimeFromSystem(item.timestamp) || '-' },
+      { "ติดต่อโดย-ชื่อ": item.called.lastChangedInfo.refUser.firstname || '-' },
+      { "ติดต่อโดย-นามสกุล": item.called.lastChangedInfo.refUser.lastname || '-' },
+      { "วันที่ติดต่อ": this.utilitiesService.convertDateFromSystem(item.called.lastChangedInfo.date) || '-' },
+      { "เวลาที่ติดต่อ": this.utilitiesService.convertTimeFromSystem(item.called.lastChangedInfo.date) || '-' },
+      { "Type": '' },
+      { "ตำแหน่ง": item.refJR.refJD.position || '-' },
+      { "No": '' },
+      { "LMS Code": '' },
+      { "Code": '' },
+      { "Code Type": '' },
+      { "Source Type": '' },
+      { "Rate": '' },
+      { "HUB Code": this.hubCode || '-' },
+      { "Source": '' },
+      { "Area": '' },
+      { "CC Name": '' },
+      { "Cost Center": '' },
+      { "Name": item.refCandidate.firstnameEN || '-' },
+      { "Surname": item.refCandidate.lastnameEN || '-' },
+      { "Title(Th)": item.refCandidate.refTitle.name.th || '-' },
+      { "ชื่อ": item.refCandidate.firstname || '-' },
+      { "นามสกุล": item.refCandidate.lastname || '-' },
+      { "New/Transfer": '' },
+      { "Contract Duration": '' },
+      { "Service Year": '' },
+      { "Original Start date": '' },
+      { "Start Date": '' },
+      { "Latest End": '' },
+      { "Resigned date": '' },
+      { "สาเหตุ": '' },
+      { "Single Number": '' },
+      { "Mobile No.": item.refCandidate.phone || '-' },
+      { "Mobile No. (2)": item.refCandidate.reservePhone || '-' },
+      { "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth) },
+      { "ID No.": item.refCandidate.idCard || '-' },
+      { "Address": item.generalAppForm.refGeneralAppForm.address || '-' },
+      { "ตำบล": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th || '-' },
+      { "อำเภอ": item.generalAppForm.refGeneralAppForm.refDistrict.name.th || '-' },
+      { "จังหวัด": item.generalAppForm.refGeneralAppForm.refProvince.name.th || '-' },
+      { "ตำบล ENG": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en || '-' },
+      { "อำเภอ ENG": item.generalAppForm.refGeneralAppForm.refDistrict.name.en || '-' },
+      { "จังหวัด ENG": item.generalAppForm.refGeneralAppForm.refProvince.name.en || '-' },
+      { "License Expiry date": '' },
+      { "Brand (Type)": '' },
+      { "Model": '' },
+      { "Color": '' },
+      { "Sticker": '' },
+      { "Truck Code": '' },
+      { "Year": '' },
+      { "อายุรถ": '' },
+      { "Emergency  Contact Information": '' },
+      { "Bank": '' },
+      { "Account Name": '' },
+      { "Code2": '' },
+      { "Branch": '' },
+      { "วันที่เเก้ไขล่าสุด": this.utilitiesService.convertDateFromSystem(item.lastChangedInfo.date) || '-' },
+      { "เวลาที่เเก้ไขล่าสุด": this.utilitiesService.convertTimeFromSystem(item.lastChangedInfo.date) || '-' },
+      { "แก้ไขล่าสุด (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.lastChangedInfo.refUser) || '-' },
+      { "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-' },
+      { "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-' },
+      { "เหตุผลที่ถูกปฏิเสธ": this.refName || '-' },
+      { "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-' },
+      { "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-' },
+      { "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-' },
+      { "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-' },
     ]
   }
 
@@ -455,15 +558,14 @@ export class CandidateComponent implements OnInit {
           this.hubCode = '';
           this.eduList = '';
           this.refName = '';
-          // this.listRow(item);
-          // this.rowListEnable.forEach(element => {
-          //   this.listRowItems.forEach((list, i) => {
-          //     if (element.value === i) {
-          //       this.dataExcel[index] = { ...this.dataExcel[index], ...list };
-          //       console.log(this.dataExcel);
-          //     }
-          //   });
-          // });
+          this.listRow(item);
+          this.rowListEnable.forEach(element => {
+            this.listRowItems.forEach((list, i) => {
+              if (element.value === i) {
+                this.dataExcel[index] = { ...this.dataExcel[index], ...list };
+              }
+            });
+          });
           if (this.isExpress && item.uploads.length > 0) {
             item.uploads.forEach(element => {
               this.uploadList.push({
@@ -489,8 +591,16 @@ export class CandidateComponent implements OnInit {
           //     this.eduList = edu.refDegree.nameTH;
           //   });
           // }
-          if (this.isExpress) {
+          if (this.isExpress && this.rowListEnable.length === 0) {
             this.dataExcel.push({
+              "Talent Pool pass - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '',
+              "Talent Pool pass - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '',
+              "Sign Contract pass - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '',
+              "Sign Contract pass - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '',
+              "Onboard pass - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '',
+              "Onboard pass - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '',
+              "Training Date": (item.training.flag) ? this.utilitiesService.convertDateFromSystem(item.training.date) : '',
+              "Onboarding Date": this.utilitiesService.convertDateFromSystem(item.onboard.date) || '',
               "สมัครรอบที่": item.order || '-',
               "Status": '',
               "สถานะปัจจุบัน": item.refSubStage.text || '-',
@@ -566,17 +676,10 @@ export class CandidateComponent implements OnInit {
               "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
               // "HUB": this.hubArea || '-',
               // "ระดับการศึกษา": this.eduList || '-',
-              "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
-              "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+              // "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
               // "แบล็คลิสต์": item.blacklist.flag.toString() || '-',
-              "Talent Pool - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '',
-              "Talent Pool - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '',
-              "Sign Contract - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '',
-              "Sign Contract - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '',
-              "Onboard - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '',
-              "Onboard - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '',
             })
-          } else {
+          } else if (!this.isExpress) {
             this.dataExcel.push({
               "สมัครรอบที่": item.order || '-',
               "Status": '',
