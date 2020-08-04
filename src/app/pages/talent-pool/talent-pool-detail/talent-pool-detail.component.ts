@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword, setKeyword } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -109,6 +109,7 @@ export class TalentPoolDetailComponent implements OnInit {
 
   // cand filter //
   candType: any;
+  startTime: any = {};
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -168,6 +169,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.startFlag = true;
     this.isExpress = this.role.refCompany.isExpress;
     this.keyword = getKeyword() || '';
+    setKeyword();
   }
 
   ngOnInit() {
@@ -232,6 +234,10 @@ export class TalentPoolDetailComponent implements OnInit {
           name: 'filterBy',
           value: this.filterType
         },
+        // {
+        //   name: 'date',
+        //   value: this.startTime
+        // }
         // {
         //   name: 'called',
         //   value: []
@@ -570,6 +576,12 @@ export class TalentPoolDetailComponent implements OnInit {
           name: 'calledBy',
           value: this.userLists
         })
+      // if (this.callType === 'called') {
+      //   this.filterBy.push({
+      //     name: 'date',
+      //     value: this.startTime
+      //   })
+      // }
     }
     if (this.selectType === 'cand') {
       this.filterBy.push({
@@ -602,6 +614,9 @@ export class TalentPoolDetailComponent implements OnInit {
     ]
     this.selectType = 'sort';
     this.filterSort = 'apply';
+    this.startTime = {};
+    this.userLists = [];
+    this.callType = 'pendingCall';
     this.search();
   }
 
@@ -1115,7 +1130,13 @@ export class TalentPoolDetailComponent implements OnInit {
         {
           name: 'calledBy',
           value: this.userLists
-        })
+        },
+        // {
+        //   name: 'date',
+        //   value: this.startTime
+        // }
+      )
+
     }
     this.search();
   }
@@ -1135,7 +1156,11 @@ export class TalentPoolDetailComponent implements OnInit {
       {
         name: 'filterBy',
         value: this.filterType
-      }
+      },
+      // {
+      //   name: 'date',
+      //   value: this.startTime
+      // }
     ]
     this.search();
   }
@@ -1220,6 +1245,16 @@ export class TalentPoolDetailComponent implements OnInit {
         setHistoryData();
       }
     });
+  }
+
+  onEventStartEndRange(event) {
+    if (event.start && !event.end) {
+      this.startTime.start = event.start;
+      this.startTime.end = event.start;
+    } else {
+      this.startTime = event;
+    }
+    this.search();
   }
 
   changePaging(event) {

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ExamService } from '../exam.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, setFlagExam, setUserToken, getKeyword } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setExamId, setJrId, setFlagExam, setUserToken, getKeyword, setKeyword } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -142,6 +142,7 @@ export class ExamDetailComponent implements OnInit {
       return step.refStage.refMain._id === this.refStageId;
     });
     this.keyword = getKeyword() || '';
+    setKeyword();
   }
 
   ngOnInit() {

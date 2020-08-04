@@ -64,3 +64,10 @@
     border-color: var(--color-green) !important;
     color: var(--color-green) !important;
 }
+.mat-icon{
+    position: absolute;
+    right: 10px;
+    color: var(--color-green);
+    cursor: pointer;
+    top: 6px;
+}
