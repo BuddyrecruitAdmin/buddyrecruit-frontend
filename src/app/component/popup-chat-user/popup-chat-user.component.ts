@@ -31,6 +31,7 @@ export class PopupChatUserComponent implements OnInit {
   devices: Devices;
   condition: any;
   checkChange: boolean = false;
+  fbName: string;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupChatUserComponent>,
@@ -55,6 +56,7 @@ export class PopupChatUserComponent implements OnInit {
       flag: false
     };
     this.candidateName = '';
+    this.fbName = '';
     if (this.flowId) {
       this.getDetail();
     } else {
@@ -79,6 +81,7 @@ export class PopupChatUserComponent implements OnInit {
           });
         }
         this.candidateName = this.utilitiesService.setFullname(response.data);
+        this.fbName =  (response.data.fbName)? response.data.fbName : '';
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
         if (this.checkChange) {

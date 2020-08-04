@@ -3,6 +3,7 @@
     <nb-card-header>
         <div class="title">
             <label [nbTooltip]="candidateName">{{ candidateName }}</label>
+            <small class="status" *ngIf="fbName">Facebook: {{ fbName || '' }}</small>
             <small class="status text-gray m-0">
                 {{ jrName }}
             </small>
