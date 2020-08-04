@@ -227,6 +227,9 @@
                   [nbTooltip]="utilitiesService.setFullname(item.refCandidate) || '-'"
                   (click)="openCandidateDetail(item)">
                   {{ utilitiesService.setFullname(item.refCandidate) || '-' }}
+                  &nbsp;
+                  <span *ngIf="isExpress && item.history.exist" class="fa fa-list-alt link"
+                    (click)="openHistory(item.history)">
                 </label>
                 <span *ngIf="isExpress">
                   <nb-icon *ngIf="item.offer.flag && !item.offer.responsed" icon="checkmark-circle-2-outline"
