@@ -27,6 +27,7 @@ import { PopupResendEmailComponent } from '../../../component/popup-resend-email
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
 import { AppFormService } from '../../setting/app-form/app-form.service';
+import { MENU_PROCESS_FLOW } from "../../pages-menu";
 @Component({
   selector: 'ngx-exam-detail',
   templateUrl: './exam-detail.component.html',
@@ -143,6 +144,12 @@ export class ExamDetailComponent implements OnInit {
     });
     this.keyword = getKeyword() || '';
     setKeyword();
+    if (this.keyword) {
+      let menu = MENU_PROCESS_FLOW.find(element => {
+        return element.title === "Pending Exam";
+      });
+      menu.link = menu.link.replace('detail', 'list');
+    }
   }
 
   ngOnInit() {
@@ -281,7 +288,9 @@ export class ExamDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    this.search();
+    if (this.isExpress) {
+      this.search();
+    }
   }
 
   search() {

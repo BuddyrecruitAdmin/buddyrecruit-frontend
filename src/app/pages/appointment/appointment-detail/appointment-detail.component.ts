@@ -25,6 +25,7 @@ import { CalendarService } from '../../calendar/calendar.service';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
 import { DropDownValue } from '../../../shared/interfaces/common.interface';
+import { MENU_PROCESS_FLOW } from "../../pages-menu";
 @Component({
   selector: 'ngx-appointment-detail',
   templateUrl: './appointment-detail.component.html',
@@ -158,6 +159,12 @@ export class AppointmentDetailComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     this.keyword = getKeyword() || '';
     setKeyword();
+    if (this.keyword) {
+      let menu = MENU_PROCESS_FLOW.find(element => {
+        return element.title === "Pending Appointment";
+      });
+      menu.link = menu.link.replace('detail', 'list');
+    }
   }
 
   ngOnInit() {
@@ -252,7 +259,9 @@ export class AppointmentDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    this.search();
+    if (this.isExpress) {
+      this.search();
+    }
   }
 
   search() {

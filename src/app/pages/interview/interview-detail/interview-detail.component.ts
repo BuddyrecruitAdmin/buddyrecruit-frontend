@@ -27,6 +27,7 @@ import { CalendarService } from '../../calendar/calendar.service';
 import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
 import { AppFormService } from '../../setting/app-form/app-form.service';
+import { MENU_PROCESS_FLOW } from "../../pages-menu";
 @Component({
   selector: 'ngx-interview-detail',
   templateUrl: './interview-detail.component.html',
@@ -146,6 +147,12 @@ export class InterviewDetailComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     this.keyword = getKeyword() || '';
     setKeyword();
+    if (this.keyword) {
+      let menu = MENU_PROCESS_FLOW.find(element => {
+        return element.title === "Pending Interview";
+      });
+      menu.link = menu.link.replace('detail', 'list');
+    }
   }
 
   ngOnInit() {
@@ -226,7 +233,9 @@ export class InterviewDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    this.search();
+    if (this.isExpress) {
+      this.search();
+    }
   }
 
   search() {

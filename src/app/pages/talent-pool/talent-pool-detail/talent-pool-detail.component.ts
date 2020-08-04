@@ -29,6 +29,7 @@ import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup
 import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
 import { ArrayType } from '@angular/compiler';
 import { environment } from '../../../../environments/environment';
+import { MENU_PROCESS_FLOW } from "../../pages-menu";
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -110,6 +111,10 @@ export class TalentPoolDetailComponent implements OnInit {
   // cand filter //
   candType: any;
   startTime: any = {};
+
+  // dialog call //
+  itemCall: any;
+  innerHeight: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -170,6 +175,13 @@ export class TalentPoolDetailComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     this.keyword = getKeyword() || '';
     setKeyword();
+    if (this.keyword) {
+      let menu = MENU_PROCESS_FLOW.find(element => {
+        return element.title === "Talent Pool";
+      });
+      menu.link = menu.link.replace('detail', 'list');
+    }
+    this.innerHeight = window.innerHeight * 0.9;
   }
 
   ngOnInit() {
@@ -320,7 +332,9 @@ export class TalentPoolDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    this.search();
+    if (this.isExpress) {
+      this.search();
+    }
   }
 
   search() {
@@ -977,6 +991,11 @@ export class TalentPoolDetailComponent implements OnInit {
     this.examUserId = _id;
     this.listExamDialog = item;
     this.callDialog(dialog)
+  }
+
+  openCallHistory(dialog: TemplateRef<any>, item) {
+    this.itemCall = item.callHistory;
+    this.callDialog(dialog);
   }
 
   callDialog(dialog: TemplateRef<any>) {

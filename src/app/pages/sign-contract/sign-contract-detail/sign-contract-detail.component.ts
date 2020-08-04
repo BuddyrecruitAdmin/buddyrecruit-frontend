@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
@@ -16,7 +16,7 @@ import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component
 import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
-import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
@@ -26,7 +26,7 @@ import { PopupTrainingDateComponent } from '../../../component/popup-training-da
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 import { environment } from '../../../../environments/environment';
 import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
-
+import { MENU_PROCESS_FLOW } from "../../pages-menu";
 @Component({
   selector: 'ngx-sign-contract-detail',
   templateUrl: './sign-contract-detail.component.html',
@@ -95,6 +95,10 @@ export class SignContractDetailComponent implements OnInit {
 
   // cand filter //
   candType: any;
+
+  dialogRef: NbDialogRef<any>;
+  itemCall: any;
+  innerHeight: any;
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -151,6 +155,13 @@ export class SignContractDetailComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     this.keyword = getKeyword() || '';
     setKeyword();
+    if (this.keyword) {
+      let menu = MENU_PROCESS_FLOW.find(element => {
+        return element.title === "Pending Sign Contract";
+      });
+      menu.link = menu.link.replace('detail', 'list');
+    }
+    this.innerHeight = window.innerHeight * 0.9;
   }
 
   ngOnInit() {
@@ -276,7 +287,9 @@ export class SignContractDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    this.search();
+    if (this.isExpress) {
+      this.search();
+    }
   }
 
   search() {
@@ -465,6 +478,9 @@ export class SignContractDetailComponent implements OnInit {
       }
       // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
       this.filteredDistrict = this.filter.data.areas.slice();
+    }
+    if (this.filter.selected.areas.length === 0) {
+      this.searchArea = [];
     }
     this.filterBy = [
       {
@@ -1138,7 +1154,7 @@ export class SignContractDetailComponent implements OnInit {
       }
     });
   }
-  
+
   openHistory(item: any) {
     setHistoryData(item)
     this.dialogService.open(PopupHistoryComponent, {
@@ -1156,6 +1172,15 @@ export class SignContractDetailComponent implements OnInit {
   checkCV(item: any) {
     const url = environment.API_URI + "/pdf" + '?id=' + item._id;
     window.open(url, '_blank');
+  }
+
+  openCallHistory(dialog: TemplateRef<any>, item) {
+    this.itemCall = item.callHistory;
+    this.callDialog(dialog);
+  }
+
+  callDialog(dialog: TemplateRef<any>) {
+    this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });
   }
 
   changePaging(event) {
