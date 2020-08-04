@@ -204,6 +204,7 @@ export class CandidateListComponent implements OnInit {
   }
 
   gotoJR(item) {
+    setKeyword(this.utilitiesService.setFullname(item));
     if (item.isBlacklist) {
       this.router.navigate(['/employer/setting/blacklist']);
     } else {
@@ -215,7 +216,7 @@ export class CandidateListComponent implements OnInit {
         setJdId(item.candidateFlow.refJR.refJD._id);
         setJdName(item.candidateFlow.refJR.refJD.position);
         setJrId(item.candidateFlow.refJR._id);
-        setKeyword(item.firstname);
+        // setKeyword(this.utilitiesService.setFullname(item));
         if (item.candidateFlow.reject.flag) {
           setTabName("REJECTED")
         }

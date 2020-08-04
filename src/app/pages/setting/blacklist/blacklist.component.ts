@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../candidate/candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, setIsGridLayout, getIsGridLayout, setFlowId, setCandidateId } from '../../../shared/services/auth.service';
+import { getRole, setIsGridLayout, getIsGridLayout, setFlowId, setCandidateId, setKeyword, getKeyword } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -50,6 +50,8 @@ export class BlacklistComponent implements OnInit {
       }
     }
     this.isExpress = this.role.refCompany.isExpress;
+    this.keyword = getKeyword() || '';
+    setKeyword();
   }
 
   ngOnInit() {
