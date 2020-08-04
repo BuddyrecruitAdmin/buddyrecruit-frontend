@@ -386,11 +386,11 @@ export class CandidateComponent implements OnInit {
   listRow(item) {
     this.listRowItems = [
       { "Talent Pool pass - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '' },
-      { "Talent Pool pass - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '' },
+      { "Talent Pool pass - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateFromSystem(item.actions.talentPool.date) : '' : '' },
       { "Sign Contract pass - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '' },
-      { "Sign Contract pass - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '' },
+      { "Sign Contract pass - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateFromSystem(item.actions.pendingSignContract.date) : '' : '' },
       { "Onboard pass - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '' },
-      { "Onboard pass - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '' },
+      { "Onboard pass - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateFromSystem(item.actions.onboard.date) : '' : '' },
       { "Training Date": (item.training.flag) ? this.utilitiesService.convertDateFromSystem(item.training.date) : '' },
       { "Onboarding Date": this.utilitiesService.convertDateFromSystem(item.onboard.date) || '' },
       { "สมัครรอบที่": item.order || '-' },
@@ -558,24 +558,6 @@ export class CandidateComponent implements OnInit {
           this.hubCode = '';
           this.eduList = '';
           this.refName = '';
-          this.listRow(item);
-          this.rowListEnable.forEach(element => {
-            this.listRowItems.forEach((list, i) => {
-              if (element.value === i) {
-                this.dataExcel[index] = { ...this.dataExcel[index], ...list };
-              }
-            });
-          });
-          if (this.isExpress && item.uploads.length > 0) {
-            item.uploads.forEach(element => {
-              this.uploadList.push({
-                [element.fieldName]: element.fieldValue.toString()
-              })
-            });
-          }
-          if (item.reject.rejectBy.refReject) {
-            this.refName = item.reject.rejectBy.refReject.name;
-          }
           if (this.isExpress && item.hubs.length > 0) {
             item.hubs.forEach(element => {
               this.hubCode = element.hubCode;
@@ -586,6 +568,25 @@ export class CandidateComponent implements OnInit {
               }
             });
           }
+          this.listRow(item);
+          this.rowListEnable.forEach(element => {
+            this.listRowItems.forEach((list, i) => {
+              if (element.value === i) {
+                this.dataExcel[index] = { ...this.dataExcel[index], ...list };
+              }
+            });
+          });
+          console.log(this.dataExcel);
+          if (this.isExpress && item.uploads.length > 0) {
+            item.uploads.forEach(element => {
+              this.uploadList.push({
+                [element.fieldName]: element.fieldValue.toString()
+              })
+            });
+          }
+          if (item.reject.rejectBy.refReject) {
+            this.refName = item.reject.rejectBy.refReject.name;
+          }
           // if (item.refCandidate.education.length > 0) {
           //   item.refCandidate.education.forEach(edu => {
           //     this.eduList = edu.refDegree.nameTH;
@@ -594,11 +595,11 @@ export class CandidateComponent implements OnInit {
           if (this.isExpress && this.rowListEnable.length === 0) {
             this.dataExcel.push({
               "Talent Pool pass - Action By": (item.actions) ? (item.actions.talentPool) ? (item.actions.talentPool.refUser) ? this.utilitiesService.setFullname(item.actions.talentPool.refUser) : '' : '' : '',
-              "Talent Pool pass - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.talentPool.date) : '' : '',
+              "Talent Pool pass - Action Date": (item.actions) ? (item.actions.talentPool) ? this.utilitiesService.convertDateFromSystem(item.actions.talentPool.date) : '' : '',
               "Sign Contract pass - Action By": (item.actions) ? (item.actions.pendingSignContract) ? (item.actions.pendingSignContract.refUser) ? this.utilitiesService.setFullname(item.actions.pendingSignContract.refUser) : '' : '' : '',
-              "Sign Contract pass - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.pendingSignContract.date) : '' : '',
+              "Sign Contract pass - Action Date": (item.actions) ? (item.actions.pendingSignContract) ? this.utilitiesService.convertDateFromSystem(item.actions.pendingSignContract.date) : '' : '',
               "Onboard pass - Action By": (item.actions) ? (item.actions.onboard) ? (item.actions.onboard.refUser) ? this.utilitiesService.setFullname(item.actions.onboard.refUser) : '' : '' : '',
-              "Onboard pass - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateTimeFromSystem(item.actions.onboard.date) : '' : '',
+              "Onboard pass - Action Date": (item.actions) ? (item.actions.onboard) ? this.utilitiesService.convertDateFromSystem(item.actions.onboard.date) : '' : '',
               "Training Date": (item.training.flag) ? this.utilitiesService.convertDateFromSystem(item.training.date) : '',
               "Onboarding Date": this.utilitiesService.convertDateFromSystem(item.onboard.date) || '',
               "สมัครรอบที่": item.order || '-',
