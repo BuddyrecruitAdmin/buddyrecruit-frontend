@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { SignContractService } from '../sign-contract.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam, setCompanyId, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword, setKeyword } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, setUserToken, setFlagExam, setCompanyId, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword, setKeyword, setHistoryData } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -25,6 +25,8 @@ import { AppFormService } from '../../setting/app-form/app-form.service';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 import { environment } from '../../../../environments/environment';
+import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
+
 @Component({
   selector: 'ngx-sign-contract-detail',
   templateUrl: './sign-contract-detail.component.html',
@@ -1133,6 +1135,20 @@ export class SignContractDetailComponent implements OnInit {
       if (flag) {
         let comment = getHistoryData();
         item.facebookLength = comment.length;
+      }
+    });
+  }
+  
+  openHistory(item: any) {
+    setHistoryData(item)
+    this.dialogService.open(PopupHistoryComponent, {
+      closeOnBackdropClick: false,
+      hasScroll: true,
+    }
+    ).onClose.subscribe(result => {
+      if (result) {
+        // this.search();
+        setHistoryData();
       }
     });
   }
