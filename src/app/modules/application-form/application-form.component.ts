@@ -1493,6 +1493,11 @@ export class ApplicationFormComponent implements OnInit {
             })
           }
         };
+        this.uploader.onErrorItem = (item, response, status, header) => {
+          const responseData = JSON.parse(response);
+          this.showToast('danger', responseData.error);
+          this.clearFile(target, question);
+        }
       }
     }
   }
