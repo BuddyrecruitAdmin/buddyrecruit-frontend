@@ -94,6 +94,7 @@ export class OnboardDetailComponent implements OnInit {
 
   // cand filter //
   candType: any;
+  startTime: any = {};
 
   dialogRef: NbDialogRef<any>;
   itemCall: any;
@@ -339,6 +340,11 @@ export class OnboardDetailComponent implements OnInit {
                 item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
               }
             }
+            if (item.callHistory.length > 0) {
+              item.callHistory.forEach(element => {
+                element.date = this.utilitiesService.convertDateTimeFromSystem(element.date);
+              });
+            }
           }
           if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
             item.refCandidate.birth = new Date((item.refCandidate.birth));
@@ -485,6 +491,12 @@ export class OnboardDetailComponent implements OnInit {
           name: 'calledBy',
           value: this.userLists
         })
+      if (this.callType === 'called') {
+        this.filterBy.push({
+          name: 'date',
+          value: this.startTime
+        })
+      }
     }
     if (this.selectType === 'cand') {
       this.filterBy.push({
@@ -527,6 +539,9 @@ export class OnboardDetailComponent implements OnInit {
     ]
     this.selectType = 'sort';
     this.filterSort = 'apply';
+    this.startTime = {};
+    this.userLists = [];
+    this.callType = 'pendingCall';
     this.search();
   }
 
@@ -988,6 +1003,10 @@ export class OnboardDetailComponent implements OnInit {
         {
           name: 'calledBy',
           value: this.userLists
+        },
+        {
+          name: 'date',
+          value: this.startTime
         })
     }
     this.search();
@@ -1048,6 +1067,15 @@ export class OnboardDetailComponent implements OnInit {
         this.showToast('success', 'Success Message', response.message);
         item.called.lastChangedInfo.refUser = this.role;
         item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(new Date());
+        item.callHistory.push({
+          refUser: {
+            firstname: this.role.firstname,
+            lastname: this.role.lastname,
+            imageData: this.role.imagePath
+          },
+          date: this.utilitiesService.convertDateTime(new Date()),
+          called: item.called.flag,
+        })
       } else {
         this.showToast('danger', 'Error Message', response.message);
       }
@@ -1131,6 +1159,38 @@ export class OnboardDetailComponent implements OnInit {
   openCallHistory(dialog: TemplateRef<any>, item) {
     this.itemCall = item.callHistory;
     this.callDialog(dialog);
+  }
+
+  onEventStartEndRangeFilter(event) {
+    if (event.start && !event.end) {
+      this.startTime.start = event.start;
+      this.startTime.end = event.start;
+    } else {
+      this.startTime = event;
+    }
+    this.filterBy = [
+      {
+        name: 'province',
+        value: this.filter.selected.provinces
+      },
+      {
+        name: 'area',
+        value: this.searchArea
+      },
+      {
+        name: 'filterBy',
+        value: this.filterType
+      },
+      {
+        name: 'calledBy',
+        value: this.userLists
+      },
+      {
+        name: 'date',
+        value: this.startTime
+      }
+    ]
+    this.search();
   }
 
   callDialog(dialog: TemplateRef<any>) {
