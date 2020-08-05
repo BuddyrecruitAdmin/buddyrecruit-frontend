@@ -1,7 +1,6 @@
 {
   "projects": {
-    "smartrecruit": "smartrecruit",
-    "default": "smartrecruit"
+    "smartrecruit": "smartrecruit"
   },
   "targets": {
     "smartrecruit": {
