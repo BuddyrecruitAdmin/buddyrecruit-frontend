@@ -310,7 +310,8 @@ export class AppFormDetailComponent implements OnInit {
           originalName: '',
           type: '',
           size: 0,
-          imgaeURL: ''
+          imgaeURL: '',
+          date: null
         },
         linearValue: null,
         linearOptions: [],
