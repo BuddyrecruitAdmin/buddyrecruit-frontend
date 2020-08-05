@@ -143,6 +143,7 @@ export interface IAttachment {
   type: string;
   size: number;
   imgaeURL: string;
+  date: Date;
 }
 
 export interface IGridOption {

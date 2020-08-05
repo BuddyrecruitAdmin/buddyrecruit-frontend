@@ -1471,6 +1471,7 @@ export class ApplicationFormComponent implements OnInit {
                 ques.answer.attachment.originalName = responseData.originalName;
                 ques.answer.attachment.type = files[0].type;
                 ques.answer.attachment.size = files[0].size;
+                ques.answer.attachment.date =responseData.date;
                 this.loadingUpload = false;
                 // set pic preview
                 let reader = new FileReader();
