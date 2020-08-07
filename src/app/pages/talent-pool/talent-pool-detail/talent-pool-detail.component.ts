@@ -332,9 +332,7 @@ export class TalentPoolDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    if (this.isExpress) {
-      this.search();
-    }
+    this.search();
   }
 
   search() {
