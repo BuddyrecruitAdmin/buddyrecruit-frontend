@@ -188,6 +188,7 @@ export class InterviewDetailComponent implements OnInit {
               this.sourceBy.push(element._id);
             }
           })
+          this.search();
         }
         resolve();
       })
@@ -232,7 +233,11 @@ export class InterviewDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
+    if (this.soList.length === 0 && !this.isExpress) {
+      this.sourceList();
+    } else {
       this.search();
+    }
   }
 
   search() {

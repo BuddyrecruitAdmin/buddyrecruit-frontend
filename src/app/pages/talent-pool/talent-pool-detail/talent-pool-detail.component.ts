@@ -282,6 +282,8 @@ export class TalentPoolDetailComponent implements OnInit {
               this.sourceBy.push(element._id);
             }
           })
+          this.filterBy = this.sourceBy;
+          this.search();
         }
         resolve();
       });
@@ -331,7 +333,11 @@ export class TalentPoolDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    this.search();
+    if (this.soList.length === 0 && !this.isExpress) {
+      this.sourceList();
+    } else {
+      this.search();
+    }
   }
 
   search() {
