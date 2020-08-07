@@ -248,7 +248,6 @@ export class SignContractDetailComponent implements OnInit {
             }
           })
         }
-        this.search();
         resolve();
       })
     })
