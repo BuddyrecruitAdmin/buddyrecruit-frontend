@@ -286,9 +286,7 @@ export class OnboardDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
-    if (this.isExpress) {
       this.search();
-    }
   }
 
   search() {
