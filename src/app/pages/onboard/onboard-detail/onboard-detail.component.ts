@@ -242,7 +242,6 @@ export class OnboardDetailComponent implements OnInit {
             }
           })
         }
-        this.search();
         resolve();
       })
     })

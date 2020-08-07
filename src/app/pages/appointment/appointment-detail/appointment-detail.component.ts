@@ -215,7 +215,6 @@ export class AppointmentDetailComponent implements OnInit {
             }
           })
         }
-        this.search();
         resolve();
       });
     });
