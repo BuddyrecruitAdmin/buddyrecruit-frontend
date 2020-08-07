@@ -243,8 +243,8 @@ export class ExamDetailComponent implements OnInit {
               this.sourceBy.push(element._id);
             }
           })
+          this.search();
         }
-        this.search();
         resolve();
       })
     })
@@ -288,7 +288,11 @@ export class ExamDetailComponent implements OnInit {
       this.tabSelected = event.tabTitle;
     }
     this.paging.pageIndex = 0;
+    if (this.soList.length === 0 && !this.isExpress) {
+      this.sourceList();
+    } else {
       this.search();
+    }
   }
 
   search() {
