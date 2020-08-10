@@ -877,8 +877,8 @@
             </nb-user>
           </div>
           <div class="actions">
-            <nb-icon *ngIf="item.called" style="width: 30px;height: 30px;" icon="phone-call-outline"
-              class="font-inherit text-green"></nb-icon>
+            <nb-icon *ngIf="item.called" [ngClass]="{ 'text-green': !item.isFollow, 'text-orange': item.isFollow }"
+              style="width: 30px;height: 30px;" icon="phone-call-outline" class="font-inherit"></nb-icon>
             <nb-icon *ngIf="!item.called" style="width: 30px;height: 30px;" icon="phone-off-outline"
               class="font-inherit text-red"></nb-icon>
           </div>
