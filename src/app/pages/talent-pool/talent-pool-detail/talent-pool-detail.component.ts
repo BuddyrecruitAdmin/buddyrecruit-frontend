@@ -1197,15 +1197,23 @@ export class TalentPoolDetailComponent implements OnInit {
       confirm.afterClosed().subscribe(result => {
         if (result) {
           item.called.isFollow = true;
+          this.callService(item, item.called);
         } else {
-          item.called.flag = !item.called.flag;
-
+          const confirm = this.matDialog.open(PopupMessageComponent, {
+            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+            data: { type: 'C', content: 'คุณต้องการยกเลิกการโทรครั้งก่อนหรือไม่' }
+          });
+          confirm.afterClosed().subscribe(result => {
+            if (result) {
+              item.called.flag = !item.called.flag;
+              this.callService(item, item.called);
+            }
+          })
         }
-        this.callService(item, item.called)
       });
     } else {
       item.called.flag = !item.called.flag;
-      this.callService(item, item.called)
+      this.callService(item, item.called);
     }
   }
 
@@ -1222,7 +1230,8 @@ export class TalentPoolDetailComponent implements OnInit {
             imageData: this.role.imagePath
           },
           date: this.utilitiesService.convertDateTime(new Date()),
-          called: item.called.flag
+          called: item.called.flag,
+          isFollow: item.called.isFollow
         })
       } else {
         this.showToast('danger', 'Error Message', response.message);
