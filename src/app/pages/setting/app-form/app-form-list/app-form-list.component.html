@@ -71,7 +71,7 @@
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/setting/app-form/edit/'+item._id">
               </nb-icon>
-              <nb-icon icon="copy-outline" class="link" nbTooltip="Edit"
+              <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
                 [routerLink]="'/employer/setting/app-form/duplicate/'+item._id">
               </nb-icon>
               <nb-icon icon="trash-2-outline" class="link" nbTooltip="Delete" (click)="delete(item)">
@@ -167,7 +167,7 @@
                   [routerLink]="'/employer/setting/app-form/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
-                <button nbButton status="info" size="tiny" nbTooltip="Edit"
+                <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
                   [routerLink]="'/employer/setting/app-form/duplicate/'+item._id">
                   <nb-icon icon="copy-outline"></nb-icon>
                 </button>
