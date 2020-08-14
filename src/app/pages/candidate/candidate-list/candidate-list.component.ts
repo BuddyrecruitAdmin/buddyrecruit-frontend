@@ -115,6 +115,9 @@ export class CandidateListComponent implements OnInit {
     this.isFilter = false;
     this.filterAll = true;
     this.isExpress = this.role.refCompany.isExpress;
+    if (this.isExpress) {
+      this.filters.push({ text: 'Facebook', filter: 'fbName', active: true })
+    }
   }
 
   ngOnInit() {
