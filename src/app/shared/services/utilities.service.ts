@@ -14,7 +14,7 @@ export class UtilitiesService {
     let fullName = '';
     if (refUser) {
       if (refUser.firstname) {
-        fullName = refUser.firstname;
+        fullName = refUser.firstname.trim();
       }
       if (refUser.lastname) {
         fullName = fullName + ' ' + refUser.lastname;
