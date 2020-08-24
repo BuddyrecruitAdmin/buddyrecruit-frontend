@@ -10,7 +10,7 @@
     จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
   </span>
 </nb-alert>
-<nb-alert *ngIf="showCondition" status="warning" closable (close)="showCondition = !showCondition">
+<nb-alert *ngIf="showCondition && isExpress" status="warning" closable (close)="showCondition = !showCondition">
   <span>
     พื้นหลังสี <span class="dot"></span> สำหรับ Candidate ที่เป็นตัวสำรอง(คุณสมบัติไม่ตรง)
   </span>
