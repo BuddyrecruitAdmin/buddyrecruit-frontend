@@ -789,7 +789,7 @@
                 </button>
                 <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Pass to Sign Contract"
-                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
+                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired || waitingApprove">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">
                     {{ item.refJR?.refStatus?.name }}
