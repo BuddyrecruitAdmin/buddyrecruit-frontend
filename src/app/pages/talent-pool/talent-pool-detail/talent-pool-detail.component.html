@@ -10,7 +10,7 @@
     จำนวน candidate ที่คุณเลือกครบที่กำหนดแล้ว หากต้องการเพิ่มโปรดทำการเพิ่มจำนวนที่ Job Request ของคุณ
   </span>
 </nb-alert>
-<nb-alert *ngIf="showCondition" status="warning" closable (close)="showCondition = !showCondition">
+<nb-alert *ngIf="showCondition && isExpress" status="warning" closable (close)="showCondition = !showCondition">
   <span>
     พื้นหลังสี <span class="dot"></span> สำหรับ Candidate ที่เป็นตัวสำรอง(คุณสมบัติไม่ตรง)
   </span>
@@ -789,7 +789,7 @@
                 </button>
                 <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Pass to Sign Contract"
-                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired">
+                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired || waitingApprove">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">
                     {{ item.refJR?.refStatus?.name }}

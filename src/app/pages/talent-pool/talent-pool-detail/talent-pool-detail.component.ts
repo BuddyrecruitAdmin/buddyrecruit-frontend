@@ -115,6 +115,7 @@ export class TalentPoolDetailComponent implements OnInit {
   // dialog call //
   itemCall: any;
   innerHeight: any;
+  waitingApprove: boolean = false;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -814,6 +815,7 @@ export class TalentPoolDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
+          this.waitingApprove = true;
           this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
@@ -829,8 +831,10 @@ export class TalentPoolDetailComponent implements OnInit {
                   element.badgeText = element.badgeText - 1;
                 }
               })
+              this.waitingApprove = false;
               // this.search();
             } else {
+              this.waitingApprove = false;
               this.showToast('danger', 'Error Message', response.message);
             }
           });

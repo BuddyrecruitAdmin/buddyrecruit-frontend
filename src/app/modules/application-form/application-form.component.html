@@ -138,10 +138,16 @@
                                 </span>
                                 <span *ngIf="!editFlag">
                                   {{ area.name }}
-                                </span> &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
-                                  {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
-                                <span class="text-red" *ngIf="!area.isFull && area.remark">
-                                  ({{ area.remark }})</span>
+                                </span>
+                                <span *ngIf="!area.isDeleted">
+                                  <span *ngIf="area.isFull" class="text-red">
+                                    {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
+                                  <span class="text-red" *ngIf="!area.isFull && area.remark">
+                                    ({{ area.remark }})</span>
+                                </span>
+                                <span *ngIf="area.isDeleted" class="text-red">
+                                  *** DELETED ***
+                                </span>
                               </nb-checkbox>
                             </div>
                           </div>
@@ -179,10 +185,16 @@
                                 <span *ngIf="!editFlag">
                                   {{ area.name }}
                                 </span>
-                                &nbsp;&nbsp;&nbsp; <span *ngIf="area.isFull" class="text-red">
-                                  {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
-                                <span class="text-red" *ngIf="!area.isFull && area.remark">
-                                  ({{ area.remark }})</span>
+                                &nbsp;&nbsp;&nbsp;
+                                <span *ngIf="!area.isDeleted">
+                                  <span *ngIf="area.isFull" class="text-red">
+                                    {{ language === 'en' ? '(Full)' :'(เต็ม)' }}</span>
+                                  <span class="text-red" *ngIf="!area.isFull && area.remark">
+                                    ({{ area.remark }})</span>
+                                </span>
+                                <span *ngIf="area.isDeleted" class="text-red">
+                                  *** DELETED ***
+                                </span>
                               </nb-checkbox>
                             </div>
                           </div>
