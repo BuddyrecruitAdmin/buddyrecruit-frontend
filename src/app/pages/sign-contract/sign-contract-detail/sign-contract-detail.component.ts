@@ -1109,32 +1109,34 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   changeCall(item) {
-    if (item.called.flag) {
-      const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-        data: { type: 'C', content: 'คุณต้องการยืนยันการโทรติดตามหรือไม่' }
-      });
-      confirm.afterClosed().subscribe(result => {
-        if (result) {
-          item.called.isFollow = true;
-          this.callService(item, item.called);
-        } else {
-          const confirm = this.matDialog.open(PopupMessageComponent, {
-            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-            data: { type: 'C', content: 'คุณต้องการยกเลิกการโทรครั้งก่อนหรือไม่' }
-          });
-          confirm.afterClosed().subscribe(result => {
-            if (result) {
-              item.called.flag = !item.called.flag;
-              this.callService(item, item.called);
-            }
-          })
-        }
-      });
-    } else {
-      item.called.flag = !item.called.flag;
-      this.callService(item, item.called);
-    }
+    // if (item.called.flag) {
+    //   const confirm = this.matDialog.open(PopupMessageComponent, {
+    //     width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+    //     data: { type: 'C', content: 'คุณต้องการยืนยันการโทรติดตามหรือไม่' }
+    //   });
+    //   confirm.afterClosed().subscribe(result => {
+    //     if (result) {
+    //       item.called.isFollow = true;
+    //       this.callService(item, item.called);
+    //     } else {
+    //       const confirm = this.matDialog.open(PopupMessageComponent, {
+    //         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+    //         data: { type: 'C', content: 'คุณต้องการยกเลิกการโทรครั้งก่อนหรือไม่' }
+    //       });
+    //       confirm.afterClosed().subscribe(result => {
+    //         if (result) {
+    //           item.called.flag = !item.called.flag;
+    //           this.callService(item, item.called);
+    //         }
+    //       })
+    //     }
+    //   });
+    // } else {
+    //   item.called.flag = !item.called.flag;
+    //   this.callService(item, item.called);
+    // }
+    item.called.flag = !item.called.flag;
+    this.callService(item, item.called);
   }
 
   callService(item, data) {
@@ -1227,7 +1229,7 @@ export class SignContractDetailComponent implements OnInit {
       }
     });
   }
-  
+
   onEventStartEndRangeFilter(event) {
     if (event.start && !event.end) {
       this.startTime.start = event.start;
