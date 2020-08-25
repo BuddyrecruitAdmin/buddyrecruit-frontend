@@ -1258,10 +1258,11 @@ export class TalentPoolDetailComponent implements OnInit {
       setCandidateId();
       if (result) {
         let history = getHistoryData();
-        if (history.training) {
+        console.log(history)
+        if (history.training && history.training.date) {
           item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
         }
-        if (history.onboard) {
+        if (history.onboard && history.onboard.date) {
           item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
         }
       }
