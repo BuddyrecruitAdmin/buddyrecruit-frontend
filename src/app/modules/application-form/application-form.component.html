@@ -29,7 +29,10 @@
 
     <div class="nav-bar" [style.background]="template.bgColor">
       <div class="nav-brand">
-        <mat-icon>account_box</mat-icon>
+        <mat-icon *ngIf="!template.isExpress" [style.color]="appForm.titleColor">account_box</mat-icon>
+        <img *ngIf="template.isExpress" style="margin-bottom: 1rem;"
+          src="https://www.img.in.th/images/97ea3153d3afbf0fb5750e0e485dad33.png" alt="LazadaExpress" width="auto"
+          height="60">
         <div class="title" [style.color]="template.titleColor">{{ template.title }}</div>
         <div class="sub-title" [style.color]="template.subTitleColor">{{ template.subTitle }}</div>
       </div>
