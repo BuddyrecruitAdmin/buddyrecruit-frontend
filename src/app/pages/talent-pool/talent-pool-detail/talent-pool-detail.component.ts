@@ -1193,32 +1193,34 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   changeCall(item) {
-    if (item.called.flag) {
-      const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-        data: { type: 'C', content: 'คุณต้องการยืนยันการโทรติดตามหรือไม่' }
-      });
-      confirm.afterClosed().subscribe(result => {
-        if (result) {
-          item.called.isFollow = true;
-          this.callService(item, item.called);
-        } else {
-          const confirm = this.matDialog.open(PopupMessageComponent, {
-            width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-            data: { type: 'C', content: 'คุณต้องการยกเลิกการโทรครั้งก่อนหรือไม่' }
-          });
-          confirm.afterClosed().subscribe(result => {
-            if (result) {
-              item.called.flag = !item.called.flag;
-              this.callService(item, item.called);
-            }
-          })
-        }
-      });
-    } else {
-      item.called.flag = !item.called.flag;
-      this.callService(item, item.called);
-    }
+    // if (item.called.flag) {
+    //   const confirm = this.matDialog.open(PopupMessageComponent, {
+    //     width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+    //     data: { type: 'C', content: 'คุณต้องการยืนยันการโทรติดตามหรือไม่' }
+    //   });
+    //   confirm.afterClosed().subscribe(result => {
+    //     if (result) {
+    //       item.called.isFollow = true;
+    //       this.callService(item, item.called);
+    //     } else {
+    //       const confirm = this.matDialog.open(PopupMessageComponent, {
+    //         width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+    //         data: { type: 'C', content: 'คุณต้องการยกเลิกการโทรครั้งก่อนหรือไม่' }
+    //       });
+    //       confirm.afterClosed().subscribe(result => {
+    //         if (result) {
+    //           item.called.flag = !item.called.flag;
+    //           this.callService(item, item.called);
+    //         }
+    //       })
+    //     }
+    //   });
+    // } else {
+    //   item.called.flag = !item.called.flag;
+    //   this.callService(item, item.called);
+    // }
+    item.called.flag = !item.called.flag;
+    this.callService(item, item.called);
   }
 
   callService(item, data) {
@@ -1256,10 +1258,11 @@ export class TalentPoolDetailComponent implements OnInit {
       setCandidateId();
       if (result) {
         let history = getHistoryData();
-        if (history.training) {
+        console.log(history)
+        if (history.training && history.training.date) {
           item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
         }
-        if (history.onboard) {
+        if (history.onboard && history.onboard.date) {
           item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
         }
       }
