@@ -113,7 +113,8 @@ export const API_ENDPOINT = {
     BLOCK: "candidate/block",
     UNBLOCK: "candidate/unblock",
     BLACKLIST: "candidate/blacklist",
-    MESSAGE: "facebook/inbox"
+    MESSAGE: "facebook/inbox",
+    HISTORY: "candidate/history"
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",

@@ -178,4 +178,11 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.MESSAGE, body);
   }
 
+  getHistory(_id: any) {
+    const body = {
+      candidateFlowId: _id
+    }
+    return this.post(API_ENDPOINT.CANDIDATE.HISTORY, body);
+  }
+
 }
