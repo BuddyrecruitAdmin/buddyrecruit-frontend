@@ -1224,7 +1224,7 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   callService(item, data) {
-    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
+    this.candidateService.candidateFlowEdit(item._id, { called: data }).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
         item.called.lastChangedInfo.refUser = this.role;
@@ -1261,9 +1261,13 @@ export class TalentPoolDetailComponent implements OnInit {
         console.log(history)
         if (history.training && history.training.date) {
           item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
+        } else {
+          item.training.date = null;
         }
         if (history.onboard && history.onboard.date) {
           item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
+        } else {
+          item.onboard.date = null;
         }
       }
     });

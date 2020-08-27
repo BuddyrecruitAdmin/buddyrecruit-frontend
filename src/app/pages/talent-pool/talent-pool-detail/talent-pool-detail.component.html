@@ -564,7 +564,7 @@
                       <small style="padding-left: 2rem"
                         *ngIf="item.called.flag">({{ item.called.lastChangedInfo.date || '-' }})</small>
                     </div>
-                    <div *ngIf="item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
+                    <div *ngIf="item.exams && item.exams.length > 0 && role.refAuthorize.checkAswer" class="text-group">
                       <span class="link underline" (click)="checkExam(dialogExam, item.exams,item._id)">
                         <nb-icon icon="info-outline" class="font-inherit"></nb-icon> Check Exam
                       </span>
@@ -789,7 +789,8 @@
                 </button>
                 <button *ngIf="item.condition.button.nextStep && isExpress" nbButton
                   [size]="(devices.isMobile)? 'tiny' : 'medium'" status="success" nbTooltip="Pass to Sign Contract"
-                  (click)="approve(item, item.condition.button.step,dialog)" [disabled]="item.condition.isExpired || waitingApprove">
+                  (click)="approve(item, item.condition.button.step,dialog)"
+                  [disabled]="item.condition.isExpired || waitingApprove">
                   <nb-icon *ngIf="!item.condition.isExpired" icon="checkmark-circle-2"></nb-icon>
                   <span *ngIf="item.condition.isExpired">
                     {{ item.refJR?.refStatus?.name }}
