@@ -538,7 +538,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
+        <div *ngIf="isExpress" class="col-md-12">
           <tag-input style="margin-bottom: 1rem;" [(ngModel)]="rowListEnable" [secondaryPlaceholder]="" placeholder=""
             [theme]="'bootstrap'" [disable]="true" [ngModelOptions]=" { standalone: true }">
           </tag-input>
