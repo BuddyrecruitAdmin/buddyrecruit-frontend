@@ -48,7 +48,11 @@ export class AppFormListComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
-    this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
+    if (this.isExpress) {
+      this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
+    } else {
+      this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
+    }
     this.isExpress = this.role.refCompany.isExpress;
   }
 

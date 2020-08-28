@@ -879,7 +879,7 @@
                   <span *ngIf="appForm.attachment.originalName && !detailFlag"
                     class="text-gray">{{ appForm.attachment.originalName }}</span>
                   <mat-icon *ngIf="appForm.attachment.originalName && !isDisabled" class="delete"
-                    (click)="clearFile(appForm.attachment, appForm); fileInput.value = ''">
+                    (click)="clearFile(appForm.attachment, appForm);">
                     cancel
                   </mat-icon>
                 </p>

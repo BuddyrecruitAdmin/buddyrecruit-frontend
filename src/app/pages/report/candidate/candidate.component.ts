@@ -370,13 +370,15 @@ export class CandidateComponent implements OnInit {
 
   openDate(dialog: TemplateRef<any>) {
     this.rowListAll = [];
-    this.rowDisplay.forEach((element, index) => {
-      this.rowListAll.push({
-        display: element,
-        value: index,
-        checked: false
-      })
-    });
+    if (this.isExpress) {
+      this.rowDisplay.forEach((element, index) => {
+        this.rowListAll.push({
+          display: element,
+          value: index,
+          checked: false
+        })
+      });
+    }
     this.rowListEnable = [];
     this.dialogTime1 = this.startTime.start;
     this.dialogTime2 = this.startTime.end;
