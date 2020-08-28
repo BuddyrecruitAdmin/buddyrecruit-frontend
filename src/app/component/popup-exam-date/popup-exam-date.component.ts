@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId, setUserEmail } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -184,6 +184,7 @@ export class PopupExamDateComponent implements OnInit {
     setFlowId(this.flowId);
     setCandidateId(this.candidateId);
     setButtonId(this.buttonId);
+    setUserEmail(this.emailCandidate)
     this.dialogService.open(PopupPreviewEmailComponent,
       {
         closeOnBackdropClick: false,
