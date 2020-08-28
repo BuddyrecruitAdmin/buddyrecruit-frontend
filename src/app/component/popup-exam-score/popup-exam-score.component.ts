@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CandidateService } from '../../pages/candidate/candidate.service';
 import { ResponseCode } from '../../shared/app.constants';
 import { NbDialogRef } from '@nebular/theme';
-import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId } from '../../shared/services/auth.service';
+import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, setButtonId, setUserEmail } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
@@ -37,6 +37,7 @@ export class PopupExamScoreComponent implements OnInit {
   touchedAtt: boolean;
   errorExam: string;
   errorAtt: string;
+  emailCandidate: any;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupExamScoreComponent>,
@@ -77,7 +78,7 @@ export class PopupExamScoreComponent implements OnInit {
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
         this.stageId = response.data.candidateFlow.refStage._id;
         this.buttonId = this.utilitiesService.findButtonIdByStage(this.stageId, response.data.candidateFlow.refJR.requiredExam);
-
+        this.emailCandidate = response.data.email;
         this.examScore = response.data.candidateFlow.pendingExamScoreInfo.examScore;
         this.examRemark = response.data.candidateFlow.pendingExamScoreInfo.examRemark;
         this.attitudeScore = response.data.candidateFlow.pendingExamScoreInfo.attitudeScore;
@@ -138,6 +139,7 @@ export class PopupExamScoreComponent implements OnInit {
     setFlowId(this.flowId);
     setCandidateId(this.candidateId);
     setButtonId(this.buttonId);
+    setUserEmail(this.emailCandidate)
     this.dialogService.open(PopupPreviewEmailComponent,
       {
         closeOnBackdropClick: false,
