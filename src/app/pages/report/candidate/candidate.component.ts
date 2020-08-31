@@ -570,15 +570,16 @@ export class CandidateComponent implements OnInit {
               }
             });
           }
-          this.listRow(item);
-          this.rowListEnable.forEach(element => {
-            this.listRowItems.forEach((list, i) => {
-              if (element.value === i) {
-                this.dataExcel[index] = { ...this.dataExcel[index], ...list };
-              }
+          if (this.isExpress) {
+            this.listRow(item);
+            this.rowListEnable.forEach(element => {
+              this.listRowItems.forEach((list, i) => {
+                if (element.value === i) {
+                  this.dataExcel[index] = { ...this.dataExcel[index], ...list };
+                }
+              });
             });
-          });
-          console.log(this.dataExcel);
+          }
           if (this.isExpress && item.uploads.length > 0) {
             item.uploads.forEach(element => {
               this.uploadList.push({
@@ -706,14 +707,14 @@ export class CandidateComponent implements OnInit {
               "ตำบล ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.en : '-', ////////////////////////////////////////
               "อำเภอ ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refDistrict.name.en : '-', ////////////////////////////////////////
               "จังหวัด ENG": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refProvince.name.en : '-', ////////////////////////////////////////
-              "วันที่เซ็นสัญญา": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) || '-',
+              "วันที่เซ็นสัญญา": (item.pendingSignContractInfo.sign) ? this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.sign.date) : '-',
               "วันที่ถูกปฏิเสธ": this.utilitiesService.convertDateFromSystem(item.reject.rejectBy.date) || '-',
               "เหตุผลที่ถูกปฏิเสธ": this.refName || '-',
               "ถูกปฏิเสธโดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.reject.rejectBy.refUser) || '-',
-              "แบล็คลิสต์-วันที่": this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) || '-',
+              "แบล็คลิสต์-วันที่": (item.blacklist.blockBy.date) ? this.utilitiesService.convertDateFromSystem(item.blacklist.blockBy.date) : '-',
               "แบล็คลิสต์-สาเหตุ": item.blacklist.refReject || '-',
               "แบล็คลิสต์โดย (ชื่อ-นามสกุล)": this.utilitiesService.setFullname(item.blacklist.blockBy.refUser) || '-',
-              "วันที่เริ่มงาน": this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
+              "วันที่เริ่มงาน": (item.pendingSignContractInfo.agreeStartDate) ? this.utilitiesService.convertDateFromSystem(item.pendingSignContractInfo.agreeStartDate) : '-',
               "เวลาเริ่มงาน": this.utilitiesService.convertTimeFromSystem(item.pendingSignContractInfo.agreeStartDate) || '-',
             })
           }
