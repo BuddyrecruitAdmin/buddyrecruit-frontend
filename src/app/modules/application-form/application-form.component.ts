@@ -1298,7 +1298,9 @@ export class ApplicationFormComponent implements OnInit {
     } else {
       request.jobMultiChild = [];
     }
-
+    if (request.attachment.imgaeURL) {
+      request.attachment.imgaeURL = '';
+    }
     // Question
     if (request.questions && request.questions.length) {
       request.questions.map(question => {
@@ -1455,7 +1457,7 @@ export class ApplicationFormComponent implements OnInit {
 
         });
         this.loadingUpload = true;
-        if (question) {
+        if (question !== 'resume') {
           question.isLoading = true;
           // this.appForm.questions.forEach(ques => {
           //   ques.isLoading = true;
@@ -1464,14 +1466,16 @@ export class ApplicationFormComponent implements OnInit {
         this.uploader.uploadItem(queue);
         this.uploader.onSuccessItem = (item, response, status, headers) => {
           const responseData = JSON.parse(response);
-          if (question) {
+          if (question !== 'resume') {
             this.appForm.questions.forEach((ques, index) => {
               if (index.toString() === responseData.index) {
-                ques.answer.attachment.uploadName = responseData.uploadName;
-                ques.answer.attachment.originalName = responseData.originalName;
-                ques.answer.attachment.type = files[0].type;
-                ques.answer.attachment.size = files[0].size;
-                ques.answer.attachment.date = responseData.date;
+                if (ques.answer) {
+                  ques.answer.attachment.uploadName = responseData.uploadName;
+                  ques.answer.attachment.originalName = responseData.originalName;
+                  ques.answer.attachment.type = files[0].type;
+                  ques.answer.attachment.size = files[0].size;
+                  ques.answer.attachment.date = responseData.date;
+                }
                 this.loadingUpload = false;
                 // set pic preview
                 let reader = new FileReader();
@@ -1492,6 +1496,22 @@ export class ApplicationFormComponent implements OnInit {
                 }
               }
             })
+          } else {
+            this.appForm.attachment.uploadName = responseData.uploadName;
+            this.appForm.attachment.originalName = responseData.originalName;
+            this.appForm.attachment.type = files[0].type;
+            this.appForm.attachment.size = files[0].size;
+            let reader = new FileReader();
+            reader.readAsDataURL(item._file);
+            reader.onload = (e) => {
+              let imgage = new Image;
+              const chImg = reader.result;
+              imgage.src = chImg.toString();
+              imgage.onload = (ee) => {
+              };
+              this.appForm.attachment.imgaeURL = imgage.src;
+            };
+            this.loadingUpload = false;
           }
         };
         this.uploader.onErrorItem = (item, response, status, header) => {

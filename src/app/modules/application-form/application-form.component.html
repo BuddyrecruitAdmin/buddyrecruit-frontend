@@ -885,11 +885,11 @@
                 </p>
                 <p><small>{{ 'ATTACH_RESUME' | translate }} (pdf, doc, docx, jpeg, png -
                     {{ 'MAX_UPLOAD' | translate }})</small></p>
-                <button *ngIf="!isDisabled" mat-flat-button type="button" color="primary" (click)="fileInput.click()"
-                  [disabled]="loadingUpload">
+                <button *ngIf="!isDisabled || editFlag" mat-flat-button type="button" color="primary"
+                  (click)="fileInput.click()" [disabled]="loadingUpload">
                   <mat-icon>cloud_upload</mat-icon> {{ 'UPLOAD_RESUME' | translate }}
                   <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-                    (change)="uploadFile(appForm.attachment, $event.target.files, true,999)" accept="*"
+                    (change)="uploadFile(appForm.attachment, $event.target.files, true,999,'resume')" accept="*"
                     style="display:none;" />
                 </button>
               </div>
@@ -897,8 +897,12 @@
           </div>
           <div class="footer">
             <button nbButton status="basic" nbStepperPrevious>{{ 'PREV' | translate }}</button>
-            <button nbButton type="button" (click)="validation() ? stepper.next() : false" [nbSpinner]="loadingButton">
+            <button *ngIf="!isDisabled || appForm.questions.length > 0" nbButton type="button"
+              (click)="validation() ? stepper.next() : false" [nbSpinner]="loadingButton">
               {{ 'NEXT' | translate }}
+            </button>
+            <button *ngIf="isDisabled && appForm.questions.length === 0" nbButton status="primary" type="submit">
+              {{ 'SUBMIT' | translate }}
             </button>
           </div>
         </nb-step>
