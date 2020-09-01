@@ -5,7 +5,7 @@
     </div>
   </div>
 
-  <div *ngIf="submitted" class="container submitted">
+  <div *ngIf="submitted" class="container submitted ">
     <div class="card">
       <div class="card-body">
         <div class="topic">
@@ -45,7 +45,18 @@
       </div>
     </div>
     <form id="headerForm" class="container" (ngSubmit)="save()" style="padding-top: 2rem;">
-      <nb-stepper #stepper disableStepNavigation="true" [(selectedIndex)]="selectIndex">
+      <div class="container submitted noJr" *ngIf="jrs.length === 0 && !loading">
+        <div class="card ">
+          <div class="card-body">
+            <div class="topic">
+              <p style="margin-bottom: -1rem">
+                ขณะนี่ยังไม่มีตำแหน่งงานที่เปิดรับสมัคร
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nb-stepper *ngIf="jrs.length > 0" #stepper disableStepNavigation="true" [(selectedIndex)]="selectIndex">
 
         <!-- --------------------------------------------------------------- -->
         <!-- STEP 1 -->
@@ -53,6 +64,7 @@
 
           <!-- JR -->
           <!-- <div class="card" *ngIf="jrs.length && !template.jobPositions.length"> -->
+
           <div class="card" *ngIf="jrs.length">
             <div class="card-body">
               <div class="row">

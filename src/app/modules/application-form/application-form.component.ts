@@ -130,6 +130,7 @@ export class ApplicationFormComponent implements OnInit {
   today: Date;
   @Input() max: any;
   IdError: string;
+  innerHeight: any;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -150,6 +151,7 @@ export class ApplicationFormComponent implements OnInit {
     this.flowId = getFlowId();
     this.today = new Date();
     this.today.setDate(this.today.getDate() - 1);
+    this.innerHeight = window.innerHeight;
   }
 
   ngOnInit() {
