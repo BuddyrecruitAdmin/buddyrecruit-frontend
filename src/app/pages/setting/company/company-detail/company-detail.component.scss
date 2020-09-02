@@ -31,3 +31,25 @@
   height: 40px;
   width: -webkit-fill-available;
 }
+.logo-img{
+  .image-preview {
+    position: relative;
+    display: inline-block;
+
+    .icon-remove {
+      position: absolute;
+      top: -15px;
+      right: -10px;
+      width: 30px;
+      height: 30px;
+      background: #eee;
+      border-radius: 50%;
+      .img-logo{
+        top: -5px !important;
+        position: relative !important;
+        right: 5px !important;
+        font-size: 1rem !important;
+      }
+    }
+  }
+}

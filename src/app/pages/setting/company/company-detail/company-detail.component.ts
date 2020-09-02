@@ -16,6 +16,10 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
 import { ContactUsService } from '../../contact-us/contact-us.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
+import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
+import { API_ENDPOINT } from '../../../../shared/constants';
+import { environment } from '../../../../../environments/environment';
+const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.FILE_PREVIEW;
 export interface CompanyDetail {
   refCompanyType: any;
   name: string;
@@ -59,6 +63,10 @@ export interface CompanyDetail {
   consentFlag: boolean;
   channelID: any;
   interviewPeriod: number;
+  logoURL: any;
+  backgroundColor: any;
+  buttonColor: any;
+  color: any;
 }
 
 export interface ErrMsg {
@@ -114,6 +122,16 @@ export class CompanyDetailComponent implements OnInit {
   inputCheck: boolean = false;
   searchText: any;
   filteredList5: any;
+  bgColors = [
+    '#35c4b2',
+    '#1b74b6',
+    '#ed5154',
+    '#ffc816',
+    '#6bcaf2',
+    '#9675cc',
+    '#707070',
+  ];
+  public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'file' });
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -129,6 +147,7 @@ export class CompanyDetailComponent implements OnInit {
     this.contactId = getContactId();
     setContactId();
     this.htmlToAdd = '<div class="two">twoๅ<input id="input" type="number"></div>';
+    this.uploader = new FileUploader({ url: URL, itemAlias: 'file', headers: [{ name: 'x-access-token', value: this.role.token }] });
   }
 
   ngOnInit() {
@@ -226,7 +245,11 @@ export class CompanyDetailComponent implements OnInit {
       waitingPeriod: 0,
       consentFlag: false,
       channelID: '',
-      interviewPeriod: 30
+      interviewPeriod: 30,
+      logoURL: '',
+      backgroundColor: '#ffffff',
+      buttonColor: '#35c4b2',
+      color: '#000000',
     }
 
   }
@@ -358,6 +381,18 @@ export class CompanyDetailComponent implements OnInit {
           }
           if (this.utilitiesService.dateIsValid(response.data.expiryDate)) {
             this.companyDetail.expiryDate = new Date(response.data.expiryDate);
+          }
+          if (!this.companyDetail.logoURL) {
+            this.companyDetail.logoURL = '';
+          }
+          if (!this.companyDetail.backgroundColor) {
+            this.companyDetail.backgroundColor = '#ffffff';
+          }
+          if (!this.companyDetail.buttonColor) {
+            this.companyDetail.buttonColor = '#35c4b2';
+          }
+          if (!this.companyDetail.color) {
+            this.companyDetail.color = '#000000';
           }
           this.companyDetailTemp = _.cloneDeep(this.companyDetail);
         }
@@ -606,6 +641,39 @@ export class CompanyDetailComponent implements OnInit {
         this.companyDetail.adminEmail = result.value;
       }
     })
+  }
+
+  uploadFile(target, files: FileList, isQuestion): void {
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = (e) => {
+      let imgage = new Image;
+      const chImg = reader.result;
+      imgage.src = chImg.toString();
+      imgage.onload = (ee) => {
+      };
+      const FileSize = files.item(0).size / 1024 / 1024; // MB
+      if (FileSize > 15) {
+        this.showToast('danger', 'File size more than 15MB', '');
+      } else {
+        const queue = this.uploader.queue.find(element => {
+          return element.file.name === files[0].name
+            && element.file.type === files[0].type
+            && element.file.size === files[0].size;
+        });
+        if (queue) {
+          this.uploader.uploadItem(queue);
+          this.uploader.onSuccessItem = (item, response, status, headers) => {
+            const responseData = JSON.parse(response);
+            if (isQuestion) {
+              target.imgaeURL = responseData.data.path;
+            } else {
+              target.logoURL = responseData.data.path;
+            }
+          };
+        }
+      }
+    };
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {
