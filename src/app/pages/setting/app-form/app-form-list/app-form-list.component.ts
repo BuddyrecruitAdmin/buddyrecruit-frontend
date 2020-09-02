@@ -48,12 +48,14 @@ export class AppFormListComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
-    if (this.isExpress) {
-      this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
-    } else {
-      this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
-    }
     this.isExpress = this.role.refCompany.isExpress;
+    if (this.isExpress) {
+      // this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
+      this.url = 'https://applicationform-e3e84.web.app/index/' + this.role.refCompany._id;
+    } else {
+      // this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
+      this.url = 'https://applicationform-e3e84.web.app/appform/submit/' + this.role.refCompany._id;
+    }
   }
 
   ngOnInit() {

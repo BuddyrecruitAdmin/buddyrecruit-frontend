@@ -87,14 +87,30 @@
               </mat-hint>
             </mat-form-field>
           </div>
+          <div class="col-md-12">
+            <button mat-icon-button type="button" (click)="fileInput.click()">
+              Click to upload logo
+              <mat-icon class="showPhoto">photo</mat-icon>
+              <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
+                (change)="uploadFile(appForm, $event.target.files, false)" style="display:none;" accept="image/*" />
+            </button>
+          </div>
         </div>
         <div class="text-left">
           <p class="text-gray"><small>(Preview)</small></p>
-          <div class="nav-bar" [style.background]="appForm.bgColor">
-            <mat-icon *ngIf="!isExpress" [style.color]="appForm.titleColor">account_box</mat-icon>
-            <img *ngIf="isExpress" style="margin-bottom: 1rem;"
+          <div class="nav-bar logo-img" [style.background]="appForm.bgColor">
+            <!-- <mat-icon *ngIf="!isExpress" [style.color]="appForm.titleColor">account_box</mat-icon> -->
+            <!-- <img *ngIf="isExpress" style="margin-bottom: 1rem;"
               src="https://www.img.in.th/images/97ea3153d3afbf0fb5750e0e485dad33.png" alt="LazadaExpress" width="auto"
-              height="60">
+              height="60"> -->
+            <div *ngIf="appForm.logoURL" class="image-preview">
+              <img style="margin-bottom: 1rem;" [src]="appForm.logoURL" alt="logo" width="auto" height="100">
+              <div class="icon-remove">
+                <button mat-icon-button type="button" (click)="appForm.logoURL = ''; fileInput.value = ''">
+                  <mat-icon class="img-logo">close</mat-icon>
+                </button>
+              </div>
+            </div>
             <div class="title" [style.color]="appForm.titleColor">{{ appForm.title }}</div>
             <div class="sub-title" [style.color]="appForm.subTitleColor">{{ appForm.subTitle }}</div>
           </div>
@@ -669,7 +685,7 @@
           <button *ngIf="question.type !== InputType.Label" mat-icon-button type="button" (click)="fileInput.click()">
             <mat-icon class="showPhoto">photo</mat-icon>
             <input #fileInput type="file" ng2FileSelect [uploader]="uploader"
-              (change)="uploadFile(question, $event.target.files)" style="display:none;" accept="image/*" />
+              (change)="uploadFile(question, $event.target.files, true)" style="display:none;" accept="image/*" />
           </button>
         </div>
 
@@ -736,7 +752,7 @@
                   <button *ngIf="question.type === InputType.Radio || question.type === InputType.ChcekBox"
                     mat-icon-button type="button" (click)="fileInput.click()">
                     <mat-icon class="showPhoto">photo</mat-icon>
-                    <input #fileInput type="file" (change)="uploadFile(option, $event.target.files)" ng2FileSelect
+                    <input #fileInput type="file" (change)="uploadFile(option, $event.target.files, true)" ng2FileSelect
                       [uploader]="uploader" style="display:none;" accept="image/*" />
                   </button>
                   <div class="button-close">
