@@ -105,7 +105,7 @@ export class AppFormDetailComponent implements OnInit {
       bgColor: '#35c4b2',
       titleColor: '#ffffff',
       subTitleColor: '#ffffff',
-      jobRemark:'',
+      jobRemark: '',
       jobRemarkColor: '#ffffff',
       isExpress: false,
       active: false,
@@ -162,6 +162,7 @@ export class AppFormDetailComponent implements OnInit {
         active: true,
       },
       refPositions: [],
+      logoURL: ''
     };
   }
 
@@ -721,6 +722,9 @@ export class AppFormDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.appForm = response.data;
+          if (!this.appForm.logoURL) {
+            this.appForm.logoURL = '';
+          }
           if (this.state === State.Duplicate) {
             this.appForm._id = null;
           }
@@ -822,7 +826,7 @@ export class AppFormDetailComponent implements OnInit {
     }
   }
 
-  uploadFile(target, files: FileList): void {
+  uploadFile(target, files: FileList, isQuestion): void {
     let reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.onload = (e) => {
@@ -844,7 +848,11 @@ export class AppFormDetailComponent implements OnInit {
           this.uploader.uploadItem(queue);
           this.uploader.onSuccessItem = (item, response, status, headers) => {
             const responseData = JSON.parse(response);
-            target.imgaeURL = responseData.data.path;
+            if (isQuestion) {
+              target.imgaeURL = responseData.data.path;
+            } else {
+              target.logoURL = responseData.data.path;
+            }
           };
         }
       }

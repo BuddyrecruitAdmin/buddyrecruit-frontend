@@ -66,6 +66,7 @@ export interface IAppFormTemplate {
     active: boolean;
   };
   refPositions: string[];
+  logoURL: string;
 }
 
 export interface IQuestion {
