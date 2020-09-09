@@ -52,21 +52,17 @@ export class UtilitiesService {
     return fullName;
   }
 
-  dateIsValid(date): boolean {
+  dateIsValid(date: Date): boolean {
     let isValid = false;
-    const d = date;
     if (date) {
       date = new Date(date);
-      if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(d)) {
-        return false;
-      }
       if (date.getUTCFullYear() > 1930) {
         isValid = true;
       }
     }
     return isValid;
   }
-  
+
   convertDate(date: Date): string {
     if (this.dateIsValid(date)) {
       const dateTime = this.convertDateTime(date);
@@ -124,9 +120,11 @@ export class UtilitiesService {
 
   convertDateTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
+      // date = new Date(date).toISOString;
+      const d = new Date(date).toISOString();
       let text = '';
-      const dateArray = date.toString().split('T')[0].split('-');
-      const TimeArray = date.toString().split('T')[1].split('.')[0].split(':');
+      const dateArray = d.toString().split('T')[0].split('-');
+      const TimeArray = d.toString().split('T')[1].split('.')[0].split(':');
       text += dateArray[2];
       text += '/';
       text += dateArray[1];
