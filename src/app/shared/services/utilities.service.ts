@@ -52,11 +52,14 @@ export class UtilitiesService {
     return fullName;
   }
 
-  dateIsValid(date: Date): boolean {
+  dateIsValid(date): boolean {
     let isValid = false;
     if (date) {
+      if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(date)) {
+        return false;
+      }
       date = new Date(date);
-      if (date.getUTCFullYear() > 1930) {
+      if (date.getUTCFullYear() > 1930 && date.toISOString() === date) {
         isValid = true;
       }
     }
