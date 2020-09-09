@@ -42,7 +42,8 @@ export class AppFormDetailComponent implements OnInit {
     '#9675cc',
     '#707070',
   ];
-  url = window.location.origin + '/application-form/submit';
+  url = 'http://localhost:4201/appform/submit';
+  // url = window.location.origin + '/application-form/submit';
 
   _id: string;
   state: string;
@@ -81,12 +82,14 @@ export class AppFormDetailComponent implements OnInit {
         this.loading = false;
       } else if (params.action === State.Edit) {
         this._id = params.id;
-        this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
+        this.url = 'http://localhost:4201/appform/submit/' + this.refCompany;
+        // this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Edit;
         this.getDetail();
       } else if (params.action === State.Duplicate) {
         this._id = params.id;
-        this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
+        this.url = 'http://localhost:4201/appform/submit/' + this.refCompany;
+        // this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Duplicate;
         this.getDetail();
       }
@@ -601,7 +604,7 @@ export class AppFormDetailComponent implements OnInit {
 
   preview() {
     setAppFormData(this.appForm);
-    const url = `/application-form/preview/${this.appForm._id}`;
+    const url = `http://localhost:4201/appform/submit/${this.refCompany}`;
     this.router.navigate([]).then(result => { window.open(url, '_blank'); });
   }
 
