@@ -51,10 +51,11 @@ export class AppFormListComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     if (this.isExpress) {
       // this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
-      this.url = 'http://localhost:4201/index/' + this.role.refCompany._id;
+      this.url = 'https://qas-application.web.app/index/' + this.role.refCompany._id;
     } else {
       // this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
-      this.url = 'http://localhost:4201/appform/submit/' + this.role.refCompany._id;
+      this.url = 'https://qas-application.web.app/appform/submit/' + this.role.refCompany._id;
+      
     }
   }
 
