@@ -82,7 +82,7 @@ export class UtilitiesService {
   }
 
   convertDateFromSystem(date: Date): string {
-    if (this.dateIsValid(date)) {
+    if (this.dateIsValid(date) && date.toString() !== '1970-01-01T00:00:00.000Z') {
       const dateTime = this.convertDateTimeFromSystem(date);
       return dateTime.split(' ')[0];
     } else {
@@ -260,7 +260,7 @@ export class UtilitiesService {
   }
 
   calculateAgeFromBirthdate(date: Date): number {
-    if (this.dateIsValid(date) && this.isDateLowerThanToday(date)) {
+    if (this.dateIsValid(date) && this.isDateLowerThanToday(date) && date.toString() !== '1970-01-01T00:00:00.000Z') {
       date = new Date(date);
       let ageDifMs = Date.now() - date.getTime();
       let ageDate = new Date(ageDifMs);

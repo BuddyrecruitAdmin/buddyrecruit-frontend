@@ -655,7 +655,7 @@ export class ApplicationFormComponent implements OnInit {
               }
             });
           }
-          if (this.utilitiesService.dateIsValid(this.appForm.birth)) {
+          if (this.utilitiesService.dateIsValid(this.appForm.birth) && this.appForm.birth.toString() !== '1970-01-01T00:00:00.000Z') {
             this.appForm.birth = new Date(this.appForm.birth);
           } else {
             this.appForm.birth = null;
