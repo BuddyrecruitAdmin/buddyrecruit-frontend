@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Devices } from '../interfaces/common.interface';
 import { InnerWidth } from '../../shared/app.constants';
 import { getRole, getToken, getIsGridLayout } from '../../shared/services/auth.service';
-
+import { MOMENT } from 'angular-calendar';
+import * as moment from 'moment';
 @Injectable({
   providedIn: 'root'
 })
@@ -83,8 +84,12 @@ export class UtilitiesService {
 
   convertDateFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      const dateTime = this.convertDateTimeFromSystem(date);
-      return dateTime.split(' ')[0];
+      if (moment(date.toString(), "YYYY-MM-DDTHH:mm:ss, true").isValid()) {
+        const dateTime = this.convertDateTimeFromSystem(date);
+        return dateTime.split(' ')[0];
+      } else {
+        return date.toString();
+      }
     } else {
       return null;
     }
@@ -92,8 +97,12 @@ export class UtilitiesService {
 
   convertTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      const dateTime = this.convertDateTimeFromSystem(date);
-      return dateTime.split(' ')[1];
+      if (moment(date.toString(), "YYYY-MM-DDTHH:mm:ss, true").isValid()) {
+        const dateTime = this.convertDateTimeFromSystem(date);
+        return dateTime.split(' ')[1];
+      } else {
+        return date.toString();
+      }
     } else {
       return null;
     }
@@ -120,21 +129,24 @@ export class UtilitiesService {
 
   convertDateTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      // date = new Date(date).toISOString;
-      const d = new Date(date).toISOString();
-      let text = '';
-      const dateArray = d.toString().split('T')[0].split('-');
-      const TimeArray = d.toString().split('T')[1].split('.')[0].split(':');
-      text += dateArray[2];
-      text += '/';
-      text += dateArray[1];
-      text += '/';
-      text += dateArray[0];
-      text += ' ';
-      text += TimeArray[0];
-      text += ':';
-      text += TimeArray[1];
-      return text;
+      if (moment(date.toString(), "YYYY-MM-DDTHH:mm:ss, true").isValid()) {
+        let text = '';
+        const dateArray = date.toString().split('T')[0].split('-');
+        const TimeArray = date.toString().split('T')[1].split('.')[0].split(':');
+        text += dateArray[2];
+        text += '/';
+        text += dateArray[1];
+        text += '/';
+        text += dateArray[0];
+        text += ' ';
+        text += TimeArray[0];
+        text += ':';
+        text += TimeArray[1];
+        return text;
+      }
+      else {
+        return date.toString();
+      }
     } else {
       return null;
     }
