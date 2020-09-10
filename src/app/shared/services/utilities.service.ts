@@ -84,7 +84,7 @@ export class UtilitiesService {
 
   convertDateFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      if (moment(date.toString(), "YYYY-MM-DDTHH:mm:ss, true").isValid()) {
+      if (this.isIsoDate(date)) {
         const dateTime = this.convertDateTimeFromSystem(date);
         return dateTime.split(' ')[0];
       } else {
@@ -95,9 +95,15 @@ export class UtilitiesService {
     }
   }
 
+  isIsoDate(str) {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+    var d = new Date(str);
+    return d.toISOString() === str;
+  }
+
   convertTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      if (moment(date.toString(), "YYYY-MM-DDTHH:mm:ss, true").isValid()) {
+      if (this.isIsoDate(date)) {
         const dateTime = this.convertDateTimeFromSystem(date);
         return dateTime.split(' ')[1];
       } else {
@@ -129,7 +135,7 @@ export class UtilitiesService {
 
   convertDateTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      if (moment(date.toString(), "YYYY-MM-DDTHH:mm:ss, true").isValid()) {
+      if (this.isIsoDate(date)) {
         let text = '';
         const dateArray = date.toString().split('T')[0].split('-');
         const TimeArray = date.toString().split('T')[1].split('.')[0].split(':');
@@ -143,8 +149,7 @@ export class UtilitiesService {
         text += ':';
         text += TimeArray[1];
         return text;
-      }
-      else {
+      } else {
         return date.toString();
       }
     } else {
