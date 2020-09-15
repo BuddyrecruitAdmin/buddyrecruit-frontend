@@ -4,7 +4,7 @@ import { ProfileService } from '../../../pages/profile/profile.service';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { getRole, setFlowId, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
+import { getRole, setFlowId, getAuthentication, setAuthentication, setAppURL } from '../../../shared/services/auth.service';
 import { Router } from "@angular/router";
 import { NbSearchService } from '@nebular/theme';
 import { setKeyword } from '../../../shared/services/auth.service';
@@ -126,6 +126,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           title: this.role.refHero.name,
           picture: response.data.imageData,
         };
+        if (response.data.refCompany.appFormsURL) {
+          setAppURL(this.getURL(response.data.refCompany.appFormsURL))
+        }
       }
     });
     const { xl } = this.breakpointService.getBreakpointsMap();
@@ -194,6 +197,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  getURL(str) {
+    return str.split('index')[0];
   }
 
   checkNewNotification() {

@@ -32,6 +32,7 @@ export class PopupChatUserComponent implements OnInit {
   condition: any;
   checkChange: boolean = false;
   fbName: string;
+  fbLink: any;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupChatUserComponent>,
@@ -50,6 +51,7 @@ export class PopupChatUserComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.fbLink = 'https://www.facebook.com/bank.pongsathorn.3';
     this.items = [];
     this.infoFlag = false;
     this.condition = {
@@ -81,7 +83,7 @@ export class PopupChatUserComponent implements OnInit {
           });
         }
         this.candidateName = this.utilitiesService.setFullname(response.data);
-        this.fbName =  (response.data.fbName)? response.data.fbName : '';
+        this.fbName = (response.data.fbName) ? response.data.fbName : '';
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
         if (this.checkChange) {
@@ -89,27 +91,34 @@ export class PopupChatUserComponent implements OnInit {
           setHistoryData(response.data.candidateFlow.inboxes);
           setFlagEdit('true')
         }
+        if (response.data.fbId) {
+          this.candidateService.getLinkFacebook(response.data.fbId).subscribe(res => {
+            if (response.code === ResponseCode.Success) {
+              this.fbLink = response.data.link;
+            }
+          })
+        }
       }
       this.loading = false;
     });
   }
 
   save() {
-    if (this.textTemp.length <= 2000) {
-      this.loading = true;
-      const request = this.setRequest();
-      this.candidateService.sendMessage(this.flowId, request).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          this.showToast('success', 'Success Message', response.message);
-          this.textTemp = '';
-          this.checkChange = true;
-          this.getDetail();
-        } else {
-          this.showToast('danger', 'Error Message', response.message);
-        }
-        this.loading = false;
-      });
-    }
+    // if (this.textTemp.length <= 2000) {
+    this.loading = true;
+    const request = this.setRequest();
+    this.candidateService.sendMessage(this.flowId, request).subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        this.showToast('success', 'Success Message', response.message);
+        this.textTemp = '';
+        this.checkChange = true;
+        this.getDetail();
+      } else {
+        this.showToast('danger', 'Error Message', response.message);
+      }
+      this.loading = false;
+    });
+    // }
   }
 
   setRequest(): any {

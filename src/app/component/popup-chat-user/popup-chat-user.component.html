@@ -7,6 +7,7 @@
             <small class="status text-gray m-0">
                 {{ jrName }}
             </small>
+            <label *ngIf="fbLink"> <a [href]="fbLink" class="link" target="_blank">Direct Message</a></label>
         </div>
         <div class="actions">
             <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
@@ -30,19 +31,19 @@
             <textarea nbInput fullWidth [(ngModel)]="textTemp" placeholder="Text..." rows="5"></textarea>
         </div>
         <div class="footer-collapse">
-            <small>
+            <!-- <small>
                 จำนวนตัวอักษรตอนนี้: {{ textTemp.length }}
             </small><br>
             <nb-checkbox [(ngModel)]="infoFlag" style="text-align: left;" [disabled]="condition.responsed"><span
                     style="font-family: kanit;"> Offering
-                    Infomation</span></nb-checkbox>
+                    Infomation</span></nb-checkbox> -->
             <!-- <button nbButton status="default" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
                 (click)="ref.close(result)">CLOSE</button> -->
         </div>
-        <small *ngIf="textTemp.length > 2000" class="text-red">
+        <!-- <small *ngIf="textTemp.length > 2000" class="text-red">
             <nb-icon icon="alert-circle-outline" class="font-inherit"></nb-icon>
             จำนวนตัวอักษรทั้งหมดเกิน 2000 ตัวอักษร
-        </small>
+        </small> -->
         <button nbButton status="success" shape="semi-round" [size]="(devices.isMobile)? 'tiny' : 'medium'"
             (click)="save()" [disabled]="!textTemp || loading">SEND</button>
     </nb-card-footer>

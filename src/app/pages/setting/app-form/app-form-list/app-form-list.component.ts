@@ -55,7 +55,7 @@ export class AppFormListComponent implements OnInit {
     } else {
       // this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
       this.url = 'https://qas-application.web.app/appform/submit/' + this.role.refCompany._id;
-      
+
     }
   }
 
@@ -98,14 +98,9 @@ export class AppFormListComponent implements OnInit {
   }
 
   preview(item: any) {
-<<<<<<< HEAD
     // this.url = 'https://applicationform-e3e84.web.app/appform/submit/' + this.role.refCompany._id;
     // const url = `/application-form/preview/${item._id}`;
-    const url = `https://applicationform-e3e84.web.app/appform/preview/${item._id}`;
-=======
-    const url = `http://localhost:4201/appform/preview/${item._id}`;
-    // const url = `/application-form/preview/${item._id}`;
->>>>>>> qas_p3
+    const url = 'https://qas-application.web.app/appform/preview/' + this.role.refCompany._id;
     this.router.navigate([]).then(result => { window.open(url, '_blank'); });
   }
 

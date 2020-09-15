@@ -455,3 +455,11 @@ export function getFlagReject() {
   const flag = JSON.parse(localStorage.getItem(FlagEdit));
   return (!flag || flag === null) ? undefined : flag;
 }
+export function setAppURL(url: string = '') {
+  localStorage.setItem(Url, JSON.stringify(url));
+}
+
+export function getAppURL() {
+  const url = JSON.parse(localStorage.getItem(Url));
+  return (!url || url === null || url === '/') ? undefined : url;
+}

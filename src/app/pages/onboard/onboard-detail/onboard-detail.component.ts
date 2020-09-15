@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword, setKeyword, setHistoryData } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword, setKeyword, setHistoryData, getAppURL } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -880,11 +880,11 @@ export class OnboardDetailComponent implements OnInit {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
       setFlagExam('true');
-
       // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
       // window.open("https://lazada-express-form.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
+      const appURL = getAppURL();
       this.router.navigate([]).then(result => {
-        window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
       });
     }
   }

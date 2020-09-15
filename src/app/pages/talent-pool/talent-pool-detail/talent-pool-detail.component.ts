@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword, setKeyword } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword, setKeyword, setAppURL, getAppURL } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -116,6 +116,7 @@ export class TalentPoolDetailComponent implements OnInit {
   itemCall: any;
   innerHeight: any;
   waitingApprove: boolean = false;
+  appfromURL: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -175,6 +176,7 @@ export class TalentPoolDetailComponent implements OnInit {
     this.startFlag = true;
     this.isExpress = this.role.refCompany.isExpress;
     this.keyword = getKeyword() || '';
+    this.appfromURL = this.role
     setKeyword();
     if (this.keyword) {
       let menu = MENU_PROCESS_FLOW.find(element => {
@@ -1086,10 +1088,11 @@ export class TalentPoolDetailComponent implements OnInit {
       setUserToken(this.role.token);
       setFlagExam('true');
       setCompanyId(this.role.refCompany._id)
+      const appURL = getAppURL();
       // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
-      // window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
+      // window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       this.router.navigate([]).then(result => {
-        window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
       });
     }
   }

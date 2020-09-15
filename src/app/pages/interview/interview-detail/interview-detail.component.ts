@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { InterviewService } from '../interview.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setFlagExam, setUserCandidate, setUserEmail, setFieldName, setJdName, setUserToken, getKeyword, setKeyword } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setFlagExam, setUserCandidate, setUserEmail, setFieldName, setJdName, setUserToken, getKeyword, setKeyword, getAppURL } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -696,8 +696,9 @@ export class InterviewDetailComponent implements OnInit {
   openApplicationForm(item: any) {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
+      const appURL = getAppURL();
       this.router.navigate([]).then(result => {
-        window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
       });
     }
   }

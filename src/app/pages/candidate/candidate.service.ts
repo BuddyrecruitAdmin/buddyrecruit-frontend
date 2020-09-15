@@ -185,4 +185,11 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.HISTORY, body);
   }
 
+  getLinkFacebook(fbId: any) {
+    const body = {
+      fbId: fbId
+    }
+    return this.post(API_ENDPOINT.CANDIDATE.HISTORY, body);
+  }
+
 }
