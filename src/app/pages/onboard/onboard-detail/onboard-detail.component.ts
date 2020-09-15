@@ -349,7 +349,7 @@ export class OnboardDetailComponent implements OnInit {
               });
             }
           }
-          if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
+          if (this.utilitiesService.dateIsValid(item.refCandidate.birth) && item.refCandidate.birth !== '1970-01-01T00:00:00.000Z') {
             item.refCandidate.birth = new Date((item.refCandidate.birth));
             var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
             item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
