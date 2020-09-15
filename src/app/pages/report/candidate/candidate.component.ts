@@ -433,7 +433,7 @@ export class CandidateComponent implements OnInit {
       { "Single Number": '' },
       { "Mobile No.": item.refCandidate.phone || '-' },
       { "Mobile No. (2)": item.refCandidate.reservePhone || '-' },
-      { "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth) },
+      { "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth) || '-' },
       { "ID No.": item.refCandidate.idCard || '-' },
       { "Address": item.generalAppForm.refGeneralAppForm.address || '-' },
       { "ตำบล": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th || '-' },
@@ -643,7 +643,7 @@ export class CandidateComponent implements OnInit {
               "Single Number": '',
               "Mobile No.": item.refCandidate.phone || '-',
               "Mobile No. (2)": item.refCandidate.reservePhone || '-',
-              "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
+              "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth) || '-',////////////////////////////////////////
               "ID No.": item.refCandidate.idCard || '-',
               "Address": item.generalAppForm.refGeneralAppForm.address || '-', ////////////////////////////////////////
               "ตำบล": item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th || '-', ////////////////////////////////////////
@@ -698,7 +698,7 @@ export class CandidateComponent implements OnInit {
               "นามสกุล": item.refCandidate.lastname || '-', ////////////////////////////////////////
               "Mobile No.": item.refCandidate.phone || '-',
               "Mobile No. (2)": item.refCandidate.reservePhone || '-',
-              "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth),////////////////////////////////////////
+              "Birth Date": this.utilitiesService.convertDateFromSystem(item.refCandidate.birth) || '-',////////////////////////////////////////
               "ID No.": item.refCandidate.idCard || '-',
               "Address": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.address : '-', ////////////////////////////////////////
               "ตำบล": (item.generalAppForm.flag) ? item.generalAppForm.refGeneralAppForm.refSubDistrict.name.th : '-', ////////////////////////////////////////
@@ -756,7 +756,7 @@ export class CandidateComponent implements OnInit {
       setFlagExam('true');
       setCompanyId(this.role.refCompany._id)
       this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+        window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
       });
     }
   }

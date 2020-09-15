@@ -349,7 +349,7 @@ export class OnboardDetailComponent implements OnInit {
               });
             }
           }
-          if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
+          if (this.utilitiesService.dateIsValid(item.refCandidate.birth) && item.refCandidate.birth !== '1970-01-01T00:00:00.000Z') {
             item.refCandidate.birth = new Date((item.refCandidate.birth));
             var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
             item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
@@ -881,10 +881,10 @@ export class OnboardDetailComponent implements OnInit {
       setUserToken(this.role.token);
       setFlagExam('true');
 
-      // window.open("https://applicationform-e3e84.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
+      // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
       // window.open("https://lazada-express-form.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+        window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
       });
     }
   }

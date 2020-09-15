@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Devices } from '../interfaces/common.interface';
 import { InnerWidth } from '../../shared/app.constants';
 import { getRole, getToken, getIsGridLayout } from '../../shared/services/auth.service';
-
+import { MOMENT } from 'angular-calendar';
+import * as moment from 'moment';
 @Injectable({
   providedIn: 'root'
 })
@@ -82,7 +83,7 @@ export class UtilitiesService {
   }
 
   convertDateFromSystem(date: Date): string {
-    if (this.dateIsValid(date)) {
+    if (this.dateIsValid(date) && date.toString() !== '1970-01-01T00:00:00.000Z') {
       const dateTime = this.convertDateTimeFromSystem(date);
       return dateTime.split(' ')[0];
     } else {
@@ -90,10 +91,20 @@ export class UtilitiesService {
     }
   }
 
+  isIsoDate(str) {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+    var d = new Date(str);
+    return d.toISOString() === str;
+  }
+
   convertTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      const dateTime = this.convertDateTimeFromSystem(date);
-      return dateTime.split(' ')[1];
+      if (this.isIsoDate(date)) {
+        const dateTime = this.convertDateTimeFromSystem(date);
+        return dateTime.split(' ')[1];
+      } else {
+        return date.toString();
+      }
     } else {
       return null;
     }
@@ -120,19 +131,23 @@ export class UtilitiesService {
 
   convertDateTimeFromSystem(date: Date): string {
     if (this.dateIsValid(date)) {
-      let text = '';
-      const dateArray = date.toString().split('T')[0].split('-');
-      const TimeArray = date.toString().split('T')[1].split('.')[0].split(':');
-      text += dateArray[2];
-      text += '/';
-      text += dateArray[1];
-      text += '/';
-      text += dateArray[0];
-      text += ' ';
-      text += TimeArray[0];
-      text += ':';
-      text += TimeArray[1];
-      return text;
+      if (this.isIsoDate(date)) {
+        let text = '';
+        const dateArray = date.toString().split('T')[0].split('-');
+        const TimeArray = date.toString().split('T')[1].split('.')[0].split(':');
+        text += dateArray[2];
+        text += '/';
+        text += dateArray[1];
+        text += '/';
+        text += dateArray[0];
+        text += ' ';
+        text += TimeArray[0];
+        text += ':';
+        text += TimeArray[1];
+        return text;
+      } else {
+        return date.toString();
+      }
     } else {
       return null;
     }
@@ -260,7 +275,7 @@ export class UtilitiesService {
   }
 
   calculateAgeFromBirthdate(date: Date): number {
-    if (this.dateIsValid(date) && this.isDateLowerThanToday(date)) {
+    if (this.dateIsValid(date) && this.isDateLowerThanToday(date) && date.toString() !== '1970-01-01T00:00:00.000Z') {
       date = new Date(date);
       let ageDifMs = Date.now() - date.getTime();
       let ageDate = new Date(ageDifMs);

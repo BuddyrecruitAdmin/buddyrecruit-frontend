@@ -266,7 +266,7 @@ export class InterviewDetailComponent implements OnInit {
         this.items.map((item, index) => {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
-          if (this.utilitiesService.dateIsValid(item.refCandidate.birth)) {
+          if (this.utilitiesService.dateIsValid(item.refCandidate.birth) && item.refCandidate.birth !== '1970-01-01T00:00:00.000Z') {
             item.refCandidate.birth = new Date((item.refCandidate.birth));
             var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
             item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
@@ -697,7 +697,7 @@ export class InterviewDetailComponent implements OnInit {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
       this.router.navigate([]).then(result => {
-        window.open(`/application-form/detail/${item.generalAppForm.refGeneralAppForm}`, '_blank');
+        window.open("https://qas-application.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
       });
     }
   }

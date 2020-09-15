@@ -421,7 +421,7 @@
         nbTooltip="Original CV">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
-      <button *ngIf="isExpress" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default"
+      <button *ngIf="item.candidateFlow.refSource.name === 'App-Form'" nbButton [size]="(devices.isMobile)? 'tiny' : 'medium'" status="default"
         (click)="openApplicationForm(item)" nbTooltip="Application Form">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
