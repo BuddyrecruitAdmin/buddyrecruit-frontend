@@ -33,6 +33,7 @@ export class PopupChatUserComponent implements OnInit {
   checkChange: boolean = false;
   fbName: string;
   fbLink: any;
+  jrName: any;
   constructor(
     private candidateService: CandidateService,
     public ref: NbDialogRef<PopupChatUserComponent>,
@@ -86,6 +87,7 @@ export class PopupChatUserComponent implements OnInit {
         this.fbName = (response.data.fbName) ? response.data.fbName : '';
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
+        this.jrName = response.data.candidateFlow.refJR.refJD.position;
         if (this.checkChange) {
           this.checkChange = false;
           setHistoryData(response.data.candidateFlow.inboxes);

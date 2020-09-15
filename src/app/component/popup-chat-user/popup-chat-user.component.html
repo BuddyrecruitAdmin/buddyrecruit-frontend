@@ -2,12 +2,17 @@
     nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Loading...">
     <nb-card-header>
         <div class="title">
-            <label [nbTooltip]="candidateName">{{ candidateName }}</label>
-            <small class="status" *ngIf="fbName">Facebook: {{ fbName || '' }}</small>
+            <label [nbTooltip]="candidateName"><span class="label">Name: </span>{{ candidateName }}</label>
+            <small class="status" *ngIf="fbName"> <span class="label">Facebook: </span><span
+                    style="color: black;font-weight: 700;">{{ fbName || '' }}</span></small>
             <small class="status text-gray m-0">
-                {{ jrName }}
+                <span class="label">Position: </span><span style="color: black;font-weight: 700;">{{ jrName }}</span>
             </small>
-            <label *ngIf="fbLink"> <a [href]="fbLink" class="link" target="_blank">Direct Message</a></label>
+            <label style="margin-top:0.25rem;padding-left: 0.125rem;" *ngIf="fbLink">
+                <a [href]="fbLink" class="link" target="_blank"><i class="fab fa-facebook-square fa-lg"
+                        style="color: #3B5998"></i>
+                    Direct Message</a>
+            </label>
         </div>
         <div class="actions">
             <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
