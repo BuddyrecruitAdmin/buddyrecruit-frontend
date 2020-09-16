@@ -52,7 +52,7 @@ export class PopupChatUserComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.fbLink = 'https://www.facebook.com/bank.pongsathorn.3';
+    this.fbLink = '';
     this.items = [];
     this.infoFlag = false;
     this.condition = {
@@ -84,7 +84,8 @@ export class PopupChatUserComponent implements OnInit {
           });
         }
         this.candidateName = this.utilitiesService.setFullname(response.data);
-        this.fbName = (response.data.fbName) ? response.data.fbName : '';
+        this.fbName = (response.data.FBInfo) ? this.utilitiesService.setFullname(response.data.FBInfo) : '';
+        this.fbLink = (response.data.FBInfo) ? response.data.conversationsLink : '';
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
@@ -92,13 +93,6 @@ export class PopupChatUserComponent implements OnInit {
           this.checkChange = false;
           setHistoryData(response.data.candidateFlow.inboxes);
           setFlagEdit('true')
-        }
-        if (response.data.fbId) {
-          this.candidateService.getLinkFacebook(response.data.fbId).subscribe(res => {
-            if (response.code === ResponseCode.Success) {
-              this.fbLink = response.data.link;
-            }
-          })
         }
       }
       this.loading = false;
