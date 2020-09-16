@@ -85,7 +85,7 @@ export class PopupChatUserComponent implements OnInit {
         }
         this.candidateName = this.utilitiesService.setFullname(response.data);
         this.fbName = (response.data.FBInfo) ? this.utilitiesService.setFullname(response.data.FBInfo) : '';
-        this.fbLink = (response.data.FBInfo) ? response.data.conversationsLink : '';
+        this.fbLink = (response.data.FBInfo) ? response.data.FBInfo.conversationsLink : '';
         this.condition = response.data.candidateFlow.offer;
         this.infoFlag = response.data.candidateFlow.offer.flag;
         this.jrName = response.data.candidateFlow.refJR.refJD.position;
