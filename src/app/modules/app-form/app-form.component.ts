@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppFormService } from './app-form.service';
 import { ResponseCode, consentFlag } from '../../shared/app.constants';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { getRole, setLanguage, getLanguage, setLangPath, setCompanyName, setFlagConsent, setCompanyId } from '../../shared/services/auth.service';
+import { getRole, setLanguage, getLanguage, setLangPath, setCompanyName, setFlagConsent, setCompanyId, getCandidateId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
@@ -114,6 +114,7 @@ export class AppFormComponent implements OnInit {
   checked: boolean;
   companyName: any;
   companyId: any;
+  candidateId: any;
   constructor(
     private service: AppFormService,
     private utilitiesService: UtilitiesService,
@@ -128,6 +129,7 @@ export class AppFormComponent implements OnInit {
   ) {
     this.role = getRole();
     this.lang = getLanguage();
+    this.candidateId = getCandidateId();
     setLangPath("APP_FORM");
     if (!this.lang) {
       this.lang = "en";
@@ -165,7 +167,7 @@ export class AppFormComponent implements OnInit {
 
   getDetail() {
     if (this.role) {
-      this.service.getDetail(this._id, this.isUser, this.role._id).subscribe(response => {
+      this.service.getDetail(this._id, this.isUser, this.role._id, this.candidateId).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.loading = false;
           if (this.isUser) {

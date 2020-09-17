@@ -23,11 +23,12 @@ export class AppFormService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.COMMENT.LIST, body);
   }
 
-  getDetail(_id, isUser, userId: any = undefined): Observable<ApiResponse> {
+  getDetail(_id, isUser, userId: any = undefined, candidateFlowId: any = undefined): Observable<ApiResponse> {
     const body = {
       _id: _id,
       isUser: isUser,
-      userId: userId
+      userId: userId,
+      candidateFlowId: candidateFlowId
     }
     return this.post(API_ENDPOINT.APPFORM.DETAIL, body);
   }

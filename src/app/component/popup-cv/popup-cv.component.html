@@ -672,7 +672,7 @@
         <nb-icon icon="alert-triangle-outline"></nb-icon>
       </button>
       <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" nbButton status="info"
-        [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openApplication(items._id)"
+        [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openApplication(items)"
         nbTooltip="Application Form">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>

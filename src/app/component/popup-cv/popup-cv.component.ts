@@ -441,8 +441,9 @@ export class PopupCvComponent implements OnInit {
 
   }
 
-  openApplication(id: any) {
-    const path = '/appform/view/' + id;
+  openApplication(item: any) {
+    const path = '/appform/view/' + item._id;
+    setCandidateId(item.candidateFlow._id);
     this.router.navigate([path])
   }
 
