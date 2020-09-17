@@ -173,7 +173,7 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
   ],
   declarations: [
     ModulesComponent,
-    // TranslatePipe,
+    TranslatePipe,
     IndexComponent,
     ExamFormComponent,
     ResumeComponent,

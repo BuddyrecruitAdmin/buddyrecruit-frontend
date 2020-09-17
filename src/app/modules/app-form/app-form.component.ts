@@ -608,6 +608,7 @@ export class AppFormComponent implements OnInit {
     setLangPath("APP_FORM");
     setLanguage(lang);
     this.translate.use(lang);
+    console.log(this.translate.data)
   }
 
   back() {
