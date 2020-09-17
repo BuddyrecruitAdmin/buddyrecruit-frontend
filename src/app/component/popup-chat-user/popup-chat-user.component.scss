@@ -1,4 +1,8 @@
 .link:hover {
     text-decoration: none;
-    color: #35c4b2;
   }
+::ng-deep .nb-theme-default [nbButton].appearance-filled.status-primary{
+
+      background-color: #1299f6 !important;
+      border-color: #1299f6 !important;
+}

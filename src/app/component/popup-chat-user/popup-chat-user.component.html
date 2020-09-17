@@ -8,15 +8,20 @@
             <small class="status text-gray m-0">
                 <span class="label">Position: </span><span style="color: black;font-weight: 700;">{{ jrName }}</span>
             </small>
-            <label style="margin-top:0.25rem;padding-left: 0.125rem;" *ngIf="fbLink">
+            <!-- <label style="margin-top:0.25rem;padding-left: 0.125rem;" *ngIf="fbLink">
                 <a [href]="fbLink" class="link" target="_blank"><i class="fab fa-facebook-square fa-lg"
                         style="color: #3B5998"></i>
                     Direct Message</a>
-            </label>
+            </label> -->
         </div>
         <div class="actions">
             <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
         </div>
+        <a [href]="fbLink" class="link" target="_blank">
+            <button *ngIf="fbLink" nbButton fullWidth status="primary">
+                <nb-icon icon="facebook"></nb-icon> Direct Message
+            </button>
+        </a>
     </nb-card-header>
     <nb-card-body *ngIf="!loading" class="dialog-body">
         <h6 *ngIf="!items.length" class="text-gray text-center">No Chat</h6>
