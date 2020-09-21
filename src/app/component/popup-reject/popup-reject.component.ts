@@ -91,7 +91,7 @@ export class PopupRejectComponent implements OnInit {
               case 'Talent Pool':
                 this.rejection = response.data.talentPool;
                 break;
-              case 'Pending Exan':
+              case 'Pending Exam':
                 this.rejection = response.data.pendingExam;
                 break;
               case 'Pending Appointment':
@@ -138,6 +138,7 @@ export class PopupRejectComponent implements OnInit {
                       rejection.push(element);
                     }
                   });
+                  console.log(rejection)
                   this.rejection = _.cloneDeep(rejection);
                 }
               });

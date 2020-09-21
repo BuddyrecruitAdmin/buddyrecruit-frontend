@@ -69,7 +69,7 @@ export class PopupChatUserComponent implements OnInit {
 
   getDetail() {
     this.items = [];
-    this.candidateService.getDetail(this.flowId).subscribe(response => {
+    this.candidateService.getDetail(this.flowId, true).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         if (response.data.candidateFlow.inboxes.length > 0) {
           response.data.candidateFlow.inboxes.forEach(element => {
