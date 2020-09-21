@@ -165,7 +165,7 @@ export class PopupSignDateComponent implements OnInit {
           flag: true,
           date: this.utilitiesService.convertTimePickerToDate(this.signTime, this.signDate)
         },
-        agreeStartDate: new Date(this.agreeDate) || null,
+        agreeStartDate: (this.agreeDate) ? new Date(this.agreeDate) : null,
         note: this.note,
       }
     };
