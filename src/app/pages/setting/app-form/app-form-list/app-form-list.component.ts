@@ -53,11 +53,11 @@ export class AppFormListComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     if (this.isExpress) {
       // this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
-      this.url = (this.appformURL) ? this.appformURL : 'https://qas-application.web.app/index/';
+      this.url = (this.appformURL) ? this.appformURL + 'index/' : 'https://qas-application.web.app/index/';
       this.url = this.url + this.role.refCompany._id;
       // this.url = 'https://qas-application.web.app/index/' + this.role.refCompany._id;
     } else {
-      this.url = (this.appformURL) ? this.appformURL : 'https://qas-application.web.app/appform/submit/';
+      this.url = (this.appformURL) ? this.appformURL + 'appform/submit' : 'https://qas-application.web.app/appform/submit/';
       this.url = this.url + this.role.refCompany._id;
       // this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
       // this.url = 'https://qas-application.web.app/appform/submit/' + this.role.refCompany._id;
@@ -106,7 +106,7 @@ export class AppFormListComponent implements OnInit {
   preview(item: any) {
     // this.url = 'https://applicationform-e3e84.web.app/appform/submit/' + this.role.refCompany._id;
     // const url = `/application-form/preview/${item._id}`;
-    this.url = (this.appformURL) ? this.appformURL : 'https://qas-application.web.app/appform/preview/';
+    this.url = (this.appformURL) ? this.appformURL + 'appform/preview/' : 'https://qas-application.web.app/appform/preview/';
     this.url = this.url + this.role.refCompany._id;
     // const url = 'https://qas-application.web.app/appform/preview/' + this.role.refCompany._id;
     this.router.navigate([]).then(result => { window.open(this.url, '_blank'); });

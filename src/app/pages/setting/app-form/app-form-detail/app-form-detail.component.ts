@@ -85,14 +85,14 @@ export class AppFormDetailComponent implements OnInit {
         this.loading = false;
       } else if (params.action === State.Edit) {
         this._id = params.id;
-        this.url = (this.appformURL) ? this.appformURL : 'https://qas-application.web.app/appform/submit/';
+        this.url = (this.appformURL) ? this.appformURL + 'appform/submit/' : 'https://qas-application.web.app/appform/submit/';
         this.url = this.url + this.refCompany;
         // this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Edit;
         this.getDetail();
       } else if (params.action === State.Duplicate) {
         this._id = params.id;
-        this.url = (this.appformURL) ? this.appformURL : 'https://qas-application.web.app/appform/submit/';
+        this.url = (this.appformURL) ? this.appformURL + 'appform/submit/' : 'https://qas-application.web.app/appform/submit/';
         this.url = this.url + this.refCompany;
         // this.url = 'https://qas-application.web.app/appform/submit/' + this.refCompany;
         // this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
