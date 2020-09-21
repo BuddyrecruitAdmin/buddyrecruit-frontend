@@ -26,9 +26,10 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.LIST, body);
   }
 
-  getDetail(flowId: string): Observable<ApiResponse> {
+  getDetail(flowId: string, facebook: boolean = false): Observable<ApiResponse> {
     const body = {
-      _id: flowId
+      _id: flowId,
+      facebook: facebook
     };
     return this.post(API_ENDPOINT.CANDIDATE.DETAIL, body);
   }

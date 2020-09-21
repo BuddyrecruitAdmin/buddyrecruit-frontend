@@ -8,7 +8,7 @@ import { MatChipInputEvent } from '@angular/material';
 
 import { IAppFormTemplate, IOption, IAction, ITreeNode, IParent } from '../app-form.interface';
 import { InputType, State, ResponseCode } from '../../../../shared/app.constants';
-import { setAppFormData, getRole } from '../../../../shared/services';
+import { setAppFormData, getRole, getAppURL } from '../../../../shared/services';
 import { AppFormService } from '../app-form.service';
 import { FormControl } from '@angular/forms';
 import { debug } from 'util';
@@ -42,7 +42,8 @@ export class AppFormDetailComponent implements OnInit {
     '#9675cc',
     '#707070',
   ];
-  url = 'https://qas-application.web.app/appform/submit';
+  url: any;
+  // url = 'https://qas-application.web.app/appform/submit';
   // url = window.location.origin + '/application-form/submit';
 
   _id: string;
@@ -59,6 +60,7 @@ export class AppFormDetailComponent implements OnInit {
   isExpress = false;
   refCompany: string;
   jobPositions: IPosition[] = [];
+  appformURL: any;
   public uploader: FileUploader = new FileUploader({ url: URL, itemAlias: 'file' });
   constructor(
     private router: Router,
@@ -67,6 +69,7 @@ export class AppFormDetailComponent implements OnInit {
     private toastrService: NbToastrService,
   ) {
     this.role = getRole();
+    this.appformURL = getAppURL();
     this.isExpress = this.role.refCompany.isExpress;
     this.refCompany = this.role.refCompany._id;
     this.uploader = new FileUploader({ url: URL, itemAlias: 'file', headers: [{ name: 'x-access-token', value: this.role.token }] });
@@ -82,13 +85,16 @@ export class AppFormDetailComponent implements OnInit {
         this.loading = false;
       } else if (params.action === State.Edit) {
         this._id = params.id;
-        this.url = 'https://qas-application.web.app/appform/submit/' + this.refCompany;
+        this.url = (this.appformURL) ? this.appformURL + 'appform/submit/' : 'https://qas-application.web.app/appform/submit/';
+        this.url = this.url + this.refCompany;
         // this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Edit;
         this.getDetail();
       } else if (params.action === State.Duplicate) {
         this._id = params.id;
-        this.url = 'https://qas-application.web.app/appform/submit/' + this.refCompany;
+        this.url = (this.appformURL) ? this.appformURL + 'appform/submit/' : 'https://qas-application.web.app/appform/submit/';
+        this.url = this.url + this.refCompany;
+        // this.url = 'https://qas-application.web.app/appform/submit/' + this.refCompany;
         // this.url = window.location.origin + '/application-form/submit/' + this.refCompany;
         this.state = State.Duplicate;
         this.getDetail();

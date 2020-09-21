@@ -1141,7 +1141,7 @@ export class SignContractDetailComponent implements OnInit {
   }
 
   callService(item, data) {
-    this.candidateService.candidateFlowEdit(item._id, data).subscribe(response => {
+    this.candidateService.candidateFlowEdit(item._id, { called: data }).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
         item.called.lastChangedInfo.refUser = this.role;

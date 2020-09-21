@@ -9,7 +9,7 @@ import { ResponseCode, Paging } from '../../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../../shared/interfaces/common.interface';
 
 import { AppFormService } from '../app-form.service';
-import { getRole, getIsGridLayout, setIsGridLayout } from '../../../../shared/services/auth.service';
+import { getRole, getIsGridLayout, setIsGridLayout, getAppURL } from '../../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../../shared/services/utilities.service';
 import { PopupMessageComponent } from '../../../../component/popup-message/popup-message.component';
 @Component({
@@ -31,6 +31,7 @@ export class AppFormListComponent implements OnInit {
   haveActive = false;
   url: string;
   isExpress: boolean;
+  appformURL: any;
   constructor(
     private router: Router,
     private service: AppFormService,
@@ -41,6 +42,7 @@ export class AppFormListComponent implements OnInit {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.isGridLayout = getIsGridLayout();
+    this.appformURL = getAppURL();
     if (!this.isGridLayout) {
       if (this.devices.isMobile || this.devices.isTablet) {
         this.isGridLayout = true;
@@ -51,10 +53,14 @@ export class AppFormListComponent implements OnInit {
     this.isExpress = this.role.refCompany.isExpress;
     if (this.isExpress) {
       // this.url = window.location.origin + '/application-form/index/' + this.role.refCompany._id;
-      this.url = 'https://qas-application.web.app/index/' + this.role.refCompany._id;
+      this.url = (this.appformURL) ? this.appformURL + 'index/' : 'https://qas-application.web.app/index/';
+      this.url = this.url + this.role.refCompany._id;
+      // this.url = 'https://qas-application.web.app/index/' + this.role.refCompany._id;
     } else {
+      this.url = (this.appformURL) ? this.appformURL + 'appform/submit' : 'https://qas-application.web.app/appform/submit/';
+      this.url = this.url + this.role.refCompany._id;
       // this.url = window.location.origin + '/application-form/submit/' + this.role.refCompany._id;
-      this.url = 'https://qas-application.web.app/appform/submit/' + this.role.refCompany._id;
+      // this.url = 'https://qas-application.web.app/appform/submit/' + this.role.refCompany._id;
 
     }
   }
@@ -100,8 +106,10 @@ export class AppFormListComponent implements OnInit {
   preview(item: any) {
     // this.url = 'https://applicationform-e3e84.web.app/appform/submit/' + this.role.refCompany._id;
     // const url = `/application-form/preview/${item._id}`;
-    const url = 'https://qas-application.web.app/appform/preview/' + this.role.refCompany._id;
-    this.router.navigate([]).then(result => { window.open(url, '_blank'); });
+    this.url = (this.appformURL) ? this.appformURL + 'appform/preview/' : 'https://qas-application.web.app/appform/preview/';
+    this.url = this.url + this.role.refCompany._id;
+    // const url = 'https://qas-application.web.app/appform/preview/' + this.role.refCompany._id;
+    this.router.navigate([]).then(result => { window.open(this.url, '_blank'); });
   }
 
   copyToClipboardByCompany() {
