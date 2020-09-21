@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false, 
-  API_URI: "http://localhost:9002", //QAS
+  API_URI: "https://p3bkd-qas.buddyrecruit.ai", //QAS
   WriteLog: true 
 };
  
