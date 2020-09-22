@@ -964,7 +964,7 @@ export class CandidateDetailComponent implements OnInit {
     data = {
       training: item.training
     }
-    this.service.candidateFlowEdit(item._id, { called: data }).subscribe(response => {
+    this.service.candidateFlowEdit(item._id, data).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.showToast('success', 'Success Message', response.message);
         this.getDetail();
