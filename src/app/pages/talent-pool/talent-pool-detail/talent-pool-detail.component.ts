@@ -1263,11 +1263,25 @@ export class TalentPoolDetailComponent implements OnInit {
         let history = getHistoryData();
         console.log(history)
         if (history.training && history.training.date) {
+          if (!history.training.time) {
+            history.training.time = {
+              hour: 0,
+              minute: 0,
+              second: 0
+            }
+          }
           item.training.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.training.time, history.training.date));
         } else {
           item.training.date = null;
         }
         if (history.onboard && history.onboard.date) {
+          if (!history.onboard.time) {
+            history.onboard.time = {
+              hour: 0,
+              minute: 0,
+              second: 0
+            }
+          }
           item.onboard.date = this.utilitiesService.convertDateTime(this.utilitiesService.convertTimePickerToDate(history.onboard.time, history.onboard.date));
         } else {
           item.onboard.date = null;
