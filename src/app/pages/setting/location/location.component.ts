@@ -34,6 +34,7 @@ export class LocationComponent implements OnInit {
   devices: Devices;
   isGridLayout: boolean;
   loading: any = false;
+  noticeHeight: any;
   constructor(
     private service: LocationService,
     private dialogService: NbDialogService,
@@ -51,6 +52,7 @@ export class LocationComponent implements OnInit {
         this.isGridLayout = false;
       }
     }
+    this.noticeHeight = window.innerHeight * 0.9;
   }
 
   ngOnInit() {
@@ -60,7 +62,13 @@ export class LocationComponent implements OnInit {
   initialModel(): any {
     const itemDialog = {
       _id: undefined,
+      locationHRIS: undefined,
       name: undefined,
+      type: undefined,
+      region: undefined,
+      region2: undefined,
+      detail: undefined,
+      linkMap: undefined,
       address: undefined,
       active: undefined,
       isDefault: undefined,

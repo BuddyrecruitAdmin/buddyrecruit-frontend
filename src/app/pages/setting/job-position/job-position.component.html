@@ -108,11 +108,11 @@
             <tr>
               <th scope="col">Job Name</th>
               <th *ngIf="isExpress" scope="col">Application Name</th>
-              <th scope="col">Remark</th>
+              <!-- <th scope="col">Remark</th> -->
               <th scope="col" style="width: 90px;">Status</th>
-              <th scope="col">Last update by</th>
-              <th *ngIf="role.refAuthorize.configuration.jobPosition.editable" scope="col" style="width: 110px;">Actions
-              </th>
+              <th scope="col">Info</th>
+              <!-- <th *ngIf="role.refAuthorize.configuration.jobPosition.editable" scope="col" style="width: 110px;">Actions
+              </th> -->
             </tr>
           </thead>
           <tbody>
@@ -123,22 +123,22 @@
               <td *ngIf="isExpress" [ngClass]="{'text-left': item.appForm, 'text-center': !item.appForm}">
                 <span>{{ item.appForm || '-' }}</span>
               </td>
-              <td class="text-left" [nbTooltip]="item.remark">
+              <!-- <td class="text-left" [nbTooltip]="item.remark">
                 <div [ngClass]="{'text-center': !item.remark }">
                   {{ item.remark || '-' }}
                 </div>
-              </td>
+              </td> -->
               <td>
                 <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
                   {{ item.active ? 'Active': 'Inactive' }}
                 </span>
               </td>
-              <td>
+              <!-- <td>
                 <span>
                   {{ item.lastChangedInfo?.refUser?.firstname }}
                   {{ item.lastChangedInfo?.refUser?.lastname }}
                 </span>
-              </td>
+              </td> -->
               <td *ngIf="role.refAuthorize.configuration.jobPosition.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item, dialog)">
                   <nb-icon icon="edit-outline"></nb-icon>
@@ -170,6 +170,31 @@
         <label class="label">Job Position<span style="color:red">*</span></label>
         <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Position">
       </div>
+      <div class="form-control-group">
+        <label class="label">Department<span style="color:red">*</span></label>
+        <mat-form-field [color]="primary" appearance="outline">
+          <mat-select [(ngModel)]="itemDialog.departmentId" (ngModelChange)="onChangeDepartment($event)">
+            <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="departMentAdmin"
+              (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+            <mat-option *ngFor="let department of filteredList2" [value]="department.value">
+              {{department.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- <div class="form-control-group">
+        <label class="label">Department<span style="color:red">*</span></label>
+        <mat-form-field [color]="primary" appearance="outline">
+          <mat-select [(ngModel)]="itemDialog.departmentId" [disabled]="checkPreview"
+            (ngModelChange)="onChangeDepartment($event)">
+            <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="departMentAdmin"
+              (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+            <mat-option *ngFor="let department of filteredList2" [value]="department.value">
+              {{department.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div> -->
       <div class="form-control-group">
         <label class="label">Qualification<span style="color:red">*</span></label>
         <textarea type="" [(ngModel)]="itemDialog.qualification" nbInput fullWidth placeholder="Remark"></textarea>

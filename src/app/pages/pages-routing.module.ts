@@ -187,6 +187,18 @@ const routes: Routes = [
         path: 'onboard/detail/:id',
         component: OnboardDetailComponent,
       },
+      {
+        path: 'hris/list',
+        component: OnboardListComponent,
+      },
+      {
+        path: 'hris/detail',
+        component: OnboardDetailComponent,
+      },
+      {
+        path: 'hris/detail/:id',
+        component: OnboardDetailComponent,
+      },
       // Report
       {
         path: 'report',

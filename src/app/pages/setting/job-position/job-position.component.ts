@@ -11,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
+import { DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
+import { DropdownService } from '../../../shared/services/dropdown.service';
 @Component({
   selector: 'ngx-job-position',
   templateUrl: './job-position.component.html',
@@ -36,12 +38,16 @@ export class JobPositionComponent implements OnInit {
   isGridLayout: boolean;
   noticeHeight: any;
   isExpress: boolean = false;
+  departMentAdmin: DropDownValue[];
+  filteredList2: any;
+  divisionAll: DropDownGroup[];
   constructor(
     private service: JobPositionService,
     private dialogService: NbDialogService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
-    private toastrService: NbToastrService
+    private toastrService: NbToastrService,
+    private dropdownService: DropdownService
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
@@ -60,6 +66,7 @@ export class JobPositionComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.refresh();
+    this.getDepartment();
   }
 
   initialModel(): any {
@@ -70,7 +77,9 @@ export class JobPositionComponent implements OnInit {
       active: undefined,
       isUsed: undefined,
       specification: undefined,
-      qualification: undefined
+      qualification: undefined,
+      departmentId: null,
+      divisionId: null
     }
     return itemDialog;
   }
@@ -177,6 +186,42 @@ export class JobPositionComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  getDepartment() {
+    return new Promise((resolve) => {
+      this.departMentAdmin = [];
+      // this.divisionAll = [];
+      // this.divisionOptions = [];
+      // this.divisionOptions.push({
+      //   label: '- Select Division -',
+      //   value: undefined,
+      //   group: undefined
+      // });
+      this.dropdownService.getDepartment().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            response.data.forEach(element => {
+              this.departMentAdmin.push({
+                label: element.name,
+                value: element._id
+              });
+              if (element.hasDivision && element.divisions.length) {
+                element.divisions.forEach(division => {
+                  this.divisionAll.push({
+                    group: element._id,
+                    label: division.name,
+                    value: division._id
+                  });
+                });
+              }
+            });
+            this.filteredList2 = this.departMentAdmin.slice();
+          }
+        }
+        resolve();
+      });
     });
   }
 

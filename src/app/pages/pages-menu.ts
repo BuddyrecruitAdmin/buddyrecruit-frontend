@@ -93,6 +93,12 @@ export const MENU_PROCESS_FLOW: NbMenuItem[] = [
     link: '/employer/consent/list',
     hidden: false,
   },
+  {
+    title: 'HRIS',
+    icon: 'shopping-bag-outline',
+    link: '/employer/hris/list',
+    hidden: false,
+  },
 ];
 
 export const MENU_REPORT: NbMenuItem[] = [

@@ -85,6 +85,7 @@ export class PagesComponent {
           if (menu.onboard && menu.onboard.active) {
             this.menu.push(MENU.MENU_PROCESS_FLOW[6]);
           }
+          this.menu.push(MENU.MENU_PROCESS_FLOW[8]);
         }
         // Reporting
         if (menu.report && menu.report.active && menu.report.reports && role.refAuthorize.showReport) {
