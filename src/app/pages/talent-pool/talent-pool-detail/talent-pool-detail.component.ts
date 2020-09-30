@@ -1094,7 +1094,7 @@ export class TalentPoolDetailComponent implements OnInit {
       // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
       // window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       this.router.navigate([]).then(result => {
-        window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/flash/d/" + item.generalAppForm.refGeneralAppForm, '_blank');
       });
     }
   }
