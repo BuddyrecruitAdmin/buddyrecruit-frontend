@@ -100,6 +100,7 @@ export class SignContractDetailComponent implements OnInit {
   dialogRef: NbDialogRef<any>;
   itemCall: any;
   innerHeight: any;
+  isHybrid: any;
   constructor(
     private router: Router,
     private service: SignContractService,
@@ -154,6 +155,7 @@ export class SignContractDetailComponent implements OnInit {
       return step.refStage.refMain._id === this.role.refCompany.menu.pendingSignContract.refStage._id && step.editable;
     });
     this.isExpress = this.role.refCompany.isExpress;
+    this.isHybrid = this.role.refCompany.isHybrid || false;
     this.keyword = getKeyword() || '';
     setKeyword();
     if (this.keyword) {
@@ -390,7 +392,7 @@ export class SignContractDetailComponent implements OnInit {
 
         });
         // filter hub
-        if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
+        if (response.filter && this.isExpress && !this.filter.data.provinces.length && !this.isHybrid) {
           this.filter.isFilter = true;
           response.filter.provinces.forEach(element => {
             this.filter.data.provinces.push({

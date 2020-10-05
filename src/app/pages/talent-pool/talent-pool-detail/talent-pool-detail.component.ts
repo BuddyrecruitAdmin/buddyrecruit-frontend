@@ -117,6 +117,7 @@ export class TalentPoolDetailComponent implements OnInit {
   innerHeight: any;
   waitingApprove: boolean = false;
   appfromURL: any;
+  isHybrid: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
@@ -175,6 +176,7 @@ export class TalentPoolDetailComponent implements OnInit {
     });
     this.startFlag = true;
     this.isExpress = this.role.refCompany.isExpress;
+    this.isHybrid = this.role.refCompany.isHybrid || false;
     this.keyword = getKeyword() || '';
     this.appfromURL = this.role
     setKeyword();
@@ -409,7 +411,7 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           });
           // filter hub
-          if (response.filter && this.isExpress && !this.filter.data.provinces.length) {
+          if (response.filter && this.isExpress && !this.filter.data.provinces.length && !this.isHybrid) {
             this.filter.isFilter = true;
             response.filter.provinces.forEach(element => {
               this.filter.data.provinces.push({
@@ -1092,7 +1094,7 @@ export class TalentPoolDetailComponent implements OnInit {
       // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
       // window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       this.router.navigate([]).then(result => {
-        window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/flash/d/" + item.generalAppForm.refGeneralAppForm, '_blank');
       });
     }
   }
