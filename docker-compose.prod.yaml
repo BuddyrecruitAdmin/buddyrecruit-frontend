@@ -5,4 +5,4 @@ services:
       context: .
     ports:
       - 80:80
-    env_file: ./src/environments/dev.env
+    env_file: ./src/environments/prod.env
