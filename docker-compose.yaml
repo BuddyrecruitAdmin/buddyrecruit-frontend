@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  buddyrecruit-fronted-nginx:
+    build:
+      context: .
+    ports:
+      - 80:80
+        #entrypoint: [ "sleep", "9999" ]
+
