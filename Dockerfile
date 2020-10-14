@@ -1,12 +1,15 @@
-FROM nginx:alpine
+FROM node:12.18-alpine AS build
+WORKDIR /app/src
+COPY package.json package-lock.json ./
+RUN yarn
+COPY . .
+RUN yarn build
 
+FROM nginx:alpine
 EXPOSE 8080
-COPY ./ /app/
+WORKDIR /
+COPY --from=build /usr/src/app/dist/ /usr/share/nginx/html
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 RUN chown -R nginx /etc/nginx /var/run /run
-
-#support running as any user
-RUN chmod -R a+w /var/run /run /var/cache /var/cache/nginx
-
 
 CMD ["nginx", "-g", "daemon off;"]
