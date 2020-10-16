@@ -2,18 +2,15 @@ steps:
   # ====BUILD====
 
   - name: 'docker'
+    entrypoint: 'bash'
     args:
-      [ 'pull',
-        '${_CONTAINER_REGISTRY}/$REPO_NAME:latest']
-  - name: 'docker'
-    args:
-      [
-        'build',
-        '-t','${_CONTAINER_REGISTRY}/$REPO_NAME-test',
-        '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
-        '.',
-      ]
-
+      - '-c'
+      - |
+          docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest'
+          docker build \
+           -t '${_CONTAINER_REGISTRY}/$REPO_NAME-test' \
+           --cache-from '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' \
+           .
   # =============
 
   # lastest and push
