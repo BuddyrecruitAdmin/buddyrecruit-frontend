@@ -31,4 +31,6 @@ steps:
 
          docker tag ${_CONTAINER_REGISTRY}/$REPO_NAME-test $IMAGE
          docker push $IMAGE
-images: ['${_CONTAINER_REGISTRY}/$REPO_NAME']
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
+         '${_CONTAINER_REGISTRY}/$REPO_NAME:latest'
+         '${_CONTAINER_REGISTRY}/$REPO_NAME-test',]
