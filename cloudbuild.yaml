@@ -22,15 +22,16 @@ steps:
     args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
 
   # push it back and tag lastest  
-  - name: 'docker'
-    args: 
-      [
-        'tag',
-        '${_CONTAINER_REGISTRY}/$REPO_NAME-test',
-        '${_CONTAINER_REGISTRY}/$REPO_NAME:latest'
-      ] 
+  - name: 'bash'
+    args:
+      - -c 
+      - |-
+         if ($TAG_NAME != ""); then
+           IMAGE=${_CONTAINER_REGISTRY}/$REPO_NAME-test:$TAG_NAME
+         else
+           IMAGE=${_CONTAINER_REGISTRY}/$REPO_NAME-test:latest
+         fi
 
-  - name: 'docker'
-    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
-images: ['${_CONTAINER_REGISTRY}/$REPO_NAME']
- 
+         docker tag ${_CONTAINER_REGISTRY}/$REPO_NAME-test $IMAGE
+         docker push $IMAGE
+
