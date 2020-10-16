@@ -1,7 +1,8 @@
 steps:
   # ====BUILD====
 
-  - name: 'bash'
+  - name: 'docker'
+    entrypoint: 'bash'
     args:
       - -c
       - |-
