@@ -6,7 +6,7 @@ steps:
     args:
       - -c
       - |
-         docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' || exit 0
+         docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest'
   - name: 'docker'
     args:
       [
