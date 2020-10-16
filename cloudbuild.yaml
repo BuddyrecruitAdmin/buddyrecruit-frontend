@@ -2,11 +2,9 @@ steps:
   # ====BUILD====
 
   - name: 'docker'
-    entrypoint: 'bash'
     args:
-      - -c
-      - |
-         docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest'
+      [ 'pull',
+        '${_CONTAINER_REGISTRY}/$REPO_NAME:latest']
   - name: 'docker'
     args:
       [
