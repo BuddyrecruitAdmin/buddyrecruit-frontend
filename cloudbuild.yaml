@@ -6,9 +6,15 @@ steps:
     args:
       - -c
       - |
-         docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' && \
-         docker build --cache-from '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' --tag '${_CONTAINER_REGISTRY}/$REPO_NAME-test' . && \
-         docker push '${_CONTAINER_REGISTRY}/$REPO_NAME-test'
+         docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' || exit 0
+  - name: 'docker'
+    args:
+      [
+        'build',
+        '--tag=${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+        '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
+        '.',
+      ]
 
   # =============
 
