@@ -14,25 +14,29 @@ steps:
     args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-test']  
   # =============
 
-  # lastest and push
+  # test and push
   # pull test
   - name: 'docker'
     args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
 
-  # push it back and tag lastest  
   - name: 'docker'
-    entrypoint: 'bash'
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME' ]
+  
+  - name: 'gcr.io/cloud-builders/kubectl'
     args:
-      - -c 
-      - |-
-         if ("$TAG_NAME" == "true"); then
-           IMAGE=${_CONTAINER_REGISTRY}/$REPO_NAME-test:$TAG_NAME
-         else
-           IMAGE=${_CONTAINER_REGISTRY}/$REPO_NAME-test:latest
-         fi
-
-         docker tag ${_CONTAINER_REGISTRY}/$REPO_NAME-test $IMAGE
-         docker push $IMAGE
-images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
+      [
+        'set',
+        '-n',
+        '${_NAMESPACE}-qas',
+        'image',
+        'deployment',
+        '$REPO_NAME',
+        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME',
+      ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=c-5l94t'
+   
+ images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
          '${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
-         '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+         
