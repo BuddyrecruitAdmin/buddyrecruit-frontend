@@ -1,9 +1,9 @@
 #!/bin/sh -eu
 cat <<EOF
-export const environment = {
-  production: $API_PROD,
-  API_URI: $API_URL,
-  WriteLog: true
-};
+window.appConfig = {
+    API_URI: "$API_URI",
+    API_PROD: "$API_PROD"
+}
+
 EOF
 

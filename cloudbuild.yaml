@@ -1,0 +1,32 @@
+steps:
+  # ====BUILD====
+  # docker build --tag gcr.io/your-project-id/your-repository-name:your-tag .
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '--tag=${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+        '.',
+      ]
+    branches: ['develop', 'qas']
+
+  # docker push gcr.io/your-project-id/your-repository-name:your-tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+    branches: ['develop', 'qas']
+  # =============
+
+  # lastest and push
+  # pull test
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+    branches: ['develop', 'qas']
+  # tag normal
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test','${_CONTAINER_REGISTRY}/$IMAGE:$TAG_NAME']
+    branches: ['develop', 'qas']
+  # push it back 
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_CONTAINER_REGISTRY}/$IMAGE:$TAG_NAME']
+    branches: ['develop', 'qas']
+ 
