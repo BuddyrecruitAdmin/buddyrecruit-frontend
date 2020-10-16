@@ -7,7 +7,7 @@ steps:
       - -c
       - |
          docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest'
-         docker build -t '${_CONTAINER_REGISTRY}/$REPO_NAME-test' --cache-from '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' .
+         docker build --cache-from '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' --tag '${_CONTAINER_REGISTRY}/$REPO_NAME-test' .
          docker push '${_CONTAINER_REGISTRY}/$REPO_NAME-test'
 
   # =============
