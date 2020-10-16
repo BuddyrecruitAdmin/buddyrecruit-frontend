@@ -1,16 +1,19 @@
 steps:
   # ====BUILD====
 
-  - name: 'docker'
+  - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
-      - |
-          docker pull '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' || true
-          docker build \
-           -t '${_CONTAINER_REGISTRY}/$REPO_NAME-test' \
-           --cache-from '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' \
-           .
+      - 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME:latest || exit 0'
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 
+            'build',
+            '-t','${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+            '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
+            '.'     
+  
   # =============
 
   # lastest and push
