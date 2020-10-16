@@ -3,10 +3,10 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
-    args:
-      - '-c'
-      - 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME:latest || exit 0'
-  image: [ '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' ]  
+    args: [
+           '-c',
+           'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME:latest || exit 0'
+#  image: [ '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' ]  
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 
             'build',
