@@ -9,7 +9,7 @@ steps:
     args:
       [
         'build',
-        '--tag=${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+        '-t','${_CONTAINER_REGISTRY}/$REPO_NAME-test',
         '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
         '.',
       ]
