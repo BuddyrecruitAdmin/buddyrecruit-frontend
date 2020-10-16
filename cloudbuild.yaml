@@ -3,6 +3,7 @@ steps:
   - name: 'docker'
     args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME:latest']
     id: 'get-cache'
+
   # docker build --tag gcr.io/your-project-id/your-repository-name-test.
   - name: 'docker'
     args:
@@ -12,7 +13,7 @@ steps:
 	'--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
         '.',
       ]
-    waitFor: 'get-cache'
+    waitFor: ['get-cache']
   # docker push gcr.io/your-project-id/your-repository-name-test
   - name: 'docker'
     args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
