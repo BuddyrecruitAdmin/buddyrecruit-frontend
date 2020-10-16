@@ -1,5 +1,7 @@
 steps:
   # ====BUILD====
+  - name: 'docker'
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME:latest']
   # docker build --tag gcr.io/your-project-id/your-repository-name-test.
   - name: 'docker'
     args:
