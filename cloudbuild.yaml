@@ -27,5 +27,5 @@ steps:
   # push it back 
   - name: 'docker'
     args: ['push', '${_CONTAINER_REGISTRY}/$IMAGE:$TAG_NAME']
-    images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
  
