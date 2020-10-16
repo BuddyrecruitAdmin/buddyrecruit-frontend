@@ -37,6 +37,6 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
       - 'CLOUDSDK_CONTAINER_CLUSTER=c-5l94t'
    
- images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
          '${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
          
