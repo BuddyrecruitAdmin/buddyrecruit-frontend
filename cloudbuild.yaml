@@ -20,7 +20,8 @@ steps:
     args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
 
   # push it back and tag lastest  
-  - name: 'bash'
+  - name: 'docker'
+    entrypoint: 'bash'
     args:
       - -c 
       - |-
