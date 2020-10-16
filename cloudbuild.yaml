@@ -6,14 +6,14 @@ steps:
       [
         'build',
         '--tag=${_CONTAINER_REGISTRY}/$REPO_NAME',
-	['--cache-from'],['${_CONTAINER_REGISTRY}/$IMAGE:latest'],
+	'--cache-from','${_CONTAINER_REGISTRY}/$IMAGE:latest',
         '.',
       ]
 
   # docker push gcr.io/your-project-id/your-repository-name-test
   - name: 'docker'
     args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
-#images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+    images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
   # =============
 
   # lastest and push
