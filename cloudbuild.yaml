@@ -10,20 +10,6 @@ steps:
             '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME',
             '.'
         ]
-
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [
-           '-c',
-           'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME || exit 0'
-          ]
-#  image: [ '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' ]  
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 
-            'build',
-            '-t','${_CONTAINER_REGISTRY}/$REPO_NAME-test',
-            '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME',
-            '.' ]    
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-test']  
   # =============
