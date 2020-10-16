@@ -5,27 +5,28 @@ steps:
     args:
       [
         'build',
-        '--tag=${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+        '--tag=${_CONTAINER_REGISTRY}/$REPO_NAME',
+	['--cache-from'],['${_CONTAINER_REGISTRY}/$IMAGE:latest'],
         '.',
       ]
 
   # docker push gcr.io/your-project-id/your-repository-name-test
   - name: 'docker'
-    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
-
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
+    images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
   # =============
 
   # lastest and push
   # pull test    branches: ['develop', 'qas']
   - name: 'docker'
-    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME']
 
   # tag normal
   - name: 'docker'
-    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test','${_CONTAINER_REGISTRY}/$IMAGE:$TAG_NAME']
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME','${_CONTAINER_REGISTRY}/$IMAGE:$TAG_NAME']
 
   # push it back 
   - name: 'docker'
     args: ['push', '${_CONTAINER_REGISTRY}/$IMAGE:$TAG_NAME']
-images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+#images: ['${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
  
