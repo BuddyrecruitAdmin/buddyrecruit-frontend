@@ -5,14 +5,14 @@ steps:
     entrypoint: 'bash'
     args: [
            '-c',
-           'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME:latest || exit 0'
+           'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME || exit 0'
           ]
 #  image: [ '${_CONTAINER_REGISTRY}/$REPO_NAME:latest' ]  
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 
             'build',
             '-t','${_CONTAINER_REGISTRY}/$REPO_NAME-test',
-            '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
+            '--cache-from','${_CONTAINER_REGISTRY}/$REPO_NAME',
             '.' ]    
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-test']  
@@ -28,7 +28,7 @@ steps:
     args:
       - -c 
       - |-
-         if ($TAG_NAME); then
+         if ("$TAG_NAME" == "true"); then
            IMAGE=${_CONTAINER_REGISTRY}/$REPO_NAME-test:$TAG_NAME
          else
            IMAGE=${_CONTAINER_REGISTRY}/$REPO_NAME-test:latest
