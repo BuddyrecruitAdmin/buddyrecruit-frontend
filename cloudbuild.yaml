@@ -57,4 +57,5 @@ steps:
       - 'CLOUDSDK_CONTAINER_CLUSTER=c-5l94t'                                                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                                                         
 images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',                                                                                                                                                                                                                                                                                           
-         '${_CONTAINER_REGISTRY}/$REPO_NAME:latest']
+         '${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
+         '${_CONTAINER_REGISTRY}/$REPO_NAME:build']
