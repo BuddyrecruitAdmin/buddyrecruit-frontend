@@ -6,7 +6,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker' 
     entrypoint: 'bash' 
     args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME || exit 0']
-  - name: '${_CONTAINER_REGISTRY}/restore_cache'
+  - name: 'gcr.io/$PROJECT_ID/restore_cache'
     args:
       - '--bucket=gs://$REPO_NAME-cache'   #create bucket first for build faster
       - '--key=build-cache-$( checksum build.gradle )-$( checksum cloudbuild.yaml )'
@@ -22,7 +22,7 @@ steps:
             '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
             '.'
         ]
-  - name: '${_CONTAINER_REGISTRY}/save_cache'
+  - name: 'gcr.io/$PROJECT_ID/save_cache'
     args:
       - '--bucket=gs://$REPO_NAME-cache'                                                      
       - '--key=build-cache-$( checksum build.gradle )-$( checksum cloudbuild.yaml )'
