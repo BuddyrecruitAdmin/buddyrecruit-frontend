@@ -1,61 +1,64 @@
-steps:                                                                                                                                                                                                                                                                                                                                  
-  # ====BUILD====                                                                                                                                                                                                                                                                                                                       
-  - name: 'gcr.io/cloud-builders/docker'                                                                                                                                                                                                                                                                                                
-    entrypoint: 'bash'                                                                                                                                                                                                                                                                                                                  
-    args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME-build || exit 0']                                                                                                                                                                                                                                                       
-  - name: 'gcr.io/cloud-builders/docker'                                                                                                                                                                                                                                                                                                
-    entrypoint: 'bash'                                                                                                                                                                                                                                                                                                                  
-    args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME || exit 0']                                                                                                                                                                                                                                                             
-                                                                                                                                                                                                                                                                                                                                        
-  - name: 'gcr.io/cloud-builders/docker'                                                                                                                                                                                                                                                                                                
-    args: [                                                                                                                                                                                                                                                                                                                             
-            'build',                                                                                                                                                                                                                                                                                                                    
-            '--target','build',                                                                                                                                                                                                                                                                                                         
-            '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',                                                                                                                                                                                                                                                                             
-            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',                                                                                                                                                                                                                                                                  
-            '.'                                                                                                                                                                                                                                                                                                                         
-        ]                                                                                                                                                                                                                                                                                                                               
-  - name: 'gcr.io/cloud-builders/docker'                                                                                                                                                                                                                                                                                                
-    args: [                                                                                                                                                                                                                                                                                                                             
-            'build',                                                                                                                                                                                                                                                                                                                    
-            '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',                                                                                                                                                                                                                                                                             
-            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',                                                                                                                                                                                                                                                                  
-            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',                                                                                                                                                                                                                                                                   
-            '.'                                                                                                                                                                                                                                                                                                                         
-        ]                                                                                                                                                                                                                                                                                                                               
-                                                                                                                                                                                                                                                                                                                                        
-  - name: 'gcr.io/cloud-builders/docker'                                                                                                                                                                                                                                                                                                
-    args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-build']                                                                                                                                                                                                                                                                            
-  - name: 'gcr.io/cloud-builders/docker'                                                                                                                                                                                                                                                                                                
-    args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-test']                                                                                                                                                                                                                                                                             
-  # =============                                                                                                                                                                                                                                                                                                                       
-                                                                                                                                                                                                                                                                                                                                        
-  # test and push                                                                                                                                                                                                                                                                                                                       
-  # pull test                                                                                                                                                                                                                                                                                                                           
-  - name: 'docker'                                                                                                                                                                                                                                                                                                                      
-    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                        
-  - name: 'docker'                                                                                                                                                                                                                                                                                                                      
-    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME']                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                        
-  - name: 'docker'                                                                                                                                                                                                                                                                                                                      
-    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME' ]                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                        
-  - name: 'gcr.io/cloud-builders/kubectl'                                                                                                                                                                                                                                                                                               
-    args:                                                                                                                                                                                                                                                                                                                               
-      [                                                                                                                                                                                                                                                                                                                                 
-        'run',                                                                                                                                                                                                                                                                                                                          
-        '-n',                                                                                                                                                                                                                                                                                                                           
-        '${_NAMESPACE}-qas',                                                                                                                                                                                                                                                                                                            
-        'image',                                                                                                                                                                                                                                                                                                                        
-        'deployment',                                                                                                                                                                                                                                                                                                                   
-        '$REPO_NAME',                                                                                                                                                                                                                                                                                                                   
-        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME',                                                                                                                                                                                                                                                                                 
-      ]                                                                                                                                                                                                                                                                                                                                 
-    env:                                                                                                                                                                                                                                                                                                                                
-      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'                                                                                                                                                                                                                                                                                       
-      - 'CLOUDSDK_CONTAINER_CLUSTER=c-5l94t'                                                                                                                                                                                                                                                                                            
-timeout: 1000s                                                                                                                                                                                                                                                                                                                                        
-images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',                                                                                                                                                                                                                                                                                           
+steps:                                             :                                                                         
+  # ====GET CACHE====
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME-build || exit 0']
+  - name: 'gcr.io/cloud-builders/docker' 
+    entrypoint: 'bash' 
+    args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME || exit 0']
+  # =================
+
+  # ====BUILD CACHE====
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+            'build',  
+            '--target','build',
+            '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
+            '.'
+        ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+            'build',  
+            '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+            '.'
+        ]
+  # ==================
+ 
+  # ====PUSH CACHE====
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-build']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+  # =================
+           
+  # ====PULL COMPLETE BUILD AND TAG LATEST====
+  - name: 'docker'
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+  - name: 'docker'
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME']
+  - name: 'docker'
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME' ]
+  # ==========================================
+
+  
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args: 
+      [
+        'set',
+        '-n',
+        '${_NAMESPACE}-qas',
+        'image',
+        'deployment',
+        '$REPO_NAME',
+        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME',
+      ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=c-5l94t'
+timeout: 1000s
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
          '${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
          '${_CONTAINER_REGISTRY}/$REPO_NAME-build']
