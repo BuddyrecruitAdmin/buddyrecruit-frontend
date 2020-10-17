@@ -43,9 +43,8 @@ steps:
     args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
   # ==========================================
 
-  
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'kubectl'
+  # Deploy to K8s  
+  - name: 'gcr.io/cloud-builders/kubectl'
     args: 
       [
         'set',
@@ -58,7 +57,8 @@ steps:
       ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=c-5l94t'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER}'
+
 timeout: 1000s
 images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
          '${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
