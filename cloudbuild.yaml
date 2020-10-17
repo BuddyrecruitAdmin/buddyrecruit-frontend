@@ -1,5 +1,5 @@
-steps:                                             :                                                                         
-  # ====GET CACHE====
+steps:
+  # ====PULL CACHE====
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME-build || exit 0']
@@ -22,7 +22,7 @@ steps:                                             :
             'build',  
             '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',
             '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
-            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME',
             '.'
         ]
   # ==================
@@ -40,7 +40,7 @@ steps:                                             :
   - name: 'docker'
     args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME']
   - name: 'docker'
-    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME' ]
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
   # ==========================================
 
   
