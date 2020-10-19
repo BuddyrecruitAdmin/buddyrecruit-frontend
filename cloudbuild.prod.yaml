@@ -1,0 +1,28 @@
+steps:
+  # ====PULL LATEST====
+  - name: 'docker'
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME']
+  - name: 'docker'
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+  - name: 'docker'
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+  # ==========================================
+
+  # Deploy to K8s  
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      [
+        'set',
+        '-n',
+        '${_NAMESPACE}-$BRANCH_NAME',
+        'image',
+        'deployment',
+        '$REPO_NAME',
+        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME',
+      ]
+    branches: $BRANCH_NAME
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER}'
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
+         '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME' ]
