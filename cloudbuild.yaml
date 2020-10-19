@@ -59,7 +59,7 @@ steps:
       [
         'set',
         '-n',
-        '${_NAMESPACE}-qas',
+        '${_NAMESPACE}-$BRANCH_NAME',
         'image',
         'deployment',
         '$REPO_NAME',
