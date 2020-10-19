@@ -22,11 +22,11 @@ steps:
             '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
             '.'
         ]
-  - name: 'asia.gcr.io/$PROJECT_ID/save_cache'
-    args:
-      - '--bucket=gs://$REPO_NAME-cache'                                                      
-      - '--key=build-cache-$( checksum build.gradle )-$( checksum cloudbuild.yaml )'
-      - '--path=.yarn'
+#  - name: 'asia.gcr.io/$PROJECT_ID/save_cache'
+#    args:
+#      - '--bucket=gs://$REPO_NAME-cache'                                                      
+#      - '--key=build-cache-$( checksum build.gradle )-$( checksum cloudbuild.yaml )'
+#      - '--path=.yarn'
   - name: 'gcr.io/cloud-builders/docker'
     args: [
             'build',  
