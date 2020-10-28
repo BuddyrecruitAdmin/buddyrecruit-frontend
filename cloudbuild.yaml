@@ -38,7 +38,7 @@ steps:
   - name: 'docker'
     args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
   - name: 'docker'
-    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME']
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
   - name: 'docker'
     args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
   # ==========================================
