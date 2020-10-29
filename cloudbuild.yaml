@@ -38,9 +38,9 @@ steps:
   - name: 'docker'
     args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
   - name: 'docker'
-    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME']
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
   - name: 'docker'
-    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME']
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
   # ==========================================
 
   # Deploy to K8s  
@@ -53,7 +53,7 @@ steps:
         'image',
         'deployment',
         '$REPO_NAME',
-        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME',
+        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME',
       ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
