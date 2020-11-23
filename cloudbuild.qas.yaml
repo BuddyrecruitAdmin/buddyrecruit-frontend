@@ -9,7 +9,7 @@ steps:
       [
         'set',
         '-n',
-        '${_NAMESPACE}-$BRANCH_NAME',
+        '${_NAMESPACE}-qas',
         'image',
         'deployment',
         '$REPO_NAME',

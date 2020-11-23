@@ -49,7 +49,7 @@ steps:
       [
         'set',
         '-n',
-        '${_NAMESPACE}-$BRANCH_NAME',
+        '${_NAMESPACE}-dev',
         'image',
         'deployment',
         '$REPO_NAME',
