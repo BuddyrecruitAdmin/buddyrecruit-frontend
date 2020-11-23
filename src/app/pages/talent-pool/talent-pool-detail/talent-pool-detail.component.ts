@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { TalentPoolService } from '../talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword, setKeyword, setAppURL, getAppURL } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJdId, getJrId, setFlowId, setCandidateId, setFlagCall, setUserEmail, setFieldName, setJdName, setFlagExam, setAppFormData, setUserToken, setHistoryData, setCompanyId, getHistoryData, getUserSuccess, setFlagEdit, getFlagEdit, getKeyword, setKeyword, getAppURL, getFlagCall, getHCID, setHCID } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -13,23 +13,22 @@ import { PopupCommentComponent } from '../../../component/popup-comment/popup-co
 import { PopupRejectComponent } from '../../../component/popup-reject/popup-reject.component';
 import { PopupExamDateComponent } from '../../../component/popup-exam-date/popup-exam-date.component';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
-import { PopupPreviewEmailComponent } from '../../../component/popup-preview-email/popup-preview-email.component';
 import { PopupTransferComponent } from '../../../component/popup-transfer/popup-transfer.component';
+import { PopupCallHistoryComponent } from '../../../component/popup-call-history/popup-call-history.component';
 import { MatDialog } from '@angular/material';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService, NbDialogRef } from '@nebular/theme';
 import { NbDialogService } from '@nebular/theme';
 import { MESSAGE } from "../../../shared/constants/message";
 import { CandidateService } from '../../candidate/candidate.service';
-import { resolve } from 'url';
 import { AppFormService } from '../../setting/app-form/app-form.service';
-import { group } from 'console';
 import { PopupTrainingDateComponent } from '../../../component/popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup-chat-user.component';
 import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
-import { ArrayType } from '@angular/compiler';
 import { environment } from '../../../../environments/environment';
 import { MENU_PROCESS_FLOW } from "../../pages-menu";
+import { JobBoardService } from '../../setting/job-board/job-board.service';
+import { elementAt } from 'rxjs/operators';
 @Component({
   selector: 'ngx-talent-pool-detail',
   templateUrl: './talent-pool-detail.component.html',
@@ -39,6 +38,7 @@ export class TalentPoolDetailComponent implements OnInit {
   role: any;
   jrId: any;
   jrName: any;
+  hcId: any;
   refStageId: any;
   tabs: any;
   steps: any;
@@ -72,32 +72,12 @@ export class TalentPoolDetailComponent implements OnInit {
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
-  filter: {
-    isFilter: boolean,
-    data: {
-      provinces: DropDownValue[],
-      areas: DropDownGroup[]
-      // districts: DropDownGroup[],
-      // subDistricts: DropDownGroup[]
-    },
-    temp: {
-      provinces: DropDownValue[],
-      areas: DropDownGroup[]
-      // districts: DropDownGroup[],
-      // subDistricts: DropDownGroup[]
-    },
-    selected: {
-      provinces: any,
-      areas: any;
-      // districts: any,
-      // subDistricts: any;
-    }
-  };
-  filteredProvince: any;
-  filteredDistrict: any;
-  filteredSubDistrict: any;
+  isFilter: boolean;
+  // filteredProvince: any;
+  // filteredDistrict: any;
   filterBy: any;
-  searchArea: any;
+  tempFilterBy: any;
+  // searchArea: any;
   filterSort: any;
 
   selectType: any;
@@ -112,15 +92,21 @@ export class TalentPoolDetailComponent implements OnInit {
   candType: any;
   startTime: any = {};
 
-  // dialog call //
-  itemCall: any;
+  // // dialog call //
+  // itemCall: any;
   innerHeight: any;
   waitingApprove: boolean = false;
   appfromURL: any;
   isHybrid: any;
+  jdType: any;
+  callList: any = [];
+  statusCodeList: any = [null, '2'];
+  maxH: any;
+  innerWidth: any;
   constructor(
     private router: Router,
     private service: TalentPoolService,
+    private jobService: JobBoardService,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
@@ -134,8 +120,11 @@ export class TalentPoolDetailComponent implements OnInit {
     }
     this.role = getRole();
     this.jrName = getJdName();
+    this.hcId = getHCID();
     this.collapseAll = getCollapse();
     this.devices = this.utilitiesService.getDevice();
+    this.maxH = window.innerHeight * 0.5;
+    this.jdType = getJdId()
     this.refStageId = this.role.refCompany.menu.talentPool.refStage._id;
     const tabs = this.role.refCompany.menu.talentPool.refStage.tabs.filter(tab => {
       if (tab.relatedJobsDB) {
@@ -164,12 +153,14 @@ export class TalentPoolDetailComponent implements OnInit {
           icon = 'clock-outline';
           break;
       }
-      this.tabs.push({
-        name: element.name,
-        icon: icon,
-        badgeText: 0,
-        badgeStatus: 'default',
-      });
+      if (element.name !== 'SELECTED') {
+        this.tabs.push({
+          name: element.name,
+          icon: icon,
+          badgeText: 0,
+          badgeStatus: 'default',
+        });
+      }
     });
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
       return step.refStage.refMain._id === this.role.refCompany.menu.talentPool.refStage._id && step.editable;
@@ -194,16 +185,12 @@ export class TalentPoolDetailComponent implements OnInit {
     this.comments = [];
     this.soList = [];
     this.sourceBy = [];
-    this.filterBy = [];
-    this.searchArea = [];
-    this.filterType = '';
-    // this.keyword = '';
+    this.filterBy = {};
+    this.tempFilterBy = {};
+    // this.searchArea = [];
+    this.filterType = 'all';
     this.showTips = false;
     this.showCondition = true;
-    // this.checkCalled = true;
-    // this.checkPending = true;
-    // this.checkCalledSend = true;
-    // this.checkPendingSend = true;
     this.filterSort = 'apply';
     this.selectType = 'sort';
     this.callType = 'pendingCall';
@@ -214,72 +201,41 @@ export class TalentPoolDetailComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.filter = {
-      isFilter: false,
-      data: {
-        provinces: [],
-        areas: [],
-        // districts: [],
-        // subDistricts: [],
-      },
-      temp: {
-        provinces: [],
-        areas: [],
-        // districts: [],
-        // subDistricts: [],
-      },
-      selected: {
-        provinces: [],
-        areas: [],
-        // districts: [],
-        // subDistricts: [],
-      }
-    }
-    if (!this.isExpress) {
+    this.callList = [
+      { label: 'All', value: 'all' },
+      { label: 'Pending Call', value: 'pendingCall' },
+      { label: 'Called', value: 'called' }
+    ]
+    this.isFilter = false;
+    if (!this.isExpress || this.jdType === 3) {
       this.filterBy = this.sourceBy;
+      this.tempFilterBy = this.sourceBy;
     } else {
-      this.filterBy = [
-        {
-          name: 'province',
-          value: this.filter.selected.provinces
-        },
-        {
-          name: 'area',
-          value: this.searchArea
-        },
-        {
-          name: 'filterBy',
-          value: this.filterType
-        },
-        // {
-        //   name: 'date',
-        //   value: this.startTime
-        // }
-        // {
-        //   name: 'called',
-        //   value: []
-        // }
-        // {
-        //   name: 'subDistrict',
-        //   value: this.filter.selected.subDistricts
-        // }
-      ]
+      this.filterBy = {
+        filterBy: this.filterType,
+        calledBy: this.userLists,
+        date: this.startTime
+      };
+      this.tempFilterBy = {
+        filterBy: 'all',
+        calledBy: [],
+        date: {}
+      };
     };
     this.onModel();
   }
 
   async onModel() {
-    if (!this.isExpress) {
+    if (!this.isExpress || this.jdType === 3) {
       await this.sourceList();
     } else {
       await this.getQuestionFilter();
     }
-    // await this.search();
   }
 
   sourceList() {
     return new Promise((resolve) => {
-      this.service.sourceList(this.jrId).subscribe(response => {
+      this.jobService.getList().subscribe(response => {
         if (ResponseCode.Success && response.code) {
           this.soList = response.data;
           this.soList.map(element => {
@@ -369,36 +325,54 @@ export class TalentPoolDetailComponent implements OnInit {
       this.service.getDetail(this.refStageId, this.jrId, this.tabSelected, this.criteria).subscribe(response => {
         if (response.code === ResponseCode.Success) {
           this.items = response.data;
+          this.jdType = response.jobType.type;
           this.showTips = response.isOverCandidate;
           this.items.map(item => {
             item.collapse = this.collapseAll;
             item.condition = this.setCondition(item);
             item.commentLenght = item.comments.length;
+            // appform
+            item.hasAppform = false;
+            // if (item.refSource) {
+            //   item.refSource.map(element => {
+            //     if (element.name === 'App-Form') {
+            //       item.hasAppform = true;
+            //     }
+            //   })
+            // }
+            if (item.generalAppForm && item.generalAppForm.flag) {
+              item.hasAppform = true;
+            }
             if (this.isExpress) {
-              item.facebookLength = item.inboxes.length;
+              item.facebookLength = (item.inboxes) ? item.inboxes.length : 0;
               if (!item.called.lastChangedInfo) {
                 item.called.lastChangedInfo = {
                   refUser: ''
                 }
               }
-              if (this.utilitiesService.dateIsValid(item.training.date)) {
-                item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
-              } else {
-                item.training.date = '';
-              }
-              if (this.utilitiesService.dateIsValid(item.onboard.date)) {
-                item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
-              } else {
-                item.onboard.date = '';
-              }
+              // if (this.utilitiesService.dateIsValid(item.training.date)) {
+              //   item.training.date = this.utilitiesService.convertDateTime(item.training.date);
+              // } else {
+              //   item.training.date = '';
+              // }
+              // if (this.utilitiesService.dateIsValid(item.onboard.date)) {
+              //   item.onboard.date = this.utilitiesService.convertDateTime(item.onboard.date);
+              // } else {
+              //   item.onboard.date = '';
+              // }
               if (item.called && item.called.lastChangedInfo) {
                 if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
-                  item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+                  item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(item.called.lastChangedInfo.date);
                 }
+              }
+              if (item.called && item.called.callbackDate && this.utilitiesService.dateIsValid(item.called.callbackDate)) {
+                item.called.callbackDate = this.utilitiesService.convertDateTime(item.called.callbackDate);
+              } else {
+                item.called.callbackDate = null
               }
               if (item.callHistory.length > 0) {
                 item.callHistory.forEach(element => {
-                  element.date = this.utilitiesService.convertDateTimeFromSystem(element.date);
+                  element.date = this.utilitiesService.convertDateTime(element.date);
                 });
               }
             }
@@ -411,71 +385,50 @@ export class TalentPoolDetailComponent implements OnInit {
             }
           });
           // filter hub
-          if (response.filter && this.isExpress && !this.filter.data.provinces.length && !this.isHybrid) {
-            this.filter.isFilter = true;
-            response.filter.provinces.forEach(element => {
-              this.filter.data.provinces.push({
-                label: element.refProvince.name.th,
-                value: element.refProvince._id
-              })
-              this.filter.temp.provinces.push({
-                label: element.refProvince.name.th,
-                value: element.refProvince._id
-              })
-            });
-            response.filter.areas.forEach(element => {
-              let hubName = '';
-              hubName = element.name;
-              if (element.hubCode) {
-                hubName = element.name + '(' + element.hubCode + ')';
-              }
-              this.filter.data.areas.push({
-                label: hubName,
-                value: element._id,
-                group: element.refProvince
-              })
-              this.filter.temp.areas.push({
-                label: hubName,
-                value: element._id,
-                group: element.refProvince
-              })
-            });
-            response.filter.users.forEach(element => {
-              this.userAll.push({
-                label: this.utilitiesService.setFullname(element),
-                value: element._id
-              })
-            });
-            // response.filter.districts.forEach(element => {
-            //   this.filter.data.districts.push({
-            //     label: element.name.th,
-            //     value: element._id,
-            //     group: element.refProvince
-            //   })
-            //   this.filter.temp.districts.push({
-            //     label: element.name.th,
-            //     value: element._id,
-            //     group: element.refProvince
-            //   })
-            // });
-            // response.filter.subDistricts.forEach(element => {
-            //   this.filter.data.subDistricts.push({
-            //     label: element.name.th,
-            //     value: element._id,
-            //     group: element.refDistrict
-            //   })
-            //   this.filter.temp.subDistricts.push({
-            //     label: element.name.th,
-            //     value: element._id,
-            //     group: element.refDistrict
-            //   })
-            // });
-            // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
-            this.filteredDistrict = this.filter.data.areas.slice();
-            this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
-            this.filteredProvince = this.filter.data.provinces.slice();
-            this.userAll = this.removeDuplicates(this.userAll, "value")
-            this.filteredUserAll = this.userAll.slice();
+          // if (response.filter && this.isExpress && !this.filter.data.provinces.length && !this.isHybrid) {
+          //   this.filter.isFilter = true;
+          //   response.filter.provinces.forEach(element => {
+          //     this.filter.data.provinces.push({
+          //       label: element.refProvince.name.th,
+          //       value: element.refProvince._id
+          //     })
+          //     this.filter.temp.provinces.push({
+          //       label: element.refProvince.name.th,
+          //       value: element.refProvince._id
+          //     })
+          //   });
+          //   response.filter.areas.forEach(element => {
+          //     let hubName = '';
+          //     hubName = element.name;
+          //     if (element.hubCode) {
+          //       hubName = element.name + '(' + element.hubCode + ')';
+          //     }
+          //     this.filter.data.areas.push({
+          //       label: hubName,
+          //       value: element._id,
+          //       group: element.refProvince
+          //     })
+          //     this.filter.temp.areas.push({
+          //       label: hubName,
+          //       value: element._id,
+          //       group: element.refProvince
+          //     })
+          //   });
+          //   response.filter.users.forEach(element => {
+          //     this.userAll.push({
+          //       label: this.utilitiesService.setFullname(element),
+          //       value: element._id
+          //     })
+          //   });
+          //   this.filteredDistrict = this.filter.data.areas.slice();
+          //   this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+          //   this.filteredProvince = this.filter.data.provinces.slice();
+          //   this.userAll = this.removeDuplicates(this.userAll, "value")
+          //   this.filteredUserAll = this.userAll.slice();
+          // }
+          if (this.isHybrid && this.jdType !== 3) {
+            this.isFilter = true;
+            this.getUser();
           }
 
           this.paging.length = (response.count && response.count.data) || response.totalDataSize;
@@ -491,132 +444,19 @@ export class TalentPoolDetailComponent implements OnInit {
     })
   }
 
-  changeFilter(calculate: boolean = true, filterBy: any) {
-    if (this.filter.selected.areas.length > 0 && this.filter.selected.provinces.length === 0 && filterBy === 'area') {
-      this.searchArea = [];
-      this.filter.data.areas.forEach(area => {
-        this.filter.selected.areas.forEach(element => {
-          if (element === area.value) {
-            this.searchArea.push({
-              refProvince: area.group,
-              _id: area.value
-            })
-          }
+  getUser() {
+    this.userAll = [];
+    this.service.getListUser().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(element => {
+          this.userAll.push({
+            label: this.utilitiesService.setFullname(element),
+            value: element._id
+          })
         });
-      })
-    }
-    if (this.filter.selected.provinces.length === 0 && filterBy === 'province') {
-      this.searchArea = [];
-      this.filter.selected.areas = [];
-      this.filter.data.areas = this.filter.temp.areas;
-      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
-      this.filteredDistrict = this.filter.data.areas.slice();
-    }
-    if (calculate && this.filter.selected.provinces.length > 0) {
-      this.filter.data.areas = [];
-      this.searchArea = [];
-      // this.filter.data.districts = [];
-      // this.filter.data.subDistricts = [];
-      this.filter.selected.provinces.forEach(province => {
-        const districts = this.filter.temp.areas.filter(district => {
-          return district.group === province;
-        });
-        districts.forEach(district => {
-          this.filter.data.areas.push({
-            label: district.label,
-            value: district.value,
-            group: province
-          });
-        });
-      });
-      const districtSelected = _.cloneDeep(this.filter.selected.areas);
-      this.filter.selected.areas = [];
-      if (districtSelected.length) {
-        districtSelected.forEach(district => {
-          const found = this.filter.data.areas.find(element => {
-            return element.value === district;
-          });
-          if (found) {
-            this.filter.selected.areas.push(found.value);
-            this.searchArea.push({
-              refProvince: found.group,
-              _id: found.value
-            })
-          }
-        });
+        this.filteredUserAll = this.userAll.slice();
       }
-      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
-      this.filteredDistrict = this.filter.data.areas.slice();
-      // subDistrict
-      // this.filter.selected.districts.forEach(district => {
-      //   const subDistricts = this.filter.temp.subDistricts.filter(sub => {
-      //     return sub.group === district;
-      //   });
-      //   subDistricts.forEach(sub => {
-      //     this.filter.data.subDistricts.push({
-      //       label: sub.label,
-      //       value: sub.value,
-      //       group: district
-      //     });
-      //   });
-      // });
-      // const subDistrictSelected = _.cloneDeep(this.filter.selected.subDistricts);
-      // this.filter.selected.subDistricts = [];
-      // if (subDistrictSelected.length) {
-      //   subDistrictSelected.forEach(sub => {
-      //     const found = this.filter.data.subDistricts.find(element => {
-      //       return element.value === sub;
-      //     });
-      //     if (found) {
-      //       this.filter.selected.subDistricts.push(found.value);
-      //     }
-      //   });
-      // }
-      // this.filter.data.subDistricts = this.removeDuplicates(this.filter.data.subDistricts, "value")
-      // this.filteredSubDistrict = this.filter.data.subDistricts.slice();
-    }
-    if (this.filter.selected.areas.length === 0) {
-      this.searchArea = [];
-    }
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      }
-    ]
-    if (this.selectType === 'call' && this.callType === 'pendingCall') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      })
-    }
-    if (this.selectType === 'call' && this.callType === 'called') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      },
-        {
-          name: 'calledBy',
-          value: this.userLists
-        })
-      if (this.callType === 'called') {
-        this.filterBy.push({
-          name: 'date',
-          value: this.startTime
-        })
-      }
-    }
-    if (this.selectType === 'cand') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      })
-    }
-    this.search();
+    })
   }
 
   removeDuplicates(myArr, prop) {
@@ -626,19 +466,8 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   clearFilter() {
-    this.filter.selected.provinces = [];
-    this.filter.selected.areas = [];
-    this.searchArea = []
-    this.filterBy = [
-      {
-        name: 'province',
-        value: []
-      },
-      {
-        name: 'area',
-        value: []
-      }
-    ]
+    this.filterBy = this.tempFilterBy;
+    this.filterType = 'all';
     this.selectType = 'sort';
     this.filterSort = 'apply';
     this.startTime = {};
@@ -811,59 +640,38 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any, dialog: any) {
-    if (item.refJR.isDefault) {
-      // this.refStageId = item.refStage._id;
-      const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
-      });
-      confirm.afterClosed().subscribe(result => {
-        if (result) {
-          this.waitingApprove = true;
-          this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
-            if (response.code === ResponseCode.Success) {
-              this.showToast('success', 'Success Message', response.message);
-              let indexA
-              this.items.map((element, index) => {
-                if (element._id === item._id) {
-                  indexA = index;
-                }
-              })
-              this.items.splice(indexA, 1);
-              this.tabs.map(element => {
-                if (element.name === 'PENDING') {
-                  element.badgeText = element.badgeText - 1;
-                }
-              })
-              this.waitingApprove = false;
-              // this.search();
-            } else {
-              this.waitingApprove = false;
-              this.showToast('danger', 'Error Message', response.message);
-            }
-          });
-        }
-      });
-    } else {
-      if (item.refCandidate.email) {
-        setUserEmail(item.refCandidate.email);
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.waitingApprove = true;
+        this.candidateService.candidateFlowApprove(item._id).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            // set to processing
+            item.waitingCVID = true;
+            // let indexA
+            // this.items.map((element, index) => {
+            //   if (element._id === item._id) {
+            //     indexA = index;
+            //   }
+            // })
+            // this.items.splice(indexA, 1);
+            // this.tabs.map(element => {
+            //   if (element.name === 'PENDING' && element.badgeText !== 0) {
+            //     element.badgeText = element.badgeText - 1;
+            //   }
+            // })
+            this.waitingApprove = false;
+          } else {
+            this.waitingApprove = false;
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
       }
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        if (result) {
-          this.search();
-        }
-      });
-    }
+    });
   }
 
   appointmentExam(item: any) {
@@ -1009,9 +817,46 @@ export class TalentPoolDetailComponent implements OnInit {
     this.callDialog(dialog)
   }
 
-  openCallHistory(dialog: TemplateRef<any>, item) {
-    this.itemCall = item.callHistory;
-    this.callDialog(dialog);
+  openCallHistory(item) {
+    setHistoryData(item);
+    setFlagEdit(true);
+    this.dialogService.open(PopupCallHistoryComponent,
+      {
+        closeOnBackdropClick: true,
+        hasScroll: true,
+      }
+    ).onClose.subscribe(result => {
+      if (result) {
+        let data = getHistoryData();
+        setHistoryData();
+        // let flag = getFlagCall();
+        if (data) {
+          item.called.flag = data.called;
+          item.called.lastChangedInfo.refUser = data.refUser;
+          item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(data.date);
+          item.called.missCall = data.missCall;
+          item.called.callbackDate = this.utilitiesService.convertDateTime(data.callbackDate);
+          item.refCandidate.callHistory.push({})
+        } else {
+          item.called.flag = false;
+          item.called.lastChangedInfo.refUser = '';
+          item.called.lastChangedInfo.date = null;
+          item.called.missCall = false;
+          item.called.callbackDate = null;
+          item.refCandidate.callHistory = [];
+        }
+        setFlagEdit();
+        setFlagCall();
+      }
+      // let flag = getFlagEdit();
+      // setFlagEdit();
+      // if (flag) {
+      //   let comment = getHistoryData();
+      //   item.commentLenght = comment.length;
+      // }
+    });
+    // this.itemCall = item.callHistory;
+    // this.callDialog(dialog);
   }
 
   callDialog(dialog: TemplateRef<any>) {
@@ -1091,10 +936,10 @@ export class TalentPoolDetailComponent implements OnInit {
       setFlagExam('true');
       setCompanyId(this.role.refCompany._id)
       const appURL = getAppURL();
-      // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
       // window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       this.router.navigate([]).then(result => {
-        window.open(appURL + "appform/flash/d/" + item.generalAppForm.refGeneralAppForm, '_blank');
+        // window.open("http://10.35.0.105:4201/appform/flash/d/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/flash/d/" + item.generalAppForm.refGeneralAppForm._id + "/" + this.role.token, '_blank');
       });
     }
   }
@@ -1143,36 +988,32 @@ export class TalentPoolDetailComponent implements OnInit {
   checkFiltered(name) {
     this.callType = name;
     this.filterType = name;
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      }
-    ]
+    this.filterBy = this.tempFilterBy;
     if (name === 'pendingCall') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      })
+      // this.filterBy.push({
+      //   name: 'filterBy',
+      //   value: this.filterType
+      // })
+      this.filterBy = { filterBy: this.filterType };
     } else {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      },
-        {
-          name: 'calledBy',
-          value: this.userLists
-        },
-        {
-          name: 'date',
-          value: this.startTime
-        }
-      )
-
+      // this.filterBy.push({
+      //   name: 'filterBy',
+      //   value: this.filterType
+      // },
+      //   {
+      //     name: 'calledBy',
+      //     value: this.userLists
+      //   },
+      //   {
+      //     name: 'date',
+      //     value: this.startTime
+      //   }
+      // )
+      this.filterBy = {
+        filterBy: this.filterType,
+        calledBy: this.userLists,
+        date: this.startTime
+      };
     }
     this.search();
   }
@@ -1180,20 +1021,12 @@ export class TalentPoolDetailComponent implements OnInit {
   checkCand(name) {
     this.candType = name;
     this.filterType = name;
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'filterBy',
-        value: this.filterType
-      }
-    ]
+    this.filterBy = this.tempFilterBy;
+    this.filterBy = {
+      filterBy: this.filterType,
+      calledBy: this.userLists,
+      date: this.startTime
+    };
     this.search();
   }
 
@@ -1224,30 +1057,38 @@ export class TalentPoolDetailComponent implements OnInit {
     //   item.called.flag = !item.called.flag;
     //   this.callService(item, item.called);
     // }
-    item.called.flag = !item.called.flag;
-    this.callService(item, item.called);
+    // item.called.flag = !item.called.flag;
+    setFlagCall(true);
+    this.openCallHistory(item)
+    // this.callService(item, item.called);
   }
 
   callService(item, data) {
-    this.candidateService.candidateFlowEdit(item._id, { called: data }).subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        this.showToast('success', 'Success Message', response.message);
-        item.called.lastChangedInfo.refUser = this.role;
-        item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(new Date());
-        item.callHistory.push({
-          refUser: {
-            firstname: this.role.firstname,
-            lastname: this.role.lastname,
-            imageData: this.role.imagePath
-          },
-          date: this.utilitiesService.convertDateTime(new Date()),
-          called: item.called.flag,
-          isFollow: item.called.isFollow
-        })
-      } else {
-        this.showToast('danger', 'Error Message', response.message);
-      }
-    })
+    if (!data.flag) {
+      setFlagCall(true);
+      this.openCallHistory(item)
+    } else {
+      item.called.flag = !item.called.flag;
+      this.candidateService.candidateFlowEdit(item._id, { called: data }).subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          this.showToast('success', 'Success Message', response.message);
+          item.called.lastChangedInfo.refUser = this.role;
+          item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(new Date());
+          item.refCandidate.callHistory.push({
+            refUser: {
+              firstname: this.role.firstname,
+              lastname: this.role.lastname,
+              imageData: this.role.imagePath
+            },
+            date: this.utilitiesService.convertDateTime(new Date()),
+            called: item.called.flag,
+            isFollow: item.called.isFollow
+          })
+        } else {
+          this.showToast('danger', 'Error Message', response.message);
+        }
+      })
+    }
   }
 
   openPopupTrainingDate(item: any) {
@@ -1316,7 +1157,8 @@ export class TalentPoolDetailComponent implements OnInit {
   }
 
   checkCV(item: any) {
-    const url = environment.API_URI + "/pdf" + '?id=' + item._id;
+    const url = environment.API_URI + "/pdf/" + item._id;
+    // const url = environment.API_URI + "/pdf" + '?id=' + item._id;
     window.open(url, '_blank');
   }
 
@@ -1341,28 +1183,21 @@ export class TalentPoolDetailComponent implements OnInit {
     } else {
       this.startTime = event;
     }
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'filterBy',
-        value: this.filterType
-      },
-      {
-        name: 'calledBy',
-        value: this.userLists
-      },
-      {
-        name: 'date',
-        value: this.startTime
-      }
-    ]
+    // this.filterBy = [
+    //   {
+    //     name: 'filterBy',
+    //     value: this.filterType
+    //   },
+    //   {
+    //     name: 'calledBy',
+    //     value: this.userLists
+    //   },
+    //   {
+    //     name: 'date',
+    //     value: this.startTime
+    //   }
+    // ]
+    this.filterBy.date = this.startTime
     this.search();
   }
 

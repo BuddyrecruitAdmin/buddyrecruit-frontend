@@ -64,7 +64,7 @@ export interface CompanyDetail {
   channelID: any;
   interviewPeriod: number;
   logoURL: any;
-  backgroundColor: any;
+  btnColor: any;
   buttonColor: any;
   color: any;
 }
@@ -247,7 +247,7 @@ export class CompanyDetailComponent implements OnInit {
       channelID: '',
       interviewPeriod: 30,
       logoURL: '',
-      backgroundColor: '#ffffff',
+      btnColor: '#ffffff',
       buttonColor: '#35c4b2',
       color: '#000000',
     }
@@ -385,8 +385,8 @@ export class CompanyDetailComponent implements OnInit {
           if (!this.companyDetail.logoURL) {
             this.companyDetail.logoURL = '';
           }
-          if (!this.companyDetail.backgroundColor) {
-            this.companyDetail.backgroundColor = '#ffffff';
+          if (!this.companyDetail.btnColor) {
+            this.companyDetail.btnColor = '#ffffff';
           }
           if (!this.companyDetail.buttonColor) {
             this.companyDetail.buttonColor = '#35c4b2';

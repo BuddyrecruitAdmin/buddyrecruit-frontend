@@ -86,7 +86,7 @@
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>
@@ -126,7 +126,7 @@
                 {{ item.lastChangedInfo?.refUser?.firstname }}
                 {{ item.lastChangedInfo?.refUser?.lastname }}
               </td>
-              <td>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</td>
+              <td>{{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}</td>
               <td class="actions" *ngIf="role.refAuthorize.configuration.authorize.editable">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/setting/authorize/edit/'+item._id">

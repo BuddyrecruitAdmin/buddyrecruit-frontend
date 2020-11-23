@@ -1,9 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from "@angular/router";
 import { OnboardService } from '../onboard.service';
+import { TalentPoolService } from '../../talent-pool/talent-pool.service';
 import { ResponseCode, Paging, InputType } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count, Filter, DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword, setKeyword, setHistoryData, getAppURL } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setIconId, setUserEmail, setUserToken, setFlagExam, getUserSuccess, getHistoryData, getFlagEdit, setFlagEdit, getKeyword, setKeyword, setHistoryData, getAppURL, getJdId, getHCID, setJdName, setHCID } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -26,7 +27,8 @@ import { PopupChatUserComponent } from '../../../component/popup-chat-user/popup
 import { environment } from '../../../../environments/environment';
 import { PopupHistoryComponent } from '../../../component/popup-history/popup-history.component';
 import { MENU_PROCESS_FLOW } from "../../pages-menu";
-// import { PopupResendEmailComponent } from '../../../component/popup-resend-email/popup-resend-email.component';
+import { PopupCallHistoryComponent } from '../../../component/popup-call-history/popup-call-history.component';
+import { JobBoardService } from '../../setting/job-board/job-board.service';
 @Component({
   selector: 'ngx-onboard-detail',
   templateUrl: './onboard-detail.component.html',
@@ -36,6 +38,7 @@ export class OnboardDetailComponent implements OnInit {
   role: any;
   jrId: any;
   jrName: any;
+  hcId: any;
   refStageId: any;
   tabs: any;
   steps: any;
@@ -61,25 +64,9 @@ export class OnboardDetailComponent implements OnInit {
   questionFilter = [];
   questionFilterSelected: Filter[] = [];
 
-  filter: {
-    isFilter: boolean,
-    data: {
-      provinces: DropDownValue[],
-      areas: DropDownGroup[]
-    },
-    temp: {
-      provinces: DropDownValue[],
-      areas: DropDownGroup[]
-    },
-    selected: {
-      provinces: any,
-      areas: any;
-    }
-  };
-  filteredProvince: any;
-  filteredDistrict: any;
+  isFilter: boolean;
   filterBy: any;
-  searchArea: any;
+  tempFilterBy: any;
   filterSort: any;
   filterTrain: any = {};
   filterOn: any = {};
@@ -97,18 +84,24 @@ export class OnboardDetailComponent implements OnInit {
   startTime: any = {};
 
   dialogRef: NbDialogRef<any>;
-  itemCall: any;
+  // itemCall: any;
   innerHeight: any;
+  waitingApprove: boolean = false;
   isHybrid: any;
+  jdType: any;
+  callList: any = [];
+  maxH: any;
   constructor(
     private router: Router,
     private service: OnboardService,
+    private talentService: TalentPoolService,
     private utilitiesService: UtilitiesService,
     private toastrService: NbToastrService,
     private dialogService: NbDialogService,
     public matDialog: MatDialog,
     public candidateService: CandidateService,
     public appFormService: AppFormService,
+    private jobService: JobBoardService,
   ) {
     this.jrId = getJrId();
     if (!this.jrId) {
@@ -116,8 +109,11 @@ export class OnboardDetailComponent implements OnInit {
     }
     this.role = getRole();
     this.jrName = getJdName();
+    this.hcId = getHCID();
     this.collapseAll = getCollapse();
+    this.jdType = getJdId()
     this.devices = this.utilitiesService.getDevice();
+    this.maxH = window.innerHeight * 0.5;
     this.refStageId = this.role.refCompany.menu.onboard.refStage._id;
     const tabs = this.role.refCompany.menu.onboard.refStage.tabs.filter(tab => {
       if (tab.relatedJobsDB) {
@@ -131,10 +127,8 @@ export class OnboardDetailComponent implements OnInit {
       let icon: string;
       switch (element.name) {
         case 'PENDING':
+          element.name = 'PASSED'
           icon = 'clock-outline';
-          break;
-        case 'JOB STARTED':
-          icon = 'done-all-outline';
           break;
         case 'REJECTED':
           icon = 'slash-outline';
@@ -143,12 +137,14 @@ export class OnboardDetailComponent implements OnInit {
           icon = 'clock-outline';
           break;
       }
-      this.tabs.push({
-        name: element.name,
-        icon: icon,
-        badgeText: 0,
-        badgeStatus: 'default',
-      })
+      if (element.name !== 'JOB STARTED') {
+        this.tabs.push({
+          name: element.name,
+          icon: icon,
+          badgeText: 0,
+          badgeStatus: 'default',
+        })
+      }
     });
     this.steps = this.role.refAuthorize.processFlow.exam.steps.filter(step => {
       return step.refStage.refMain._id === this.role.refCompany.menu.onboard.refStage._id && step.editable;
@@ -173,7 +169,7 @@ export class OnboardDetailComponent implements OnInit {
     this.soList = [];
     this.sourceBy = [];
     this.filterBy = [];
-    this.searchArea = [];
+    this.tempFilterBy = {};
     this.filterSort = 'apply';
     this.selectType = 'sort';
     this.callType = 'pendingCall';
@@ -184,48 +180,32 @@ export class OnboardDetailComponent implements OnInit {
       pageSize: Paging.pageSizeOptions[0],
       pageSizeOptions: Paging.pageSizeOptions
     }
-    this.filter = {
-      isFilter: false,
-      data: {
-        provinces: [],
-        areas: []
-      },
-      temp: {
-        provinces: [],
-        areas: []
-      },
-      selected: {
-        provinces: [],
-        areas: []
-      }
-    }
-    if (!this.isExpress) {
+    this.callList = [
+      { label: 'All', value: 'all' },
+      { label: 'Pending Call', value: 'pendingCall' },
+      { label: 'Called', value: 'called' }
+    ]
+    this.isFilter = false;
+    if (!this.isExpress || this.jdType === 3) {
       this.filterBy = this.sourceBy;
+      this.tempFilterBy = this.sourceBy;
     } else {
-      this.filterBy = [
-        {
-          name: 'province',
-          value: this.filter.selected.provinces
-        },
-        {
-          name: 'area',
-          value: this.searchArea
-        },
-        {
-          name: 'training',
-          value: this.filterTrain
-        },
-        {
-          name: 'onboard',
-          value: this.filterOn
-        }
-      ]
+      this.filterBy = {
+        filterBy: this.filterType,
+        calledBy: this.userLists,
+        date: this.startTime
+      };
+      this.tempFilterBy = {
+        filterBy: 'all',
+        calledBy: [],
+        date: {}
+      };
     };
     this.onModel();
   }
 
   async onModel() {
-    if (!this.isExpress) {
+    if (!this.isExpress || this.jdType === 3) {
       await this.sourceList();
     } else {
       await this.getQuestionFilter();
@@ -235,7 +215,7 @@ export class OnboardDetailComponent implements OnInit {
 
   sourceList() {
     return new Promise((resolve) => {
-      this.service.sourceList(this.jrId).subscribe(response => {
+      this.jobService.getList().subscribe(response => {
         if (ResponseCode.Success && response.code) {
           this.soList = response.data;
           this.soList.map(element => {
@@ -299,7 +279,7 @@ export class OnboardDetailComponent implements OnInit {
   search() {
     this.loading = true;
     this.criteria = {
-      keyword: this.keyword,
+      keyword: this.keyword.trim(),
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: [
@@ -323,6 +303,11 @@ export class OnboardDetailComponent implements OnInit {
           item.collapse = this.collapseAll;
           item.condition = this.setCondition(item);
           item.commentLenght = item.comments.length;
+          // appform
+          item.hasAppform = false;
+          if (item.generalAppForm && item.generalAppForm.flag) {
+            item.hasAppform = true;
+          }
           if (this.isExpress) {
             item.facebookLength = item.inboxes.length;
             if (!item.called.lastChangedInfo) {
@@ -331,68 +316,74 @@ export class OnboardDetailComponent implements OnInit {
               }
             }
             if (this.utilitiesService.dateIsValid(item.training.date)) {
-              item.training.date = this.utilitiesService.convertDateTimeFromSystem(item.training.date);
+              item.training.date = this.utilitiesService.convertDateTime(item.training.date);
             } else {
               item.training.date = '';
             }
             if (this.utilitiesService.dateIsValid(item.onboard.date)) {
-              item.onboard.date = this.utilitiesService.convertDateTimeFromSystem(item.onboard.date);
+              item.onboard.date = this.utilitiesService.convertDateTime(item.onboard.date);
             } else {
               item.onboard.date = '';
             }
             if (item.called && item.called.lastChangedInfo) {
               if (this.utilitiesService.dateIsValid(item.called.lastChangedInfo.date)) {
-                item.called.lastChangedInfo.date = this.utilitiesService.convertDateTimeFromSystem(item.called.lastChangedInfo.date);
+                item.called.lastChangedInfo.date = this.utilitiesService.convertDateTime(item.called.lastChangedInfo.date);
               }
             }
             if (item.callHistory.length > 0) {
               item.callHistory.forEach(element => {
-                element.date = this.utilitiesService.convertDateTimeFromSystem(element.date);
+                element.date = this.utilitiesService.convertDateTime(element.date);
               });
             }
           }
-          if (this.utilitiesService.dateIsValid(item.refCandidate.birth) && item.refCandidate.birth !== '1970-01-01T00:00:00.000Z') {
-            item.refCandidate.birth = new Date((item.refCandidate.birth));
-            var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
-            item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+          if (item.refCandidate && item.refCandidate.birth) {
+            if (this.utilitiesService.dateIsValid(item.refCandidate.birth) && item.refCandidate.birth !== '1970-01-01T00:00:00.000Z') {
+              item.refCandidate.birth = new Date((item.refCandidate.birth));
+              var timeDiff = Math.abs(Date.now() - item.refCandidate.birth.getTime());
+              item.refCandidate.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
+            }
           }
         });
         // filter hub
-        if (response.filter && this.isExpress && !this.filter.data.provinces.length && !this.isHybrid) {
-          this.filter.isFilter = true;
-          response.filter.provinces.forEach(element => {
-            this.filter.data.provinces.push({
-              label: element.refProvince.name.th,
-              value: element.refProvince._id
-            })
-            this.filter.temp.provinces.push({
-              label: element.refProvince.name.th,
-              value: element.refProvince._id
-            })
-          });
-          response.filter.areas.forEach(element => {
-            this.filter.data.areas.push({
-              label: element.name,
-              value: element._id,
-              group: element.refProvince
-            })
-            this.filter.temp.areas.push({
-              label: element.name,
-              value: element._id,
-              group: element.refProvince
-            })
-          });
-          response.filter.users.forEach(element => {
-            this.userAll.push({
-              label: this.utilitiesService.setFullname(element),
-              value: element._id
-            })
-          });
-          this.filteredDistrict = this.filter.data.areas.slice();
-          this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
-          this.filteredProvince = this.filter.data.provinces.slice();
-          this.userAll = this.removeDuplicates(this.userAll, "value")
-          this.filteredUserAll = this.userAll.slice();
+        // if (response.filter && this.isExpress && !this.filter.data.provinces.length && !this.isHybrid) {
+        //   this.filter.isFilter = true;
+        //   response.filter.provinces.forEach(element => {
+        //     this.filter.data.provinces.push({
+        //       label: element.refProvince.name.th,
+        //       value: element.refProvince._id
+        //     })
+        //     this.filter.temp.provinces.push({
+        //       label: element.refProvince.name.th,
+        //       value: element.refProvince._id
+        //     })
+        //   });
+        //   response.filter.areas.forEach(element => {
+        //     this.filter.data.areas.push({
+        //       label: element.name,
+        //       value: element._id,
+        //       group: element.refProvince
+        //     })
+        //     this.filter.temp.areas.push({
+        //       label: element.name,
+        //       value: element._id,
+        //       group: element.refProvince
+        //     })
+        //   });
+        //   response.filter.users.forEach(element => {
+        //     this.userAll.push({
+        //       label: this.utilitiesService.setFullname(element),
+        //       value: element._id
+        //     })
+        //   });
+        //   this.filteredDistrict = this.filter.data.areas.slice();
+        //   this.filter.data.provinces = this.removeDuplicates(this.filter.data.provinces, "value")
+        //   this.filteredProvince = this.filter.data.provinces.slice();
+        //   this.userAll = this.removeDuplicates(this.userAll, "value")
+        //   this.filteredUserAll = this.userAll.slice();
+        // }
+        if (this.isHybrid && this.jdType !== 3) {
+          this.isFilter = true;
+          this.getUser();
         }
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
@@ -405,111 +396,19 @@ export class OnboardDetailComponent implements OnInit {
     });
   }
 
-  changeFilter(calculate: boolean = true, filterBy: any) {
-    if (this.filter.selected.areas.length > 0 && this.filter.selected.provinces.length === 0 && filterBy === 'area') {
-      this.searchArea = [];
-      this.filter.data.areas.forEach(area => {
-        this.filter.selected.areas.forEach(element => {
-          if (element === area.value) {
-            this.searchArea.push({
-              refProvince: area.group,
-              _id: area.value
-            })
-          }
+  getUser() {
+    this.userAll = [];
+    this.talentService.getListUser().subscribe(response => {
+      if (response.code === ResponseCode.Success) {
+        response.data.forEach(element => {
+          this.userAll.push({
+            label: this.utilitiesService.setFullname(element),
+            value: element._id
+          })
         });
-      })
-    }
-    if (this.filter.selected.provinces.length === 0 && filterBy === 'province') {
-      this.searchArea = [];
-      this.filter.selected.areas = [];
-      this.filter.data.areas = this.filter.temp.areas;
-      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
-      this.filteredDistrict = this.filter.data.areas.slice();
-    }
-    if (calculate && this.filter.selected.provinces.length > 0) {
-      this.filter.data.areas = [];
-      this.searchArea = [];
-      this.filter.selected.provinces.forEach(province => {
-        const districts = this.filter.temp.areas.filter(district => {
-          return district.group === province;
-        });
-        districts.forEach(district => {
-          this.filter.data.areas.push({
-            label: district.label,
-            value: district.value,
-            group: province
-          });
-        });
-      });
-      const districtSelected = _.cloneDeep(this.filter.selected.areas);
-      this.filter.selected.areas = [];
-      if (districtSelected.length) {
-        districtSelected.forEach(district => {
-          const found = this.filter.data.areas.find(element => {
-            return element.value === district;
-          });
-          if (found) {
-            this.filter.selected.areas.push(found.value);
-            this.searchArea.push({
-              refProvince: found.group,
-              _id: found.value
-            })
-          }
-        });
+        this.filteredUserAll = this.userAll.slice();
       }
-      // this.filter.data.areas = this.removeDuplicates(this.filter.data.areas, "value")
-      this.filteredDistrict = this.filter.data.areas.slice();
-    }
-    if (this.filter.selected.areas.length === 0) {
-      this.searchArea = [];
-    }
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'training',
-        value: this.filterTrain
-      },
-      {
-        name: 'onboard',
-        value: this.filterOn
-      }
-    ]
-    if (this.selectType === 'call' && this.callType === 'pendingCall') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      })
-    }
-    if (this.selectType === 'call' && this.callType === 'called') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      },
-        {
-          name: 'calledBy',
-          value: this.userLists
-        })
-      if (this.callType === 'called') {
-        this.filterBy.push({
-          name: 'date',
-          value: this.startTime
-        })
-      }
-    }
-    if (this.selectType === 'cand') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      })
-    }
-    this.search();
+    })
   }
 
   removeDuplicates(myArr, prop) {
@@ -519,29 +418,8 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   clearFilter() {
-    this.filter.selected.provinces = [];
-    this.filter.selected.areas = [];
-    this.filterOn = {};
-    this.filterTrain = {};
-    this.searchArea = []
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'training',
-        value: this.filterTrain
-      },
-      {
-        name: 'onboard',
-        value: this.filterOn
-      }
-    ]
+    this.filterBy = this.tempFilterBy;
+    this.filterType = 'all';
     this.selectType = 'sort';
     this.filterSort = 'apply';
     this.startTime = {};
@@ -622,7 +500,7 @@ export class OnboardDetailComponent implements OnInit {
       this.count = count;
       this.tabs.map(element => {
         switch (element.name) {
-          case 'PENDING':
+          case 'PASSED':
             element.badgeText = count.pending;
             element.badgeStatus = 'danger';
             break;
@@ -635,7 +513,7 @@ export class OnboardDetailComponent implements OnInit {
             element.badgeStatus = 'default';
             break;
           default:
-            element.badgeText = '0';
+            element.badgeText = 0;
             element.badgeStatus = 'default';
         }
       });
@@ -652,57 +530,36 @@ export class OnboardDetailComponent implements OnInit {
   }
 
   approve(item: any, button: any) {
-    if (item.refJR.isDefault) {
-      // this.refStageId = item.refStage._id;
-      const confirm = this.matDialog.open(PopupMessageComponent, {
-        width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
-        data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
-      });
-      confirm.afterClosed().subscribe(result => {
-        if (result) {
-          this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
-            if (response.code === ResponseCode.Success) {
-              this.showToast('success', 'Success Message', response.message);
-              let indexA
-              this.items.map((element, index) => {
-                if (element._id === item._id) {
-                  indexA = index;
-                }
-              })
-              this.items.splice(indexA, 1);
-              this.tabs.map(element => {
-                if (element.name === 'PENDING') {
-                  element.badgeText = element.badgeText - 1;
-                }
-              })
-              // this.search();
-            } else {
-              this.showToast('danger', 'Error Message', response.message);
-            }
-          });
-        }
-      });
-    } else {
-      if (item.refCandidate.email) {
-        setUserEmail(item.refCandidate.email);
+    const confirm = this.matDialog.open(PopupMessageComponent, {
+      width: `${this.utilitiesService.getWidthOfPopupCard()}px`,
+      data: { type: 'C', content: 'คุณต้องการทำรายการต่อหรือไม่' }
+    });
+    confirm.afterClosed().subscribe(result => {
+      if (result) {
+        this.waitingApprove = true;
+        this.candidateService.candidateFlowApprove(item._id).subscribe(response => {
+          if (response.code === ResponseCode.Success) {
+            this.showToast('success', 'Success Message', response.message);
+            let indexA
+            this.items.map((element, index) => {
+              if (element._id === item._id) {
+                indexA = index;
+              }
+            })
+            this.items.splice(indexA, 1);
+            this.tabs.map(element => {
+              if (element.name === 'PENDING' && element.badgeText !== 0) {
+                element.badgeText = element.badgeText - 1;
+              }
+            })
+            this.waitingApprove = false;
+          } else {
+            this.waitingApprove = false;
+            this.showToast('danger', 'Error Message', response.message);
+          }
+        });
       }
-      setFlowId(item._id);
-      setCandidateId(item.refCandidate._id);
-      setButtonId(button._id);
-      this.dialogService.open(PopupPreviewEmailComponent,
-        {
-          closeOnBackdropClick: true,
-          hasScroll: true,
-        }
-      ).onClose.subscribe(result => {
-        setFlowId();
-        setCandidateId();
-        setButtonId();
-        if (result) {
-          this.search();
-        }
-      });
-    }
+    });
   }
 
   reject(item: any) {
@@ -827,7 +684,6 @@ export class OnboardDetailComponent implements OnInit {
         hasScroll: true,
       }
     ).onClose.subscribe(result => {
-      // this.search();
       if (result) {
         setFlowId();
       }
@@ -839,20 +695,6 @@ export class OnboardDetailComponent implements OnInit {
       }
     });
   }
-
-  // sendEmail(item: any ) {         
-  //   setFlowId(item._id);
-  //   setCandidateId(item.refCandidate._id);
-  //   this.dialogService.open(PopupResendEmailComponent,
-  //     {
-  //       closeOnBackdropClick: false,
-  //       hasScroll: true,
-  //     }
-  //   ).onClose.subscribe(result => {
-  //     setFlowId();
-  //     setCandidateId();
-  //   });
-  // }
 
   forExpressCompany() {
     if (this.items && this.items.length) {
@@ -882,55 +724,21 @@ export class OnboardDetailComponent implements OnInit {
     if (item.generalAppForm.refGeneralAppForm) {
       setUserToken(this.role.token);
       setFlagExam('true');
-      // window.open("http://localhost:4201/appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token);
-      // window.open("https://lazada-express-form.web.app/appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token);
       const appURL = getAppURL();
       this.router.navigate([]).then(result => {
-        window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
+        window.open(appURL + "appform/flash/d/" + item.generalAppForm.refGeneralAppForm + "/" + this.role.token, '_blank');
       });
     }
   }
 
-  onEventStartEndRange(event, name) {
-    switch (name) {
-      case 'train':
-        if (event.start && !event.end) {
-          this.filterTrain.start = event.start;
-          this.filterTrain.end = event.start;
-        } else {
-          this.filterTrain = event;
-        }
-        break;
-      case 'onboard':
-        if (event.start && !event.end) {
-          this.filterOn.start = event.start;
-          this.filterOn.end = event.start;
-        } else {
-          this.filterOn = event;
-        }
-        break;
-
-      default:
-        break;
+  onEventStartEndRange(event) {
+    if (event.start && !event.end) {
+      this.startTime.start = event.start;
+      this.startTime.end = event.start;
+    } else {
+      this.startTime = event;
     }
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'training',
-        value: this.filterTrain
-      },
-      {
-        name: 'onboard',
-        value: this.filterOn
-      }
-    ]
+    this.filterBy.date = this.startTime
     this.search();
   }
 
@@ -977,42 +785,15 @@ export class OnboardDetailComponent implements OnInit {
   checkFiltered(name) {
     this.callType = name;
     this.filterType = name;
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'training',
-        value: this.filterTrain
-      },
-      {
-        name: 'onboard',
-        value: this.filterOn
-      }
-    ]
+    this.filterBy = this.tempFilterBy;
     if (name === 'pendingCall') {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      })
+      this.filterBy = { filterBy: this.filterType };
     } else {
-      this.filterBy.push({
-        name: 'filterBy',
-        value: this.filterType
-      },
-        {
-          name: 'calledBy',
-          value: this.userLists
-        },
-        {
-          name: 'date',
-          value: this.startTime
-        })
+      this.filterBy = {
+        filterBy: this.filterType,
+        calledBy: this.userLists,
+        date: this.startTime
+      };
     }
     this.search();
   }
@@ -1020,28 +801,12 @@ export class OnboardDetailComponent implements OnInit {
   checkCand(name) {
     this.candType = name;
     this.filterType = name;
-    this.filterBy = [
-      {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'training',
-        value: this.filterTrain
-      },
-      {
-        name: 'onboard',
-        value: this.filterOn
-      },
-      {
-        name: 'filterBy',
-        value: this.filterType
-      }
-    ]
+    this.filterBy = this.tempFilterBy;
+    this.filterBy = {
+      filterBy: this.filterType,
+      calledBy: this.userLists,
+      date: this.startTime
+    };
     this.search();
   }
 
@@ -1198,41 +963,20 @@ export class OnboardDetailComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  openCallHistory(dialog: TemplateRef<any>, item) {
-    this.itemCall = item.callHistory;
-    this.callDialog(dialog);
-  }
-
-  onEventStartEndRangeFilter(event) {
-    if (event.start && !event.end) {
-      this.startTime.start = event.start;
-      this.startTime.end = event.start;
-    } else {
-      this.startTime = event;
-    }
-    this.filterBy = [
+  openCallHistory(item) {
+    setHistoryData(item);
+    setFlagEdit(false)
+    this.dialogService.open(PopupCallHistoryComponent,
       {
-        name: 'province',
-        value: this.filter.selected.provinces
-      },
-      {
-        name: 'area',
-        value: this.searchArea
-      },
-      {
-        name: 'filterBy',
-        value: this.filterType
-      },
-      {
-        name: 'calledBy',
-        value: this.userLists
-      },
-      {
-        name: 'date',
-        value: this.startTime
+        closeOnBackdropClick: true,
+        hasScroll: true,
       }
-    ]
-    this.search();
+    ).onClose.subscribe(result => {
+      if (result) {
+        setFlagEdit();
+        setHistoryData();
+      }
+    });
   }
 
   callDialog(dialog: TemplateRef<any>) {
@@ -1260,5 +1004,4 @@ export class OnboardDetailComponent implements OnInit {
     };
     this.toastrService.show(body, title, config);
   }
-
 }

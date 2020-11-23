@@ -17,8 +17,8 @@
         <div class="actions">
             <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close(result)"></nb-icon>
         </div>
-        <a [href]="fbLink" class="link" target="_blank">
-            <button *ngIf="fbLink" style="margin-top:0.75rem;" nbButton fullWidth status="primary">
+        <a *ngIf="fbLink" [href]="fbLink" class="link" target="_blank">
+            <button class="face-color" style="margin-top:0.75rem;" nbButton fullWidth>
                 <nb-icon icon="facebook"></nb-icon> Direct Message
             </button>
         </a>

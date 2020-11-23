@@ -112,6 +112,8 @@ import { ConsentListComponent } from './consent/consent-list/consent-list.compon
 import { ConsentDetailComponent } from './consent/consent-detail/consent-detail.component';
 import { HubComponent } from './hub/hub.component';
 import { FileUploadModule } from 'ng2-file-upload';
+import { JobBoardListComponent } from './job-board/list/list.component';
+import { JobBoardDetailComponent } from './job-board/detail/detail.component';
 @NgModule({
   declarations: [
     SettingComponent,
@@ -143,6 +145,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     ConsentListComponent,
     ConsentDetailComponent,
     HubComponent,
+    JobBoardListComponent,
+    JobBoardDetailComponent,
   ],
   imports: [
     CommonModule,

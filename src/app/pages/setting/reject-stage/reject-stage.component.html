@@ -27,7 +27,7 @@
         </nb-accordion-item-body>
       </nb-accordion-item>
 
-      <nb-accordion-item>
+      <nb-accordion-item *ngIf="!isHybrid">
         <nb-accordion-item-header class="txt-header">
           Pending Exam
         </nb-accordion-item-header>
@@ -42,7 +42,7 @@
         </nb-accordion-item-body>
       </nb-accordion-item>
 
-      <nb-accordion-item>
+      <nb-accordion-item *ngIf="!isHybrid">
         <nb-accordion-item-header class="txt-header">
           Pending Appointment
         </nb-accordion-item-header>
@@ -57,7 +57,7 @@
         </nb-accordion-item-body>
       </nb-accordion-item>
 
-      <nb-accordion-item>
+      <nb-accordion-item *ngIf="!isHybrid">
         <nb-accordion-item-header class="txt-header">
           Pending Interview
         </nb-accordion-item-header>
@@ -72,7 +72,7 @@
         </nb-accordion-item-body>
       </nb-accordion-item>
 
-      <nb-accordion-item>
+      <nb-accordion-item *ngIf="!isHybrid">
         <nb-accordion-item-header class="txt-header">
           Pending Sign Contract
         </nb-accordion-item-header>
@@ -87,7 +87,7 @@
         </nb-accordion-item-body>
       </nb-accordion-item>
 
-      <nb-accordion-item>
+      <nb-accordion-item *ngIf="!isHybrid">
         <nb-accordion-item-header class="txt-header">
           Onboard
         </nb-accordion-item-header>

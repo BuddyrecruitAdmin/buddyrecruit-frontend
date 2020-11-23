@@ -86,7 +86,7 @@
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>
@@ -173,9 +173,9 @@
       <div class="form-control-group">
         <label class="label">Department<span style="color:red">*</span></label>
         <mat-form-field [color]="primary" appearance="outline">
-          <mat-select [(ngModel)]="itemDialog.departmentId" (ngModelChange)="onChangeDepartment($event)">
-            <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="departMentAdmin"
-              (filteredReturn)="filteredList2 =$event"></mat-select-filter>
+          <mat-select #selectDepartment [(ngModel)]="itemDialog.departmentId">
+            <mat-select-filter *ngIf="selectDepartment.focused" [placeholder]="'Filter'" [displayMember]="'label'"
+              [array]="departMentAdmin" (filteredReturn)="filteredList2 =$event"></mat-select-filter>
             <mat-option *ngFor="let department of filteredList2" [value]="department.value">
               {{department.label}}
             </mat-option>

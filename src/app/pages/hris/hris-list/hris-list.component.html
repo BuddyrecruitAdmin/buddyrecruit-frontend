@@ -1,0 +1,236 @@
+<div class="content-header with-shadow">
+  <div *ngIf="!showStepper" class="breadcrumb">
+    <h4>HRIS</h4>
+  </div>
+  <nb-stepper *ngIf="showStepper" orientation="horizontal" disableStepNavigation selectedIndex="1">
+    <nb-step label="Talent Pool"></nb-step>
+    <nb-step *ngIf="!isExpress" label="Pending Exam"></nb-step>
+    <nb-step *ngIf="!isExpress" label="Pending Appointment"></nb-step>
+    <nb-step *ngIf="!isExpress" label="Pending Interview"></nb-step>
+    <nb-step *ngIf="!isHybrid" label="Pending Sign Contract"></nb-step>
+    <nb-step *ngIf="isHybrid" label="HRIS"></nb-step>
+    <nb-step label="Onboard"></nb-step>
+  </nb-stepper>
+</div>
+
+<nb-card>
+  <nb-card-body class="body-card">
+    <div class="row">
+      <div class="col-xs-12 col-md-6 ">
+        <div class="input-group">
+          <input type="text" [(ngModel)]="keyword" nbInput fullWidth placeholder="Search"
+            (keyup.enter)="paging.pageIndex = 0; search()">
+          <div class="input-group-addon" nbTooltip="Search">
+            <nb-icon icon="search-outline" class="link" (click)="paging.pageIndex = 0; search()"></nb-icon>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6 actions-block">
+        <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
+            (click)="filterToggle()">
+          </nb-action>
+          <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
+            (click)="changeLayout(true)">
+          </nb-action>
+          <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
+            (click)="changeLayout(false)"></nb-action>
+        </nb-actions>
+      </div>
+    </div>
+    <div *ngIf="filter.isFilter" class="filter-block">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-4 col-lg-3">
+          <div class="form-control-group">
+            <label class="label">Branch</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select #selectbranchs [(ngModel)]="filter.selected.branchs" (ngModelChange)="changeFilter('branch')"
+                multiple>
+                <mat-select-filter *ngIf="selectbranchs.focused" [placeholder]="'Filter'" [displayMember]="'label'"
+                  [array]="filter.data.branchs" (filteredReturn)="filteredBranch =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredBranch" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-3">
+          <div class="form-control-group">
+            <label class="label">Province</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select #selectProvinces [(ngModel)]="filter.selected.provinces"
+                (ngModelChange)="changeFilter('province')" multiple>
+                <mat-select-filter *ngIf="selectProvinces.focused" [placeholder]="'Filter'" [displayMember]="'label'"
+                  [array]="filter.data.provinces" (filteredReturn)="filteredProvince =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredProvince" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-3">
+          <div class="form-control-group">
+            <label class="label">Type</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select #selectTypes [(ngModel)]="filter.selected.types" (ngModelChange)="changeFilter('type')"
+                multiple>
+                <mat-select-filter *ngIf="selectTypes.focused" [placeholder]="'Filter'" [displayMember]="'label'"
+                  [array]="filter.data.types" (filteredReturn)="filteredType =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredType" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group" style="margin-top: 3px;">
+            <button nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
+              Clear Filter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="!items.length" [nbSpinner]="loading" nbSpinnerStatus="success" nbSpinnerSize="large"
+  nbSpinnerMessage="Loading...">
+  <nb-card-body>
+    <h5 *ngIf="!loading" class="text-no-data">No data found</h5>
+  </nb-card-body>
+</nb-card>
+
+<div *ngIf="!loading && items.length">
+
+  <!-- Grid Layout -->
+  <div *ngIf="isGridLayout">
+    <div class="row">
+      <div class="col-lg-6" *ngFor="let item of items;">
+        <nb-card style="margin-bottom: 1rem;">
+          <nb-card-header class="link" (click)="edit(item)">
+            <div class="title">
+              <span class="link">{{ item.hc_id || '-' }}</span>
+            </div>
+            <div class="actions">
+              <span class="label" [ngClass]="{ 'label-success' : item.allInHRIS, 'label-gray' : !item.allInHRIS }">
+                <span>{{ item.allInHRIS }}</span>
+              </span>
+              <nb-icon icon="arrow-ios-forward-outline" class="link"></nb-icon>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <div class="text-group">
+              <label class="label">Priority</label>
+              <span>P{{ item.priority_id }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Job Name</label>
+              <span>{{ item.refJD?.position || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Branch</label>
+              <span>{{ item.refLocation?.name || ' -' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Days before expire</label>
+              <span [ngClass]="{ 'text-red' : item.daysBeforeExpire > 0 && item.daysBeforeExpire <= 15 }">
+                {{ item.daysBeforeExpire > 0 ? item.daysBeforeExpire : '-' }}
+              </span>
+            </div>
+            <div class="text-group">
+              <label class="label">Status</label>
+              <span [nbTooltip]="item.refStatus.name" class="label"
+                [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name || '-' }}
+              </span>
+            </div>
+            <!-- <div class="text-right">
+              <span class="link" (click)="info(item)">
+                <nb-icon icon="info-outline" class="font-inherit"></nb-icon> More Details
+              </span>
+            </div> -->
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-sm-12">
+        <mat-paginator *ngIf="paging.length > minPageSize" [length]="paging.length" [pageIndex]="paging.pageIndex"
+          [pageSize]="paging.pageSize" [pageSizeOptions]="paging.pageSizeOptions"
+          (page)="pageEvent = changePaging($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <!-- List Layout -->
+  <nb-card *ngIf="!isGridLayout">
+    <nb-card-body>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 70px;">HCID</th>
+              <th scope="col">Priority</th>
+              <th scope="col">Job Name</th>
+              <th scope="col" style="min-width: 130px;">Branch</th>
+              <th scope="col" style="width: 150px;">Days before expire</th>
+              <th scope="col" style="width: 110px;">Status</th>
+              <th scope="col" style="width: 70px;">Total</th>
+              <th scope="col" style="width: 110px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items;">
+              <td>
+                <span class="link" (click)="edit(item)">
+                  {{ item.hc_id || '-' }}
+                </span>
+              </td>
+              <td>
+                <span>P{{ item.priority_id }}</span>
+              </td>
+              <td>
+                <span>
+                  {{ item.refJD?.position || '-' }}
+                </span>
+              </td>
+              <td>
+                <span>{{ item.refLocation?.name || '-' }}</span>
+              </td>
+              <td>
+                <span [ngClass]="{ 'text-red' : item.daysBeforeExpire > 0 && item.daysBeforeExpire <= 15 }">
+                  {{ item.daysBeforeExpire > 0 ? item.daysBeforeExpire : '-' }}
+                </span>
+              </td>
+              <td>
+                <span [nbTooltip]="item.refStatus.name" class="label"
+                  [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name || '-' }}
+                </span>
+              </td>
+              <td>
+                <span class="label" [ngClass]="{ 'label-success' : item.allInHRIS, 'label-gray' : !item.allInHRIS }">
+                  <span>{{ item.allInHRIS }}</span>
+                </span>
+              </td>
+              <td class="actions">
+                <!-- <button nbButton status="info" size="tiny" nbTooltip="More details" (click)="info(item)">
+                  <nb-icon icon="info-outline"></nb-icon>
+                </button> -->
+                <button nbButton status="primary" size="tiny" nbTooltip="Preview" (click)="edit(item)">
+                  <nb-icon icon="arrowhead-right-outline"></nb-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <mat-paginator [length]="paging.length" [pageIndex]="paging.pageIndex" [pageSize]="paging.pageSize"
+        [pageSizeOptions]="paging.pageSizeOptions" (page)="pageEvent = changePaging($event)">
+      </mat-paginator>
+    </nb-card-body>
+  </nb-card>
+
+</div>

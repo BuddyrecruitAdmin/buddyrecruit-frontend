@@ -2,7 +2,7 @@
     <div class="breadcrumb">
         <span><a [routerLink]="'/employer/consent/list'" class="text-green">Consent</a></span>
         <span class="fa fa-angle-right"></span>
-        <span>{{ jrName }}</span>
+        <span>{{ jrName }} <span *ngIf="hcId && isHybrid">({{ hcId }})</span></span>
     </div>
 </div>
 <nb-card>
@@ -47,6 +47,12 @@
                                             [ngClass]="utilitiesService.setConsent(item.refCandidate.consentStatus.status)"
                                             style="word-wrap: break-word;
                                 white-space: initial;border-radius: 25px;">{{ item.refCandidate?.consentStatus?.name || item.refCandidate.consentStatus.status }}</label>
+                                    </span><br>
+                                    <span>
+                                        <!-- <span *ngIf="!devices.isMobile">|</span>  -->
+                                        Source:
+                                        <label *ngFor="let source of item.refSource" class="label"
+                                            [ngClass]="utilitiesService.sourcingColors(source.key)">{{ source.name || '' }}</label>
                                     </span>
                                 </small>
                             </div>
@@ -69,7 +75,13 @@
                                     <div class="text-group">
                                         <label class="label">Email Sent Date</label>
                                         <span>
-                                            {{ utilitiesService.convertDateTimeFromSystem(item.refCandidate.lastSend) || '-' }}
+                                            {{ utilitiesService.convertDateTime(item.refCandidate.lastSendConsentMail) || '-' }}
+                                        </span>
+                                    </div>
+                                    <div class="text-group">
+                                        <label class="label">Apply Date</label>
+                                        <span>
+                                            {{ utilitiesService.convertDateTime(item.timestamp) || '-' }}
                                         </span>
                                     </div>
                                     <div class="text-group">

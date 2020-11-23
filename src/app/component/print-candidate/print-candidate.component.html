@@ -67,21 +67,21 @@
           </div>
 
           <!-- Hard Skills -->
-          <label class="label topic">Hard Skills</label>
+          <label *ngIf="!isHybrid" class="label topic">Hard Skills</label>
           <div class="m-l-15">
             <span *ngIf="item.hardSkill?.length">• </span>
             <span>{{ utilitiesService.convertStringArrayToLongText(item.hardSkill) || '-' }}</span>
           </div>
 
           <!-- Soft Skills -->
-          <label class="label topic">Soft Skills</label>
+          <label *ngIf="!isHybrid" class="label topic">Soft Skills</label>
           <div class="m-l-15">
             <span *ngIf="item.softSkill?.length">• </span>
             <span>{{ utilitiesService.convertStringArrayToLongText(item.softSkill) || '-' }}</span>
           </div>
 
           <!-- Certificate -->
-          <label class="label topic">Certificate</label>
+          <label *ngIf="!isHybrid" class="label topic">Certificate</label>
           <div class="m-l-15">
             <span *ngIf="item.certificate?.length">• </span>
             <span>{{ utilitiesService.convertStringArrayToLongText(item.certificate) || '-' }}</span>
@@ -151,7 +151,7 @@
             </div>
           </div>
 
-          <div *ngIf="isExpress">
+          <div *ngIf="isExpress && !isHybrid">
             <label class="label topic" style="margin-top: 0;">Application Form Score</label>
             <div *ngFor="let score of item.candidateFlow.scores; let i = index;" class="m-b-10">
               <div class="label m-b-5">{{ score.title }}
@@ -275,7 +275,7 @@
             <div class="m-l-15">
               <div class="text-group">
                 <label class="label">Sign Contract Date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingSignContractInfo?.sign?.date) || '-' }}</span>
               </div>
               <div class="text-group">
                 <label class="label">Agree Start Date</label>
@@ -283,7 +283,7 @@
               </div>
               <div class="text-group">
                 <label class="label">Email Sent Date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.candidateFlow?.pendingSignContractInfo?.mail?.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.candidateFlow?.pendingSignContractInfo?.mail?.date) || '-' }}</span>
               </div>
               <div class="text-group">
                 <label class="label">Remark</label>

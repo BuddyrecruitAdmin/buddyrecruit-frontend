@@ -97,7 +97,7 @@ export class PopupSignContractComponent implements OnInit {
         const request = this.setRequest();
         this.candidateService.candidateFlowEdit(this.flowId, request).subscribe(response => {
           if (response.code === ResponseCode.Success) {
-            this.candidateService.candidateFlowApprove(this.flowId, this.stageId, request).subscribe(response => {
+            this.candidateService.candidateFlowApprove(this.flowId).subscribe(response => {
               if (response.code === ResponseCode.Success) {
                 if (response.code === ResponseCode.Success) {
                   this.showToast('success', 'Success Message', response.message);

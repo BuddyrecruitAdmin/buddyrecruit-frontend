@@ -22,7 +22,7 @@ export class PrintCandidateComponent implements OnInit {
   innerWidth: any;
   innerHeight: any;
   isExpress = false;
-
+  isHybrid = false;
   constructor(
     private ref: NbDialogRef<PrintCandidateComponent>,
     private candidateService: CandidateService,
@@ -35,6 +35,7 @@ export class PrintCandidateComponent implements OnInit {
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.9;
     this.isExpress = this.role.refCompany.isExpress;
+    this.isHybrid = this.role.refCompany.isHybrid;
   }
 
   ngOnInit() {

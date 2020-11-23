@@ -34,4 +34,8 @@ export class DropdownService extends NetworkService {
     return this.post(API_ENDPOINT.DROPDOWN.USER, body);
   }
 
+  getJobType(): Observable<ApiResponse> {
+    return this.get(API_ENDPOINT.DROPDOWN.JOB_TYPE, undefined);
+  }
+
 }

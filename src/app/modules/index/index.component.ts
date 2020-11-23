@@ -142,6 +142,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
   pathName: any;
   role: any;
   adminCheck: boolean;
+  date: any;
   constructor(
     private utilitiesService: UtilitiesService,
     private service: IndexService,
@@ -171,9 +172,10 @@ export class IndexComponent implements OnInit, AfterViewInit {
     setPathName();
     this.adminCheck = false;
     this.role = getRole();
-    if(this.role && this.role.refHero.isSuperAdmin){
+    if (this.role && this.role.refHero.isSuperAdmin) {
       this.adminCheck = true;
     }
+    this.date = new Date().getFullYear();
   }
 
   ngOnInit() {

@@ -2,11 +2,11 @@
   nbSpinnerMessage="Loading...">
   <nb-card-header>
     <div class="title">
-      <span [nbTooltip]="jrDetail.refJD?.position">{{ jrDetail.refJD.position || '-' }}</span>
-      <small class="status">
+      <span>{{ jrDetail.hc_id || '-' }}</span>
+      <!-- <small class="status">
         Status: <label class="label"
           [ngClass]="utilitiesService.getJrStatusClass(jrDetail.refStatus?.status)">{{ jrDetail.refStatus.name || '-' }}</label>
-      </small>
+      </small> -->
     </div>
     <div class="actions">
       <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="ref.close()"></nb-icon>
@@ -14,41 +14,40 @@
   </nb-card-header>
   <nb-card-body class="dialog-body">
     <div class="text-group">
-      <label class="label">Capacity</label>
-      <span>{{ jrDetail.capacity || '0' }}</span>
+      <label class="label">Job ID</label>
+      <span>{{ jrDetail.refJD?.job_id || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Job Name</label>
+      <span>{{ jrDetail.refJD?.position || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Public Job Name (TH)</label>
+      <span>{{ jrDetail.refJD?.publicJobName?.th || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Public Job Name (EN)</label>
+      <span>{{ jrDetail.refJD?.publicJobName?.en || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Branch</label>
+      <span>{{ jrDetail.refLocation?.name || '-' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Number of Opening</label>
+      <span>{{ jrDetail.demandNumber || '0' }}</span>
+    </div>
+    <div class="text-group">
+      <label class="label">Group</label>
+      <span>{{ jrDetail.group || '-' }}</span>
     </div>
     <div class="text-group">
       <label class="label">Start Date</label>
-      <span>{{ utilitiesService.convertDate(jrDetail.duration.startDate) || '-' }}</span>
+      <span>{{ utilitiesService.convertDate(jrDetail.duration?.startDate) || '-' }}</span>
     </div>
     <div class="text-group">
       <label class="label">End Date</label>
-      <span>{{ utilitiesService.convertDate(jrDetail.duration.endDate) || '-' }}</span>
-    </div>
-    <div class="text-group">
-      <label class="label">Onboard Date</label>
-      <span>{{ utilitiesService.convertDate(jrDetail.onboardDate) || '-' }}</span>
-    </div>
-    <div class="text-group">
-      <label class="label">Remark</label>
-      <span>{{ jrDetail.remark || '-' }}</span>
-    </div>
-    <div class="text-group">
-      <label class="label">Sourcing</label>
-      <span *ngFor="let sourcing of jrDetail.refSource" class="m-r-5">{{ sourcing.name }}</span>
-    </div>
-    <div class="text-group">
-      <label class="label">Exam</label>
-      <nb-icon *ngIf="jrDetail.requiredExam" icon="checkmark-outline" class="text-green"></nb-icon>
-      <nb-icon *ngIf="!jrDetail.requiredExam" icon="close-outline" class="text-red"></nb-icon>
-    </div>
-    <div class="text-group">
-      <label class="label">User Interviews</label>
-      <span *ngIf="jrDetail.userInterviews.length === 0">-</span>
-      <div *ngFor="let user of jrDetail.userInterviews" class="m-l-10">
-        <nb-icon icon="person-outline"></nb-icon>
-        <span class="m-l-5">{{ utilitiesService.setFullname(user.refUser) }}</span>
-      </div>
+      <span>{{ utilitiesService.convertDate(jrDetail.duration?.endDate) || '-' }}</span>
     </div>
   </nb-card-body>
 </nb-card>

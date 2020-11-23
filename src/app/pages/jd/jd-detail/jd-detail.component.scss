@@ -25,3 +25,30 @@ nb-card-footer input {
 [nbButton]:disabled {
 cursor: not-allowed;
 }
+
+.score-body {
+  padding: 1rem;
+  border-radius: 5px;
+  border-style: dashed;
+  border-width: 1px;
+  border-color: var(--color-light-gray);
+
+  .score-scale-left {
+    color: var(--color-gray);
+    margin-left: 8px;
+  }
+  .score-scale-right {
+    color: var(--color-gray);
+    float: right;
+    margin-right: 8px;
+  }
+  .h-36 {
+    height: 36px;
+  }
+  .pt1{ 
+    padding-top: 1rem;
+  }
+  .pt05{ 
+    padding-top: 0.5rem;
+  }
+}

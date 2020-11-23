@@ -92,6 +92,7 @@ import { FeaturesComponent } from './features/features.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { GalleryComponent } from '../pages/gallery/gallery.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -179,7 +180,8 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
     ResumeComponent,
     FeaturesComponent,
     PdpaComponent,
-    AppFormComponent
+    AppFormComponent,
+    GalleryComponent
   ],
   providers: [
     TranslateService,

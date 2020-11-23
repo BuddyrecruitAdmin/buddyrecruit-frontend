@@ -3,7 +3,7 @@
     <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>Job Description</h3>
     </div>
-    <div class="col-sm-4 col-md-3 col-lg-2">
+    <div *ngIf="!isHybrid" class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jd.editable" nbButton fullWidth status="success" nbTooltip="Create"
         [routerLink]="'/employer/jd/detail/create'" [disabled]="showTips.jobPosition || showTips.department">
         <nb-icon icon="plus-outline"></nb-icon>Create
@@ -12,7 +12,7 @@
   </div>
 </div>
 
-<div *ngIf="role.refAuthorize.jd.editable">
+<div *ngIf="role.refAuthorize.jd.editable && !isHybrid">
   <nb-alert *ngIf="showTips.jobPosition" status="warning">
     <span>
       ไม่สามารถสร้าง JD ได้ เนื่องจากไม่มีการกำหนดค่าของ <b>Job Position</b> ไว้ก่อน,
@@ -76,26 +76,34 @@
           <nb-card-header>
             <div class="title">
               <label class="link" [routerLink]="'/employer/jd/detail/preview/'+item._id"
-                [nbTooltip]="item.position">{{ item.position }}</label>
+                nbTooltip="Preview">{{ item.position }}</label>
             </div>
             <div *ngIf="role.refAuthorize.jd.editable" class="actions">
-              <nb-icon *ngIf="!item.isUsed" icon="edit-outline" class="link" nbTooltip="Edit"
+              <nb-icon icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/jd/detail/edit/'+item._id">
               </nb-icon>
-              <nb-icon icon="copy-outline" class="link" nbTooltip="Duplicate"
-                [routerLink]="'/employer/jd/detail/duplicate/'+item._id"></nb-icon>
-              <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
-                (click)="delete(item)"></nb-icon>
             </div>
           </nb-card-header>
           <nb-card-body>
             <div class="text-group">
-              <label class="label">Department</label>
-              <span>{{ item.department?.name || '-' }}</span>
+              <label class="label">Job Type</label>
+              <span>{{ item.refJobType?.name?.en || '-'  }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Job ID</label>
+              <span>{{ item.job_id || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Company</label>
+              <span>-</span>
             </div>
             <div class="text-group">
               <label class="label">Division</label>
-              <span>{{ item.division?.name || '-' }}</span>
+              <span>{{ item.department_name || '-'  }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Department</label>
+              <span>-</span>
             </div>
             <i class="text-gray">
               <div class="text-group">
@@ -106,7 +114,7 @@
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>
@@ -125,36 +133,40 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col">Job Position</th>
-              <th scope="col">Department</th>
+              <th scope="col" style="width: 70px;">Job ID</th>
+              <th scope="col">Job Name</th>
+              <th scope="col">Job Type</th>
+              <th scope="col">Company</th>
               <th scope="col">Division</th>
+              <th scope="col">Department</th>
               <th *ngIf="role.refAuthorize.jd.editable" scope="col" style="width: 160px;">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
+              <td>
+                <span class="link"
+                  [routerLink]="'/employer/jd/detail/preview/'+item._id">{{ item.job_id || '-' }}</span>
+              </td>
               <td class="text-left">
-                <span class="link" [routerLink]="'/employer/jd/detail/preview/'+item._id"
-                  [nbTooltip]="item.position">{{ item.position }}</span>
+                <span>{{ item.position }}</span>
               </td>
               <td>
-                <span>{{ item.department.name || '-' }}</span>
+                <span>{{ item.refJobType?.name?.en || '-' }}</span>
               </td>
               <td>
-                <span>{{ item.division.name || '-' }}</span>
+                <span>-</span>
               </td>
-              <td *ngIf="role.refAuthorize.jd.editable" class="actions">
-                <button *ngIf="!item.isUsed" nbButton status="primary" size="tiny" nbTooltip="Edit"
+              <td>
+                <span>{{ item.department_name || '-' }}</span>
+              </td>
+              <td>
+                <span>-</span>
+              </td>
+              <td *ngIf="role.refAuthorize.jd.editable">
+                <button nbButton status="primary" size="tiny" nbTooltip="edit"
                   [routerLink]="'/employer/jd/detail/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
-                </button>
-                <button nbButton status="info" size="tiny" nbTooltip="Duplicate"
-                  [routerLink]="'/employer/jd/detail/duplicate/'+item._id">
-                  <nb-icon icon="copy-outline"></nb-icon>
-                </button>
-                <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
-                  (click)="delete(item)">
-                  <nb-icon icon="trash-2-outline"></nb-icon>
                 </button>
               </td>
             </tr>

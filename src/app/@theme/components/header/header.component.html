@@ -12,10 +12,10 @@
 
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="control-item">
+    <nb-action *ngIf="!role.refHero.isAdmin" class="control-item">
       <nb-search type="modal-move" nbTooltip="Search" nbTooltipPlacement="bottom"></nb-search>
     </nb-action>
-    <nb-action class="control-item">
+    <nb-action *ngIf="!isHybrid" class="control-item">
       <nb-icon icon="calendar-outline" class="link" (click)="gotoCalendar()" nbTooltip="Calendar"
         nbTooltipPlacement="bottom"></nb-icon>
       <!-- <nb-badge text="!" status="danger" position="top right" style="top: -8px; right: 10px;"></nb-badge> -->
@@ -39,7 +39,8 @@
           <div *ngFor="let notification of notifications; let i = index;" class="notification-body"
             [ngClass]="{ 'read' : notification.hidden, 'unread' : !notification.hidden}"
             (click)="onClickNotification(i)">
-            <nb-user size="medium" [name]="notification.name" [title]="notification.title" [picture]="notification?.picture">
+            <nb-user size="medium" [name]="notification.name" [title]="notification.title"
+              [picture]="notification?.picture">
             </nb-user>
           </div>
         </nb-card-body>

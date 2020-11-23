@@ -1,8 +1,12 @@
 .link:hover {
     text-decoration: none;
   }
-::ng-deep .nb-theme-default [nbButton].appearance-filled.status-primary{
+// ::ng-deep .nb-theme-default [nbButton].appearance-filled.status-primary{
 
-      background-color: #1299f6 !important;
-      border-color: #1299f6 !important;
+//       background-color: #1b74b6 !important;
+//       border-color: #1b74b6 !important;
+// }
+.face-color{ 
+  background-color: #1299f6 !important;
+  border-color: #1299f6 !important;
 }

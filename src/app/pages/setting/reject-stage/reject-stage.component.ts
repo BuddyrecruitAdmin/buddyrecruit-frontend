@@ -23,13 +23,14 @@ export class RejectStageComponent implements OnInit {
   signList: any;
   onboardList: any;
   loading: boolean;
-
+  isHybrid: any;
   constructor(
     private service: RejectStageService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService
   ) {
     this.role = getRole();
+    this.isHybrid = this.role.refCompany.isHybrid;
   }
 
   ngOnInit() {

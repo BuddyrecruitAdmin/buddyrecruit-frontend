@@ -21,10 +21,15 @@ import { SignContractListComponent } from './sign-contract/sign-contract-list/si
 import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
 import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
 import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
+import { HRISListComponent } from './hris/hris-list/hris-list.component';
+import { HRISDetailComponent } from './hris/hris-detail/hris-detail.component';
 import { CandidateListComponent } from './candidate/candidate-list/candidate-list.component';
 import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
 import { HomeComponent } from './home/home.component';
 import { CalendarComponent } from './calendar/calendar.component';
+// import { GalleryComponent } from './gallery/gallery.component';
+import { getRole } from '../shared/services/auth.service';
+
 const routes: Routes = [
   {
     path: '',
@@ -189,16 +194,20 @@ const routes: Routes = [
       },
       {
         path: 'hris/list',
-        component: OnboardListComponent,
+        component: HRISListComponent,
       },
       {
         path: 'hris/detail',
-        component: OnboardDetailComponent,
+        component: HRISDetailComponent,
       },
       {
         path: 'hris/detail/:id',
-        component: OnboardDetailComponent,
+        component: HRISDetailComponent,
       },
+      // {
+      //   path: 'file/:name',
+      //   component: GalleryComponent,
+      // },
       // Report
       {
         path: 'report',
@@ -219,7 +228,14 @@ const routes: Routes = [
     ],
   },
 ];
-
+// remove change path with no authorize 
+let role = getRole()
+if (role.refCompany.isHybrid && !role.refHero.isAdmin) {
+  let arrDel = [2, 3, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
+  arrDel.reverse().forEach(element => {
+    routes[0].children.splice(element, 1)
+  })
+}
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

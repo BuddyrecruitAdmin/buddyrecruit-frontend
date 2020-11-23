@@ -24,7 +24,7 @@
           <div *ngIf="bubbleChartData.length > 0">
             <div class="row">
               <!-- Filter Recruitement Status -->
-              <div class="col-md-4">
+              <div *ngIf="!isHybrid" class="col-md-4">
                 <div class="form-control-group">
                   <label class="label">Department</label>
                   <nb-select [(ngModel)]="filterStatus.department" fullWidth
@@ -102,7 +102,7 @@
                 </nb-select>
               </div>
             </div>
-            <div class="col-md-4">
+            <div *ngIf="!isHybrid" class="col-md-4">
               <div class="form-group">
                 <label class="label">Department</label>
                 <nb-select [(ngModel)]="filterRejection.department" fullWidth
@@ -177,7 +177,7 @@
   <!-- Jobboard -->
   <div *ngIf="enabledJobboard" class="form-group">
     <nb-accordion>
-      <nb-accordion-item [expanded]="true">        
+      <nb-accordion-item [expanded]="true">
         <nb-accordion-item-header>
           <span class="text-green">Jobboard Report</span>
         </nb-accordion-item-header>
@@ -217,7 +217,7 @@
                   </nb-select>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div *ngIf="!isHybrid" class="col-md-4">
                 <div class="form-group">
                   <label class="label">Department</label>
                   <nb-select [(ngModel)]="filterTimeToFill.department" fullWidth
