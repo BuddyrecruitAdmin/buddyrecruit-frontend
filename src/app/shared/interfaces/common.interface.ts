@@ -14,6 +14,8 @@ export interface ApiResponse {
   usedTime?;
   isExpired?;
   token?: string;
+  headers?: any;
+  jobType?: any;
 }
 
 export interface Count {

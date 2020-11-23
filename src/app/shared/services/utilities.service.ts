@@ -549,6 +549,27 @@ export class UtilitiesService {
     return consentColor;
   }
 
+  setColorStatus(name): string {
+    let labelColor = 'label-gray';
+    switch (name) {
+      case 'Passed':
+        labelColor = 'label-success';
+        break;
+      case 'Rejected':
+        labelColor = 'label-danger';
+        break
+      case 'Waiting':
+        labelColor = 'label-warning';
+        break
+      case 'Blacklist':
+        labelColor = 'label-blacklist';
+        break
+      default:
+        break;
+    }
+    return labelColor
+  }
+
   getNumberOfMonth(startDate, endDate): any {
     var months;
     startDate = new Date(startDate);
@@ -559,5 +580,14 @@ export class UtilitiesService {
     months += endDate.getMonth();
     return months <= 0 ? 0 : months;
   }
+
+  getRandomColor() {
+		var letters = '0123456789ABCDEF';
+		var color = '#';
+		for (var i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	}
 
 }

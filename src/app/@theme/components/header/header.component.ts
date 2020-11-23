@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: any;
   sss = getRole();
-
+  isHybrid: any;
   themes = [
     {
       value: 'default',
@@ -115,6 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
     this.noticeHeight = window.innerHeight * 0.7;
+    this.isHybrid = this.role.refCompany.isHybrid;
   }
 
   ngOnInit() {
@@ -178,16 +179,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
               if (element.fromUser.refUser) {
                 this.notifications.unshift({
                   name: element.title,
-                  title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
-                    this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+                  title: this.utilitiesService.convertDateTime(element.date) ||
+                    this.utilitiesService.convertDateTime(element.lastChangedInfo.date),
                   picture: element.fromUser.refUser.imageData,
                   hidden: element.readed
                 });
               } else {
                 this.notifications.unshift({
                   name: element.title,
-                  title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
-                    this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+                  title: this.utilitiesService.convertDateTime(element.date) ||
+                    this.utilitiesService.convertDateTime(element.lastChangedInfo.date),
                   picture: 'https://image.flaticon.com/icons/png/512/55/55089.png',
                   hidden: element.readed
                 });
@@ -247,16 +248,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (element.fromUser.refUser) {
             this.notifications.push({
               name: element.title,
-              title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
-                this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+              title: this.utilitiesService.convertDateTime(element.date) ||
+                this.utilitiesService.convertDateTime(element.lastChangedInfo.date),
               picture: element.fromUser.refUser.imageData || 'https://image.flaticon.com/icons/png/512/55/55089.png',
               hidden: element.readed
             });
           } else {
             this.notifications.push({
               name: element.title,
-              title: this.utilitiesService.convertDateTimeFromSystem(element.date) ||
-                this.utilitiesService.convertDateTimeFromSystem(element.lastChangedInfo.date),
+              title: this.utilitiesService.convertDateTime(element.date) ||
+                this.utilitiesService.convertDateTime(element.lastChangedInfo.date),
               picture: 'https://image.flaticon.com/icons/png/512/55/55089.png',
               hidden: element.readed
             });

@@ -6,7 +6,7 @@ import { getRole, setFlowId, setCandidateId, setIsGridLayout, setFlagExam, setUs
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { NbDialogService, NbDialogRef, NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { MatDialog } from '@angular/material';
+import { MatChipInputEvent, MatDialog } from '@angular/material';
 import { PageEvent } from '@angular/material/paginator';
 import { PopupCvComponent } from '../../../component/popup-cv/popup-cv.component';
 import 'style-loader!angular2-toaster/toaster.css';
@@ -15,6 +15,7 @@ import { ExcelService } from '../excel.service';
 import { Router } from '@angular/router';
 import { start } from 'repl';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
   selector: 'ngx-candidate',
   templateUrl: './candidate.component.html',
@@ -75,6 +76,7 @@ export class CandidateComponent implements OnInit {
   rowListEnable: any;
   rowListAll: any = [];
   rowDisplay: any = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
     private router: Router,
     private service: ReportService,
@@ -155,22 +157,6 @@ export class CandidateComponent implements OnInit {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
-      filter: [
-        'refJR.refJD.position',
-        'refStage.name',
-        'refCandidate.firstname',
-        'refCandidate.lastname',
-        'refJR.refStatus.name',
-        'actionDate',
-        'reject.remark',
-        'reject.rejectBy.refUser.firstname',
-        'reject.rejectBy.refUser.lastname',
-        'department.name',
-        'refProvince.name.th',
-        'refCandidate.phone',
-        'refCandidate.education',
-        'refSubStage.text'
-      ],
       filters: [
         {
           name: 'department._id',
@@ -204,12 +190,12 @@ export class CandidateComponent implements OnInit {
           this.paging.pageIndex--;
           this.search();
         }
-        response.filter.jobStatus.forEach(element => {
-          this.filter.data.jobStatus.push({
-            label: element.name,
-            value: element._id
-          })
-        });
+        // response.filter.jobStatus.forEach(element => {
+        //   this.filter.data.jobStatus.push({
+        //     label: element.name,
+        //     value: element._id
+        //   })
+        // });
         // response.filter.stage.forEach(element => {
         //   this.filter.data.stage.push({
         //     label: element.name,
@@ -239,10 +225,10 @@ export class CandidateComponent implements OnInit {
         //     value: element.refSubStage._id
         //   })
         // })
-        this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value")
-        this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
-        this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
-        this.filteredList3 = this.filter.data.jobStatus.slice();
+        // this.filter.data.jobStatus = this.removeDuplicates(this.filter.data.jobStatus, "value")
+        // this.filter.data.stage = this.removeDuplicates(this.filter.data.stage, "value")
+        // this.filter.data.subStage = this.removeDuplicates(this.filter.data.subStage, "value")
+        // this.filteredList3 = this.filter.data.jobStatus.slice();
         // this.filteredList4 = this.filter.data.stage.slice();
         // this.filteredList5 = this.filter.data.subStage.slice();
         // this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value")
@@ -274,31 +260,31 @@ export class CandidateComponent implements OnInit {
         this.loading = false;
       }
     })
-    this.service.getListDepartment().subscribe(res => {
-      if (res.code === ResponseCode.Success) {
-        res.data.forEach(ele => {
-          //department
-          this.filter.data.department.push({
-            label: ele.name,
-            value: ele._id
-          })
-        })
-        this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value");
-        this.filteredList = this.filter.data.department.slice();
-      }
-    })
-    this.service.getPositionList().subscribe(response => {
-      if (response.code === ResponseCode.Success) {
-        response.data.forEach(item => {
-          this.filter.data.jobPosition.push({
-            label: item.position,
-            value: item._id
-          })
-        });
-        this.filter.data.jobPosition = this.removeDuplicates(this.filter.data.jobPosition, "value");
-        this.filteredList2 = this.filter.data.jobPosition.slice();
-      }
-    })
+    // this.service.getListDepartment().subscribe(res => {
+    //   if (res.code === ResponseCode.Success) {
+    //     res.data.forEach(ele => {
+    //       //department
+    //       this.filter.data.department.push({
+    //         label: ele.name,
+    //         value: ele._id
+    //       })
+    //     })
+    //     this.filter.data.department = this.removeDuplicates(this.filter.data.department, "value");
+    //     this.filteredList = this.filter.data.department.slice();
+    //   }
+    // })
+    // this.service.getPositionList().subscribe(response => {
+    //   if (response.code === ResponseCode.Success) {
+    //     response.data.forEach(item => {
+    //       this.filter.data.jobPosition.push({
+    //         label: item.position,
+    //         value: item._id
+    //       })
+    //     });
+    //     this.filter.data.jobPosition = this.removeDuplicates(this.filter.data.jobPosition, "value");
+    //     this.filteredList2 = this.filter.data.jobPosition.slice();
+    //   }
+    // })
   }
 
   toggle(checked: boolean) {
@@ -520,18 +506,6 @@ export class CandidateComponent implements OnInit {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
-      filter: [
-        'refJR.refJD.position',
-        'refStage.name',
-        'refCandidate.firstname',
-        'refCandidate.lastname',
-        'refJR.refStatus.name',
-        'actionDate',
-        'reject.remark',
-        'reject.rejectBy.refUser.firstname',
-        'reject.rejectBy.refUser.lastname',
-        'department.name'
-      ],
       filters: [
         {
           name: 'department._id',
@@ -760,6 +734,23 @@ export class CandidateComponent implements OnInit {
         window.open(appURL + "appform/detail/" + item.generalAppForm.refGeneralAppForm  + "/" + this.role.token, '_blank');
       });
     }
+  }
+
+  addKeyword(keywords, event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+    if (value) {
+      if (keywords.indexOf(value) === -1) {
+        keywords.push(value.trim());
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeKeyword(keywords, index): void {
+    keywords.splice(index, 1);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

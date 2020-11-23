@@ -503,7 +503,7 @@ export class CandidateDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.service.candidateFlowApprove(item.candidateFlow._id, this.refStageId, button, undefined).subscribe(response => {
+          this.service.candidateFlowApprove(item.candidateFlow._id).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
               this.getDetail();
@@ -547,7 +547,7 @@ export class CandidateDetailComponent implements OnInit {
     });
     confirm.afterClosed().subscribe(result => {
       if (result) {
-        this.service.candidateFlowApprove(item.candidateFlow._id, item.candidateFlow.refStage._id, button._id, item).subscribe(response => {
+        this.service.candidateFlowApprove(item.candidateFlow._id).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.getDetail();

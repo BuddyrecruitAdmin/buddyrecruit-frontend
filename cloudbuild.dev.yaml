@@ -1,0 +1,65 @@
+steps:
+  # ====PULL CACHE====
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME-build || exit 0']
+  - name: 'gcr.io/cloud-builders/docker' 
+    entrypoint: 'bash' 
+    args: ['-c', 'docker pull ${_CONTAINER_REGISTRY}/$REPO_NAME || exit 0']
+  # =================
+
+  # ====BUILD CACHE====
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+            'build',  
+            '--target','build',
+            '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
+            '.'
+        ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+            'build',  
+            '-t', '${_CONTAINER_REGISTRY}/$REPO_NAME-test',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME-build',
+            '--cache-from', '${_CONTAINER_REGISTRY}/$REPO_NAME',
+            '.'
+        ]
+  # ==================
+ 
+  # ====PUSH CACHE====
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-build']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+  # =================
+           
+  # ====PULL COMPLETE BUILD AND TAG LATEST====
+  - name: 'docker'
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME-test']
+  - name: 'docker'
+    args: ['tag', '${_CONTAINER_REGISTRY}/$REPO_NAME-test', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+  - name: 'docker'
+    args: ['push', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+  # ==========================================
+
+  # Deploy to K8s  
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: 
+      [
+        'set',
+        '-n',
+        '${_NAMESPACE}-dev',
+        'image',
+        'deployment',
+        '$REPO_NAME',
+        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME',
+      ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER}'
+
+timeout: 1000s
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME',
+         '${_CONTAINER_REGISTRY}/$REPO_NAME:latest',
+         '${_CONTAINER_REGISTRY}/$REPO_NAME-build']

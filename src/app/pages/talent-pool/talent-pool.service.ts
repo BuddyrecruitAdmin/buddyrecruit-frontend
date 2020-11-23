@@ -16,14 +16,28 @@ export class TalentPoolService extends NetworkService {
     super('TalentPoolService', httpClient, errorHandler);
   }
 
-  getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
+  getList(criteria: any = undefined): Observable<ApiResponse> {
     const body = {
-      userData: {
-        refCompany: refCompany._id
-      },
-      criteria: criteria
+      criteria: {
+        keyword: criteria.keyword,
+        skip: criteria.skip,
+        limit: criteria.limit,
+        filters: {
+          provinces: criteria.filters[0].value,
+          types: criteria.filters[1].value,
+          branchs: criteria.filters[2].value
+        }
+      }
     };
     return this.post(API_ENDPOINT.TALENT_POOL.LIST, body);
+  }
+  //  new 
+  // getList(criteria: any = undefined): Observable<ApiResponse> {
+  //   var path = `?keyword=${criteria.keyword}&skip=${criteria.skip}&limit=${criteria.limit}&provinces=${criteria.filters[0].value}&types=${criteria.filters[1].value}`
+  //   return this.get(API_ENDPOINT.TALENT_POOL.LIST, path);
+  // }
+  getListUser(): Observable<ApiResponse> {
+    return this.get(API_ENDPOINT.TALENT_POOL.USER);
   }
 
   getDetail(refStageId: string, jrId: string, tabName: string, criteria: any = undefined): Observable<ApiResponse> {

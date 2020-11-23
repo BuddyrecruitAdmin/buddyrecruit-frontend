@@ -95,7 +95,7 @@
                                             </small><br>
                                         </a>
                                         <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
-                                            {{ utilitiesService.convertDateTimeFromSystem(itemNew.lastChangedInfo.date) }}</small><br>
+                                            {{ utilitiesService.convertDateTime(itemNew.lastChangedInfo.date) }}</small><br>
                                         <nb-icon *ngIf="adminCheck" icon="trash-2-outline" class="link text-red"
                                             nbTooltip="ลบ" (click)="delete(itemNew._id)">
                                         </nb-icon>
@@ -125,7 +125,7 @@
                                     </small><br>
                                 </a>
                                 <small style="color: #b3b3b3;cursor: default;" class="text-left">แก้ไขล่าสุด:
-                                    {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) }}</small><br>
+                                    {{ utilitiesService.convertDateTime(item.lastChangedInfo.date) }}</small><br>
                                 <nb-icon *ngIf="adminCheck" icon="trash-2-outline" class="link text-red"
                                     nbTooltip="Delete" (click)="delete(item._id)">
                                 </nb-icon>
@@ -176,7 +176,7 @@
                 </div>
             </div>
             <div id="copyright">
-                <span class="created-by">Copyright &copy; 2018-2019
+                <span class="created-by">Copyright &copy; 2018-{{ date }}
                     <a class="text-green" target="_blank" href="http://www.zygencenter.com/">ZyGen Company Limited</a>.
                     All rights reserved.
                 </span>

@@ -76,7 +76,7 @@ export class PopupChatUserComponent implements OnInit {
             this.items.push({
               _id: element._id,
               name: this.utilitiesService.setFullname(element.refUser),
-              title: this.utilitiesService.convertDateTimeFromSystem(element.date),
+              title: this.utilitiesService.convertDateTime(element.date),
               picture: element.refUser.imageData,
               message: element.message,
               accent: element.refUser._id === this.role._id ? 'success' : 'default',

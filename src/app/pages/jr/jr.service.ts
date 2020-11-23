@@ -16,14 +16,9 @@ export class JrService extends NetworkService {
     super('JrService', httpClient, errorHandler);
   }
 
-  getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
-    const body = {
-      userData: {
-        refCompany: refCompany._id
-      },
-      criteria: criteria
-    }
-    return this.post(API_ENDPOINT.JOBREQUEST.LIST, body);
+  getList(criteria: any = undefined): Observable<ApiResponse> {
+    var path = `?keyword=${criteria.keyword}&skip=${criteria.skip}&limit=${criteria.limit}`
+    return this.get(API_ENDPOINT.JOBREQUEST.LIST, path);
   }
 
   deleteItem(item: any): Observable<ApiResponse> {
@@ -41,11 +36,16 @@ export class JrService extends NetworkService {
     const body = {
       _id: _id
     }
-    return this.post(API_ENDPOINT.JOBREQUEST.DETAIL, body);
+    return this.get(API_ENDPOINT.JOBREQUEST.DETAIL, body);
   }
 
   edit(request: any): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.JOBREQUEST.EDIT, request);
+    const body = { 
+      _id: request._id,
+      group: request.refJD.group,
+      publicJobName: request.refJD.publicJobName
+    }
+    return this.patch(API_ENDPOINT.JOBREQUEST.LIST, body);
   }
 
   action(action: any, item: any): Observable<ApiResponse> {

@@ -1,29 +1,29 @@
-import { Component, OnInit, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, TemplateRef, ChangeDetectorRef } from '@angular/core';
 import { JdService } from '../jd.service';
-import { ResponseCode, Paging, State } from '../../../shared/app.constants';
+import { ResponseCode, State } from '../../../shared/app.constants';
 import { getRole, setAllList, setAllListName } from '../../../shared/services/auth.service';
 import { Router, ActivatedRoute } from "@angular/router";
-import { DropDownValue, DropDownGroup } from '../../../shared/interfaces/common.interface';
+import { DropDownValue, DropDownGroup, Devices } from '../../../shared/interfaces/common.interface';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import { DropdownService } from '../../../shared/services/dropdown.service';
 import * as _ from 'lodash';
 import { MESSAGE } from '../../../shared/constants/message';
-import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
-import { MatDialog } from '@angular/material';
+import { MatChipInputEvent, MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../../component/popup-message/popup-message.component';
 import 'style-loader!angular2-toaster/toaster.css';
 import { NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService } from '@nebular/theme';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { FileSelectDirective, FileDropDirective, FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
+import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload/ng2-file-upload';
 import { Subject } from 'rxjs/Subject';
 import { API_ENDPOINT } from '../../../shared/constants';
 import { environment } from '../../../../environments/environment';
 import { saveAs } from "file-saver";
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.UPLOAD;
-import { UserService } from '../../setting/user/user.service';
 import { PopupSearchDropdownComponent } from '../../../component/popup-search-dropdown/popup-search-dropdown.component';
-
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { questBlueVan, questBlueBike, questGeneral } from '../questionBlue'
 @Component({
   selector: 'ngx-jd-detail',
   templateUrl: './jd-detail.component.html',
@@ -60,6 +60,7 @@ export class JdDetailComponent implements OnInit {
   keyword: string;
   dialogRef: NbDialogRef<any>;
   positionMaster: DropDownValue[];
+  jobTypeList: any;
   filteredList: any;
   departMentAdmin: DropDownValue[];
   filteredList2: any;
@@ -103,6 +104,15 @@ export class JdDetailComponent implements OnInit {
   sErrorDivision: string;
   devices: Devices;
   isExpress = false;
+  isHybrid = false;
+  editorConfig: AngularEditorConfig = {
+    editable: false,
+    showToolbar: false,
+  }
+  formGroup: FormGroup;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  questionList: any;
+  questionGene: any;
   constructor(
     private service: JdService,
     private dialogService: NbDialogService,
@@ -112,16 +122,24 @@ export class JdDetailComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private dropdownService: DropdownService,
+    private formBuilder: FormBuilder,
+    private cdRef: ChangeDetectorRef
   ) {
     this.role = getRole();
     this.devices = this.utilitiesService.getDevice();
     this.innerWidth = window.innerWidth * 0.8;
     this.innerHeight = window.innerHeight * 0.8;
     this.isExpress = this.role.refCompany.isExpress;
+    this.isHybrid = this.role.refCompany.isHybrid || false;
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   ngOnInit() {
     this.jd = this.initialModel();
+    this.initialForm();
     this.checkDivision = false;
     this.bHasFile = false;
     this.modeEditable = true;
@@ -147,6 +165,7 @@ export class JdDetailComponent implements OnInit {
           } else {
             this.state = "View";
             this.checkPreview = true;
+            this.formGroup.disable();
           }
           this.getDetail();
         } else {
@@ -172,6 +191,10 @@ export class JdDetailComponent implements OnInit {
       refPosition: undefined,
       departmentId: undefined,
       divisionId: undefined,
+      publicJobName: {
+        th: '',
+        en: ''
+      },
       // keywordSearch: [],
       weightScore: {
         workExperience: {
@@ -199,14 +222,52 @@ export class JdDetailComponent implements OnInit {
       attachment: {
         originalname: undefined,
         uploadName: undefined,
+      },
+      group: undefined,
+      refJobType: {
+        _id: undefined
       }
     }
   }
 
+  initialForm() {
+    this.formGroup = this.formBuilder.group({
+      nameEN: [{ value: '', disabled: false }, [Validators.required]],
+      nameTH: [{ value: '', disabled: false }, [Validators.required]],
+      // nameEN: [{ value: '', disabled: false }, [Validators.pattern('^[a-zA-Z0-9- ]*$')]],
+      // nameTH: [{ value: '', disabled: false }, [Validators.pattern('^[ก-ํ0-9- ]*$')]],
+    });
+  }
+
+  get f() { return this.formGroup.controls; }
+
   async initialDropdown() {
-    await this.getPosition();
-    await this.getDepartment();
-    await this.getEducation();
+    if (this.isHybrid) {
+      await this.getJobType();
+    }
+    // await this.getPosition();
+    // await this.getDepartment();
+    // await this.getEducation();
+  }
+
+  getJobType() {
+    return new Promise((resolve) => {
+      this.jobTypeList = [];
+      this.dropdownService.getJobType().subscribe(response => {
+        if (response.code === ResponseCode.Success) {
+          if (response.data) {
+            response.data.forEach(element => {
+              this.jobTypeList.push({
+                label: element.name.en,
+                value: element._id,
+                type: element.type
+              })
+            });
+          }
+        }
+        resolve();
+      });
+    })
   }
 
   getPosition() {
@@ -302,34 +363,108 @@ export class JdDetailComponent implements OnInit {
       if (response.code === ResponseCode.Success) {
         if (response.data) {
           this.jd = response.data;
-          this.jd.weightScore.education.weight.map((ele, i) => {
-            ele.name = this.TempEdu[i].name;
-          })
-          this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
-          this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
-          this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
-          this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
-          this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
-          if (this.jd.weightScore.workExperience.total > 0) {
-            this.isAddWork = true;
+          if (this.jd.department_id) {
+            this.getDepartmentName(this.jd.department_id, this.jd);
           }
-          if (this.jd.weightScore.softSkill.total > 0) {
-            this.isAddSoft = true;
+          if (!this.jd.refJobType) {
+            this.jd.refJobType = {
+              _id: undefined
+            }
           }
-          if (this.jd.weightScore.hardSkill.total > 0) {
-            this.isAddHard = true;
+          //  Set Question
+          if (this.isHybrid) {
+            this.getQuestionList();
+            // this.jd.questions.forEach(element => {
+            //   if(element.question_no === 'qa3013') { 
+            //     element.question.en = "Is there a recommender working in this company？";
+            //   }
+            // });
+            if (this.jd.questions.length !== this.questionList.length) {
+              // let tempQuestion = this.jd.questions;
+              this.questionList.forEach(element => {
+                this.jd.questions.forEach(quest => {
+                  if (element.question_no === quest.question_no) {
+                    element.isWeightScore = quest.isWeightScore;
+                    element.options.forEach(option => {
+                      quest.options.forEach(queso => {
+                        if (option.val === queso.val) {
+                          option.score = queso.score;
+                        }
+                      });
+                    });
+                  }
+                });
+              });
+            } else {
+              this.questionList = this.jd.questions;
+            }
           }
-          if (this.jd.weightScore.certificate.total > 0) {
-            this.isAddCert = true;
-          }
-          this.onChangeDepartmentAfter(this.jd.departmentId)
-          this.calculateTotal();
-          this.onChangePercentCertificate();
-          this.onChangePercentHardSkill();
-          this.onChangePercentSoftSkill();
+          // this.jd.weightScore.education.weight.map((ele, i) => {
+          //   ele.name = this.TempEdu[i].name;
+          // })
+          // this.TempEdu = _.cloneDeep(this.jd.weightScore.education.weight);
+          // this.TempCer = _.cloneDeep(this.jd.weightScore.certificate.weight);
+          // this.TempHard = _.cloneDeep(this.jd.weightScore.hardSkill.weight);
+          // this.TempSoft = _.cloneDeep(this.jd.weightScore.softSkill.weight);
+          // this.TempWork = _.cloneDeep(this.jd.weightScore.workExperience.weight);
+          // if (this.jd.weightScore.workExperience.total > 0) {
+          //   this.isAddWork = true;
+          // }
+          // if (this.jd.weightScore.softSkill.total > 0) {
+          //   this.isAddSoft = true;
+          // }
+          // if (this.jd.weightScore.hardSkill.total > 0) {
+          //   this.isAddHard = true;
+          // }
+          // if (this.jd.weightScore.certificate.total > 0) {
+          //   this.isAddCert = true;
+          // }
+          // this.onChangeDepartmentAfter(this.jd.departmentId)
+          // this.calculateTotal();
+          // this.onChangePercentCertificate();
+          // this.onChangePercentHardSkill();
+          // this.onChangePercentSoftSkill();
         }
       }
     });
+  }
+
+  getQuestionList(event: any = undefined) {
+    if (event) {
+      this.jd.refJobType.type = event;
+    }
+    this.questionGene = JSON.parse(JSON.stringify(questGeneral));
+    switch (this.jd.refJobType.type) {
+      case 1:
+        this.questionList = JSON.parse(JSON.stringify(questBlueBike));
+        this.questionList = this.questionList.concat(this.questionGene);
+        break;
+      case 2:
+        this.questionList = JSON.parse(JSON.stringify(questBlueVan));
+        this.questionList = this.questionList.concat(this.questionGene);
+        break;
+      default:
+        this.questionList = this.questionGene;
+        break;
+    }
+  }
+
+  getDepartmentName(arr, item) {
+    item.divisionName = arr.val || '';
+    // if (arr.list.length > 0) {
+    //   arr.list.forEach((ele, i) => {
+    //     if (i === 0) {
+    //       item.departmentName = ele.val || '';
+    //       if (ele.list.length > 0) {
+    //         ele.list.forEach((data, j) => {
+    //           if (j === 0) {
+    //             item.sectionName = data.val || '';
+    //           }
+    //         });
+    //       }
+    //     }
+    //   });
+    // }
   }
 
   onChangeDepartment(value) {
@@ -907,6 +1042,7 @@ export class JdDetailComponent implements OnInit {
                 }
               });
             }
+            // here
             if (this.state === State.Edit) {
               this.service.edit(request).subscribe(response => {
                 if (response.code === ResponseCode.Success) {
@@ -1033,66 +1169,68 @@ export class JdDetailComponent implements OnInit {
         this.SErrorAll = this.SErrorAll || MESSAGE[158];
       }
     }
-    if (this.state === State.Edit || this.state === "duplicate") {
-      if (this.jd.weightScore.certificate.total != 0) {
-        this.certificateTotal = 0;
-        this.jd.weightScore.certificate.weight.map((element) => {
-          this.certificateTotal += element.percent;
-        })
+    if (!this.isHybrid) {
+      if (this.state === State.Edit || this.state === "duplicate") {
+        if (this.jd.weightScore.certificate.total != 0) {
+          this.certificateTotal = 0;
+          this.jd.weightScore.certificate.weight.map((element) => {
+            this.certificateTotal += element.percent;
+          })
+        }
+        if (this.jd.weightScore.hardSkill.total != 0) {
+          this.hardTotal = 0;
+          this.jd.weightScore.hardSkill.weight.map((element) => {
+            this.hardTotal += element.percent;
+          })
+        }
+        if (this.jd.weightScore.softSkill.total != 0) {
+          this.softTotal = 0;
+          this.jd.weightScore.softSkill.weight.map((element) => {
+            this.softTotal += element.percent;
+          })
+        }
+        if (this.jd.weightScore.education.total != 0) {
+          this.eduTotal = 0;
+          this.jd.weightScore.education.weight.map((element) => {
+            if (this.jd.weightScore.education.total === element.percent) {
+              this.eduTotal = element.percent;
+            }
+          })
+        }
+        if (this.jd.weightScore.workExperience.total != 0) {
+          this.wCheck = 0;
+          this.jd.weightScore.workExperience.weight.map((element) => {
+            if (this.jd.weightScore.workExperience.total === element.percent) {
+              this.wCheck = element.percent;
+            }
+          })
+        }
       }
-      if (this.jd.weightScore.hardSkill.total != 0) {
-        this.hardTotal = 0;
-        this.jd.weightScore.hardSkill.weight.map((element) => {
-          this.hardTotal += element.percent;
-        })
+      if (this.hardTotal != this.jd.weightScore.hardSkill.total) {
+        isValid = false;
+        this.SErrorAll = this.SErrorAll || MESSAGE[69];
       }
-      if (this.jd.weightScore.softSkill.total != 0) {
-        this.softTotal = 0;
-        this.jd.weightScore.softSkill.weight.map((element) => {
-          this.softTotal += element.percent;
-        })
+      if (this.softTotal != this.jd.weightScore.softSkill.total) {
+        isValid = false;
+        this.SErrorAll = this.SErrorAll || MESSAGE[74];
       }
-      if (this.jd.weightScore.education.total != 0) {
-        this.eduTotal = 0;
-        this.jd.weightScore.education.weight.map((element) => {
-          if (this.jd.weightScore.education.total === element.percent) {
-            this.eduTotal = element.percent;
-          }
-        })
+      if (this.certificateTotal != this.jd.weightScore.certificate.total) {
+        isValid = false;
+        this.SErrorAll = this.SErrorAll || MESSAGE[78];
       }
-      if (this.jd.weightScore.workExperience.total != 0) {
-        this.wCheck = 0;
-        this.jd.weightScore.workExperience.weight.map((element) => {
-          if (this.jd.weightScore.workExperience.total === element.percent) {
-            this.wCheck = element.percent;
-          }
-        })
-      }
-    }
-    if (this.hardTotal != this.jd.weightScore.hardSkill.total) {
-      isValid = false;
-      this.SErrorAll = this.SErrorAll || MESSAGE[69];
-    }
-    if (this.softTotal != this.jd.weightScore.softSkill.total) {
-      isValid = false;
-      this.SErrorAll = this.SErrorAll || MESSAGE[74];
-    }
-    if (this.certificateTotal != this.jd.weightScore.certificate.total) {
-      isValid = false;
-      this.SErrorAll = this.SErrorAll || MESSAGE[78];
-    }
-    if (this.eduTotal != this.jd.weightScore.education.total) {
-      isValid = false;
-      this.SErrorAll = this.SErrorAll || "% of max education is not equal to total education score";
+      if (this.eduTotal != this.jd.weightScore.education.total) {
+        isValid = false;
+        this.SErrorAll = this.SErrorAll || "% of max education is not equal to total education score";
 
-    }
-    if (this.wCheck != this.jd.weightScore.workExperience.total) {
-      isValid = false;
-      this.SErrorAll = this.SErrorAll || "% of max work experience is not equal to total work experience score";
-    }
-    if (this.sTotal != 100) {
-      isValid = false;
-      this.SErrorAll = this.SErrorAll || MESSAGE[56];
+      }
+      if (this.wCheck != this.jd.weightScore.workExperience.total) {
+        isValid = false;
+        this.SErrorAll = this.SErrorAll || "% of max work experience is not equal to total work experience score";
+      }
+      if (this.sTotal != 100) {
+        isValid = false;
+        this.SErrorAll = this.SErrorAll || MESSAGE[56];
+      }
     }
     return isValid
   }
@@ -1122,6 +1260,16 @@ export class JdDetailComponent implements OnInit {
     // if (this.jd.keywordSearch.length > 0) {
     //   this.jd.keywordSearch = this.convertArray(this.jd.keywordSearch);
     // }
+    this.jd.questions = this.questionList;
+    this.jd.questions.forEach(element => {
+      if (element.isWeightScore) {
+        element.options.forEach(ele => {
+          if (!ele.score) {
+            ele.score = 0;
+          }
+        });
+      }
+    });
     if (this.state === State.Duplicate) {
       this.jd._id = undefined;
     }
@@ -1206,6 +1354,39 @@ export class JdDetailComponent implements OnInit {
       return 'success';
     } else {
       return 'danger';
+    }
+  }
+
+  addKeyword(keywords, event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+    if (value) {
+      if (keywords.indexOf(value) === -1) {
+        keywords.push(value.trim());
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeKeyword(keywords, index): void {
+    keywords.splice(index, 1);
+  }
+
+  selectAll() {
+    if (!this.checkPreview) {
+      this.questionList.forEach(element => {
+        element.isWeightScore = true;
+      });
+    }
+  }
+
+  unSelectAll() {
+    if (!this.checkPreview) {
+      this.questionList.forEach(element => {
+        element.isWeightScore = false;
+      });
     }
   }
 

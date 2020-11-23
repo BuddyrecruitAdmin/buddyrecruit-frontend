@@ -422,7 +422,7 @@
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="role.refHero.isAdmin">
+      <!-- <div class="row" *ngIf="role.refHero.isAdmin">
         <div class="col-md-6">
           <div class="form-control-group" [ngClass]="{ 'select-red': errMsg.adminEmail }">
             <label class="label" for="name">Admin Company <span class="text-red">*</span>
@@ -439,8 +439,8 @@
             <small *ngIf="errMsg.adminEmail" class="text-red">{{ errMsg.adminEmail }}</small>
           </div>
         </div>
-      </div>
-      <div class="row" *ngIf="role.refHero.isAdmin">
+      </div> -->
+      <!-- <div class="row" *ngIf="role.refHero.isAdmin">
         <div class="col-md-6">
           <div class="form-control-group">
             <label class="label">Interview Period Time</label>
@@ -448,12 +448,12 @@
               digitOnly onKeyPress="if(this.value.length==3) return false;" placeholder="minute" nbInput>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="row" *ngIf="role.refHero.isAdmin">
         <div class="col-md-6">
           <label style="font-weight: bold;">Consent Settings</label><br>
           <div class="form-control-group">
-            <label class="label">Waiting Period</label>
+            <label class="label">Waiting Period (Days)</label>
             <input type="text" [(ngModel)]="companyDetail.waitingPeriod" pattern="[0-9]*" inputmode="numeric" digitOnly
               onKeyPress="if(this.value.length==3) return false;" nbInput>
           </div>
@@ -474,11 +474,11 @@
           </mat-form-field>
           <mat-form-field appearance="outline" class="m-b-20">
             <mat-label>Button Color</mat-label>
-            <input matInput type="text" id="buttonColor" [(ngModel)]="companyDetail.buttonColor" required>
+            <input matInput type="text" id="buttonColor" [(ngModel)]="companyDetail.btnColor" required>
             <mat-hint align="start" style="font-size: 20px;">
               <mat-icon *ngFor="let color of bgColors;" class="link" [style.color]="color"
-                (click)="companyDetail.buttonColor = color">lens</mat-icon>
-              <mat-icon class="link" (click)="companyDetail.buttonColor = '#ffffff'">panorama_fish_eye</mat-icon>
+                (click)="companyDetail.btnColor = color">lens</mat-icon>
+              <mat-icon class="link" (click)="companyDetail.btnColor = '#ffffff'">panorama_fish_eye</mat-icon>
             </mat-hint>
           </mat-form-field>
           <mat-form-field appearance="outline" class="m-b-20">

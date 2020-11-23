@@ -42,7 +42,10 @@ import {
   AppFormIStatus,
   HistoryData,
   FacebookId,
-  FlagEdit
+  FlagEdit,
+  FlagCall,
+  LocationId,
+  HCID
 } from '../app.constants';
 import { Authentication as IAuthentication } from '../interfaces/common.interface';
 
@@ -462,4 +465,28 @@ export function setAppURL(url: string = '') {
 export function getAppURL() {
   const url = JSON.parse(localStorage.getItem(Url));
   return (!url || url === null || url === '/') ? undefined : url;
+}
+export function setFlagCall(flag: any = null) {
+  localStorage.setItem(FlagCall, JSON.stringify(flag));
+}
+
+export function getFlagCall() {
+  const flag = JSON.parse(localStorage.getItem(FlagCall));
+  return (!flag || flag === null) ? undefined : flag;
+}
+export function setBranchItem(flag: any = null) {
+  localStorage.setItem(LocationId, JSON.stringify(flag));
+}
+
+export function getBranchItem() {
+  const flag = JSON.parse(localStorage.getItem(LocationId));
+  return (!flag || flag === null) ? undefined : flag;
+}
+export function setHCID(id: any = null) {
+  localStorage.setItem(HCID, JSON.stringify(id));
+}
+
+export function getHCID() {
+  const id = JSON.parse(localStorage.getItem(HCID));
+  return (!id || id === null) ? undefined : id;
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
 import { JdService } from '../jd.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging } from '../../../shared/interfaces/common.interface';
@@ -22,7 +21,7 @@ import { DepartmentService } from '../../../pages/setting/department/department.
 })
 export class JdListComponent implements OnInit {
   role: any;
-  items: [];
+  items: any = [];
   keyword: string;
   paging: IPaging;
   pageEvent: PageEvent;
@@ -34,16 +33,13 @@ export class JdListComponent implements OnInit {
     jobPosition: boolean,
     department: boolean,
   }
-
+  isHybrid: any;
   constructor(
-    private router: Router,
     private service: JdService,
     private utilitiesService: UtilitiesService,
     public matDialog: MatDialog,
     private toastrService: NbToastrService,
-    private authorizeService: AuthorizeService,
-    private jobPositionService: JobPositionService,
-    private departmentService: DepartmentService,
+    private authorizeService: AuthorizeService
   ) {
     this.role = getRole();
     if (this.role && this.role.refAuthorize) {
@@ -62,21 +58,8 @@ export class JdListComponent implements OnInit {
         jobPosition: false,
         department: false
       };
-      this.jobPositionService.getList().subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          if (!response.data || !response.data.length) {
-            this.showTips.jobPosition = true;
-          }
-        }
-      });
-      this.departmentService.getList(undefined, this.role.refCompany).subscribe(response => {
-        if (response.code === ResponseCode.Success) {
-          if (!response.data || !response.data.length) {
-            this.showTips.department = true;
-          }
-        }
-      });
     }
+    this.isHybrid = this.role.refCompany.isHybrid;
   }
 
   ngOnInit() {
@@ -98,17 +81,16 @@ export class JdListComponent implements OnInit {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
-      filter: [
-        'position',
-        'department',
-        'keywordSearch',
-        'division',
-      ]
     };
     this.items = [];
-    this.service.getList(this.criteria, this.role.refCompany).subscribe(response => {
+    this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.items = response.data;
+        this.items.forEach(element => {
+          if (element.department_id) {
+            this.getDepartmentName(element.department_id, element);
+          }
+        });
         this.paging.length = response.totalDataSize;
         if (!this.items.length && this.paging.pageIndex > 0) {
           this.paging.pageIndex--;
@@ -117,6 +99,24 @@ export class JdListComponent implements OnInit {
       }
       this.loading = false;
     });
+  }
+
+  getDepartmentName(arr, item) {
+    item.divisionName = arr.val || '';
+    // if (arr.list.length > 0) {
+    //   arr.list.forEach((ele, i) => {
+    //     if (i === 0) {
+    //       item.departmentName = ele.val || '';
+    //       if (ele.list.length > 0) {
+    //         ele.list.forEach((data, j) => {
+    //           if (j === 0) {
+    //             item.sectionName = data.val || '';
+    //           }
+    //         });
+    //       }
+    //     }
+    //   });
+    // }
   }
 
   changeLayout(value) {

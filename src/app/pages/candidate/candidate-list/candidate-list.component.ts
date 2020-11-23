@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { CandidateService } from '../candidate.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName, setFlowId, setJdId, setFlagReject, setTabName } from '../../../shared/services/auth.service';
+import { getRole, getKeyword, setKeyword, setCandidateId, setJrId, setJdName, setFlowId, setJdId, setFlagReject, setTabName, setHCID } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -99,6 +99,7 @@ export class CandidateListComponent implements OnInit {
     }
   ];
   isExpress: any;
+  isHybrid: any;
   constructor(
     private router: Router,
     private service: CandidateService,
@@ -108,15 +109,20 @@ export class CandidateListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
   ) {
     this.role = getRole();
-    // this.keyword = getKeyword() || '';
-    // console.log(this.keyword)
     this.devices = this.utilitiesService.getDevice();
     setKeyword();
     this.isFilter = false;
     this.filterAll = true;
     this.isExpress = this.role.refCompany.isExpress;
+    this.isHybrid = this.role.refCompany.isHybrid;
     if (this.isExpress) {
       this.filters.push({ text: 'Facebook', filter: 'fbName', active: true })
+    }
+    if (this.isHybrid) {
+      this.filters.splice(0, 2);
+      this.filters.push({ text: 'CV ID', filter: 'cv_id', active: true })
+      this.filters.push({ text: 'ID Card', filter: 'IdCard', active: true })
+      this.filters.push({ text: 'Responsibility', filter: 'responsibility', active: true })
     }
   }
 
@@ -151,7 +157,7 @@ export class CandidateListComponent implements OnInit {
       return element.filter;
     });
     this.criteria = {
-      keyword: this.keyword,
+      keyword: this.keyword.trim(),
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
       filter: filter
@@ -214,11 +220,23 @@ export class CandidateListComponent implements OnInit {
       let menu = MENU_PROCESS_FLOW.find(element => {
         return element.title === item.candidateFlow.refStage.refMain.name;
       });
+      if (menu.title === 'Talent Pool' && item.candidateFlow.inHRISProcess) {
+        // menu.link = "/employer/hris/detail";
+        menu = {
+          title: 'HRIS',
+          icon: 'shopping-bag-outline',
+          link: '/employer/hris/detail',
+          hidden: false,
+        }
+      }
       menu.link = menu.link.replace('list', 'detail');
       if (menu) {
-        setJdId(item.candidateFlow.refJR.refJD._id);
+        setJdId(item.candidateFlow.refJR.refJD.refJobType.type);
         setJdName(item.candidateFlow.refJR.refJD.position);
         setJrId(item.candidateFlow.refJR._id);
+        if (this.isHybrid) {
+          setHCID(item.candidateFlow.refJR.hc_id);
+        }
         // setKeyword(this.utilitiesService.setFullname(item));
         if (item.candidateFlow.reject.flag) {
           setTabName("REJECTED")

@@ -5,7 +5,7 @@ import { PopupCVService } from './popup-cv.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { getRole, getFlowId, setFlowId, getCandidateId, setBugCandidateId, setCandidateId, setBugId, setFieldLabel, setFieldName, setUserCandidate } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import { MatDialog } from '@angular/material';
+import { MatChipInputEvent, MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { Router } from "@angular/router";
@@ -18,6 +18,7 @@ import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interf
 import { DomSanitizer } from '@angular/platform-browser';
 import { saveAs } from "file-saver";
 import { TrafficChartService } from '../../@core/mock/traffic-chart.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 var FileSaver = require('file-saver');
 @Component({
   selector: 'ngx-popup-cv',
@@ -80,6 +81,7 @@ export class PopupCvComponent implements OnInit {
   allComments: any;
   editRemark: boolean;
   isExpress: boolean;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
     private service: PopupCVService,
     public ref: NbDialogRef<PopupCvComponent>,
@@ -173,7 +175,7 @@ export class PopupCvComponent implements OnInit {
             accent: (ele.lastChangedInfo.refUser._id === this.role._id) ? 'success' : 'default',
             lastChangedInfo: {
               refUser: ele.lastChangedInfo.refUser,
-              date: this.utilitiesService.convertDateTimeFromSystem(ele.lastChangedInfo.date)
+              date: this.utilitiesService.convertDateTime(ele.lastChangedInfo.date)
             },
             message: ele.message,
             editFlag: false,
@@ -202,13 +204,21 @@ export class PopupCvComponent implements OnInit {
             this.totalYear = 0;
           }
         }
-        if (this.items.education.length > 0) {
-          this.items.education.map(ele => {
-            if (!ele.refDegree) {
-              ele.refDegree = { _id: undefined };
+        if (this.items.candidateFlow && this.items.candidateFlow.generalAppForm && this.items.candidateFlow.generalAppForm.refGeneralAppForm
+          && this.items.candidateFlow.generalAppForm.refGeneralAppForm.exp_info && this.items.candidateFlow.generalAppForm.refGeneralAppForm.exp_info) {
+          this.items.candidateFlow.generalAppForm.refGeneralAppForm.exp_info.education_experience.forEach(element => {
+            if (element.graduate_time) {
+              element.graduate_time = new Date(element.graduate_time);
             }
-          })
+          });
         }
+        // if (this.items.education.length > 0) {
+        //   this.items.education.map(ele => {
+        //     if (!ele.refDegree) {
+        //       ele.refDegree = { _id: undefined };
+        //     }
+        //   })
+        // }
         if (this.items.candidateFlow.pendingInterviewScoreInfo.evaluation.length) {
           this.totalPass = 0;
           this.totalCompare = 0;
@@ -236,7 +246,7 @@ export class PopupCvComponent implements OnInit {
               response.data.forEach(element => {
                 this.degreeMaster.push({
                   label: element.name,
-                  value: element._id
+                  value: element.level
                 })
               });
               this.loading = false;
@@ -254,18 +264,23 @@ export class PopupCvComponent implements OnInit {
   }
 
   removeEducation(index: any) {
-    this.items.education.splice(index, 1);
+    this.items.candidateFlow.generalAppForm.refGeneralAppForm.exp_info.education_experience.splice(index, 1);
   }
 
   addEducation() {
-    this.items.education.push({
-      refDegree: {
-        name: "",
-        nameTH: "",
-      },
-      university: "",
-      major: "",
-      gpa: ""
+    this.items.candidateFlow.generalAppForm.refGeneralAppForm.exp_info.education_experience.push({
+      // refDegree: {
+      //   name: "",
+      //   nameTH: "",
+      // },
+      // university: "",
+      // major: "",
+      // gpa: "",
+      // graduateTime: null
+      education_level: null,
+      graduate_time: null,
+      graduate_school: "",
+      major: ""
     });
   }
 
@@ -424,20 +439,21 @@ export class PopupCvComponent implements OnInit {
   }
 
   downloadFile(data: any, name: string) {
-    if (data.type === 'image/jpeg') {
-      const blob = new Blob([data], { type: "image/jpeg" });
-      const url = window.URL.createObjectURL(blob);
-      saveAs(url, name + ".jpeg");
-      window.open(url);
-    } else {
-      const blob = new Blob([data], { type: "application/pdf" });
-      const url = window.URL.createObjectURL(blob);
-      saveAs(url, name + ".pdf");
-      window.open(url);
-    }
+    // if (data.type === 'image/jpeg') {
+    //   const blob = new Blob([data], { type: "image/jpeg" });
+    //   const url = window.URL.createObjectURL(blob);
+    //   saveAs(url, name + ".jpeg");
+    //   window.open(url);
+    // } else {
+    //   const blob = new Blob([data], { type: "application/pdf" });
+    //   const url = window.URL.createObjectURL(blob);
+    //   window.open(url);
+    // }
     // const name_url = name + ".jpeg"
     // FileSaver.saveAs(blob, name_url);
-    // window.open(url);
+    // saveAs(data.data.url, name);
+    // console.log(data.headers.get('Content-Type'))
+    window.open(data.data.url);
 
   }
 
@@ -483,7 +499,7 @@ export class PopupCvComponent implements OnInit {
     item.accuracy.map(ele => {
       if (ele.feedbackType === "Correct") {
         switch (ele.fieldName) {
-          case "First Name":
+          case "firstname":
             this.colorStatus.nameSuccess = true;
             if (this.colorStatus.nameBug === true) {
               this.colorStatus.nameBug = false;
@@ -572,7 +588,7 @@ export class PopupCvComponent implements OnInit {
         }
       } else {
         switch (ele.fieldName) {
-          case "First Name":
+          case "firstname":
             this.colorStatus.nameBug = true;
             if (this.colorStatus.nameSuccess === true) {
               this.colorStatus.nameSuccess = false;
@@ -685,6 +701,23 @@ export class PopupCvComponent implements OnInit {
       setFlowId();
       setCandidateId();
     });
+  }
+
+  addKeyword(keywords, event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+    if (value) {
+      if (keywords.indexOf(value) === -1) {
+        keywords.push(value.trim());
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeKeyword(keywords, index): void {
+    keywords.splice(index, 1);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

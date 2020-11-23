@@ -192,7 +192,7 @@ export class JobPositionComponent implements OnInit {
   getDepartment() {
     return new Promise((resolve) => {
       this.departMentAdmin = [];
-      // this.divisionAll = [];
+      this.divisionAll = [];
       // this.divisionOptions = [];
       // this.divisionOptions.push({
       //   label: '- Select Division -',

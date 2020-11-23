@@ -28,10 +28,10 @@ import {
   NbAccordionModule,
   NbProgressBarModule,
   NbChatModule,
-  NbListModule
+  NbListModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-// import { NbMomentDateModule } from '@nebular/moment';
+import { NbMomentDateModule } from '@nebular/moment';
 // import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { A11yModule } from '@angular/cdk/a11y';
@@ -82,7 +82,7 @@ import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 import { TagInputModule } from 'ngx-chips';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-
+ 
 import { PopupMessageComponent } from './popup-message/popup-message.component';
 import { PopupCommentComponent } from './popup-comment/popup-comment.component';
 import { PopupJrInfoComponent } from './popup-jr-info/popup-jr-info.component';
@@ -113,6 +113,9 @@ import { PopupAppointmentDateComponent } from './popup-appointment-date/popup-ap
 import { PopupTrainingDateComponent } from './popup-training-date/popup-training-date.component';
 import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.component';
 import { PopupHistoryComponent } from './popup-history/popup-history.component';
+import { PopupCallHistoryComponent } from './popup-call-history/popup-call-history.component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 @NgModule({
   imports: [
     CommonModule,
@@ -144,9 +147,9 @@ import { PopupHistoryComponent } from './popup-history/popup-history.component';
     NbAccordionModule,
     NbProgressBarModule,
     NbChatModule,
-    // NbMomentDateModule,
+    NbMomentDateModule,
     // NbDateFnsDateModule.forChild({ format: 'dd/MM/yyyy' }),
-
+ 
     A11yModule,
     CdkStepperModule,
     CdkTableModule,
@@ -195,7 +198,10 @@ import { PopupHistoryComponent } from './popup-history/popup-history.component';
     DigitOnlyModule,
     Ng2SearchPipeModule,
     NbListModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    NbEvaIconsModule
   ],
   declarations: [
     PopupMessageComponent,
@@ -226,6 +232,7 @@ import { PopupHistoryComponent } from './popup-history/popup-history.component';
     PopupTrainingDateComponent,
     PopupChatUserComponent,
     PopupHistoryComponent,
+    PopupCallHistoryComponent,
   ],
   exports: [
     PopupMessageComponent,
@@ -254,7 +261,8 @@ import { PopupHistoryComponent } from './popup-history/popup-history.component';
     PopupExtractionComponent,
     PopupTrainingDateComponent,
     PopupChatUserComponent,
-    PopupHistoryComponent
+    PopupHistoryComponent,
+    PopupCallHistoryComponent
   ],
   entryComponents: [
     PopupMessageComponent,
@@ -283,7 +291,8 @@ import { PopupHistoryComponent } from './popup-history/popup-history.component';
     PopupExtractionComponent,
     PopupTrainingDateComponent,
     PopupChatUserComponent,
-    PopupHistoryComponent
+    PopupHistoryComponent,
+    PopupCallHistoryComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

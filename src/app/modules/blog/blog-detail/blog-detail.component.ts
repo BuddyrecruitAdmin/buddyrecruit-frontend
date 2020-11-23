@@ -67,6 +67,7 @@ export class BlogDetailComponent implements OnInit {
     ]
   };
   loading: boolean;
+  date: any;
   constructor(
     private toastrService: NbToastrService,
     private router: Router,
@@ -76,6 +77,7 @@ export class BlogDetailComponent implements OnInit {
     public sanitizer: DomSanitizer
   ) {
     this.role = getRole();
+    this.date = new Date().getFullYear();
   }
 
   ngOnInit() {

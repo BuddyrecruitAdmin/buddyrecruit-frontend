@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { JrService } from '../jr.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices } from '../../../shared/interfaces/common.interface';
-import { getRole, getIsGridLayout, setIsGridLayout, getAuthentication, setAuthentication } from '../../../shared/services/auth.service';
+import { getRole, getIsGridLayout, setIsGridLayout, getAuthentication, setAuthentication, setBranchItem } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material';
@@ -92,27 +92,16 @@ export class JrListComponent implements OnInit {
       keyword: this.keyword,
       skip: (this.paging.pageIndex * this.paging.pageSize),
       limit: this.paging.pageSize,
-      filter: [
-        'refStatus.name',
-        'department.name',
-        'requiredExam',
-        'remark',
-        'refJD.position',
-        'refSource',
-        'capacity',
-        'lastChangedInfo.refUser.firstname',
-        'lastChangedInfo.refUser.lastname',
-        'lastChangedInfo.date'
-      ]
     };
     this.items = [];
-    this.service.getList(this.criteria, this.refCompany).subscribe(response => {
+    this.service.getList(this.criteria).subscribe(response => {
       if (response.code === ResponseCode.Success) {
         this.paging.length = response.totalDataSize;
         this.isOverQuota = response.isOverQuota;
         this.showTips = response.isOverQuota;
         this.items = response.data;
         this.items.map(item => {
+          item.numberOpen = item.surplusnumber + ' / ' + item.demandNumber;
           item.canEdit = true;
           item.canDelete = true;
           switch (item.refStatus.status) {
@@ -245,6 +234,12 @@ export class JrListComponent implements OnInit {
       }
     })
   }
+
+  gotoBranch(location) {
+    setBranchItem(location);
+    this.router.navigate(['/employer/setting/location']);
+  }
+
 
   callDialog(dialog: TemplateRef<any>) {
     this.dialogRef = this.dialogService.open(dialog, { closeOnBackdropClick: false });

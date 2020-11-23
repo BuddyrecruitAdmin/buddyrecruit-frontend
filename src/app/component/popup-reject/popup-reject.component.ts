@@ -37,6 +37,7 @@ export class PopupRejectComponent implements OnInit {
   result: boolean = false;
   devices: Devices;
   isExpress: boolean;
+  isHybrid: boolean;
   constructor(
     private service: PopupRejectService,
     private candidateService: CandidateService,
@@ -59,6 +60,7 @@ export class PopupRejectComponent implements OnInit {
       this.innerWidth = window.innerWidth * 0.4;
     }
     this.isExpress = this.role.refCompany.isExpress;
+    this.isHybrid = this.role.refCompany.isHybrid;
   }
 
   ngOnInit() {
@@ -138,7 +140,6 @@ export class PopupRejectComponent implements OnInit {
                       rejection.push(element);
                     }
                   });
-                  console.log(rejection)
                   this.rejection = _.cloneDeep(rejection);
                 }
               });

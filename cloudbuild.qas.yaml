@@ -1,0 +1,23 @@
+steps:
+  # Pull image from tag
+  - name: 'docker'
+    args: ['pull', '${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME']
+  # =========================================  
+  # Deploy to K8s  
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: 
+      [
+        'set',
+        '-n',
+        '${_NAMESPACE}-qas',
+        'image',
+        'deployment',
+        '$REPO_NAME',
+        '$REPO_NAME=${_CONTAINER_REGISTRY}/$REPO_NAME:$TAG_NAME',
+      ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=asia-southeast1-b'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLUSTER}'
+
+timeout: 1000s
+images: ['${_CONTAINER_REGISTRY}/$REPO_NAME']

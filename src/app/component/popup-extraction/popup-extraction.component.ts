@@ -4,7 +4,7 @@ import { JdService } from '../../pages/jd/jd.service';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { getRole, getFlowId, setFlowId, getCandidateId, setCandidateId, getCompanyId } from '../../shared/services/auth.service';
 import { UtilitiesService } from '../../shared/services/utilities.service';
-import { MatDialog } from '@angular/material';
+import { MatChipInputEvent, MatDialog } from '@angular/material';
 import { PopupMessageComponent } from '../../component/popup-message/popup-message.component';
 import { DropDownValue } from '../../shared/interfaces/common.interface';
 import { Router } from "@angular/router";
@@ -13,6 +13,7 @@ import * as _ from 'lodash';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../shared/interfaces/common.interface';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PopupCVService } from '../popup-cv/popup-cv.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
   selector: 'ngx-popup-extraction',
   templateUrl: './popup-extraction.component.html',
@@ -37,6 +38,7 @@ export class PopupExtractionComponent implements OnInit {
   remark: any;
   allComments: any;
   sError: string
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
     private service: PopupCVService,
     public ref: NbDialogRef<PopupExtractionComponent>,
@@ -277,6 +279,23 @@ export class PopupExtractionComponent implements OnInit {
     }
     this.allComments.push(showCom)
     this.remark = '';
+  }
+
+  addKeyword(keywords, event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value.trim();
+    if (value) {
+      if (keywords.indexOf(value) === -1) {
+        keywords.push(value.trim());
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeKeyword(keywords, index): void {
+    keywords.splice(index, 1);
   }
 
   showToast(type: NbComponentStatus, title: string, body: string) {

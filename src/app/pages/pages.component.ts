@@ -31,10 +31,12 @@ export class PagesComponent {
 
     this.menu = [];
     const role = getRole();
-    // Home
-    MENU.MENU_HOME.forEach(element => {
-      this.menu.push(element);
-    });
+    // Home  
+    if (!role.refHero.isAdmin) {
+      MENU.MENU_HOME.forEach(element => {
+        this.menu.push(element);
+      });
+    }
     if (role && role.refCompany && role.refCompany.menu) {
       const menu = role.refCompany.menu;
       if (menu) {
@@ -45,47 +47,53 @@ export class PagesComponent {
           });
         }
         // Masrter Data
-        if ((menu.jd && menu.jd.active) || (menu.jr && menu.jr.active)) {
-          this.menu.push(MENU.MENU_MASTER_DATA[0]);
-          if (menu.jd && menu.jd.active) {
-            this.menu.push(MENU.MENU_MASTER_DATA[1]);
-          }
-          if (menu.jr && menu.jr.active) {
-            this.menu.push(MENU.MENU_MASTER_DATA[2]);
+        if (!role.refHero.isAdmin) {
+          if ((menu.jd && menu.jd.active) || (menu.jr && menu.jr.active)) {
+            this.menu.push(MENU.MENU_MASTER_DATA[0]);
+            if (menu.jd && menu.jd.active) {
+              this.menu.push(MENU.MENU_MASTER_DATA[1]);
+            }
+            if (menu.jr && menu.jr.active) {
+              this.menu.push(MENU.MENU_MASTER_DATA[2]);
+            }
           }
         }
         // Process Flow
-        if ((menu.talentPool && menu.talentPool.active)
-          || (menu.pendingExam && menu.pendingExam.active)
-          || (menu.pendingAppointment && menu.pendingAppointment.active)
-          || (menu.pendingInterview && menu.pendingInterview.active)
-          || (menu.pendingSignContract && menu.pendingSignContract.active)
-          || (menu.onboard && menu.onboard.active)
-          || role.refCompany.consentFlag
-        ) {
-          this.menu.push(MENU.MENU_PROCESS_FLOW[0]);
-          if (role.refCompany.consentFlag) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[7]);// consent list
+        if (!role.refHero.isAdmin) {
+          if ((menu.talentPool && menu.talentPool.active)
+            || (menu.pendingExam && menu.pendingExam.active)
+            || (menu.pendingAppointment && menu.pendingAppointment.active)
+            || (menu.pendingInterview && menu.pendingInterview.active)
+            || (menu.pendingSignContract && menu.pendingSignContract.active)
+            || (menu.onboard && menu.onboard.active)
+            || role.refCompany.consentFlag
+          ) {
+            this.menu.push(MENU.MENU_PROCESS_FLOW[0]);
+            if (role.refCompany.consentFlag) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[7]);// consent list
+            }
+            if (menu.talentPool && menu.talentPool.active) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[1]);
+            }
+            if (menu.pendingExam && menu.pendingExam.active && !role.refCompany.isExpress) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[2]);
+            }
+            if (menu.pendingAppointment && menu.pendingAppointment.active && !role.refCompany.isExpress) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[3]);
+            }
+            if (menu.pendingInterview && menu.pendingInterview.active && !role.refCompany.isExpress) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[4]);
+            }
+            if (menu.pendingSignContract && menu.pendingSignContract.active && !role.refCompany.isHybrid) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[5]);
+            }
+            if (role.refCompany.isHybrid) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[8]);
+            }
+            if (menu.onboard && menu.onboard.active) {
+              this.menu.push(MENU.MENU_PROCESS_FLOW[6]);
+            }
           }
-          if (menu.talentPool && menu.talentPool.active) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[1]);
-          }
-          if (menu.pendingExam && menu.pendingExam.active && !role.refCompany.isExpress) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[2]);
-          }
-          if (menu.pendingAppointment && menu.pendingAppointment.active && !role.refCompany.isExpress) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[3]);
-          }
-          if (menu.pendingInterview && menu.pendingInterview.active && !role.refCompany.isExpress) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[4]);
-          }
-          if (menu.pendingSignContract && menu.pendingSignContract.active) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[5]);
-          }
-          if (menu.onboard && menu.onboard.active) {
-            this.menu.push(MENU.MENU_PROCESS_FLOW[6]);
-          }
-          this.menu.push(MENU.MENU_PROCESS_FLOW[8]);
         }
         // Reporting
         if (menu.report && menu.report.active && menu.report.reports && role.refAuthorize.showReport) {
@@ -166,7 +174,7 @@ export class PagesComponent {
         if (configuration.company && configuration.company.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[1]);
         }
-        if (configuration.department && configuration.department.visible) {
+        if (configuration.department && configuration.department.visible && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[2]);
         }
         // if (configuration.division && configuration.division.visible) {
@@ -178,25 +186,28 @@ export class PagesComponent {
         if (configuration.user && configuration.user.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[5]);
         }
-        if (configuration.jobPosition && configuration.jobPosition.visible) {
+        if (configuration.jobPosition && configuration.jobPosition.visible && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[6]);
         }
-        if (role.refCompany.isExpress) {
+        if (configuration.jobBoard && configuration.jobBoard.visible) {
+          menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[20]);
+        }
+        if (role.refCompany.isExpress && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[19]);
         }
-        if (configuration.examOnline && configuration.examOnline.visible) {
+        if (configuration.examOnline && configuration.examOnline.visible && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[16]);
         }
-        if (configuration.examOnline && configuration.examOnline.visible) {
+        if (configuration.examOnline && configuration.examOnline.visible && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[15]);
         }
-        if (configuration.evaluation && configuration.evaluation.visible) {
+        if (configuration.evaluation && configuration.evaluation.visible && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[7]);
         }
         if (configuration.location && configuration.location.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[8]);
         }
-        if (configuration.mailTemplate && configuration.mailTemplate.visible) {
+        if (configuration.mailTemplate && configuration.mailTemplate.visible && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[9]);
         }
         if (configuration.rejection && configuration.rejection.visible) {
@@ -209,7 +220,7 @@ export class PagesComponent {
         if (configuration.report && configuration.report.visible) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[13]);
         }
-        if (configuration.blacklist && configuration.blacklist.visible && !role.refHero.isSuperAdmin) {
+        if (configuration.blacklist && configuration.blacklist.visible && !role.refHero.isSuperAdmin && !role.refCompany.isHybrid) {
           menuSetting[1].children.push(MENU.MENU_SETTING_CHILD[14]);
         }
         if (configuration.consent && configuration.consent.visible) {

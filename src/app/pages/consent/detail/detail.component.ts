@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { ConsentService } from '../consent.service';
 import { ResponseCode, Paging } from '../../../shared/app.constants';
 import { Criteria, Paging as IPaging, Devices, Count } from '../../../shared/interfaces/common.interface';
-import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail } from '../../../shared/services/auth.service';
+import { getRole, getJdName, getJrId, setFlowId, setCandidateId, setButtonId, setUserCandidate, setIconId, setUserEmail, getHCID, setJdName, setHCID } from '../../../shared/services/auth.service';
 import { setTabName, getTabName, setCollapse, getCollapse } from '../../../shared/services/auth.service';
 import { UtilitiesService } from '../../../shared/services/utilities.service';
 import * as _ from 'lodash';
@@ -19,6 +19,7 @@ export class DetailComponent implements OnInit {
   role: any;
   jrId: any;
   jrName: any;
+  hcId: any;
   tabs: any;
   items: any;
   collapseAll: boolean;
@@ -32,6 +33,7 @@ export class DetailComponent implements OnInit {
   loading: boolean;
   count: Count;
   startFlag: boolean;
+  isHybrid: any;
   constructor(
     private router: Router,
     private service: ConsentService,
@@ -44,6 +46,7 @@ export class DetailComponent implements OnInit {
     }
     this.role = getRole();
     this.jrName = getJdName();
+    this.hcId = getHCID();
     this.collapseAll = getCollapse();
     this.devices = this.utilitiesService.getDevice();
     const tabs = [{
@@ -81,6 +84,7 @@ export class DetailComponent implements OnInit {
       })
     });
     this.startFlag = true;
+    this.isHybrid = this.role.refCompany.isHybrid || false;
   }
 
   ngOnInit() {
@@ -133,7 +137,6 @@ export class DetailComponent implements OnInit {
           item.collapse = this.collapseAll;
           item.accent = this.setConsent(item.refCandidate.consentStatus.status)
         });
-        console.log(this.items)
         this.paging.length = (response.count && response.count.data) || response.totalDataSize;
         this.setTabCount(response.count);
       }

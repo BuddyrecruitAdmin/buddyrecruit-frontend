@@ -53,6 +53,7 @@ export interface Auth {
     authorize: Control;
     user: Control;
     jobPosition: Control;
+    jobBoard: Control;
     examOnline: Control;
     evaluation: Control;
     location: Control;
@@ -60,6 +61,7 @@ export interface Auth {
     rejection: Control;
     dashboard: Control;
     report: Control;
+    consent: Control;
     blacklist: Control;
   };
   showDashboard: boolean;
@@ -187,6 +189,11 @@ export class AuthorizeDetailComponent implements OnInit {
           editable: false,
           active: true
         },
+        jobBoard: {
+          visible: false,
+          editable: false,
+          active: true
+        },
         examOnline: {
           visible: false,
           editable: false,
@@ -213,6 +220,11 @@ export class AuthorizeDetailComponent implements OnInit {
           active: true
         },
         report: {
+          visible: false,
+          editable: false,
+          active: true
+        },
+        consent: {
           visible: false,
           editable: false,
           active: true
@@ -712,6 +724,17 @@ export class AuthorizeDetailComponent implements OnInit {
           }
         }
         break;
+      case 'JOBBOARD':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.jobBoard.visible) {
+            this.authDetail.configuration.jobBoard.editable = false;
+          }
+        } else {
+          if (this.authDetail.configuration.jobBoard.editable) {
+            this.authDetail.configuration.jobBoard.visible = true;
+          }
+        }
+        break;
       case 'EXAMONLINE':
         if (choice === 'VISIBLE') {
           if (!this.authDetail.configuration.examOnline.visible) {
@@ -786,6 +809,17 @@ export class AuthorizeDetailComponent implements OnInit {
         } else {
           if (this.authDetail.configuration.report.editable) {
             this.authDetail.configuration.report.visible = true;
+          }
+        }
+        break;
+      case 'CONSENT':
+        if (choice === 'VISIBLE') {
+          if (!this.authDetail.configuration.consent.visible) {
+            this.authDetail.configuration.consent.editable = false;
+          }
+        } else {
+          if (this.authDetail.configuration.consent.editable) {
+            this.authDetail.configuration.consent.visible = true;
           }
         }
         break;

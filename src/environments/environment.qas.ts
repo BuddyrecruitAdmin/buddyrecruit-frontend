@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  API_URI: 'https://gosp3-qas.buddyrecruit.ai', //QAS
+  API_URI: 'https://flash.buddyrecruit.ai', //QAS
   WriteLog: true
 };

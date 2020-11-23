@@ -29,6 +29,9 @@ import { AppFormListComponent } from './app-form/app-form-list/app-form-list.com
 import { AppFormDetailComponent } from './app-form/app-form-detail/app-form-detail.component';
 import { ConsentListComponent } from './consent/consent-list/consent-list.component';
 import { HubComponent } from './hub/hub.component';
+import { JobBoardListComponent } from './job-board/list/list.component';
+import { JobBoardDetailComponent } from './job-board/detail/detail.component';
+import { getRole } from '../../shared/services/auth.service';
 const routes: Routes = [
   {
     path: '',
@@ -163,6 +166,18 @@ const routes: Routes = [
         component: AuthorizeDetailComponent,
       },
       {
+        path: 'job-board',
+        component: JobBoardListComponent,
+      },
+      {
+        path: 'job-board/:action',
+        component: JobBoardDetailComponent,
+      },
+      {
+        path: 'job-board/:action/:id',
+        component: JobBoardDetailComponent,
+      },
+      {
         path: 'blacklist',
         component: BlacklistComponent,
       },
@@ -182,7 +197,14 @@ const routes: Routes = [
     ],
   },
 ];
-
+// remove change path with no authorize 
+let role = getRole()
+if(role.refCompany.isHybrid && !role.refHero.isAdmin) { 
+  let arrDel = [0,1,2,3,4,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,24,25];
+  arrDel.reverse().forEach(element => {
+    routes[0].children.splice(element, 1)
+  })
+}
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]

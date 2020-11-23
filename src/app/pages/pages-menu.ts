@@ -198,7 +198,7 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
     hidden: false,
   },
   {
-    title: 'Location',
+    title: 'Branch',
     link: '/employer/setting/location',
     hidden: false,
   },
@@ -255,6 +255,11 @@ export const MENU_SETTING_CHILD: NbMenuItem[] = [
   {
     title: 'Hub',
     link: '/employer/setting/hub',
+    hidden: false,
+  },
+  {
+    title: 'Job Board',
+    link: '/employer/setting/job-board',
     hidden: false,
   },
 ];

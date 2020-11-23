@@ -33,17 +33,41 @@
         </div>
         <div class="form-control-group" [ngClass]="{ 'has-error': sErrorcc }">
           <label class="label">CC<small>(After input email please press enter)</small></label>
-          <tag-input [(ngModel)]="itemDialog.cc" secondaryPlaceholder="Enter a email" placeholder="+"
+          <!-- <tag-input [(ngModel)]="itemDialog.cc" secondaryPlaceholder="Enter a email" placeholder="+"
             [ngModelOptions]="{ standalone: true }">
-          </tag-input>
-          <small *ngIf="touched" class="text-red">{{ sErrorcc }}</small>
+          </tag-input> -->
+          <mat-form-field appearance="outline">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let keyword of itemDialog.cc; let iKeyword = index;" [selectable]="true"
+                [removable]="true" (removed)="removeKeyword(itemDialog.cc, iKeyword)">
+                {{ keyword }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="+" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addKeyword(itemDialog.cc, $event)" required>
+            </mat-chip-list>
+            <mat-hint *ngIf="touched" class="text-red">{{ sErrorcc }}</mat-hint>
+          </mat-form-field>
+          <!-- <small *ngIf="touched" class="text-red">{{ sErrorcc }}</small> -->
         </div>
         <div class="form-control-group" [ngClass]="{ 'has-error': sErrorBcc }">
           <label class="label">BCC<small>(After input email please press enter)</small></label>
-          <tag-input [(ngModel)]="itemDialog.bcc" secondaryPlaceholder="Enter a email" placeholder="+"
+          <!-- <tag-input [(ngModel)]="itemDialog.bcc" secondaryPlaceholder="Enter a email" placeholder="+"
             [ngModelOptions]="{ standalone: true }">
-          </tag-input>
-          <small *ngIf="touched" class="text-red">{{ sErrorBcc }}</small>
+          </tag-input> -->
+          <mat-form-field appearance="outline">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let keyword of itemDialog.bcc; let iKeyword = index;" [selectable]="true"
+                [removable]="true" (removed)="removeKeyword(itemDialog.bcc, iKeyword)">
+                {{ keyword }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="+" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addKeyword(itemDialog.bcc, $event)" required>
+            </mat-chip-list>
+            <mat-hint *ngIf="touched" class="text-red">{{ sErrorBcc }}</mat-hint>
+          </mat-form-field>
+          <!-- <small *ngIf="touched" class="text-red">{{ sErrorBcc }}</small> -->
         </div>
       </div>
     </div>
