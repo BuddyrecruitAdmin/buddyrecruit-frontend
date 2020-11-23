@@ -266,7 +266,7 @@
   </div> -->
 
   <!-- Table layout -->
-  <nb-card *ngIf="!isGridLayout">
+  <nb-card>
     <nb-card-body>
       <div class="table-responsive">
         <table class="table table-bordered table-striped">
@@ -274,10 +274,11 @@
             <tr style="font-size: 14px;">
               <th scope="col" style="width: 240px;  ">ชื่อ-นามสกุล</th>
               <th scope="col" style="width: 230px;">ตำแหน่ง</th>
-              <th *ngIf="isExpress" scope="col" style="width: 300px;">HUB</th>
+              <th scope="col" style="width: 230px;">HCID</th>
+              <th *ngIf="isExpress" scope="col" style="width: 300px;">Location</th>
               <!-- <th scope="col" style="width: 300px;">HUB Code</th> -->
               <th scope="col" style="width: 120px;">เบอร์โทร (ปัจจุบัน)</th>
-              <th scope="col" style="width: 120px;">เบอร์โทร(สำรอง)</th>
+              <!-- <th scope="col" style="width: 120px;">เบอร์โทร(สำรอง)</th> -->
               <!-- <th scope="col" style="width: 250px;">ระดับการศึกษา</th> -->
               <th scope="col" style="width: 120px;">วันที่สมัคร</th>
               <!-- <th scope="col" style="width: 250px;">เวลาที่สมัคร</th> -->
@@ -288,7 +289,7 @@
               <th scope="col" style="width: 200px;">วันที่ถูกปฏิเสธ</th>
               <th scope="col" style="width: 200px;">เวลาที่ถูกปฏิเสธ</th>
               <th scope="col" style="width: 200px;">เหตุผลที่ถูกปฏิเสธ</th> -->
-              <th scope="col" style="width: 200px;">สถานะปัจจุบัน</th>
+              <!-- <th scope="col" style="width: 200px;">สถานะปัจจุบัน</th> -->
               <th scope="col" style="width: 200px;">วันที่เเก้ไขล่าสุด</th>
               <!-- <th scope="col" style="width: 200px;">เวลาที่เเก้ไขล่าสุด</th> -->
               <th scope="col" style="width: 200px;">แก้ไขล่าสุดโดย</th>
@@ -320,11 +321,21 @@
                   {{ item?.refJR?.refJD?.position || '-' }}
                 </span>
               </td>
-              <td *ngIf="isExpress">
+              <td>
+                <span>
+                  {{ item?.refJR?.hc_id || '-' }}
+                </span>
+              </td>
+              <td>
+                <span>
+                  {{ item?.refJR?.refLocation?.name || '-' }}
+                </span>
+              </td>
+              <!-- <td *ngIf="isExpress">
                 <span *ngFor="let hub of item.hubs;">
                   {{ hub.refProvince?.name.th || '-' }} <span *ngIf="hub.areaName"> - {{ hub.areaName  }}</span>
                 </span>
-              </td>
+              </td> -->
               <!-- <td>
                 <span *ngFor="let hub of item.hubs;">
                   {{ hub.hubCode || '-' }}
@@ -336,12 +347,11 @@
                   {{ item?.refCandidate?.phone || '-' }}
                 </span>
               </td>
-              <td>
-                <!-- phone -->
+              <!-- <td>
                 <span>
                   {{ item?.refCandidate?.reservePhone || '-' }}
                 </span>
-              </td>
+              </td> -->
               <!-- <td>
                
                 <span *ngFor="let edu of item.refCandidate.education;">
@@ -351,7 +361,7 @@
               <td>
                 <!-- apply date -->
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.timestamp) || '-' }}
+                  {{ utilitiesService.convertDateTime(item?.timestamp) || '-' }}
                 </span>
                 <!-- <span>
                   {{ utilitiesService.convertDateFromSystem(item?.timestamp) || '-' }}
@@ -405,16 +415,16 @@
                   {{ item?.reject?.rejectBy?.refReject?.name || '-' }}
                 </span>
               </td> -->
-              <td>
-                <!-- Status -->
+              <!-- Status -->
+              <!-- <td>
                 <span>
                   {{ item.refSubStage.text || '-' }}
                 </span>
-              </td>
+              </td> -->
               <!-- Lastchange Date -->
               <td>
                 <span>
-                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
+                  {{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}
                 </span>
               </td>
               <!-- Lastchange Time -->
@@ -539,9 +549,20 @@
           </div>
         </div>
         <div *ngIf="isExpress" class="col-md-12">
-          <tag-input style="margin-bottom: 1rem;" [(ngModel)]="rowListEnable" [secondaryPlaceholder]="" placeholder=""
+          <!-- <tag-input style="margin-bottom: 1rem;" [(ngModel)]="rowListEnable" [secondaryPlaceholder]="" placeholder=""
             [theme]="'bootstrap'" [disable]="true" [ngModelOptions]=" { standalone: true }">
-          </tag-input>
+          </tag-input> -->
+          <mat-form-field appearance="outline">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let keyword of rowListEnable; let iKeyword = index;" [selectable]="true"
+                [removable]="true" (removed)="removeKeyword(rowListEnable, iKeyword)">
+                {{ keyword }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="+" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addKeyword(rowListEnable, $event)">
+            </mat-chip-list>
+          </mat-form-field>
           <div class="row">
             <div *ngFor="let list of rowListAll;" class="col-4" style="text-align: center;">
               <button style="margin-bottom: 1rem;" [ngClass]="{'nbNotSelect': !list.checked }"

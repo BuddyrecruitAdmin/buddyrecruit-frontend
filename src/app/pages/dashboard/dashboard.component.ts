@@ -156,7 +156,7 @@ export class DashboardComponent implements OnInit {
 	pieOption: any = [];
 	pieLabels: any = [];
 	jobData: any;
-
+	isHybrid: any;
 	constructor(
 		private service: DashboardService,
 		public sanitizer: DomSanitizer,
@@ -165,6 +165,20 @@ export class DashboardComponent implements OnInit {
 		this.enabledRecruitStatus = false;
 		this.enabledRejection = false;
 		this.enabledJobboard = false;
+		this.isHybrid = this.role.refCompany.isHybrid;
+		if (this.isHybrid) {
+			this.stages = [
+				{
+					key: "onboard",
+					value: "Onboard"
+				},
+				{
+					key: "hris",
+					value: "HRIS"
+				}
+			];
+			this.filterStatus.stages = this.stages;
+		}
 	}
 
 	ngOnInit() {
@@ -412,48 +426,71 @@ export class DashboardComponent implements OnInit {
 			});
 
 			const startDate = new Date(item.duration.startDate);
-			const endDate = new Date(item.onboardDate);
+			const endDate = new Date(item.duration.endDate);
 			const workingDays = this.getDiffDaysBetween2Date(startDate, today);
 			const targetDays = this.getDiffDaysBetween2Date(startDate, endDate);
 
 			const percentX = this.calPercentageBetween2Number(workingDays, targetDays);
 			let percentY: number;
-			switch (this.filterStatus.stage) {
-				case this.stages[0].key: // Pending Exam
-					percentY = this.calPercentageBetween2Number(item.pending_exam, item.capacity);
-					if (isNaN(percentY)) {
-						percentY = 0;
-					}
-					break;
-				case this.stages[1].key: // Pending Appointment
-					percentY = this.calPercentageBetween2Number(item.pending_appointment, item.capacity);
-					if (isNaN(percentY)) {
-						percentY = 0;
-					}
-					break;
-				case this.stages[2].key: // Pending Interview
-					percentY = this.calPercentageBetween2Number(item.pending_interview, item.capacity);
-					if (isNaN(percentY)) {
-						percentY = 0;
-					}
-					break;
-				case this.stages[3].key: // Pending Sign Contract
-					percentY = this.calPercentageBetween2Number(item.pending_sign_contract, item.capacity);
-					if (isNaN(percentY)) {
-						percentY = 0;
-					}
-					break;
-				case this.stages[4].key: // Onboard
-					percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
-					if (isNaN(percentY)) {
-						percentY = 0;
-					}
-					break;
-				default:
-					percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
-					if (isNaN(percentY)) {
-						percentY = 0;
-					}
+			if (!this.isHybrid) {
+				switch (this.filterStatus.stage) {
+					case this.stages[0].key: // Pending Exam
+						percentY = this.calPercentageBetween2Number(item.pending_exam, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					case this.stages[1].key: // Pending Appointment
+						percentY = this.calPercentageBetween2Number(item.pending_appointment, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					case this.stages[2].key: // Pending Interview
+						percentY = this.calPercentageBetween2Number(item.pending_interview, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					case this.stages[3].key: // Pending Sign Contract
+						percentY = this.calPercentageBetween2Number(item.pending_sign_contract, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					case this.stages[4].key: // Onboard
+						percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					default:
+						percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+				}
+			} else {
+				switch (this.filterStatus.stage) {
+					case this.stages[0].key: //Onboard
+						percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					case this.stages[1].key: //HRIS
+						percentY = this.calPercentageBetween2Number(item.hris, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+					default:
+						percentY = this.calPercentageBetween2Number(item.onboard, item.capacity);
+						if (isNaN(percentY)) {
+							percentY = 0;
+						}
+						break;
+				}
 			}
 
 			const color = this.getColorByIndex(index);
@@ -463,7 +500,7 @@ export class DashboardComponent implements OnInit {
 				],
 				label: item.position,
 				backgroundColor: color,
-				pointRadius: 100
+				pointRadius: 1
 			});
 			// console.log(this.bubbleChartData)
 			if (maxScaleX < percentX) {
@@ -526,14 +563,13 @@ export class DashboardComponent implements OnInit {
 		// 		maxScaleY = percentY;
 		// 	}
 		// });
-
 		this.bubbleChartLegend = this.legendLabel;
 		this.bubbleChartOptions = {
 			responsive: true,
 			maintainAspectRatio: true,
-			aspectRatio: this.aspectRatio,
+			aspectRatio: 1,
 			legend: {
-				position: this.legendPosition,
+				position: "bottom",
 			},
 			scales: {
 				xAxes: [
@@ -791,7 +827,7 @@ export class DashboardComponent implements OnInit {
 		this.filterRejection.positions = [];
 		this.filterRejection.position = "ALL";
 
-		this.enabledRecruitStatus = false;
+		// this.enabledRecruitStatus = false;
 		this.enabledRejection = true;
 
 		this.rejection = {

@@ -23,7 +23,6 @@
               "src/.well-known",
               "src/favicon.ico",
               "src/favicon.png",
-	      "src/env.js",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",

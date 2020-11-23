@@ -42,15 +42,21 @@ export class CandidateService extends NetworkService {
     return this.post(API_ENDPOINT.CANDIDATE.FLOW.EDIT, body);
   }
 
-  candidateFlowApprove(flowId: string, stageId: string, buttonId: string, data?: any): Observable<ApiResponse> {
+  candidateFlowApprove(flowId: string = undefined): Observable<ApiResponse> {
     const body = {
-      refCandidateFlowId: flowId,
-      refStageId: stageId,
-      buttonId: buttonId,
-      data: data
+      candidateFlowId: flowId
     };
-    return this.post(API_ENDPOINT.CANDIDATE.FLOW.APPROVE, body);
+    return this.patch(API_ENDPOINT.CANDIDATE.FLOW.APPROVE, body);
   }
+  // candidateFlowApprove(flowId: string, stageId: string, buttonId: string, data?: any): Observable<ApiResponse> {
+  //   const body = {
+  //     refCandidateFlowId: flowId,
+  //     refStageId: stageId,
+  //     buttonId: buttonId,
+  //     data: data
+  //   };
+  //   return this.post(API_ENDPOINT.CANDIDATE.FLOW.APPROVE, body);
+  // }
 
   candidateFlowReject(flowId: string, rejectId: string, remark: string): Observable<ApiResponse> {
     const body = {
@@ -191,6 +197,19 @@ export class CandidateService extends NetworkService {
       fbId: fbId
     }
     return this.post(API_ENDPOINT.CANDIDATE.HISTORY, body);
+  }
+
+  getListHistory(_id): Observable<ApiResponse>{ 
+    var path = `?candidateId=${_id}`
+    return this.get(API_ENDPOINT.CANDIDATE.CALL_HISTORY, path);
+  }
+
+  deleteItemCall(candidateId, historyId): Observable<ApiResponse>{ 
+    const body = {
+      candidateFlowId: candidateId,
+      historyId: historyId
+    }
+    return this.patch(API_ENDPOINT.CANDIDATE.DEL_HISTORY, body);
   }
 
 }

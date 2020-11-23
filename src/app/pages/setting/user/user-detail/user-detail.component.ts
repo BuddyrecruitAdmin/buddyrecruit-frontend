@@ -352,6 +352,13 @@ export class UserDetailComponent implements OnInit {
     if (!this.userDetail.username) {
       this.errMsg.username = 'Please Input Username';
       isValid = false;
+    }else{ 
+      this.userDetail.username.split('').forEach(element =>  {
+        if(element === ' '){ 
+          this.errMsg.username = 'Please remove white space';
+          isValid = false;
+        }
+      })
     }
     if (!this.userDetail.password) {
       this.errMsg.password = 'Please Input Password';

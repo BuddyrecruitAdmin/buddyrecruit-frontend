@@ -6,8 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pdpa.component.scss']
 })
 export class PdpaComponent implements OnInit {
-
-  constructor() { }
+  date: any;
+  constructor() { 
+    this.date = new Date().getFullYear();
+  }
 
   ngOnInit() {
   }

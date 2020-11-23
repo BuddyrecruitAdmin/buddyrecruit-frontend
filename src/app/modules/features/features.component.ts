@@ -20,6 +20,7 @@ export class FeaturesComponent implements OnInit {
   role: any;
   urlSafe: SafeResourceUrl;
   adminCheck: boolean;
+  date: any;
   constructor(
     private utilitiesService: UtilitiesService,
     private router: Router,
@@ -28,6 +29,7 @@ export class FeaturesComponent implements OnInit {
     this.devices = this.utilitiesService.getDevice();
     this.adminCheck = false;
     this.role = getRole();
+    this.date = new Date().getFullYear();
     if (this.role && this.role.refHero.isSuperAdmin) {
       this.adminCheck = true;
     }

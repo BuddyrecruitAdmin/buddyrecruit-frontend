@@ -1,13 +1,7 @@
 <div class="content-header with-shadow">
   <div class="row">
     <div class="col-sm-8 col-md-9 col-lg-10">
-      <h3>Location</h3>
-    </div>
-    <div class="col-sm-4 col-md-3 col-lg-2">
-      <button *ngIf="role.refAuthorize.configuration.location.editable" nbButton fullWidth status="success"
-        nbTooltip="Create" (click)="create(dialog)">
-        <nb-icon icon="plus-outline"></nb-icon>Create
-      </button>
+      <h3>Branch</h3>
     </div>
   </div>
 </div>
@@ -26,12 +20,59 @@
       </div>
       <div class="col-md-6 actions-block">
         <nb-actions size="small" class="h-100 pull-right">
+          <nb-action class="link" icon="funnel-outline" nbTooltip="Filter" [ngClass]="{ 'active' : filter.isFilter }"
+            (click)="filterToggle()">
+          </nb-action>
           <nb-action class="link" icon="grid-outline" nbTooltip="Grid" [ngClass]="{ 'active' : isGridLayout }"
             (click)="changeLayout(true)">
           </nb-action>
           <nb-action class="link" icon="list-outline" nbTooltip="List" [ngClass]="{ 'active' : !isGridLayout }"
             (click)="changeLayout(false)"></nb-action>
         </nb-actions>
+      </div>
+    </div>
+    <!-- filter -->
+    <div *ngIf="filter.isFilter" class="filter-block">
+      <label class="label">Filters:</label>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Provinces</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select #selectProvinces [(ngModel)]="filter.selected.provinces"
+                (ngModelChange)="changeFilter('province')" multiple>
+                <mat-select-filter *ngIf="selectProvinces.focused" [placeholder]="'Filter'" [displayMember]="'label'"
+                  [array]="filter.data.provinces" (filteredReturn)="filteredTypes =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredTypes" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Types</label>
+            <mat-form-field [color]="primary" appearance="outline">
+              <mat-select #selectTypes [(ngModel)]="filter.selected.types" (ngModelChange)="changeFilter('type')"
+                multiple>
+                <mat-select-filter *ngIf="selectTypes.focused" [placeholder]="'Filter'" [displayMember]="'label'"
+                  [array]="filter.data.types" (filteredReturn)="filteredTypes2 =$event"></mat-select-filter>
+                <mat-option *ngFor="let option of filteredTypes2" [value]="option.value">
+                  {{option.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-control-group" style="margin-top: 3px;">
+            <br>
+            <button nbButton status="default" nbTooltip="Clear Filter" (click)="clearFilter()">
+              Clear Filter
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </nb-card-body>
@@ -57,38 +98,40 @@
             </div>
             <div class="actions" *ngIf="role.refAuthorize.configuration.location.editable">
               <nb-icon icon="edit-outline" class="link" nbTooltip="Edit" (click)="edit(item, dialog)"></nb-icon>
-              <nb-icon *ngIf="!item.isUsed" icon="trash-2-outline" class="link" nbTooltip="Delete"
-                (click)="delete(item)">
-              </nb-icon>
             </div>
           </nb-card-header>
           <nb-card-body>
             <div class="text-group">
-              <label class="label">Address</label>
-              <span>{{ item.address || '-' }}</span>
+              <label class="label">Branch Name</label>
+              <span>{{ item.name || '-' }}</span>
             </div>
             <div class="text-group">
-              <label class="label">Default</label>
-              <nb-icon *ngIf="item.isDefault" icon="checkmark-outline" class="text-green"></nb-icon>
-              <nb-icon *ngIf="!item.isDefault" icon="close-outline" class="text-red"></nb-icon>
+              <label class="label">Public Name</label>
+              <span>{{ item.nickname || '-' }}</span>
             </div>
             <div class="text-group">
-              <label class="label">Status</label>
-              <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
-                {{ item.active ? 'Active': 'Inactive' }}
-              </span>
+              <label class="label">Region</label>
+              <span>{{ item.refRegion.name.en || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Province</label>
+              <span>{{ item.refProvince.name.en || '-' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Type</label>
+              <span>{{ item.type || '-' }}</span>
             </div>
             <i class="text-gray">
               <div class="text-group">
                 <label class="label">Last update by</label>
                 <span>
-                  {{ item.lastChangedInfo.refUser.firstname }}
-                  {{ item.lastChangedInfo.refUser.lastname }}
+                  {{ item.lastChangedInfo?.refUser?.firstname || '-' }}
+                  {{ item.lastChangedInfo?.refUser?.lastname || '-' }}
                 </span>
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>
@@ -108,7 +151,8 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col">Location Name</th>
+              <th scope="col">Branch Name</th>
+              <th scope="col">Public Name</th>
               <th scope="col">Region</th>
               <th scope="col">Province</th>
               <th scope="col">Type</th>
@@ -120,25 +164,23 @@
               <td class="text-left">
                 <span [nbTooltip]="item.name">{{ item.name }}</span>
               </td>
-              <td class="text-left">
-                <span>{{ item.address || '-' }}</span>
+              <td [ngClass]="{'text-left': item.nickname}">
+                <span>{{ item.nickname || '-' }}</span>
               </td>
               <td>
-                <nb-icon *ngIf="item.isDefault" icon="checkmark-outline" class="text-green"></nb-icon>
-                <nb-icon *ngIf="!item.isDefault" icon="close-outline" class="text-red"></nb-icon>
+                <span>{{ item.refRegion.name.en || '-' }}</span>
               </td>
               <td>
-                <span class="label" [ngClass]="{ 'label-success' : item.active, 'label-gray' : !item.active }">
-                  {{ item.active ? 'Active': 'Inactive' }}
+                <span>{{ item.refProvince.name.en || '-' }}</span>
+              </td>
+              <td>
+                <span>
+                  <span>{{ item.type || '-' }}</span>
                 </span>
               </td>
               <td *ngIf="role.refAuthorize.configuration.location.editable" class="actions">
                 <button nbButton status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item, dialog)">
                   <nb-icon icon="edit-outline"></nb-icon>
-                </button>
-                <button *ngIf="!item.isUsed" nbButton status="danger" size="tiny" nbTooltip="Delete"
-                  (click)="delete(item)">
-                  <nb-icon icon="trash-2-outline"></nb-icon>
                 </button>
               </td>
             </tr>
@@ -155,63 +197,50 @@
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card [style.max-height.px]="noticeHeight" [style.width.px]="utilitiesService.getWidthOfPopupCard()">
-    <nb-card-header>Location Detail</nb-card-header>
+    <nb-card-header>Branch Detail</nb-card-header>
     <nb-card-body>
       <div class="form-control-group">
-        <label class="label">Location Name (HRIS)<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.locationHRIS" nbInput fullWidth placeholder="Location">
+        <label class="label">Branch Name</label>
+        <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Location" disabled>
       </div>
       <div class="form-control-group">
-        <label class="label">Location Nickname<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="name">
+        <label class="label">Public name<span style="color:red">*</span></label>
+        <input type="text" [(ngModel)]="itemDialog.nickname" nbInput fullWidth placeholder="Location nickname">
       </div>
       <div class="form-control-group">
-        <label class="label">Type<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.type" nbInput fullWidth placeholder="type">
+        <label class="label">Type</label>
+        <input type="text" [(ngModel)]="itemDialog.type" nbInput fullWidth placeholder="type" disabled>
       </div>
       <div class="form-control-group">
-        <label class="label">Region<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.region" nbInput fullWidth placeholder="region">
+        <label class="label">Region</label>
+        <input type="text" [(ngModel)]="itemDialog.refRegion.name.en" nbInput fullWidth placeholder="region" disabled>
       </div>
       <div class="form-control-group">
-        <label class="label">Region<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.region2" nbInput fullWidth placeholder="region2">
+        <label class="label">Province</label>
+        <input type="text" [(ngModel)]="itemDialog.refProvince.name.en" nbInput fullWidth placeholder="province"
+          disabled>
       </div>
       <div class="form-control-group">
+        <label class="label">City</label>
+        <input type="text" [(ngModel)]="itemDialog.refCity.name.en" nbInput fullWidth placeholder="province" disabled>
+      </div>
+      <div class="form-control-group">
+        <label class="label">District</label>
+        <input type="text" [(ngModel)]="itemDialog.refDistrict.name.en" nbInput fullWidth placeholder="province"
+          disabled>
+      </div>
+      <!-- <div class="form-control-group">
         <label class="label">Detail<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.detail" nbInput fullWidth placeholder="detail">
+        <input type="text" [(ngModel)]="itemDialog.detail" nbInput fullWidth placeholder="detail" disabled>
       </div>
       <div class="form-control-group">
         <label class="label">Link Google Map<span style="color:red">*</span></label>
         <input type="text" [(ngModel)]="itemDialog.linkMap" nbInput fullWidth placeholder="linkMap">
-      </div>
+      </div> -->
     </nb-card-body>
-    <!-- <nb-card-body>
-      <div class="form-control-group">
-        <label class="label">Location<span style="color:red">*</span></label>
-        <input type="text" [(ngModel)]="itemDialog.name" nbInput fullWidth placeholder="Location">
-      </div>
-      <div class="form-control-group">
-        <label class="label">Address<span style="color:red">*</span></label>
-        <textarea type="" [(ngModel)]="itemDialog.address" nbInput fullWidth placeholder="Address"></textarea>
-      </div>
-      <div class="form-control-group">
-        <label class="label">Status</label>
-        <nb-radio-group [(ngModel)]="itemDialog.active" [disabled]="!itemDialog._id || itemDialog.isUsed">
-          <nb-radio *ngFor="let status of statusList" [value]="status.value">
-            {{ status.label }}
-          </nb-radio>
-        </nb-radio-group>
-      </div>
-      <div class="form-control-group">
-        <label class="label">Default Location</label>
-        <nb-checkbox status="primary" [(ngModel)]="itemDialog.isDefault">Default Location</nb-checkbox>
-      </div>
-    </nb-card-body> -->
     <nb-card-footer>
       <button nbButton status="default" (click)="ref.close()">Cancel</button>
-      <button nbButton status="success" (click)="save()"
-        [disabled]="!itemDialog.name || !itemDialog.address">Save</button>
+      <button nbButton status="success" (click)="save()">Save</button>
     </nb-card-footer>
   </nb-card>
 </ng-template>

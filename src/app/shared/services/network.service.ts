@@ -25,8 +25,45 @@ export class NetworkService {
     this._handleError = errorHandler.createHandleError(this._serviceName);
   }
 
-  protected get = (uri: string): Observable<ApiResponse> => {
-    return this.httpClient.get<ApiResponse>(`${API_URI}/${uri}`, {
+  protected get = (uri: string, criteria: any = undefined): Observable<ApiResponse> => {
+    if (!criteria) {
+      return this.httpClient.get<ApiResponse>(`${API_URI}/${uri}`, {
+        headers: this.getHeaders(), observe: 'response', withCredentials: true
+      }).pipe(
+        map(response => {
+          return {
+            code: response.body.code,
+            status: response.body.status,
+            message: response.body.message,
+            data: response.body.data || [],
+            totalDataSize: response.body.totalDataSize
+          };
+        }),
+        catchError(this._handleError('get', this.ErrorResponse()))
+      );
+    } else {
+      return this.httpClient.get<ApiResponse>((criteria._id) ?
+        `${API_URI}/${uri}?&_id=${criteria._id}`
+        : `${API_URI}/${uri}${criteria}`
+        , {
+          headers: this.getHeaders(), observe: 'response', withCredentials: true
+        }).pipe(
+          map(response => {
+            return {
+              code: response.body.code,
+              status: response.body.status,
+              message: response.body.message,
+              data: response.body.data || [],
+              totalDataSize: response.body.totalDataSize
+            };
+          }),
+          catchError(this._handleError('get', this.ErrorResponse()))
+        );
+    }
+  }
+
+  protected post = (uri: string, data: any): Observable<ApiResponse> => {
+    return this.httpClient.post<ApiResponse>(`${API_URI}/${uri}`, data, {
       headers: this.getHeaders(), observe: 'response', withCredentials: true
     }).pipe(
       map(response => {
@@ -34,15 +71,24 @@ export class NetworkService {
           code: response.body.code,
           status: response.body.status,
           message: response.body.message,
-          data: response.body.data || []
+          data: response.body.data || [],
+          filter: response.body.filter || [],
+          totalDataSize: response.body.totalDataSize,
+          count: response.body.count || undefined,
+          isOverQuota: response.body.isOverQuota || false,
+          done: response.body.done,
+          startAt: response.body.startAt,
+          usedTime: response.body.usedTime,
+          isExpired: response.body.isExpired,
+          jobType: response.body.jobType
         };
       }),
-      catchError(this._handleError('get', this.ErrorResponse()))
+      catchError(this._handleError('post', this.ErrorResponse()))
     );
   }
 
-  protected post = (uri: string, data: any): Observable<ApiResponse> => {
-    return this.httpClient.post<ApiResponse>(`${API_URI}/${uri}`, data, {
+  protected patch = (uri: string, data: any): Observable<ApiResponse> => {
+    return this.httpClient.patch<ApiResponse>(`${API_URI}/${uri}`, data, {
       headers: this.getHeaders(), observe: 'response', withCredentials: true
     }).pipe(
       map(response => {
@@ -81,8 +127,8 @@ export class NetworkService {
     );
   }
 
-  protected delete = (uri: string): Observable<ApiResponse> => {
-    return this.httpClient.delete<ApiResponse>(`${API_URI}/${uri}`, {
+  protected delete = (uri: string, _id: any = undefined): Observable<ApiResponse> => {
+    return this.httpClient.delete<ApiResponse>((_id) ? `${API_URI}/${uri}/${_id}` : `${API_URI}/${uri}`, {
       headers: this.getHeaders(), observe: 'response', withCredentials: true
     }).pipe(
       map(response => {
@@ -104,6 +150,28 @@ export class NetworkService {
     return url;
   }
 
+  protected getFile = (uri: any): Observable<ApiResponse> => {
+    let headers = new HttpHeaders();
+    const authToken = authService.getToken();
+    headers = headers.set('Accept', 'application/pdf');
+    headers = headers.set('x-access-token', `${authToken}`);
+    return this.httpClient.get<ApiResponse>(uri, {
+      headers: headers, observe: 'response', withCredentials: true
+    }).pipe(
+      map(response => {
+        console.log(response)
+        return {
+          code: response.body.code,
+          status: response.body.status,
+          message: response.body.message,
+          data: response.body.data || [],
+          headers: response.headers
+        };
+      }),
+      catchError(this._handleError('get', this.ErrorResponse()))
+    );
+  }
+
   private getHeaders = (): HttpHeaders => {
     const authToken = authService.getToken();
     let headers: HttpHeaders;
@@ -111,6 +179,7 @@ export class NetworkService {
       headers = new HttpHeaders()
         .set('Content-Type', 'application/json')
         // .set('Authorization', `Bearer ${authToken}`);
+        .set('Access-Control-Expose-Headers', '*')
         .set('x-access-token', `${authToken}`);
     } else {
       headers = new HttpHeaders()

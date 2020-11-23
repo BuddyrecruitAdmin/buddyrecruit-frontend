@@ -32,16 +32,16 @@ export const API_ENDPOINT = {
     }
   },
   JOBDESCRIPTION: {
-    LIST: "jd/list",
-    DETAIL: "jd/detail",
+    LIST: "apis/jd",
+    DETAIL: "apis/jd/detail",
     CREATE: "jd/create",
     EDIT: "jd/edit",
     DELETE: "jd/delete",
     EDUCATION: "degree/list"
   },
   JOBREQUEST: {
-    LIST: "jr/list",
-    DETAIL: "jr/detail",
+    LIST: "apis/jrs",
+    DETAIL: 'apis/jrs/detail',
     CREATE: "jr/create",
     EDIT: "jr/edit",
     DELETE: "jr/delete",
@@ -54,6 +54,10 @@ export const API_ENDPOINT = {
     TOGGLE: "jr/active",
     GET_ACTIVE: "jr/getActive",
   },
+  HRIS: {
+    LIST: "hris/list",
+    DETAIL: "hris/detail",
+  },
   CONSENT: {
     LIST: "consentStage/list",
     DETAIL: "consentStage/detail",
@@ -61,7 +65,8 @@ export const API_ENDPOINT = {
   TALENT_POOL: {
     LIST: "talentPool/list",
     DETAIL: "talentPool/detail",
-    SOURCE: "source/list"
+    SOURCE: "source/list",
+    USER: "apis/user"
   },
   PENDING_EXAM: {
     LIST: "pendingExam/list",
@@ -87,7 +92,7 @@ export const API_ENDPOINT = {
   },
   CANDIDATE: {
     FLOW: {
-      APPROVE: "candidate/flow/approve",
+      APPROVE: "apis/actionFlow/approve",
       REJECT: "candidate/flow/reject",
       REVOKE: "candidate/flow/revoke",
       COMMENT: {
@@ -114,7 +119,9 @@ export const API_ENDPOINT = {
     UNBLOCK: "candidate/unblock",
     BLACKLIST: "candidate/blacklist",
     MESSAGE: "facebook/inbox",
-    HISTORY: "candidate/history"
+    HISTORY: "candidate/history",
+    CALL_HISTORY: "apis/candidate/component/callHistory",
+    DEL_HISTORY: "apis/candidate/component/callHistory"
   },
   CONFIGURATION: {
     COMPANY_TYPE_LIST: "companyType/list",
@@ -149,12 +156,14 @@ export const API_ENDPOINT = {
     HUB_LIST: "hub/list",
     HUB_DELETE: "hub/delete",
 
-    LOCATION_LIST: "location/list",
-    LOCATION_EDIT: "location/edit",
+    LOCATION_LIST: "apis/location",
+    LOCATION_EDIT: "apis/location",
     LOCATION_CREATE: "location/create",
     LOCATION_LIST_ACTIVE: "location/list/active",
     LOCATION_ACTION: "location/action",
     LOCATION_DELETE: "location/delete",
+    LOCATION_TYPE: "apis/location/type",
+    LOCATION_PROVINCES: "apis/location/province",
 
     USER_LIST: "user/list",
     USER_CREATE: "user/create",
@@ -251,7 +260,10 @@ export const API_ENDPOINT = {
     },
 
     CONSENT_DETAIL: "userConsentText/detail",
-    CONSENT_EDIT: "userConsentText/edit"
+    CONSENT_EDIT: "userConsentText/edit",
+
+    JOB_BOARD_LIST: "apis/source",
+    JOB_BOARD_DETAIL: "apis/source/detail"
   },
   CV: {
     DETAIL: "candidate/id",
@@ -270,7 +282,8 @@ export const API_ENDPOINT = {
     DOWNLOAD: "jd/download",
     FILE_UPLOAD: "file/upload",
     FILE_DOWNLOAD: "file/download",
-    FILE_PREVIEW: "uploads/appFormTemplate"
+    FILE_PREVIEW: "uploads/appFormTemplate",
+    FILE_EXTER: "apis/file/download"
   },
   APPFORM: {
     ACTION: "appForm/action",
@@ -283,7 +296,7 @@ export const API_ENDPOINT = {
   },
   REPORT: {
     ACTION: "report",
-    LIST: "report/candidate",
+    LIST: "apis/report/candidate",
     LISTFEEDBACK: "feedbackReport/list",
     EDIT: "feedbackReport/edit",
     DEPARTMENT: "dropdown/department",
@@ -301,6 +314,7 @@ export const API_ENDPOINT = {
     DEPARTMENT: "dropdown/department",
     JOBPOSITION: "dropdown/position",
     USER: "dropdown/user",
+    JOB_TYPE: "apis/jobType",
   },
   CONTACT: {
     CREATE: "contact/create",

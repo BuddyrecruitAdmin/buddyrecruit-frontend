@@ -119,11 +119,11 @@
             <i class="text-gray">
               <div class="text-group">
                 <label class="label">Request Date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.contactDate) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.contactDate) || '-' }}</span>
               </div>
               <div class="text-group">
                 <label class="label">Company Created Date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.createdDate) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.createdDate) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>

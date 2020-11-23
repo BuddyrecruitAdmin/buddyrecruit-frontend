@@ -37,14 +37,14 @@
         <div *ngIf="item.refUser || item.date" class="m-l-20">
           <small>
             ( {{ utilitiesService.setFullname(item.refUser) }},
-            {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
+            {{ utilitiesService.convertDateTime(item.date) }} )
           </small>
         </div>
       </div>
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <button nbButton class="status-black" status="black" (click)="block()" [disabled]="!rejectId">BLOCK</button>
+    <button *ngIf="!isHybrid" nbButton class="status-black" status="black" (click)="block()" [disabled]="!rejectId">BLOCK</button>
     <button nbButton status="danger" (click)="reject()" [disabled]="!rejectId">REJECT</button>
   </nb-card-footer>
 </nb-card>

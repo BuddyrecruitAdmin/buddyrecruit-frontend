@@ -15,211 +15,120 @@
       </nb-card-header>
       <nb-card-body>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 col-sm-6">
             <div class="form-control-group"
               [ngClass]="{ 'select-red': touched,'select-disabled': editCheck || duplicateCheck || checkPreview }">
-              <label class="label">HC ID <span class="text-red">*</span></label>
-              <input type="text" name="hcId" [(ngModel)]="jr.hcId" nbInput fullWidth
-                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview)" />
+              <label class="label">HC ID </label>
+              <input type="text" name="hc_id" [(ngModel)]="jr.hc_id" nbInput fullWidth
+                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview) || isHybrid" />
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group" class="select-disabled">
+              <label class="label">Priority </label>
+              <input type="text" name="priority" [(ngModel)]="priorityId" nbInput fullWidth disabled>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-12 col-sm-6">
             <div class="form-control-group"
               [ngClass]="{ 'select-red': touched,'select-disabled': editCheck || duplicateCheck || checkPreview }">
-              <label class="label" for="name">Job Position <span class="text-red">*</span></label>
-              <mat-form-field appearance="outline">
-                <mat-select [(ngModel)]="jr.refJD._id" [disabled]="editCheck || duplicateCheck || checkPreview"
-                  (ngModelChange)="onChangeJobposition($event)">
-                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="JobPosition"
-                    (filteredReturn)="filteredList =$event"></mat-select-filter>
-                  <mat-option *ngFor="let job of filteredList" [value]="job.value">
-                    {{job.label}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <!-- <nb-select [(ngModel)]="jr.refJD._id" [ngModelOptions]="{ standalone: true }"
-                [disabled]="editCheck || duplicateCheck || checkPreview" (selectedChange)="onChangeJobposition($event)"
-                fullWidth>
-                <nb-option *ngFor="let job of JobPosition" [value]="job.value"
-                  [disabled]="editCheck || duplicateCheck || checkPreview">
-                  {{ job.label }}
-                </nb-option>
-              </nb-select> -->
-              <small *ngIf="touched" class="text-red">{{ sErrorPosition }}</small>
+              <label class="label" for="name">Job ID </label>
+              <div class="input-link" [routerLink]="'/employer/jd/detail/preview/'+jr.refJD._id">
+                <input type="text" name="jobId" [(ngModel)]="jr.refJD.job_id"
+                  [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview) || isHybrid"
+                  nbInput fullWidth />
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedCap }">
-              <label class="label" for="name">Number of Opening <span class="text-red">*</span></label>
-              <input type="number" name="capacity" [(ngModel)]="jr.capacity" min="0.00" max="100.00" step="1.00"
-                onKeyPress="if(this.value.length==2) return false;" nbInput fullWidth appNumberDirective
-                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview)" pattern="[0-9]*"
-                inputmode="numeric" digitOnly />
-              <small *ngIf="touchedCap" class="text-red">{{ sErrorCap }}</small>
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group"
+              [ngClass]="{ 'select-red': touched,'select-disabled': editCheck || duplicateCheck || checkPreview }">
+              <label class="label" for="name">Job Name
+              </label>
+              <input type="text" name="jobId" [(ngModel)]="jr.refJD.position" nbInput fullWidth
+                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview) || isHybrid" />
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group"
+              [ngClass]="{ 'has-error': f.nameTH.invalid,'select-disabled': editCheck || duplicateCheck || checkPreview }">
+              <label class="label">Public Job Name (TH) </label>
+              <input type="text" [formControl]="f.nameTH" name="nameTH" [(ngModel)]="jr.refJD.publicJobName.th" nbInput
+                fullWidth />
+              <small *ngIf="f.nameTH.invalid" class="text-red">Please enter public job name (th)</small>
+              <!-- <small *ngIf="f.nameTH.invalid" class="text-red">Thai language only</small> -->
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group"
+              [ngClass]="{ 'has-error': f.nameEN.invalid,'select-disabled': editCheck || duplicateCheck || checkPreview }">
+              <label class="label" for="name">Public Job Name (EN) </label>
+              <input type="text" [formControl]="f.nameEN" name="nameEN" [(ngModel)]="jr.refJD.publicJobName.en" nbInput
+                fullWidth />
+              <small *ngIf="f.nameEN.invalid" class="text-red">Please enter public job name (en)</small>
+              <!-- <small *ngIf="f.nameEN.invalid" class="text-red">English language only</small> -->
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group">
+              <label class="label" for="name">Branch </label>
+              <div class="input-link" (click)="gotoBranch(jr.refLocation)">
+                <input type="text" name="branch" [(ngModel)]="jr.refLocation.name" nbInput fullWidth
+                  [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview) || isHybrid" />
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group">
+              <label class="label" for="name">Number of Opening </label>
+              <input type="text" name="opening" [(ngModel)]="jr.numberOpen" nbInput fullWidth
+                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview) || isHybrid" />
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="form-control-group">
+              <label class="label">Group (can change)</label>
+              <input type="text" name="group" [(ngModel)]="jr.refJD.group" nbInput [disabled]="checkPreview"
+                fullWidth />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedStart }">
-              <label class="label">Start Date <span class="text-red">*</span></label>
+              <label class="label">Start Date </label>
               <nb-datepicker #startDate format="dd/MM/yyyy"></nb-datepicker>
               <div class="input-group">
                 <input [nbDatepicker]="startDate" [(ngModel)]="jr.duration.startDate" nbInput fullWidth
-                  [disabled]="editCheck || checkPreview" style="cursor: pointer;">
+                  [disabled]="editCheck || checkPreview || isHybrid" style="cursor: pointer;">
                 <div class="input-group-addon" style="pointer-events: none;">
-                  <nb-icon
-                    [ngClass]="{ 'text-green': !editCheck || !checkPreview, 'text-light-gray':  editCheck || checkPreview }"
+                  <nb-icon [ngClass]="{ 'text-green': !checkPreview, 'text-light-gray':  !editCheck || checkPreview }"
                     icon="calendar-outline"></nb-icon>
                 </div>
                 <small *ngIf="touchedStart" class="text-red">{{ sErrorStart }}</small>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-12 col-sm-6">
             <div class="form-control-group" [ngClass]="{ 'has-error': touchedEnd }">
-              <label class="label">End Date <span class="text-red">*</span></label>
+              <label class="label">End Date </label>
               <nb-datepicker #endDate format="dd/MM/yyyy"></nb-datepicker>
               <div class="input-group">
                 <input [nbDatepicker]="endDate" [(ngModel)]="jr.duration.endDate" nbInput fullWidth
-                  [disabled]="checkPreview" style="cursor: pointer;">
+                  [disabled]="checkPreview || isHybrid" style="cursor: pointer;">
                 <div class="input-group-addon" style="pointer-events: none;">
                   <nb-icon icon="calendar-outline"
-                    [ngClass]="{ 'text-green': !checkPreview, 'text-light-gray': checkPreview }"></nb-icon>
+                    [ngClass]="{ 'text-green': !checkPreview, 'text-light-gray': !editCheck || checkPreview }">
+                  </nb-icon>
                 </div>
                 <small *ngIf="touchedEnd" class="text-red">{{ sErrorEnd }}</small>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-control-group" [ngClass]="{ 'has-error': touchedOn }">
-              <label class="label">Onboard Date <span class="text-red">*</span></label>
-              <nb-datepicker #onboardDate format="dd/MM/yyyy"></nb-datepicker>
-              <div class="input-group">
-                <input [nbDatepicker]="onboardDate" [(ngModel)]="jr.onboardDate" nbInput fullWidth
-                  [disabled]="checkPreview" style="cursor: pointer;">
-                <div class="input-group-addon" style="pointer-events: none;">
-                  <nb-icon icon="calendar-outline"
-                    [ngClass]="{ 'text-green': !checkPreview, 'text-light-gray': checkPreview }"></nb-icon>
-                </div>
-                <small *ngIf="touchedOn" class="text-red">{{ sErrorOn }}</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="!isExpress" class="row">
-          <div class="col-md-6">
-            <div class="form-control-group"
-              [ngClass]="{ 'select-red': sErrorUser,'select-disabled': checkPreview || !jr.refJD._id }">
-              <label class="label">Users Interview <span class="text-red">*</span>
-                <small> (Please select Job Position first)</small>
-                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
-                  (click)="openSearch(Users, 'User Interview', 'user')"></nb-icon> -->
-              </label>
-              <mat-form-field [color]="primary" appearance="outline">
-                <mat-select [(ngModel)]="jr.userInterviews" [disabled]="checkPreview || !jr.refJD._id" multiple>
-                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="Users"
-                    (filteredReturn)="filteredList2 =$event"></mat-select-filter>
-                  <mat-option [hidden]="user.group === 'disabled'" *ngFor="let user of filteredList2"
-                    [value]="user.value">
-                    {{user.label}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <!-- <nb-select multiple [(ngModel)]="jr.userInterviews" [ngModelOptions]="{ standalone: true }" fullWidth
-                [disabled]="checkPreview || !jr.refJD._id">
-                <nb-option [hidden]="user.group === 'disabled'" *ngFor="let user of Users" [value]="user.value"
-                  [disabled]="checkPreview">
-                  {{ user.label }}
-                </nb-option>
-              </nb-select> -->
-              <small *ngIf="sErrorUser" class="text-red">{{ sErrorUser }}</small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-control-group" [ngClass]="{ 'select-red': touchedEva,'select-disabled': checkPreview}">
-              <label class="label">Evaluation Template <span class="text-red">*</span>
-                <small> (Configuration data)</small>
-                <!-- <nb-icon icon="search-outline" style="width: 15px" class="link"
-                  (click)="openSearch(Evaluation, 'Evaluation Template', 'evaluation')"></nb-icon> -->
-              </label>
-              <mat-form-field [color]="primary" appearance="outline">
-                <mat-select [(ngModel)]="jr.refEvaluation" [disabled]="checkPreview">
-                  <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="Evaluation"
-                    (filteredReturn)="filteredList3 =$event"></mat-select-filter>
-                  <mat-option *ngFor="let eva of filteredList3" (click)="selectedEva()" [value]="eva.value">
-                    {{eva.label}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <!-- <nb-select [(ngModel)]="jr.refEvaluation" [ngModelOptions]="{ standalone: true }" fullWidth
-                [disabled]="checkPreview">
-                <nb-option *ngFor="let eva of Evaluation" (click)="selectedEva()" [value]="eva.value"
-                  [disabled]="checkPreview">
-                  {{ eva.label }}
-                </nb-option>
-              </nb-select> -->
-              <small *ngIf="touchedEva" class="text-red">{{ sErrorEvaluation }}</small>
-              <small *ngIf="jr.refEvaluation" class="link" (click)="openPopupEvaluation(jr.refEvaluation)">
-                <nb-icon icon="info-outline"></nb-icon>Click to see preview evaluation form
-              </small>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="!isExpress" class="row">
-          <div class="col-md-12">
-            <div class="form-control-group">
-              <label class="label">Remark</label>
-              <textarea nbInput fullWidth placeholder="Remark" [(ngModel)]="jr.remark" rows="3"
-                [disabled]="checkPreview"></textarea>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="!isExpress" class="row">
-          <div *ngIf="!isExpress" class="col-sm-2 col-md-2">
-            <label class="label">Sourcing</label>
-            <div>
-              <mat-checkbox class="label" [(ngModel)]="emailCheck" disabled>Email</mat-checkbox>
-            </div>
-            <div *ngIf="role?.refCompany?.activeJobsDB">
-              <mat-checkbox class="label" [(ngModel)]="jobDB" [disabled]="!editExam || checkPreview">JobsDB
-              </mat-checkbox>
-            </div>
-          </div>
-          <div class="col-sm-2 col-md-2">
-            <label *ngIf="!jr.requiredExam" class="label">Have Exam</label>
-            <label *ngIf="jr.requiredExam && role.refAuthorize.editExam" class="label link m-r-5"
-              (click)="callExam(dialog)">Have Exam</label>
-            <label *ngIf="jr.requiredExam && !role.refAuthorize.editExam" class="label">Have Exam</label>
-            <nb-icon *ngIf="jr.requiredExam && role.refAuthorize.editExam" icon="edit-2-outline" class="link"
-              nbTooltip="Edit Exam Online" (click)="callExam(dialog)">
-            </nb-icon>
-            <div>
-              <mat-checkbox class="label" [(ngModel)]="jr.requiredExam"
-                [disabled]="(!isExpress && (editCheck || checkPreview)) || (isExpress && checkPreview)">Yes
-              </mat-checkbox>
-            </div>
-          </div>
-          <div *ngIf="jr.requiredExam && !isExpress" class="col-sm-3 col-md-3">
-            <label class="label">Have Attitude Test</label>
-            <div>
-              <mat-checkbox class="label" [(ngModel)]="jr.requiredAttitude" [disabled]="checkPreview || !editExam">Yes
-              </mat-checkbox>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="checkPreview && jr.refStatus === 'Reject'" class="row">
-          <div class="col-md-12">
-            <div class="form-control-group">
-              <label class="label">Reason for reject</label>
-              <textarea type="" nbInput fullWidth [(ngModel)]="jr.refRejection.name" disabled></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="row pull-right">
-          <small *ngIf="touchedCheck" class="text-red-right">{{ sErrorCheck }}</small>
         </div>
       </nb-card-body>
       <nb-card-footer>
@@ -233,36 +142,3 @@
   nbSpinnerMessage="Loading...">
   <nb-card-body></nb-card-body>
 </nb-card>
-
-<!-- dialogPopup -->
-<ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
-    <nb-card-header>
-      <label>Please Select Exam Form</label></nb-card-header>
-    <nb-card-body>
-      <div *ngIf="!checkPreview" class="row">
-        <div class="col-md-12 col-lg-12">
-          <mat-form-field [color]="primary" appearance="outline">
-            <mat-select [(ngModel)]="jr.exams" [disabled]="checkPreview" multiple>
-              <mat-select-filter [placeholder]="'Filter'" [displayMember]="'label'" [array]="ExamLists"
-                (filteredReturn)="filteredListExam =$event"></mat-select-filter>
-              <mat-option *ngFor="let exam of filteredListExam" [value]="exam.value">
-                {{exam.label}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-      <div *ngIf="checkPreview" class="row">
-        <div *ngFor="let show of examShow;let i = index;" class="col-md-12 col-lg-12">
-          <label class="text-left link" (click)="examLink(show._id)">{{ i+1 }}.
-            {{ show.name }}</label>
-        </div>
-      </div>
-    </nb-card-body>
-    <nb-card-footer>
-      <button nbButton status="default" (click)="saveExam(false)">Cancel</button>
-      <button nbButton status="success" (click)="saveExam(true)" [disabled]="!jr.exams">OK</button>
-    </nb-card-footer>
-  </nb-card>
-</ng-template>

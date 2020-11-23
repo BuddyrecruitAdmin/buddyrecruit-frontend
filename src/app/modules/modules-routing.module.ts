@@ -7,7 +7,7 @@ import { ExamFormComponent } from './exam-form/exam-form.component';
 import { ResumeComponent } from './resume/resume.component';
 import { FeaturesComponent } from './features/features.component';
 import { PdpaComponent } from './pdpa/pdpa.component';
-
+import { GalleryComponent } from '../pages/gallery/gallery.component';
 const routes: Routes = [
   {
     path: '',
@@ -44,6 +44,10 @@ const routes: Routes = [
       {
         path: 'pdpa',
         component: PdpaComponent,
+      },
+      {
+        path: 'file/:name',
+        component: GalleryComponent,
       },
       {
         path: 'blog',

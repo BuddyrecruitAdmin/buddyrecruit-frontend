@@ -20,6 +20,7 @@ export class BlogListComponent implements OnInit {
   itemNew: any;
   adminCheck: any;
   loading: boolean;
+  date: any;
   constructor(
     private router: Router,
     public service: BlogService,
@@ -28,6 +29,7 @@ export class BlogListComponent implements OnInit {
     private toastrService: NbToastrService,
   ) {
     this.role = getRole();
+    this.date = new Date().getFullYear();
   }
 
   ngOnInit() {

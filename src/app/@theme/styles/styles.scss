@@ -37,6 +37,7 @@
 }
 
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 @font-face {
   font-family: sukhumvit;
   src: url(../../../assets/font/SukhumvitSet/SukhumvitSet-Medium.ttf) format("truetype");
@@ -604,7 +605,7 @@
     .mat-select-disabled .mat-select-value {
       font-weight: 550;
       font-family: Open Sans, sans-serif;
-      color: #c5cedf;
+      color: black;
       padding-bottom: 2px;
       cursor: not-allowed;
     }
@@ -1045,6 +1046,13 @@
     display: inline-block;
     color: var(--color-white);
     background: var(--color-orange);
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  .label-blacklist {
+    display: inline-block;
+    color: var(--color-white);
+    background: var(--color-black);
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem;
   }
@@ -1955,6 +1963,55 @@
     width: 75px;
     margin-top: -5px;
     float: right;
+  }
+  // for stepper in HRIS
+  .new-stepper{ 
+    .container {
+      background-color: #ccc;
+      padding: 15px;
+      
+      /* align items in one column and take space defined by content */
+      /* this is used for centering separator */
+      display: inline-flex;
+      flex-direction: column;
+    }
+    
+    .letter {
+      width: 25px;
+      height: 25px;
+      background-color: white;
+      border-radius: 50%;
+      /* styles for text centering */
+      display: inline-flex;
+      margin-left: 5px;
+      margin-right: 5px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .open-font{ 
+      font-family: Open Sans, sans-serif !important;
+      font-weight: 100 !important;
+    }
+    
+    .separator {
+      width: 3px;
+      height: 100%;
+      border-radius: 3px;
+      background-color:#35c4b2;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      margin-left: 10px;
+      /* center horizontally */
+      align-self: center;
+    }
+  }
+  .border-gray{
+    border-color: var(--color-light-gray) !important;
+    }
+
+  .border-1px{ 
+    border: solid 1px #DCDCDC;
   }
 
   // --------------------------------------------------------------------

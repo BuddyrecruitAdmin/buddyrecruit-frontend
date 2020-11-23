@@ -84,30 +84,30 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <div class="form-group">
-              <label class="label">First name <small class="text-red">*</small></label><br>
+            <div class="form-control-group">
+              <label class="label">First name <small class="text-red">*</small></label>
               <input type="text" [(ngModel)]="profileDetail.firstname" [formControl]="firstName" nbInput fullWidth
                 placeholder="first name">
               <small *ngIf="touched && firstName.errors" class="text-red">{{ sErrorFirstName }}</small>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-group">
-              <label class="label">Last name <small class="text-red">*</small></label><br>
+            <div class="form-control-group">
+              <label class="label">Last name <small class="text-red">*</small></label>
               <input type="text" [(ngModel)]="profileDetail.lastname" [formControl]="lastName" nbInput fullWidth
                 placeholder="last name">
               <small *ngIf="touched && lastName.errors" class="text-red">{{ sErrorLastName }}</small>
             </div>
           </div>
           <div class="col-md-12">
-            <div class="form-group">
-              <label class="label">Notification email<small class="text-red">*</small></label><br>
+            <div class="form-control-group">
+              <label class="label">Notification email<small class="text-red">*</small></label>
               <input type="text" [(ngModel)]="profileDetail.notifyEmail" [formControl]="email" nbInput fullWidth
                 placeholder="email">
               <small *ngIf="touched && email.errors" class="text-red">{{ sErrorEmail }}</small>
             </div>
           </div>
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <label class="label">Notification Setting</label>
           </div>
           <div class="col-sm-6 col-md-6">
@@ -128,7 +128,7 @@
                 Onboard
               </nb-checkbox><br>
             </div>
-          </div>
+          </div> -->
           <div *ngIf="!isExpress" class="col-sm-6 col-md-6">
             <div class="form-group">
               <nb-checkbox [(ngModel)]="profileDetail.setting?.notification.pendingInterview.mail">

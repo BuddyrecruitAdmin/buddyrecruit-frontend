@@ -172,9 +172,21 @@
             <div class="border-all box-pad box-header with-border">
                 <div class="row">
                     <div class="col-lg-6">
-                        <tag-input [(ngModel)]="items.hardSkill" [maxItems]="35" secondaryPlaceholder="Hard Skill"
+                        <!-- <tag-input [(ngModel)]="items.hardSkill" [maxItems]="35" secondaryPlaceholder="Hard Skill"
                             placeholder="+" [ngModelOptions]="{ standalone: true }">
-                        </tag-input>
+                        </tag-input> -->
+                        <mat-form-field appearance="outline">
+                            <mat-chip-list #chipListHard>
+                                <mat-chip *ngFor="let keyword of items.hardSkill; let iKeyword = index;"
+                                    (removed)="removeKeyword(items.hardSkill, iKeyword)">
+                                    {{ keyword }}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip>
+                                <input placeholder="+" [matChipInputFor]="chipListHard"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                                    (matChipInputTokenEnd)="addKeyword(items.hardSkill, $event)">
+                            </mat-chip-list>
+                        </mat-form-field>
                     </div>
                 </div>
             </div>
@@ -188,9 +200,21 @@
             <div class="border-all box-pad box-header with-border">
                 <div class="row">
                     <div class="col-lg-6">
-                        <tag-input [(ngModel)]="items.softSkill" [maxItems]="35" secondaryPlaceholder="Soft Skill"
+                        <!-- <tag-input [(ngModel)]="items.softSkill" [maxItems]="35" secondaryPlaceholder="Soft Skill"
                             placeholder="+" [ngModelOptions]="{ standalone: true }">
-                        </tag-input>
+                        </tag-input> -->
+                        <mat-form-field appearance="outline">
+                            <mat-chip-list #chipListSoft>
+                                <mat-chip *ngFor="let keyword of items.softSkill; let iKeyword = index;"
+                                    (removed)="removeKeyword(items.softSkill, iKeyword)">
+                                    {{ keyword }}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip>
+                                <input placeholder="+" [matChipInputFor]="chipListSoft"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                                    (matChipInputTokenEnd)="addKeyword(items.softSkill, $event)">
+                            </mat-chip-list>
+                        </mat-form-field>
                     </div>
                 </div>
             </div>
@@ -204,9 +228,21 @@
             <div class="border-all box-pad box-header with-border">
                 <div class="row">
                     <div class="col-lg-6">
-                        <tag-input [(ngModel)]="items.certificate" [maxItems]="35" secondaryPlaceholder="Certificate"
+                        <!-- <tag-input [(ngModel)]="items.certificate" [maxItems]="35" secondaryPlaceholder="Certificate"
                             placeholder="+" [ngModelOptions]="{ standalone: true }">
-                        </tag-input>
+                        </tag-input> -->
+                        <mat-form-field appearance="outline">
+                            <mat-chip-list #chipListCert>
+                                <mat-chip *ngFor="let keyword of items.certificate; let iKeyword = index;"
+                                    (removed)="removeKeyword(items.certificate, iKeyword)">
+                                    {{ keyword }}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip>
+                                <input placeholder="+" [matChipInputFor]="chipListCert"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                                    (matChipInputTokenEnd)="addKeyword(items.certificate, $event)">
+                            </mat-chip-list>
+                        </mat-form-field>
                     </div>
                 </div>
             </div>

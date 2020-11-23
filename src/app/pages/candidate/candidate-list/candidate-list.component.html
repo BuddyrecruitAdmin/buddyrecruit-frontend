@@ -80,25 +80,45 @@
             </div>
           </nb-card-header>
           <nb-card-body>
-            <div class="text-group">
+            <div *ngIf="!isHybrid" class="text-group">
               <label class="label">Department</label>
               <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
             </div>
-            <div *ngIf="!isExpress" class="text-group">
+            <div *ngIf="!isExpress && !isHybrid" class="text-group">
               <label class="label">Division</label>
               <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
             </div>
+            <div *ngIf="isHybrid" class="text-group">
+              <label class="label">HCID</label>
+              <span>{{ item.candidateFlow?.refJR?.hc_id || '-' }}</span>
+            </div>
             <div class="text-group">
-              <label class="label">Job Position</label>
+              <label *ngIf="!isHybrid" class="label">Job Position</label>
+              <label *ngIf="isHybrid" class="label">Job Position</label>
               <span>{{ item.candidateFlow?.refJR?.refJD?.position || '-' }}</span>
             </div>
             <div class="text-group">
+              <label *ngIf="isHybrid" class="label">Branch</label>
+              <span>{{ item.candidateFlow?.refJR?.refLocation?.name || '-' }}</span>
+            </div>
+            <div class="text-group">
               <label class="label">Stage</label>
-              <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+              <span *ngIf="item.candidateFlow?.refStage?.refMain?.name === 'Talent Pool' 
+              && item.candidateFlow.inHRISProcess; else inHRIS">{{ 'HRIS' }}</span>
+              <ng-template #inHRIS>
+                <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+              </ng-template>
             </div>
             <div class="text-group">
               <label class="label">Status</label>
-              <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}Test</span>
+              <span [ngClass]="utilitiesService.setColorStatus(item.status)">{{ item.status }}</span>
+              <!-- <span *ngIf="item.isBlacklist" style="font-weight: bolder;">Blacklist</span>
+              <span *ngIf="!item.isBlacklist && item.candidateFlow.reject.flag" class="text-red">Reject</span>
+              <span
+                *ngIf="!item.isBlacklist && !item.candidateFlow.reject.flag && item.candidateFlow.refStage.name !== 'Job Started'">Pending</span>
+              <span
+                *ngIf="!item.isBlacklist && !item.candidateFlow.reject.flag && item.candidateFlow.refStage.name === 'Job Started'"
+                class="text-green">Job Started</span> -->
             </div>
             <div *ngIf="!isExpress" class="text-right ">
               <span class="link" (click)="info(item)">
@@ -124,12 +144,15 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col" class="text-left">Name</th>
-              <th scope="col" class="text-left">Department</th>
-              <th scope="col" class="text-left" *ngIf="!isExpress">Division</th>
-              <th scope="col" class="text-left">Job Position</th>
-              <th scope="col" class="text-left">Stage</th>
-              <th scope="col" class="text-left">status</th>
+              <th scope="col">Name</th>
+              <th scope="col" *ngIf="!isHybrid">Department</th>
+              <th scope="col" *ngIf="!isExpress">Division</th>
+              <th scope="col" *ngIf="!isHybrid">Job Position</th>
+              <th scope="col" *ngIf="isHybrid">HCID</th>
+              <th scope="col" *ngIf="isHybrid">Job Name</th>
+              <th scope="col" *ngIf="isHybrid">Branch</th>
+              <th scope="col">Stage</th>
+              <th scope="col">Status</th>
               <th scope="col" style="width: 110px;">Actions</th>
             </tr>
           </thead>
@@ -145,29 +168,41 @@
                   {{ utilitiesService.setFullname(item) }}
                 </span>
               </td>
-              <td class="text-left">
+              <td *ngIf="!isHybrid" class="text-left">
                 <span>{{ item.candidateFlow?.refJR?.department?.name || '-' }}</span>
               </td>
               <td *ngIf="!isExpress" class="text-left">
                 <span>{{ item.candidateFlow?.refJR?.division?.name || '-' }}</span>
               </td>
+              <td>
+                <span>{{ item.candidateFlow?.refJR?.hc_id || '-' }}</span>
+              </td>
               <td class="text-left">
                 <span>{{ item.candidateFlow?.refJR?.refJD?.position || '-' }}</span>
               </td>
               <td class="text-left">
-                <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+                <span>{{ item.candidateFlow?.refJR?.refLocation?.name || '-' }}</span>
               </td>
               <td class="text-left">
-                <span *ngIf="item.isBlacklist" style="font-weight: bolder;">Blacklist</span>
+                <span *ngIf="item.candidateFlow?.refStage?.refMain?.name === 'Talent Pool' 
+                  && item.candidateFlow.inHRISProcess; else inHRIS">{{ 'HRIS' }}</span>
+                <ng-template #inHRIS>
+                  <span>{{ item.candidateFlow?.refStage?.refMain?.name || '-' }}</span>
+                </ng-template>
+              </td>
+              <td>
+                <span [ngClass]="utilitiesService.setColorStatus(item.status)">{{ item.status }}</span>
+                <!-- <span *ngIf="item.isBlacklist" style="font-weight: bolder;">Blacklist</span>
                 <span *ngIf="!item.isBlacklist && item.candidateFlow.reject.flag" class="text-red">Reject</span>
                 <span
                   *ngIf="!item.isBlacklist && !item.candidateFlow.reject.flag && item.candidateFlow.refStage.name !== 'Job Started'">Pending</span>
                 <span
                   *ngIf="!item.isBlacklist && !item.candidateFlow.reject.flag && item.candidateFlow.refStage.name === 'Job Started'"
-                  class="text-green">Job Started</span>
+                  class="text-green">Job Started</span> -->
               </td>
               <td class="actions">
-                <button nbButton status="info" size="tiny" nbTooltip="More Details" (click)="info(item)">
+                <button *ngIf="!isHybrid" nbButton status="info" size="tiny" nbTooltip="More Details"
+                  (click)="info(item)">
                   <nb-icon icon="info-outline"></nb-icon>
                 </button>
                 <button nbButton *ngIf="!isExpress" status="primary" size="tiny" nbTooltip="Edit" (click)="edit(item)">

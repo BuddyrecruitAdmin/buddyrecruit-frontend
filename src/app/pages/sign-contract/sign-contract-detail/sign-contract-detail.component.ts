@@ -704,7 +704,7 @@ export class SignContractDetailComponent implements OnInit {
       });
       confirm.afterClosed().subscribe(result => {
         if (result) {
-          this.candidateService.candidateFlowApprove(item._id, item.refStage._id, button, undefined).subscribe(response => {
+          this.candidateService.candidateFlowApprove(item._id).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
               let indexA
@@ -770,7 +770,7 @@ export class SignContractDetailComponent implements OnInit {
             return step.refStage._id === item.refStage._id;
           });
         }
-        this.candidateService.candidateFlowApprove(item._id, step.refStage._id, button._id, item).subscribe(response => {
+        this.candidateService.candidateFlowApprove(item._id).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
             this.search();

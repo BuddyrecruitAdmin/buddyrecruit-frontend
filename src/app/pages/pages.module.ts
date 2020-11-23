@@ -35,7 +35,6 @@ import {
   NbAlertModule
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-
 import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -106,6 +105,8 @@ import { SignContractListComponent } from './sign-contract/sign-contract-list/si
 import { SignContractDetailComponent } from './sign-contract/sign-contract-detail/sign-contract-detail.component';
 import { OnboardListComponent } from './onboard/onboard-list/onboard-list.component';
 import { OnboardDetailComponent } from './onboard/onboard-detail/onboard-detail.component';
+import { HRISListComponent } from './hris/hris-list/hris-list.component';
+import { HRISDetailComponent } from './hris/hris-detail/hris-detail.component';
 import { CandidateListComponent } from './candidate/candidate-list/candidate-list.component';
 import { CandidateDetailComponent } from './candidate/candidate-detail/candidate-detail.component';
 import { HomeComponent } from './home/home.component';
@@ -115,7 +116,9 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { ListComponent } from './consent/list/list.component';
 import { DetailComponent } from './consent/detail/detail.component';
 import { NgApexchartsModule } from "ng-apexcharts";
-
+import { AngularEditorModule } from '@kolkov/angular-editor';
+// import { GalleryComponent } from './gallery/gallery.component';
+// import { NbMomentDateModule } from '@nebular/moment'
 @NgModule({
   imports: [
     CommonModule,
@@ -208,7 +211,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
     DigitOnlyModule,
     ImageCropperModule,
     MatSelectFilterModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    AngularEditorModule
   ],
   declarations: [
     PagesComponent,
@@ -229,12 +233,15 @@ import { NgApexchartsModule } from "ng-apexcharts";
     SignContractDetailComponent,
     OnboardListComponent,
     OnboardDetailComponent,
+    HRISDetailComponent,
+    HRISListComponent,
     HomeComponent,
     CandidateListComponent,
     CandidateDetailComponent,
     CalendarComponent,
     ListComponent,
     DetailComponent,
+    // GalleryComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

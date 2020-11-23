@@ -1,0 +1,58 @@
+<div class="content-header with-shadow">
+    <h3>
+        <span class="link text-gray" (click)="back()">
+            <nb-icon icon="arrow-ios-back-outline" class="font-inherit"></nb-icon>
+        </span>
+        Job Board <small *ngIf="state" class="text-cap">({{ state }})</small>
+    </h3>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <nb-card>
+            <nb-card-header style="color:#8f9bb3">
+                Job Board
+            </nb-card-header>
+            <nb-card-body>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-control-group" [ngClass]="{ 'has-error': sErrorEmail }">
+                            <label class="label">Email<small>(After input email please press enter)</small> <span
+                                    class="text-red"> *</span></label>
+                            <!-- <tag-input [(ngModel)]="item.emailSender" secondaryPlaceholder="Enter a email"
+                                placeholder="+" [ngModelOptions]="{ standalone: true }" (onAdd)="onAdd()"
+                                [disabled]="preview">
+                            </tag-input> -->
+                            <mat-form-field appearance="outline">
+                                <mat-chip-list #chipList>
+                                    <mat-chip *ngFor="let keyword of item.emailSender; let iKeyword = index;"
+                                        [selectable]="true" [removable]="true"
+                                        (removed)="removeKeyword(item.emailSender, iKeyword)">
+                                        {{ keyword }}
+                                        <mat-icon matChipRemove>cancel</mat-icon>
+                                    </mat-chip>
+                                    <input placeholder="+" [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="true"
+                                        (matChipInputTokenEnd)="addKeyword(item.emailSender, $event)" required>
+                                </mat-chip-list>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-control-group" [ngClass]="{ 'has-error': nameFlag }">
+                            <label class="label">Job board Type<span class="text-red"> *</span></label>
+                            <input type="text" [(ngModel)]="item.name" required nbInput fullWidth [disabled]="preview">
+                        </div>
+                    </div>
+                </div>
+            </nb-card-body>
+            <small *ngIf="sErrorEmail" class="text-red-right">{{ sErrorEmail }}</small>
+            <nb-card-footer>
+                <button nbButton status="default" (click)="back()">Cancel</button>
+                <button *ngIf="!checkPreview" nbButton status="success" (click)="save()"
+                    [disabled]="preview">Save</button>
+            </nb-card-footer>
+        </nb-card>
+    </div>
+</div>

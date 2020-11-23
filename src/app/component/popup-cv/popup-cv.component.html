@@ -6,13 +6,17 @@
         {{ utilitiesService.setFullname(items) }}
       </label>
       <small class="status">
-        <b>{{ items.candidateFlow?.refJR?.refJD?.position }}</b>
+        <b>{{ items.candidateFlow?.refJR?.refJD?.position }} <span
+            *ngIf="items.candidateFlow?.refJR?.hc_id">({{ items.candidateFlow?.refJR?.hc_id }})</span></b>
         <span *ngIf="!devices.isMobile">
           |
         </span><br *ngIf="devices.isMobile">
         Source:
+        <label *ngFor="let source of items.candidateFlow?.refSource" class="label"
+          [ngClass]="utilitiesService.sourcingColors(source.key)">{{ source.name || '' }}</label>
+        <!-- Source:
         <label class="label"
-          [ngClass]="utilitiesService.sourcingColors(items.candidateFlow?.refSource?.key)">{{ items.candidateFlow?.refSource?.name || 'Email' }}</label>
+          [ngClass]="utilitiesService.sourcingColors(items.candidateFlow?.refSource?.key)">{{ items.candidateFlow?.refSource?.name || 'Email' }}</label> -->
       </small>
     </div>
     <div *ngIf="role.refAuthorize.editCandidateInfo">
@@ -69,19 +73,23 @@
             <span>{{ item.refReject?.name }}</span>
             <span *ngIf="item.remark">: {{ item.remark }}</span> -->
 
-            <label><strong>{{ i+1 }}.Position:</strong>
-              {{ item.refCandidateFlows?.refJR.refJD.position || '' }} </label><br>
+            <label><strong>{{ i+1 }}.Job Name:</strong>
+              {{ item.refCandidateFlows?.refJR.refLocation.name || '' }}
+              ({{ item.refCandidateFlows?.refJR.hc_id || '' }})
+            </label> -
+            <label><strong>Branch</strong>:
+              {{ item.refCandidateFlows?.refJR.refLocation.name || '' }}</label><br>
             <label><strong>Rejected by</strong>:
-              {{ utilitiesService.setFullname(item.refUser) || '' }}</label><br>
+              {{ utilitiesService.setFullname(item.refUser) || '' }}</label> -
             <label><strong>Rejected Date</strong>:
-              {{ utilitiesService.convertDateTimeFromSystem(item.date) || '' }}</label><br>
+              {{ utilitiesService.convertDateTime(item.date) || '' }}</label> -
             <label><strong>Rejected reason:</strong>
               {{ item.refReject?.name || '' }}<span *ngIf="item.remark">({{ item.remark || '' }})</span></label><br>
           </div>
           <!-- <div *ngIf="item.refUser || item.date" class="m-l-20">
             <small>
               ( {{ item.refCandidateFlows?.refJR.refJD.position }} - {{ utilitiesService.setFullname(item.refUser) }},
-              {{ utilitiesService.convertDateTimeFromSystem(item.date) }} )
+              {{ utilitiesService.convertDateTime(item.date) }} )
             </small>
           </div> -->
         </div>
@@ -96,10 +104,13 @@
     </div>
     <div *ngIf="showMulti" class="border-padbottom border-all-reject box-pad box-header with-border">
       <div *ngFor="let mul of multiJr;let i = index;" class="text-gray m-t-10">
-        <span>{{ i+1 }}. <strong>Position:</strong> {{ mul.refJR.refJD.position }} - <strong>Department:</strong>
-          {{ mul.refJR.departmentName }} </span>
+        <span>{{ i+1 }}. <strong>Job Name:</strong> {{ mul.refJR.refJD.position }} ({{ mul.refJR.hc_id }}) -
+          <strong>Branch:</strong>
+          {{ mul.refJR.refLocation?.name || '' }} </span>
         <div>
-          <small class="m-l-20">(stage: {{ mul.refStage.name }})</small>
+          <small class="m-l-20">(Stage: <span *ngIf="!mul.inHRISProcess">{{ mul.refStage.refMain.name }}</span>
+            <span *ngIf="mul.inHRISProcess">HRIS</span>
+            <span *ngIf="mul.reject.flag"> - Status: Rejected</span>)</small>
         </div>
       </div>
     </div>
@@ -378,7 +389,8 @@
       </div> -->
     </div>
     <!-- Work Experience -->
-    <div *ngIf="!isExpress" class="border-padtop">
+    <!-- *ngIf="!isExpress" -->
+    <div class="border-padtop">
       <div class="title">
         <label class="label">Work Experience
           <span class="fas fa-check" (click)="toggleCheck('Work Experience', 'Work Experience')" [matTooltip]="Checked"
@@ -390,10 +402,10 @@
               'icon-red': colorStatus.workBug,
               'icon-default': !colorStatus.workBug }"></span>
         </label>
-        <small class="label pull-right bg-gray">
+        <!-- <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore?.workExperience?.accumulativeScore }} /
           {{ items.candidateFlow?.weightScore?.workExperience?.total }}
-        </small>
+        </small> -->
       </div>
       <div class="border-all box-pad box-header with-border">
         <div class="row">
@@ -420,7 +432,8 @@
     </div>
 
     <!-- Education -->
-    <div *ngIf="!isExpress" class="border-padtop">
+    <!-- *ngIf="!isExpress" -->
+    <div class="border-padtop">
       <div class="title">
         <label class="label">Education
           <span class="fas fa-check" (click)="toggleCheck('Education', 'Education')" [matTooltip]="Checked"
@@ -432,16 +445,17 @@
               'icon-red': colorStatus.eduBug,
               'icon-default': !colorStatus.eduBug }"></span>
         </label>
-        <small class="label pull-right bg-gray">
+        <!-- <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.education.accumulativeScore }} /
           {{ items.candidateFlow?.weightScore.education.total }}
-        </small>
+        </small> -->
       </div>
       <div class="border-all box-pad box-header with-border">
-        <nb-card *ngFor="let education of items.education;let i = index">
+        <nb-card
+          *ngFor="let education of items.candidateFlow?.generalAppForm?.refGeneralAppForm?.exp_info?.education_experience;let i = index">
           <nb-card-header *ngIf="editable">
             <div class="actions">
-              <nb-icon class="fa fa-times-circle ng-star-inserted link" status="danger" nbTooltip="Delete"
+              <nb-icon icon="trash-2-outline" class="link" status="danger" nbTooltip="Delete"
                 (click)="removeEducation(i)">
               </nb-icon>
             </div>
@@ -451,24 +465,38 @@
               <div class="col-md-6 form-group">
                 <label class="control-label">Degree
                 </label>
-                <nb-select [(ngModel)]="education.refDegree._id" [ngModelOptions]="{ standalone: true }"
+                <nb-select [(ngModel)]="education.education_level" [ngModelOptions]="{ standalone: true }"
                   [disabled]="!editable" Faria-hidden="true" fullWidth>
                   <nb-option *ngFor="let degree of degreeMaster" [value]="degree.value">{{ degree.label }}</nb-option>
                 </nb-select>
               </div>
-              <div class="col-md-2 form-group">
+              <!-- <div class="col-md-2 form-group">
                 <label class="control-label">GPA
                 </label>
                 <input type="text" [(ngModel)]="education.gpa" [disabled]="!editable"
                   [ngModelOptions]="{standalone: true}" onKeyPress="if(this.value.length==4) return false;" nbInput
                   fullWidth pattern="[0-9]*" decimal="true" inputmode="numeric" fullWidth digitOnly />
+              </div> -->
+              <div class="col-md-6 form-group">
+                <label class="control-label">Graduation Date
+                </label>
+                <nb-datepicker #gradDate format="dd/MM/yyyy"></nb-datepicker>
+                <div class="input-group">
+                  <input [nbDatepicker]="gradDate" [(ngModel)]="education.graduate_time" nbInput fullWidth
+                    [disabled]="!editable" style="cursor: pointer;">
+                  <div class="input-group-addon" style="pointer-events: none;">
+                    <nb-icon icon="calendar-outline"
+                      [ngClass]="{ 'text-green': editable, 'text-light-gray': !editable }">
+                    </nb-icon>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 form-group">
                 <label class="control-label">University
                 </label>
-                <input type="text" [(ngModel)]="education.university" [disabled]="!editable"
+                <input type="text" [(ngModel)]="education.graduate_school" [disabled]="!editable"
                   [ngModelOptions]="{standalone: true}" nbInput fullWidth />
               </div>
               <div class="col-md-6 form-group">
@@ -482,14 +510,15 @@
         </nb-card>
         <div *ngIf="editable" class="box-body text-center">
           <button nbButton type="button" status="success" size="small" (click)="addEducation()"
-            [disabled]="items.education.length === 5">
+            [disabled]="items.candidateFlow.generalAppForm.refGeneralAppForm.exp_info.education_experience > 3">
             Add more education
           </button>
         </div>
       </div>
     </div>
     <!-- Hard Skill -->
-    <div *ngIf="!isExpress" class="border-padtop">
+    <!-- *ngIf="!isExpress" -->
+    <div class="border-padtop">
       <div class="title">
         <label class="label">Hard Skill
           <span class="fas fa-check" (click)="toggleCheck('Hard Skill', 'Hard Skill')" [matTooltip]="Checked"
@@ -501,10 +530,10 @@
               'icon-red': colorStatus.hardBug,
               'icon-default': !colorStatus.hardBug }"></span>
         </label>
-        <small class="label pull-right bg-gray">
+        <!-- <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.hardSkill.accumulativeScore }} /
           {{ items.candidateFlow?.weightScore.hardSkill.total }}
-        </small>
+        </small> -->
       </div>
       <div class="border-all box-pad box-header with-border">
         <div class="row">
@@ -512,6 +541,18 @@
             <tag-input [(ngModel)]="items.hardSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
               [maxItems]="35" secondaryPlaceholder="Hard Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
+            <!-- <mat-form-field appearance="outline">
+              <mat-chip-list #chipListHard>
+                <mat-chip *ngFor="let keyword of items.hardSkill; let iKeyword = index;" [selectable]="editable"
+                  [removable]="editable" (removed)="removeKeyword(items.hardSkill, iKeyword)">
+                  {{ keyword }}
+                  <mat-icon *ngIf="editable" matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="+" [matChipInputFor]="chipListHard"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addKeyword(items.hardSkill, $event)" [disabled]="!editable">
+              </mat-chip-list>
+            </mat-form-field> -->
           </div>
           <div class="col-lg-6">
             <div class="progress-group" *ngFor="
@@ -528,7 +569,8 @@
     </div>
 
     <!-- Soft Skill -->
-    <div *ngIf="!isExpress" class="border-padtop">
+    <!-- *ngIf="!isExpress" -->
+    <div class="border-padtop">
       <div class="title">
         <label class="label">Soft Skill
           <span class="fas fa-check" (click)="toggleCheck('Soft Skill', 'Soft Skill')" [matTooltip]="Checked"
@@ -540,10 +582,10 @@
               'icon-red': colorStatus.softBug,
               'icon-default': !colorStatus.softBug }"></span>
         </label>
-        <small class="label pull-right bg-gray">
+        <!-- <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.softSkill.accumulativeScore }} /
           {{ items.candidateFlow?.weightScore.softSkill.total }}
-        </small>
+        </small> -->
       </div>
       <div class="border-all box-pad box-header with-border">
         <div class="row">
@@ -551,6 +593,18 @@
             <tag-input [(ngModel)]="items.softSkill" [removable]="editable" [editable]="editable" [disable]="!editable"
               [maxItems]="35" secondaryPlaceholder="Soft Skill" placeholder="+" [ngModelOptions]="{ standalone: true }">
             </tag-input>
+            <!-- <mat-form-field appearance="outline">
+              <mat-chip-list #chipListSoft>
+                <mat-chip *ngFor="let keyword of items.softSkill; let iKeyword = index;" [selectable]="editable"
+                  [removable]="editable" (removed)="removeKeyword(items.softSkill, iKeyword)">
+                  {{ keyword }}
+                  <mat-icon *ngIf="editable" matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="+" [matChipInputFor]="chipListSoft"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addKeyword(items.softSkill, $event)" [disabled]="!editable">
+              </mat-chip-list>
+            </mat-form-field> -->
           </div>
           <div class="col-lg-6">
             <div class="progress-group" *ngFor="
@@ -569,7 +623,8 @@
     </div>
 
     <!-- Certificate -->
-    <div *ngIf="!isExpress" class="border-padtop">
+    <!-- *ngIf="!isExpress" -->
+    <div class="border-padtop">
       <div class="title">
         <label class="label">Certificate
           <span class="fas fa-check" (click)="toggleCheck('Certificate', 'Certificate')" [matTooltip]="Checked"
@@ -581,10 +636,10 @@
               'icon-red': colorStatus.cerBug,
               'icon-default': !colorStatus.cerBug }"></span>
         </label>
-        <small class="label pull-right bg-gray">
+        <!-- <small class="label pull-right bg-gray">
           {{ items.candidateFlow?.weightScore.certificate.accumulativeScore }} /
           {{ items.candidateFlow?.weightScore.certificate.total }}
-        </small>
+        </small> -->
       </div>
       <div class="border-all box-pad box-header with-border">
         <div class="row">
@@ -593,6 +648,18 @@
               [disable]="!editable" [maxItems]="35" secondaryPlaceholder="Certificate" placeholder="+"
               [ngModelOptions]="{ standalone: true }">
             </tag-input>
+            <!-- <mat-form-field appearance="outline">
+              <mat-chip-list #chipListCert>
+                <mat-chip *ngFor="let keyword of items.certificate; let iKeyword = index;" [selectable]="editable"
+                  [removable]="editable" (removed)="removeKeyword(items.certificate, iKeyword)">
+                  {{ keyword }}
+                  <mat-icon *ngIf="editable" matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="+" [matChipInputFor]="chipListCert"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addKeyword(items.certificate, $event)" [disabled]="!editable">
+              </mat-chip-list>
+            </mat-form-field> -->
           </div>
           <div class="col-lg-6">
             <div class="progress-group" *ngFor="
@@ -659,21 +726,21 @@
   </nb-card-body>
   <nb-card-footer style="padding-left: 5px;padding-right: 20px;">
     <div class="float-left">
-      <button *ngIf="role.refAuthorize?.showOriginalCV" [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton
-        status="default" (click)="checkCV(items._id,items)" nbTooltip="Original CV">
+      <button *ngIf="role.refAuthorize?.showOriginalCV && (items.cvPath && items.cvPath.filename)"
+        [size]="(devices.isMobile)? 'tiny' : 'medium'" nbButton status="default" (click)="checkCV(items._id,items)"
+        nbTooltip="Original CV">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
-      <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
+      <!-- <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'"
         (click)="openPrintCandidate(items)" nbTooltip="Print">
         <nb-icon icon="printer-outline"></nb-icon>
-      </button>
+      </button> -->
       <button nbButton status="default" [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="bugReport('All','all')"
         nbTooltip="Feedback">
         <nb-icon icon="alert-triangle-outline"></nb-icon>
       </button>
       <button *ngIf="items.applicationForm && role.refAuthorize.showApplicationForm" nbButton status="info"
-        [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openApplication(items)"
-        nbTooltip="Application Form">
+        [size]="(devices.isMobile)? 'tiny' : 'medium'" (click)="openApplication(items)" nbTooltip="Application Form">
         <nb-icon icon="file-text-outline"></nb-icon>
       </button>
     </div>

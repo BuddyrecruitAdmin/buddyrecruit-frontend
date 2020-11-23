@@ -3,12 +3,12 @@
     <div class="col-sm-8 col-md-9 col-lg-10">
       <h3>Job Request</h3>
     </div>
-    <div class="col-sm-4 col-md-3 col-lg-2">
+    <!-- <div class="col-sm-4 col-md-3 col-lg-2">
       <button *ngIf="role.refAuthorize.jr.editable" nbButton fullWidth status="success" nbTooltip="Create"
         [routerLink]="'/employer/jr/detail/create'" [disabled]="isOverQuota">
         <nb-icon icon="plus-outline"></nb-icon>Create
       </button>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -60,43 +60,55 @@
         <nb-card>
           <nb-card-header>
             <div class="title">
-              <label class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
-                [nbTooltip]="item.refJD?.position">
-                {{ item.refJD?.position }}
+              <label class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id">
+                {{ item.hc_id || ' -' }}
               </label>
             </div>
             <div *ngIf="role.refAuthorize.jr.editable" class="actions">
-              <nb-icon *ngIf="item.refStatus.name === 'Active' || (item.refStatus.name === 'Inactive' && !isOverQuota)"
+              <!-- <nb-icon *ngIf="item.refStatus.name === 'Active' || (item.refStatus.name === 'Inactive' && !isOverQuota)"
                 [ngClass]="{ 'icon-warning': item.refStatus.name === 'Active', 'icon-green' :  item.refStatus.name != 'Active' }"
                 nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
                 icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}"
                 (click)="switchActive(item)">
-              </nb-icon>
+              </nb-icon> -->
               <nb-icon *ngIf="item.canEdit" icon="edit-outline" class="link" nbTooltip="Edit"
                 [routerLink]="'/employer/jr/detail/edit/'+item._id">
               </nb-icon>
-              <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="icon-red" nbTooltip="Delete"
-                (click)="delete(item)"></nb-icon>
+              <!-- <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="icon-red" nbTooltip="Delete"
+                (click)="delete(item)"></nb-icon> -->
             </div>
           </nb-card-header>
           <nb-card-body>
             <div class="text-group">
-              <label class="label">Department</label>
-              <span>{{ item.department?.name || '-' }}</span>
+              <label class="label">Priority</label>
+              <span>P{{ item.priority_id }}</span>
             </div>
             <div class="text-group">
-              <label class="label">Capacity</label>
-              <span>{{ item.capacity }}</span>
+              <label class="label">Job Name</label>
+              <span class="link"
+                [routerLink]="'/employer/jd/detail/preview/'+item.refJD._id">{{ item.refJD?.position }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Branch</label>
+              <span class="link" (click)="gotoBranch(item.refLocation)">{{ item.refLocation?.name || ' -' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Group</label>
+              <span>{{ item.refJD?.group || ' -' }}</span>
+            </div>
+            <div class="text-group">
+              <label class="label">Opening</label>
+              <span>{{ item.numberOpen }}</span>
             </div>
             <div class="text-group">
               <label class="label">End Date</label>
-              {{ utilitiesService.convertDate(item.duration.endDate) || '-'}}
+              <span>{{ utilitiesService.convertDate(item.duration.endDate) || '-' }}</span>
             </div>
-            <div class="text-group">
+            <!-- <div class="text-group">
               <label class="label">Exam</label>
               <nb-icon *ngIf="item.requiredExam" icon="checkmark-outline" class="text-green"></nb-icon>
               <nb-icon *ngIf="!item.requiredExam" icon="close-outline" class="text-red"></nb-icon>
-            </div>
+            </div> -->
             <div class="text-group">
               <label class="label">Status</label>
               <span class="label"
@@ -106,20 +118,17 @@
               <div class="text-group">
                 <label class="label">Last update by</label>
                 <span>
-                  {{ item.lastChangedInfo.refUser.firstname }}
-                  {{ item.lastChangedInfo.refUser.lastname }}
+                  {{ item.lastChangedInfo?.refUser?.firstname }}
+                  {{ item.lastChangedInfo?.refUser?.lastname }}
+                  <span *ngIf="!item.lastChangedInfo?.refUser">-</span>
                 </span>
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || ' -' }}</span>
               </div>
             </i>
           </nb-card-body>
-          <nb-card-footer *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'">
-            <button nbButton status="danger" (click)="Reject(item,dialog)">REJECT</button>
-            <button nbButton status="success" (click)="Approve(item)">APPROVE</button>
-          </nb-card-footer>
         </nb-card>
       </div>
     </div>
@@ -135,59 +144,63 @@
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th scope="col">Job Request</th>
-              <th scope="col">Department</th>
-              <th scope="col">Division</th>
-              <th scope="col">Capacity</th>
+              <th scope="col" style="width: 70px;">HC ID</th>
+              <th scope="col">Priority</th>
+              <th scope="col">Job Name</th>
+              <th scope="col" style="min-width: 130px;">Branch</th>
+              <th scope="col" style="min-width: 130px;">Group</th>
+              <th scope="col">Opening</th>
               <th scope="col">End Date</th>
-              <th scope="col">Exam</th>
+              <!-- <th scope="col">Exam</th> -->
               <th scope="col">Status</th>
-              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="min-width: 110px;">Actions</th>
+              <th *ngIf="role.refAuthorize.jr.editable" scope="col" style="min-width: 110px;">Info</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of items;">
-              <td class="text-left">
-                <span class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id"
-                  [nbTooltip]="item.refJD?.position">{{ item.refJD?.position }}</span>
+              <td>
+                <span class="link" [routerLink]="'/employer/jr/detail/preview/'+item._id">{{ item.hc_id || '-' }}</span>
               </td>
               <td>
-                <span>{{ item.department?.name || '-' }}</span>
+                <span>P{{ item.priority_id }}</span>
+              </td>
+              <td class="text-left link" [routerLink]="'/employer/jd/detail/preview/'+item.refJD._id">
+                <span>{{ item.refJD?.position }}</span>
               </td>
               <td>
-                <span>{{ item.division.name || '-' }}</span>
+                <span class="link" (click)="gotoBranch(item.refLocation)">{{ item.refLocation?.name || '-' }}</span>
               </td>
               <td>
-                <span>{{ item.capacity }}</span>
+                <span>{{ item.refJD?.group || '-' }}</span>
+              </td>
+              <td>
+                <span>{{ item.numberOpen }}</span>
               </td>
               <td>
                 <span>{{ utilitiesService.convertDate(item.duration.endDate) || '-'}}</span>
               </td>
-              <td>
+              <!-- <td>
                 <nb-icon *ngIf="item.requiredExam" icon="checkmark-outline" class="text-green"></nb-icon>
                 <nb-icon *ngIf="!item.requiredExam" icon="close-outline" class="text-red"></nb-icon>
-              </td>
+              </td> -->
               <td>
                 <span class="label"
                   [ngClass]="utilitiesService.getJrStatusClass(item.refStatus.status)">{{ item.refStatus.name}}</span>
               </td>
               <td *ngIf="role.refAuthorize.jr.editable" class="actions">
-                <button *ngIf="item.refStatus.name === 'Active' || item.refStatus.name === 'Inactive'" nbButton
+                <!-- <button *ngIf="item.refStatus.name === 'Active' || item.refStatus.name === 'Inactive'" nbButton
                   status="warning" size="tiny" nbTooltip="Edit" (click)="switchActive(item)"
                   nbTooltip="{{   item.refStatus.name === 'Active' ? 'Inactive' : 'Active' }}"
                   [disabled]="item.refStatus.name === 'Inactive' && isOverQuota">
-                  <!-- <nb-badge *ngIf="item.refStatus.name === 'Inactive'" nbTooltip="Agree start date is not arrived yet"
-                    text="!" status="warning" position="top right">
-                  </nb-badge> -->
                   <nb-icon
                     icon="{{   item.refStatus.name === 'Active' ? 'pause-circle-outline' : 'play-circle-outline' }}">
                   </nb-icon>
-                </button>
+                </button> -->
                 <button *ngIf="item.canEdit" nbButton status="primary" size="tiny" nbTooltip="Edit"
                   [routerLink]="'/employer/jr/detail/edit/'+item._id">
                   <nb-icon icon="edit-outline"></nb-icon>
                 </button>
-                <button *ngIf="item.canDelete" nbButton status="danger" size="tiny" nbTooltip="Delete"
+                <!-- <button *ngIf="item.canDelete" nbButton status="danger" size="tiny" nbTooltip="Delete"
                   (click)="delete(item)">
                   <nb-icon icon="trash-2-outline"></nb-icon>
                 </button>
@@ -198,7 +211,7 @@
                 <button *ngIf="role.refHero.isHR && item.refStatus.name === 'Waiting for HR Confirm'" nbButton
                   status="success" outline size="tiny" (click)="Approve(item)" nbTooltip="Approve">
                   <nb-icon icon="checkmark-circle-2"></nb-icon>
-                </button>
+                </button> -->
               </td>
             </tr>
           </tbody>

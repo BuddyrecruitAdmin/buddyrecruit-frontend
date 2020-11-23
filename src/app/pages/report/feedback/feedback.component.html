@@ -228,8 +228,8 @@
               </td>
               <td>
                 <span style="font-size: 14px;"
-                  [nbTooltip]="utilitiesService.convertDateTimeFromSystem(item?.createdInfo?.date)">
-                  {{ utilitiesService.convertDateTimeFromSystem(item?.createdInfo?.date) || '-' }}
+                  [nbTooltip]="utilitiesService.convertDateTime(item?.createdInfo?.date)">
+                  {{ utilitiesService.convertDateTime(item?.createdInfo?.date) || '-' }}
                 </span>
               </td>
               <td *ngIf="!checked">
@@ -298,7 +298,7 @@
           <div class="text-group">
             <label class="label">Create Date</label>
             <span>
-              {{ utilitiesService.convertDateTimeFromSystem(item?.createdInfo?.date) || '-' }}
+              {{ utilitiesService.convertDateTime(item?.createdInfo?.date) || '-' }}
             </span>
           </div>
           <div class="text-group">

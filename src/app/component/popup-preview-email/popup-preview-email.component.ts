@@ -163,7 +163,7 @@ export class PopupPreviewEmailComponent implements OnInit {
         } else {
           this.loading = true;
           const request = this.setRequest();
-          this.candidateService.candidateFlowApprove(this.flowId, this.stageId, this.buttonId, request).subscribe(response => {
+          this.candidateService.candidateFlowApprove(this.flowId).subscribe(response => {
             if (response.code === ResponseCode.Success) {
               this.showToast('success', 'Success Message', response.message);
             } else {
@@ -202,7 +202,7 @@ export class PopupPreviewEmailComponent implements OnInit {
     confirm.afterClosed().subscribe(result => {
       if (result) {
         const request = this.setRequest();
-        this.candidateService.candidateFlowApprove(this.flowId, this.stageId, this.buttonId, request).subscribe(response => {
+        this.candidateService.candidateFlowApprove(this.flowId).subscribe(response => {
           if (response.code === ResponseCode.Success) {
             this.showToast('success', 'Success Message', response.message);
           } else {

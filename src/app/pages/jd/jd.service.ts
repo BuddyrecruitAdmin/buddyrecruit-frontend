@@ -6,8 +6,9 @@ import { HttpErrorHandler } from '../../shared/services/http-error-handler.servi
 import { ApiResponse } from '../../shared/interfaces/common.interface';
 import { API_ENDPOINT } from "../../shared/constants";
 import { environment } from '../../../environments/environment';
+import * as authService from '../../shared/services/auth.service';
 const URL = environment.API_URI + "/" + API_ENDPOINT.FILE.DOWNLOAD;
-const URL2 = environment.API_URI + "/" + API_ENDPOINT.CV.CANDIDATE_ORIGINAL;
+const URL2 = environment.API_URI + "/"
 @Injectable({
   providedIn: "root"
 })
@@ -34,6 +35,7 @@ export class JdService extends NetworkService {
   // }
 
   originalCV(id: String, userId: string, stagingId: any = undefined): Observable<any> {
+    const authToken = authService.getToken();
     const body = {
       _id: id,
       userId: userId,
@@ -41,7 +43,9 @@ export class JdService extends NetworkService {
     };
     let headers = new HttpHeaders();
     headers = headers.set('Accept', 'application/pdf');
-    return this.httpClient.post(URL2, body, { headers: headers, responseType: 'blob' });
+    headers = headers.set('x-access-token', `${authToken}`);
+    let path = URL2 + `apis/file/download/cv?candidateId=${id}`
+    return this.httpClient.get(path, { headers: headers });
 
     // return this.httpClient.post(URL2, body, {
     //   responseType: "blob" as 'json',
@@ -49,14 +53,9 @@ export class JdService extends NetworkService {
     // });
   }
 
-  getList(criteria: any = undefined, refCompany: any): Observable<ApiResponse> {
-    const body = {
-      userData: {
-        refCompany: refCompany._id
-      },
-      criteria: criteria
-    }
-    return this.post(API_ENDPOINT.JOBDESCRIPTION.LIST, body);
+  getList(criteria: any = undefined): Observable<ApiResponse> {
+    var path = `?keyword=${criteria.keyword}&skip=${criteria.skip}&limit=${criteria.limit}`
+    return this.get(API_ENDPOINT.JOBDESCRIPTION.LIST, path);
   }
 
   deleteItem(item: any): Observable<ApiResponse> {
@@ -74,11 +73,18 @@ export class JdService extends NetworkService {
     const body = {
       _id: _id
     }
-    return this.post(API_ENDPOINT.JOBDESCRIPTION.DETAIL, body);
+    return this.get(API_ENDPOINT.JOBDESCRIPTION.DETAIL, body);
   }
 
   edit(request: any): Observable<ApiResponse> {
-    return this.post(API_ENDPOINT.JOBDESCRIPTION.EDIT, request);
+    const body = { 
+      _id: request._id,
+      group: request.group,
+      publicJobName: request.publicJobName,
+      refJobType: request.refJobType._id,
+      questions: request.questions
+    }
+    return this.patch(API_ENDPOINT.JOBDESCRIPTION.LIST, body);
   }
 
   getPositionList(criteria: any = undefined): Observable<ApiResponse> {

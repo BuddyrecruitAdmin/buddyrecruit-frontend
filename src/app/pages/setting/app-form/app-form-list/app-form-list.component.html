@@ -103,7 +103,7 @@
               </div>
               <div class="text-group">
                 <label class="label">Last update date</label>
-                <span>{{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo.date) || '-' }}</span>
+                <span>{{ utilitiesService.convertDateTime(item.lastChangedInfo.date) || '-' }}</span>
               </div>
             </i>
           </nb-card-body>
@@ -156,7 +156,7 @@
                   {{ item.lastChangedInfo?.refUser?.lastname }}
                 </div>
                 <div>
-                  {{ utilitiesService.convertDateTimeFromSystem(item.lastChangedInfo?.date) || '-' }}
+                  {{ utilitiesService.convertDateTime(item.lastChangedInfo?.date) || '-' }}
                 </div>
               </td>
               <td class="actions">

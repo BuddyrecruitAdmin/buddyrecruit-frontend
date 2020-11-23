@@ -1,0 +1,78 @@
+<nb-card [style.width.px]="innerWidth" [style.max-height.px]="innerHeight">
+    <nb-card-header>
+        <div class="title">
+            <label>Call Logs</label>
+        </div>
+        <div class="actions">
+            <nb-icon icon="close-outline" class="close" nbTooltip="Close" (click)="close()"></nb-icon>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <h6 *ngIf="!itemCall.length" class="text-gray text-center">No Log</h6>
+        <nb-card *ngFor="let item of itemCall" [ngClass]="{'border-gray' : item.refUser._id !== role._id}"
+            style="border: 2.5px solid blue;margin-bottom: 1rem;">
+            <nb-card-header>
+                <div class="title">
+                    <nb-user size="medium" [name]="utilitiesService.setFullname(item.refUser)"
+                        [title]="utilitiesService.convertDateTime(item.date)" [picture]="item.refUser.imageData">
+                    </nb-user>
+                </div>
+                <div class="actions">
+                    <nb-icon *ngIf="!item.missCall && item.called"
+                        [ngClass]="{ 'text-green': !item.isFollow, 'text-orange': item.isFollow }"
+                        style="width: 30px;height: 30px;" icon="phone-call-outline" class="font-inherit"></nb-icon>
+                    <nb-icon *ngIf="!item.missCall && !item.called" style="width: 30px;height: 30px;"
+                        icon="phone-off-outline" class="font-inherit text-red"></nb-icon>
+                    <nb-icon *ngIf="item.missCall" style="width: 30px;height: 30px;" icon="phone-missed-outline"
+                        class="font-inherit text-red"></nb-icon>
+                    <!-- <nb-icon *ngIf="item.canDelete" icon="trash-2-outline" class="link text-red" nbTooltip="Delete"
+                        (click)="delete(item)"></nb-icon> -->
+                </div>
+            </nb-card-header>
+            <nb-card-body *ngIf="item.comment || utilitiesService.dateIsValid(item.callbackDate)">
+                <div class="row">
+                    <div class="col-12">
+                        <label>HCID: {{ item.refJR?.hc_id || '-' }}</label><br>
+                        <div *ngIf="item.comment">
+                            <label>{{ item.comment || '' }}</label><br>
+                        </div>
+                        <label *ngIf="utilitiesService.dateIsValid(item.callbackDate)">Callback appointment:
+                            {{ utilitiesService.convertDateTime(item.callbackDate) || '' }}</label>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </nb-card-body>
+    <nb-card-footer *ngIf="flagEdit">
+        <input type="text" [(ngModel)]="message" nbInput fullWidth placeholder="Comment here">
+        <div class="row" style="margin-top: 0.75rem">
+            <div class="col-12">
+                <div class="form-control-group" [ngClass]="{ 'has-error': dateClick.invalid }">
+                    <owl-date-time #dt2></owl-date-time>
+                    <span [owlDateTimeTrigger]="dt2"></span>
+                    <div class="input-group">
+                        <input #dateClick="ngModel" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" [(ngModel)]="date"
+                            placeholder="Callback Date" nbInput fullWidth style="cursor: pointer;">
+                        <div (click)="dateClick.click()" class="input-group-addon" style="pointer-events: none;">
+                            <nb-icon class="text-green" icon="calendar-outline"></nb-icon>
+                        </div>
+                        <small *ngIf="dateClick.invalid" class="text-red">Invalid date format please select date
+                            again.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <nb-radio-group [(ngModel)]="missCall" class="inline" style="float: left;" status="info">
+                    <nb-radio [value]="false">
+                        <span style="color: #35C4B2">Called</span>
+                    </nb-radio>
+                    <nb-radio [value]="true">
+                        <span style="color: #ED5154">Miss call</span>
+                    </nb-radio>
+                </nb-radio-group>
+                <button nbButton status="success" [disabled]="dateClick.invalid || loading || (!date && !message) "
+                    (click)="comment()">SAVE</button>
+            </div>
+        </div>
+    </nb-card-footer>
+</nb-card>
