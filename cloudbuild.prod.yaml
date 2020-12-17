@@ -10,7 +10,7 @@ steps:
       [
         'set',
         '-n',
-        '${_NAMESPACE}-prod',
+        '${_NAMESPACE}',
         'image',
         'deployment',
         '$REPO_NAME',
