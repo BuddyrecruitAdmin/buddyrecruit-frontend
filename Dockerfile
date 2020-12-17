@@ -3,7 +3,7 @@ WORKDIR /app/src
 COPY package.json package-lock.json ./
 RUN yarn
 COPY . .
-RUN yarn build --prod
+RUN yarn build
 
 FROM nginx:alpine
 EXPOSE 8080
