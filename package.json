@@ -100,7 +100,7 @@
     "typeface-exo": "0.0.22",
     "vanilla-lazyload": "^17.1.0",
     "web-animations-js": "github:angular/web-animations-js#release_pr208",
-    "xlsx": "^0.15.5",
+    "xlsx": "^0.17.0",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
